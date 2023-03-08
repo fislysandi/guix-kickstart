@@ -20,10 +20,3 @@ else
     echo "Symlink created for guix"
 fi
 
-if [[ -L $guix_link && "$(readlink $guix_link)" == "$guix_path" ]]; then
-    echo "$guix_link already exists and is correct"
-else
-    rm -rf $guix_link
-    ln -s $guix_path
-    echo "Symlink created for guix"
-fi
