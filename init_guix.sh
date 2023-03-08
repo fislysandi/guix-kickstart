@@ -1,15 +1,10 @@
 #!/bin/bash
 
 #prompt user for sudo password
-
-
-curl -LO https://mirror.hydra.gnu.org/guix/guix-binary-latest.tar.xz
-
-
-sudo tar xvf guix-binary-latest.tar.xz -C /usr/local
-
-echo 'export PATH="$PATH:/usr/local/guix/current/bin"' >> ~/.bashrc
-source ~/.bashrc
+cd /tmp
+curl -L -o guix-install.sh https://git.savannah.gnu.org/guix.git/plain/etc/guix-install.sh
+chmod +x guix.install.sh
+./guix-install.sh
 
 guix pull
 
