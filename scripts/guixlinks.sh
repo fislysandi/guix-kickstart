@@ -17,6 +17,14 @@ if [[ -L $guix_link && "$(readlink $nixpkgs_link)" == "$nixpkgs_path" ]]; then
 else
     rm -rf $guix_link
     ln -s $guix_path 
-    echo "Symlink created for nixpkgs"
+    echo "Symlink created for guix"
 fi
 
+
+if [[ -L $guix_link && "$(readlink $nix_link)" == "$nix_path" ]]; then
+    echo "$guix_link already exists and is correct"
+else
+    rm -rf $guix_link
+    ln -s $guix_path
+    echo "Symlink created for guix"
+fi
