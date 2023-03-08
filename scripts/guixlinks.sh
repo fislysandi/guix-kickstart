@@ -16,7 +16,9 @@ if [[ -L $guix_link && "$(readlink $guix_link)" == "$guix_path" ]]; then
     echo "$guix_link already exists and is correct"
 else
     rm -rf $guix_link
-    ln -s $guix_path 
+    ln -s  $guix_path $guix_link
     echo "Symlink created for guix"
 fi
+
+#!/bin/bash
 
