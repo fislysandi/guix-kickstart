@@ -1,6 +1,6 @@
 (list (channel
 	(name 'guix)
-	(url "https://github.com/fislysandi/guix.git")
+	(url "https://github.com/guix-mirror/guix.git")
 	(branch "master")
 	(introduction
 	   (make-channel-introduction
