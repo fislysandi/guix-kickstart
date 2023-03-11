@@ -19,7 +19,8 @@
 					    "htop"
 					    "nyxt"
 					    "wayland"
-					    "stow")))
+					    "stow"
+					    "pandoc")))
 
   ;; Below is the list of Home services.  To search for available
   ;; services, run 'guix home search KEYWORD' in a terminal.
