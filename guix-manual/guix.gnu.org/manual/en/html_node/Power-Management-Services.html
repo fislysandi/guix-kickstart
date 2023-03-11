@@ -1,0 +1,870 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Power Management Services (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="Power Management Services (GNU Guix Reference Manual)" />
+<meta name="keywords" content="Power Management Services (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Services.html" rel="up" title="Services" />
+<link href="Audio-Services.html" rel="next" title="Audio Services" />
+<link href="Continuous-Integration.html" rel="prev" title="Continuous Integration" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="Power-Management-Services"></span><div class="header">
+<p>
+Next: <a href="Audio-Services.html" accesskey="n" rel="next">Audio Services</a>, Previous: <a href="Continuous-Integration.html" accesskey="p" rel="prev">Continuous Integration</a>, Up: <a href="Services.html" accesskey="u" rel="up">Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Power-Management-Services-1"></span><h4 class="subsection">12.9.27 Power Management Services</h4>
+
+<span id="index-tlp"></span>
+<span id="index-power-management-with-TLP"></span>
+<span id="TLP-daemon"></span><h4 class="subsubheading">TLP daemon</h4>
+
+<p>The <code>(gnu services pm)</code> module provides a Guix service definition
+for the Linux power management tool TLP.
+</p>
+<p>TLP enables various powersaving modes in userspace and kernel.
+Contrary to <code>upower-service</code>, it is not a passive,
+monitoring tool, as it will apply custom settings each time a new power
+source is detected.  More information can be found at
+<a href="https://linrunner.de/en/tlp/tlp.html">TLP home page</a>.
+</p>
+<dl>
+<dt id="index-tlp_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">tlp-service-type </span></dt>
+<dd><p>The service type for the TLP tool.  The default settings are optimised
+for battery life on most systems, but you can tweak them to your heart&rsquo;s
+content by adding a valid <code>tlp-configuration</code>:
+</p><div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Power-Management-Services.html#index-tlp_002dservice_002dtype">tlp-service-type</a>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">tlp-configuration</span>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">cpu-scaling-governor-on-ac</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-string">"performance"</span></span>)</span></span>)</span>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">sched-powersave-on-bat?</span> <span class="syntax-symbol">#t</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+</dd></dl>
+
+<p>Each parameter definition is preceded by its type; for example,
+&lsquo;<samp>boolean foo</samp>&rsquo; indicates that the <code>foo</code> parameter should be
+specified as a boolean.  Types starting with <code>maybe-</code> denote
+parameters that won&rsquo;t show up in TLP config file when their value is
+left unset, or is explicitly set to the <code>%unset-value</code> value.
+</p>
+
+<p>Available <code>tlp-configuration</code> fields are:
+</p>
+<dl>
+<dt id="index-tlp-1" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>package</em> </span><span class="symbol-definition-prototype">tlp </span></dt>
+<dd><p>The TLP package.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-tlp_002denable_003f" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">tlp-enable? </span></dt>
+<dd><p>Set to true if you wish to enable TLP.
+</p>
+<p>Defaults to &lsquo;<samp>#t</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-tlp_002ddefault_002dmode" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">tlp-default-mode </span></dt>
+<dd><p>Default mode when no power supply can be detected.  Alternatives are AC
+and BAT.
+</p>
+<p>Defaults to &lsquo;<samp>"AC"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-disk_002didle_002dsecs_002don_002dac" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">disk-idle-secs-on-ac </span></dt>
+<dd><p>Number of seconds Linux kernel has to wait after the disk goes idle,
+before syncing on AC.
+</p>
+<p>Defaults to &lsquo;<samp>0</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-disk_002didle_002dsecs_002don_002dbat" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">disk-idle-secs-on-bat </span></dt>
+<dd><p>Same as <code>disk-idle-ac</code> but on BAT mode.
+</p>
+<p>Defaults to &lsquo;<samp>2</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-max_002dlost_002dwork_002dsecs_002don_002dac" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">max-lost-work-secs-on-ac </span></dt>
+<dd><p>Dirty pages flushing periodicity, expressed in seconds.
+</p>
+<p>Defaults to &lsquo;<samp>15</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-max_002dlost_002dwork_002dsecs_002don_002dbat" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">max-lost-work-secs-on-bat </span></dt>
+<dd><p>Same as <code>max-lost-work-secs-on-ac</code> but on BAT mode.
+</p>
+<p>Defaults to &lsquo;<samp>60</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-cpu_002dscaling_002dgovernor_002don_002dac" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-space-separated-string-list</em> </span><span class="symbol-definition-prototype">cpu-scaling-governor-on-ac </span></dt>
+<dd><p>CPU frequency scaling governor on AC mode.  With intel_pstate driver,
+alternatives are powersave and performance.  With acpi-cpufreq driver,
+alternatives are ondemand, powersave, performance and conservative.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-cpu_002dscaling_002dgovernor_002don_002dbat" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-space-separated-string-list</em> </span><span class="symbol-definition-prototype">cpu-scaling-governor-on-bat </span></dt>
+<dd><p>Same as <code>cpu-scaling-governor-on-ac</code> but on BAT mode.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-cpu_002dscaling_002dmin_002dfreq_002don_002dac" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-non-negative-integer</em> </span><span class="symbol-definition-prototype">cpu-scaling-min-freq-on-ac </span></dt>
+<dd><p>Set the min available frequency for the scaling governor on AC.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-cpu_002dscaling_002dmax_002dfreq_002don_002dac" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-non-negative-integer</em> </span><span class="symbol-definition-prototype">cpu-scaling-max-freq-on-ac </span></dt>
+<dd><p>Set the max available frequency for the scaling governor on AC.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-cpu_002dscaling_002dmin_002dfreq_002don_002dbat" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-non-negative-integer</em> </span><span class="symbol-definition-prototype">cpu-scaling-min-freq-on-bat </span></dt>
+<dd><p>Set the min available frequency for the scaling governor on BAT.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-cpu_002dscaling_002dmax_002dfreq_002don_002dbat" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-non-negative-integer</em> </span><span class="symbol-definition-prototype">cpu-scaling-max-freq-on-bat </span></dt>
+<dd><p>Set the max available frequency for the scaling governor on BAT.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-cpu_002dmin_002dperf_002don_002dac" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-non-negative-integer</em> </span><span class="symbol-definition-prototype">cpu-min-perf-on-ac </span></dt>
+<dd><p>Limit the min P-state to control the power dissipation of the CPU, in AC
+mode.  Values are stated as a percentage of the available performance.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-cpu_002dmax_002dperf_002don_002dac" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-non-negative-integer</em> </span><span class="symbol-definition-prototype">cpu-max-perf-on-ac </span></dt>
+<dd><p>Limit the max P-state to control the power dissipation of the CPU, in AC
+mode.  Values are stated as a percentage of the available performance.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-cpu_002dmin_002dperf_002don_002dbat" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-non-negative-integer</em> </span><span class="symbol-definition-prototype">cpu-min-perf-on-bat </span></dt>
+<dd><p>Same as <code>cpu-min-perf-on-ac</code> on BAT mode.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-cpu_002dmax_002dperf_002don_002dbat" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-non-negative-integer</em> </span><span class="symbol-definition-prototype">cpu-max-perf-on-bat </span></dt>
+<dd><p>Same as <code>cpu-max-perf-on-ac</code> on BAT mode.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-cpu_002dboost_002don_002dac_003f" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-boolean</em> </span><span class="symbol-definition-prototype">cpu-boost-on-ac? </span></dt>
+<dd><p>Enable CPU turbo boost feature on AC mode.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-cpu_002dboost_002don_002dbat_003f" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-boolean</em> </span><span class="symbol-definition-prototype">cpu-boost-on-bat? </span></dt>
+<dd><p>Same as <code>cpu-boost-on-ac?</code> on BAT mode.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-sched_002dpowersave_002don_002dac_003f" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">sched-powersave-on-ac? </span></dt>
+<dd><p>Allow Linux kernel to minimize the number of CPU cores/hyper-threads
+used under light load conditions.
+</p>
+<p>Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-sched_002dpowersave_002don_002dbat_003f" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">sched-powersave-on-bat? </span></dt>
+<dd><p>Same as <code>sched-powersave-on-ac?</code> but on BAT mode.
+</p>
+<p>Defaults to &lsquo;<samp>#t</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-nmi_002dwatchdog_003f" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">nmi-watchdog? </span></dt>
+<dd><p>Enable Linux kernel NMI watchdog.
+</p>
+<p>Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-phc_002dcontrols" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-string</em> </span><span class="symbol-definition-prototype">phc-controls </span></dt>
+<dd><p>For Linux kernels with PHC patch applied, change CPU voltages.  An
+example value would be &lsquo;<samp>"F:V F:V F:V F:V"</samp>&rsquo;.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-energy_002dperf_002dpolicy_002don_002dac" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">energy-perf-policy-on-ac </span></dt>
+<dd><p>Set CPU performance versus energy saving policy on AC.  Alternatives are
+performance, normal, powersave.
+</p>
+<p>Defaults to &lsquo;<samp>"performance"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-energy_002dperf_002dpolicy_002don_002dbat" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">energy-perf-policy-on-bat </span></dt>
+<dd><p>Same as <code>energy-perf-policy-ac</code> but on BAT mode.
+</p>
+<p>Defaults to &lsquo;<samp>"powersave"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-disks_002ddevices" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>space-separated-string-list</em> </span><span class="symbol-definition-prototype">disks-devices </span></dt>
+<dd><p>Hard disk devices.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-disk_002dapm_002dlevel_002don_002dac" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>space-separated-string-list</em> </span><span class="symbol-definition-prototype">disk-apm-level-on-ac </span></dt>
+<dd><p>Hard disk advanced power management level.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-disk_002dapm_002dlevel_002don_002dbat" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>space-separated-string-list</em> </span><span class="symbol-definition-prototype">disk-apm-level-on-bat </span></dt>
+<dd><p>Same as <code>disk-apm-bat</code> but on BAT mode.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-disk_002dspindown_002dtimeout_002don_002dac" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-space-separated-string-list</em> </span><span class="symbol-definition-prototype">disk-spindown-timeout-on-ac </span></dt>
+<dd><p>Hard disk spin down timeout.  One value has to be specified for each
+declared hard disk.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-disk_002dspindown_002dtimeout_002don_002dbat" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-space-separated-string-list</em> </span><span class="symbol-definition-prototype">disk-spindown-timeout-on-bat </span></dt>
+<dd><p>Same as <code>disk-spindown-timeout-on-ac</code> but on BAT mode.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-disk_002diosched" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-space-separated-string-list</em> </span><span class="symbol-definition-prototype">disk-iosched </span></dt>
+<dd><p>Select IO scheduler for disk devices.  One value has to be specified for
+each declared hard disk.  Example alternatives are cfq, deadline and
+noop.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-sata_002dlinkpwr_002don_002dac" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">sata-linkpwr-on-ac </span></dt>
+<dd><p>SATA aggressive link power management (ALPM) level.  Alternatives are
+min_power, medium_power, max_performance.
+</p>
+<p>Defaults to &lsquo;<samp>"max_performance"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-sata_002dlinkpwr_002don_002dbat" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">sata-linkpwr-on-bat </span></dt>
+<dd><p>Same as <code>sata-linkpwr-ac</code> but on BAT mode.
+</p>
+<p>Defaults to &lsquo;<samp>"min_power"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-sata_002dlinkpwr_002dblacklist" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-string</em> </span><span class="symbol-definition-prototype">sata-linkpwr-blacklist </span></dt>
+<dd><p>Exclude specified SATA host devices for link power management.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-ahci_002druntime_002dpm_002don_002dac_003f" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-on-off-boolean</em> </span><span class="symbol-definition-prototype">ahci-runtime-pm-on-ac? </span></dt>
+<dd><p>Enable Runtime Power Management for AHCI controller and disks on AC
+mode.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-ahci_002druntime_002dpm_002don_002dbat_003f" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-on-off-boolean</em> </span><span class="symbol-definition-prototype">ahci-runtime-pm-on-bat? </span></dt>
+<dd><p>Same as <code>ahci-runtime-pm-on-ac</code> on BAT mode.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-ahci_002druntime_002dpm_002dtimeout" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">ahci-runtime-pm-timeout </span></dt>
+<dd><p>Seconds of inactivity before disk is suspended.
+</p>
+<p>Defaults to &lsquo;<samp>15</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-pcie_002daspm_002don_002dac" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">pcie-aspm-on-ac </span></dt>
+<dd><p>PCI Express Active State Power Management level.  Alternatives are
+default, performance, powersave.
+</p>
+<p>Defaults to &lsquo;<samp>"performance"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-pcie_002daspm_002don_002dbat" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">pcie-aspm-on-bat </span></dt>
+<dd><p>Same as <code>pcie-aspm-ac</code> but on BAT mode.
+</p>
+<p>Defaults to &lsquo;<samp>"powersave"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-start_002dcharge_002dthresh_002dbat0" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-non-negative-integer</em> </span><span class="symbol-definition-prototype">start-charge-thresh-bat0 </span></dt>
+<dd><p>Percentage when battery 0 should begin charging.  Only supported on some laptops.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-stop_002dcharge_002dthresh_002dbat0" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-non-negative-integer</em> </span><span class="symbol-definition-prototype">stop-charge-thresh-bat0 </span></dt>
+<dd><p>Percentage when battery 0 should stop charging.  Only supported on some laptops.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-start_002dcharge_002dthresh_002dbat1" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-non-negative-integer</em> </span><span class="symbol-definition-prototype">start-charge-thresh-bat1 </span></dt>
+<dd><p>Percentage when battery 1 should begin charging.  Only supported on some laptops.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-stop_002dcharge_002dthresh_002dbat1" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-non-negative-integer</em> </span><span class="symbol-definition-prototype">stop-charge-thresh-bat1 </span></dt>
+<dd><p>Percentage when battery 1 should stop charging.  Only supported on some laptops.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-radeon_002dpower_002dprofile_002don_002dac" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">radeon-power-profile-on-ac </span></dt>
+<dd><p>Radeon graphics clock speed level.  Alternatives are low, mid, high,
+auto, default.
+</p>
+<p>Defaults to &lsquo;<samp>"high"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-radeon_002dpower_002dprofile_002don_002dbat" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">radeon-power-profile-on-bat </span></dt>
+<dd><p>Same as <code>radeon-power-ac</code> but on BAT mode.
+</p>
+<p>Defaults to &lsquo;<samp>"low"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-radeon_002ddpm_002dstate_002don_002dac" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">radeon-dpm-state-on-ac </span></dt>
+<dd><p>Radeon dynamic power management method (DPM).  Alternatives are battery,
+performance.
+</p>
+<p>Defaults to &lsquo;<samp>"performance"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-radeon_002ddpm_002dstate_002don_002dbat" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">radeon-dpm-state-on-bat </span></dt>
+<dd><p>Same as <code>radeon-dpm-state-ac</code> but on BAT mode.
+</p>
+<p>Defaults to &lsquo;<samp>"battery"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-radeon_002ddpm_002dperf_002dlevel_002don_002dac" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">radeon-dpm-perf-level-on-ac </span></dt>
+<dd><p>Radeon DPM performance level.  Alternatives are auto, low, high.
+</p>
+<p>Defaults to &lsquo;<samp>"auto"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-radeon_002ddpm_002dperf_002dlevel_002don_002dbat" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">radeon-dpm-perf-level-on-bat </span></dt>
+<dd><p>Same as <code>radeon-dpm-perf-ac</code> but on BAT mode.
+</p>
+<p>Defaults to &lsquo;<samp>"auto"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-wifi_002dpwr_002don_002dac_003f" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>on-off-boolean</em> </span><span class="symbol-definition-prototype">wifi-pwr-on-ac? </span></dt>
+<dd><p>Wifi power saving mode.
+</p>
+<p>Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-wifi_002dpwr_002don_002dbat_003f" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>on-off-boolean</em> </span><span class="symbol-definition-prototype">wifi-pwr-on-bat? </span></dt>
+<dd><p>Same as <code>wifi-power-ac?</code> but on BAT mode.
+</p>
+<p>Defaults to &lsquo;<samp>#t</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-wol_002ddisable_003f" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>y-n-boolean</em> </span><span class="symbol-definition-prototype">wol-disable? </span></dt>
+<dd><p>Disable wake on LAN.
+</p>
+<p>Defaults to &lsquo;<samp>#t</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-sound_002dpower_002dsave_002don_002dac" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">sound-power-save-on-ac </span></dt>
+<dd><p>Timeout duration in seconds before activating audio power saving on
+Intel HDA and AC97 devices.  A value of 0 disables power saving.
+</p>
+<p>Defaults to &lsquo;<samp>0</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-sound_002dpower_002dsave_002don_002dbat" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">sound-power-save-on-bat </span></dt>
+<dd><p>Same as <code>sound-powersave-ac</code> but on BAT mode.
+</p>
+<p>Defaults to &lsquo;<samp>1</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-sound_002dpower_002dsave_002dcontroller_003f" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>y-n-boolean</em> </span><span class="symbol-definition-prototype">sound-power-save-controller? </span></dt>
+<dd><p>Disable controller in powersaving mode on Intel HDA devices.
+</p>
+<p>Defaults to &lsquo;<samp>#t</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-bay_002dpoweroff_002don_002dbat_003f" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">bay-poweroff-on-bat? </span></dt>
+<dd><p>Enable optical drive in UltraBay/MediaBay on BAT mode.  Drive can be
+powered on again by releasing (and reinserting) the eject lever or by
+pressing the disc eject button on newer models.
+</p>
+<p>Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-bay_002ddevice" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">bay-device </span></dt>
+<dd><p>Name of the optical drive device to power off.
+</p>
+<p>Defaults to &lsquo;<samp>"sr0"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-runtime_002dpm_002don_002dac" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">runtime-pm-on-ac </span></dt>
+<dd><p>Runtime Power Management for PCI(e) bus devices.  Alternatives are on
+and auto.
+</p>
+<p>Defaults to &lsquo;<samp>"on"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-runtime_002dpm_002don_002dbat" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">runtime-pm-on-bat </span></dt>
+<dd><p>Same as <code>runtime-pm-ac</code> but on BAT mode.
+</p>
+<p>Defaults to &lsquo;<samp>"auto"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-runtime_002dpm_002dall_003f" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">runtime-pm-all? </span></dt>
+<dd><p>Runtime Power Management for all PCI(e) bus devices, except blacklisted
+ones.
+</p>
+<p>Defaults to &lsquo;<samp>#t</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-runtime_002dpm_002dblacklist" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-space-separated-string-list</em> </span><span class="symbol-definition-prototype">runtime-pm-blacklist </span></dt>
+<dd><p>Exclude specified PCI(e) device addresses from Runtime Power Management.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-runtime_002dpm_002ddriver_002dblacklist" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>space-separated-string-list</em> </span><span class="symbol-definition-prototype">runtime-pm-driver-blacklist </span></dt>
+<dd><p>Exclude PCI(e) devices assigned to the specified drivers from Runtime
+Power Management.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-usb_002dautosuspend_003f" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">usb-autosuspend? </span></dt>
+<dd><p>Enable USB autosuspend feature.
+</p>
+<p>Defaults to &lsquo;<samp>#t</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-usb_002dblacklist" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-string</em> </span><span class="symbol-definition-prototype">usb-blacklist </span></dt>
+<dd><p>Exclude specified devices from USB autosuspend.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-usb_002dblacklist_002dwwan_003f" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">usb-blacklist-wwan? </span></dt>
+<dd><p>Exclude WWAN devices from USB autosuspend.
+</p>
+<p>Defaults to &lsquo;<samp>#t</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-usb_002dwhitelist" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-string</em> </span><span class="symbol-definition-prototype">usb-whitelist </span></dt>
+<dd><p>Include specified devices into USB autosuspend, even if they are already
+excluded by the driver or via <code>usb-blacklist-wwan?</code>.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-usb_002dautosuspend_002ddisable_002don_002dshutdown_003f" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>maybe-boolean</em> </span><span class="symbol-definition-prototype">usb-autosuspend-disable-on-shutdown? </span></dt>
+<dd><p>Enable USB autosuspend before shutdown.
+</p>
+<p>Defaults to &lsquo;<samp>disabled</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-restore_002ddevice_002dstate_002don_002dstartup_003f" class="symbol-definition"><span class="symbol-definition-category"><code>tlp-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">restore-device-state-on-startup? </span></dt>
+<dd><p>Restore radio device state (bluetooth, wifi, wwan) from previous
+shutdown on system startup.
+</p>
+<p>Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<span id="index-thermald"></span>
+<span id="index-CPU-frequency-scaling-with-thermald"></span>
+<span id="Thermald-daemon"></span><h4 class="subsubheading">Thermald daemon</h4>
+
+<p>The <code>(gnu services pm)</code> module provides an interface to
+thermald, a CPU frequency scaling service which helps prevent overheating.
+</p>
+<dl>
+<dt id="index-thermald_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">thermald-service-type </span></dt>
+<dd><p>This is the service type for
+<a href="https://01.org/linux-thermal-daemon/">thermald</a>, the Linux
+Thermal Daemon, which is responsible for controlling the thermal state
+of processors and preventing overheating.
+</p></dd></dl>
+
+<dl>
+<dt id="index-thermald_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">thermald-configuration </span></dt>
+<dd><p>Data type representing the configuration of <code>thermald-service-type</code>.
+</p>
+<dl compact="compact">
+<dt><code>adaptive?</code> (default: <code>#f</code>)</dt>
+<dd><p>Use <acronym title="Dynamic Power and Thermal Framework">DPTF</acronym> (Dynamic Power and Thermal Framework) adaptive tables
+when present.
+</p>
+</dd>
+<dt><code>ignore-cpuid-check?</code> (default: <code>#f</code>)</dt>
+<dd><p>Ignore cpuid check for supported CPU models.
+</p>
+</dd>
+<dt><code>thermald</code> (default: <var>thermald</var>)</dt>
+<dd><p>Package object of thermald.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr />
+<div class="header">
+<p>
+Next: <a href="Audio-Services.html" accesskey="n" rel="next">Audio Services</a>, Previous: <a href="Continuous-Integration.html" accesskey="p" rel="prev">Continuous Integration</a>, Up: <a href="Services.html" accesskey="u" rel="up">Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

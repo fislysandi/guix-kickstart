@@ -1,0 +1,570 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Continuous Integration (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="Continuous Integration (GNU Guix Reference Manual)" />
+<meta name="keywords" content="Continuous Integration (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Services.html" rel="up" title="Services" />
+<link href="Power-Management-Services.html" rel="next" title="Power Management Services" />
+<link href="Samba-Services.html" rel="prev" title="Samba Services" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="Continuous-Integration"></span><div class="header">
+<p>
+Next: <a href="Power-Management-Services.html" accesskey="n" rel="next">Power Management Services</a>, Previous: <a href="Samba-Services.html" accesskey="p" rel="prev">Samba Services</a>, Up: <a href="Services.html" accesskey="u" rel="up">Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Continuous-Integration-1"></span><h4 class="subsection">12.9.26 Continuous Integration</h4>
+
+<span id="index-continuous-integration-1"></span>
+<p><a href="https://guix.gnu.org/cuirass/">Cuirass</a> is a continuous
+integration tool for Guix.  It can be used both for development and for
+providing substitutes to others (see <a href="Substitutes.html">Substitutes</a>).
+</p>
+<p>The <code>(gnu services cuirass)</code> module provides the following service.
+</p>
+<dl>
+<dt id="index-cuirass_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">cuirass-service-type </span></dt>
+<dd><p>The type of the Cuirass service.  Its value must be a
+<code>cuirass-configuration</code> object, as described below.
+</p></dd></dl>
+
+<p>To add build jobs, you have to set the <code>specifications</code> field of
+the configuration.  For instance, the following example will build all
+the packages provided by the <code>my-channel</code> channel.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <span class="syntax-symbol">%cuirass-specs</span>
+  <span class="syntax-symbol">#~</span><span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">specification</span>
+           <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">name</span> <span class="syntax-string">"my-channel"</span></span>)</span>
+           <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Using-Guix-Interactively.html#index-build">build</a> <span class="syntax-symbol">'</span><span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">channels</span> <span class="syntax-symbol">my-channel</span></span>)</span></span>)</span>
+           <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">channels</span>
+            <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Pairs.html#index-cons">cons</a> <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">channel</span>
+                   <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">name</span> <span class="syntax-symbol">'my-channel</span></span>)</span>
+                   <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">url</span> <span class="syntax-string">"https://my-channel.git"</span></span>)</span></span>)</span>
+                  <span class="syntax-symbol">%default-channels</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Continuous-Integration.html#index-cuirass_002dservice_002dtype">cuirass-service-type</a>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Continuous-Integration.html#index-cuirass_002dconfiguration">cuirass-configuration</a>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">specifications</span> <span class="syntax-symbol">%cuirass-specs</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>To build the <code>linux-libre</code> package defined by the default Guix
+channel, one can use the following configuration.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <span class="syntax-symbol">%cuirass-specs</span>
+  <span class="syntax-symbol">#~</span><span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">specification</span>
+           <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">name</span> <span class="syntax-string">"my-linux"</span></span>)</span>
+           <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Using-Guix-Interactively.html#index-build">build</a> <span class="syntax-symbol">'</span><span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">packages</span> <span class="syntax-string">"linux-libre"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Continuous-Integration.html#index-cuirass_002dservice_002dtype">cuirass-service-type</a>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Continuous-Integration.html#index-cuirass_002dconfiguration">cuirass-configuration</a>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">specifications</span> <span class="syntax-symbol">%cuirass-specs</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>The other configuration possibilities, as well as the specification
+record itself are described in the Cuirass manual
+(see <a href="https://www.gnu.org/software/guix/cuirass/manual/html_node/Specifications.html#Specifications">Specifications</a> in <cite>Cuirass</cite>).
+</p>
+<p>While information related to build jobs is located directly in the
+specifications, global settings for the <code>cuirass</code> process are
+accessible in other <code>cuirass-configuration</code> fields.
+</p>
+<dl>
+<dt id="index-cuirass_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">cuirass-configuration </span></dt>
+<dd><p>Data type representing the configuration of Cuirass.
+</p>
+<dl compact="compact">
+<dt><code>cuirass</code> (default: <code>cuirass</code>)</dt>
+<dd><p>The Cuirass package to use.
+</p>
+</dd>
+<dt><code>log-file</code> (default: <code>"/var/log/cuirass.log"</code>)</dt>
+<dd><p>Location of the log file.
+</p>
+</dd>
+<dt><code>web-log-file</code> (default: <code>"/var/log/cuirass-web.log"</code>)</dt>
+<dd><p>Location of the log file used by the web interface.
+</p>
+</dd>
+<dt><code>cache-directory</code> (default: <code>"/var/cache/cuirass"</code>)</dt>
+<dd><p>Location of the repository cache.
+</p>
+</dd>
+<dt><code>user</code> (default: <code>"cuirass"</code>)</dt>
+<dd><p>Owner of the <code>cuirass</code> process.
+</p>
+</dd>
+<dt><code>group</code> (default: <code>"cuirass"</code>)</dt>
+<dd><p>Owner&rsquo;s group of the <code>cuirass</code> process.
+</p>
+</dd>
+<dt><code>interval</code> (default: <code>60</code>)</dt>
+<dd><p>Number of seconds between the poll of the repositories followed by the
+Cuirass jobs.
+</p>
+</dd>
+<dt><code>parameters</code> (default: <code>#f</code>)</dt>
+<dd><p>Read parameters from the given <var>parameters</var> file.  The supported
+parameters are described here (see <a href="https://www.gnu.org/software/guix/cuirass/manual/html_node/Parameters.html#Parameters">Parameters</a> in <cite>Cuirass</cite>).
+</p>
+</dd>
+<dt><code>remote-server</code> (default: <code>#f</code>)</dt>
+<dd><p>A <code>cuirass-remote-server-configuration</code> record to use the build
+remote mechanism or <code>#f</code> to use the default build mechanism.
+</p>
+</dd>
+<dt><code>database</code> (default: <code>"dbname=cuirass host=/var/run/postgresql"</code>)</dt>
+<dd><p>Use <var>database</var> as the database containing the jobs and the past
+build results. Since Cuirass uses PostgreSQL as a database engine,
+<var>database</var> must be a string such as <code>"dbname=cuirass
+host=localhost"</code>.
+</p>
+</dd>
+<dt><code>port</code> (default: <code>8081</code>)</dt>
+<dd><p>Port number used by the HTTP server.
+</p>
+</dd>
+<dt><code>host</code> (default: <code>"localhost"</code>)</dt>
+<dd><p>Listen on the network interface for <var>host</var>.  The default is to
+accept connections from localhost.
+</p>
+</dd>
+<dt><code>specifications</code> (default: <code>#~'()</code>)</dt>
+<dd><p>A gexp (see <a href="G_002dExpressions.html">G-Expressions</a>) that evaluates to a list of
+specifications records.  The specification record is described in the
+Cuirass manual (see <a href="https://www.gnu.org/software/guix/cuirass/manual/html_node/Specifications.html#Specifications">Specifications</a> in <cite>Cuirass</cite>).
+</p>
+</dd>
+<dt><code>use-substitutes?</code> (default: <code>#f</code>)</dt>
+<dd><p>This allows using substitutes to avoid building every dependencies of a job
+from source.
+</p>
+</dd>
+<dt><code>one-shot?</code> (default: <code>#f</code>)</dt>
+<dd><p>Only evaluate specifications and build derivations once.
+</p>
+</dd>
+<dt><code>fallback?</code> (default: <code>#f</code>)</dt>
+<dd><p>When substituting a pre-built binary fails, fall back to building
+packages locally.
+</p>
+</dd>
+<dt><code>extra-options</code> (default: <code>'()</code>)</dt>
+<dd><p>Extra options to pass when running the Cuirass processes.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span id="index-remote-build"></span>
+<span id="Cuirass-remote-building"></span><h4 class="subsubheading">Cuirass remote building</h4>
+
+<p>Cuirass supports two mechanisms to build derivations.
+</p>
+<ul>
+<li> Using the local Guix daemon.
+This is the default build mechanism.  Once the build jobs are
+evaluated, they are sent to the local Guix daemon.  Cuirass then
+listens to the Guix daemon output to detect the various build events.
+
+</li><li> Using the remote build mechanism.
+The build jobs are not submitted to the local Guix daemon.  Instead, a
+remote server dispatches build requests to the connect remote workers,
+according to the build priorities.
+
+</li></ul>
+
+<p>To enable this build mode a <code>cuirass-remote-server-configuration</code>
+record must be passed as <code>remote-server</code> argument of the
+<code>cuirass-configuration</code> record.  The
+<code>cuirass-remote-server-configuration</code> record is described below.
+</p>
+<p>This build mode scales way better than the default build mode.  This is
+the build mode that is used on the GNU Guix build farm at
+<a href="https://ci.guix.gnu.org">https://ci.guix.gnu.org</a>.  It should be preferred when using
+Cuirass to build large amount of packages.
+</p>
+<dl>
+<dt id="index-cuirass_002dremote_002dserver_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">cuirass-remote-server-configuration </span></dt>
+<dd><p>Data type representing the configuration of the Cuirass remote-server.
+</p>
+<dl compact="compact">
+<dt><code>backend-port</code> (default: <code>5555</code>)</dt>
+<dd><p>The TCP port for communicating with <code>remote-worker</code> processes
+using ZMQ.  It defaults to <code>5555</code>.
+</p>
+</dd>
+<dt><code>log-port</code> (default: <code>5556</code>)</dt>
+<dd><p>The TCP port of the log server.  It defaults to <code>5556</code>.
+</p>
+</dd>
+<dt><code>publish-port</code> (default: <code>5557</code>)</dt>
+<dd><p>The TCP port of the publish server.  It defaults to <code>5557</code>.
+</p>
+</dd>
+<dt><code>log-file</code> (default: <code>"/var/log/cuirass-remote-server.log"</code>)</dt>
+<dd><p>Location of the log file.
+</p>
+</dd>
+<dt><code>cache</code> (default: <code>"/var/cache/cuirass/remote"</code>)</dt>
+<dd><p>Use <var>cache</var> directory to cache build log files.
+</p>
+</dd>
+<dt><code>trigger-url</code> (default: <code>#f</code>)</dt>
+<dd><p>Once a substitute is successfully fetched, trigger substitute baking at
+<var>trigger-url</var>.
+</p>
+</dd>
+<dt><code>publish?</code> (default: <code>#t</code>)</dt>
+<dd><p>If set to false, do not start a publish server and ignore the
+<code>publish-port</code> argument.  This can be useful if there is already a
+standalone publish server standing next to the remote server.
+</p>
+</dd>
+<dt><code>public-key</code></dt>
+<dt><code>private-key</code></dt>
+<dd><p>Use the specific <var>file</var>s as the public/private key pair used to sign
+the store items being published.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>At least one remote worker must also be started on any machine of the
+local network to actually perform the builds and report their status.
+</p>
+<dl>
+<dt id="index-cuirass_002dremote_002dworker_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">cuirass-remote-worker-configuration </span></dt>
+<dd><p>Data type representing the configuration of the Cuirass remote-worker.
+</p>
+<dl compact="compact">
+<dt><code>cuirass</code> (default: <code>cuirass</code>)</dt>
+<dd><p>The Cuirass package to use.
+</p>
+</dd>
+<dt><code>workers</code> (default: <code>1</code>)</dt>
+<dd><p>Start <var>workers</var> parallel workers.
+</p>
+</dd>
+<dt><code>server</code> (default: <code>#f</code>)</dt>
+<dd><p>Do not use Avahi discovery and connect to the given <code>server</code> IP
+address instead.
+</p>
+</dd>
+<dt><code>systems</code> (default: <code>(list (%current-system))</code>)</dt>
+<dd><p>Only request builds for the given <var>systems</var>.
+</p>
+</dd>
+<dt><code>log-file</code> (default: <code>"/var/log/cuirass-remote-worker.log"</code>)</dt>
+<dd><p>Location of the log file.
+</p>
+</dd>
+<dt><code>publish-port</code> (default: <code>5558</code>)</dt>
+<dd><p>The TCP port of the publish server.  It defaults to <code>5558</code>.
+</p>
+</dd>
+<dt><code>substitute-urls</code> (default: <code>%default-substitute-urls</code>)</dt>
+<dd><p>The list of URLs where to look for substitutes by default.
+</p>
+</dd>
+<dt><code>public-key</code></dt>
+<dt><code>private-key</code></dt>
+<dd><p>Use the specific <var>file</var>s as the public/private key pair used to sign
+the store items being published.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span id="Laminar"></span><h4 class="subsubheading">Laminar</h4>
+
+<p><a href="https://laminar.ohwg.net/">Laminar</a> is a lightweight and modular
+Continuous Integration service.  It doesn&rsquo;t have a configuration web UI
+instead uses version-controllable configuration files and scripts.
+</p>
+<p>Laminar encourages the use of existing tools such as bash and cron
+instead of reinventing them.
+</p>
+<dl>
+<dt id="index-laminar_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">laminar-service-type </span></dt>
+<dd><p>The type of the Laminar service.  Its value must be a
+<code>laminar-configuration</code> object, as described below.
+</p>
+<p>All configuration values have defaults, a minimal configuration to get
+Laminar running is shown below. By default, the web interface is
+available on port 8080.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Continuous-Integration.html#index-laminar_002dservice_002dtype">laminar-service-type</a></span>)</span>
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt id="index-laminar_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">laminar-configuration </span></dt>
+<dd><p>Data type representing the configuration of Laminar.
+</p>
+<dl compact="compact">
+<dt><code>laminar</code> (default: <code>laminar</code>)</dt>
+<dd><p>The Laminar package to use.
+</p>
+</dd>
+<dt><code>home-directory</code> (default: <code>"/var/lib/laminar"</code>)</dt>
+<dd><p>The directory for job configurations and run directories.
+</p>
+</dd>
+<dt><code>bind-http</code> (default: <code>"*:8080"</code>)</dt>
+<dd><p>The interface/port or unix socket on which laminard should listen for
+incoming connections to the web frontend.
+</p>
+</dd>
+<dt><code>bind-rpc</code> (default: <code>"unix-abstract:laminar"</code>)</dt>
+<dd><p>The interface/port or unix socket on which laminard should listen for
+incoming commands such as build triggers.
+</p>
+</dd>
+<dt><code>title</code> (default: <code>"Laminar"</code>)</dt>
+<dd><p>The page title to show in the web frontend.
+</p>
+</dd>
+<dt><code>keep-rundirs</code> (default: <code>0</code>)</dt>
+<dd><p>Set to an integer defining how many rundirs to keep per job.  The
+lowest-numbered ones will be deleted.  The default is 0, meaning all run
+dirs will be immediately deleted.
+</p>
+</dd>
+<dt><code>archive-url</code> (default: <code>#f</code>)</dt>
+<dd><p>The web frontend served by laminard will use this URL to form links to
+artefacts archived jobs.
+</p>
+</dd>
+<dt><code>base-url</code> (default: <code>#f</code>)</dt>
+<dd><p>Base URL to use for links to laminar itself.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr />
+<div class="header">
+<p>
+Next: <a href="Power-Management-Services.html" accesskey="n" rel="next">Power Management Services</a>, Previous: <a href="Samba-Services.html" accesskey="p" rel="prev">Samba Services</a>, Up: <a href="Services.html" accesskey="u" rel="up">Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

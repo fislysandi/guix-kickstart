@@ -1,0 +1,471 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Invoking guix gc (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="Invoking guix gc (GNU Guix Reference Manual)" />
+<meta name="keywords" content="Invoking guix gc (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Package-Management.html" rel="up" title="Package Management" />
+<link href="Invoking-guix-pull.html" rel="next" title="Invoking guix pull" />
+<link href="Packages-with-Multiple-Outputs.html" rel="prev" title="Packages with Multiple Outputs" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="Invoking-guix-gc"></span><div class="header">
+<p>
+Next: <a href="Invoking-guix-pull.html" accesskey="n" rel="next">Invoking guix pull</a>, Previous: <a href="Packages-with-Multiple-Outputs.html" accesskey="p" rel="prev">Packages with Multiple Outputs</a>, Up: <a href="Package-Management.html" accesskey="u" rel="up">Package Management</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Invoking-guix-gc-1"></span><h3 class="section">6.5 Invoking <code>guix gc</code></h3>
+
+<span id="index-garbage-collector"></span>
+<span id="index-disk-space"></span>
+<span id="index-guix-gc"></span>
+<p>Packages that are installed, but not used, may be <em>garbage-collected</em>.
+The <code>guix gc</code> command allows users to explicitly run the garbage
+collector to reclaim space from the <samp>/gnu/store</samp> directory.  It is
+the <em>only</em> way to remove files from <samp>/gnu/store</samp>&mdash;removing
+files or directories manually may break it beyond repair!
+</p>
+<span id="index-GC-roots-1"></span>
+<span id="index-garbage-collector-roots-1"></span>
+<p>The garbage collector has a set of known <em>roots</em>: any file under
+<samp>/gnu/store</samp> reachable from a root is considered <em>live</em> and
+cannot be deleted; any other file is considered <em>dead</em> and may be
+deleted.  The set of garbage collector roots (&ldquo;GC roots&rdquo; for short)
+includes default user profiles; by default, the symlinks under
+<samp>/var/guix/gcroots</samp> represent these GC roots.  New GC roots can be
+added with <code>guix build --root</code>, for example (see <a href="Invoking-guix-build.html">Invoking guix build</a>).  The <code>guix gc --list-roots</code> command lists them.
+</p>
+<p>Prior to running <code>guix gc --collect-garbage</code> to make space, it is
+often useful to remove old generations from user profiles; that way, old
+package builds referenced by those generations can be reclaimed.  This
+is achieved by running <code>guix package --delete-generations</code>
+(see <a href="Invoking-guix-package.html">Invoking guix package</a>).
+</p>
+<p>Our recommendation is to run a garbage collection periodically, or when
+you are short on disk space.  For instance, to guarantee that at least
+5&nbsp;GB are available on your disk, simply run:
+</p>
+<div class="example">
+<pre class="example">guix gc -F 5G
+</pre></div>
+
+<p>It is perfectly safe to run as a non-interactive periodic job
+(see <a href="Scheduled-Job-Execution.html">Scheduled Job Execution</a>, for how to set up such a job).
+Running <code>guix gc</code> with no arguments will collect as
+much garbage as it can, but that is often inconvenient: you may find
+yourself having to rebuild or re-download software that is &ldquo;dead&rdquo; from
+the GC viewpoint but that is necessary to build other pieces of
+software&mdash;e.g., the compiler tool chain.
+</p>
+<p>The <code>guix gc</code> command has three modes of operation: it can be
+used to garbage-collect any dead files (the default), to delete specific
+files (the <samp>--delete</samp> option), to print garbage-collector
+information, or for more advanced queries.  The garbage collection
+options are as follows:
+</p>
+<dl compact="compact">
+<dt><code>--collect-garbage[=<var>min</var>]</code></dt>
+<dt><code>-C [<var>min</var>]</code></dt>
+<dd><p>Collect garbage&mdash;i.e., unreachable <samp>/gnu/store</samp> files and
+sub-directories.  This is the default operation when no option is
+specified.
+</p>
+<p>When <var>min</var> is given, stop once <var>min</var> bytes have been collected.
+<var>min</var> may be a number of bytes, or it may include a unit as a
+suffix, such as <code>MiB</code> for mebibytes and <code>GB</code> for gigabytes
+(see <a href="https://www.gnu.org/software/coreutils/manual/html_node/Block-size.html#Block-size">size specifications</a> in <cite>GNU Coreutils</cite>).
+</p>
+<p>When <var>min</var> is omitted, collect all the garbage.
+</p>
+</dd>
+<dt><code>--free-space=<var>free</var></code></dt>
+<dt><code>-F <var>free</var></code></dt>
+<dd><p>Collect garbage until <var>free</var> space is available under
+<samp>/gnu/store</samp>, if possible; <var>free</var> denotes storage space, such
+as <code>500MiB</code>, as described above.
+</p>
+<p>When <var>free</var> or more is already available in <samp>/gnu/store</samp>, do
+nothing and exit immediately.
+</p>
+</dd>
+<dt><code>--delete-generations[=<var>duration</var>]</code></dt>
+<dt><code>-d [<var>duration</var>]</code></dt>
+<dd><p>Before starting the garbage collection process, delete all the generations
+older than <var>duration</var>, for all the user profiles and home environment
+generations; when run as root, this
+applies to all the profiles <em>of all the users</em>.
+</p>
+<p>For example, this command deletes all the generations of all your profiles
+that are older than 2 months (except generations that are current), and then
+proceeds to free space until at least 10 GiB are available:
+</p>
+<div class="example">
+<pre class="example">guix gc -d 2m -F 10G
+</pre></div>
+
+</dd>
+<dt><code>--delete</code></dt>
+<dt><code>-D</code></dt>
+<dd><p>Attempt to delete all the store files and directories specified as
+arguments.  This fails if some of the files are not in the store, or if
+they are still live.
+</p>
+</dd>
+<dt><code>--list-failures</code></dt>
+<dd><p>List store items corresponding to cached build failures.
+</p>
+<p>This prints nothing unless the daemon was started with
+<samp>--cache-failures</samp> (see <a href="Invoking-guix_002ddaemon.html"><samp>--cache-failures</samp></a>).
+</p>
+</dd>
+<dt><code>--list-roots</code></dt>
+<dd><p>List the GC roots owned by the user; when run as root, list <em>all</em> the GC
+roots.
+</p>
+</dd>
+<dt><code>--list-busy</code></dt>
+<dd><p>List store items in use by currently running processes.  These store
+items are effectively considered GC roots: they cannot be deleted.
+</p>
+</dd>
+<dt><code>--clear-failures</code></dt>
+<dd><p>Remove the specified store items from the failed-build cache.
+</p>
+<p>Again, this option only makes sense when the daemon is started with
+<samp>--cache-failures</samp>.  Otherwise, it does nothing.
+</p>
+</dd>
+<dt><code>--list-dead</code></dt>
+<dd><p>Show the list of dead files and directories still present in the
+store&mdash;i.e., files and directories no longer reachable from any root.
+</p>
+</dd>
+<dt><code>--list-live</code></dt>
+<dd><p>Show the list of live store files and directories.
+</p>
+</dd>
+</dl>
+
+<p>In addition, the references among existing store files can be queried:
+</p>
+<dl compact="compact">
+<dt><code>--references</code></dt>
+<dt><code>--referrers</code></dt>
+<dd><span id="index-package-dependencies"></span>
+<p>List the references (respectively, the referrers) of store files given
+as arguments.
+</p>
+</dd>
+<dt><code>--requisites</code></dt>
+<dt><code>-R</code></dt>
+<dd><span id="index-closure"></span>
+<p>List the requisites of the store files passed as arguments.  Requisites
+include the store files themselves, their references, and the references
+of these, recursively.  In other words, the returned list is the
+<em>transitive closure</em> of the store files.
+</p>
+<p>See <a href="Invoking-guix-size.html">Invoking guix size</a>, for a tool to profile the size of the closure
+of an element.  See <a href="Invoking-guix-graph.html">Invoking guix graph</a>, for a tool to visualize
+the graph of references.
+</p>
+</dd>
+<dt><code>--derivers</code></dt>
+<dd><span id="index-derivation"></span>
+<p>Return the derivation(s) leading to the given store items
+(see <a href="Derivations.html">Derivations</a>).
+</p>
+<p>For example, this command:
+</p>
+<div class="example">
+<pre class="example">guix gc --derivers $(guix package -I ^emacs$ | cut -f4)
+</pre></div>
+
+<p>returns the <samp>.drv</samp> file(s) leading to the <code>emacs</code> package
+installed in your profile.
+</p>
+<p>Note that there may be zero matching <samp>.drv</samp> files, for instance
+because these files have been garbage-collected.  There can also be more
+than one matching <samp>.drv</samp> due to fixed-output derivations.
+</p></dd>
+</dl>
+
+<p>Lastly, the following options allow you to check the integrity of the
+store and to control disk usage.
+</p>
+<dl compact="compact">
+<dt><samp>--verify[=<var>options</var>]</samp></dt>
+<dd><span id="index-integrity_002c-of-the-store"></span>
+<span id="index-integrity-checking"></span>
+<p>Verify the integrity of the store.
+</p>
+<p>By default, make sure that all the store items marked as valid in the
+database of the daemon actually exist in <samp>/gnu/store</samp>.
+</p>
+<p>When provided, <var>options</var> must be a comma-separated list containing one
+or more of <code>contents</code> and <code>repair</code>.
+</p>
+<p>When passing <samp>--verify=contents</samp>, the daemon computes the
+content hash of each store item and compares it against its hash in the
+database.  Hash mismatches are reported as data corruptions.  Because it
+traverses <em>all the files in the store</em>, this command can take a
+long time, especially on systems with a slow disk drive.
+</p>
+<span id="index-repairing-the-store"></span>
+<span id="index-corruption_002c-recovering-from"></span>
+<p>Using <samp>--verify=repair</samp> or <samp>--verify=contents,repair</samp>
+causes the daemon to try to repair corrupt store items by fetching
+substitutes for them (see <a href="Substitutes.html">Substitutes</a>).  Because repairing is not
+atomic, and thus potentially dangerous, it is available only to the
+system administrator.  A lightweight alternative, when you know exactly
+which items in the store are corrupt, is <code>guix build --repair</code>
+(see <a href="Invoking-guix-build.html">Invoking guix build</a>).
+</p>
+</dd>
+<dt><samp>--optimize</samp></dt>
+<dd><span id="index-deduplication-1"></span>
+<p>Optimize the store by hard-linking identical files&mdash;this is
+<em>deduplication</em>.
+</p>
+<p>The daemon performs deduplication after each successful build or archive
+import, unless it was started with <samp>--disable-deduplication</samp>
+(see <a href="Invoking-guix_002ddaemon.html"><samp>--disable-deduplication</samp></a>).  Thus,
+this option is primarily useful when the daemon was running with
+<samp>--disable-deduplication</samp>.
+</p>
+</dd>
+<dt><samp>--vacuum-database</samp></dt>
+<dd><span id="index-vacuum-the-store-database"></span>
+<p>Guix uses an sqlite database to keep track of the items in (see <a href="The-Store.html">The Store</a>).
+Over time it is possible that the database may grow to a large size and become
+fragmented.  As a result, one may wish to clear the freed space and join the
+partially used pages in the database left behind from removed packages or after
+running the garbage collector.  Running <code>sudo guix gc
+--vacuum-database</code> will lock the database and <code>VACUUM</code> the store,
+defragmenting the database and purging freed pages, unlocking the database when
+it finishes.
+</p>
+</dd>
+</dl>
+
+<hr />
+<div class="header">
+<p>
+Next: <a href="Invoking-guix-pull.html" accesskey="n" rel="next">Invoking guix pull</a>, Previous: <a href="Packages-with-Multiple-Outputs.html" accesskey="p" rel="prev">Packages with Multiple Outputs</a>, Up: <a href="Package-Management.html" accesskey="u" rel="up">Package Management</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

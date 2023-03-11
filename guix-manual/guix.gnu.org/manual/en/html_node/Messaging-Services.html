@@ -1,0 +1,798 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Messaging Services (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="Messaging Services (GNU Guix Reference Manual)" />
+<meta name="keywords" content="Messaging Services (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Services.html" rel="up" title="Services" />
+<link href="Telephony-Services.html" rel="next" title="Telephony Services" />
+<link href="Mail-Services.html" rel="prev" title="Mail Services" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="Messaging-Services"></span><div class="header">
+<p>
+Next: <a href="Telephony-Services.html" accesskey="n" rel="next">Telephony Services</a>, Previous: <a href="Mail-Services.html" accesskey="p" rel="prev">Mail Services</a>, Up: <a href="Services.html" accesskey="u" rel="up">Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Messaging-Services-1"></span><h4 class="subsection">12.9.13 Messaging Services</h4>
+
+<span id="index-messaging"></span>
+<span id="index-jabber"></span>
+<span id="index-XMPP"></span>
+<p>The <code>(gnu services messaging)</code> module provides Guix service
+definitions for messaging services.  Currently it provides the following
+services:
+</p>
+<span id="Prosody-Service"></span><h4 class="subsubheading">Prosody Service</h4>
+
+<dl>
+<dt id="index-prosody_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">prosody-service-type </span></dt>
+<dd><p>This is the type for the <a href="https://prosody.im">Prosody XMPP
+communication server</a>.  Its value must be a <code>prosody-configuration</code>
+record as in this example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Messaging-Services.html#index-prosody_002dservice_002dtype">prosody-service-type</a>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">prosody-configuration</span>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">modules-enabled</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-cons_002a">cons*</a> <span class="syntax-string">"groups"</span> <span class="syntax-string">"mam"</span> <span class="syntax-symbol">%default-modules-enabled</span></span>)</span></span>)</span>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">int-components</span>
+           <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a>
+            <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">int-component-configuration</span>
+             <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">hostname</span> <span class="syntax-string">"conference.example.net"</span></span>)</span>
+             <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">plugin</span> <span class="syntax-string">"muc"</span></span>)</span>
+             <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">mod-muc</span> <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">mod-muc-configuration</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">virtualhosts</span>
+           <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a>
+            <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">virtualhost-configuration</span>
+             <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">domain</span> <span class="syntax-string">"example.net"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>See below for details about <code>prosody-configuration</code>.
+</p>
+</dd></dl>
+
+<p>By default, Prosody does not need much configuration.  Only one
+<code>virtualhosts</code> field is needed: it specifies the domain you wish
+Prosody to serve.
+</p>
+<p>You can perform various sanity checks on the generated configuration
+with the <code>prosodyctl check</code> command.
+</p>
+<p>Prosodyctl will also help you to import certificates from the
+<code>letsencrypt</code> directory so that the <code>prosody</code> user can access
+them.  See <a href="https://prosody.im/doc/letsencrypt">https://prosody.im/doc/letsencrypt</a>.
+</p>
+<div class="example">
+<pre class="example">prosodyctl --root cert import /etc/letsencrypt/live
+</pre></div>
+
+<p>The available configuration parameters follow.  Each parameter
+definition is preceded by its type; for example, &lsquo;<samp>string-list foo</samp>&rsquo;
+indicates that the <code>foo</code> parameter should be specified as a list of
+strings.  Types starting with <code>maybe-</code> denote parameters that won&rsquo;t
+show up in <code>prosody.cfg.lua</code> when their value is left unspecified.
+</p>
+<p>There is also a way to specify the configuration as a string, if you
+have an old <code>prosody.cfg.lua</code> file that you want to port over from
+some other system; see the end for more details.
+</p>
+<p>The <code>file-object</code> type designates either a file-like object
+(see <a href="G_002dExpressions.html">file-like objects</a>) or a file name.
+</p>
+
+<p>Available <code>prosody-configuration</code> fields are:
+</p>
+<dl>
+<dt id="index-prosody" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>package</em> </span><span class="symbol-definition-prototype">prosody </span></dt>
+<dd><p>The Prosody package.
+</p></dd></dl>
+
+<dl>
+<dt id="index-data_002dpath" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>file-name</em> </span><span class="symbol-definition-prototype">data-path </span></dt>
+<dd><p>Location of the Prosody data storage directory.  See
+<a href="https://prosody.im/doc/configure">https://prosody.im/doc/configure</a>.
+Defaults to &lsquo;<samp>"/var/lib/prosody"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-plugin_002dpaths" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>file-object-list</em> </span><span class="symbol-definition-prototype">plugin-paths </span></dt>
+<dd><p>Additional plugin directories.  They are searched in all the specified
+paths in order.  See <a href="https://prosody.im/doc/plugins_directory">https://prosody.im/doc/plugins_directory</a>.
+Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-certificates-1" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>file-name</em> </span><span class="symbol-definition-prototype">certificates </span></dt>
+<dd><p>Every virtual host and component needs a certificate so that clients and
+servers can securely verify its identity.  Prosody will automatically load
+certificates/keys from the directory specified here.
+Defaults to &lsquo;<samp>"/etc/prosody/certs"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-admins" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>string-list</em> </span><span class="symbol-definition-prototype">admins </span></dt>
+<dd><p>This is a list of accounts that are admins for the server.  Note that you
+must create the accounts separately.  See <a href="https://prosody.im/doc/admins">https://prosody.im/doc/admins</a> and
+<a href="https://prosody.im/doc/creating_accounts">https://prosody.im/doc/creating_accounts</a>.
+Example: <code>(admins '("user1@example.com" "user2@example.net"))</code>
+Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-use_002dlibevent_003f" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">use-libevent? </span></dt>
+<dd><p>Enable use of libevent for better performance under high load.  See
+<a href="https://prosody.im/doc/libevent">https://prosody.im/doc/libevent</a>.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-modules_002denabled" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>module-list</em> </span><span class="symbol-definition-prototype">modules-enabled </span></dt>
+<dd><p>This is the list of modules Prosody will load on startup.  It looks for
+<code>mod_modulename.lua</code> in the plugins folder, so make sure that exists too.
+Documentation on modules can be found at:
+<a href="https://prosody.im/doc/modules">https://prosody.im/doc/modules</a>.
+Defaults to &lsquo;<samp>("roster" "saslauth" "tls" "dialback" "disco" "carbons" "private" "blocklist" "vcard" "version" "uptime" "time" "ping" "pep" "register" "admin_adhoc")</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-modules_002ddisabled" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>string-list</em> </span><span class="symbol-definition-prototype">modules-disabled </span></dt>
+<dd><p>&lsquo;<samp>"offline"</samp>&rsquo;, &lsquo;<samp>"c2s"</samp>&rsquo; and &lsquo;<samp>"s2s"</samp>&rsquo; are auto-loaded, but
+should you want to disable them then add them to this list.
+Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-groups_002dfile" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>file-object</em> </span><span class="symbol-definition-prototype">groups-file </span></dt>
+<dd><p>Path to a text file where the shared groups are defined.  If this path is
+empty then &lsquo;<samp>mod_groups</samp>&rsquo; does nothing.  See
+<a href="https://prosody.im/doc/modules/mod_groups">https://prosody.im/doc/modules/mod_groups</a>.
+Defaults to &lsquo;<samp>"/var/lib/prosody/sharedgroups.txt"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-allow_002dregistration_003f" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">allow-registration? </span></dt>
+<dd><p>Disable account creation by default, for security.  See
+<a href="https://prosody.im/doc/creating_accounts">https://prosody.im/doc/creating_accounts</a>.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ssl" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>maybe-ssl-configuration</em> </span><span class="symbol-definition-prototype">ssl </span></dt>
+<dd><p>These are the SSL/TLS-related settings.  Most of them are disabled so to
+use Prosody&rsquo;s defaults.  If you do not completely understand these options, do
+not add them to your config, it is easy to lower the security of your server
+using them.  See <a href="https://prosody.im/doc/advanced_ssl_config">https://prosody.im/doc/advanced_ssl_config</a>.
+</p>
+<p>Available <code>ssl-configuration</code> fields are:
+</p>
+<dl>
+<dt id="index-protocol-1" class="symbol-definition"><span class="symbol-definition-category"><code>ssl-configuration</code> parameter: <em>maybe-string</em> </span><span class="symbol-definition-prototype">protocol </span></dt>
+<dd><p>This determines what handshake to use.
+</p></dd></dl>
+
+<dl>
+<dt id="index-key" class="symbol-definition"><span class="symbol-definition-category"><code>ssl-configuration</code> parameter: <em>maybe-file-name</em> </span><span class="symbol-definition-prototype">key </span></dt>
+<dd><p>Path to your private key file.
+</p></dd></dl>
+
+<dl>
+<dt id="index-certificate" class="symbol-definition"><span class="symbol-definition-category"><code>ssl-configuration</code> parameter: <em>maybe-file-name</em> </span><span class="symbol-definition-prototype">certificate </span></dt>
+<dd><p>Path to your certificate file.
+</p></dd></dl>
+
+<dl>
+<dt id="index-capath" class="symbol-definition"><span class="symbol-definition-category"><code>ssl-configuration</code> parameter: <em>file-object</em> </span><span class="symbol-definition-prototype">capath </span></dt>
+<dd><p>Path to directory containing root certificates that you wish Prosody to
+trust when verifying the certificates of remote servers.
+Defaults to &lsquo;<samp>"/etc/ssl/certs"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-cafile" class="symbol-definition"><span class="symbol-definition-category"><code>ssl-configuration</code> parameter: <em>maybe-file-object</em> </span><span class="symbol-definition-prototype">cafile </span></dt>
+<dd><p>Path to a file containing root certificates that you wish Prosody to trust.
+Similar to <code>capath</code> but with all certificates concatenated together.
+</p></dd></dl>
+
+<dl>
+<dt id="index-verify" class="symbol-definition"><span class="symbol-definition-category"><code>ssl-configuration</code> parameter: <em>maybe-string-list</em> </span><span class="symbol-definition-prototype">verify </span></dt>
+<dd><p>A list of verification options (these mostly map to OpenSSL&rsquo;s
+<code>set_verify()</code> flags).
+</p></dd></dl>
+
+<dl>
+<dt id="index-options-1" class="symbol-definition"><span class="symbol-definition-category"><code>ssl-configuration</code> parameter: <em>maybe-string-list</em> </span><span class="symbol-definition-prototype">options </span></dt>
+<dd><p>A list of general options relating to SSL/TLS.  These map to OpenSSL&rsquo;s
+<code>set_options()</code>.  For a full list of options available in LuaSec, see the
+LuaSec source.
+</p></dd></dl>
+
+<dl>
+<dt id="index-depth" class="symbol-definition"><span class="symbol-definition-category"><code>ssl-configuration</code> parameter: <em>maybe-non-negative-integer</em> </span><span class="symbol-definition-prototype">depth </span></dt>
+<dd><p>How long a chain of certificate authorities to check when looking for a
+trusted root certificate.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ciphers" class="symbol-definition"><span class="symbol-definition-category"><code>ssl-configuration</code> parameter: <em>maybe-string</em> </span><span class="symbol-definition-prototype">ciphers </span></dt>
+<dd><p>An OpenSSL cipher string.  This selects what ciphers Prosody will offer to
+clients, and in what order.
+</p></dd></dl>
+
+<dl>
+<dt id="index-dhparam" class="symbol-definition"><span class="symbol-definition-category"><code>ssl-configuration</code> parameter: <em>maybe-file-name</em> </span><span class="symbol-definition-prototype">dhparam </span></dt>
+<dd><p>A path to a file containing parameters for Diffie-Hellman key exchange.  You
+can create such a file with:
+<code>openssl dhparam -out /etc/prosody/certs/dh-2048.pem 2048</code>
+</p></dd></dl>
+
+<dl>
+<dt id="index-curve" class="symbol-definition"><span class="symbol-definition-category"><code>ssl-configuration</code> parameter: <em>maybe-string</em> </span><span class="symbol-definition-prototype">curve </span></dt>
+<dd><p>Curve for Elliptic curve Diffie-Hellman.  Prosody&rsquo;s default is
+&lsquo;<samp>"secp384r1"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-verifyext" class="symbol-definition"><span class="symbol-definition-category"><code>ssl-configuration</code> parameter: <em>maybe-string-list</em> </span><span class="symbol-definition-prototype">verifyext </span></dt>
+<dd><p>A list of &ldquo;extra&rdquo; verification options.
+</p></dd></dl>
+
+<dl>
+<dt id="index-password-1" class="symbol-definition"><span class="symbol-definition-category"><code>ssl-configuration</code> parameter: <em>maybe-string</em> </span><span class="symbol-definition-prototype">password </span></dt>
+<dd><p>Password for encrypted private keys.
+</p></dd></dl>
+
+</dd></dl>
+
+<dl>
+<dt id="index-c2s_002drequire_002dencryption_003f" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">c2s-require-encryption? </span></dt>
+<dd><p>Whether to force all client-to-server connections to be encrypted or not.
+See <a href="https://prosody.im/doc/modules/mod_tls">https://prosody.im/doc/modules/mod_tls</a>.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-disable_002dsasl_002dmechanisms" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>string-list</em> </span><span class="symbol-definition-prototype">disable-sasl-mechanisms </span></dt>
+<dd><p>Set of mechanisms that will never be offered.  See
+<a href="https://prosody.im/doc/modules/mod_saslauth">https://prosody.im/doc/modules/mod_saslauth</a>.
+Defaults to &lsquo;<samp>("DIGEST-MD5")</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-s2s_002drequire_002dencryption_003f" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">s2s-require-encryption? </span></dt>
+<dd><p>Whether to force all server-to-server connections to be encrypted or not.
+See <a href="https://prosody.im/doc/modules/mod_tls">https://prosody.im/doc/modules/mod_tls</a>.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-s2s_002dsecure_002dauth_003f" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">s2s-secure-auth? </span></dt>
+<dd><p>Whether to require encryption and certificate authentication.  This
+provides ideal security, but requires servers you communicate with to support
+encryption AND present valid, trusted certificates.  See
+<a href="https://prosody.im/doc/s2s#security">https://prosody.im/doc/s2s#security</a>.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-s2s_002dinsecure_002ddomains" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>string-list</em> </span><span class="symbol-definition-prototype">s2s-insecure-domains </span></dt>
+<dd><p>Many servers don&rsquo;t support encryption or have invalid or self-signed
+certificates.  You can list domains here that will not be required to
+authenticate using certificates.  They will be authenticated using DNS.  See
+<a href="https://prosody.im/doc/s2s#security">https://prosody.im/doc/s2s#security</a>.
+Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-s2s_002dsecure_002ddomains" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>string-list</em> </span><span class="symbol-definition-prototype">s2s-secure-domains </span></dt>
+<dd><p>Even if you leave <code>s2s-secure-auth?</code> disabled, you can still require
+valid certificates for some domains by specifying a list here.  See
+<a href="https://prosody.im/doc/s2s#security">https://prosody.im/doc/s2s#security</a>.
+Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-authentication" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">authentication </span></dt>
+<dd><p>Select the authentication backend to use.  The default provider stores
+passwords in plaintext and uses Prosody&rsquo;s configured data storage to store the
+authentication data.  If you do not trust your server please see
+<a href="https://prosody.im/doc/modules/mod_auth_internal_hashed">https://prosody.im/doc/modules/mod_auth_internal_hashed</a> for information
+about using the hashed backend.  See also
+<a href="https://prosody.im/doc/authentication">https://prosody.im/doc/authentication</a>
+Defaults to &lsquo;<samp>"internal_plain"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-log" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>maybe-string</em> </span><span class="symbol-definition-prototype">log </span></dt>
+<dd><p>Set logging options.  Advanced logging configuration is not yet supported
+by the Prosody service.  See <a href="https://prosody.im/doc/logging">https://prosody.im/doc/logging</a>.
+Defaults to &lsquo;<samp>"*syslog"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-pidfile" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>file-name</em> </span><span class="symbol-definition-prototype">pidfile </span></dt>
+<dd><p>File to write pid in.  See <a href="https://prosody.im/doc/modules/mod_posix">https://prosody.im/doc/modules/mod_posix</a>.
+Defaults to &lsquo;<samp>"/var/run/prosody/prosody.pid"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-http_002dmax_002dcontent_002dsize" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>maybe-non-negative-integer</em> </span><span class="symbol-definition-prototype">http-max-content-size </span></dt>
+<dd><p>Maximum allowed size of the HTTP body (in bytes).
+</p></dd></dl>
+
+<dl>
+<dt id="index-http_002dexternal_002durl" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>maybe-string</em> </span><span class="symbol-definition-prototype">http-external-url </span></dt>
+<dd><p>Some modules expose their own URL in various ways.  This URL is built
+from the protocol, host and port used.  If Prosody sits behind a proxy, the
+public URL will be <code>http-external-url</code> instead.  See
+<a href="https://prosody.im/doc/http#external_url">https://prosody.im/doc/http#external_url</a>.
+</p></dd></dl>
+
+<dl>
+<dt id="index-virtualhosts" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>virtualhost-configuration-list</em> </span><span class="symbol-definition-prototype">virtualhosts </span></dt>
+<dd><p>A host in Prosody is a domain on which user accounts can be created.  For
+example if you want your users to have addresses like
+&lsquo;<samp>"john.smith@example.com"</samp>&rsquo; then you need to add a host
+&lsquo;<samp>"example.com"</samp>&rsquo;.  All options in this list will apply only to this host.
+</p>
+<blockquote>
+<p><b>Note:</b> The name <em>virtual</em> host is used in configuration to avoid confusion with
+the actual physical host that Prosody is installed on.  A single Prosody
+instance can serve many domains, each one defined as a VirtualHost entry in
+Prosody&rsquo;s configuration.  Conversely a server that hosts a single domain would
+have just one VirtualHost entry.
+</p>
+<p>See <a href="https://prosody.im/doc/configure#virtual_host_settings">https://prosody.im/doc/configure#virtual_host_settings</a>.
+</p></blockquote>
+
+<p>Available <code>virtualhost-configuration</code> fields are:
+</p>
+<p>all these <code>prosody-configuration</code> fields: <code>admins</code>, <code>use-libevent?</code>, <code>modules-enabled</code>, <code>modules-disabled</code>, <code>groups-file</code>, <code>allow-registration?</code>, <code>ssl</code>, <code>c2s-require-encryption?</code>, <code>disable-sasl-mechanisms</code>, <code>s2s-require-encryption?</code>, <code>s2s-secure-auth?</code>, <code>s2s-insecure-domains</code>, <code>s2s-secure-domains</code>, <code>authentication</code>, <code>log</code>, <code>http-max-content-size</code>, <code>http-external-url</code>, <code>raw-content</code>, plus:
+</p><dl>
+<dt id="index-domain" class="symbol-definition"><span class="symbol-definition-category"><code>virtualhost-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">domain </span></dt>
+<dd><p>Domain you wish Prosody to serve.
+</p></dd></dl>
+
+</dd></dl>
+
+<dl>
+<dt id="index-int_002dcomponents" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>int-component-configuration-list</em> </span><span class="symbol-definition-prototype">int-components </span></dt>
+<dd><p>Components are extra services on a server which are available to clients,
+usually on a subdomain of the main server (such as
+&lsquo;<samp>"mycomponent.example.com"</samp>&rsquo;).  Example components might be chatroom
+servers, user directories, or gateways to other protocols.
+</p>
+<p>Internal components are implemented with Prosody-specific plugins.  To add an
+internal component, you simply fill the hostname field, and the plugin you wish
+to use for the component.
+</p>
+<p>See <a href="https://prosody.im/doc/components">https://prosody.im/doc/components</a>.
+Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p>
+<p>Available <code>int-component-configuration</code> fields are:
+</p>
+<p>all these <code>prosody-configuration</code> fields: <code>admins</code>, <code>use-libevent?</code>, <code>modules-enabled</code>, <code>modules-disabled</code>, <code>groups-file</code>, <code>allow-registration?</code>, <code>ssl</code>, <code>c2s-require-encryption?</code>, <code>disable-sasl-mechanisms</code>, <code>s2s-require-encryption?</code>, <code>s2s-secure-auth?</code>, <code>s2s-insecure-domains</code>, <code>s2s-secure-domains</code>, <code>authentication</code>, <code>log</code>, <code>http-max-content-size</code>, <code>http-external-url</code>, <code>raw-content</code>, plus:
+</p><dl>
+<dt id="index-hostname-1" class="symbol-definition"><span class="symbol-definition-category"><code>int-component-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">hostname </span></dt>
+<dd><p>Hostname of the component.
+</p></dd></dl>
+
+<dl>
+<dt id="index-plugin" class="symbol-definition"><span class="symbol-definition-category"><code>int-component-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">plugin </span></dt>
+<dd><p>Plugin you wish to use for the component.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mod_002dmuc" class="symbol-definition"><span class="symbol-definition-category"><code>int-component-configuration</code> parameter: <em>maybe-mod-muc-configuration</em> </span><span class="symbol-definition-prototype">mod-muc </span></dt>
+<dd><p>Multi-user chat (MUC) is Prosody&rsquo;s module for allowing you to create
+hosted chatrooms/conferences for XMPP users.
+</p>
+<p>General information on setting up and using multi-user chatrooms can be found
+in the &ldquo;Chatrooms&rdquo; documentation (<a href="https://prosody.im/doc/chatrooms">https://prosody.im/doc/chatrooms</a>),
+which you should read if you are new to XMPP chatrooms.
+</p>
+<p>See also <a href="https://prosody.im/doc/modules/mod_muc">https://prosody.im/doc/modules/mod_muc</a>.
+</p>
+<p>Available <code>mod-muc-configuration</code> fields are:
+</p>
+<dl>
+<dt id="index-name-5" class="symbol-definition"><span class="symbol-definition-category"><code>mod-muc-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">name </span></dt>
+<dd><p>The name to return in service discovery responses.
+Defaults to &lsquo;<samp>"Prosody Chatrooms"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-restrict_002droom_002dcreation" class="symbol-definition"><span class="symbol-definition-category"><code>mod-muc-configuration</code> parameter: <em>string-or-boolean</em> </span><span class="symbol-definition-prototype">restrict-room-creation </span></dt>
+<dd><p>If &lsquo;<samp>#t</samp>&rsquo;, this will only allow admins to create new chatrooms.
+Otherwise anyone can create a room.  The value &lsquo;<samp>"local"</samp>&rsquo; restricts room
+creation to users on the service&rsquo;s parent domain.  E.g. &lsquo;<samp>user@example.com</samp>&rsquo;
+can create rooms on &lsquo;<samp>rooms.example.com</samp>&rsquo;.  The value &lsquo;<samp>"admin"</samp>&rsquo;
+restricts to service administrators only.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-max_002dhistory_002dmessages" class="symbol-definition"><span class="symbol-definition-category"><code>mod-muc-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">max-history-messages </span></dt>
+<dd><p>Maximum number of history messages that will be sent to the member that has
+just joined the room.
+Defaults to &lsquo;<samp>20</samp>&rsquo;.
+</p></dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl>
+<dt id="index-ext_002dcomponents" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>ext-component-configuration-list</em> </span><span class="symbol-definition-prototype">ext-components </span></dt>
+<dd><p>External components use XEP-0114, which most standalone components
+support.  To add an external component, you simply fill the hostname field.  See
+<a href="https://prosody.im/doc/components">https://prosody.im/doc/components</a>.
+Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p>
+<p>Available <code>ext-component-configuration</code> fields are:
+</p>
+<p>all these <code>prosody-configuration</code> fields: <code>admins</code>, <code>use-libevent?</code>, <code>modules-enabled</code>, <code>modules-disabled</code>, <code>groups-file</code>, <code>allow-registration?</code>, <code>ssl</code>, <code>c2s-require-encryption?</code>, <code>disable-sasl-mechanisms</code>, <code>s2s-require-encryption?</code>, <code>s2s-secure-auth?</code>, <code>s2s-insecure-domains</code>, <code>s2s-secure-domains</code>, <code>authentication</code>, <code>log</code>, <code>http-max-content-size</code>, <code>http-external-url</code>, <code>raw-content</code>, plus:
+</p><dl>
+<dt id="index-component_002dsecret" class="symbol-definition"><span class="symbol-definition-category"><code>ext-component-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">component-secret </span></dt>
+<dd><p>Password which the component will use to log in.
+</p></dd></dl>
+
+<dl>
+<dt id="index-hostname-2" class="symbol-definition"><span class="symbol-definition-category"><code>ext-component-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">hostname </span></dt>
+<dd><p>Hostname of the component.
+</p></dd></dl>
+
+</dd></dl>
+
+<dl>
+<dt id="index-component_002dports" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>non-negative-integer-list</em> </span><span class="symbol-definition-prototype">component-ports </span></dt>
+<dd><p>Port(s) Prosody listens on for component connections.
+Defaults to &lsquo;<samp>(5347)</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-component_002dinterface" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">component-interface </span></dt>
+<dd><p>Interface Prosody listens on for component connections.
+Defaults to &lsquo;<samp>"127.0.0.1"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-raw_002dcontent" class="symbol-definition"><span class="symbol-definition-category"><code>prosody-configuration</code> parameter: <em>maybe-raw-content</em> </span><span class="symbol-definition-prototype">raw-content </span></dt>
+<dd><p>Raw content that will be added to the configuration file.
+</p></dd></dl>
+
+<p>It could be that you just want to get a <code>prosody.cfg.lua</code>
+up and running.  In that case, you can pass an
+<code>opaque-prosody-configuration</code> record as the value of
+<code>prosody-service-type</code>.  As its name indicates, an opaque configuration
+does not have easy reflective capabilities.
+Available <code>opaque-prosody-configuration</code> fields are:
+</p>
+<dl>
+<dt id="index-prosody-1" class="symbol-definition"><span class="symbol-definition-category"><code>opaque-prosody-configuration</code> parameter: <em>package</em> </span><span class="symbol-definition-prototype">prosody </span></dt>
+<dd><p>The prosody package.
+</p></dd></dl>
+
+<dl>
+<dt id="index-prosody_002ecfg_002elua" class="symbol-definition"><span class="symbol-definition-category"><code>opaque-prosody-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">prosody.cfg.lua </span></dt>
+<dd><p>The contents of the <code>prosody.cfg.lua</code> to use.
+</p></dd></dl>
+
+<p>For example, if your <code>prosody.cfg.lua</code> is just the empty
+string, you could instantiate a prosody service like this:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Messaging-Services.html#index-prosody_002dservice_002dtype">prosody-service-type</a>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">opaque-prosody-configuration</span>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">prosody.cfg.lua</span> <span class="syntax-string">""</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+
+<span id="BitlBee-Service"></span><h4 class="subsubheading">BitlBee Service</h4>
+
+<span id="index-IRC-_0028Internet-Relay-Chat_0029"></span>
+<span id="index-IRC-gateway"></span>
+<p><a href="https://bitlbee.org">BitlBee</a> is a gateway that provides an IRC
+interface to a variety of messaging protocols such as XMPP.
+</p>
+<dl>
+<dt id="index-bitlbee_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">bitlbee-service-type </span></dt>
+<dd><p>This is the service type for the <a href="https://bitlbee.org">BitlBee</a> IRC
+gateway daemon.  Its value is a <code>bitlbee-configuration</code> (see
+below).
+</p>
+<p>To have BitlBee listen on port 6667 on localhost, add this line to your
+services:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Messaging-Services.html#index-bitlbee_002dservice_002dtype">bitlbee-service-type</a></span>)</span>
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt id="index-bitlbee_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">bitlbee-configuration </span></dt>
+<dd><p>This is the configuration for BitlBee, with the following fields:
+</p>
+<dl compact="compact">
+<dt><code>interface</code> (default: <code>"127.0.0.1"</code>)</dt>
+<dt><code>port</code> (default: <code>6667</code>)</dt>
+<dd><p>Listen on the network interface corresponding to the IP address
+specified in <var>interface</var>, on <var>port</var>.
+</p>
+<p>When <var>interface</var> is <code>127.0.0.1</code>, only local clients can
+connect; when it is <code>0.0.0.0</code>, connections can come from any
+networking interface.
+</p>
+</dd>
+<dt><code>bitlbee</code> (default: <code>bitlbee</code>)</dt>
+<dd><p>The BitlBee package to use.
+</p>
+</dd>
+<dt><code>plugins</code> (default: <code>'()</code>)</dt>
+<dd><p>List of plugin packages to use&mdash;e.g., <code>bitlbee-discord</code>.
+</p>
+</dd>
+<dt><code>extra-settings</code> (default: <code>""</code>)</dt>
+<dd><p>Configuration snippet added as-is to the BitlBee configuration file.
+</p></dd>
+</dl>
+</dd></dl>
+
+<span id="Quassel-Service"></span><h4 class="subsubheading">Quassel Service</h4>
+
+<span id="index-IRC-_0028Internet-Relay-Chat_0029-1"></span>
+<p><a href="https://quassel-irc.org/">Quassel</a> is a distributed IRC client,
+meaning that one or more clients can attach to and detach from the
+central core.
+</p>
+<dl>
+<dt id="index-quassel_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">quassel-service-type </span></dt>
+<dd><p>This is the service type for the <a href="https://quassel-irc.org/">Quassel</a>
+IRC backend daemon.  Its value is a <code>quassel-configuration</code>
+(see below).
+</p></dd></dl>
+
+<dl>
+<dt id="index-quassel_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">quassel-configuration </span></dt>
+<dd><p>This is the configuration for Quassel, with the following fields:
+</p>
+<dl compact="compact">
+<dt><code>quassel</code> (default: <code>quassel</code>)</dt>
+<dd><p>The Quassel package to use.
+</p>
+</dd>
+<dt><code>interface</code> (default: <code>"::,0.0.0.0"</code>)</dt>
+<dt><code>port</code> (default: <code>4242</code>)</dt>
+<dd><p>Listen on the network interface(s) corresponding to the IPv4 or IPv6
+interfaces specified in the comma delimited <var>interface</var>, on
+<var>port</var>.
+</p>
+</dd>
+<dt><code>loglevel</code> (default: <code>"Info"</code>)</dt>
+<dd><p>The level of logging desired.  Accepted values are Debug, Info, Warning
+and Error.
+</p></dd>
+</dl>
+</dd></dl>
+
+<hr />
+<div class="header">
+<p>
+Next: <a href="Telephony-Services.html" accesskey="n" rel="next">Telephony Services</a>, Previous: <a href="Mail-Services.html" accesskey="p" rel="prev">Mail Services</a>, Up: <a href="Services.html" accesskey="u" rel="up">Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

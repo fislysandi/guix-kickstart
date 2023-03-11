@@ -1,0 +1,639 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Invoking guix refresh (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="Invoking guix refresh (GNU Guix Reference Manual)" />
+<meta name="keywords" content="Invoking guix refresh (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Utilities.html" rel="up" title="Utilities" />
+<link href="Invoking-guix-style.html" rel="next" title="Invoking guix style" />
+<link href="Invoking-guix-import.html" rel="prev" title="Invoking guix import" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="Invoking-guix-refresh"></span><div class="header">
+<p>
+Next: <a href="Invoking-guix-style.html" accesskey="n" rel="next">Invoking guix style</a>, Previous: <a href="Invoking-guix-import.html" accesskey="p" rel="prev">Invoking guix import</a>, Up: <a href="Utilities.html" accesskey="u" rel="up">Utilities</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Invoking-guix-refresh-1"></span><h3 class="section">10.6 Invoking <code>guix refresh</code></h3>
+
+<span id="index-guix-refresh"></span>
+<p>The primary audience of the <code>guix refresh</code> command is packagers.
+As a user, you may be interested in the <samp>--with-latest</samp> option,
+which can bring you package update superpowers built upon <code>guix
+refresh</code> (see <a href="Package-Transformation-Options.html"><samp>--with-latest</samp></a>).  By default, <code>guix refresh</code> reports
+any packages provided by the distribution that are outdated compared to
+the latest upstream version, like this:
+</p>
+<div class="example">
+<pre class="example">$ guix refresh
+gnu/packages/gettext.scm:29:13: gettext would be upgraded from 0.18.1.1 to 0.18.2.1
+gnu/packages/glib.scm:77:12: glib would be upgraded from 2.34.3 to 2.37.0
+</pre></div>
+
+<p>Alternatively, one can specify packages to consider, in which case a
+warning is emitted for packages that lack an updater:
+</p>
+<div class="example">
+<pre class="example">$ guix refresh coreutils guile guile-ssh
+gnu/packages/ssh.scm:205:2: warning: no updater for guile-ssh
+gnu/packages/guile.scm:136:12: guile would be upgraded from 2.0.12 to 2.0.13
+</pre></div>
+
+<p><code>guix refresh</code> browses the upstream repository of each package and determines
+the highest version number of the releases therein.  The command
+knows how to update specific types of packages: GNU packages, ELPA
+packages, etc.&mdash;see the documentation for <samp>--type</samp> below.  There
+are many packages, though, for which it lacks a method to determine
+whether a new upstream release is available.  However, the mechanism is
+extensible, so feel free to get in touch with us to add a new method!
+</p>
+<dl compact="compact">
+<dt><code>--recursive</code></dt>
+<dd><p>Consider the packages specified, and all the packages upon which they depend.
+</p>
+<div class="example">
+<pre class="example">$ guix refresh --recursive coreutils
+gnu/packages/acl.scm:40:13: acl would be upgraded from 2.2.53 to 2.3.1
+gnu/packages/m4.scm:30:12: 1.4.18 is already the latest version of m4
+gnu/packages/xml.scm:68:2: warning: no updater for expat
+gnu/packages/multiprecision.scm:40:12: 6.1.2 is already the latest version of gmp
+&hellip;
+</pre></div>
+
+</dd>
+</dl>
+
+<p>Sometimes the upstream name differs from the package name used in Guix,
+and <code>guix refresh</code> needs a little help.  Most updaters honor the
+<code>upstream-name</code> property in package definitions, which can be used
+to that effect:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define-public</span> <span class="syntax-symbol">network-manager</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="package-Reference.html#index-package">package</a>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">name</span> <span class="syntax-string">"network-manager"</span></span>)</span>
+    <span class="syntax-comment">;; …
+</span>    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">properties</span> <span class="syntax-symbol">'</span><span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">upstream-name</span> <span class="syntax-symbol">.</span> <span class="syntax-string">"NetworkManager"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>When passed <samp>--update</samp>, it modifies distribution source files to
+update the version numbers and source tarball hashes of those package
+recipes (see <a href="Defining-Packages.html">Defining Packages</a>).  This is achieved by downloading
+each package&rsquo;s latest source tarball and its associated OpenPGP
+signature, authenticating the downloaded tarball against its signature
+using <code>gpgv</code>, and finally computing its hash&mdash;note that GnuPG must be
+installed and in <code>$PATH</code>; run <code>guix install gnupg</code> if needed.
+</p>
+<p>When the public
+key used to sign the tarball is missing from the user&rsquo;s keyring, an
+attempt is made to automatically retrieve it from a public key server;
+when this is successful, the key is added to the user&rsquo;s keyring; otherwise,
+<code>guix refresh</code> reports an error.
+</p>
+<p>The following options are supported:
+</p>
+<dl compact="compact">
+<dt><code>--expression=<var>expr</var></code></dt>
+<dt><code>-e <var>expr</var></code></dt>
+<dd><p>Consider the package <var>expr</var> evaluates to.
+</p>
+<p>This is useful to precisely refer to a package, as in this example:
+</p>
+<div class="example">
+<pre class="example">guix refresh -l -e '(@@ (gnu packages commencement) glibc-final)'
+</pre></div>
+
+<p>This command lists the dependents of the &ldquo;final&rdquo; libc (essentially all
+the packages).
+</p>
+</dd>
+<dt><code>--update</code></dt>
+<dt><code>-u</code></dt>
+<dd><p>Update distribution source files (package recipes) in place.  This is
+usually run from a checkout of the Guix source tree (see <a href="Running-Guix-Before-It-Is-Installed.html">Running Guix Before It Is Installed</a>):
+</p>
+<div class="example">
+<pre class="example">$ ./pre-inst-env guix refresh -s non-core -u
+</pre></div>
+
+<p>See <a href="Defining-Packages.html">Defining Packages</a>, for more information on package definitions.
+</p>
+</dd>
+<dt><code>--select=[<var>subset</var>]</code></dt>
+<dt><code>-s <var>subset</var></code></dt>
+<dd><p>Select all the packages in <var>subset</var>, one of <code>core</code> or
+<code>non-core</code>.
+</p>
+<p>The <code>core</code> subset refers to all the packages at the core of the
+distribution&mdash;i.e., packages that are used to build &ldquo;everything
+else&rdquo;.  This includes GCC, libc, Binutils, Bash, etc.  Usually,
+changing one of these packages in the distribution entails a rebuild of
+all the others.  Thus, such updates are an inconvenience to users in
+terms of build time or bandwidth used to achieve the upgrade.
+</p>
+<p>The <code>non-core</code> subset refers to the remaining packages.  It is
+typically useful in cases where an update of the core packages would be
+inconvenient.
+</p>
+</dd>
+<dt><code>--manifest=<var>file</var></code></dt>
+<dt><code>-m <var>file</var></code></dt>
+<dd><p>Select all the packages from the manifest in <var>file</var>.  This is useful to
+check if any packages of the user manifest can be updated.
+</p>
+</dd>
+<dt><code>--type=<var>updater</var></code></dt>
+<dt><code>-t <var>updater</var></code></dt>
+<dd><p>Select only packages handled by <var>updater</var> (may be a comma-separated
+list of updaters).  Currently, <var>updater</var> may be one of:
+</p>
+<dl compact="compact">
+<dt><code>gnu</code></dt>
+<dd><p>the updater for GNU packages;
+</p></dd>
+<dt><code>savannah</code></dt>
+<dd><p>the updater for packages hosted at <a href="https://savannah.gnu.org">Savannah</a>;
+</p></dd>
+<dt><code>sourceforge</code></dt>
+<dd><p>the updater for packages hosted at <a href="https://sourceforge.net">SourceForge</a>;
+</p></dd>
+<dt><code>gnome</code></dt>
+<dd><p>the updater for GNOME packages;
+</p></dd>
+<dt><code>kde</code></dt>
+<dd><p>the updater for KDE packages;
+</p></dd>
+<dt><code>xorg</code></dt>
+<dd><p>the updater for X.org packages;
+</p></dd>
+<dt><code>kernel.org</code></dt>
+<dd><p>the updater for packages hosted on kernel.org;
+</p></dd>
+<dt><code>egg</code></dt>
+<dd><p>the updater for <a href="https://wiki.call-cc.org/eggs/">Egg</a> packages;
+</p></dd>
+<dt><code>elpa</code></dt>
+<dd><p>the updater for <a href="https://elpa.gnu.org/">ELPA</a> packages;
+</p></dd>
+<dt><code>cran</code></dt>
+<dd><p>the updater for <a href="https://cran.r-project.org/">CRAN</a> packages;
+</p></dd>
+<dt><code>bioconductor</code></dt>
+<dd><p>the updater for <a href="https://www.bioconductor.org/">Bioconductor</a> R packages;
+</p></dd>
+<dt><code>cpan</code></dt>
+<dd><p>the updater for <a href="https://www.cpan.org/">CPAN</a> packages;
+</p></dd>
+<dt><code>pypi</code></dt>
+<dd><p>the updater for <a href="https://pypi.python.org">PyPI</a> packages.
+</p></dd>
+<dt><code>gem</code></dt>
+<dd><p>the updater for <a href="https://rubygems.org">RubyGems</a> packages.
+</p></dd>
+<dt><code>github</code></dt>
+<dd><p>the updater for <a href="https://github.com">GitHub</a> packages.
+</p></dd>
+<dt><code>hackage</code></dt>
+<dd><p>the updater for <a href="https://hackage.haskell.org">Hackage</a> packages.
+</p></dd>
+<dt><code>stackage</code></dt>
+<dd><p>the updater for <a href="https://www.stackage.org">Stackage</a> packages.
+</p></dd>
+<dt><code>crate</code></dt>
+<dd><p>the updater for <a href="https://crates.io">Crates</a> packages.
+</p></dd>
+<dt><code>launchpad</code></dt>
+<dd><p>the updater for <a href="https://launchpad.net">Launchpad</a> packages.
+</p></dd>
+<dt><code>generic-html</code></dt>
+<dd><p>a generic updater that crawls the HTML page where the source tarball of
+the package is hosted, when applicable.
+</p>
+</dd>
+<dt><code>generic-git</code></dt>
+<dd><p>a generic updater for packages hosted on Git repositories.  It tries to
+be smart about parsing Git tag names, but if it is not able to parse the
+tag name and compare tags correctly, users can define the following
+properties for a package.
+</p>
+<ul>
+<li> <code>release-tag-prefix</code>: a regular expression for matching a prefix of
+the tag name.
+
+</li><li> <code>release-tag-suffix</code>: a regular expression for matching a suffix of
+the tag name.
+
+</li><li> <code>release-tag-version-delimiter</code>: a string used as the delimiter in
+the tag name for separating the numbers of the version.
+
+</li><li> <code>accept-pre-releases</code>: by default, the updater will ignore
+pre-releases; to make it also look for pre-releases, set the this
+property to <code>#t</code>.
+
+</li></ul>
+
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="package-Reference.html#index-package">package</a>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">name</span> <span class="syntax-string">"foo"</span></span>)</span>
+  <span class="syntax-comment">;; ...
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">properties</span>
+    <span class="syntax-symbol">'</span><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">release-tag-prefix</span> <span class="syntax-symbol">.</span> <span class="syntax-string">"^release0-"</span></span>)</span>
+      <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">release-tag-suffix</span> <span class="syntax-symbol">.</span> <span class="syntax-string">"[a-z]?$"</span></span>)</span>
+      <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">release-tag-version-delimiter</span> <span class="syntax-symbol">.</span> <span class="syntax-string">":"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+
+</dd>
+</dl>
+
+<p>For instance, the following command only checks for updates of Emacs
+packages hosted at <code>elpa.gnu.org</code> and for updates of CRAN packages:
+</p>
+<div class="example">
+<pre class="example">$ guix refresh --type=elpa,cran
+gnu/packages/statistics.scm:819:13: r-testthat would be upgraded from 0.10.0 to 0.11.0
+gnu/packages/emacs.scm:856:13: emacs-auctex would be upgraded from 11.88.6 to 11.88.9
+</pre></div>
+
+</dd>
+<dt><code>--list-updaters</code></dt>
+<dd><p>List available updaters and exit (see <samp>--type</samp> above).
+</p>
+<p>For each updater, display the fraction of packages it covers; at the
+end, display the fraction of packages covered by all these updaters.
+</p></dd>
+</dl>
+
+<p>In addition, <code>guix refresh</code> can be passed one or more package
+names, as in this example:
+</p>
+<div class="example">
+<pre class="example">$ ./pre-inst-env guix refresh -u emacs idutils gcc@4.8
+</pre></div>
+
+<p>The command above specifically updates the <code>emacs</code> and
+<code>idutils</code> packages.  The <samp>--select</samp> option would have no
+effect in this case.  You might also want to update definitions that
+correspond to the packages installed in your profile:
+</p>
+<div class="example">
+<pre class="example">$ ./pre-inst-env guix refresh -u \
+       $(guix package --list-installed | cut -f1)
+</pre></div>
+
+<p>When considering whether to upgrade a package, it is sometimes
+convenient to know which packages would be affected by the upgrade and
+should be checked for compatibility.  For this the following option may
+be used when passing <code>guix refresh</code> one or more package names:
+</p>
+<dl compact="compact">
+<dt><code>--list-dependent</code></dt>
+<dt><code>-l</code></dt>
+<dd><p>List top-level dependent packages that would need to be rebuilt as a
+result of upgrading one or more packages.
+</p>
+<p>See <a href="Invoking-guix-graph.html">the <code>reverse-package</code> type of
+<code>guix graph</code></a>, for information on how to visualize the list of
+dependents of a package.
+</p>
+</dd>
+</dl>
+
+<p>Be aware that the <samp>--list-dependent</samp> option only
+<em>approximates</em> the rebuilds that would be required as a result of
+an upgrade.  More rebuilds might be required under some circumstances.
+</p>
+<div class="example">
+<pre class="example">$ guix refresh --list-dependent flex
+Building the following 120 packages would ensure 213 dependent packages are rebuilt:
+hop@2.4.0 emacs-geiser@0.13 notmuch@0.18 mu@0.9.9.5 cflow@1.4 idutils@4.6 &hellip;
+</pre></div>
+
+<p>The command above lists a set of packages that could be built to check
+for compatibility with an upgraded <code>flex</code> package.
+</p>
+<dl compact="compact">
+<dt><code>--list-transitive</code></dt>
+<dd><p>List all the packages which one or more packages depend upon.
+</p>
+<div class="example">
+<pre class="example">$ guix refresh --list-transitive flex
+flex@2.6.4 depends on the following 25 packages: perl@5.28.0 help2man@1.47.6
+bison@3.0.5 indent@2.2.10 tar@1.30 gzip@1.9 bzip2@1.0.6 xz@5.2.4 file@5.33 &hellip;
+</pre></div>
+
+</dd>
+</dl>
+
+<p>The command above lists a set of packages which, when changed, would cause
+<code>flex</code> to be rebuilt.
+</p>
+<p>The following options can be used to customize GnuPG operation:
+</p>
+<dl compact="compact">
+<dt><code>--gpg=<var>command</var></code></dt>
+<dd><p>Use <var>command</var> as the GnuPG 2.x command.  <var>command</var> is searched
+for in <code>$PATH</code>.
+</p>
+</dd>
+<dt><code>--keyring=<var>file</var></code></dt>
+<dd><p>Use <var>file</var> as the keyring for upstream keys.  <var>file</var> must be in the
+<em>keybox format</em>.  Keybox files usually have a name ending in <samp>.kbx</samp>
+and the GNU&nbsp;Privacy Guard (GPG) can manipulate these files
+(see <a href="https://www.gnupg.org/documentation/manuals/gnupg/kbxutil.html#kbxutil"><code>kbxutil</code></a> in <cite>Using the GNU Privacy Guard</cite>, for
+information on a tool to manipulate keybox files).
+</p>
+<p>When this option is omitted, <code>guix refresh</code> uses
+<samp>~/.config/guix/upstream/trustedkeys.kbx</samp> as the keyring for upstream
+signing keys.  OpenPGP signatures are checked against keys from this keyring;
+missing keys are downloaded to this keyring as well (see
+<samp>--key-download</samp> below).
+</p>
+<p>You can export keys from your default GPG keyring into a keybox file using
+commands like this one:
+</p>
+<div class="example">
+<pre class="example">gpg --export rms@gnu.org | kbxutil --import-openpgp &gt;&gt; mykeyring.kbx
+</pre></div>
+
+<p>Likewise, you can fetch keys to a specific keybox file like this:
+</p>
+<div class="example">
+<pre class="example">gpg --no-default-keyring --keyring mykeyring.kbx \
+  --recv-keys 3CE464558A84FDC69DB40CFB090B11993D9AEBB5
+</pre></div>
+
+<p>See <a href="https://www.gnupg.org/documentation/manuals/gnupg/GPG-Configuration-Options.html#GPG-Configuration-Options"><samp>--keyring</samp></a> in <cite>Using the GNU
+Privacy Guard</cite>, for more information on GPG&rsquo;s <samp>--keyring</samp> option.
+</p>
+</dd>
+<dt><code>--key-download=<var>policy</var></code></dt>
+<dd><p>Handle missing OpenPGP keys according to <var>policy</var>, which may be one
+of:
+</p>
+<dl compact="compact">
+<dt><code>always</code></dt>
+<dd><p>Always download missing OpenPGP keys from the key server, and add them
+to the user&rsquo;s GnuPG keyring.
+</p>
+</dd>
+<dt><code>never</code></dt>
+<dd><p>Never try to download missing OpenPGP keys.  Instead just bail out.
+</p>
+</dd>
+<dt><code>interactive</code></dt>
+<dd><p>When a package signed with an unknown OpenPGP key is encountered, ask
+the user whether to download it or not.  This is the default behavior.
+</p></dd>
+</dl>
+
+</dd>
+<dt><code>--key-server=<var>host</var></code></dt>
+<dd><p>Use <var>host</var> as the OpenPGP key server when importing a public key.
+</p>
+</dd>
+<dt><code>--load-path=<var>directory</var></code></dt>
+<dt><code>-L <var>directory</var></code></dt>
+<dd><p>Add <var>directory</var> to the front of the package module search path
+(see <a href="Package-Modules.html">Package Modules</a>).
+</p>
+<p>This allows users to define their own packages and make them visible to
+the command-line tools.
+</p>
+</dd>
+</dl>
+
+<p>The <code>github</code> updater uses the
+<a href="https://developer.github.com/v3/">GitHub API</a> to query for new
+releases.  When used repeatedly e.g. when refreshing all packages,
+GitHub will eventually refuse to answer any further API requests.  By
+default 60 API requests per hour are allowed, and a full refresh on all
+GitHub packages in Guix requires more than this.  Authentication with
+GitHub through the use of an API token alleviates these limits.  To use
+an API token, set the environment variable <code>GUIX_GITHUB_TOKEN</code> to a
+token procured from <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a> or
+otherwise.
+</p>
+
+<hr />
+<div class="header">
+<p>
+Next: <a href="Invoking-guix-style.html" accesskey="n" rel="next">Invoking guix style</a>, Previous: <a href="Invoking-guix-import.html" accesskey="p" rel="prev">Invoking guix import</a>, Up: <a href="Utilities.html" accesskey="u" rel="up">Utilities</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

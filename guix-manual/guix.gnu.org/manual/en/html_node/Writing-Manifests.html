@@ -1,0 +1,545 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Writing Manifests (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="Writing Manifests (GNU Guix Reference Manual)" />
+<meta name="keywords" content="Writing Manifests (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Programming-Interface.html" rel="up" title="Programming Interface" />
+<link href="Build-Systems.html" rel="next" title="Build Systems" />
+<link href="Defining-Package-Variants.html" rel="prev" title="Defining Package Variants" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="Writing-Manifests"></span><div class="header">
+<p>
+Next: <a href="Build-Systems.html" accesskey="n" rel="next">Build Systems</a>, Previous: <a href="Defining-Package-Variants.html" accesskey="p" rel="prev">Defining Package Variants</a>, Up: <a href="Programming-Interface.html" accesskey="u" rel="up">Programming Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Writing-Manifests-1"></span><h3 class="section">9.4 Writing Manifests</h3>
+
+<span id="index-manifest"></span>
+<span id="index-bill-of-materials-_0028manifests_0029"></span>
+<p><code>guix</code> commands let you specify package lists on the command
+line.  This is convenient, but as the command line becomes longer and
+less trivial, it quickly becomes more convenient to have that package
+list in what we call a <em>manifest</em>.  A manifest is some sort of a
+&ldquo;bill of materials&rdquo; that defines a package set.  You would typically
+come up with a code snippet that builds the manifest, store it in a
+file, say <samp>manifest.scm</samp>, and then pass that file to the
+<samp>-m</samp> (or <samp>--manifest</samp>) option that many <code>guix</code>
+commands support.  For example, here&rsquo;s what a manifest for a simple
+package set might look like:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-comment">;; Manifest for three packages.
+</span><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Writing-Manifests.html#index-specifications_002d_003emanifest">specifications-&gt;manifest</a> <span class="syntax-symbol">'</span><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-string">"gcc-toolchain"</span> <span class="syntax-string">"make"</span> <span class="syntax-string">"git"</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>Once you have that manifest, you can pass it, for example, to
+<code>guix package</code> to install just those three packages to your
+profile (see <a href="Invoking-guix-package.html#profile_002dmanifest"><samp>-m</samp> option of <code>guix
+package</code></a>):
+</p>
+<div class="example">
+<pre class="example">guix package -m manifest.scm
+</pre></div>
+
+<p>... or you can pass it to <code>guix shell</code> (see <a href="Invoking-guix-shell.html#shell_002dmanifest"><code>-m</code> option of <code>guix shell</code></a>) to spawn an ephemeral
+environment:
+</p>
+<div class="example">
+<pre class="example">guix shell -m manifest.scm
+</pre></div>
+
+<p>... or you can pass it to <code>guix pack</code> in pretty much the same
+way (see <a href="Invoking-guix-pack.html#pack_002dmanifest"><samp>-m</samp> option of <code>guix pack</code></a>).
+You can store the manifest under version control, share it with others
+so they can easily get set up, etc.
+</p>
+<p>But how do you write your first manifest?  To get started, maybe you&rsquo;ll
+want to write a manifest that mirrors what you already have in a
+profile.  Rather than start from a blank page, <code>guix package</code>
+can generate a manifest for you (see <a href="Invoking-guix-package.html#export_002dmanifest"><code>guix
+package --export-manifest</code></a>):
+</p>
+<div class="example">
+<pre class="example"># Write to 'manifest.scm' a manifest corresponding to the
+# default profile, ~/.guix-profile.
+guix package --export-manifest &gt; manifest.scm
+</pre></div>
+
+<p>Or maybe you&rsquo;ll want to &ldquo;translate&rdquo; command-line arguments into a
+manifest.  In that case, <code>guix shell</code> can help
+(see <a href="Invoking-guix-shell.html#shell_002dexport_002dmanifest"><code>guix shell --export-manifest</code></a>):
+</p>
+<div class="example">
+<pre class="example"># Write a manifest for the packages specified on the command line.
+guix shell --export-manifest gcc-toolchain make git &gt; manifest.scm
+</pre></div>
+
+<p>In both cases, the <samp>--export-manifest</samp> option tries hard to
+generate a faithful manifest; in particular, it takes package
+transformation options into account (see <a href="Package-Transformation-Options.html">Package Transformation Options</a>).
+</p>
+<blockquote>
+<p><b>Note:</b> Manifests are <em>symbolic</em>: they refer to packages of the channels
+<em>currently in use</em> (see <a href="Channels.html">Channels</a>).  In the example above,
+<code>gcc-toolchain</code> might refer to version 11 today, but it might refer
+to version 13 two years from now.
+</p>
+<p>If you want to &ldquo;pin&rdquo; your software environment to specific package
+versions and variants, you need an additional piece of information: the
+list of channel revisions in use, as returned by <code>guix
+describe</code>.  See <a href="Replicating-Guix.html">Replicating Guix</a>, for more information.
+</p></blockquote>
+
+<p>Once you&rsquo;ve obtained your first manifest, perhaps you&rsquo;ll want to
+customize it.  Since your manifest is code, you now have access to all
+the Guix programming interfaces!
+</p>
+<p>Let&rsquo;s assume you want a manifest to deploy a custom variant of GDB, the
+GNU Debugger, that does not depend on Guile, together with another
+package.  Building on the example seen in the previous section
+(see <a href="Defining-Package-Variants.html">Defining Package Variants</a>), you can write a manifest along
+these lines:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-use_002dmodules">use-modules</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <span class="syntax-symbol">packages</span></span>)</span>
+             <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">gdb</span></span>)</span>               <span class="syntax-comment">;for 'gdb'
+</span>             <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">version-control</span></span>)</span></span>)</span>  <span class="syntax-comment">;for 'git'
+</span>
+<span class="syntax-comment">;; Define a variant of GDB without a dependency on Guile.
+</span><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <span class="syntax-symbol">gdb-sans-guile</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="package-Reference.html#index-package">package</a>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">inherit</span> <span class="syntax-symbol">gdb</span></span>)</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">inputs</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Defining-Package-Variants.html#index-modify_002dinputs">modify-inputs</a> <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">package-inputs</span> <span class="syntax-symbol">gdb</span></span>)</span>
+              <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Modification.html#index-delete">delete</a> <span class="syntax-string">"guile"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+
+<span class="syntax-comment">;; Return a manifest containing that one package plus Git.
+</span><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Writing-Manifests.html#index-packages_002d_003emanifest-1">packages-&gt;manifest</a> <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-symbol">gdb-sans-guile</span> <span class="syntax-symbol">git</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>Note that in this example, the manifest directly refers to the
+<code>gdb</code> and <code>git</code> variables, which are bound to a <code>package</code>
+object (see <a href="package-Reference.html">package Reference</a>), instead of calling
+<code>specifications-&gt;manifest</code> to look up packages by name as we did
+before.  The <code>use-modules</code> form at the top lets us access the core
+package interface (see <a href="Defining-Packages.html">Defining Packages</a>) and the modules that
+define <code>gdb</code> and <code>git</code> (see <a href="Package-Modules.html">Package Modules</a>).  Seamlessly,
+we&rsquo;re weaving all this together&mdash;the possibilities are endless, unleash
+your creativity!
+</p>
+<p>The data type for manifests as well as supporting procedures are defined
+in the <code>(guix profiles)</code> module, which is automatically available
+to code passed to <samp>-m</samp>.  The reference follows.
+</p>
+<dl>
+<dt id="index-manifest-1" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">manifest </span></dt>
+<dd><p>Data type representing a manifest.
+</p>
+<p>It currently has one field:
+</p>
+<dl compact="compact">
+<dt><code>entries</code></dt>
+<dd><p>This must be a list of <code>manifest-entry</code> records&mdash;see below.
+</p></dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-manifest_002dentry" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">manifest-entry </span></dt>
+<dd><p>Data type representing a manifest entry.  A manifest entry contains
+essential metadata: a name and version string, the object (usually a
+package) for that entry, the desired output (see <a href="Packages-with-Multiple-Outputs.html">Packages with Multiple Outputs</a>), and a number of optional pieces of information
+detailed below.
+</p>
+<p>Most of the time, you won&rsquo;t build a manifest entry directly; instead,
+you will pass a package to <code>package-&gt;manifest-entry</code>, described
+below.  In some unusual cases though, you might want to create manifest
+entries for things that are <em>not</em> packages, as in this example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-comment">;; Manually build a single manifest entry for a non-package object.
+</span><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">let</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">hello</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-program_002dfile">program-file</a> <span class="syntax-string">"hello"</span> <span class="syntax-symbol">#~</span><span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/GOOPS-Object-Miscellany.html#index-display-3">display</a> <span class="syntax-string">"Hi!"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Writing-Manifests.html#index-manifest_002dentry">manifest-entry</a>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">name</span> <span class="syntax-string">"foo"</span></span>)</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Build-Config.html#index-version">version</a> <span class="syntax-string">"42"</span></span>)</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">item</span>
+     <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-computed_002dfile">computed-file</a> <span class="syntax-string">"hello-directory"</span>
+                     <span class="syntax-symbol">#~</span><span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-special">let</span> <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">bin</span> <span class="syntax-paren7">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-symbol">#$output</span> <span class="syntax-string">"/bin"</span></span>)</span></span>)</span></span>)</span>
+                         <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/File-System.html#index-mkdir">mkdir</a> <span class="syntax-symbol">#$output</span></span>)</span> <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/File-System.html#index-mkdir">mkdir</a> <span class="syntax-symbol">bin</span></span>)</span>
+                          <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/File-System.html#index-symlink">symlink</a> <span class="syntax-symbol">#$hello</span>
+                                   <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-symbol">bin</span> <span class="syntax-string">"/hello"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>The available fields are the following:
+</p>
+<dl compact="compact">
+<dt><code>name</code></dt>
+<dt><code>version</code></dt>
+<dd><p>Name and version string for this entry.
+</p>
+</dd>
+<dt><code>item</code></dt>
+<dd><p>A package or other file-like object (see <a href="G_002dExpressions.html">file-like
+objects</a>).
+</p>
+</dd>
+<dt><code>output</code> (default: <code>"out"</code>)</dt>
+<dd><p>Output of <code>item</code> to use, in case <code>item</code> has multiple outputs
+(see <a href="Packages-with-Multiple-Outputs.html">Packages with Multiple Outputs</a>).
+</p>
+</dd>
+<dt><code>dependencies</code> (default: <code>'()</code>)</dt>
+<dd><p>List of manifest entries this entry depends on.  When building a
+profile, dependencies are added to the profile.
+</p>
+<p>Typically, the propagated inputs of a package (see <a href="package-Reference.html"><code>propagated-inputs</code></a>) end up having a corresponding manifest entry
+in among the dependencies of the package&rsquo;s own manifest entry.
+</p>
+</dd>
+<dt><code>search-paths</code> (default: <code>'()</code>)</dt>
+<dd><p>The list of search path specifications honored by this entry
+(see <a href="Search-Paths.html">Search Paths</a>).
+</p>
+</dd>
+<dt><code>properties</code> (default: <code>'()</code>)</dt>
+<dd><p>List of symbol/value pairs.  When building a profile, those properties
+get serialized.
+</p>
+<p>This can be used to piggyback additional metadata&mdash;e.g., the
+transformations applied to a package (see <a href="Package-Transformation-Options.html">Package Transformation Options</a>).
+</p>
+</dd>
+<dt><code>parent</code> (default: <code>(delay #f)</code>)</dt>
+<dd><p>A promise pointing to the &ldquo;parent&rdquo; manifest entry.
+</p>
+<p>This is used as a hint to provide context when reporting an error
+related to a manifest entry coming from a <code>dependencies</code> field.
+</p></dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-concatenate_002dmanifests" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">concatenate-manifests <var>lst</var></span></dt>
+<dd><p>Concatenate the manifests listed in <var>lst</var> and return the resulting
+manifest.
+</p></dd></dl>
+
+
+<dl>
+<dt id="index-package_002d_003emanifest_002dentry" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">package-&gt;manifest-entry <var>package</var>   [<var>output</var>] [#:properties]</span></dt>
+<dd><p>Return a manifest entry for the <var>output</var> of package <var>package</var>,
+where <var>output</var> defaults to <code>"out"</code>, and with the given
+<var>properties</var>.  By default <var>properties</var> is the empty list or, if
+one or more package transformations were applied to <var>package</var>, it is
+an association list representing those transformations, suitable as an
+argument to <code>options-&gt;transformation</code> (see <a href="Defining-Package-Variants.html"><code>options-&gt;transformation</code></a>).
+</p>
+<p>The code snippet below builds a manifest with an entry for the default
+output and the <code>send-email</code> output of the <code>git</code> package:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-use_002dmodules">use-modules</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">version-control</span></span>)</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Writing-Manifests.html#index-manifest-1">manifest</a> <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="Writing-Manifests.html#index-package_002d_003emanifest_002dentry">package-&gt;manifest-entry</a> <span class="syntax-symbol">git</span></span>)</span>
+                <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="Writing-Manifests.html#index-package_002d_003emanifest_002dentry">package-&gt;manifest-entry</a> <span class="syntax-symbol">git</span> <span class="syntax-string">"send-email"</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt id="index-packages_002d_003emanifest-1" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">packages-&gt;manifest <var>packages</var></span></dt>
+<dd><p>Return a list of manifest entries, one for each item listed in
+<var>packages</var>.  Elements of <var>packages</var> can be either package
+objects or package/string tuples denoting a specific output of a
+package.
+</p>
+<p>Using this procedure, the manifest above may be rewritten more
+concisely:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-use_002dmodules">use-modules</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">version-control</span></span>)</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Writing-Manifests.html#index-packages_002d_003emanifest-1">packages-&gt;manifest</a> <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-symbol">git</span> <span class="syntax-symbol">`</span><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">,git</span> <span class="syntax-string">"send-email"</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+</dd></dl>
+
+<span id="package_002ddevelopment_002dmanifest"></span><dl>
+<dt id="index-package_002d_003edevelopment_002dmanifest" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">package-&gt;development-manifest <var>package</var>   [<var>system</var>] [#:target]</span></dt>
+<dd><p>Return a manifest for the <em>development inputs</em> of <var>package</var> for
+<var>system</var>, optionally when cross-compiling to <var>target</var>.
+Development inputs include both explicit and implicit inputs of
+<var>package</var>.
+</p>
+<p>Like the <samp>-D</samp> option of <code>guix shell</code>
+(see <a href="Invoking-guix-shell.html#shell_002ddevelopment_002doption"><code>guix shell -D</code></a>), the
+resulting manifest describes the environment in which one can develop
+<var>package</var>.  For example, suppose you&rsquo;re willing to set up a
+development environment for Inkscape, with the addition of Git for
+version control; you can describe that &ldquo;bill of materials&rdquo; with the
+following manifest:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-use_002dmodules">use-modules</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">inkscape</span></span>)</span>          <span class="syntax-comment">;for 'inkscape'
+</span>             <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">version-control</span></span>)</span></span>)</span>  <span class="syntax-comment">;for 'git'
+</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Writing-Manifests.html#index-concatenate_002dmanifests">concatenate-manifests</a>
+ <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="Writing-Manifests.html#index-package_002d_003edevelopment_002dmanifest">package-&gt;development-manifest</a> <span class="syntax-symbol">inkscape</span></span>)</span>
+       <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="Writing-Manifests.html#index-packages_002d_003emanifest-1">packages-&gt;manifest</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-symbol">git</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>In this example, the development manifest that
+<code>package-&gt;development-manifest</code> returns includes the compiler
+(GCC), the many supporting libraries (Boost, GLib, GTK, etc.), and a
+couple of additional development tools&mdash;these are the dependencies
+<code>guix show inkscape</code> lists.
+</p></dd></dl>
+
+
+<p>Last, the <code>(gnu packages)</code> module provides higher-level facilities
+to build manifests.  In particular, it lets you look up packages by
+name&mdash;see below.
+</p>
+<dl>
+<dt id="index-specifications_002d_003emanifest" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">specifications-&gt;manifest <var>specs</var></span></dt>
+<dd><p>Given <var>specs</var>, a list of specifications such as <code>"emacs@25.2"</code>
+or <code>"guile:debug"</code>, return a manifest.  Specs have the format that
+command-line tools such as <code>guix install</code> and <code>guix
+package</code> understand (see <a href="Invoking-guix-package.html">Invoking guix package</a>).
+</p>
+<p>As an example, it lets you rewrite the Git manifest that we saw earlier
+like this:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Writing-Manifests.html#index-specifications_002d_003emanifest">specifications-&gt;manifest</a> <span class="syntax-symbol">'</span><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-string">"git"</span> <span class="syntax-string">"git:send-email"</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>Notice that we do not need to worry about <code>use-modules</code>, importing
+the right set of modules, and referring to the right variables.
+Instead, we directly refer to packages in the same way as on the command
+line, which can often be more convenient.
+</p></dd></dl>
+
+
+
+<hr />
+<div class="header">
+<p>
+Next: <a href="Build-Systems.html" accesskey="n" rel="next">Build Systems</a>, Previous: <a href="Defining-Package-Variants.html" accesskey="p" rel="prev">Defining Package Variants</a>, Up: <a href="Programming-Interface.html" accesskey="u" rel="up">Programming Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

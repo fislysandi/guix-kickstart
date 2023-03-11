@@ -1,0 +1,717 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Build Utilities (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="Build Utilities (GNU Guix Reference Manual)" />
+<meta name="keywords" content="Build Utilities (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Programming-Interface.html" rel="up" title="Programming Interface" />
+<link href="Search-Paths.html" rel="next" title="Search Paths" />
+<link href="Build-Phases.html" rel="prev" title="Build Phases" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="Build-Utilities"></span><div class="header">
+<p>
+Next: <a href="Search-Paths.html" accesskey="n" rel="next">Search Paths</a>, Previous: <a href="Build-Phases.html" accesskey="p" rel="prev">Build Phases</a>, Up: <a href="Programming-Interface.html" accesskey="u" rel="up">Programming Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Build-Utilities-1"></span><h3 class="section">9.7 Build Utilities</h3>
+
+<p>As soon as you start writing non-trivial package definitions
+(see <a href="Defining-Packages.html">Defining Packages</a>) or other build actions
+(see <a href="G_002dExpressions.html">G-Expressions</a>), you will likely start looking for helpers for
+&ldquo;shell-like&rdquo; actions&mdash;creating directories, copying and deleting
+files recursively, manipulating build phases, and so on.  The
+<code>(guix build utils)</code> module provides such utility procedures.
+</p>
+<p>Most build systems load <code>(guix build utils)</code> (see <a href="Build-Systems.html">Build Systems</a>).  Thus, when writing custom build phases for your package
+definitions, you can usually assume those procedures are in scope.
+</p>
+<p>When writing G-expressions, you can import <code>(guix build utils)</code> on
+the &ldquo;build side&rdquo; using <code>with-imported-modules</code> and then put it in
+scope with the <code>use-modules</code> form (see <a href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#Using-Guile-Modules">Using Guile Modules</a> in <cite>GNU Guile Reference Manual</cite>):
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-with_002dimported_002dmodules-1">with-imported-modules</a> <span class="syntax-symbol">'</span><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <a class="syntax-symbol" href="Using-Guix-Interactively.html#index-build">build</a> <span class="syntax-symbol">utils</span></span>)</span></span>)</span>  <span class="syntax-comment">;import it
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-computed_002dfile">computed-file</a> <span class="syntax-string">"empty-tree"</span>
+                 <span class="syntax-symbol">#~</span><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-special">begin</span>
+                     <span class="syntax-comment">;; Put it in scope.
+</span>                     <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-use_002dmodules">use-modules</a> <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <a class="syntax-symbol" href="Using-Guix-Interactively.html#index-build">build</a> <span class="syntax-symbol">utils</span></span>)</span></span>)</span>
+
+                     <span class="syntax-comment">;; Happily use its 'mkdir-p' procedure.
+</span>                     <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-mkdir_002dp">mkdir-p</a> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-symbol">#$output</span> <span class="syntax-string">"/a/b/c"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>The remainder of this section is the reference for most of the utility
+procedures provided by <code>(guix build utils)</code>.
+</p>
+
+<span id="Dealing-with-Store-File-Names"></span><h4 class="subsection">9.7.1 Dealing with Store File Names</h4>
+
+<p>This section documents procedures that deal with store file names.
+</p>
+<dl>
+<dt id="index-_0025store_002ddirectory" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">%store-directory </span></dt>
+<dd><p>Return the directory name of the store.
+</p></dd></dl>
+
+<dl>
+<dt id="index-store_002dfile_002dname_003f" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">store-file-name? <var>file</var></span></dt>
+<dd><p>Return true if <var>file</var> is in the store.
+</p></dd></dl>
+
+<dl>
+<dt id="index-strip_002dstore_002dfile_002dname" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">strip-store-file-name <var>file</var></span></dt>
+<dd><p>Strip the <samp>/gnu/store</samp> and hash from <var>file</var>, a store file name.
+The result is typically a <code>"<var>package</var>-<var>version</var>"</code> string.
+</p></dd></dl>
+
+<dl>
+<dt id="index-package_002dname_002d_003ename_002bversion" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">package-name-&gt;name+version <var>name</var></span></dt>
+<dd><p>Given <var>name</var>, a package name like <code>"foo-0.9.1b"</code>, return two
+values: <code>"foo"</code> and <code>"0.9.1b"</code>.  When the version part is
+unavailable, <var>name</var> and <code>#f</code> are returned.  The first hyphen
+followed by a digit is considered to introduce the version part.
+</p></dd></dl>
+
+<span id="File-Types"></span><h4 class="subsection">9.7.2 File Types</h4>
+
+<p>The procedures below deal with files and file types.
+</p>
+<dl>
+<dt id="index-directory_002dexists_003f" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">directory-exists? <var>dir</var></span></dt>
+<dd><p>Return <code>#t</code> if <var>dir</var> exists and is a directory.
+</p></dd></dl>
+
+<dl>
+<dt id="index-executable_002dfile_003f" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">executable-file? <var>file</var></span></dt>
+<dd><p>Return <code>#t</code> if <var>file</var> exists and is executable.
+</p></dd></dl>
+
+<dl>
+<dt id="index-symbolic_002dlink_003f" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">symbolic-link? <var>file</var></span></dt>
+<dd><p>Return <code>#t</code> if <var>file</var> is a symbolic link (aka. a &ldquo;symlink&rdquo;).
+</p></dd></dl>
+
+<dl>
+<dt id="index-elf_002dfile_003f" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">elf-file? <var>file</var></span></dt>
+<dt id="index-ar_002dfile_003f" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">ar-file? <var>file</var></span></dt>
+<dt id="index-gzip_002dfile_003f" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">gzip-file? <var>file</var></span></dt>
+<dd><p>Return <code>#t</code> if <var>file</var> is, respectively, an ELF file, an
+<code>ar</code> archive (such as a <samp>.a</samp> static library), or a gzip file.
+</p></dd></dl>
+
+<dl>
+<dt id="index-reset_002dgzip_002dtimestamp" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">reset-gzip-timestamp <var>file</var> [#:keep-mtime? #t]</span></dt>
+<dd><p>If <var>file</var> is a gzip file, reset its embedded timestamp (as with
+<code>gzip --no-name</code>) and return true.  Otherwise return <code>#f</code>.
+When <var>keep-mtime?</var> is true, preserve <var>file</var>&rsquo;s modification time.
+</p></dd></dl>
+
+<span id="File-Manipulation"></span><h4 class="subsection">9.7.3 File Manipulation</h4>
+
+<p>The following procedures and macros help create, modify, and delete
+files.  They provide functionality comparable to common shell utilities
+such as <code>mkdir -p</code>, <code>cp -r</code>, <code>rm -r</code>, and
+<code>sed</code>.  They complement Guile&rsquo;s extensive, but low-level, file
+system interface (see <a href="https://www.gnu.org/software/guile/manual/html_node/POSIX.html#POSIX">POSIX</a> in <cite>GNU Guile Reference Manual</cite>).
+</p>
+<dl>
+<dt id="index-with_002ddirectory_002dexcursion" class="symbol-definition"><span class="symbol-definition-category">Scheme Syntax: </span><span class="symbol-definition-prototype">with-directory-excursion <var>directory</var> <var>body</var>&hellip;</span></dt>
+<dd><p>Run <var>body</var> with <var>directory</var> as the process&rsquo;s current directory.
+</p>
+<p>Essentially, this macro changes the current directory to <var>directory</var>
+before evaluating <var>body</var>, using <code>chdir</code> (see <a href="https://www.gnu.org/software/guile/manual/html_node/Processes.html#Processes">Processes</a> in <cite>GNU Guile Reference Manual</cite>).  It changes back to the initial
+directory when the dynamic extent of <var>body</var> is left, be it <i>via</i>
+normal procedure return or <i>via</i> a non-local exit such as an
+exception.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mkdir_002dp" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">mkdir-p <var>dir</var></span></dt>
+<dd><p>Create directory <var>dir</var> and all its ancestors.
+</p></dd></dl>
+
+<dl>
+<dt id="index-install_002dfile" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">install-file <var>file</var> <var>directory</var></span></dt>
+<dd><p>Create <var>directory</var> if it does not exist and copy <var>file</var> in there
+under the same name.
+</p></dd></dl>
+
+<dl>
+<dt id="index-make_002dfile_002dwritable" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">make-file-writable <var>file</var></span></dt>
+<dd><p>Make <var>file</var> writable for its owner.
+</p></dd></dl>
+
+<dl>
+<dt id="index-copy_002drecursively" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">copy-recursively <var>source</var> <var>destination</var>   [#:log (current-output-port)] [#:follow-symlinks? #f]   [#:copy-file copy-file] [#:keep-mtime? #f] [#:keep-permissions? #t]</span></dt>
+<dd><p>Copy <var>source</var> directory to <var>destination</var>.  Follow symlinks if
+<var>follow-symlinks?</var>  is true; otherwise, just preserve them.  Call
+<var>copy-file</var> to copy regular files.  When <var>keep-mtime?</var> is true,
+keep the modification time of the files in <var>source</var> on those of
+<var>destination</var>.  When <var>keep-permissions?</var> is true, preserve file
+permissions.  Write verbose output to the <var>log</var> port.
+</p></dd></dl>
+
+<dl>
+<dt id="index-delete_002dfile_002drecursively" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">delete-file-recursively <var>dir</var>   [#:follow-mounts? #f]</span></dt>
+<dd><p>Delete <var>dir</var> recursively, like <code>rm -rf</code>, without following
+symlinks.  Don&rsquo;t follow mount points either, unless <var>follow-mounts?</var>
+is true.  Report but ignore errors.
+</p></dd></dl>
+
+<dl>
+<dt id="index-substitute_002a" class="symbol-definition"><span class="symbol-definition-category">Scheme Syntax: </span><span class="symbol-definition-prototype">substitute* <var>file</var>   ((<var>regexp</var> <var>match-var</var>&hellip;) <var>body</var>&hellip;) &hellip;</span></dt>
+<dd><p>Substitute <var>regexp</var> in <var>file</var> by the string returned by
+<var>body</var>.  <var>body</var> is evaluated with each <var>match-var</var> bound to
+the corresponding positional regexp sub-expression.  For example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-substitute_002a">substitute*</a> <span class="syntax-symbol">file</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"hello"</span></span>)</span>
+   <span class="syntax-string">"good morning\n"</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"foo([a-z]+)bar(.*)$"</span> <span class="syntax-symbol">all</span> <span class="syntax-symbol">letters</span> <span class="syntax-symbol">end</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-string">"baz"</span> <span class="syntax-symbol">letters</span> <span class="syntax-symbol">end</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>Here, anytime a line of <var>file</var> contains <code>hello</code>, it is replaced
+by <code>good morning</code>.  Anytime a line of <var>file</var> matches the second
+regexp, <code>all</code> is bound to the complete match, <code>letters</code> is bound
+to the first sub-expression, and <code>end</code> is bound to the last one.
+</p>
+<p>When one of the <var>match-var</var> is <code>_</code>, no variable is bound to the
+corresponding match substring.
+</p>
+<p>Alternatively, <var>file</var> may be a list of file names, in which case
+they are all subject to the substitutions.
+</p>
+<p>Be careful about using <code>$</code> to match the end of a line; by itself it
+won&rsquo;t match the terminating newline of a line.
+</p></dd></dl>
+
+<span id="File-Search"></span><h4 class="subsection">9.7.4 File Search</h4>
+
+<span id="index-file_002c-searching"></span>
+<p>This section documents procedures to search and filter files.
+</p>
+<dl>
+<dt id="index-file_002dname_002dpredicate" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">file-name-predicate <var>regexp</var></span></dt>
+<dd><p>Return a predicate that returns true when passed a file name whose base
+name matches <var>regexp</var>.
+</p></dd></dl>
+
+<dl>
+<dt id="index-find_002dfiles" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">find-files <var>dir</var> [<var>pred</var>]   [#:stat lstat] [#:directories? #f] [#:fail-on-error? #f]</span></dt>
+<dd><p>Return the lexicographically sorted list of files under <var>dir</var> for
+which <var>pred</var> returns true.  <var>pred</var> is passed two arguments: the
+absolute file name, and its stat buffer; the default predicate always
+returns true.  <var>pred</var> can also be a regular expression, in which
+case it is equivalent to <code>(file-name-predicate <var>pred</var>)</code>.
+<var>stat</var> is used to obtain file information; using <code>lstat</code> means
+that symlinks are not followed.  If <var>directories?</var> is true, then
+directories will also be included.  If <var>fail-on-error?</var> is true,
+raise an exception upon error.
+</p></dd></dl>
+
+<p>Here are a few examples where we assume that the current directory is
+the root of the Guix source tree:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-comment">;; List all the regular files in the current directory.
+</span><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-find_002dfiles">find-files</a> <span class="syntax-string">"."</span></span>)</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-string">"./.dir-locals.el"</span> <span class="syntax-string">"./.gitignore"</span> <span class="syntax-symbol">…</span></span>)</span>
+
+<span class="syntax-comment">;; List all the .scm files under gnu/services.
+</span><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-find_002dfiles">find-files</a> <span class="syntax-string">"gnu/services"</span> <span class="syntax-string">"\\.scm$"</span></span>)</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-string">"gnu/services/admin.scm"</span> <span class="syntax-string">"gnu/services/audio.scm"</span> <span class="syntax-symbol">…</span></span>)</span>
+
+<span class="syntax-comment">;; List ar files in the current directory.
+</span><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-find_002dfiles">find-files</a> <span class="syntax-string">"."</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-special">lambda</span> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">file</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/File-System.html#index-stat">stat</a></span>)</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-ar_002dfile_003f">ar-file?</a> <span class="syntax-symbol">file</span></span>)</span></span>)</span></span>)</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-string">"./libformat.a"</span> <span class="syntax-string">"./libstore.a"</span> <span class="syntax-symbol">…</span></span>)</span>
+</pre></div>
+
+<dl>
+<dt id="index-which" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">which <var>program</var></span></dt>
+<dd><p>Return the complete file name for <var>program</var> as found in
+<code>$PATH</code>, or <code>#f</code> if <var>program</var> could not be found.
+</p></dd></dl>
+
+<dl>
+<dt id="index-search_002dinput_002dfile" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">search-input-file <var>inputs</var> <var>name</var></span></dt>
+<dt id="index-search_002dinput_002ddirectory" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">search-input-directory <var>inputs</var> <var>name</var></span></dt>
+<dd><p>Return the complete file name for <var>name</var> as found in <var>inputs</var>;
+<code>search-input-file</code> searches for a regular file and
+<code>search-input-directory</code> searches for a directory.  If <var>name</var>
+could not be found, an exception is raised.
+</p>
+<p>Here, <var>inputs</var> must be an association list like <code>inputs</code> and
+<code>native-inputs</code> as available to build phases (see <a href="Build-Phases.html">Build Phases</a>).
+</p></dd></dl>
+
+<p>Here is a (simplified) example of how <code>search-input-file</code> is used
+in a build phase of the <code>wireguard-tools</code> package:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">add-after</span> <span class="syntax-symbol">'install</span> <span class="syntax-symbol">'wrap-wg-quick</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/lambda_002a-and-define_002a.html#index-lambda_002a">lambda*</a> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-keyword">#:key</span> <span class="syntax-symbol">inputs</span> <span class="syntax-symbol">outputs</span> <span class="syntax-keyword">#:allow-other-keys</span></span>)</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-special">let</span> <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">coreutils</span> <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Retrieving-Alist-Entries.html#index-assoc_002dref">assoc-ref</a> <span class="syntax-symbol">inputs</span> <span class="syntax-string">"coreutils"</span></span>)</span>
+                                    <span class="syntax-string">"/bin"</span></span>)</span></span>)</span></span>)</span>
+      <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-wrap_002dprogram">wrap-program</a> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-search_002dinput_002dfile">search-input-file</a> <span class="syntax-symbol">outputs</span> <span class="syntax-string">"bin/wg-quick"</span></span>)</span>
+        <span class="syntax-keyword">#:sh</span> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-search_002dinput_002dfile">search-input-file</a> <span class="syntax-symbol">inputs</span> <span class="syntax-string">"bin/bash"</span></span>)</span>
+        <span class="syntax-symbol">`</span><span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-string">"PATH"</span> <span class="syntax-string">":"</span> <span class="syntax-symbol">prefix</span> <span class="syntax-symbol">,</span><span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-symbol">coreutils</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<span id="Program-Invocation"></span><h4 class="subsection">9.7.5 Program Invocation</h4>
+
+<span id="index-program-invocation_002c-from-Scheme"></span>
+<span id="index-invoking-programs_002c-from-Scheme"></span>
+<p>You&rsquo;ll find handy procedures to spawn processes in this module,
+essentially convenient wrappers around Guile&rsquo;s <code>system*</code>
+(see <a href="https://www.gnu.org/software/guile/manual/html_node/Processes.html#Processes"><code>system*</code></a> in <cite>GNU Guile Reference Manual</cite>).
+</p>
+<dl>
+<dt id="index-invoke" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">invoke <var>program</var> <var>args</var>&hellip;</span></dt>
+<dd><p>Invoke <var>program</var> with the given <var>args</var>.  Raise an
+<code>&amp;invoke-error</code> exception if the exit code is non-zero; otherwise
+return <code>#t</code>.
+</p>
+<p>The advantage compared to <code>system*</code> is that you do not need to
+check the return value.  This reduces boilerplate in shell-script-like
+snippets for instance in package build phases.
+</p></dd></dl>
+
+<dl>
+<dt id="index-invoke_002derror_003f" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">invoke-error? <var>c</var></span></dt>
+<dd><p>Return true if <var>c</var> is an <code>&amp;invoke-error</code> condition.
+</p></dd></dl>
+
+<dl>
+<dt id="index-invoke_002derror_002dprogram" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">invoke-error-program <var>c</var></span></dt>
+<dt id="index-invoke_002derror_002darguments" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">invoke-error-arguments <var>c</var></span></dt>
+<dt id="index-invoke_002derror_002dexit_002dstatus" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">invoke-error-exit-status <var>c</var></span></dt>
+<dt id="index-invoke_002derror_002dterm_002dsignal" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">invoke-error-term-signal <var>c</var></span></dt>
+<dt id="index-invoke_002derror_002dstop_002dsignal" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">invoke-error-stop-signal <var>c</var></span></dt>
+<dd><p>Access specific fields of <var>c</var>, an <code>&amp;invoke-error</code> condition.
+</p></dd></dl>
+
+<dl>
+<dt id="index-report_002dinvoke_002derror" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">report-invoke-error <var>c</var> [<var>port</var>]</span></dt>
+<dd><p>Report to <var>port</var> (by default the current error port) about <var>c</var>,
+an <code>&amp;invoke-error</code> condition, in a human-friendly way.
+</p>
+<p>Typical usage would look like this:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-use_002dmodules">use-modules</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">srfi</span> <span class="syntax-symbol">srfi-34</span></span>)</span> <span class="syntax-comment">;for 'guard'
+</span>             <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <a class="syntax-symbol" href="Using-Guix-Interactively.html#index-build">build</a> <span class="syntax-symbol">utils</span></span>)</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d34.html#index-guard">guard</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">c</span> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-invoke_002derror_003f">invoke-error?</a> <span class="syntax-symbol">c</span></span>)</span>
+           <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-report_002dinvoke_002derror">report-invoke-error</a> <span class="syntax-symbol">c</span></span>)</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-invoke">invoke</a> <span class="syntax-string">"date"</span> <span class="syntax-string">"--imaginary-option"</span></span>)</span></span>)</span>
+
+<span class="syntax-symbol">-|</span> <span class="syntax-symbol">command</span> <span class="syntax-string">"date"</span> <span class="syntax-string">"--imaginary-option"</span> <span class="syntax-symbol">failed</span> <span class="syntax-symbol">with</span> <span class="syntax-symbol">status</span> <span class="syntax-symbol">1</span>
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt id="index-invoke_002fquiet" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">invoke/quiet <var>program</var> <var>args</var>&hellip;</span></dt>
+<dd><p>Invoke <var>program</var> with <var>args</var> and capture <var>program</var>&rsquo;s
+standard output and standard error.  If <var>program</var> succeeds, print
+nothing and return the unspecified value; otherwise, raise a
+<code>&amp;message</code> error condition that includes the status code and the
+output of <var>program</var>.
+</p>
+<p>Here&rsquo;s an example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-use_002dmodules">use-modules</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">srfi</span> <span class="syntax-symbol">srfi-34</span></span>)</span> <span class="syntax-comment">;for 'guard'
+</span>             <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">srfi</span> <span class="syntax-symbol">srfi-35</span></span>)</span> <span class="syntax-comment">;for 'message-condition?'
+</span>             <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <a class="syntax-symbol" href="Using-Guix-Interactively.html#index-build">build</a> <span class="syntax-symbol">utils</span></span>)</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d34.html#index-guard">guard</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">c</span> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d35.html#index-message_002dcondition_003f">message-condition?</a> <span class="syntax-symbol">c</span></span>)</span>
+           <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/GOOPS-Object-Miscellany.html#index-display-3">display</a> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d35.html#index-condition_002dmessage">condition-message</a> <span class="syntax-symbol">c</span></span>)</span></span>)</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-invoke_002fquiet">invoke/quiet</a> <span class="syntax-string">"date"</span></span>)</span>  <span class="syntax-comment">;all is fine
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-invoke_002fquiet">invoke/quiet</a> <span class="syntax-string">"date"</span> <span class="syntax-string">"--imaginary-option"</span></span>)</span></span>)</span>
+
+<span class="syntax-symbol">-|</span> <span class="syntax-symbol">'date</span> <span class="syntax-symbol">--imaginary-option'</span> <span class="syntax-symbol">exited</span> <span class="syntax-symbol">with</span> <span class="syntax-symbol">status</span> <span class="syntax-symbol">1;</span> <span class="syntax-symbol">output</span> <span class="syntax-symbol">follows:</span>
+
+    <span class="syntax-symbol">date:</span> <span class="syntax-symbol">unrecognized</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d37.html#index-option-1">option</a> <span class="syntax-symbol">'--imaginary-option'</span>
+    <span class="syntax-symbol">Try</span> <span class="syntax-symbol">'date</span> <span class="syntax-symbol">--help'</span> <span class="syntax-symbol">for</span> <span class="syntax-symbol">more</span> <span class="syntax-symbol">information.</span>
+</pre></div>
+</dd></dl>
+
+<span id="Build-Phases-2"></span><h4 class="subsection">9.7.6 Build Phases</h4>
+
+<span id="index-build-phases-2"></span>
+<p>The <code>(guix build utils)</code> also contains tools to manipulate build
+phases as used by build systems (see <a href="Build-Systems.html">Build Systems</a>).  Build phases
+are represented as association lists or &ldquo;alists&rdquo; (see <a href="https://www.gnu.org/software/guile/manual/html_node/Association-Lists.html#Association-Lists">Association
+Lists</a> in <cite>GNU Guile Reference Manual</cite>) where each key is a symbol
+naming the phase and the associated value is a procedure (see <a href="Build-Phases.html">Build Phases</a>).
+</p>
+<p>Guile core and the <code>(srfi srfi-1)</code> module both provide tools to
+manipulate alists.  The <code>(guix build utils)</code> module complements
+those with tools written with build phases in mind.
+</p>
+<span id="index-build-phases_002c-modifying"></span>
+<dl>
+<dt id="index-modify_002dphases" class="symbol-definition"><span class="symbol-definition-category">Scheme Syntax: </span><span class="symbol-definition-prototype">modify-phases <var>phases</var> <var>clause</var>&hellip;</span></dt>
+<dd><p>Modify <var>phases</var> sequentially as per each <var>clause</var>, which may
+have one of the following forms:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Modification.html#index-delete">delete</a> <span class="syntax-symbol">old-phase-name</span></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">replace</span> <span class="syntax-symbol">old-phase-name</span> <span class="syntax-symbol">new-phase</span></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">add-before</span> <span class="syntax-symbol">old-phase-name</span> <span class="syntax-symbol">new-phase-name</span> <span class="syntax-symbol">new-phase</span></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">add-after</span> <span class="syntax-symbol">old-phase-name</span> <span class="syntax-symbol">new-phase-name</span> <span class="syntax-symbol">new-phase</span></span>)</span>
+</pre></div>
+
+<p>Where every <var>phase-name</var> above is an expression evaluating to a
+symbol, and <var>new-phase</var> an expression evaluating to a procedure.
+</p></dd></dl>
+
+<p>The example below is taken from the definition of the <code>grep</code>
+package.  It adds a phase to run after the <code>install</code> phase, called
+<code>fix-egrep-and-fgrep</code>.  That phase is a procedure (<code>lambda*</code>
+is for anonymous procedures) that takes a <code>#:outputs</code> keyword
+argument and ignores extra keyword arguments (see <a href="https://www.gnu.org/software/guile/manual/html_node/Optional-Arguments.html#Optional-Arguments">Optional
+Arguments</a> in <cite>GNU Guile Reference Manual</cite>, for more on
+<code>lambda*</code> and optional and keyword arguments.)  The phase uses
+<code>substitute*</code> to modify the installed <samp>egrep</samp> and <samp>fgrep</samp>
+scripts so that they refer to <code>grep</code> by its absolute file name:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-modify_002dphases">modify-phases</a> <span class="syntax-symbol">%standard-phases</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">add-after</span> <span class="syntax-symbol">'install</span> <span class="syntax-symbol">'fix-egrep-and-fgrep</span>
+    <span class="syntax-comment">;; Patch 'egrep' and 'fgrep' to execute 'grep' via its
+</span>    <span class="syntax-comment">;; absolute file name instead of searching for it in $PATH.
+</span>    <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/lambda_002a-and-define_002a.html#index-lambda_002a">lambda*</a> <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-keyword">#:key</span> <span class="syntax-symbol">outputs</span> <span class="syntax-keyword">#:allow-other-keys</span></span>)</span>
+      <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-special">let*</span> <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">out</span> <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Retrieving-Alist-Entries.html#index-assoc_002dref">assoc-ref</a> <span class="syntax-symbol">outputs</span> <span class="syntax-string">"out"</span></span>)</span></span>)</span>
+             <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">bin</span> <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-symbol">out</span> <span class="syntax-string">"/bin"</span></span>)</span></span>)</span></span>)</span>
+        <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-substitute_002a">substitute*</a> <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-symbol">bin</span> <span class="syntax-string">"/egrep"</span></span>)</span>
+                           <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-symbol">bin</span> <span class="syntax-string">"/fgrep"</span></span>)</span></span>)</span>
+          <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-string">"^exec grep"</span></span>)</span>
+           <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-string">"exec "</span> <span class="syntax-symbol">bin</span> <span class="syntax-string">"/grep"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>In the example below, phases are modified in two ways: the standard
+<code>configure</code> phase is deleted, presumably because the package does
+not have a <samp>configure</samp> script or anything similar, and the default
+<code>install</code> phase is replaced by one that manually copies the
+executable files to be installed:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-modify_002dphases">modify-phases</a> <span class="syntax-symbol">%standard-phases</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Modification.html#index-delete">delete</a> <span class="syntax-symbol">'configure</span></span>)</span>      <span class="syntax-comment">;no 'configure' script
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">replace</span> <span class="syntax-symbol">'install</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/lambda_002a-and-define_002a.html#index-lambda_002a">lambda*</a> <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-keyword">#:key</span> <span class="syntax-symbol">outputs</span> <span class="syntax-keyword">#:allow-other-keys</span></span>)</span>
+      <span class="syntax-comment">;; The package's Makefile doesn't provide an "install"
+</span>      <span class="syntax-comment">;; rule so do it by ourselves.
+</span>      <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-special">let</span> <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">bin</span> <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-paren7">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Retrieving-Alist-Entries.html#index-assoc_002dref">assoc-ref</a> <span class="syntax-symbol">outputs</span> <span class="syntax-string">"out"</span></span>)</span>
+                                <span class="syntax-string">"/bin"</span></span>)</span></span>)</span></span>)</span>
+        <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-install_002dfile">install-file</a> <span class="syntax-string">"footswitch"</span> <span class="syntax-symbol">bin</span></span>)</span>
+        <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-install_002dfile">install-file</a> <span class="syntax-string">"scythe"</span> <span class="syntax-symbol">bin</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+
+<span id="Wrappers"></span><h4 class="subsection">9.7.7 Wrappers</h4>
+
+<span id="index-program-wrappers"></span>
+<span id="index-wrapping-programs"></span>
+<p>It is not unusual for a command to require certain environment variables
+to be set for proper functioning, typically search paths (see <a href="Search-Paths.html">Search Paths</a>).  Failing to do that, the command might fail to find files or
+other commands it relies on, or it might pick the &ldquo;wrong&rdquo;
+ones&mdash;depending on the environment in which it runs.  Examples include:
+</p>
+<ul>
+<li> a shell script that assumes all the commands it uses are in <code>PATH</code>;
+
+</li><li> a Guile program that assumes all its modules are in <code>GUILE_LOAD_PATH</code>
+and <code>GUILE_LOAD_COMPILED_PATH</code>;
+
+</li><li> a Qt application that expects to find certain plugins in
+<code>QT_PLUGIN_PATH</code>.
+</li></ul>
+
+<p>For a package writer, the goal is to make sure commands always work the
+same rather than depend on some external settings.  One way to achieve
+that is to <em>wrap</em> commands in a thin script that sets those
+environment variables, thereby ensuring that those run-time dependencies
+are always found.  The wrapper would be used to set <code>PATH</code>,
+<code>GUILE_LOAD_PATH</code>, or <code>QT_PLUGIN_PATH</code> in the examples above.
+</p>
+<p>To ease that task, the <code>(guix build utils)</code> module provides a
+couple of helpers to wrap commands.
+</p>
+<dl>
+<dt id="index-wrap_002dprogram" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">wrap-program <var>program</var>   [#:sh <var>sh</var>] [#:rest <var>variables</var>]</span></dt>
+<dd><p>Make a wrapper for <var>program</var>.  <var>variables</var> should look like this:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-symbol">'</span><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">variable</span> <span class="syntax-symbol">delimiter</span> <span class="syntax-symbol">position</span> <span class="syntax-symbol">list-of-directories</span></span>)</span>
+</pre></div>
+
+<p>where <var>delimiter</var> is optional.  <code>:</code> will be used if
+<var>delimiter</var> is not given.
+</p>
+<p>For example, this call:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-wrap_002dprogram">wrap-program</a> <span class="syntax-string">"foo"</span>
+              <span class="syntax-symbol">'</span><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-string">"PATH"</span> <span class="syntax-string">":"</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Comparison.html#index-_003d">=</a> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"/gnu/.../bar/bin"</span></span>)</span></span>)</span>
+              <span class="syntax-symbol">'</span><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-string">"CERT_PATH"</span> <span class="syntax-symbol">suffix</span> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"/gnu/.../baz/certs"</span>
+                                    <span class="syntax-string">"/qux/certs"</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>will copy <samp>foo</samp> to <samp>.foo-real</samp> and create the file <samp>foo</samp>
+with the following contents:
+</p>
+<div class="example">
+<pre class="example">#!location/of/bin/bash
+export PATH="/gnu/.../bar/bin"
+export CERT_PATH="$CERT_PATH${CERT_PATH:+:}/gnu/.../baz/certs:/qux/certs"
+exec -a $0 location/of/.foo-real "$@"
+</pre></div>
+
+<p>If <var>program</var> has previously been wrapped by <code>wrap-program</code>, the
+wrapper is extended with definitions for <var>variables</var>.  If it is not,
+<var>sh</var> will be used as the interpreter.
+</p></dd></dl>
+
+<dl>
+<dt id="index-wrap_002dscript" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">wrap-script <var>program</var>   [#:guile <var>guile</var>] [#:rest <var>variables</var>]</span></dt>
+<dd><p>Wrap the script <var>program</var> such that <var>variables</var> are set first.
+The format of <var>variables</var> is the same as in the <code>wrap-program</code>
+procedure.  This procedure differs from <code>wrap-program</code> in that it
+does not create a separate shell script.  Instead, <var>program</var> is
+modified directly by prepending a Guile script, which is interpreted as
+a comment in the script&rsquo;s language.
+</p>
+<p>Special encoding comments as supported by Python are recreated on the
+second line.
+</p>
+<p>Note that this procedure can only be used once per file as Guile scripts are
+not supported.
+</p></dd></dl>
+
+<hr />
+<div class="header">
+<p>
+Next: <a href="Search-Paths.html" accesskey="n" rel="next">Search Paths</a>, Previous: <a href="Build-Phases.html" accesskey="p" rel="prev">Build Phases</a>, Up: <a href="Programming-Interface.html" accesskey="u" rel="up">Programming Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

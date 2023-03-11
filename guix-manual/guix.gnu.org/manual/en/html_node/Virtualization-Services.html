@@ -1,0 +1,2083 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Virtualization Services (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="Virtualization Services (GNU Guix Reference Manual)" />
+<meta name="keywords" content="Virtualization Services (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Services.html" rel="up" title="Services" />
+<link href="Version-Control-Services.html" rel="next" title="Version Control Services" />
+<link href="Audio-Services.html" rel="prev" title="Audio Services" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="Virtualization-Services"></span><div class="header">
+<p>
+Next: <a href="Version-Control-Services.html" accesskey="n" rel="next">Version Control Services</a>, Previous: <a href="Audio-Services.html" accesskey="p" rel="prev">Audio Services</a>, Up: <a href="Services.html" accesskey="u" rel="up">Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Virtualization-Services-1"></span><h4 class="subsection">12.9.29 Virtualization Services</h4>
+
+<p>The <code>(gnu services virtualization)</code> module provides services for
+the libvirt and virtlog daemons, as well as other virtualization-related
+services.
+</p>
+<span id="Libvirt-daemon"></span><h4 class="subsubheading">Libvirt daemon</h4>
+
+<p><code>libvirtd</code> is the server side daemon component of the libvirt
+virtualization management system.  This daemon runs on host servers
+and performs required management tasks for virtualized guests.
+</p>
+<dl>
+<dt id="index-libvirt_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">libvirt-service-type </span></dt>
+<dd><p>This is the type of the <a href="https://libvirt.org">libvirt daemon</a>.
+Its value must be a <code>libvirt-configuration</code>.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Virtualization-Services.html#index-libvirt_002dservice_002dtype">libvirt-service-type</a>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">libvirt-configuration</span>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">unix-sock-group</span> <span class="syntax-string">"libvirt"</span></span>)</span>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">tls-port</span> <span class="syntax-string">"16555"</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+</dd></dl>
+
+<p>Available <code>libvirt-configuration</code> fields are:
+</p>
+<dl>
+<dt id="index-libvirt" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>package</em> </span><span class="symbol-definition-prototype">libvirt </span></dt>
+<dd><p>Libvirt package.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-listen_002dtls_003f" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">listen-tls? </span></dt>
+<dd><p>Flag listening for secure TLS connections on the public TCP/IP port.
+You must set <code>listen</code> for this to have any effect.
+</p>
+<p>It is necessary to setup a CA and issue server certificates before using
+this capability.
+</p>
+<p>Defaults to &lsquo;<samp>#t</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-listen_002dtcp_003f" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">listen-tcp? </span></dt>
+<dd><p>Listen for unencrypted TCP connections on the public TCP/IP port.  You must
+set <code>listen</code> for this to have any effect.
+</p>
+<p>Using the TCP socket requires SASL authentication by default.  Only SASL
+mechanisms which support data encryption are allowed.  This is
+DIGEST_MD5 and GSSAPI (Kerberos5).
+</p>
+<p>Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-tls_002dport" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">tls-port </span></dt>
+<dd><p>Port for accepting secure TLS connections.   This can be a port number,
+or service name.
+</p>
+<p>Defaults to &lsquo;<samp>"16514"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-tcp_002dport" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">tcp-port </span></dt>
+<dd><p>Port for accepting insecure TCP connections.  This can be a port number,
+or service name.
+</p>
+<p>Defaults to &lsquo;<samp>"16509"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-listen_002daddr" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">listen-addr </span></dt>
+<dd><p>IP address or hostname used for client connections.
+</p>
+<p>Defaults to &lsquo;<samp>"0.0.0.0"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-mdns_002dadv_003f" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">mdns-adv? </span></dt>
+<dd><p>Flag toggling mDNS advertisement of the libvirt service.
+</p>
+<p>Alternatively can disable for all services on a host by stopping the
+Avahi daemon.
+</p>
+<p>Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-mdns_002dname" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">mdns-name </span></dt>
+<dd><p>Default mDNS advertisement name.  This must be unique on the immediate
+broadcast network.
+</p>
+<p>Defaults to &lsquo;<samp>"Virtualization Host &lt;hostname&gt;"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-unix_002dsock_002dgroup" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">unix-sock-group </span></dt>
+<dd><p>UNIX domain socket group ownership.  This can be used to allow a
+&rsquo;trusted&rsquo; set of users access to management capabilities without
+becoming root.
+</p>
+<p>Defaults to &lsquo;<samp>"root"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-unix_002dsock_002dro_002dperms" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">unix-sock-ro-perms </span></dt>
+<dd><p>UNIX socket permissions for the R/O socket.  This is used for monitoring
+VM status only.
+</p>
+<p>Defaults to &lsquo;<samp>"0777"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-unix_002dsock_002drw_002dperms" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">unix-sock-rw-perms </span></dt>
+<dd><p>UNIX socket permissions for the R/W socket.  Default allows only root.
+If PolicyKit is enabled on the socket, the default will change to allow
+everyone (eg, 0777)
+</p>
+<p>Defaults to &lsquo;<samp>"0770"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-unix_002dsock_002dadmin_002dperms" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">unix-sock-admin-perms </span></dt>
+<dd><p>UNIX socket permissions for the admin socket.  Default allows only owner
+(root), do not change it unless you are sure to whom you are exposing
+the access to.
+</p>
+<p>Defaults to &lsquo;<samp>"0777"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-unix_002dsock_002ddir" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">unix-sock-dir </span></dt>
+<dd><p>The directory in which sockets will be found/created.
+</p>
+<p>Defaults to &lsquo;<samp>"/var/run/libvirt"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-auth_002dunix_002dro" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">auth-unix-ro </span></dt>
+<dd><p>Authentication scheme for UNIX read-only sockets.  By default socket
+permissions allow anyone to connect
+</p>
+<p>Defaults to &lsquo;<samp>"polkit"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-auth_002dunix_002drw" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">auth-unix-rw </span></dt>
+<dd><p>Authentication scheme for UNIX read-write sockets.  By default socket
+permissions only allow root.  If PolicyKit support was compiled into
+libvirt, the default will be to use &rsquo;polkit&rsquo; auth.
+</p>
+<p>Defaults to &lsquo;<samp>"polkit"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-auth_002dtcp" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">auth-tcp </span></dt>
+<dd><p>Authentication scheme for TCP sockets.  If you don&rsquo;t enable SASL, then
+all TCP traffic is cleartext.  Don&rsquo;t do this outside of a dev/test
+scenario.
+</p>
+<p>Defaults to &lsquo;<samp>"sasl"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-auth_002dtls" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">auth-tls </span></dt>
+<dd><p>Authentication scheme for TLS sockets.  TLS sockets already have
+encryption provided by the TLS layer, and limited authentication is done
+by certificates.
+</p>
+<p>It is possible to make use of any SASL authentication mechanism as well,
+by using &rsquo;sasl&rsquo; for this option
+</p>
+<p>Defaults to &lsquo;<samp>"none"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-access_002ddrivers" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>optional-list</em> </span><span class="symbol-definition-prototype">access-drivers </span></dt>
+<dd><p>API access control scheme.
+</p>
+<p>By default an authenticated user is allowed access to all APIs.  Access
+drivers can place restrictions on this.
+</p>
+<p>Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-key_002dfile" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">key-file </span></dt>
+<dd><p>Server key file path.  If set to an empty string, then no private key is
+loaded.
+</p>
+<p>Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-cert_002dfile" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">cert-file </span></dt>
+<dd><p>Server key file path.  If set to an empty string, then no certificate is
+loaded.
+</p>
+<p>Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-ca_002dfile" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">ca-file </span></dt>
+<dd><p>Server key file path.  If set to an empty string, then no CA certificate
+is loaded.
+</p>
+<p>Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-crl_002dfile" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">crl-file </span></dt>
+<dd><p>Certificate revocation list path.  If set to an empty string, then no
+CRL is loaded.
+</p>
+<p>Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-tls_002dno_002dsanity_002dcert" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">tls-no-sanity-cert </span></dt>
+<dd><p>Disable verification of our own server certificates.
+</p>
+<p>When libvirtd starts it performs some sanity checks against its own
+certificates.
+</p>
+<p>Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-tls_002dno_002dverify_002dcert" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">tls-no-verify-cert </span></dt>
+<dd><p>Disable verification of client certificates.
+</p>
+<p>Client certificate verification is the primary authentication mechanism.
+Any client which does not present a certificate signed by the CA will be
+rejected.
+</p>
+<p>Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-tls_002dallowed_002ddn_002dlist" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>optional-list</em> </span><span class="symbol-definition-prototype">tls-allowed-dn-list </span></dt>
+<dd><p>Whitelist of allowed x509 Distinguished Name.
+</p>
+<p>Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-sasl_002dallowed_002dusernames" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>optional-list</em> </span><span class="symbol-definition-prototype">sasl-allowed-usernames </span></dt>
+<dd><p>Whitelist of allowed SASL usernames.  The format for username depends on
+the SASL authentication mechanism.
+</p>
+<p>Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-tls_002dpriority" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">tls-priority </span></dt>
+<dd><p>Override the compile time default TLS priority string.  The default is
+usually &lsquo;<samp>"NORMAL"</samp>&rsquo; unless overridden at build time.  Only set this is it
+is desired for libvirt to deviate from the global default settings.
+</p>
+<p>Defaults to &lsquo;<samp>"NORMAL"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-max_002dclients-1" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">max-clients </span></dt>
+<dd><p>Maximum number of concurrent client connections to allow over all
+sockets combined.
+</p>
+<p>Defaults to &lsquo;<samp>5000</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-max_002dqueued_002dclients" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">max-queued-clients </span></dt>
+<dd><p>Maximum length of queue of connections waiting to be accepted by the
+daemon.  Note, that some protocols supporting retransmission may obey
+this so that a later reattempt at connection succeeds.
+</p>
+<p>Defaults to &lsquo;<samp>1000</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-max_002danonymous_002dclients" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">max-anonymous-clients </span></dt>
+<dd><p>Maximum length of queue of accepted but not yet authenticated clients.
+Set this to zero to turn this feature off
+</p>
+<p>Defaults to &lsquo;<samp>20</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-min_002dworkers" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">min-workers </span></dt>
+<dd><p>Number of workers to start up initially.
+</p>
+<p>Defaults to &lsquo;<samp>5</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-max_002dworkers" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">max-workers </span></dt>
+<dd><p>Maximum number of worker threads.
+</p>
+<p>If the number of active clients exceeds <code>min-workers</code>, then more
+threads are spawned, up to max_workers limit.  Typically you&rsquo;d want
+max_workers to equal maximum number of clients allowed.
+</p>
+<p>Defaults to &lsquo;<samp>20</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-prio_002dworkers" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">prio-workers </span></dt>
+<dd><p>Number of priority workers.  If all workers from above pool are stuck,
+some calls marked as high priority (notably domainDestroy) can be
+executed in this pool.
+</p>
+<p>Defaults to &lsquo;<samp>5</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-max_002drequests" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">max-requests </span></dt>
+<dd><p>Total global limit on concurrent RPC calls.
+</p>
+<p>Defaults to &lsquo;<samp>20</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-max_002dclient_002drequests" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">max-client-requests </span></dt>
+<dd><p>Limit on concurrent requests from a single client connection.  To avoid
+one client monopolizing the server this should be a small fraction of
+the global max_requests and max_workers parameter.
+</p>
+<p>Defaults to &lsquo;<samp>5</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-admin_002dmin_002dworkers" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">admin-min-workers </span></dt>
+<dd><p>Same as <code>min-workers</code> but for the admin interface.
+</p>
+<p>Defaults to &lsquo;<samp>1</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-admin_002dmax_002dworkers" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">admin-max-workers </span></dt>
+<dd><p>Same as <code>max-workers</code> but for the admin interface.
+</p>
+<p>Defaults to &lsquo;<samp>5</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-admin_002dmax_002dclients" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">admin-max-clients </span></dt>
+<dd><p>Same as <code>max-clients</code> but for the admin interface.
+</p>
+<p>Defaults to &lsquo;<samp>5</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-admin_002dmax_002dqueued_002dclients" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">admin-max-queued-clients </span></dt>
+<dd><p>Same as <code>max-queued-clients</code> but for the admin interface.
+</p>
+<p>Defaults to &lsquo;<samp>5</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-admin_002dmax_002dclient_002drequests" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">admin-max-client-requests </span></dt>
+<dd><p>Same as <code>max-client-requests</code> but for the admin interface.
+</p>
+<p>Defaults to &lsquo;<samp>5</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-log_002dlevel-1" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">log-level </span></dt>
+<dd><p>Logging level.  4 errors, 3 warnings, 2 information, 1 debug.
+</p>
+<p>Defaults to &lsquo;<samp>3</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-log_002dfilters" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">log-filters </span></dt>
+<dd><p>Logging filters.
+</p>
+<p>A filter allows to select a different logging level for a given category
+of logs.  The format for a filter is one of:
+</p>
+<ul>
+<li> x:name
+
+</li><li> x:+name
+
+</li></ul>
+
+<p>where <code>name</code> is a string which is matched against the category
+given in the <code>VIR_LOG_INIT()</code> at the top of each libvirt source
+file, e.g., &lsquo;<samp>"remote"</samp>&rsquo;, &lsquo;<samp>"qemu"</samp>&rsquo;, or &lsquo;<samp>"util.json"</samp>&rsquo; (the
+name in the filter can be a substring of the full category name, in
+order to match multiple similar categories), the optional &lsquo;<samp>"+"</samp>&rsquo;
+prefix tells libvirt to log stack trace for each message matching name,
+and <code>x</code> is the minimal level where matching messages should be
+logged:
+</p>
+<ul>
+<li> 1: DEBUG
+
+</li><li> 2: INFO
+
+</li><li> 3: WARNING
+
+</li><li> 4: ERROR
+
+</li></ul>
+
+<p>Multiple filters can be defined in a single filters statement, they just
+need to be separated by spaces.
+</p>
+<p>Defaults to &lsquo;<samp>"3:remote 4:event"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-log_002doutputs" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">log-outputs </span></dt>
+<dd><p>Logging outputs.
+</p>
+<p>An output is one of the places to save logging information.  The format
+for an output can be:
+</p>
+<dl compact="compact">
+<dt><code>x:stderr</code></dt>
+<dd><p>output goes to stderr
+</p>
+</dd>
+<dt><code>x:syslog:name</code></dt>
+<dd><p>use syslog for the output and use the given name as the ident
+</p>
+</dd>
+<dt><code>x:file:file_path</code></dt>
+<dd><p>output to a file, with the given filepath
+</p>
+</dd>
+<dt><code>x:journald</code></dt>
+<dd><p>output to journald logging system
+</p>
+</dd>
+</dl>
+
+<p>In all case the x prefix is the minimal level, acting as a filter
+</p>
+<ul>
+<li> 1: DEBUG
+
+</li><li> 2: INFO
+
+</li><li> 3: WARNING
+
+</li><li> 4: ERROR
+
+</li></ul>
+
+<p>Multiple outputs can be defined, they just need to be separated by
+spaces.
+</p>
+<p>Defaults to &lsquo;<samp>"3:stderr"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-audit_002dlevel" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">audit-level </span></dt>
+<dd><p>Allows usage of the auditing subsystem to be altered
+</p>
+<ul>
+<li> 0: disable all auditing
+
+</li><li> 1: enable auditing, only if enabled on host
+
+</li><li> 2: enable auditing, and exit if disabled on host.
+
+</li></ul>
+
+<p>Defaults to &lsquo;<samp>1</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-audit_002dlogging" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">audit-logging </span></dt>
+<dd><p>Send audit messages via libvirt logging infrastructure.
+</p>
+<p>Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-host_002duuid" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>optional-string</em> </span><span class="symbol-definition-prototype">host-uuid </span></dt>
+<dd><p>Host UUID.  UUID must not have all digits be the same.
+</p>
+<p>Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-host_002duuid_002dsource" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">host-uuid-source </span></dt>
+<dd><p>Source to read host UUID.
+</p>
+<ul>
+<li> <code>smbios</code>: fetch the UUID from <code>dmidecode -s system-uuid</code>
+
+</li><li> <code>machine-id</code>: fetch the UUID from <code>/etc/machine-id</code>
+
+</li></ul>
+
+<p>If <code>dmidecode</code> does not provide a valid UUID a temporary UUID will
+be generated.
+</p>
+<p>Defaults to &lsquo;<samp>"smbios"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-keepalive_002dinterval" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">keepalive-interval </span></dt>
+<dd><p>A keepalive message is sent to a client after <code>keepalive_interval</code>
+seconds of inactivity to check if the client is still responding.  If
+set to -1, libvirtd will never send keepalive requests; however clients
+can still send them and the daemon will send responses.
+</p>
+<p>Defaults to &lsquo;<samp>5</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-keepalive_002dcount" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">keepalive-count </span></dt>
+<dd><p>Maximum number of keepalive messages that are allowed to be sent to the
+client without getting any response before the connection is considered
+broken.
+</p>
+<p>In other words, the connection is automatically closed approximately
+after <code>keepalive_interval * (keepalive_count + 1)</code> seconds since
+the last message received from the client.  When <code>keepalive-count</code>
+is set to 0, connections will be automatically closed after
+<code>keepalive-interval</code> seconds of inactivity without sending any
+keepalive messages.
+</p>
+<p>Defaults to &lsquo;<samp>5</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-admin_002dkeepalive_002dinterval" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">admin-keepalive-interval </span></dt>
+<dd><p>Same as above but for admin interface.
+</p>
+<p>Defaults to &lsquo;<samp>5</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-admin_002dkeepalive_002dcount" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">admin-keepalive-count </span></dt>
+<dd><p>Same as above but for admin interface.
+</p>
+<p>Defaults to &lsquo;<samp>5</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-ovs_002dtimeout" class="symbol-definition"><span class="symbol-definition-category"><code>libvirt-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">ovs-timeout </span></dt>
+<dd><p>Timeout for Open vSwitch calls.
+</p>
+<p>The <code>ovs-vsctl</code> utility is used for the configuration and its
+timeout option is set by default to 5 seconds to avoid potential
+infinite waits blocking libvirt.
+</p>
+<p>Defaults to &lsquo;<samp>5</samp>&rsquo;.
+</p>
+</dd></dl>
+
+
+<span id="Virtlog-daemon"></span><h4 class="subsubheading">Virtlog daemon</h4>
+<p>The virtlogd service is a server side daemon component of libvirt that is
+used to manage logs from virtual machine consoles.
+</p>
+<p>This daemon is not used directly by libvirt client applications, rather it
+is called on their behalf by <code>libvirtd</code>.  By maintaining the logs in a
+standalone daemon, the main <code>libvirtd</code> daemon can be restarted without
+risk of losing logs.  The <code>virtlogd</code> daemon has the ability to re-exec()
+itself upon receiving <code>SIGUSR1</code>, to allow live upgrades without downtime.
+</p>
+<dl>
+<dt id="index-virtlog_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">virtlog-service-type </span></dt>
+<dd><p>This is the type of the virtlog daemon.
+Its value must be a <code>virtlog-configuration</code>.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Virtualization-Services.html#index-virtlog_002dservice_002dtype">virtlog-service-type</a>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">virtlog-configuration</span>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">max-clients</span> <span class="syntax-symbol">1000</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt id="index-package-2" class="symbol-definition"><span class="symbol-definition-category">Variable: <em><code>libvirt</code> parameter</em> </span><span class="symbol-definition-prototype">package libvirt</span></dt>
+<dd><p>Libvirt package.
+</p></dd></dl>
+
+<dl>
+<dt id="index-log_002dlevel-2" class="symbol-definition"><span class="symbol-definition-category"><code>virtlog-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">log-level </span></dt>
+<dd><p>Logging level.  4 errors, 3 warnings, 2 information, 1 debug.
+</p>
+<p>Defaults to &lsquo;<samp>3</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-log_002dfilters-1" class="symbol-definition"><span class="symbol-definition-category"><code>virtlog-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">log-filters </span></dt>
+<dd><p>Logging filters.
+</p>
+<p>A filter allows to select a different logging level for a given category
+of logs The format for a filter is one of:
+</p>
+<ul>
+<li> x:name
+
+</li><li> x:+name
+
+</li></ul>
+
+<p>where <code>name</code> is a string which is matched against the category
+given in the <code>VIR_LOG_INIT()</code> at the top of each libvirt source
+file, e.g., "remote", "qemu", or "util.json" (the name in the filter can
+be a substring of the full category name, in order to match multiple
+similar categories), the optional "+" prefix tells libvirt to log stack
+trace for each message matching name, and <code>x</code> is the minimal level
+where matching messages should be logged:
+</p>
+<ul>
+<li> 1: DEBUG
+
+</li><li> 2: INFO
+
+</li><li> 3: WARNING
+
+</li><li> 4: ERROR
+
+</li></ul>
+
+<p>Multiple filters can be defined in a single filters statement, they just
+need to be separated by spaces.
+</p>
+<p>Defaults to &lsquo;<samp>"3:remote 4:event"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-log_002doutputs-1" class="symbol-definition"><span class="symbol-definition-category"><code>virtlog-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">log-outputs </span></dt>
+<dd><p>Logging outputs.
+</p>
+<p>An output is one of the places to save logging information The format
+for an output can be:
+</p>
+<dl compact="compact">
+<dt><code>x:stderr</code></dt>
+<dd><p>output goes to stderr
+</p>
+</dd>
+<dt><code>x:syslog:name</code></dt>
+<dd><p>use syslog for the output and use the given name as the ident
+</p>
+</dd>
+<dt><code>x:file:file_path</code></dt>
+<dd><p>output to a file, with the given filepath
+</p>
+</dd>
+<dt><code>x:journald</code></dt>
+<dd><p>output to journald logging system
+</p>
+</dd>
+</dl>
+
+<p>In all case the x prefix is the minimal level, acting as a filter
+</p>
+<ul>
+<li> 1: DEBUG
+
+</li><li> 2: INFO
+
+</li><li> 3: WARNING
+
+</li><li> 4: ERROR
+
+</li></ul>
+
+<p>Multiple outputs can be defined, they just need to be separated by
+spaces.
+</p>
+<p>Defaults to &lsquo;<samp>"3:stderr"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-max_002dclients-2" class="symbol-definition"><span class="symbol-definition-category"><code>virtlog-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">max-clients </span></dt>
+<dd><p>Maximum number of concurrent client connections to allow over all
+sockets combined.
+</p>
+<p>Defaults to &lsquo;<samp>1024</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-max_002dsize" class="symbol-definition"><span class="symbol-definition-category"><code>virtlog-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">max-size </span></dt>
+<dd><p>Maximum file size before rolling over.
+</p>
+<p>Defaults to &lsquo;<samp>2MB</samp>&rsquo;
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-max_002dbackups" class="symbol-definition"><span class="symbol-definition-category"><code>virtlog-configuration</code> parameter: <em>integer</em> </span><span class="symbol-definition-prototype">max-backups </span></dt>
+<dd><p>Maximum number of backup files to keep.
+</p>
+<p>Defaults to &lsquo;<samp>3</samp>&rsquo;
+</p>
+</dd></dl>
+
+<span id="transparent_002demulation_002dqemu"></span><span id="Transparent-Emulation-with-QEMU"></span><h4 class="subsubheading">Transparent Emulation with QEMU</h4>
+
+<span id="index-emulation"></span>
+<span id="index-binfmt_005fmisc"></span>
+<p><code>qemu-binfmt-service-type</code> provides support for transparent
+emulation of program binaries built for different architectures&mdash;e.g.,
+it allows you to transparently execute an ARMv7 program on an x86_64
+machine.  It achieves this by combining the <a href="https://www.qemu.org">QEMU</a> emulator and the <code>binfmt_misc</code> feature of the kernel Linux.
+This feature only allows you to emulate GNU/Linux on a different
+architecture, but see below for GNU/Hurd support.
+</p>
+<dl>
+<dt id="index-qemu_002dbinfmt_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">qemu-binfmt-service-type </span></dt>
+<dd><p>This is the type of the QEMU/binfmt service for transparent emulation.
+Its value must be a <code>qemu-binfmt-configuration</code> object, which
+specifies the QEMU package to use as well as the architecture we want to
+emulated:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Virtualization-Services.html#index-qemu_002dbinfmt_002dservice_002dtype">qemu-binfmt-service-type</a>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Virtualization-Services.html#index-qemu_002dbinfmt_002dconfiguration">qemu-binfmt-configuration</a>
+           <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">platforms</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Virtualization-Services.html#index-lookup_002dqemu_002dplatforms">lookup-qemu-platforms</a> <span class="syntax-string">"arm"</span> <span class="syntax-string">"aarch64"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>In this example, we enable transparent emulation for the ARM and aarch64
+platforms.  Running <code>herd stop qemu-binfmt</code> turns it off, and
+running <code>herd start qemu-binfmt</code> turns it back on (see <a href="https://www.gnu.org/software/shepherd/manual/html_node/Invoking-herd.html#Invoking-herd">the <code>herd</code> command</a> in <cite>The GNU Shepherd Manual</cite>).
+</p></dd></dl>
+
+<dl>
+<dt id="index-qemu_002dbinfmt_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">qemu-binfmt-configuration </span></dt>
+<dd><p>This is the configuration for the <code>qemu-binfmt</code> service.
+</p>
+<dl compact="compact">
+<dt><code>platforms</code> (default: <code>'()</code>)</dt>
+<dd><p>The list of emulated QEMU platforms.  Each item must be a <em>platform
+object</em> as returned by <code>lookup-qemu-platforms</code> (see below).
+</p>
+<p>For example, let&rsquo;s suppose you&rsquo;re on an x86_64 machine and you have this
+service:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Virtualization-Services.html#index-qemu_002dbinfmt_002dservice_002dtype">qemu-binfmt-service-type</a>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Virtualization-Services.html#index-qemu_002dbinfmt_002dconfiguration">qemu-binfmt-configuration</a>
+           <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">platforms</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Virtualization-Services.html#index-lookup_002dqemu_002dplatforms">lookup-qemu-platforms</a> <span class="syntax-string">"arm"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>You can run:
+</p>
+<div class="example">
+<pre class="example">guix build -s armhf-linux inkscape
+</pre></div>
+
+<p>and it will build Inkscape for ARMv7 <em>as if it were a native
+build</em>, transparently using QEMU to emulate the ARMv7 CPU.  Pretty handy
+if you&rsquo;d like to test a package build for an architecture you don&rsquo;t have
+access to!
+</p>
+</dd>
+<dt><code>qemu</code> (default: <code>qemu</code>)</dt>
+<dd><p>The QEMU package to use.
+</p></dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-lookup_002dqemu_002dplatforms" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">lookup-qemu-platforms <var>platforms</var>&hellip;</span></dt>
+<dd><p>Return the list of QEMU platform objects corresponding to
+<var>platforms</var>&hellip;.  <var>platforms</var> must be a list of strings
+corresponding to platform names, such as <code>"arm"</code>, <code>"sparc"</code>,
+<code>"mips64el"</code>, and so on.
+</p></dd></dl>
+
+<dl>
+<dt id="index-qemu_002dplatform_003f" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">qemu-platform? <var>obj</var></span></dt>
+<dd><p>Return true if <var>obj</var> is a platform object.
+</p></dd></dl>
+
+<dl>
+<dt id="index-qemu_002dplatform_002dname" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">qemu-platform-name <var>platform</var></span></dt>
+<dd><p>Return the name of <var>platform</var>&mdash;a string such as <code>"arm"</code>.
+</p></dd></dl>
+
+
+<span id="QEMU-Guest-Agent"></span><h4 class="subsubheading">QEMU Guest Agent</h4>
+
+<span id="index-emulation-1"></span>
+
+<p>The QEMU guest agent provides control over the emulated system to the
+host.  The <code>qemu-guest-agent</code> service runs the agent on Guix
+guests.  To control the agent from the host, open a socket by invoking
+QEMU with the following arguments:
+</p>
+<div class="example">
+<pre class="example">qemu-system-x86_64 \
+	-chardev socket,path=/tmp/qga.sock,server=on,wait=off,id=qga0 \
+	-device virtio-serial \
+	-device virtserialport,chardev=qga0,name=org.qemu.guest_agent.0 \
+	...
+</pre></div>
+
+<p>This creates a socket at <samp>/tmp/qga.sock</samp> on the host.  Once the
+guest agent is running, you can issue commands with <code>socat</code>:
+</p>
+<div class="example">
+<pre class="example">$ guix shell socat -- socat unix-connect:/tmp/qga.sock stdio
+{"execute": "guest-get-host-name"}
+{"return": {"host-name": "guix"}}
+</pre></div>
+
+<p>See <a href="https://wiki.qemu.org/Features/GuestAgent">QEMU guest agent
+documentation</a> for more options and commands.
+</p>
+<dl>
+<dt id="index-qemu_002dguest_002dagent_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">qemu-guest-agent-service-type </span></dt>
+<dd><p>Service type for the QEMU guest agent service.
+</p></dd></dl>
+
+<dl>
+<dt id="index-qemu_002dguest_002dagent_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">qemu-guest-agent-configuration </span></dt>
+<dd><p>Configuration for the <code>qemu-guest-agent</code> service.
+</p>
+<dl compact="compact">
+<dt><code>qemu</code> (default: <code>qemu-minimal</code>)</dt>
+<dd><p>The QEMU package to use.
+</p>
+</dd>
+<dt><code>device</code> (default: <code>""</code>)</dt>
+<dd><p>File name of the device or socket the agent uses to communicate with the
+host.  If empty, QEMU uses a default file name.
+</p></dd>
+</dl>
+</dd></dl>
+
+
+<span id="The-Hurd-in-a-Virtual-Machine"></span><h4 class="subsubheading">The Hurd in a Virtual Machine</h4>
+
+<span id="index-hurd-1"></span>
+<span id="index-the-Hurd"></span>
+<span id="index-childhurd"></span>
+
+<p>Service <code>hurd-vm</code> provides support for running GNU/Hurd in a
+virtual machine (VM), a so-called <em>childhurd</em>.  This service is meant
+to be used on GNU/Linux and the given GNU/Hurd operating system
+configuration is cross-compiled.  The virtual machine is a Shepherd
+service that can be referred to by the names <code>hurd-vm</code> and
+<code>childhurd</code> and be controlled with commands such as:
+</p>
+<div class="example">
+<pre class="example">herd start hurd-vm
+herd stop childhurd
+</pre></div>
+
+<p>When the service is running, you can view its console by connecting to
+it with a VNC client, for example with:
+</p>
+<div class="example">
+<pre class="example">guix shell tigervnc-client -- vncviewer localhost:5900
+</pre></div>
+
+<p>The default configuration (see <code>hurd-vm-configuration</code> below)
+spawns a secure shell (SSH) server in your GNU/Hurd system, which QEMU
+(the virtual machine emulator) redirects to port 10222 on the host.
+Thus, you can connect over SSH to the childhurd with:
+</p>
+<div class="example">
+<pre class="example">ssh root@localhost -p 10022
+</pre></div>
+
+<p>The childhurd is volatile and stateless: it starts with a fresh root
+file system every time you restart it.  By default though, all the files
+under <samp>/etc/childhurd</samp> on the host are copied as is to the root
+file system of the childhurd when it boots.  This allows you to
+initialize &ldquo;secrets&rdquo; inside the VM: SSH host keys, authorized
+substitute keys, and so on&mdash;see the explanation of <code>secret-root</code>
+below.
+</p>
+<dl>
+<dt id="index-hurd_002dvm_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">hurd-vm-service-type </span></dt>
+<dd><p>This is the type of the Hurd in a Virtual Machine service.  Its value
+must be a <code>hurd-vm-configuration</code> object, which specifies the
+operating system (see <a href="operating_002dsystem-Reference.html">operating-system Reference</a>) and the disk size
+for the Hurd Virtual Machine, the QEMU package to use as well as the
+options for running it.
+</p>
+<p>For example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Virtualization-Services.html#index-hurd_002dvm_002dservice_002dtype">hurd-vm-service-type</a>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Virtualization-Services.html#index-hurd_002dvm_002dconfiguration">hurd-vm-configuration</a>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">disk-size</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Arithmetic.html#index-_002a">*</a> <span class="syntax-symbol">5000</span> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Scientific.html#index-expt">expt</a> <span class="syntax-symbol">2</span> <span class="syntax-symbol">20</span></span>)</span></span>)</span></span>)</span> <span class="syntax-comment">;5G
+</span>          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">memory-size</span> <span class="syntax-symbol">1024</span></span>)</span></span>)</span></span>)</span>             <span class="syntax-comment">;1024MiB
+</span></pre></div>
+
+<p>would create a disk image big enough to build GNU&nbsp;Hello, with some
+extra memory.
+</p></dd></dl>
+
+<dl>
+<dt id="index-hurd_002dvm_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">hurd-vm-configuration </span></dt>
+<dd><p>The data type representing the configuration for
+<code>hurd-vm-service-type</code>.
+</p>
+<dl compact="compact">
+<dt><code>os</code> (default: <var>%hurd-vm-operating-system</var>)</dt>
+<dd><p>The operating system to instantiate.  This default is bare-bones with a
+permissive OpenSSH secure shell daemon listening on port 2222
+(see <a href="Networking-Services.html"><code>openssh-service-type</code></a>).
+</p>
+</dd>
+<dt><code>qemu</code> (default: <code>qemu-minimal</code>)</dt>
+<dd><p>The QEMU package to use.
+</p>
+</dd>
+<dt><code>image</code> (default: <var>hurd-vm-disk-image</var>)</dt>
+<dd><p>The procedure used to build the disk-image built from this
+configuration.
+</p>
+</dd>
+<dt><code>disk-size</code> (default: <code>'guess</code>)</dt>
+<dd><p>The size of the disk image.
+</p>
+</dd>
+<dt><code>memory-size</code> (default: <code>512</code>)</dt>
+<dd><p>The memory size of the Virtual Machine in mebibytes.
+</p>
+</dd>
+<dt><code>options</code> (default: <code>'("--snapshot")</code>)</dt>
+<dd><p>The extra options for running QEMU.
+</p>
+</dd>
+<dt><code>id</code> (default: <code>#f</code>)</dt>
+<dd><p>If set, a non-zero positive integer used to parameterize Childhurd
+instances.  It is appended to the service&rsquo;s name,
+e.g. <code>childhurd1</code>.
+</p>
+</dd>
+<dt><code>net-options</code> (default: <var>hurd-vm-net-options</var>)</dt>
+<dd><p>The procedure used to produce the list of QEMU networking options.
+</p>
+<p>By default, it produces
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-symbol">'</span><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-string">"--device"</span> <span class="syntax-string">"rtl8139,netdev=net0"</span>
+  <span class="syntax-string">"--netdev"</span> <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a>
+              <span class="syntax-string">"user,id=net0,"</span>
+              <span class="syntax-string">"hostfwd=tcp:127.0.0.1:secrets-port-:1004,"</span>
+              <span class="syntax-string">"hostfwd=tcp:127.0.0.1:ssh-port-:2222,"</span>
+              <span class="syntax-string">"hostfwd=tcp:127.0.0.1:vnc-port-:5900"</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>with forwarded ports:
+</p>
+<div class="example">
+<pre class="example"><var>secrets-port</var>: <code>(+ 11004 (* 1000 <var>ID</var>))</code>
+<var>ssh-port</var>: <code>(+ 10022 (* 1000 <var>ID</var>))</code>
+<var>vnc-port</var>: <code>(+ 15900 (* 1000 <var>ID</var>))</code>
+</pre></div>
+
+</dd>
+<dt><code>secret-root</code> (default: <samp>/etc/childhurd</samp>)</dt>
+<dd><p>The root directory with out-of-band secrets to be installed into the
+childhurd once it runs.  Childhurds are volatile which means that on
+every startup, secrets such as the SSH host keys and Guix signing key
+are recreated.
+</p>
+<p>If the <samp>/etc/childhurd</samp> directory does not exist, the
+<code>secret-service</code> running in the Childhurd will be sent an empty
+list of secrets.
+</p>
+<p>By default, the service automatically populates <samp>/etc/childhurd</samp>
+with the following non-volatile secrets, unless they already exist:
+</p>
+<div class="example">
+<pre class="example">/etc/childhurd/etc/guix/acl
+/etc/childhurd/etc/guix/signing-key.pub
+/etc/childhurd/etc/guix/signing-key.sec
+/etc/childhurd/etc/ssh/ssh_host_ed25519_key
+/etc/childhurd/etc/ssh/ssh_host_ecdsa_key
+/etc/childhurd/etc/ssh/ssh_host_ed25519_key.pub
+/etc/childhurd/etc/ssh/ssh_host_ecdsa_key.pub
+</pre></div>
+
+<p>These files are automatically sent to the guest Hurd VM when it boots,
+including permissions.
+</p>
+<span id="index-childhurd_002c-offloading"></span>
+<span id="index-Hurd_002c-offloading"></span>
+<p>Having these files in place means that only a couple of things are
+missing to allow the host to offload <code>i586-gnu</code> builds to the
+childhurd:
+</p>
+<ol>
+<li> Authorizing the childhurd&rsquo;s key on the host so that the host accepts
+build results coming from the childhurd, which can be done like so:
+
+<div class="example">
+<pre class="example">guix archive --authorize &lt; \
+  /etc/childhurd/etc/guix/signing-key.pub
+</pre></div>
+
+</li><li> Adding the childhurd to <samp>/etc/guix/machines.scm</samp> (see <a href="Daemon-Offload-Setup.html">Daemon Offload Setup</a>).
+</li></ol>
+
+<p>We&rsquo;re working towards making that happen automatically&mdash;get in touch
+with us at <a href="mailto:guix-devel@gnu.org">guix-devel@gnu.org</a> to discuss it!
+</p></dd>
+</dl>
+</dd></dl>
+
+<p>Note that by default the VM image is volatile, i.e., once stopped the
+contents are lost.  If you want a stateful image instead, override the
+configuration&rsquo;s <code>image</code> and <code>options</code> without
+the <code>--snapshot</code> flag using something along these lines:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Virtualization-Services.html#index-hurd_002dvm_002dservice_002dtype">hurd-vm-service-type</a>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Virtualization-Services.html#index-hurd_002dvm_002dconfiguration">hurd-vm-configuration</a>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="image-Reference.html#index-image">image</a>   <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Higher_002dOrder-Functions.html#index-const">const</a> <span class="syntax-string">"/out/of/store/writable/hurd.img"</span></span>)</span></span>)</span>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">options</span> <span class="syntax-symbol">'</span><span class="syntax-paren3">(<span class="syntax-symbol"></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<span id="Ganeti"></span><h4 class="subsubheading">Ganeti</h4>
+
+<span id="index-ganeti"></span>
+
+<blockquote>
+<p><b>Note:</b> This service is considered experimental.  Configuration options may be changed
+in a backwards-incompatible manner, and not all features have been thorougly
+tested.  Users of this service are encouraged to share their experience at
+<a href="mailto:guix-devel@gnu.org">guix-devel@gnu.org</a>.
+</p></blockquote>
+
+<p>Ganeti is a virtual machine management system.  It is designed to keep virtual
+machines running on a cluster of servers even in the event of hardware failures,
+and to make maintenance and recovery tasks easy.  It consists of multiple
+services which are described later in this section.  In addition to the Ganeti
+service, you will need the OpenSSH service (see <a href="Networking-Services.html"><code>openssh-service-type</code></a>), and update the <samp>/etc/hosts</samp> file
+(see <a href="operating_002dsystem-Reference.html"><code>hosts-file</code></a>) with the cluster name
+and address (or use a DNS server).
+</p>
+<p>All nodes participating in a Ganeti cluster should have the same Ganeti and
+<samp>/etc/hosts</samp> configuration.  Here is an example configuration for a Ganeti
+cluster node that supports multiple storage backends, and installs the
+<code>debootstrap</code> and <code>guix</code> <em>OS providers</em>:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">use-package-modules</span> <span class="syntax-symbol">virtualization</span></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">use-service-modules</span> <span class="syntax-symbol">base</span> <span class="syntax-symbol">ganeti</span> <span class="syntax-symbol">networking</span> <span class="syntax-symbol">ssh</span></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="operating_002dsystem-Reference.html#index-operating_002dsystem-1">operating-system</a>
+  <span class="syntax-comment">;; …
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">host-name</span> <span class="syntax-string">"node1"</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">hosts-file</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-plain_002dfile">plain-file</a> <span class="syntax-string">"hosts"</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Formatted-Output.html#index-format-1">format</a> <span class="syntax-symbol">#f</span> <span class="syntax-string">"
+127.0.0.1       localhost
+::1             localhost
+
+192.168.1.200   ganeti.example.com
+192.168.1.201   node1.example.com node1
+192.168.1.202   node2.example.com node2
+"</span></span>)</span></span>)</span></span>)</span>
+
+  <span class="syntax-comment">;; Install QEMU so we can use KVM-based instances, and LVM, DRBD and Ceph
+</span>  <span class="syntax-comment">;; in order to use the "plain", "drbd" and "rbd" storage backends.
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">packages</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Append_002fReverse.html#index-append">append</a> <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-special">map</span> <span class="syntax-symbol">specification-&gt;package</span>
+                         <span class="syntax-symbol">'</span><span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-string">"qemu"</span> <span class="syntax-string">"lvm2"</span> <span class="syntax-string">"drbd-utils"</span> <span class="syntax-string">"ceph"</span>
+                           <span class="syntax-comment">;; Add the debootstrap and guix OS providers.
+</span>                           <span class="syntax-string">"ganeti-instance-guix"</span> <span class="syntax-string">"ganeti-instance-debootstrap"</span></span>)</span></span>)</span>
+                    <span class="syntax-symbol">%base-packages</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">services</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Append_002fReverse.html#index-append">append</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Networking-Setup.html#index-static_002dnetworking_002dservice_002dtype">static-networking-service-type</a>
+                          <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="Networking-Setup.html#index-static_002dnetworking">static-networking</a>
+                                 <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-symbol">addresses</span>
+                                  <span class="syntax-paren8">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren9">(<span class="syntax-symbol"><a class="syntax-symbol" href="Networking-Setup.html#index-network_002daddress">network-address</a>
+                                         <span class="syntax-paren10">(<span class="syntax-symbol"><span class="syntax-symbol">device</span> <span class="syntax-string">"eth0"</span></span>)</span>
+                                         <span class="syntax-paren10">(<span class="syntax-symbol"><span class="syntax-symbol">value</span> <span class="syntax-string">"192.168.1.201/24"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+                                 <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-symbol">routes</span>
+                                  <span class="syntax-paren8">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren9">(<span class="syntax-symbol"><a class="syntax-symbol" href="Networking-Setup.html#index-network_002droute">network-route</a>
+                                         <span class="syntax-paren10">(<span class="syntax-symbol"><span class="syntax-symbol">destination</span> <span class="syntax-string">"default"</span></span>)</span>
+                                         <span class="syntax-paren10">(<span class="syntax-symbol"><span class="syntax-symbol">gateway</span> <span class="syntax-string">"192.168.1.254"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+                                 <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-symbol">name-servers</span> <span class="syntax-symbol">'</span><span class="syntax-paren8">(<span class="syntax-symbol"><span class="syntax-string">"192.168.1.252"</span>
+                                                 <span class="syntax-string">"192.168.1.253"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+
+                 <span class="syntax-comment">;; Ganeti uses SSH to communicate between nodes.
+</span>                 <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Networking-Services.html#index-openssh_002dservice_002dtype">openssh-service-type</a>
+                          <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="Networking-Services.html#index-openssh_002dconfiguration">openssh-configuration</a>
+                           <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">permit-root-login</span> <span class="syntax-symbol">'prohibit-password</span></span>)</span></span>)</span></span>)</span>
+
+                 <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Virtualization-Services.html#index-ganeti_002dservice_002dtype">ganeti-service-type</a>
+                          <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="Virtualization-Services.html#index-ganeti_002dconfiguration">ganeti-configuration</a>
+                           <span class="syntax-comment">;; This list specifies allowed file system paths
+</span>                           <span class="syntax-comment">;; for storing virtual machine images.
+</span>                           <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">file-storage-paths</span> <span class="syntax-symbol">'</span><span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-string">"/srv/ganeti/file-storage"</span></span>)</span></span>)</span>
+                           <span class="syntax-comment">;; This variable configures a single "variant" for
+</span>                           <span class="syntax-comment">;; both Debootstrap and Guix that works with KVM.
+</span>                           <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">os</span> <span class="syntax-symbol">%default-ganeti-os</span></span>)</span></span>)</span></span>)</span></span>)</span>
+           <a class="syntax-symbol" href="Base-Services.html#index-_0025base_002dservices-1">%base-services</a></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>Users are advised to read the
+<a href="https://docs.ganeti.org/docs/ganeti/3.0/html/admin.html">Ganeti
+administrators guide</a> to learn about the various cluster options and
+day-to-day operations.  There is also a
+<a href="https://guix.gnu.org/blog/2020/running-a-ganeti-cluster-on-guix/">blog post</a>
+describing how to configure and initialize a small cluster.
+</p>
+<dl>
+<dt id="index-ganeti_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">ganeti-service-type </span></dt>
+<dd><p>This is a service type that includes all the various services that Ganeti
+nodes should run.
+</p>
+<p>Its value is a <code>ganeti-configuration</code> object that defines the package
+to use for CLI operations, as well as configuration for the various daemons.
+Allowed file storage paths and available guest operating systems are also
+configured through this data type.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ganeti_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">ganeti-configuration </span></dt>
+<dd><p>The <code>ganeti</code> service takes the following configuration options:
+</p>
+<dl compact="compact">
+<dt><code>ganeti</code> (default: <code>ganeti</code>)</dt>
+<dd><p>The <code>ganeti</code> package to use.  It will be installed to the system profile
+and make <code>gnt-cluster</code>, <code>gnt-instance</code>, etc available.  Note
+that the value specified here does not affect the other services as each refer
+to a specific <code>ganeti</code> package (see below).
+</p>
+</dd>
+<dt><code>noded-configuration</code> (default: <code>(ganeti-noded-configuration)</code>)</dt>
+<dt><code>confd-configuration</code> (default: <code>(ganeti-confd-configuration)</code>)</dt>
+<dt><code>wconfd-configuration</code> (default: <code>(ganeti-wconfd-configuration)</code>)</dt>
+<dt><code>luxid-configuration</code> (default: <code>(ganeti-luxid-configuration)</code>)</dt>
+<dt><code>rapi-configuration</code> (default: <code>(ganeti-rapi-configuration)</code>)</dt>
+<dt><code>kvmd-configuration</code> (default: <code>(ganeti-kvmd-configuration)</code>)</dt>
+<dt><code>mond-configuration</code> (default: <code>(ganeti-mond-configuration)</code>)</dt>
+<dt><code>metad-configuration</code> (default: <code>(ganeti-metad-configuration)</code>)</dt>
+<dt><code>watcher-configuration</code> (default: <code>(ganeti-watcher-configuration)</code>)</dt>
+<dt><code>cleaner-configuration</code> (default: <code>(ganeti-cleaner-configuration)</code>)</dt>
+<dd>
+<p>These options control the various daemons and cron jobs that are distributed
+with Ganeti.  The possible values for these are described in detail below.
+To override a setting, you must use the configuration type for that service:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Virtualization-Services.html#index-ganeti_002dservice_002dtype">ganeti-service-type</a>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Virtualization-Services.html#index-ganeti_002dconfiguration">ganeti-configuration</a>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">rapi-configuration</span>
+           <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Virtualization-Services.html#index-ganeti_002drapi_002dconfiguration">ganeti-rapi-configuration</a>
+            <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">interface</span> <span class="syntax-string">"eth1"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+          <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">watcher-configuration</span>
+           <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="Virtualization-Services.html#index-ganeti_002dwatcher_002dconfiguration">ganeti-watcher-configuration</a>
+            <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">rapi-ip</span> <span class="syntax-string">"10.0.0.1"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+</dd>
+<dt><code>file-storage-paths</code> (default: <code>'()</code>)</dt>
+<dd><p>List of allowed directories for file storage backend.
+</p>
+</dd>
+<dt><code>os</code> (default: <code>%default-ganeti-os</code>)</dt>
+<dd><p>List of <code>&lt;ganeti-os&gt;</code> records.
+</p></dd>
+</dl>
+
+<p>In essence <code>ganeti-service-type</code> is shorthand for declaring each service
+individually:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Virtualization-Services.html#index-ganeti_002dnoded_002dservice_002dtype">ganeti-noded-service-type</a></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Virtualization-Services.html#index-ganeti_002dconfd_002dservice_002dtype">ganeti-confd-service-type</a></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Virtualization-Services.html#index-ganeti_002dwconfd_002dservice_002dtype">ganeti-wconfd-service-type</a></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Virtualization-Services.html#index-ganeti_002dluxid_002dservice_002dtype">ganeti-luxid-service-type</a></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Virtualization-Services.html#index-ganeti_002dkvmd_002dservice_002dtype">ganeti-kvmd-service-type</a></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Virtualization-Services.html#index-ganeti_002dmond_002dservice_002dtype">ganeti-mond-service-type</a></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Virtualization-Services.html#index-ganeti_002dmetad_002dservice_002dtype">ganeti-metad-service-type</a></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Virtualization-Services.html#index-ganeti_002dwatcher_002dservice_002dtype">ganeti-watcher-service-type</a></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Virtualization-Services.html#index-ganeti_002dcleaner_002dservice_002dtype">ganeti-cleaner-service-type</a></span>)</span>
+</pre></div>
+
+<p>Plus a service extension for <code>etc-service-type</code> that configures the file
+storage backend and OS variants.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-ganeti_002dos" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">ganeti-os </span></dt>
+<dd><p>This data type is suitable for passing to the <code>os</code> parameter of
+<code>ganeti-configuration</code>.  It takes the following parameters:
+</p>
+<dl compact="compact">
+<dt><code>name</code></dt>
+<dd><p>The name for this OS provider.  It is only used to specify where the
+configuration ends up.  Setting it to &ldquo;debootstrap&rdquo; will create
+<samp>/etc/ganeti/instance-debootstrap</samp>.
+</p>
+</dd>
+<dt><code>extension</code> (default: <code>#f</code>)</dt>
+<dd><p>The file extension for variants of this OS type.  For example <samp>.conf</samp>
+or <samp>.scm</samp>.  It will be appended to the variant file name if set.
+</p>
+</dd>
+<dt><code>variants</code> (default: <code>'()</code>)</dt>
+<dd><p>This must be either a list of <code>ganeti-os-variant</code> objects for this OS,
+or a &ldquo;file-like&rdquo; object (see <a href="G_002dExpressions.html">file-like objects</a>)
+representing the variants directory.
+</p>
+<p>To use the Guix OS provider with variant definitions residing in a local
+directory instead of declaring individual variants (see <var>guix-variants</var>
+below), you can do:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Virtualization-Services.html#index-ganeti_002dos">ganeti-os</a>
+ <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">name</span> <span class="syntax-string">"guix"</span></span>)</span>
+ <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">variants</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-local_002dfile">local-file</a> <span class="syntax-string">"ganeti-guix-variants"</span>
+                       <span class="syntax-keyword">#:recursive?</span> <span class="syntax-symbol">#true</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>Note that you will need to maintain the <samp>variants.list</samp> file
+(see <code><a href="https://docs.ganeti.org/docs/ganeti/3.0/man/ganeti-os-interface.html">ganeti-os-interface(7)</a></code>)
+manually in this case.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-ganeti_002dos_002dvariant" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">ganeti-os-variant </span></dt>
+<dd><p>This is the data type for a Ganeti OS variant.  It takes the following
+parameters:
+</p>
+<dl compact="compact">
+<dt><code>name</code></dt>
+<dd><p>The name of this variant.
+</p>
+</dd>
+<dt><code>configuration</code></dt>
+<dd><p>A configuration file for this variant.
+</p></dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-_0025default_002ddebootstrap_002dhooks" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">%default-debootstrap-hooks </span></dt>
+<dd><p>This variable contains hooks to configure networking and the GRUB bootloader.
+</p></dd></dl>
+
+<dl>
+<dt id="index-_0025default_002ddebootstrap_002dextra_002dpkgs" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">%default-debootstrap-extra-pkgs </span></dt>
+<dd><p>This variable contains a list of packages suitable for a fully-virtualized guest.
+</p></dd></dl>
+
+<dl>
+<dt id="index-debootstrap_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">debootstrap-configuration </span></dt>
+<dd>
+<p>This data type creates configuration files suitable for the debootstrap OS provider.
+</p>
+<dl compact="compact">
+<dt><code>hooks</code> (default: <code>%default-debootstrap-hooks</code>)</dt>
+<dd><p>When not <code>#f</code>, this must be a G-expression that specifies a directory with
+scripts that will run when the OS is installed.  It can also be a list of
+<code>(name . file-like)</code> pairs.  For example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-symbol">`</span><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">99-hello-world</span> <span class="syntax-symbol">.</span> <span class="syntax-symbol">,</span><span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-plain_002dfile">plain-file</a> <span class="syntax-string">"#!/bin/sh\necho Hello, World"</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>That will create a directory with one executable named <code>99-hello-world</code>
+and run it every time this variant is installed.  If set to <code>#f</code>, hooks
+in <samp>/etc/ganeti/instance-debootstrap/hooks</samp> will be used, if any.
+</p></dd>
+<dt><code>proxy</code> (default: <code>#f</code>)</dt>
+<dd><p>Optional HTTP proxy to use.
+</p></dd>
+<dt><code>mirror</code> (default: <code>#f</code>)</dt>
+<dd><p>The Debian mirror.  Typically something like <code>http://ftp.no.debian.org/debian</code>.
+The default varies depending on the distribution.
+</p></dd>
+<dt><code>arch</code> (default: <code>#f</code>)</dt>
+<dd><p>The dpkg architecture.  Set to <code>armhf</code> to debootstrap an ARMv7 instance
+on an AArch64 host.  Default is to use the current system architecture.
+</p></dd>
+<dt><code>suite</code> (default: <code>"stable"</code>)</dt>
+<dd><p>When set, this must be a Debian distribution &ldquo;suite&rdquo; such as <code>buster</code>
+or <code>focal</code>.  If set to <code>#f</code>, the default for the OS provider is used.
+</p></dd>
+<dt><code>extra-pkgs</code> (default: <code>%default-debootstrap-extra-pkgs</code>)</dt>
+<dd><p>List of extra packages that will get installed by dpkg in addition
+to the minimal system.
+</p></dd>
+<dt><code>components</code> (default: <code>#f</code>)</dt>
+<dd><p>When set, must be a list of Debian repository &ldquo;components&rdquo;.  For example
+<code>'("main" "contrib")</code>.
+</p></dd>
+<dt><code>generate-cache?</code> (default: <code>#t</code>)</dt>
+<dd><p>Whether to automatically cache the generated debootstrap archive.
+</p></dd>
+<dt><code>clean-cache</code> (default: <code>14</code>)</dt>
+<dd><p>Discard the cache after this amount of days.  Use <code>#f</code> to never
+clear the cache.
+</p></dd>
+<dt><code>partition-style</code> (default: <code>'msdos</code>)</dt>
+<dd><p>The type of partition to create.  When set, it must be one of
+<code>'msdos</code>, <code>'none</code> or a string.
+</p></dd>
+<dt><code>partition-alignment</code> (default: <code>2048</code>)</dt>
+<dd><p>Alignment of the partition in sectors.
+</p></dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-debootstrap_002dvariant" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">debootstrap-variant <var>name</var> <var>configuration</var></span></dt>
+<dd><p>This is a helper procedure that creates a <code>ganeti-os-variant</code> record.  It
+takes two parameters: a name and a <code>debootstrap-configuration</code> object.
+</p></dd></dl>
+
+<dl>
+<dt id="index-debootstrap_002dos" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">debootstrap-os <var>variants</var>&hellip;</span></dt>
+<dd><p>This is a helper procedure that creates a <code>ganeti-os</code> record.  It takes
+a list of variants created with <code>debootstrap-variant</code>.
+</p></dd></dl>
+
+<dl>
+<dt id="index-guix_002dvariant" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">guix-variant <var>name</var> <var>configuration</var></span></dt>
+<dd><p>This is a helper procedure that creates a <code>ganeti-os-variant</code> record for
+use with the Guix OS provider.  It takes a name and a G-expression that returns
+a &ldquo;file-like&rdquo; (see <a href="G_002dExpressions.html">file-like objects</a>) object containing a
+Guix System configuration.
+</p></dd></dl>
+
+<dl>
+<dt id="index-guix_002dos" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">guix-os <var>variants</var>&hellip;</span></dt>
+<dd><p>This is a helper procedure that creates a <code>ganeti-os</code> record.  It
+takes a list of variants produced by <code>guix-variant</code>.
+</p></dd></dl>
+
+<dl>
+<dt id="index-_0025default_002ddebootstrap_002dvariants" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">%default-debootstrap-variants </span></dt>
+<dd><p>This is a convenience variable to make the debootstrap provider work
+&ldquo;out of the box&rdquo; without users having to declare variants manually.  It
+contains a single debootstrap variant with the default configuration:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Virtualization-Services.html#index-debootstrap_002dvariant">debootstrap-variant</a>
+       <span class="syntax-string">"default"</span>
+       <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="Virtualization-Services.html#index-debootstrap_002dconfiguration">debootstrap-configuration</a></span>)</span></span>)</span></span>)</span>
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt id="index-_0025default_002dguix_002dvariants" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">%default-guix-variants </span></dt>
+<dd><p>This is a convenience variable to make the Guix OS provider work without
+additional configuration.  It creates a virtual machine that has an SSH
+server, a serial console, and authorizes the Ganeti hosts SSH keys.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Virtualization-Services.html#index-guix_002dvariant">guix-variant</a>
+       <span class="syntax-string">"default"</span>
+       <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-file_002dappend">file-append</a> <span class="syntax-symbol">ganeti-instance-guix</span>
+                    <span class="syntax-string">"/share/doc/ganeti-instance-guix/examples/dynamic.scm"</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+</dd></dl>
+
+<p>Users can implement support for OS providers unbeknownst to Guix by extending
+the <code>ganeti-os</code> and <code>ganeti-os-variant</code> records appropriately.
+For example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Virtualization-Services.html#index-ganeti_002dos">ganeti-os</a>
+ <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">name</span> <span class="syntax-string">"custom"</span></span>)</span>
+ <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">extension</span> <span class="syntax-string">".conf"</span></span>)</span>
+ <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">variants</span>
+  <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Virtualization-Services.html#index-ganeti_002dos_002dvariant">ganeti-os-variant</a>
+         <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">name</span> <span class="syntax-string">"foo"</span></span>)</span>
+         <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">configuration</span> <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-plain_002dfile">plain-file</a> <span class="syntax-string">"bar"</span> <span class="syntax-string">"this is fine"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>That creates <samp>/etc/ganeti/instance-custom/variants/foo.conf</samp> which points
+to a file in the store with contents <code>this is fine</code>.  It also creates
+<samp>/etc/ganeti/instance-custom/variants/variants.list</samp> with contents <code>foo</code>.
+</p>
+<p>Obviously this may not work for all OS providers out there.  If you find the
+interface limiting, please reach out to <a href="mailto:guix-devel@gnu.org">guix-devel@gnu.org</a>.
+</p>
+<p>The rest of this section documents the various services that are included by
+<code>ganeti-service-type</code>.
+</p>
+<dl>
+<dt id="index-ganeti_002dnoded_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">ganeti-noded-service-type </span></dt>
+<dd><p><code>ganeti-noded</code> is the daemon responsible for node-specific functions
+within the Ganeti system.  The value of this service must be a
+<code>ganeti-noded-configuration</code> object.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ganeti_002dnoded_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">ganeti-noded-configuration </span></dt>
+<dd><p>This is the configuration for the <code>ganeti-noded</code> service.
+</p>
+<dl compact="compact">
+<dt><code>ganeti</code> (default: <code>ganeti</code>)</dt>
+<dd><p>The <code>ganeti</code> package to use for this service.
+</p>
+</dd>
+<dt><code>port</code> (default: <code>1811</code>)</dt>
+<dd><p>The TCP port on which the node daemon listens for network requests.
+</p>
+</dd>
+<dt><code>address</code> (default: <code>"0.0.0.0"</code>)</dt>
+<dd><p>The network address that the daemon will bind to.  The default address means
+bind to all available addresses.
+</p>
+</dd>
+<dt><code>interface</code> (default: <code>#f</code>)</dt>
+<dd><p>When this is set, it must be a specific network interface (e.g. <code>eth0</code>)
+that the daemon will bind to.
+</p>
+</dd>
+<dt><code>max-clients</code> (default: <code>20</code>)</dt>
+<dd><p>This sets a limit on the maximum number of simultaneous client connections
+that the daemon will handle.  Connections above this count are accepted, but
+no responses will be sent until enough connections have closed.
+</p>
+</dd>
+<dt><code>ssl?</code> (default: <code>#t</code>)</dt>
+<dd><p>Whether to use SSL/TLS to encrypt network communications.  The certificate
+is automatically provisioned by the cluster and can be rotated with
+<code>gnt-cluster renew-crypto</code>.
+</p>
+</dd>
+<dt><code>ssl-key</code> (default: <samp>"/var/lib/ganeti/server.pem"</samp>)</dt>
+<dd><p>This can be used to provide a specific encryption key for TLS communications.
+</p>
+</dd>
+<dt><code>ssl-cert</code> (default: <samp>"/var/lib/ganeti/server.pem"</samp>)</dt>
+<dd><p>This can be used to provide a specific certificate for TLS communications.
+</p>
+</dd>
+<dt><code>debug?</code> (default: <code>#f</code>)</dt>
+<dd><p>When true, the daemon performs additional logging for debugging purposes.
+Note that this will leak encryption details to the log files, use with caution.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-ganeti_002dconfd_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">ganeti-confd-service-type </span></dt>
+<dd><p><code>ganeti-confd</code> answers queries related to the configuration of a
+Ganeti cluster.  The purpose of this daemon is to have a highly available
+and fast way to query cluster configuration values.  It is automatically
+active on all <em>master candidates</em>.  The value of this service must be a
+<code>ganeti-confd-configuration</code> object.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-ganeti_002dconfd_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">ganeti-confd-configuration </span></dt>
+<dd><p>This is the configuration for the <code>ganeti-confd</code> service.
+</p>
+<dl compact="compact">
+<dt><code>ganeti</code> (default: <code>ganeti</code>)</dt>
+<dd><p>The <code>ganeti</code> package to use for this service.
+</p>
+</dd>
+<dt><code>port</code> (default: <code>1814</code>)</dt>
+<dd><p>The UDP port on which to listen for network requests.
+</p>
+</dd>
+<dt><code>address</code> (default: <code>"0.0.0.0"</code>)</dt>
+<dd><p>Network address that the daemon will bind to.
+</p>
+</dd>
+<dt><code>debug?</code> (default: <code>#f</code>)</dt>
+<dd><p>When true, the daemon performs additional logging for debugging purposes.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-ganeti_002dwconfd_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">ganeti-wconfd-service-type </span></dt>
+<dd><p><code>ganeti-wconfd</code> is the daemon that has authoritative knowledge
+about the cluster configuration and is the only entity that can accept
+changes to it.  All jobs that need to modify the configuration will do so
+by sending appropriate requests to this daemon.  It only runs on the
+<em>master node</em> and will automatically disable itself on other nodes.
+</p>
+<p>The value of this service must be a
+<code>ganeti-wconfd-configuration</code> object.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ganeti_002dwconfd_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">ganeti-wconfd-configuration </span></dt>
+<dd><p>This is the configuration for the <code>ganeti-wconfd</code> service.
+</p>
+<dl compact="compact">
+<dt><code>ganeti</code> (default: <code>ganeti</code>)</dt>
+<dd><p>The <code>ganeti</code> package to use for this service.
+</p>
+</dd>
+<dt><code>no-voting?</code> (default: <code>#f</code>)</dt>
+<dd><p>The daemon will refuse to start if the majority of cluster nodes does not
+agree that it is running on the master node.  Set to <code>#t</code> to start
+even if a quorum can not be reached (dangerous, use with caution).
+</p>
+</dd>
+<dt><code>debug?</code> (default: <code>#f</code>)</dt>
+<dd><p>When true, the daemon performs additional logging for debugging purposes.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-ganeti_002dluxid_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">ganeti-luxid-service-type </span></dt>
+<dd><p><code>ganeti-luxid</code> is a daemon used to answer queries related to the
+configuration and the current live state of a Ganeti cluster.  Additionally,
+it is the authoritative daemon for the Ganeti job queue.   Jobs can be
+submitted via this daemon and it schedules and starts them.
+</p>
+<p>It takes a <code>ganeti-luxid-configuration</code> object.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ganeti_002dluxid_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">ganeti-luxid-configuration </span></dt>
+<dd><p>This is the configuration for the <code>ganeti-luxid</code> service.
+</p>
+<dl compact="compact">
+<dt><code>ganeti</code> (default: <code>ganeti</code>)</dt>
+<dd><p>The <code>ganeti</code> package to use for this service.
+</p>
+</dd>
+<dt><code>no-voting?</code> (default: <code>#f</code>)</dt>
+<dd><p>The daemon will refuse to start if it cannot verify that the majority of
+cluster nodes believes that it is running on the master node.  Set to
+<code>#t</code> to ignore such checks and start anyway (this can be dangerous).
+</p>
+</dd>
+<dt><code>debug?</code> (default: <code>#f</code>)</dt>
+<dd><p>When true, the daemon performs additional logging for debugging purposes.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-ganeti_002drapi_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">ganeti-rapi-service-type </span></dt>
+<dd><p><code>ganeti-rapi</code> provides a remote API for Ganeti clusters.  It runs on
+the master node and can be used to perform cluster actions programmatically
+via a JSON-based RPC protocol.
+</p>
+<p>Most query operations are allowed without authentication (unless
+<var>require-authentication?</var> is set), whereas write operations require
+explicit authorization via the <samp>/var/lib/ganeti/rapi/users</samp> file.  See
+the <a href="https://docs.ganeti.org/docs/ganeti/3.0/html/rapi.html">Ganeti Remote
+API documentation</a> for more information.
+</p>
+<p>The value of this service must be a <code>ganeti-rapi-configuration</code> object.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ganeti_002drapi_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">ganeti-rapi-configuration </span></dt>
+<dd><p>This is the configuration for the <code>ganeti-rapi</code> service.
+</p>
+<dl compact="compact">
+<dt><code>ganeti</code> (default: <code>ganeti</code>)</dt>
+<dd><p>The <code>ganeti</code> package to use for this service.
+</p>
+</dd>
+<dt><code>require-authentication?</code> (default: <code>#f</code>)</dt>
+<dd><p>Whether to require authentication even for read-only operations.
+</p>
+</dd>
+<dt><code>port</code> (default: <code>5080</code>)</dt>
+<dd><p>The TCP port on which to listen to API requests.
+</p>
+</dd>
+<dt><code>address</code> (default: <code>"0.0.0.0"</code>)</dt>
+<dd><p>The network address that the service will bind to.  By default it listens
+on all configured addresses.
+</p>
+</dd>
+<dt><code>interface</code> (default: <code>#f</code>)</dt>
+<dd><p>When set, it must specify a specific network interface such as <code>eth0</code>
+that the daemon will bind to.
+</p>
+</dd>
+<dt><code>max-clients</code> (default: <code>20</code>)</dt>
+<dd><p>The maximum number of simultaneous client requests to handle.  Further
+connections are allowed, but no responses are sent until enough connections
+have closed.
+</p>
+</dd>
+<dt><code>ssl?</code> (default: <code>#t</code>)</dt>
+<dd><p>Whether to use SSL/TLS encryption on the RAPI port.
+</p>
+</dd>
+<dt><code>ssl-key</code> (default: <samp>"/var/lib/ganeti/server.pem"</samp>)</dt>
+<dd><p>This can be used to provide a specific encryption key for TLS communications.
+</p>
+</dd>
+<dt><code>ssl-cert</code> (default: <samp>"/var/lib/ganeti/server.pem"</samp>)</dt>
+<dd><p>This can be used to provide a specific certificate for TLS communications.
+</p>
+</dd>
+<dt><code>debug?</code> (default: <code>#f</code>)</dt>
+<dd><p>When true, the daemon performs additional logging for debugging purposes.
+Note that this will leak encryption details to the log files, use with caution.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-ganeti_002dkvmd_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">ganeti-kvmd-service-type </span></dt>
+<dd><p><code>ganeti-kvmd</code> is responsible for determining whether a given KVM
+instance was shut down by an administrator or a user.  Normally Ganeti will
+restart an instance that was not stopped through Ganeti itself.  If the
+cluster option <code>user_shutdown</code> is true, this daemon monitors the
+<code>QMP</code> socket provided by QEMU and listens for shutdown events, and
+marks the instance as <em>USER_down</em> instead of <em>ERROR_down</em> when
+it shuts down gracefully by itself.
+</p>
+<p>It takes a <code>ganeti-kvmd-configuration</code> object.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ganeti_002dkvmd_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">ganeti-kvmd-configuration </span></dt>
+<dd>
+<dl compact="compact">
+<dt><code>ganeti</code> (default: <code>ganeti</code>)</dt>
+<dd><p>The <code>ganeti</code> package to use for this service.
+</p>
+</dd>
+<dt><code>debug?</code> (default: <code>#f</code>)</dt>
+<dd><p>When true, the daemon performs additional logging for debugging purposes.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-ganeti_002dmond_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">ganeti-mond-service-type </span></dt>
+<dd><p><code>ganeti-mond</code> is an optional daemon that provides Ganeti monitoring
+functionality.  It is responsible for running data collectors and publish the
+collected information through a HTTP interface.
+</p>
+<p>It takes a <code>ganeti-mond-configuration</code> object.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ganeti_002dmond_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">ganeti-mond-configuration </span></dt>
+<dd>
+<dl compact="compact">
+<dt><code>ganeti</code> (default: <code>ganeti</code>)</dt>
+<dd><p>The <code>ganeti</code> package to use for this service.
+</p>
+</dd>
+<dt><code>port</code> (default: <code>1815</code>)</dt>
+<dd><p>The port on which the daemon will listen.
+</p>
+</dd>
+<dt><code>address</code> (default: <code>"0.0.0.0"</code>)</dt>
+<dd><p>The network address that the daemon will bind to.  By default it binds to all
+available interfaces.
+</p>
+</dd>
+<dt><code>debug?</code> (default: <code>#f</code>)</dt>
+<dd><p>When true, the daemon performs additional logging for debugging purposes.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-ganeti_002dmetad_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">ganeti-metad-service-type </span></dt>
+<dd><p><code>ganeti-metad</code> is an optional daemon that can be used to provide
+information about the cluster to instances or OS install scripts.
+</p>
+<p>It takes a <code>ganeti-metad-configuration</code> object.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ganeti_002dmetad_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">ganeti-metad-configuration </span></dt>
+<dd>
+<dl compact="compact">
+<dt><code>ganeti</code> (default: <code>ganeti</code>)</dt>
+<dd><p>The <code>ganeti</code> package to use for this service.
+</p>
+</dd>
+<dt><code>port</code> (default: <code>80</code>)</dt>
+<dd><p>The port on which the daemon will listen.
+</p>
+</dd>
+<dt><code>address</code> (default: <code>#f</code>)</dt>
+<dd><p>If set, the daemon will bind to this address only.  If left unset, the behavior
+depends on the cluster configuration.
+</p>
+</dd>
+<dt><code>debug?</code> (default: <code>#f</code>)</dt>
+<dd><p>When true, the daemon performs additional logging for debugging purposes.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-ganeti_002dwatcher_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">ganeti-watcher-service-type </span></dt>
+<dd><p><code>ganeti-watcher</code> is a script designed to run periodically and ensure
+the health of a cluster.  It will automatically restart instances that have
+stopped without Ganeti&rsquo;s consent, and repairs DRBD links in case a node has
+rebooted.  It also archives old cluster jobs and restarts Ganeti daemons
+that are not running.  If the cluster parameter <code>ensure_node_health</code>
+is set, the watcher will also shutdown instances and DRBD devices if the
+node it is running on is declared offline by known master candidates.
+</p>
+<p>It can be paused on all nodes with <code>gnt-cluster watcher pause</code>.
+</p>
+<p>The service takes a <code>ganeti-watcher-configuration</code> object.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ganeti_002dwatcher_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">ganeti-watcher-configuration </span></dt>
+<dd>
+<dl compact="compact">
+<dt><code>ganeti</code> (default: <code>ganeti</code>)</dt>
+<dd><p>The <code>ganeti</code> package to use for this service.
+</p>
+</dd>
+<dt><code>schedule</code> (default: <code>'(next-second-from (next-minute (range 0 60 5)))</code>)</dt>
+<dd><p>How often to run the script.  The default is every five minutes.
+</p>
+</dd>
+<dt><code>rapi-ip</code> (default: <code>#f</code>)</dt>
+<dd><p>This option needs to be specified only if the RAPI daemon is configured to use
+a particular interface or address.  By default the cluster address is used.
+</p>
+</dd>
+<dt><code>job-age</code> (default: <code>(* 6 3600)</code>)</dt>
+<dd><p>Archive cluster jobs older than this age, specified in seconds.  The default
+is 6 hours.  This keeps <code>gnt-job list</code> manageable.
+</p>
+</dd>
+<dt><code>verify-disks?</code> (default: <code>#t</code>)</dt>
+<dd><p>If this is <code>#f</code>, the watcher will not try to repair broken DRBD links
+automatically.  Administrators will need to use <code>gnt-cluster verify-disks</code>
+manually instead.
+</p>
+</dd>
+<dt><code>debug?</code> (default: <code>#f</code>)</dt>
+<dd><p>When <code>#t</code>, the script performs additional logging for debugging purposes.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-ganeti_002dcleaner_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">ganeti-cleaner-service-type </span></dt>
+<dd><p><code>ganeti-cleaner</code> is a script designed to run periodically and remove
+old files from the cluster.  This service type controls two <em>cron jobs</em>:
+one intended for the master node that permanently purges old cluster jobs,
+and one intended for every node that removes expired X509 certificates, keys,
+and outdated <code>ganeti-watcher</code> information.  Like all Ganeti services,
+it is safe to include even on non-master nodes as it will disable itself as
+necessary.
+</p>
+<p>It takes a <code>ganeti-cleaner-configuration</code> object.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ganeti_002dcleaner_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">ganeti-cleaner-configuration </span></dt>
+<dd>
+<dl compact="compact">
+<dt><code>ganeti</code> (default: <code>ganeti</code>)</dt>
+<dd><p>The <code>ganeti</code> package to use for the <code>gnt-cleaner</code> command.
+</p>
+</dd>
+<dt><code>master-schedule</code> (default: <code>"45 1 * * *"</code>)</dt>
+<dd><p>How often to run the master cleaning job.  The default is once per day, at
+01:45:00.
+</p>
+</dd>
+<dt><code>node-schedule</code> (default: <code>"45 2 * * *"</code>)</dt>
+<dd><p>How often to run the node cleaning job.  The default is once per day, at
+02:45:00.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr />
+<div class="header">
+<p>
+Next: <a href="Version-Control-Services.html" accesskey="n" rel="next">Version Control Services</a>, Previous: <a href="Audio-Services.html" accesskey="p" rel="prev">Audio Services</a>, Up: <a href="Services.html" accesskey="u" rel="up">Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

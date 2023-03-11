@@ -1,0 +1,464 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Build Phases (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="Build Phases (GNU Guix Reference Manual)" />
+<meta name="keywords" content="Build Phases (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Programming-Interface.html" rel="up" title="Programming Interface" />
+<link href="Build-Utilities.html" rel="next" title="Build Utilities" />
+<link href="Build-Systems.html" rel="prev" title="Build Systems" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="Build-Phases"></span><div class="header">
+<p>
+Next: <a href="Build-Utilities.html" accesskey="n" rel="next">Build Utilities</a>, Previous: <a href="Build-Systems.html" accesskey="p" rel="prev">Build Systems</a>, Up: <a href="Programming-Interface.html" accesskey="u" rel="up">Programming Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Build-Phases-1"></span><h3 class="section">9.6 Build Phases</h3>
+
+<span id="index-build-phases_002c-for-packages"></span>
+<p>Almost all package build systems implement a notion <em>build phases</em>:
+a sequence of actions that the build system executes, when you build the
+package, leading to the installed byproducts in the store.  A notable
+exception is the &ldquo;bare-bones&rdquo; <code>trivial-build-system</code>
+(see <a href="Build-Systems.html">Build Systems</a>).
+</p>
+<p>As discussed in the previous section, those build systems provide a
+standard list of phases.  For <code>gnu-build-system</code>, the main build
+phases are the following:
+</p>
+<dl compact="compact">
+<dt><code>set-paths</code></dt>
+<dd><p>Define search path environment variables for all the input packages,
+including <code>PATH</code> (see <a href="Search-Paths.html">Search Paths</a>).
+</p>
+</dd>
+<dt><code>unpack</code></dt>
+<dd><p>Unpack the source tarball, and change the current directory to the
+extracted source tree.  If the source is actually a directory, copy it
+to the build tree, and enter that directory.
+</p>
+</dd>
+<dt><code>patch-source-shebangs</code></dt>
+<dd><p>Patch shebangs encountered in source files so they refer to the right
+store file names.  For instance, this changes <code>#!/bin/sh</code> to
+<code>#!/gnu/store/&hellip;-bash-4.3/bin/sh</code>.
+</p>
+</dd>
+<dt><code>configure</code></dt>
+<dd><p>Run the <samp>configure</samp> script with a number of default options, such
+as <samp>--prefix=/gnu/store/&hellip;</samp>, as well as the options specified
+by the <code>#:configure-flags</code> argument.
+</p>
+</dd>
+<dt><code>build</code></dt>
+<dd><p>Run <code>make</code> with the list of flags specified with
+<code>#:make-flags</code>.  If the <code>#:parallel-build?</code> argument is true
+(the default), build with <code>make -j</code>.
+</p>
+</dd>
+<dt><code>check</code></dt>
+<dd><p>Run <code>make check</code>, or some other target specified with
+<code>#:test-target</code>, unless <code>#:tests? #f</code> is passed.  If the
+<code>#:parallel-tests?</code> argument is true (the default), run <code>make
+check -j</code>.
+</p>
+</dd>
+<dt><code>install</code></dt>
+<dd><p>Run <code>make install</code> with the flags listed in <code>#:make-flags</code>.
+</p>
+</dd>
+<dt><code>patch-shebangs</code></dt>
+<dd><p>Patch shebangs on the installed executable files.
+</p>
+</dd>
+<dt><code>strip</code></dt>
+<dd><p>Strip debugging symbols from ELF files (unless <code>#:strip-binaries?</code>
+is false), copying them to the <code>debug</code> output when available
+(see <a href="Installing-Debugging-Files.html">Installing Debugging Files</a>).
+</p>
+<span id="index-RUNPATH_002c-validation-1"></span>
+<span id="phase_002dvalidate_002drunpath"></span></dd>
+<dt><code>validate-runpath</code></dt>
+<dd><p>Validate the <code>RUNPATH</code> of ELF binaries, unless
+<code>#:validate-runpath?</code> is false (see <a href="Build-Systems.html">Build Systems</a>).
+</p>
+<p>This validation step consists in making sure that all the shared
+libraries needed by an ELF binary, which are listed as <code>DT_NEEDED</code>
+entries in its <code>PT_DYNAMIC</code> segment, appear in the
+<code>DT_RUNPATH</code> entry of that binary.  In other words, it ensures that
+running or using those binaries will not result in a &ldquo;file not found&rdquo;
+error at run time.  See <a href="https://sourceware.org/binutils/docs/ld/Options.html#Options"><samp>-rpath</samp></a> in <cite>The GNU
+Linker</cite>, for more information on <code>RUNPATH</code>.
+</p>
+</dd>
+</dl>
+
+<p>Other build systems have similar phases, with some variations.  For
+example, <code>cmake-build-system</code> has same-named phases but its
+<code>configure</code> phases runs <code>cmake</code> instead of <code>./configure</code>.
+Others, such as <code>python-build-system</code>, have a wholly different list
+of standard phases.  All this code runs on the <em>build side</em>: it is
+evaluated when you actually build the package, in a dedicated build
+process spawned by the build daemon (see <a href="Invoking-guix_002ddaemon.html">Invoking guix-daemon</a>).
+</p>
+<p>Build phases are represented as association lists or &ldquo;alists&rdquo;
+(see <a href="https://www.gnu.org/software/guile/manual/html_node/Association-Lists.html#Association-Lists">Association Lists</a> in <cite>GNU Guile Reference Manual</cite>) where
+each key is a symbol for the name of the phase and the associated value
+is a procedure that accepts an arbitrary number of arguments.  By
+convention, those procedures receive information about the build in the
+form of <em>keyword parameters</em>, which they can use or ignore.
+</p>
+<span id="index-_0025standard_002dphases"></span>
+<p>For example, here is how <code>(guix build gnu-build-system)</code> defines
+<code>%standard-phases</code>, the variable holding its alist of build
+phases<a id="DOCF21" href="Build-Phases.html#FOOT21"><sup>21</sup></a>:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-comment">;; The build phases of 'gnu-build-system'.
+</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define*</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">unpack</span> <span class="syntax-keyword">#:key</span> <span class="syntax-symbol">source</span> <span class="syntax-keyword">#:allow-other-keys</span></span>)</span>
+  <span class="syntax-comment">;; Extract the source tarball.
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-invoke">invoke</a> <span class="syntax-string">"tar"</span> <span class="syntax-string">"xvf"</span> <span class="syntax-symbol">source</span></span>)</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define*</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">configure</span> <span class="syntax-keyword">#:key</span> <span class="syntax-symbol">outputs</span> <span class="syntax-keyword">#:allow-other-keys</span></span>)</span>
+  <span class="syntax-comment">;; Run the 'configure' script.  Install to output "out".
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-special">let</span> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">out</span> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Retrieving-Alist-Entries.html#index-assoc_002dref">assoc-ref</a> <span class="syntax-symbol">outputs</span> <span class="syntax-string">"out"</span></span>)</span></span>)</span></span>)</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-invoke">invoke</a> <span class="syntax-string">"./configure"</span>
+            <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-string">"--prefix="</span> <span class="syntax-symbol">out</span></span>)</span></span>)</span></span>)</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define*</span> <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Using-Guix-Interactively.html#index-build">build</a> <span class="syntax-keyword">#:allow-other-keys</span></span>)</span>
+  <span class="syntax-comment">;; Compile.
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-invoke">invoke</a> <span class="syntax-string">"make"</span></span>)</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define*</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">check</span> <span class="syntax-keyword">#:key</span> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">test-target</span> <span class="syntax-string">"check"</span></span>)</span> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">tests?</span> <span class="syntax-symbol">#true</span></span>)</span>
+                <span class="syntax-keyword">#:allow-other-keys</span></span>)</span>
+  <span class="syntax-comment">;; Run the test suite.
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-special">if</span> <span class="syntax-symbol">tests?</span>
+      <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-invoke">invoke</a> <span class="syntax-string">"make"</span> <span class="syntax-symbol">test-target</span></span>)</span>
+      <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/GOOPS-Object-Miscellany.html#index-display-3">display</a> <span class="syntax-string">"test suite not run\n"</span></span>)</span></span>)</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define*</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">install</span> <span class="syntax-keyword">#:allow-other-keys</span></span>)</span>
+  <span class="syntax-comment">;; Install files to the prefix 'configure' specified.
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-invoke">invoke</a> <span class="syntax-string">"make"</span> <span class="syntax-string">"install"</span></span>)</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <span class="syntax-symbol">%standard-phases</span>
+  <span class="syntax-comment">;; The list of standard phases (quite a few are omitted
+</span>  <span class="syntax-comment">;; for brevity).  Each element is a symbol/procedure pair.
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Pairs.html#index-cons">cons</a> <span class="syntax-symbol">'unpack</span> <span class="syntax-symbol">unpack</span></span>)</span>
+        <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Pairs.html#index-cons">cons</a> <span class="syntax-symbol">'configure</span> <span class="syntax-symbol">configure</span></span>)</span>
+        <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Pairs.html#index-cons">cons</a> <span class="syntax-symbol">'build</span> <a class="syntax-symbol" href="Using-Guix-Interactively.html#index-build">build</a></span>)</span>
+        <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Pairs.html#index-cons">cons</a> <span class="syntax-symbol">'check</span> <span class="syntax-symbol">check</span></span>)</span>
+        <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Pairs.html#index-cons">cons</a> <span class="syntax-symbol">'install</span> <span class="syntax-symbol">install</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>This shows how <code>%standard-phases</code> is defined as a list of
+symbol/procedure pairs (see <a href="https://www.gnu.org/software/guile/manual/html_node/Pairs.html#Pairs">Pairs</a> in <cite>GNU Guile Reference
+Manual</cite>).  The first pair associates the <code>unpack</code> procedure with
+the <code>unpack</code> symbol&mdash;a name; the second pair defines the
+<code>configure</code> phase similarly, and so on.  When building a package
+that uses <code>gnu-build-system</code> with its default list of phases, those
+phases are executed sequentially.  You can see the name of each phase
+started and completed in the build log of packages that you build.
+</p>
+<p>Let&rsquo;s now look at the procedures themselves.  Each one is defined with
+<code>define*</code>: <code>#:key</code> lists keyword parameters the procedure
+accepts, possibly with a default value, and <code>#:allow-other-keys</code>
+specifies that other keyword parameters are ignored (see <a href="https://www.gnu.org/software/guile/manual/html_node/Optional-Arguments.html#Optional-Arguments">Optional
+Arguments</a> in <cite>GNU Guile Reference Manual</cite>).
+</p>
+<p>The <code>unpack</code> procedure honors the <code>source</code> parameter, which
+the build system uses to pass the file name of the source tarball (or
+version control checkout), and it ignores other parameters.  The
+<code>configure</code> phase only cares about the <code>outputs</code> parameter, an
+alist mapping package output names to their store file name
+(see <a href="Packages-with-Multiple-Outputs.html">Packages with Multiple Outputs</a>).  It extracts the file name of
+for <code>out</code>, the default output, and passes it to
+<code>./configure</code> as the installation prefix, meaning that
+<code>make install</code> will eventually copy all the files in that
+directory (see <a href="https://www.gnu.org/prep/standards/html_node/Configuration.html#Configuration">configuration and makefile
+conventions</a> in <cite>GNU Coding Standards</cite>).  <code>build</code> and
+<code>install</code> ignore all their arguments.  <code>check</code> honors the
+<code>test-target</code> argument, which specifies the name of the Makefile
+target to run tests; it prints a message and skips tests when
+<code>tests?</code> is false.
+</p>
+<span id="index-build-phases_002c-customizing"></span>
+<p>The list of phases used for a particular package can be changed with the
+<code>#:phases</code> parameter of the build system.  Changing the set of
+build phases boils down to building a new alist of phases based on the
+<code>%standard-phases</code> alist described above.  This can be done with
+standard alist procedures such as <code>alist-delete</code> (see <a href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d1-Association-Lists.html#SRFI_002d1-Association-Lists">SRFI-1
+Association Lists</a> in <cite>GNU Guile Reference Manual</cite>); however, it is
+more convenient to do so with <code>modify-phases</code> (see <a href="Build-Utilities.html"><code>modify-phases</code></a>).
+</p>
+<p>Here is an example of a package definition that removes the
+<code>configure</code> phase of <code>%standard-phases</code> and inserts a new
+phase before the <code>build</code> phase, called
+<code>set-prefix-in-makefile</code>:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define-public</span> <span class="syntax-symbol">example</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="package-Reference.html#index-package">package</a>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">name</span> <span class="syntax-string">"example"</span></span>)</span>
+    <span class="syntax-comment">;; other fields omitted
+</span>    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">build-system</span> <a class="syntax-symbol" href="Build-Systems.html#index-gnu_002dbuild_002dsystem">gnu-build-system</a></span>)</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">arguments</span>
+     <span class="syntax-symbol">'</span><span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-keyword">#:phases</span> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-modify_002dphases">modify-phases</a> <span class="syntax-symbol">%standard-phases</span>
+                  <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Modification.html#index-delete">delete</a> <span class="syntax-symbol">'configure</span></span>)</span>
+                  <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">add-before</span> <span class="syntax-symbol">'build</span> <span class="syntax-symbol">'set-prefix-in-makefile</span>
+                    <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/lambda_002a-and-define_002a.html#index-lambda_002a">lambda*</a> <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-keyword">#:key</span> <span class="syntax-symbol">outputs</span> <span class="syntax-keyword">#:allow-other-keys</span></span>)</span>
+                      <span class="syntax-comment">;; Modify the makefile so that its
+</span>                      <span class="syntax-comment">;; 'PREFIX' variable points to "out".
+</span>                      <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-special">let</span> <span class="syntax-paren8">(<span class="syntax-symbol"><span class="syntax-paren9">(<span class="syntax-symbol"><span class="syntax-symbol">out</span> <span class="syntax-paren10">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Retrieving-Alist-Entries.html#index-assoc_002dref">assoc-ref</a> <span class="syntax-symbol">outputs</span> <span class="syntax-string">"out"</span></span>)</span></span>)</span></span>)</span>
+                        <span class="syntax-paren8">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-substitute_002a">substitute*</a> <span class="syntax-string">"Makefile"</span>
+                          <span class="syntax-paren9">(<span class="syntax-symbol"><span class="syntax-paren10">(<span class="syntax-symbol"><span class="syntax-string">"PREFIX =.*"</span></span>)</span>
+                           <span class="syntax-paren10">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-string">"PREFIX = "</span>
+                                          <span class="syntax-symbol">out</span> <span class="syntax-string">"\n"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>The new phase that is inserted is written as an anonymous procedure,
+introduced with <code>lambda*</code>; it honors the <code>outputs</code> parameter
+we have seen before.  See <a href="Build-Utilities.html">Build Utilities</a>, for more about the helpers
+used by this phase, and for more examples of <code>modify-phases</code>.
+</p>
+<span id="index-code-staging"></span>
+<span id="index-staging_002c-of-code"></span>
+<p>Keep in mind that build phases are code evaluated at the time the
+package is actually built.  This explains why the whole
+<code>modify-phases</code> expression above is quoted (it comes after the
+<code>'</code> or apostrophe): it is <em>staged</em> for later execution.
+See <a href="G_002dExpressions.html">G-Expressions</a>, for an explanation of code staging and the
+<em>code strata</em> involved.
+</p>
+<div class="footnote">
+<hr />
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5><a id="FOOT21" href="Build-Phases.html#DOCF21">(21)</a>
+<p>We present a simplified view of those build phases, but
+do take a look at <code>(guix build gnu-build-system)</code> to see all the
+details!</p>
+</h5></div>
+<hr />
+<div class="header">
+<p>
+Next: <a href="Build-Utilities.html" accesskey="n" rel="next">Build Utilities</a>, Previous: <a href="Build-Systems.html" accesskey="p" rel="prev">Build Systems</a>, Up: <a href="Programming-Interface.html" accesskey="u" rel="up">Programming Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

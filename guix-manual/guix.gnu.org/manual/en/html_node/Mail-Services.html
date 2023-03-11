@@ -1,0 +1,2363 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Mail Services (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="Mail Services (GNU Guix Reference Manual)" />
+<meta name="keywords" content="Mail Services (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Services.html" rel="up" title="Services" />
+<link href="Messaging-Services.html" rel="next" title="Messaging Services" />
+<link href="Database-Services.html" rel="prev" title="Database Services" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="Mail-Services"></span><div class="header">
+<p>
+Next: <a href="Messaging-Services.html" accesskey="n" rel="next">Messaging Services</a>, Previous: <a href="Database-Services.html" accesskey="p" rel="prev">Database Services</a>, Up: <a href="Services.html" accesskey="u" rel="up">Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Mail-Services-1"></span><h4 class="subsection">12.9.12 Mail Services</h4>
+
+<span id="index-mail"></span>
+<span id="index-email"></span>
+<p>The <code>(gnu services mail)</code> module provides Guix service definitions
+for email services: IMAP, POP3, and LMTP servers, as well as mail
+transport agents (MTAs).  Lots of acronyms!  These services are detailed
+in the subsections below.
+</p>
+<span id="Dovecot-Service"></span><h4 class="subsubheading">Dovecot Service</h4>
+
+<dl>
+<dt id="index-dovecot_002dservice" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">dovecot-service [#:config (dovecot-configuration)]</span></dt>
+<dd><p>Return a service that runs the Dovecot IMAP/POP3/LMTP mail server.
+</p></dd></dl>
+
+<p>By default, Dovecot does not need much configuration; the default
+configuration object created by <code>(dovecot-configuration)</code> will
+suffice if your mail is delivered to <code>~/Maildir</code>.  A self-signed
+certificate will be generated for TLS-protected connections, though
+Dovecot will also listen on cleartext ports by default.  There are a
+number of options, though, which mail administrators might need to change,
+and as is the case with other services, Guix allows the system
+administrator to specify these parameters via a uniform Scheme interface.
+</p>
+<p>For example, to specify that mail is located at <code>maildir~/.mail</code>,
+one would instantiate the Dovecot service like this:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Mail-Services.html#index-dovecot_002dservice">dovecot-service</a> <span class="syntax-keyword">#:config</span>
+                 <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">dovecot-configuration</span>
+                  <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">mail-location</span> <span class="syntax-string">"maildir:~/.mail"</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>The available configuration parameters follow.  Each parameter
+definition is preceded by its type; for example, &lsquo;<samp>string-list foo</samp>&rsquo;
+indicates that the <code>foo</code> parameter should be specified as a list of
+strings.  There is also a way to specify the configuration as a string,
+if you have an old <code>dovecot.conf</code> file that you want to port over
+from some other system; see the end for more details.
+</p>
+
+<p>Available <code>dovecot-configuration</code> fields are:
+</p>
+<dl>
+<dt id="index-dovecot" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>package</em> </span><span class="symbol-definition-prototype">dovecot </span></dt>
+<dd><p>The dovecot package.
+</p></dd></dl>
+
+<dl>
+<dt id="index-listen-1" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>comma-separated-string-list</em> </span><span class="symbol-definition-prototype">listen </span></dt>
+<dd><p>A list of IPs or hosts where to listen for connections.  &lsquo;<samp>*</samp>&rsquo;
+listens on all IPv4 interfaces, &lsquo;<samp>::</samp>&rsquo; listens on all IPv6
+interfaces.  If you want to specify non-default ports or anything more
+complex, customize the address and port fields of the
+&lsquo;<samp>inet-listener</samp>&rsquo; of the specific services you are interested in.
+</p></dd></dl>
+
+<dl>
+<dt id="index-protocols" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>protocol-configuration-list</em> </span><span class="symbol-definition-prototype">protocols </span></dt>
+<dd><p>List of protocols we want to serve.  Available protocols include
+&lsquo;<samp>imap</samp>&rsquo;, &lsquo;<samp>pop3</samp>&rsquo;, and &lsquo;<samp>lmtp</samp>&rsquo;.
+</p>
+<p>Available <code>protocol-configuration</code> fields are:
+</p>
+<dl>
+<dt id="index-name-1" class="symbol-definition"><span class="symbol-definition-category"><code>protocol-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">name </span></dt>
+<dd><p>The name of the protocol.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002dsocket_002dpath" class="symbol-definition"><span class="symbol-definition-category"><code>protocol-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">auth-socket-path </span></dt>
+<dd><p>UNIX socket path to the master authentication server to find users.
+This is used by imap (for shared users) and lda.
+It defaults to &lsquo;<samp>"/var/run/dovecot/auth-userdb"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-imap_002dmetadata_003f" class="symbol-definition"><span class="symbol-definition-category"><code>protocol-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">imap-metadata? </span></dt>
+<dd><p>Whether to enable the <code>IMAP METADATA</code> extension as defined in
+<a href="https://tools.ietf.org/html/rfc5464">RFC&nbsp;5464</a>, which provides
+a means for clients to set and retrieve per-mailbox, per-user metadata
+and annotations over IMAP.
+</p>
+<p>If this is &lsquo;<samp>#t</samp>&rsquo;, you must also specify a dictionary <i>via</i> the
+<code>mail-attribute-dict</code> setting.
+</p>
+<p>Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-managesieve_002dnotify_002dcapabilities" class="symbol-definition"><span class="symbol-definition-category"><code>protocol-configuration</code> parameter: <em>space-separated-string-list</em> </span><span class="symbol-definition-prototype">managesieve-notify-capabilities </span></dt>
+<dd><p>Which NOTIFY capabilities to report to clients that first connect to
+the ManageSieve service, before authentication.  These may differ from the
+capabilities offered to authenticated users.  If this field is left empty,
+report what the Sieve interpreter supports by default.
+</p>
+<p>Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-managesieve_002dsieve_002dcapability" class="symbol-definition"><span class="symbol-definition-category"><code>protocol-configuration</code> parameter: <em>space-separated-string-list</em> </span><span class="symbol-definition-prototype">managesieve-sieve-capability </span></dt>
+<dd><p>Which SIEVE capabilities to report to clients that first connect to
+the ManageSieve service, before authentication.  These may differ from the
+capabilities offered to authenticated users.  If this field is left empty,
+report what the Sieve interpreter supports by default.
+</p>
+<p>Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-mail_002dplugins" class="symbol-definition"><span class="symbol-definition-category"><code>protocol-configuration</code> parameter: <em>space-separated-string-list</em> </span><span class="symbol-definition-prototype">mail-plugins </span></dt>
+<dd><p>Space separated list of plugins to load.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002dmax_002duserip_002dconnections" class="symbol-definition"><span class="symbol-definition-category"><code>protocol-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">mail-max-userip-connections </span></dt>
+<dd><p>Maximum number of IMAP connections allowed for a user from each IP
+address.  NOTE: The username is compared case-sensitively.
+Defaults to &lsquo;<samp>10</samp>&rsquo;.
+</p></dd></dl>
+
+</dd></dl>
+
+<dl>
+<dt id="index-services-2" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>service-configuration-list</em> </span><span class="symbol-definition-prototype">services </span></dt>
+<dd><p>List of services to enable.  Available services include &lsquo;<samp>imap</samp>&rsquo;,
+&lsquo;<samp>imap-login</samp>&rsquo;, &lsquo;<samp>pop3</samp>&rsquo;, &lsquo;<samp>pop3-login</samp>&rsquo;, &lsquo;<samp>auth</samp>&rsquo;, and
+&lsquo;<samp>lmtp</samp>&rsquo;.
+</p>
+<p>Available <code>service-configuration</code> fields are:
+</p>
+<dl>
+<dt id="index-kind" class="symbol-definition"><span class="symbol-definition-category"><code>service-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">kind </span></dt>
+<dd><p>The service kind.  Valid values include <code>director</code>,
+<code>imap-login</code>, <code>pop3-login</code>, <code>lmtp</code>, <code>imap</code>,
+<code>pop3</code>, <code>auth</code>, <code>auth-worker</code>, <code>dict</code>,
+<code>tcpwrap</code>, <code>quota-warning</code>, or anything else.
+</p></dd></dl>
+
+<dl>
+<dt id="index-listeners" class="symbol-definition"><span class="symbol-definition-category"><code>service-configuration</code> parameter: <em>listener-configuration-list</em> </span><span class="symbol-definition-prototype">listeners </span></dt>
+<dd><p>Listeners for the service.  A listener is either a
+<code>unix-listener-configuration</code>, a <code>fifo-listener-configuration</code>, or
+an <code>inet-listener-configuration</code>.
+Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p>
+<p>Available <code>unix-listener-configuration</code> fields are:
+</p>
+<dl>
+<dt id="index-path-1" class="symbol-definition"><span class="symbol-definition-category"><code>unix-listener-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">path </span></dt>
+<dd><p>Path to the file, relative to <code>base-dir</code> field.  This is also used as
+the section name.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mode" class="symbol-definition"><span class="symbol-definition-category"><code>unix-listener-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">mode </span></dt>
+<dd><p>The access mode for the socket.
+Defaults to &lsquo;<samp>"0600"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-user-1" class="symbol-definition"><span class="symbol-definition-category"><code>unix-listener-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">user </span></dt>
+<dd><p>The user to own the socket.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-group-1" class="symbol-definition"><span class="symbol-definition-category"><code>unix-listener-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">group </span></dt>
+<dd><p>The group to own the socket.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+
+<p>Available <code>fifo-listener-configuration</code> fields are:
+</p>
+<dl>
+<dt id="index-path-2" class="symbol-definition"><span class="symbol-definition-category"><code>fifo-listener-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">path </span></dt>
+<dd><p>Path to the file, relative to <code>base-dir</code> field.  This is also used as
+the section name.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mode-1" class="symbol-definition"><span class="symbol-definition-category"><code>fifo-listener-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">mode </span></dt>
+<dd><p>The access mode for the socket.
+Defaults to &lsquo;<samp>"0600"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-user-2" class="symbol-definition"><span class="symbol-definition-category"><code>fifo-listener-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">user </span></dt>
+<dd><p>The user to own the socket.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-group-2" class="symbol-definition"><span class="symbol-definition-category"><code>fifo-listener-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">group </span></dt>
+<dd><p>The group to own the socket.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+
+<p>Available <code>inet-listener-configuration</code> fields are:
+</p>
+<dl>
+<dt id="index-protocol" class="symbol-definition"><span class="symbol-definition-category"><code>inet-listener-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">protocol </span></dt>
+<dd><p>The protocol to listen for.
+</p></dd></dl>
+
+<dl>
+<dt id="index-address" class="symbol-definition"><span class="symbol-definition-category"><code>inet-listener-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">address </span></dt>
+<dd><p>The address on which to listen, or empty for all addresses.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-port" class="symbol-definition"><span class="symbol-definition-category"><code>inet-listener-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">port </span></dt>
+<dd><p>The port on which to listen.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ssl_003f" class="symbol-definition"><span class="symbol-definition-category"><code>inet-listener-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">ssl? </span></dt>
+<dd><p>Whether to use SSL for this service; &lsquo;<samp>yes</samp>&rsquo;, &lsquo;<samp>no</samp>&rsquo;, or
+&lsquo;<samp>required</samp>&rsquo;.
+Defaults to &lsquo;<samp>#t</samp>&rsquo;.
+</p></dd></dl>
+
+</dd></dl>
+
+<dl>
+<dt id="index-client_002dlimit" class="symbol-definition"><span class="symbol-definition-category"><code>service-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">client-limit </span></dt>
+<dd><p>Maximum number of simultaneous client connections per process.  Once
+this number of connections is received, the next incoming connection
+will prompt Dovecot to spawn another process.  If set to 0,
+<code>default-client-limit</code> is used instead.
+</p>
+<p>Defaults to &lsquo;<samp>0</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-service_002dcount" class="symbol-definition"><span class="symbol-definition-category"><code>service-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">service-count </span></dt>
+<dd><p>Number of connections to handle before starting a new process.
+Typically the only useful values are 0 (unlimited) or 1.  1 is more
+secure, but 0 is faster.  &lt;doc/wiki/LoginProcess.txt&gt;.
+Defaults to &lsquo;<samp>1</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-process_002dlimit" class="symbol-definition"><span class="symbol-definition-category"><code>service-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">process-limit </span></dt>
+<dd><p>Maximum number of processes that can exist for this service.  If set to
+0, <code>default-process-limit</code> is used instead.
+</p>
+<p>Defaults to &lsquo;<samp>0</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-process_002dmin_002davail" class="symbol-definition"><span class="symbol-definition-category"><code>service-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">process-min-avail </span></dt>
+<dd><p>Number of processes to always keep waiting for more connections.
+Defaults to &lsquo;<samp>0</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-vsz_002dlimit" class="symbol-definition"><span class="symbol-definition-category"><code>service-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">vsz-limit </span></dt>
+<dd><p>If you set &lsquo;<samp>service-count 0</samp>&rsquo;, you probably need to grow
+this.
+Defaults to &lsquo;<samp>256000000</samp>&rsquo;.
+</p></dd></dl>
+
+</dd></dl>
+
+<dl>
+<dt id="index-dict" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>dict-configuration</em> </span><span class="symbol-definition-prototype">dict </span></dt>
+<dd><p>Dict configuration, as created by the <code>dict-configuration</code>
+constructor.
+</p>
+<p>Available <code>dict-configuration</code> fields are:
+</p>
+<dl>
+<dt id="index-entries" class="symbol-definition"><span class="symbol-definition-category"><code>dict-configuration</code> parameter: <em>free-form-fields</em> </span><span class="symbol-definition-prototype">entries </span></dt>
+<dd><p>A list of key-value pairs that this dict should hold.
+Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p></dd></dl>
+
+</dd></dl>
+
+<dl>
+<dt id="index-passdbs" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>passdb-configuration-list</em> </span><span class="symbol-definition-prototype">passdbs </span></dt>
+<dd><p>A list of passdb configurations, each one created by the
+<code>passdb-configuration</code> constructor.
+</p>
+<p>Available <code>passdb-configuration</code> fields are:
+</p>
+<dl>
+<dt id="index-driver" class="symbol-definition"><span class="symbol-definition-category"><code>passdb-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">driver </span></dt>
+<dd><p>The driver that the passdb should use.  Valid values include
+&lsquo;<samp>pam</samp>&rsquo;, &lsquo;<samp>passwd</samp>&rsquo;, &lsquo;<samp>shadow</samp>&rsquo;, &lsquo;<samp>bsdauth</samp>&rsquo;, and
+&lsquo;<samp>static</samp>&rsquo;.
+Defaults to &lsquo;<samp>"pam"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-args" class="symbol-definition"><span class="symbol-definition-category"><code>passdb-configuration</code> parameter: <em>space-separated-string-list</em> </span><span class="symbol-definition-prototype">args </span></dt>
+<dd><p>Space separated list of arguments to the passdb driver.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+</dd></dl>
+
+<dl>
+<dt id="index-userdbs" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>userdb-configuration-list</em> </span><span class="symbol-definition-prototype">userdbs </span></dt>
+<dd><p>List of userdb configurations, each one created by the
+<code>userdb-configuration</code> constructor.
+</p>
+<p>Available <code>userdb-configuration</code> fields are:
+</p>
+<dl>
+<dt id="index-driver-1" class="symbol-definition"><span class="symbol-definition-category"><code>userdb-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">driver </span></dt>
+<dd><p>The driver that the userdb should use.  Valid values include
+&lsquo;<samp>passwd</samp>&rsquo; and &lsquo;<samp>static</samp>&rsquo;.
+Defaults to &lsquo;<samp>"passwd"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-args-1" class="symbol-definition"><span class="symbol-definition-category"><code>userdb-configuration</code> parameter: <em>space-separated-string-list</em> </span><span class="symbol-definition-prototype">args </span></dt>
+<dd><p>Space separated list of arguments to the userdb driver.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-override_002dfields" class="symbol-definition"><span class="symbol-definition-category"><code>userdb-configuration</code> parameter: <em>free-form-args</em> </span><span class="symbol-definition-prototype">override-fields </span></dt>
+<dd><p>Override fields from passwd.
+Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p></dd></dl>
+
+</dd></dl>
+
+<dl>
+<dt id="index-plugin_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>plugin-configuration</em> </span><span class="symbol-definition-prototype">plugin-configuration </span></dt>
+<dd><p>Plug-in configuration, created by the <code>plugin-configuration</code>
+constructor.
+</p></dd></dl>
+
+<dl>
+<dt id="index-namespaces" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>list-of-namespace-configuration</em> </span><span class="symbol-definition-prototype">namespaces </span></dt>
+<dd><p>List of namespaces.  Each item in the list is created by the
+<code>namespace-configuration</code> constructor.
+</p>
+<p>Available <code>namespace-configuration</code> fields are:
+</p>
+<dl>
+<dt id="index-name-2" class="symbol-definition"><span class="symbol-definition-category"><code>namespace-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">name </span></dt>
+<dd><p>Name for this namespace.
+</p></dd></dl>
+
+<dl>
+<dt id="index-type" class="symbol-definition"><span class="symbol-definition-category"><code>namespace-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">type </span></dt>
+<dd><p>Namespace type: &lsquo;<samp>private</samp>&rsquo;, &lsquo;<samp>shared</samp>&rsquo; or &lsquo;<samp>public</samp>&rsquo;.
+Defaults to &lsquo;<samp>"private"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-separator" class="symbol-definition"><span class="symbol-definition-category"><code>namespace-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">separator </span></dt>
+<dd><p>Hierarchy separator to use.  You should use the same separator for
+all namespaces or some clients get confused.  &lsquo;<samp>/</samp>&rsquo; is usually a good
+one.  The default however depends on the underlying mail storage
+format.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-prefix" class="symbol-definition"><span class="symbol-definition-category"><code>namespace-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">prefix </span></dt>
+<dd><p>Prefix required to access this namespace.  This needs to be
+different for all namespaces.  For example &lsquo;<samp>Public/</samp>&rsquo;.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-location" class="symbol-definition"><span class="symbol-definition-category"><code>namespace-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">location </span></dt>
+<dd><p>Physical location of the mailbox. This is in the same format as
+mail_location, which is also the default for it.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-inbox_003f" class="symbol-definition"><span class="symbol-definition-category"><code>namespace-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">inbox? </span></dt>
+<dd><p>There can be only one INBOX, and this setting defines which
+namespace has it.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-hidden_003f" class="symbol-definition"><span class="symbol-definition-category"><code>namespace-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">hidden? </span></dt>
+<dd><p>If namespace is hidden, it&rsquo;s not advertised to clients via NAMESPACE
+extension.  You&rsquo;ll most likely also want to set &lsquo;<samp>list? #f</samp>&rsquo;.  This is mostly
+useful when converting from another server with different namespaces
+which you want to deprecate but still keep working.  For example you can
+create hidden namespaces with prefixes &lsquo;<samp>~/mail/</samp>&rsquo;, &lsquo;<samp>~%u/mail/</samp>&rsquo;
+and &lsquo;<samp>mail/</samp>&rsquo;.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-list_003f" class="symbol-definition"><span class="symbol-definition-category"><code>namespace-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">list? </span></dt>
+<dd><p>Show the mailboxes under this namespace with the LIST command.  This
+makes the namespace visible for clients that do not support the NAMESPACE
+extension.  The special <code>children</code> value lists child mailboxes, but
+hides the namespace prefix.
+Defaults to &lsquo;<samp>#t</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-subscriptions_003f" class="symbol-definition"><span class="symbol-definition-category"><code>namespace-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">subscriptions? </span></dt>
+<dd><p>Namespace handles its own subscriptions.  If set to <code>#f</code>, the
+parent namespace handles them.  The empty prefix should always have this
+as <code>#t</code>).
+Defaults to &lsquo;<samp>#t</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mailboxes" class="symbol-definition"><span class="symbol-definition-category"><code>namespace-configuration</code> parameter: <em>mailbox-configuration-list</em> </span><span class="symbol-definition-prototype">mailboxes </span></dt>
+<dd><p>List of predefined mailboxes in this namespace.
+Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p>
+<p>Available <code>mailbox-configuration</code> fields are:
+</p>
+<dl>
+<dt id="index-name-3" class="symbol-definition"><span class="symbol-definition-category"><code>mailbox-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">name </span></dt>
+<dd><p>Name for this mailbox.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auto" class="symbol-definition"><span class="symbol-definition-category"><code>mailbox-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">auto </span></dt>
+<dd><p>&lsquo;<samp>create</samp>&rsquo; will automatically create this mailbox.
+&lsquo;<samp>subscribe</samp>&rsquo; will both create and subscribe to the mailbox.
+Defaults to &lsquo;<samp>"no"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-special_002duse" class="symbol-definition"><span class="symbol-definition-category"><code>mailbox-configuration</code> parameter: <em>space-separated-string-list</em> </span><span class="symbol-definition-prototype">special-use </span></dt>
+<dd><p>List of IMAP <code>SPECIAL-USE</code> attributes as specified by RFC 6154.
+Valid values are <code>\All</code>, <code>\Archive</code>, <code>\Drafts</code>,
+<code>\Flagged</code>, <code>\Junk</code>, <code>\Sent</code>, and <code>\Trash</code>.
+Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p></dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl>
+<dt id="index-base_002ddir" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>file-name</em> </span><span class="symbol-definition-prototype">base-dir </span></dt>
+<dd><p>Base directory where to store runtime data.
+Defaults to &lsquo;<samp>"/var/run/dovecot/"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-login_002dgreeting" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">login-greeting </span></dt>
+<dd><p>Greeting message for clients.
+Defaults to &lsquo;<samp>"Dovecot ready."</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-login_002dtrusted_002dnetworks" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>space-separated-string-list</em> </span><span class="symbol-definition-prototype">login-trusted-networks </span></dt>
+<dd><p>List of trusted network ranges.  Connections from these IPs are
+allowed to override their IP addresses and ports (for logging and for
+authentication checks).  &lsquo;<samp>disable-plaintext-auth</samp>&rsquo; is also ignored
+for these networks.  Typically you would specify your IMAP proxy servers
+here.
+Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-login_002daccess_002dsockets" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>space-separated-string-list</em> </span><span class="symbol-definition-prototype">login-access-sockets </span></dt>
+<dd><p>List of login access check sockets (e.g. tcpwrap).
+Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-verbose_002dproctitle_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">verbose-proctitle? </span></dt>
+<dd><p>Show more verbose process titles (in ps).  Currently shows user name
+and IP address.  Useful for seeing who is actually using the IMAP
+processes (e.g. shared mailboxes or if the same uid is used for multiple
+accounts).
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-shutdown_002dclients_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">shutdown-clients? </span></dt>
+<dd><p>Should all processes be killed when Dovecot master process shuts down.
+Setting this to <code>#f</code> means that Dovecot can be upgraded without
+forcing existing client connections to close (although that could also
+be a problem if the upgrade is e.g. due to a security fix).
+Defaults to &lsquo;<samp>#t</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-doveadm_002dworker_002dcount" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">doveadm-worker-count </span></dt>
+<dd><p>If non-zero, run mail commands via this many connections to doveadm
+server, instead of running them directly in the same process.
+Defaults to &lsquo;<samp>0</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-doveadm_002dsocket_002dpath" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">doveadm-socket-path </span></dt>
+<dd><p>UNIX socket or host:port used for connecting to doveadm server.
+Defaults to &lsquo;<samp>"doveadm-server"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-import_002denvironment" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>space-separated-string-list</em> </span><span class="symbol-definition-prototype">import-environment </span></dt>
+<dd><p>List of environment variables that are preserved on Dovecot startup
+and passed down to all of its child processes.  You can also give
+key=value pairs to always set specific settings.
+</p></dd></dl>
+
+<dl>
+<dt id="index-disable_002dplaintext_002dauth_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">disable-plaintext-auth? </span></dt>
+<dd><p>Disable LOGIN command and all other plaintext authentications unless
+SSL/TLS is used (LOGINDISABLED capability).  Note that if the remote IP
+matches the local IP (i.e. you&rsquo;re connecting from the same computer),
+the connection is considered secure and plaintext authentication is
+allowed.  See also ssl=required setting.
+Defaults to &lsquo;<samp>#t</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002dcache_002dsize" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">auth-cache-size </span></dt>
+<dd><p>Authentication cache size (e.g. &lsquo;<samp>#e10e6</samp>&rsquo;).  0 means it&rsquo;s disabled.
+Note that bsdauth, PAM and vpopmail require &lsquo;<samp>cache-key</samp>&rsquo; to be set
+for caching to be used.
+Defaults to &lsquo;<samp>0</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002dcache_002dttl" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">auth-cache-ttl </span></dt>
+<dd><p>Time to live for cached data.  After TTL expires the cached record
+is no longer used, *except* if the main database lookup returns internal
+failure.  We also try to handle password changes automatically: If
+user&rsquo;s previous authentication was successful, but this one wasn&rsquo;t, the
+cache isn&rsquo;t used.  For now this works only with plaintext
+authentication.
+Defaults to &lsquo;<samp>"1 hour"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002dcache_002dnegative_002dttl" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">auth-cache-negative-ttl </span></dt>
+<dd><p>TTL for negative hits (user not found, password mismatch).
+0 disables caching them completely.
+Defaults to &lsquo;<samp>"1 hour"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002drealms" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>space-separated-string-list</em> </span><span class="symbol-definition-prototype">auth-realms </span></dt>
+<dd><p>List of realms for SASL authentication mechanisms that need them.
+You can leave it empty if you don&rsquo;t want to support multiple realms.
+Many clients simply use the first one listed here, so keep the default
+realm first.
+Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002ddefault_002drealm" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">auth-default-realm </span></dt>
+<dd><p>Default realm/domain to use if none was specified.  This is used for
+both SASL realms and appending @domain to username in plaintext
+logins.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002dusername_002dchars" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">auth-username-chars </span></dt>
+<dd><p>List of allowed characters in username.  If the user-given username
+contains a character not listed in here, the login automatically fails.
+This is just an extra check to make sure user can&rsquo;t exploit any
+potential quote escaping vulnerabilities with SQL/LDAP databases.  If
+you want to allow all characters, set this value to empty.
+Defaults to &lsquo;<samp>"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890.-_@"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002dusername_002dtranslation" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">auth-username-translation </span></dt>
+<dd><p>Username character translations before it&rsquo;s looked up from
+databases.  The value contains series of from -&gt; to characters.  For
+example &lsquo;<samp>#@/@</samp>&rsquo; means that &lsquo;<samp>#</samp>&rsquo; and &lsquo;<samp>/</samp>&rsquo; characters are
+translated to &lsquo;<samp>@</samp>&rsquo;.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002dusername_002dformat" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">auth-username-format </span></dt>
+<dd><p>Username formatting before it&rsquo;s looked up from databases.  You can
+use the standard variables here, e.g. %Lu would lowercase the username,
+%n would drop away the domain if it was given, or &lsquo;<samp>%n-AT-%d</samp>&rsquo; would
+change the &lsquo;<samp>@</samp>&rsquo; into &lsquo;<samp>-AT-</samp>&rsquo;.  This translation is done after
+&lsquo;<samp>auth-username-translation</samp>&rsquo; changes.
+Defaults to &lsquo;<samp>"%Lu"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002dmaster_002duser_002dseparator" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">auth-master-user-separator </span></dt>
+<dd><p>If you want to allow master users to log in by specifying the master
+username within the normal username string (i.e. not using SASL
+mechanism&rsquo;s support for it), you can specify the separator character
+here.  The format is then &lt;username&gt;&lt;separator&gt;&lt;master username&gt;.
+UW-IMAP uses &lsquo;<samp>*</samp>&rsquo; as the separator, so that could be a good
+choice.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002danonymous_002dusername" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">auth-anonymous-username </span></dt>
+<dd><p>Username to use for users logging in with ANONYMOUS SASL
+mechanism.
+Defaults to &lsquo;<samp>"anonymous"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002dworker_002dmax_002dcount" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">auth-worker-max-count </span></dt>
+<dd><p>Maximum number of dovecot-auth worker processes.  They&rsquo;re used to
+execute blocking passdb and userdb queries (e.g. MySQL and PAM).
+They&rsquo;re automatically created and destroyed as needed.
+Defaults to &lsquo;<samp>30</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002dgssapi_002dhostname" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">auth-gssapi-hostname </span></dt>
+<dd><p>Host name to use in GSSAPI principal names.  The default is to use
+the name returned by gethostname().  Use &lsquo;<samp>$ALL</samp>&rsquo; (with quotes) to
+allow all keytab entries.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002dkrb5_002dkeytab" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">auth-krb5-keytab </span></dt>
+<dd><p>Kerberos keytab to use for the GSSAPI mechanism.  Will use the
+system default (usually <samp>/etc/krb5.keytab</samp>) if not specified.  You may
+need to change the auth service to run as root to be able to read this
+file.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002duse_002dwinbind_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">auth-use-winbind? </span></dt>
+<dd><p>Do NTLM and GSS-SPNEGO authentication using Samba&rsquo;s winbind daemon
+and &lsquo;<samp>ntlm-auth</samp>&rsquo; helper.
+&lt;doc/wiki/Authentication/Mechanisms/Winbind.txt&gt;.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002dwinbind_002dhelper_002dpath" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>file-name</em> </span><span class="symbol-definition-prototype">auth-winbind-helper-path </span></dt>
+<dd><p>Path for Samba&rsquo;s &lsquo;<samp>ntlm-auth</samp>&rsquo; helper binary.
+Defaults to &lsquo;<samp>"/usr/bin/ntlm_auth"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002dfailure_002ddelay" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">auth-failure-delay </span></dt>
+<dd><p>Time to delay before replying to failed authentications.
+Defaults to &lsquo;<samp>"2 secs"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002dssl_002drequire_002dclient_002dcert_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">auth-ssl-require-client-cert? </span></dt>
+<dd><p>Require a valid SSL client certificate or the authentication
+fails.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002dssl_002dusername_002dfrom_002dcert_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">auth-ssl-username-from-cert? </span></dt>
+<dd><p>Take the username from client&rsquo;s SSL certificate, using
+<code>X509_NAME_get_text_by_NID()</code> which returns the subject&rsquo;s DN&rsquo;s
+CommonName.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002dmechanisms" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>space-separated-string-list</em> </span><span class="symbol-definition-prototype">auth-mechanisms </span></dt>
+<dd><p>List of wanted authentication mechanisms.  Supported mechanisms are:
+&lsquo;<samp>plain</samp>&rsquo;, &lsquo;<samp>login</samp>&rsquo;, &lsquo;<samp>digest-md5</samp>&rsquo;, &lsquo;<samp>cram-md5</samp>&rsquo;,
+&lsquo;<samp>ntlm</samp>&rsquo;, &lsquo;<samp>rpa</samp>&rsquo;, &lsquo;<samp>apop</samp>&rsquo;, &lsquo;<samp>anonymous</samp>&rsquo;, &lsquo;<samp>gssapi</samp>&rsquo;,
+&lsquo;<samp>otp</samp>&rsquo;, &lsquo;<samp>skey</samp>&rsquo;, and &lsquo;<samp>gss-spnego</samp>&rsquo;.  NOTE: See also
+&lsquo;<samp>disable-plaintext-auth</samp>&rsquo; setting.
+</p></dd></dl>
+
+<dl>
+<dt id="index-director_002dservers" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>space-separated-string-list</em> </span><span class="symbol-definition-prototype">director-servers </span></dt>
+<dd><p>List of IPs or hostnames to all director servers, including ourself.
+Ports can be specified as ip:port.  The default port is the same as what
+director service&rsquo;s &lsquo;<samp>inet-listener</samp>&rsquo; is using.
+Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-director_002dmail_002dservers" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>space-separated-string-list</em> </span><span class="symbol-definition-prototype">director-mail-servers </span></dt>
+<dd><p>List of IPs or hostnames to all backend mail servers.  Ranges are
+allowed too, like 10.0.0.10-10.0.0.30.
+Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-director_002duser_002dexpire" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">director-user-expire </span></dt>
+<dd><p>How long to redirect users to a specific server after it no longer
+has any connections.
+Defaults to &lsquo;<samp>"15 min"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-director_002dusername_002dhash" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">director-username-hash </span></dt>
+<dd><p>How the username is translated before being hashed.  Useful values
+include %Ln if user can log in with or without @domain, %Ld if mailboxes
+are shared within domain.
+Defaults to &lsquo;<samp>"%Lu"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-log_002dpath" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">log-path </span></dt>
+<dd><p>Log file to use for error messages.  &lsquo;<samp>syslog</samp>&rsquo; logs to syslog,
+&lsquo;<samp>/dev/stderr</samp>&rsquo; logs to stderr.
+Defaults to &lsquo;<samp>"syslog"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-info_002dlog_002dpath" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">info-log-path </span></dt>
+<dd><p>Log file to use for informational messages.  Defaults to
+&lsquo;<samp>log-path</samp>&rsquo;.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-debug_002dlog_002dpath" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">debug-log-path </span></dt>
+<dd><p>Log file to use for debug messages.  Defaults to
+&lsquo;<samp>info-log-path</samp>&rsquo;.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-syslog_002dfacility" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">syslog-facility </span></dt>
+<dd><p>Syslog facility to use if you&rsquo;re logging to syslog.  Usually if you
+don&rsquo;t want to use &lsquo;<samp>mail</samp>&rsquo;, you&rsquo;ll use local0..local7.  Also other
+standard facilities are supported.
+Defaults to &lsquo;<samp>"mail"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002dverbose_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">auth-verbose? </span></dt>
+<dd><p>Log unsuccessful authentication attempts and the reasons why they
+failed.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002dverbose_002dpasswords" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">auth-verbose-passwords </span></dt>
+<dd><p>In case of password mismatches, log the attempted password.  Valid
+values are no, plain and sha1.  sha1 can be useful for detecting brute
+force password attempts vs.  user simply trying the same password over
+and over again.  You can also truncate the value to n chars by appending
+":n" (e.g. sha1:6).
+Defaults to &lsquo;<samp>"no"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002ddebug_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">auth-debug? </span></dt>
+<dd><p>Even more verbose logging for debugging purposes.  Shows for example
+SQL queries.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002ddebug_002dpasswords_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">auth-debug-passwords? </span></dt>
+<dd><p>In case of password mismatches, log the passwords and used scheme so
+the problem can be debugged.  Enabling this also enables
+&lsquo;<samp>auth-debug</samp>&rsquo;.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002ddebug_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">mail-debug? </span></dt>
+<dd><p>Enable mail process debugging.  This can help you figure out why
+Dovecot isn&rsquo;t finding your mails.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-verbose_002dssl_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">verbose-ssl? </span></dt>
+<dd><p>Show protocol level SSL errors.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-log_002dtimestamp" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">log-timestamp </span></dt>
+<dd><p>Prefix for each line written to log file.  % codes are in
+strftime(3) format.
+Defaults to &lsquo;<samp>"\"%b %d %H:%M:%S \""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-login_002dlog_002dformat_002delements" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>space-separated-string-list</em> </span><span class="symbol-definition-prototype">login-log-format-elements </span></dt>
+<dd><p>List of elements we want to log.  The elements which have a
+non-empty variable value are joined together to form a comma-separated
+string.
+</p></dd></dl>
+
+<dl>
+<dt id="index-login_002dlog_002dformat" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">login-log-format </span></dt>
+<dd><p>Login log format.  %s contains &lsquo;<samp>login-log-format-elements</samp>&rsquo;
+string, %$ contains the data we want to log.
+Defaults to &lsquo;<samp>"%$: %s"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002dlog_002dprefix" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">mail-log-prefix </span></dt>
+<dd><p>Log prefix for mail processes.  See doc/wiki/Variables.txt for list
+of possible variables you can use.
+Defaults to &lsquo;<samp>"\"%s(%u)&lt;%{pid}&gt;&lt;%{session}&gt;: \""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-deliver_002dlog_002dformat" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">deliver-log-format </span></dt>
+<dd><p>Format to use for logging mail deliveries.  You can use variables:
+</p><dl compact="compact">
+<dt><code>%$</code></dt>
+<dd><p>Delivery status message (e.g. &lsquo;<samp>saved to INBOX</samp>&rsquo;)
+</p></dd>
+<dt><code>%m</code></dt>
+<dd><p>Message-ID
+</p></dd>
+<dt><code>%s</code></dt>
+<dd><p>Subject
+</p></dd>
+<dt><code>%f</code></dt>
+<dd><p>From address
+</p></dd>
+<dt><code>%p</code></dt>
+<dd><p>Physical size
+</p></dd>
+<dt><code>%w</code></dt>
+<dd><p>Virtual size.
+</p></dd>
+</dl>
+<p>Defaults to &lsquo;<samp>"msgid=%m: %$"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002dlocation" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">mail-location </span></dt>
+<dd><p>Location for users&rsquo; mailboxes.  The default is empty, which means
+that Dovecot tries to find the mailboxes automatically.  This won&rsquo;t work
+if the user doesn&rsquo;t yet have any mail, so you should explicitly tell
+Dovecot the full location.
+</p>
+<p>If you&rsquo;re using mbox, giving a path to the INBOX
+file (e.g. <samp>/var/mail/%u</samp>) isn&rsquo;t enough.  You&rsquo;ll also need to tell Dovecot
+where the other mailboxes are kept.  This is called the <em>root mail
+directory</em>, and it must be the first path given in the
+&lsquo;<samp>mail-location</samp>&rsquo; setting.
+</p>
+<p>There are a few special variables you can use, e.g.:
+</p>
+<dl compact="compact">
+<dt>&lsquo;<samp>%u</samp>&rsquo;</dt>
+<dd><p>username
+</p></dd>
+<dt>&lsquo;<samp>%n</samp>&rsquo;</dt>
+<dd><p>user part in user@domain, same as %u if there&rsquo;s no domain
+</p></dd>
+<dt>&lsquo;<samp>%d</samp>&rsquo;</dt>
+<dd><p>domain part in user@domain, empty if there&rsquo;s no domain
+</p></dd>
+<dt>&lsquo;<samp>%h</samp>&rsquo;</dt>
+<dd><p>home director
+</p></dd>
+</dl>
+
+<p>See doc/wiki/Variables.txt for full list.  Some examples:
+</p><dl compact="compact">
+<dt>&lsquo;<samp>maildir:~/Maildir</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>mbox:~/mail:INBOX=/var/mail/%u</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>mbox:/var/mail/%d/%1n/%n:INDEX=/var/indexes/%d/%1n/%</samp>&rsquo;</dt>
+</dl>
+<p>Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002duid" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">mail-uid </span></dt>
+<dd><p>System user and group used to access mails.  If you use multiple,
+userdb can override these by returning uid or gid fields.  You can use
+either numbers or names.  &lt;doc/wiki/UserIds.txt&gt;.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002dgid" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">mail-gid </span></dt>
+<dd>
+<p>Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002dprivileged_002dgroup" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">mail-privileged-group </span></dt>
+<dd><p>Group to enable temporarily for privileged operations.  Currently
+this is used only with INBOX when either its initial creation or
+dotlocking fails.  Typically this is set to &lsquo;<samp>"mail"</samp>&rsquo; to give access to
+<samp>/var/mail</samp>.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002daccess_002dgroups" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">mail-access-groups </span></dt>
+<dd><p>Grant access to these supplementary groups for mail processes.
+Typically these are used to set up access to shared mailboxes.  Note
+that it may be dangerous to set these if users can create symlinks
+(e.g. if &lsquo;<samp>mail</samp>&rsquo; group is set here, <code>ln -s /var/mail ~/mail/var</code>
+could allow a user to delete others&rsquo; mailboxes, or <code>ln -s
+/secret/shared/box ~/mail/mybox</code> would allow reading it).  Defaults to
+&lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002dattribute_002ddict" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">mail-attribute-dict </span></dt>
+<dd><p>The location of a dictionary used to store <code>IMAP METADATA</code>
+as defined by <a href="https://tools.ietf.org/html/rfc5464">RFC&nbsp;5464</a>.
+</p>
+<p>The IMAP METADATA commands are available only if the &ldquo;imap&rdquo;
+protocol configuration&rsquo;s <code>imap-metadata?</code> field is &lsquo;<samp>#t</samp>&rsquo;.
+</p>
+<p>Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-mail_002dfull_002dfilesystem_002daccess_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">mail-full-filesystem-access? </span></dt>
+<dd><p>Allow full file system access to clients.  There&rsquo;s no access checks
+other than what the operating system does for the active UID/GID.  It
+works with both maildir and mboxes, allowing you to prefix mailboxes
+names with e.g. <samp>/path/</samp> or <samp>~user/</samp>.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mmap_002ddisable_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">mmap-disable? </span></dt>
+<dd><p>Don&rsquo;t use <code>mmap()</code> at all.  This is required if you store indexes to
+shared file systems (NFS or clustered file system).
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-dotlock_002duse_002dexcl_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">dotlock-use-excl? </span></dt>
+<dd><p>Rely on &lsquo;<samp>O_EXCL</samp>&rsquo; to work when creating dotlock files.  NFS
+supports &lsquo;<samp>O_EXCL</samp>&rsquo; since version 3, so this should be safe to use
+nowadays by default.
+Defaults to &lsquo;<samp>#t</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002dfsync" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">mail-fsync </span></dt>
+<dd><p>When to use fsync() or fdatasync() calls:
+</p><dl compact="compact">
+<dt><code>optimized</code></dt>
+<dd><p>Whenever necessary to avoid losing important data
+</p></dd>
+<dt><code>always</code></dt>
+<dd><p>Useful with e.g. NFS when <code>write()</code>s are delayed
+</p></dd>
+<dt><code>never</code></dt>
+<dd><p>Never use it (best performance, but crashes can lose data).
+</p></dd>
+</dl>
+<p>Defaults to &lsquo;<samp>"optimized"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002dnfs_002dstorage_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">mail-nfs-storage? </span></dt>
+<dd><p>Mail storage exists in NFS.  Set this to yes to make Dovecot flush
+NFS caches whenever needed.  If you&rsquo;re using only a single mail server
+this isn&rsquo;t needed.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002dnfs_002dindex_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">mail-nfs-index? </span></dt>
+<dd><p>Mail index files also exist in NFS.  Setting this to yes requires
+&lsquo;<samp>mmap-disable? #t</samp>&rsquo; and &lsquo;<samp>fsync-disable? #f</samp>&rsquo;.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-lock_002dmethod" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">lock-method </span></dt>
+<dd><p>Locking method for index files.  Alternatives are fcntl, flock and
+dotlock.  Dotlocking uses some tricks which may create more disk I/O
+than other locking methods.  NFS users: flock doesn&rsquo;t work, remember to
+change &lsquo;<samp>mmap-disable</samp>&rsquo;.
+Defaults to &lsquo;<samp>"fcntl"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002dtemp_002ddir" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>file-name</em> </span><span class="symbol-definition-prototype">mail-temp-dir </span></dt>
+<dd><p>Directory in which LDA/LMTP temporarily stores incoming mails &gt;128
+kB.
+Defaults to &lsquo;<samp>"/tmp"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-first_002dvalid_002duid" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">first-valid-uid </span></dt>
+<dd><p>Valid UID range for users.  This is mostly to make sure that users can&rsquo;t
+log in as daemons or other system users.  Note that denying root logins is
+hardcoded to dovecot binary and can&rsquo;t be done even if &lsquo;<samp>first-valid-uid</samp>&rsquo;
+is set to 0.
+Defaults to &lsquo;<samp>500</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-last_002dvalid_002duid" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">last-valid-uid </span></dt>
+<dd>
+<p>Defaults to &lsquo;<samp>0</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-first_002dvalid_002dgid" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">first-valid-gid </span></dt>
+<dd><p>Valid GID range for users.  Users having non-valid GID as primary group ID
+aren&rsquo;t allowed to log in.  If user belongs to supplementary groups with
+non-valid GIDs, those groups are not set.
+Defaults to &lsquo;<samp>1</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-last_002dvalid_002dgid" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">last-valid-gid </span></dt>
+<dd>
+<p>Defaults to &lsquo;<samp>0</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002dmax_002dkeyword_002dlength" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">mail-max-keyword-length </span></dt>
+<dd><p>Maximum allowed length for mail keyword name.  It&rsquo;s only forced when
+trying to create new keywords.
+Defaults to &lsquo;<samp>50</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-valid_002dchroot_002ddirs" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>colon-separated-file-name-list</em> </span><span class="symbol-definition-prototype">valid-chroot-dirs </span></dt>
+<dd><p>List of directories under which chrooting is allowed for mail
+processes (i.e. <samp>/var/mail</samp> will allow chrooting to <samp>/var/mail/foo/bar</samp>
+too).  This setting doesn&rsquo;t affect &lsquo;<samp>login-chroot</samp>&rsquo;
+&lsquo;<samp>mail-chroot</samp>&rsquo; or auth chroot settings.  If this setting is empty,
+&lsquo;<samp>/./</samp>&rsquo; in home dirs are ignored.  WARNING: Never add directories here
+which local users can modify, that may lead to root exploit.  Usually
+this should be done only if you don&rsquo;t allow shell access for users.
+&lt;doc/wiki/Chrooting.txt&gt;.
+Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002dchroot" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">mail-chroot </span></dt>
+<dd><p>Default chroot directory for mail processes.  This can be overridden
+for specific users in user database by giving &lsquo;<samp>/./</samp>&rsquo; in user&rsquo;s home
+directory (e.g. &lsquo;<samp>/home/./user</samp>&rsquo; chroots into <samp>/home</samp>).  Note that usually
+there is no real need to do chrooting, Dovecot doesn&rsquo;t allow users to
+access files outside their mail directory anyway.  If your home
+directories are prefixed with the chroot directory, append &lsquo;<samp>/.</samp>&rsquo; to
+&lsquo;<samp>mail-chroot</samp>&rsquo;.  &lt;doc/wiki/Chrooting.txt&gt;.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-auth_002dsocket_002dpath-1" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>file-name</em> </span><span class="symbol-definition-prototype">auth-socket-path </span></dt>
+<dd><p>UNIX socket path to master authentication server to find users.
+This is used by imap (for shared users) and lda.
+Defaults to &lsquo;<samp>"/var/run/dovecot/auth-userdb"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002dplugin_002ddir" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>file-name</em> </span><span class="symbol-definition-prototype">mail-plugin-dir </span></dt>
+<dd><p>Directory where to look up mail plugins.
+Defaults to &lsquo;<samp>"/usr/lib/dovecot"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002dplugins-1" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>space-separated-string-list</em> </span><span class="symbol-definition-prototype">mail-plugins </span></dt>
+<dd><p>List of plugins to load for all services.  Plugins specific to IMAP,
+LDA, etc. are added to this list in their own .conf files.
+Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002dcache_002dmin_002dmail_002dcount" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">mail-cache-min-mail-count </span></dt>
+<dd><p>The minimum number of mails in a mailbox before updates are done to
+cache file.  This allows optimizing Dovecot&rsquo;s behavior to do less disk
+writes at the cost of more disk reads.
+Defaults to &lsquo;<samp>0</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mailbox_002didle_002dcheck_002dinterval" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">mailbox-idle-check-interval </span></dt>
+<dd><p>When IDLE command is running, mailbox is checked once in a while to
+see if there are any new mails or other changes.  This setting defines
+the minimum time to wait between those checks.  Dovecot can also use
+dnotify, inotify and kqueue to find out immediately when changes
+occur.
+Defaults to &lsquo;<samp>"30 secs"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002dsave_002dcrlf_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">mail-save-crlf? </span></dt>
+<dd><p>Save mails with CR+LF instead of plain LF.  This makes sending those
+mails take less CPU, especially with sendfile() syscall with Linux and
+FreeBSD.  But it also creates a bit more disk I/O which may just make it
+slower.  Also note that if other software reads the mboxes/maildirs,
+they may handle the extra CRs wrong and cause problems.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-maildir_002dstat_002ddirs_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">maildir-stat-dirs? </span></dt>
+<dd><p>By default LIST command returns all entries in maildir beginning
+with a dot.  Enabling this option makes Dovecot return only entries
+which are directories.  This is done by stat()ing each entry, so it
+causes more disk I/O.
+ (For systems setting struct &lsquo;<samp>dirent-&gt;d_type</samp>&rsquo; this check is free
+and it&rsquo;s done always regardless of this setting).
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-maildir_002dcopy_002dwith_002dhardlinks_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">maildir-copy-with-hardlinks? </span></dt>
+<dd><p>When copying a message, do it with hard links whenever possible.
+This makes the performance much better, and it&rsquo;s unlikely to have any
+side effects.
+Defaults to &lsquo;<samp>#t</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-maildir_002dvery_002ddirty_002dsyncs_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">maildir-very-dirty-syncs? </span></dt>
+<dd><p>Assume Dovecot is the only MUA accessing Maildir: Scan cur/
+directory only when its mtime changes unexpectedly or when we can&rsquo;t find
+the mail otherwise.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mbox_002dread_002dlocks" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>space-separated-string-list</em> </span><span class="symbol-definition-prototype">mbox-read-locks </span></dt>
+<dd><p>Which locking methods to use for locking mbox.  There are four
+available:
+</p>
+<dl compact="compact">
+<dt><code>dotlock</code></dt>
+<dd><p>Create &lt;mailbox&gt;.lock file.  This is the oldest and most NFS-safe
+solution.  If you want to use /var/mail/ like directory, the users will
+need write access to that directory.
+</p></dd>
+<dt><code>dotlock-try</code></dt>
+<dd><p>Same as dotlock, but if it fails because of permissions or because there
+isn&rsquo;t enough disk space, just skip it.
+</p></dd>
+<dt><code>fcntl</code></dt>
+<dd><p>Use this if possible.  Works with NFS too if lockd is used.
+</p></dd>
+<dt><code>flock</code></dt>
+<dd><p>May not exist in all systems.  Doesn&rsquo;t work with NFS.
+</p></dd>
+<dt><code>lockf</code></dt>
+<dd><p>May not exist in all systems.  Doesn&rsquo;t work with NFS.
+</p></dd>
+</dl>
+
+<p>You can use multiple locking methods; if you do the order they&rsquo;re declared
+in is important to avoid deadlocks if other MTAs/MUAs are using multiple
+locking methods as well.  Some operating systems don&rsquo;t allow using some of
+them simultaneously.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mbox_002dwrite_002dlocks" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>space-separated-string-list</em> </span><span class="symbol-definition-prototype">mbox-write-locks </span></dt>
+</dl>
+
+<dl>
+<dt id="index-mbox_002dlock_002dtimeout" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">mbox-lock-timeout </span></dt>
+<dd><p>Maximum time to wait for lock (all of them) before aborting.
+Defaults to &lsquo;<samp>"5 mins"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mbox_002ddotlock_002dchange_002dtimeout" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">mbox-dotlock-change-timeout </span></dt>
+<dd><p>If dotlock exists but the mailbox isn&rsquo;t modified in any way,
+override the lock file after this much time.
+Defaults to &lsquo;<samp>"2 mins"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mbox_002ddirty_002dsyncs_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">mbox-dirty-syncs? </span></dt>
+<dd><p>When mbox changes unexpectedly we have to fully read it to find out
+what changed.  If the mbox is large this can take a long time.  Since
+the change is usually just a newly appended mail, it&rsquo;d be faster to
+simply read the new mails.  If this setting is enabled, Dovecot does
+this but still safely fallbacks to re-reading the whole mbox file
+whenever something in mbox isn&rsquo;t how it&rsquo;s expected to be.  The only real
+downside to this setting is that if some other MUA changes message
+flags, Dovecot doesn&rsquo;t notice it immediately.  Note that a full sync is
+done with SELECT, EXAMINE, EXPUNGE and CHECK commands.
+Defaults to &lsquo;<samp>#t</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mbox_002dvery_002ddirty_002dsyncs_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">mbox-very-dirty-syncs? </span></dt>
+<dd><p>Like &lsquo;<samp>mbox-dirty-syncs</samp>&rsquo;, but don&rsquo;t do full syncs even with SELECT,
+EXAMINE, EXPUNGE or CHECK commands.  If this is set,
+&lsquo;<samp>mbox-dirty-syncs</samp>&rsquo; is ignored.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mbox_002dlazy_002dwrites_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">mbox-lazy-writes? </span></dt>
+<dd><p>Delay writing mbox headers until doing a full write sync (EXPUNGE
+and CHECK commands and when closing the mailbox).  This is especially
+useful for POP3 where clients often delete all mails.  The downside is
+that our changes aren&rsquo;t immediately visible to other MUAs.
+Defaults to &lsquo;<samp>#t</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mbox_002dmin_002dindex_002dsize" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">mbox-min-index-size </span></dt>
+<dd><p>If mbox size is smaller than this (e.g. 100k), don&rsquo;t write index
+files.  If an index file already exists it&rsquo;s still read, just not
+updated.
+Defaults to &lsquo;<samp>0</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mdbox_002drotate_002dsize" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">mdbox-rotate-size </span></dt>
+<dd><p>Maximum dbox file size until it&rsquo;s rotated.
+Defaults to &lsquo;<samp>10000000</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mdbox_002drotate_002dinterval" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">mdbox-rotate-interval </span></dt>
+<dd><p>Maximum dbox file age until it&rsquo;s rotated.  Typically in days.  Day
+begins from midnight, so 1d = today, 2d = yesterday, etc.  0 = check
+disabled.
+Defaults to &lsquo;<samp>"1d"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mdbox_002dpreallocate_002dspace_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">mdbox-preallocate-space? </span></dt>
+<dd><p>When creating new mdbox files, immediately preallocate their size to
+&lsquo;<samp>mdbox-rotate-size</samp>&rsquo;.  This setting currently works only in Linux
+with some file systems (ext4, xfs).
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002dattachment_002ddir" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">mail-attachment-dir </span></dt>
+<dd><p>sdbox and mdbox support saving mail attachments to external files,
+which also allows single instance storage for them.  Other backends
+don&rsquo;t support this for now.
+</p>
+<p>WARNING: This feature hasn&rsquo;t been tested much yet.  Use at your own risk.
+</p>
+<p>Directory root where to store mail attachments.  Disabled, if empty.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002dattachment_002dmin_002dsize" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">mail-attachment-min-size </span></dt>
+<dd><p>Attachments smaller than this aren&rsquo;t saved externally.  It&rsquo;s also
+possible to write a plugin to disable saving specific attachments
+externally.
+Defaults to &lsquo;<samp>128000</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002dattachment_002dfs" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">mail-attachment-fs </span></dt>
+<dd><p>File system backend to use for saving attachments:
+</p><dl compact="compact">
+<dt><code>posix</code></dt>
+<dd><p>No SiS done by Dovecot (but this might help FS&rsquo;s own deduplication)
+</p></dd>
+<dt><code>sis posix</code></dt>
+<dd><p>SiS with immediate byte-by-byte comparison during saving
+</p></dd>
+<dt><code>sis-queue posix</code></dt>
+<dd><p>SiS with delayed comparison and deduplication.
+</p></dd>
+</dl>
+<p>Defaults to &lsquo;<samp>"sis posix"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mail_002dattachment_002dhash" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">mail-attachment-hash </span></dt>
+<dd><p>Hash format to use in attachment filenames.  You can add any text and
+variables: <code>%{md4}</code>, <code>%{md5}</code>, <code>%{sha1}</code>,
+<code>%{sha256}</code>, <code>%{sha512}</code>, <code>%{size}</code>.  Variables can be
+truncated, e.g. <code>%{sha256:80}</code> returns only first 80 bits.
+Defaults to &lsquo;<samp>"%{sha1}"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-default_002dprocess_002dlimit" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">default-process-limit </span></dt>
+<dd>
+<p>Defaults to &lsquo;<samp>100</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-default_002dclient_002dlimit" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">default-client-limit </span></dt>
+<dd>
+<p>Defaults to &lsquo;<samp>1000</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-default_002dvsz_002dlimit" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">default-vsz-limit </span></dt>
+<dd><p>Default VSZ (virtual memory size) limit for service processes.
+This is mainly intended to catch and kill processes that leak memory
+before they eat up everything.
+Defaults to &lsquo;<samp>256000000</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-default_002dlogin_002duser" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">default-login-user </span></dt>
+<dd><p>Login user is internally used by login processes.  This is the most
+untrusted user in Dovecot system.  It shouldn&rsquo;t have access to anything
+at all.
+Defaults to &lsquo;<samp>"dovenull"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-default_002dinternal_002duser" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">default-internal-user </span></dt>
+<dd><p>Internal user is used by unprivileged processes.  It should be
+separate from login user, so that login processes can&rsquo;t disturb other
+processes.
+Defaults to &lsquo;<samp>"dovecot"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ssl_003f-1" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">ssl? </span></dt>
+<dd><p>SSL/TLS support: yes, no, required.  &lt;doc/wiki/SSL.txt&gt;.
+Defaults to &lsquo;<samp>"required"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ssl_002dcert" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">ssl-cert </span></dt>
+<dd><p>PEM encoded X.509 SSL/TLS certificate (public key).
+Defaults to &lsquo;<samp>"&lt;/etc/dovecot/default.pem"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ssl_002dkey" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">ssl-key </span></dt>
+<dd><p>PEM encoded SSL/TLS private key.  The key is opened before
+dropping root privileges, so keep the key file unreadable by anyone but
+root.
+Defaults to &lsquo;<samp>"&lt;/etc/dovecot/private/default.pem"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ssl_002dkey_002dpassword" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">ssl-key-password </span></dt>
+<dd><p>If key file is password protected, give the password here.
+Alternatively give it when starting dovecot with -p parameter.  Since
+this file is often world-readable, you may want to place this setting
+instead to a different.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ssl_002dca" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">ssl-ca </span></dt>
+<dd><p>PEM encoded trusted certificate authority.  Set this only if you
+intend to use &lsquo;<samp>ssl-verify-client-cert? #t</samp>&rsquo;.  The file should
+contain the CA certificate(s) followed by the matching
+CRL(s).  (e.g. &lsquo;<samp>ssl-ca &lt;/etc/ssl/certs/ca.pem</samp>&rsquo;).
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ssl_002drequire_002dcrl_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">ssl-require-crl? </span></dt>
+<dd><p>Require that CRL check succeeds for client certificates.
+Defaults to &lsquo;<samp>#t</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ssl_002dverify_002dclient_002dcert_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">ssl-verify-client-cert? </span></dt>
+<dd><p>Request client to send a certificate.  If you also want to require
+it, set &lsquo;<samp>auth-ssl-require-client-cert? #t</samp>&rsquo; in auth section.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ssl_002dcert_002dusername_002dfield" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">ssl-cert-username-field </span></dt>
+<dd><p>Which field from certificate to use for username.  commonName and
+x500UniqueIdentifier are the usual choices.  You&rsquo;ll also need to set
+&lsquo;<samp>auth-ssl-username-from-cert? #t</samp>&rsquo;.
+Defaults to &lsquo;<samp>"commonName"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ssl_002dmin_002dprotocol" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">ssl-min-protocol </span></dt>
+<dd><p>Minimum SSL protocol version to accept.
+Defaults to &lsquo;<samp>"TLSv1"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ssl_002dcipher_002dlist" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">ssl-cipher-list </span></dt>
+<dd><p>SSL ciphers to use.
+Defaults to &lsquo;<samp>"ALL:!kRSA:!SRP:!kDHd:!DSS:!aNULL:!eNULL:!EXPORT:!DES:!3DES:!MD5:!PSK:!RC4:!ADH:!LOW@STRENGTH"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-ssl_002dcrypto_002ddevice" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">ssl-crypto-device </span></dt>
+<dd><p>SSL crypto device to use, for valid values run "openssl engine".
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-postmaster_002daddress" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">postmaster-address </span></dt>
+<dd><p>Address to use when sending rejection mails.
+%d expands to recipient domain.
+Defaults to &lsquo;<samp>"postmaster@%d"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-hostname" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">hostname </span></dt>
+<dd><p>Hostname to use in various parts of sent mails (e.g. in Message-Id)
+and in LMTP replies.  Default is the system&rsquo;s real hostname@domain.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-quota_002dfull_002dtempfail_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">quota-full-tempfail? </span></dt>
+<dd><p>If user is over quota, return with temporary failure instead of
+bouncing the mail.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-sendmail_002dpath" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>file-name</em> </span><span class="symbol-definition-prototype">sendmail-path </span></dt>
+<dd><p>Binary to use for sending mails.
+Defaults to &lsquo;<samp>"/usr/sbin/sendmail"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-submission_002dhost" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">submission-host </span></dt>
+<dd><p>If non-empty, send mails via this SMTP host[:port] instead of
+sendmail.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-rejection_002dsubject" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">rejection-subject </span></dt>
+<dd><p>Subject: header to use for rejection mails.  You can use the same
+variables as for &lsquo;<samp>rejection-reason</samp>&rsquo; below.
+Defaults to &lsquo;<samp>"Rejected: %s"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-rejection_002dreason" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">rejection-reason </span></dt>
+<dd><p>Human readable error message for rejection mails.  You can use
+variables:
+</p>
+<dl compact="compact">
+<dt><code>%n</code></dt>
+<dd><p>CRLF
+</p></dd>
+<dt><code>%r</code></dt>
+<dd><p>reason
+</p></dd>
+<dt><code>%s</code></dt>
+<dd><p>original subject
+</p></dd>
+<dt><code>%t</code></dt>
+<dd><p>recipient
+</p></dd>
+</dl>
+<p>Defaults to &lsquo;<samp>"Your message to &lt;%t&gt; was automatically rejected:%n%r"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-recipient_002ddelimiter" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">recipient-delimiter </span></dt>
+<dd><p>Delimiter character between local-part and detail in email
+address.
+Defaults to &lsquo;<samp>"+"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-lda_002doriginal_002drecipient_002dheader" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">lda-original-recipient-header </span></dt>
+<dd><p>Header where the original recipient address (SMTP&rsquo;s RCPT TO:
+address) is taken from if not available elsewhere.  With dovecot-lda -a
+parameter overrides this.  A commonly used header for this is
+X-Original-To.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-lda_002dmailbox_002dautocreate_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">lda-mailbox-autocreate? </span></dt>
+<dd><p>Should saving a mail to a nonexistent mailbox automatically create
+it?.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-lda_002dmailbox_002dautosubscribe_003f" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">lda-mailbox-autosubscribe? </span></dt>
+<dd><p>Should automatically created mailboxes be also automatically
+subscribed?.
+Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-imap_002dmax_002dline_002dlength" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">imap-max-line-length </span></dt>
+<dd><p>Maximum IMAP command line length.  Some clients generate very long
+command lines with huge mailboxes, so you may need to raise this if you
+get "Too long argument" or "IMAP command line too large" errors
+often.
+Defaults to &lsquo;<samp>64000</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-imap_002dlogout_002dformat" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">imap-logout-format </span></dt>
+<dd><p>IMAP logout format string:
+</p><dl compact="compact">
+<dt><code>%i</code></dt>
+<dd><p>total number of bytes read from client
+</p></dd>
+<dt><code>%o</code></dt>
+<dd><p>total number of bytes sent to client.
+</p></dd>
+</dl>
+<p>See <samp>doc/wiki/Variables.txt</samp> for a list of all the variables you can use.
+Defaults to &lsquo;<samp>"in=%i out=%o deleted=%{deleted} expunged=%{expunged} trashed=%{trashed} hdr_count=%{fetch_hdr_count} hdr_bytes=%{fetch_hdr_bytes} body_count=%{fetch_body_count} body_bytes=%{fetch_body_bytes}"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-imap_002dcapability" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">imap-capability </span></dt>
+<dd><p>Override the IMAP CAPABILITY response.  If the value begins with &rsquo;+&rsquo;,
+add the given capabilities on top of the defaults (e.g. +XFOO XBAR).
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-imap_002didle_002dnotify_002dinterval" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">imap-idle-notify-interval </span></dt>
+<dd><p>How long to wait between "OK Still here" notifications when client
+is IDLEing.
+Defaults to &lsquo;<samp>"2 mins"</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-imap_002did_002dsend" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">imap-id-send </span></dt>
+<dd><p>ID field names and values to send to clients.  Using * as the value
+makes Dovecot use the default value.  The following fields have default
+values currently: name, version, os, os-version, support-url,
+support-email.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-imap_002did_002dlog" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">imap-id-log </span></dt>
+<dd><p>ID fields sent by client to log.  * means everything.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-imap_002dclient_002dworkarounds" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>space-separated-string-list</em> </span><span class="symbol-definition-prototype">imap-client-workarounds </span></dt>
+<dd><p>Workarounds for various client bugs:
+</p>
+<dl compact="compact">
+<dt><code>delay-newmail</code></dt>
+<dd><p>Send EXISTS/RECENT new mail notifications only when replying to NOOP and
+CHECK commands.  Some clients ignore them otherwise, for example OSX
+Mail (&lt;v2.1).  Outlook Express breaks more badly though, without this it
+may show user "Message no longer in server" errors.  Note that OE6
+still breaks even with this workaround if synchronization is set to
+"Headers Only".
+</p>
+</dd>
+<dt><code>tb-extra-mailbox-sep</code></dt>
+<dd><p>Thunderbird gets somehow confused with LAYOUT=fs (mbox and dbox) and
+adds extra &lsquo;<samp>/</samp>&rsquo; suffixes to mailbox names.  This option causes Dovecot to
+ignore the extra &lsquo;<samp>/</samp>&rsquo; instead of treating it as invalid mailbox name.
+</p>
+</dd>
+<dt><code>tb-lsub-flags</code></dt>
+<dd><p>Show \Noselect flags for LSUB replies with LAYOUT=fs (e.g. mbox).
+This makes Thunderbird realize they aren&rsquo;t selectable and show them
+greyed out, instead of only later giving "not selectable" popup error.
+</p></dd>
+</dl>
+<p>Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-imap_002durlauth_002dhost" class="symbol-definition"><span class="symbol-definition-category"><code>dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">imap-urlauth-host </span></dt>
+<dd><p>Host allowed in URLAUTH URLs sent by client.  "*" allows all.
+Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p></dd></dl>
+
+
+<p>Whew!  Lots of configuration options.  The nice thing about it though is
+that Guix has a complete interface to Dovecot&rsquo;s configuration
+language.  This allows not only a nice way to declare configurations,
+but also offers reflective capabilities as well: users can write code to
+inspect and transform configurations from within Scheme.
+</p>
+<p>However, it could be that you just want to get a <code>dovecot.conf</code> up
+and running.  In that case, you can pass an
+<code>opaque-dovecot-configuration</code> as the <code>#:config</code> parameter to
+<code>dovecot-service</code>.  As its name indicates, an opaque configuration
+does not have easy reflective capabilities.
+</p>
+<p>Available <code>opaque-dovecot-configuration</code> fields are:
+</p>
+<dl>
+<dt id="index-dovecot-1" class="symbol-definition"><span class="symbol-definition-category"><code>opaque-dovecot-configuration</code> parameter: <em>package</em> </span><span class="symbol-definition-prototype">dovecot </span></dt>
+<dd><p>The dovecot package.
+</p></dd></dl>
+
+<dl>
+<dt id="index-string" class="symbol-definition"><span class="symbol-definition-category"><code>opaque-dovecot-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">string </span></dt>
+<dd><p>The contents of the <code>dovecot.conf</code>, as a string.
+</p></dd></dl>
+
+<p>For example, if your <code>dovecot.conf</code> is just the empty string, you
+could instantiate a dovecot service like this:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Mail-Services.html#index-dovecot_002dservice">dovecot-service</a> <span class="syntax-keyword">#:config</span>
+                 <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">opaque-dovecot-configuration</span>
+                  <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/String-Constructors.html#index-string">string</a> <span class="syntax-string">""</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<span id="OpenSMTPD-Service"></span><h4 class="subsubheading">OpenSMTPD Service</h4>
+
+<dl>
+<dt id="index-opensmtpd_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">opensmtpd-service-type </span></dt>
+<dd><p>This is the type of the <a href="https://www.opensmtpd.org">OpenSMTPD</a>
+service, whose value should be an <code>opensmtpd-configuration</code> object
+as in this example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Mail-Services.html#index-opensmtpd_002dservice_002dtype">opensmtpd-service-type</a>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Mail-Services.html#index-opensmtpd_002dconfiguration">opensmtpd-configuration</a>
+           <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">config-file</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-local_002dfile">local-file</a> <span class="syntax-string">"./my-smtpd.conf"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt id="index-opensmtpd_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">opensmtpd-configuration </span></dt>
+<dd><p>Data type representing the configuration of opensmtpd.
+</p>
+<dl compact="compact">
+<dt><code>package</code> (default: <var>opensmtpd</var>)</dt>
+<dd><p>Package object of the OpenSMTPD SMTP server.
+</p>
+</dd>
+<dt><code>config-file</code> (default: <code>%default-opensmtpd-config-file</code>)</dt>
+<dd><p>File-like object of the OpenSMTPD configuration file to use.  By default
+it listens on the loopback network interface, and allows for mail from
+users and daemons on the local machine, as well as permitting email to
+remote servers.  Run <code>man smtpd.conf</code> for more information.
+</p>
+</dd>
+<dt><code>setgid-commands?</code> (default: <code>#t</code>)</dt>
+<dd><p>Make the following commands setgid to <code>smtpq</code> so they can be
+executed: <code>smtpctl</code>, <code>sendmail</code>, <code>send-mail</code>,
+<code>makemap</code>, <code>mailq</code>, and <code>newaliases</code>.
+See <a href="Setuid-Programs.html">Setuid Programs</a>, for more information on setgid programs.
+</p></dd>
+</dl>
+</dd></dl>
+
+<span id="Exim-Service"></span><h4 class="subsubheading">Exim Service</h4>
+
+<span id="index-mail-transfer-agent-_0028MTA_0029"></span>
+<span id="index-MTA-_0028mail-transfer-agent_0029"></span>
+<span id="index-SMTP"></span>
+
+<dl>
+<dt id="index-exim_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">exim-service-type </span></dt>
+<dd><p>This is the type of the <a href="https://exim.org">Exim</a> mail transfer
+agent (MTA), whose value should be an <code>exim-configuration</code> object
+as in this example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Mail-Services.html#index-exim_002dservice_002dtype">exim-service-type</a>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Mail-Services.html#index-exim_002dconfiguration">exim-configuration</a>
+           <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">config-file</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-local_002dfile">local-file</a> <span class="syntax-string">"./my-exim.conf"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+</dd></dl>
+
+<p>In order to use an <code>exim-service-type</code> service you must also have a
+<code>mail-aliases-service-type</code> service present in your
+<code>operating-system</code> (even if it has no aliases).
+</p>
+<dl>
+<dt id="index-exim_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">exim-configuration </span></dt>
+<dd><p>Data type representing the configuration of exim.
+</p>
+<dl compact="compact">
+<dt><code>package</code> (default: <var>exim</var>)</dt>
+<dd><p>Package object of the Exim server.
+</p>
+</dd>
+<dt><code>config-file</code> (default: <code>#f</code>)</dt>
+<dd><p>File-like object of the Exim configuration file to use.  If its value is
+<code>#f</code> then use the default configuration file from the package
+provided in <code>package</code>.  The resulting configuration file is loaded
+after setting the <code>exim_user</code> and <code>exim_group</code> configuration
+variables.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span id="Getmail-service"></span><h4 class="subsubheading">Getmail service</h4>
+
+<span id="index-IMAP"></span>
+<span id="index-POP"></span>
+
+<dl>
+<dt id="index-getmail_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">getmail-service-type </span></dt>
+<dd><p>This is the type of the <a href="http://pyropus.ca/software/getmail/">Getmail</a>
+mail retriever, whose value should be an <code>getmail-configuration</code>.
+</p></dd></dl>
+
+<p>Available <code>getmail-configuration</code> fields are:
+</p>
+<dl>
+<dt id="index-name-4" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-configuration</code> parameter: <em>symbol</em> </span><span class="symbol-definition-prototype">name </span></dt>
+<dd><p>A symbol to identify the getmail service.
+</p>
+<p>Defaults to &lsquo;<samp>"unset"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-package-1" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-configuration</code> parameter: <em>package</em> </span><span class="symbol-definition-prototype">package </span></dt>
+<dd><p>The getmail package to use.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-user-3" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">user </span></dt>
+<dd><p>The user to run getmail as.
+</p>
+<p>Defaults to &lsquo;<samp>"getmail"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-group-3" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">group </span></dt>
+<dd><p>The group to run getmail as.
+</p>
+<p>Defaults to &lsquo;<samp>"getmail"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-directory" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">directory </span></dt>
+<dd><p>The getmail directory to use.
+</p>
+<p>Defaults to &lsquo;<samp>"/var/lib/getmail/default"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-rcfile" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-configuration</code> parameter: <em>getmail-configuration-file</em> </span><span class="symbol-definition-prototype">rcfile </span></dt>
+<dd><p>The getmail configuration file to use.
+</p>
+<p>Available <code>getmail-configuration-file</code> fields are:
+</p>
+<dl>
+<dt id="index-retriever" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-configuration-file</code> parameter: <em>getmail-retriever-configuration</em> </span><span class="symbol-definition-prototype">retriever </span></dt>
+<dd><p>What mail account to retrieve mail from, and how to access that account.
+</p>
+<p>Available <code>getmail-retriever-configuration</code> fields are:
+</p>
+<dl>
+<dt id="index-type-1" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-retriever-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">type </span></dt>
+<dd><p>The type of mail retriever to use.  Valid values include &lsquo;<samp>passwd</samp>&rsquo;
+and &lsquo;<samp>static</samp>&rsquo;.
+</p>
+<p>Defaults to &lsquo;<samp>"SimpleIMAPSSLRetriever"</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-server" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-retriever-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">server </span></dt>
+<dd><p>Username to login to the mail server with.
+</p>
+<p>Defaults to &lsquo;<samp>unset</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-username" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-retriever-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">username </span></dt>
+<dd><p>Username to login to the mail server with.
+</p>
+<p>Defaults to &lsquo;<samp>unset</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-port-1" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-retriever-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">port </span></dt>
+<dd><p>Port number to connect to.
+</p>
+<p>Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-password" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-retriever-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">password </span></dt>
+<dd><p>Override fields from passwd.
+</p>
+<p>Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-password_002dcommand" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-retriever-configuration</code> parameter: <em>list</em> </span><span class="symbol-definition-prototype">password-command </span></dt>
+<dd><p>Override fields from passwd.
+</p>
+<p>Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-keyfile" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-retriever-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">keyfile </span></dt>
+<dd><p>PEM-formatted key file to use for the TLS negotiation.
+</p>
+<p>Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-certfile" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-retriever-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">certfile </span></dt>
+<dd><p>PEM-formatted certificate file to use for the TLS negotiation.
+</p>
+<p>Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-ca_002dcerts" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-retriever-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">ca-certs </span></dt>
+<dd><p>CA certificates to use.
+</p>
+<p>Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-extra_002dparameters" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-retriever-configuration</code> parameter: <em>parameter-alist</em> </span><span class="symbol-definition-prototype">extra-parameters </span></dt>
+<dd><p>Extra retriever parameters.
+</p>
+<p>Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl>
+<dt id="index-destination" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-configuration-file</code> parameter: <em>getmail-destination-configuration</em> </span><span class="symbol-definition-prototype">destination </span></dt>
+<dd><p>What to do with retrieved messages.
+</p>
+<p>Available <code>getmail-destination-configuration</code> fields are:
+</p>
+<dl>
+<dt id="index-type-2" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-destination-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">type </span></dt>
+<dd><p>The type of mail destination.  Valid values include &lsquo;<samp>Maildir</samp>&rsquo;,
+&lsquo;<samp>Mboxrd</samp>&rsquo; and &lsquo;<samp>MDA_external</samp>&rsquo;.
+</p>
+<p>Defaults to &lsquo;<samp>unset</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-path-3" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-destination-configuration</code> parameter: <em>string-or-filelike</em> </span><span class="symbol-definition-prototype">path </span></dt>
+<dd><p>The path option for the mail destination.  The behaviour depends on the
+chosen type.
+</p>
+<p>Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-extra_002dparameters-1" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-destination-configuration</code> parameter: <em>parameter-alist</em> </span><span class="symbol-definition-prototype">extra-parameters </span></dt>
+<dd><p>Extra destination parameters
+</p>
+<p>Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl>
+<dt id="index-options" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-configuration-file</code> parameter: <em>getmail-options-configuration</em> </span><span class="symbol-definition-prototype">options </span></dt>
+<dd><p>Configure getmail.
+</p>
+<p>Available <code>getmail-options-configuration</code> fields are:
+</p>
+<dl>
+<dt id="index-verbose" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-options-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">verbose </span></dt>
+<dd><p>If set to &lsquo;<samp>0</samp>&rsquo;, getmail will only print warnings and errors.  A
+value of &lsquo;<samp>1</samp>&rsquo; means that messages will be printed about retrieving
+and deleting messages.  If set to &lsquo;<samp>2</samp>&rsquo;, getmail will print messages
+about each of its actions.
+</p>
+<p>Defaults to &lsquo;<samp>1</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-read_002dall" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-options-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">read-all </span></dt>
+<dd><p>If true, getmail will retrieve all available messages.  Otherwise it
+will only retrieve messages it hasn&rsquo;t seen previously.
+</p>
+<p>Defaults to &lsquo;<samp>#t</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-delete" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-options-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">delete </span></dt>
+<dd><p>If set to true, messages will be deleted from the server after
+retrieving and successfully delivering them.  Otherwise, messages will
+be left on the server.
+</p>
+<p>Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-delete_002dafter" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-options-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">delete-after </span></dt>
+<dd><p>Getmail will delete messages this number of days after seeing them, if
+they have been delivered.  This means messages will be left on the
+server this number of days after delivering them.  A value of &lsquo;<samp>0</samp>&rsquo;
+disabled this feature.
+</p>
+<p>Defaults to &lsquo;<samp>0</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-delete_002dbigger_002dthan" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-options-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">delete-bigger-than </span></dt>
+<dd><p>Delete messages larger than this of bytes after retrieving them, even if
+the delete and delete-after options are disabled.  A value of &lsquo;<samp>0</samp>&rsquo;
+disables this feature.
+</p>
+<p>Defaults to &lsquo;<samp>0</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-max_002dbytes_002dper_002dsession" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-options-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">max-bytes-per-session </span></dt>
+<dd><p>Retrieve messages totalling up to this number of bytes before closing
+the session with the server.  A value of &lsquo;<samp>0</samp>&rsquo; disables this feature.
+</p>
+<p>Defaults to &lsquo;<samp>0</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-max_002dmessage_002dsize" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-options-configuration</code> parameter: <em>non-negative-integer</em> </span><span class="symbol-definition-prototype">max-message-size </span></dt>
+<dd><p>Don&rsquo;t retrieve messages larger than this number of bytes.  A value of
+&lsquo;<samp>0</samp>&rsquo; disables this feature.
+</p>
+<p>Defaults to &lsquo;<samp>0</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-delivered_002dto" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-options-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">delivered-to </span></dt>
+<dd><p>If true, getmail will add a Delivered-To header to messages.
+</p>
+<p>Defaults to &lsquo;<samp>#t</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-received" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-options-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">received </span></dt>
+<dd><p>If set, getmail adds a Received header to the messages.
+</p>
+<p>Defaults to &lsquo;<samp>#t</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-message_002dlog" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-options-configuration</code> parameter: <em>string</em> </span><span class="symbol-definition-prototype">message-log </span></dt>
+<dd><p>Getmail will record a log of its actions to the named file.  A value of
+&lsquo;<samp>""</samp>&rsquo; disables this feature.
+</p>
+<p>Defaults to &lsquo;<samp>""</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-message_002dlog_002dsyslog" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-options-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">message-log-syslog </span></dt>
+<dd><p>If true, getmail will record a log of its actions using the system
+logger.
+</p>
+<p>Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-message_002dlog_002dverbose" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-options-configuration</code> parameter: <em>boolean</em> </span><span class="symbol-definition-prototype">message-log-verbose </span></dt>
+<dd><p>If true, getmail will log information about messages not retrieved and
+the reason for not retrieving them, as well as starting and ending
+information lines.
+</p>
+<p>Defaults to &lsquo;<samp>#f</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-extra_002dparameters-2" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-options-configuration</code> parameter: <em>parameter-alist</em> </span><span class="symbol-definition-prototype">extra-parameters </span></dt>
+<dd><p>Extra options to include.
+</p>
+<p>Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl>
+<dt id="index-idle" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-configuration</code> parameter: <em>list</em> </span><span class="symbol-definition-prototype">idle </span></dt>
+<dd><p>A list of mailboxes that getmail should wait on the server for new mail
+notifications.  This depends on the server supporting the IDLE
+extension.
+</p>
+<p>Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<dl>
+<dt id="index-environment_002dvariables-1" class="symbol-definition"><span class="symbol-definition-category"><code>getmail-configuration</code> parameter: <em>list</em> </span><span class="symbol-definition-prototype">environment-variables </span></dt>
+<dd><p>Environment variables to set for getmail.
+</p>
+<p>Defaults to &lsquo;<samp>()</samp>&rsquo;.
+</p>
+</dd></dl>
+
+<span id="Mail-Aliases-Service"></span><h4 class="subsubheading">Mail Aliases Service</h4>
+
+<span id="index-email-aliases"></span>
+<span id="index-aliases_002c-for-email-addresses"></span>
+
+<dl>
+<dt id="index-mail_002daliases_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">mail-aliases-service-type </span></dt>
+<dd><p>This is the type of the service which provides <code>/etc/aliases</code>,
+specifying how to deliver mail to users on this system.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Mail-Services.html#index-mail_002daliases_002dservice_002dtype">mail-aliases-service-type</a>
+         <span class="syntax-symbol">'</span><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"postmaster"</span> <span class="syntax-string">"bob"</span></span>)</span>
+           <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"bob"</span> <span class="syntax-string">"bob@example.com"</span> <span class="syntax-string">"bob@example2.com"</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+</dd></dl>
+
+<p>The configuration for a <code>mail-aliases-service-type</code> service is an
+association list denoting how to deliver mail that comes to this
+system.  Each entry is of the form <code>(alias addresses ...)</code>, with
+<code>alias</code> specifying the local alias and <code>addresses</code> specifying
+where to deliver this user&rsquo;s mail.
+</p>
+<p>The aliases aren&rsquo;t required to exist as users on the local system.  In
+the above example, there doesn&rsquo;t need to be a <code>postmaster</code> entry in
+the <code>operating-system</code>&rsquo;s <code>user-accounts</code> in order to deliver
+the <code>postmaster</code> mail to <code>bob</code> (which subsequently would
+deliver mail to <code>bob@example.com</code> and <code>bob@example2.com</code>).
+</p>
+<span id="GNU-Mailutils-IMAP4-Daemon"></span><h4 class="subsubheading">GNU Mailutils IMAP4 Daemon</h4>
+<span id="index-GNU-Mailutils-IMAP4-Daemon"></span>
+
+<dl>
+<dt id="index-imap4d_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">imap4d-service-type </span></dt>
+<dd><p>This is the type of the GNU Mailutils IMAP4 Daemon (see <a href="https://www.gnu.org/software/mailutils/manual/html_node/imap4d.html#imap4d">imap4d</a> in <cite>GNU Mailutils Manual</cite>), whose value should be an
+<code>imap4d-configuration</code> object as in this example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Mail-Services.html#index-imap4d_002dservice_002dtype">imap4d-service-type</a>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Mail-Services.html#index-imap4d_002dconfiguration">imap4d-configuration</a>
+           <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">config-file</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-local_002dfile">local-file</a> <span class="syntax-string">"imap4d.conf"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt id="index-imap4d_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">imap4d-configuration </span></dt>
+<dd><p>Data type representing the configuration of <code>imap4d</code>.
+</p>
+<dl compact="compact">
+<dt><code>package</code> (default: <code>mailutils</code>)</dt>
+<dd><p>The package that provides <code>imap4d</code>.
+</p>
+</dd>
+<dt><code>config-file</code> (default: <code>%default-imap4d-config-file</code>)</dt>
+<dd><p>File-like object of the configuration file to use, by default it will listen
+on TCP port 143 of <code>localhost</code>.  See <a href="https://www.gnu.org/software/mailutils/manual/html_node/Conf_002dimap4d.html#Conf_002dimap4d">Conf-imap4d</a> in <cite>GNU
+Mailutils Manual</cite>, for details.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span id="Radicale-Service"></span><h4 class="subsubheading">Radicale Service</h4>
+<span id="index-CalDAV"></span>
+<span id="index-CardDAV"></span>
+
+<dl>
+<dt id="index-radicale_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">radicale-service-type </span></dt>
+<dd><p>This is the type of the <a href="https://radicale.org">Radicale</a> CalDAV/CardDAV
+server whose value should be a <code>radicale-configuration</code>.
+</p></dd></dl>
+
+<dl>
+<dt id="index-radicale_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">radicale-configuration </span></dt>
+<dd><p>Data type representing the configuration of <code>radicale</code>.
+</p>
+<dl compact="compact">
+<dt><code>package</code> (default: <code>radicale</code>)</dt>
+<dd><p>The package that provides <code>radicale</code>.
+</p>
+</dd>
+<dt><code>config-file</code> (default: <code>%default-radicale-config-file</code>)</dt>
+<dd><p>File-like object of the configuration file to use, by default it will listen
+on TCP port 5232 of <code>localhost</code> and use the <code>htpasswd</code> file at
+<samp>/var/lib/radicale/users</samp> with no (<code>plain</code>) encryption.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr />
+<div class="header">
+<p>
+Next: <a href="Messaging-Services.html" accesskey="n" rel="next">Messaging Services</a>, Previous: <a href="Database-Services.html" accesskey="p" rel="prev">Database Services</a>, Up: <a href="Services.html" accesskey="u" rel="up">Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

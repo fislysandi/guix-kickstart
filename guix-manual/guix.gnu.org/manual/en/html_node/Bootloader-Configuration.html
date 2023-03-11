@@ -1,0 +1,596 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Bootloader Configuration (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="Bootloader Configuration (GNU Guix Reference Manual)" />
+<meta name="keywords" content="Bootloader Configuration (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="System-Configuration.html" rel="up" title="System Configuration" />
+<link href="Invoking-guix-system.html" rel="next" title="Invoking guix system" />
+<link href="Initial-RAM-Disk.html" rel="prev" title="Initial RAM Disk" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="Bootloader-Configuration"></span><div class="header">
+<p>
+Next: <a href="Invoking-guix-system.html" accesskey="n" rel="next">Invoking guix system</a>, Previous: <a href="Initial-RAM-Disk.html" accesskey="p" rel="prev">Initial RAM Disk</a>, Up: <a href="System-Configuration.html" accesskey="u" rel="up">System Configuration</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Bootloader-Configuration-1"></span><h3 class="section">12.14 Bootloader Configuration</h3>
+
+<span id="index-bootloader"></span>
+<span id="index-boot-loader"></span>
+
+<p>The operating system supports multiple bootloaders.  The bootloader is
+configured using <code>bootloader-configuration</code> declaration.  All the
+fields of this structure are bootloader agnostic except for one field,
+<code>bootloader</code> that indicates the bootloader to be configured and
+installed.
+</p>
+<p>Some of the bootloaders do not honor every field of
+<code>bootloader-configuration</code>.  For instance, the extlinux
+bootloader does not support themes and thus ignores the <code>theme</code>
+field.
+</p>
+<dl>
+<dt id="index-bootloader_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">bootloader-configuration </span></dt>
+<dd><p>The type of a bootloader configuration declaration.
+</p>
+<dl compact="compact">
+<dt><code>bootloader</code></dt>
+<dd><span id="index-EFI_002c-bootloader"></span>
+<span id="index-UEFI_002c-bootloader"></span>
+<span id="index-BIOS_002c-bootloader"></span>
+<p>The bootloader to use, as a <code>bootloader</code> object.  For now
+<code>grub-bootloader</code>, <code>grub-efi-bootloader</code>,
+<code>grub-efi-netboot-bootloader</code>, <code>grub-efi-removable-bootloader</code>,
+<code>extlinux-bootloader</code> and <code>u-boot-bootloader</code> are supported.
+</p>
+<span id="index-ARM_002c-bootloaders"></span>
+<span id="index-AArch64_002c-bootloaders"></span>
+<p>Available bootloaders are described in <code>(gnu bootloader &hellip;)</code>
+modules.  In particular, <code>(gnu bootloader u-boot)</code> contains definitions
+of bootloaders for a wide range of ARM and AArch64 systems, using the
+<a href="https://www.denx.de/wiki/U-Boot/">U-Boot bootloader</a>.
+</p>
+<span id="index-grub_002defi_002dbootloader-1"></span>
+<p><code>grub-efi-bootloader</code> allows to boot on modern systems using the
+<em>Unified Extensible Firmware Interface</em> (UEFI).  This is what you should
+use if the installation image contains a <samp>/sys/firmware/efi</samp> directory
+when you boot it on your system.
+</p>
+<span id="index-grub_002dbootloader-1"></span>
+<p><code>grub-bootloader</code> allows you to boot in particular Intel-based machines
+in &ldquo;legacy&rdquo; BIOS mode.
+</p>
+<span id="index-grub_002defi_002dnetboot_002dbootloader"></span>
+<p><code>grub-efi-netboot-bootloader</code> allows you to boot your system over network
+through TFTP.  In combination with an NFS root file system this allows you to
+build a diskless Guix system.
+</p>
+<p>The installation of the <code>grub-efi-netboot-bootloader</code> generates the
+content of the TFTP root directory at <code>targets</code> (see <a href="Bootloader-Configuration.html#Bootloader-Configuration"><code>targets</code></a>), to be served by a TFTP server.  You may
+want to mount your TFTP server directories onto the <code>targets</code> to
+move the required files to the TFTP server automatically.
+</p>
+<p>If you plan to use an NFS root file system as well (actually if you mount the
+store from an NFS share), then the TFTP server needs to serve the file
+<samp>/boot/grub/grub.cfg</samp> and other files from the store (like GRUBs background
+image, the kernel (see <a href="operating_002dsystem-Reference.html"><code>kernel</code></a>) and the
+initrd (see <a href="operating_002dsystem-Reference.html"><code>initrd</code></a>)), too.  All these
+files from the store will be accessed by GRUB through TFTP with their normal
+store path, for example as
+<samp>tftp://tftp-server/gnu/store/…-initrd/initrd.cpio.gz</samp>.
+</p>
+<p>Two symlinks are created to make this possible.  For each target in the
+<code>targets</code> field, the first symlink is
+&lsquo;<samp>target</samp>&rsquo;<samp>/efi/Guix/boot/grub/grub.cfg</samp> pointing to
+<samp>../../../boot/grub/grub.cfg</samp>, where &lsquo;<samp>target</samp>&rsquo; may be
+<samp>/boot</samp>.  In this case the link is not leaving the served TFTP root
+directory, but otherwise it does.  The second link is
+&lsquo;<samp>target</samp>&rsquo;<samp>/gnu/store</samp> and points to <samp>../gnu/store</samp>.  This
+link is leaving the served TFTP root directory.
+</p>
+<p>The assumption behind all this is that you have an NFS server exporting
+the root file system for your Guix system, and additionally a TFTP
+server exporting your <code>targets</code> directories—usually a single
+<samp>/boot</samp>—from that same root file system for your Guix system.  In
+this constellation the symlinks will work.
+</p>
+<p>For other constellations you will have to program your own bootloader
+installer, which then takes care to make necessary files from the store
+accessible through TFTP, for example by copying them into the TFTP root
+directory to your <code>targets</code>.
+</p>
+<p>It is important to note that symlinks pointing outside the TFTP root directory
+may need to be allowed in the configuration of your TFTP server.  Further the
+store link exposes the whole store through TFTP.  Both points need to be
+considered carefully for security aspects.
+</p>
+<p>Beside the <code>grub-efi-netboot-bootloader</code>, the already mentioned TFTP and
+NFS servers, you also need a properly configured DHCP server to make the booting
+over netboot possible.  For all this we can currently only recommend you to look
+for instructions about <acronym title="Preboot eXecution Environment">PXE</acronym> (Preboot eXecution Environment).
+</p>
+<span id="index-grub_002defi_002dremovable_002dbootloader"></span>
+<p><code>grub-efi-removable-bootloader</code> allows you to boot your system from
+removable media by writing the GRUB file to the UEFI-specification location of
+<samp>/EFI/BOOT/BOOTX64.efi</samp> of the boot directory, usually <samp>/boot/efi</samp>.
+This is also useful for some UEFI firmwares that &ldquo;forget&rdquo; their configuration
+from their non-volatile storage. Like <code>grub-efi-bootloader</code>, this can only
+be used if the <samp>/sys/firmware/efi</samp> directory is available.
+</p>
+<blockquote>
+<p><b>Note:</b> This <em>will</em> overwrite the GRUB file from any other operating systems that
+also place their GRUB file in the UEFI-specification location; making them
+unbootable.
+</p></blockquote>
+
+</dd>
+<dt><code>targets</code></dt>
+<dd><p>This is a list of strings denoting the targets onto which to install the
+bootloader.
+</p>
+<p>The interpretation of targets depends on the bootloader in question.
+For <code>grub-bootloader</code>, for example, they should be device names
+understood by the bootloader <code>installer</code> command, such as
+<code>/dev/sda</code> or <code>(hd0)</code> (see <a href="https://www.gnu.org/software/grub/manual/html_node/Invoking-grub_002dinstall.html#Invoking-grub_002dinstall">Invoking grub-install</a> in <cite>GNU GRUB Manual</cite>).  For <code>grub-efi-bootloader</code> and
+<code>grub-efi-removable-bootloader</code> they should be mount
+points of the EFI file system, usually <samp>/boot/efi</samp>.  For
+<code>grub-efi-netboot-bootloader</code>, <code>targets</code> should be the mount
+points corresponding to TFTP root directories served by your TFTP
+server.
+</p>
+</dd>
+<dt><code>menu-entries</code> (default: <code>()</code>)</dt>
+<dd><p>A possibly empty list of <code>menu-entry</code> objects (see below), denoting
+entries to appear in the bootloader menu, in addition to the current
+system entry and the entry pointing to previous system generations.
+</p>
+</dd>
+<dt><code>default-entry</code> (default: <code>0</code>)</dt>
+<dd><p>The index of the default boot menu entry.  Index 0 is for the entry of the
+current system.
+</p>
+</dd>
+<dt><code>timeout</code> (default: <code>5</code>)</dt>
+<dd><p>The number of seconds to wait for keyboard input before booting.  Set to
+0 to boot immediately, and to -1 to wait indefinitely.
+</p>
+<span id="index-keyboard-layout_002c-for-the-bootloader"></span>
+</dd>
+<dt><code>keyboard-layout</code> (default: <code>#f</code>)</dt>
+<dd><p>If this is <code>#f</code>, the bootloader&rsquo;s menu (if any) uses the default keyboard
+layout, usually US&nbsp;English (&ldquo;qwerty&rdquo;).
+</p>
+<p>Otherwise, this must be a <code>keyboard-layout</code> object (see <a href="Keyboard-Layout.html">Keyboard Layout</a>).
+</p>
+<blockquote>
+<p><b>Note:</b> This option is currently ignored by bootloaders other than <code>grub</code> and
+<code>grub-efi</code>.
+</p></blockquote>
+
+</dd>
+<dt><code>theme</code> (default: <var>#f</var>)</dt>
+<dd><p>The bootloader theme object describing the theme to use.  If no theme
+is provided, some bootloaders might use a default theme, that&rsquo;s true
+for GRUB.
+</p>
+</dd>
+<dt><code>terminal-outputs</code> (default: <code>'(gfxterm)</code>)</dt>
+<dd><p>The output terminals used for the bootloader boot menu, as a list of
+symbols.  GRUB accepts the values: <code>console</code>, <code>serial</code>,
+<code>serial_{0-3}</code>, <code>gfxterm</code>, <code>vga_text</code>,
+<code>mda_text</code>, <code>morse</code>, and <code>pkmodem</code>.  This field
+corresponds to the GRUB variable <code>GRUB_TERMINAL_OUTPUT</code> (see <a href="https://www.gnu.org/software/grub/manual/html_node/Simple-configuration.html#Simple-configuration">Simple
+configuration</a> in <cite>GNU GRUB manual</cite>).
+</p>
+</dd>
+<dt><code>terminal-inputs</code> (default: <code>'()</code>)</dt>
+<dd><p>The input terminals used for the bootloader boot menu, as a list of
+symbols.  For GRUB, the default is the native platform terminal as
+determined at run-time.  GRUB accepts the values: <code>console</code>,
+<code>serial</code>, <code>serial_{0-3}</code>, <code>at_keyboard</code>, and
+<code>usb_keyboard</code>.  This field corresponds to the GRUB variable
+<code>GRUB_TERMINAL_INPUT</code> (see <a href="https://www.gnu.org/software/grub/manual/html_node/Simple-configuration.html#Simple-configuration">Simple configuration</a> in <cite>GNU GRUB
+manual</cite>).
+</p>
+</dd>
+<dt><code>serial-unit</code> (default: <code>#f</code>)</dt>
+<dd><p>The serial unit used by the bootloader, as an integer from 0 to 3.
+For GRUB, it is chosen at run-time; currently GRUB chooses 0, which
+corresponds to COM1 (see <a href="https://www.gnu.org/software/grub/manual/html_node/Serial-terminal.html#Serial-terminal">Serial terminal</a> in <cite>GNU GRUB manual</cite>).
+</p>
+</dd>
+<dt><code>serial-speed</code> (default: <code>#f</code>)</dt>
+<dd><p>The speed of the serial interface, as an integer.  For GRUB, the
+default value is chosen at run-time; currently GRUB chooses
+9600&nbsp;bps (see <a href="https://www.gnu.org/software/grub/manual/html_node/Serial-terminal.html#Serial-terminal">Serial terminal</a> in <cite>GNU GRUB manual</cite>).
+</p>
+</dd>
+<dt><code>device-tree-support?</code> (default: <code>#t</code>)</dt>
+<dd><p>Whether to support Linux <a href="https://en.wikipedia.org/wiki/Devicetree">device tree</a> files loading.
+</p>
+<p>This option in enabled by default.  In some cases involving the
+<code>u-boot</code> bootloader, where the device tree has already been loaded
+in RAM, it can be handy to disable the option by setting it to
+<code>#f</code>.
+</p></dd>
+</dl>
+
+</dd></dl>
+
+<span id="index-dual-boot"></span>
+<span id="index-boot-menu"></span>
+<p>Should you want to list additional boot menu entries <i>via</i> the
+<code>menu-entries</code> field above, you will need to create them with the
+<code>menu-entry</code> form.  For example, imagine you want to be able to
+boot another distro (hard to imagine!), you can define a menu entry
+along these lines:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Bootloader-Configuration.html#index-menu_002dentry">menu-entry</a>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">label</span> <span class="syntax-string">"The Other Distro"</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">linux</span> <span class="syntax-string">"/boot/old/vmlinux-2.6.32"</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">linux-arguments</span> <span class="syntax-symbol">'</span><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"root=/dev/sda2"</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">initrd</span> <span class="syntax-string">"/boot/old/initrd"</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>Details below.
+</p>
+<dl>
+<dt id="index-menu_002dentry" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">menu-entry </span></dt>
+<dd><p>The type of an entry in the bootloader menu.
+</p>
+<dl compact="compact">
+<dt><code>label</code></dt>
+<dd><p>The label to show in the menu&mdash;e.g., <code>"GNU"</code>.
+</p>
+</dd>
+<dt><code>linux</code> (default: <code>#f</code>)</dt>
+<dd><p>The Linux kernel image to boot, for example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-file_002dappend">file-append</a> <span class="syntax-symbol">linux-libre</span> <span class="syntax-string">"/bzImage"</span></span>)</span>
+</pre></div>
+
+<p>For GRUB, it is also possible to specify a device explicitly in the
+file path using GRUB&rsquo;s device naming convention (see <a href="https://www.gnu.org/software/grub/manual/html_node/Naming-convention.html#Naming-convention">Naming
+convention</a> in <cite>GNU GRUB manual</cite>), for example:
+</p>
+<div class="example">
+<pre class="example">"(hd0,msdos1)/boot/vmlinuz"
+</pre></div>
+
+<p>If the device is specified explicitly as above, then the <code>device</code>
+field is ignored entirely.
+</p>
+</dd>
+<dt><code>linux-arguments</code> (default: <code>()</code>)</dt>
+<dd><p>The list of extra Linux kernel command-line arguments&mdash;e.g.,
+<code>("console=ttyS0")</code>.
+</p>
+</dd>
+<dt><code>initrd</code> (default: <code>#f</code>)</dt>
+<dd><p>A G-Expression or string denoting the file name of the initial RAM disk
+to use (see <a href="G_002dExpressions.html">G-Expressions</a>).
+</p>
+</dd>
+<dt><code>device</code> (default: <code>#f</code>)</dt>
+<dd><p>The device where the kernel and initrd are to be found&mdash;i.e., for GRUB,
+<em>root</em> for this menu entry (see <a href="https://www.gnu.org/software/grub/manual/html_node/root.html#root">root</a> in <cite>GNU GRUB manual</cite>).
+</p>
+<p>This may be a file system label (a string), a file system UUID (a
+bytevector, see <a href="File-Systems.html">File Systems</a>), or <code>#f</code>, in which case
+the bootloader will search the device containing the file specified by
+the <code>linux</code> field (see <a href="https://www.gnu.org/software/grub/manual/html_node/search.html#search">search</a> in <cite>GNU GRUB manual</cite>).  It
+must <em>not</em> be an OS device name such as <samp>/dev/sda1</samp>.
+</p>
+</dd>
+<dt><code>multiboot-kernel</code> (default: <code>#f</code>)</dt>
+<dd><p>The kernel to boot in Multiboot-mode (see <a href="https://www.gnu.org/software/grub/manual/html_node/multiboot.html#multiboot">multiboot</a> in <cite>GNU GRUB
+manual</cite>).  When this field is set, a Multiboot menu-entry is generated.
+For example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-file_002dappend">file-append</a> <span class="syntax-symbol">mach</span> <span class="syntax-string">"/boot/gnumach"</span></span>)</span>
+</pre></div>
+
+</dd>
+<dt><code>multiboot-arguments</code> (default: <code>()</code>)</dt>
+<dd><p>The list of extra command-line arguments for the multiboot-kernel.
+</p>
+</dd>
+<dt><code>multiboot-modules</code> (default: <code>()</code>)</dt>
+<dd><p>The list of commands for loading Multiboot modules.  For example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-file_002dappend">file-append</a> <span class="syntax-symbol">hurd</span> <span class="syntax-string">"/hurd/ext2fs.static"</span></span>)</span> <span class="syntax-string">"ext2fs"</span>
+             <span class="syntax-symbol">…</span></span>)</span>
+      <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-file_002dappend">file-append</a> <span class="syntax-symbol">libc</span> <span class="syntax-string">"/lib/ld.so.1"</span></span>)</span> <span class="syntax-string">"exec"</span>
+             <span class="syntax-symbol">…</span></span>)</span></span>)</span>
+</pre></div>
+
+</dd>
+<dt><code>chain-loader</code> (default: <code>#f</code>)</dt>
+<dd><p>A string that can be accepted by <code>grub</code>&rsquo;s <code>chainloader</code>
+directive. This has no effect if either <code>linux</code> or
+<code>multiboot-kernel</code> fields are specified. The following is an
+example of chainloading a different GNU/Linux system.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">bootloader</span>
+ <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Bootloader-Configuration.html#index-bootloader_002dconfiguration">bootloader-configuration</a>
+  <span class="syntax-comment">;; …
+</span>  <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">menu-entries</span>
+   <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a>
+    <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="Bootloader-Configuration.html#index-menu_002dentry">menu-entry</a>
+     <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">label</span> <span class="syntax-string">"GNU/Linux"</span></span>)</span>
+     <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">device</span> <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="File-Systems.html#index-uuid-1">uuid</a> <span class="syntax-string">"1C31-A17C"</span> <span class="syntax-symbol">'fat</span></span>)</span></span>)</span>
+     <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">chain-loader</span> <span class="syntax-string">"/EFI/GNULinux/grubx64.efi"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+</dd>
+</dl>
+</dd></dl>
+
+<span id="index-HDPI"></span>
+<span id="index-HiDPI"></span>
+<span id="index-resolution"></span>
+<p>For now only GRUB has theme support.  GRUB themes are created using
+the <code>grub-theme</code> form, which is not fully documented yet.
+</p>
+<dl>
+<dt id="index-grub_002dtheme-1" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">grub-theme </span></dt>
+<dd><p>Data type representing the configuration of the GRUB theme.
+</p>
+<dl compact="compact">
+<dt><code>gfxmode</code> (default: <code>'("auto")</code>)</dt>
+<dd><p>The GRUB <code>gfxmode</code> to set (a list of screen resolution strings,
+see <a href="https://www.gnu.org/software/grub/manual/html_node/gfxmode.html#gfxmode">gfxmode</a> in <cite>GNU GRUB manual</cite>).
+</p></dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-grub_002dtheme" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">grub-theme </span></dt>
+<dd><p>Return the default GRUB theme used by the operating system if no
+<code>theme</code> field is specified in <code>bootloader-configuration</code>
+record.
+</p>
+<p>It comes with a fancy background image displaying the GNU and Guix
+logos.
+</p></dd></dl>
+
+<p>For example, to override the default resolution, you may use something
+like
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">bootloader</span>
+ <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Bootloader-Configuration.html#index-bootloader_002dconfiguration">bootloader-configuration</a>
+ <span class="syntax-comment">;; …
+</span> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">theme</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Bootloader-Configuration.html#index-grub_002dtheme">grub-theme</a>
+         <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">inherit</span> <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="Bootloader-Configuration.html#index-grub_002dtheme">grub-theme</a></span>)</span></span>)</span>
+         <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">gfxmode</span> <span class="syntax-symbol">'</span><span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-string">"1024x786x32"</span> <span class="syntax-string">"auto"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<hr />
+<div class="header">
+<p>
+Next: <a href="Invoking-guix-system.html" accesskey="n" rel="next">Invoking guix system</a>, Previous: <a href="Initial-RAM-Disk.html" accesskey="p" rel="prev">Initial RAM Disk</a>, Up: <a href="System-Configuration.html" accesskey="u" rel="up">System Configuration</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

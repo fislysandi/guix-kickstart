@@ -1,0 +1,540 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>package Reference (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="package Reference (GNU Guix Reference Manual)" />
+<meta name="keywords" content="package Reference (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Defining-Packages.html" rel="up" title="Defining Packages" />
+<link href="origin-Reference.html" rel="next" title="origin Reference" />
+<link href="Defining-Packages.html" rel="prev" title="Defining Packages" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="package-Reference"></span><div class="header">
+<p>
+Next: <a href="origin-Reference.html" accesskey="n" rel="next">origin Reference</a>, Up: <a href="Defining-Packages.html" accesskey="u" rel="up">Defining Packages</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="package-Reference-1"></span><h4 class="subsection">9.2.1 <code>package</code> Reference</h4>
+
+<p>This section summarizes all the options available in <code>package</code>
+declarations (see <a href="Defining-Packages.html">Defining Packages</a>).
+</p>
+<dl>
+<dt id="index-package" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">package </span></dt>
+<dd><p>This is the data type representing a package recipe.
+</p>
+<dl compact="compact">
+<dt><code>name</code></dt>
+<dd><p>The name of the package, as a string.
+</p>
+</dd>
+<dt><code>version</code></dt>
+<dd><p>The version of the package, as a string.  See <a href="Version-Numbers.html">Version Numbers</a>, for
+guidelines.
+</p>
+</dd>
+<dt><code>source</code></dt>
+<dd><p>An object telling how the source code for the package should be
+acquired.  Most of the time, this is an <code>origin</code> object, which
+denotes a file fetched from the Internet (see <a href="origin-Reference.html">origin Reference</a>).  It
+can also be any other &ldquo;file-like&rdquo; object such as a <code>local-file</code>,
+which denotes a file from the local file system (see <a href="G_002dExpressions.html"><code>local-file</code></a>).
+</p>
+</dd>
+<dt><code>build-system</code></dt>
+<dd><p>The build system that should be used to build the package (see <a href="Build-Systems.html">Build Systems</a>).
+</p>
+</dd>
+<dt><code>arguments</code> (default: <code>'()</code>)</dt>
+<dd><p>The arguments that should be passed to the build system (see <a href="Build-Systems.html">Build Systems</a>).  This is a list, typically containing sequential
+keyword-value pairs, as in this example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="package-Reference.html#index-package">package</a>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">name</span> <span class="syntax-string">"example"</span></span>)</span>
+  <span class="syntax-comment">;; several fields omitted
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">arguments</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-keyword">#:tests?</span> <span class="syntax-symbol">#f</span>                     <span class="syntax-comment">;skip tests
+</span>          <span class="syntax-keyword">#:make-flags</span> <span class="syntax-symbol">#~'</span><span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-string">"VERBOSE=1"</span></span>)</span>   <span class="syntax-comment">;pass flags to 'make'
+</span>          <span class="syntax-keyword">#:configure-flags</span> <span class="syntax-symbol">#~'</span><span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-string">"--enable-frobbing"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>The exact set of supported keywords depends on the build system
+(see <a href="Build-Systems.html">Build Systems</a>), but you will find that almost all of them honor
+<code>#:configure-flags</code>, <code>#:make-flags</code>, <code>#:tests?</code>, and
+<code>#:phases</code>.  The <code>#:phases</code> keyword in particular lets you
+modify the set of build phases for your package (see <a href="Build-Phases.html">Build Phases</a>).
+</p>
+</dd>
+<dt><code>inputs</code> (default: <code>'()</code>)</dt>
+<dt><code>native-inputs</code> (default: <code>'()</code>)</dt>
+<dt><code>propagated-inputs</code> (default: <code>'()</code>)</dt>
+<dd><span id="index-inputs_002c-of-packages"></span>
+<p>These fields list dependencies of the package.  Each element of these
+lists is either a package, origin, or other &ldquo;file-like object&rdquo;
+(see <a href="G_002dExpressions.html">G-Expressions</a>); to specify the output of that file-like object
+that should be used, pass a two-element list where the second element is
+the output (see <a href="Packages-with-Multiple-Outputs.html">Packages with Multiple Outputs</a>, for more on package
+outputs).  For example, the list below specifies three inputs:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-symbol">libffi</span> <span class="syntax-symbol">libunistring</span>
+      <span class="syntax-symbol">`</span><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">,glib</span> <span class="syntax-string">"bin"</span></span>)</span></span>)</span>      <span class="syntax-comment">;the "bin" output of GLib
+</span></pre></div>
+
+<p>In the example above, the <code>"out"</code> output of <code>libffi</code> and
+<code>libunistring</code> is used.
+</p>
+<blockquote>
+<p><b>Compatibility Note:</b> Until version 1.3.0, input lists were a list of tuples,
+where each tuple has a label for the input (a string) as its
+first element, a package, origin, or derivation as its second element,
+and optionally the name of the output thereof that should be used, which
+defaults to <code>"out"</code>.  For example, the list below is equivalent to
+the one above, but using the <em>old input style</em>:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-comment">;; Old input style (deprecated).
+</span><span class="syntax-symbol">`</span><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-string">"libffi"</span> <span class="syntax-symbol">,libffi</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-string">"libunistring"</span> <span class="syntax-symbol">,libunistring</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-string">"glib:bin"</span> <span class="syntax-symbol">,glib</span> <span class="syntax-string">"bin"</span></span>)</span></span>)</span>  <span class="syntax-comment">;the "bin" output of GLib
+</span></pre></div>
+
+<p>This style is now deprecated; it is still supported but support will be
+removed in a future version.  It should not be used for new package
+definitions.  See <a href="Invoking-guix-style.html">Invoking guix style</a>, on how to migrate to the new
+style.
+</p></blockquote>
+
+<span id="index-cross-compilation_002c-package-dependencies"></span>
+<p>The distinction between <code>native-inputs</code> and <code>inputs</code> is
+necessary when considering cross-compilation.  When cross-compiling,
+dependencies listed in <code>inputs</code> are built for the <em>target</em>
+architecture; conversely, dependencies listed in <code>native-inputs</code>
+are built for the architecture of the <em>build</em> machine.
+</p>
+<p><code>native-inputs</code> is typically used to list tools needed at
+build time, but not at run time, such as Autoconf, Automake, pkg-config,
+Gettext, or Bison.  <code>guix lint</code> can report likely mistakes in
+this area (see <a href="Invoking-guix-lint.html">Invoking guix lint</a>).
+</p>
+<span id="package_002dpropagated_002dinputs"></span><p>Lastly, <code>propagated-inputs</code> is similar to <code>inputs</code>, but the
+specified packages will be automatically installed to profiles
+(see <a href="Features.html">the role of profiles in Guix</a>) alongside the package
+they belong to (see <a href="Invoking-guix-package.html#package_002dcmd_002dpropagated_002dinputs"><code>guix
+package</code></a>, for information on how <code>guix package</code> deals with
+propagated inputs).
+</p>
+<p>For example this is necessary when packaging a C/C++ library that needs
+headers of another library to compile, or when a pkg-config file refers
+to another one <i>via</i> its <code>Requires</code> field.
+</p>
+<p>Another example where <code>propagated-inputs</code> is useful is for languages
+that lack a facility to record the run-time search path akin to the
+<code>RUNPATH</code> of ELF files; this includes Guile, Python, Perl, and
+more.  When packaging libraries written in those languages, ensure they
+can find library code they depend on at run time by listing run-time
+dependencies in <code>propagated-inputs</code> rather than <code>inputs</code>.
+</p>
+</dd>
+<dt><code>outputs</code> (default: <code>'("out")</code>)</dt>
+<dd><p>The list of output names of the package.  See <a href="Packages-with-Multiple-Outputs.html">Packages with Multiple Outputs</a>, for typical uses of additional outputs.
+</p>
+</dd>
+<dt><code>native-search-paths</code> (default: <code>'()</code>)</dt>
+<dt><code>search-paths</code> (default: <code>'()</code>)</dt>
+<dd><p>A list of <code>search-path-specification</code> objects describing
+search-path environment variables honored by the package.  See <a href="Search-Paths.html">Search Paths</a>, for more on search path specifications.
+</p>
+<p>As for inputs, the distinction between <code>native-search-paths</code> and
+<code>search-paths</code> only matters when cross-compiling.  In a
+cross-compilation context, <code>native-search-paths</code> applies
+exclusively to native inputs whereas <code>search-paths</code> applies only to
+host inputs.
+</p>
+<p>Packages such as cross-compilers care about target inputs&mdash;for
+instance, our (modified) GCC cross-compiler has
+<code>CROSS_C_INCLUDE_PATH</code> in <code>search-paths</code>, which allows it to
+pick <samp>.h</samp> files for the target system and <em>not</em> those of
+native inputs.  For the majority of packages though, only
+<code>native-search-paths</code> makes sense.
+</p>
+</dd>
+<dt><code>replacement</code> (default: <code>#f</code>)</dt>
+<dd><p>This must be either <code>#f</code> or a package object that will be used as a
+<em>replacement</em> for this package.  See <a href="Security-Updates.html">grafts</a>,
+for details.
+</p>
+</dd>
+<dt><code>synopsis</code></dt>
+<dd><p>A one-line description of the package.
+</p>
+</dd>
+<dt><code>description</code></dt>
+<dd><p>A more elaborate description of the package, as a string in Texinfo
+syntax.
+</p>
+</dd>
+<dt><code>license</code></dt>
+<dd><span id="index-license_002c-of-packages"></span>
+<p>The license of the package; a value from <code>(guix licenses)</code>,
+or a list of such values.
+</p>
+</dd>
+<dt><code>home-page</code></dt>
+<dd><p>The URL to the home-page of the package, as a string.
+</p>
+</dd>
+<dt><code>supported-systems</code> (default: <code>%supported-systems</code>)</dt>
+<dd><p>The list of systems supported by the package, as strings of the form
+<code>architecture-kernel</code>, for example <code>"x86_64-linux"</code>.
+</p>
+</dd>
+<dt><code>location</code> (default: source location of the <code>package</code> form)</dt>
+<dd><p>The source location of the package.  It is useful to override this when
+inheriting from another package, in which case this field is not
+automatically corrected.
+</p></dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-this_002dpackage" class="symbol-definition"><span class="symbol-definition-category">Scheme Syntax: </span><span class="symbol-definition-prototype">this-package </span></dt>
+<dd><p>When used in the <em>lexical scope</em> of a package field definition, this
+identifier resolves to the package being defined.
+</p>
+<p>The example below shows how to add a package as a native input of itself when
+cross-compiling:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="package-Reference.html#index-package">package</a>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">name</span> <span class="syntax-string">"guile"</span></span>)</span>
+  <span class="syntax-comment">;; ...
+</span>
+  <span class="syntax-comment">;; When cross-compiled, Guile, for example, depends on
+</span>  <span class="syntax-comment">;; a native version of itself.  Add it here.
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">native-inputs</span> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-special">if</span> <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">%current-target-system</span></span>)</span>
+                     <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <a class="syntax-symbol" href="package-Reference.html#index-this_002dpackage">this-package</a></span>)</span>
+                     <span class="syntax-symbol">'</span><span class="syntax-paren3">(<span class="syntax-symbol"></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>It is an error to refer to <code>this-package</code> outside a package definition.
+</p></dd></dl>
+
+<p>The following helper procedures are provided to help deal with package
+inputs.
+</p>
+<dl>
+<dt id="index-lookup_002dpackage_002dinput" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">lookup-package-input <var>package</var> <var>name</var></span></dt>
+<dt id="index-lookup_002dpackage_002dnative_002dinput" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">lookup-package-native-input <var>package</var> <var>name</var></span></dt>
+<dt id="index-lookup_002dpackage_002dpropagated_002dinput" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">lookup-package-propagated-input <var>package</var> <var>name</var></span></dt>
+<dt id="index-lookup_002dpackage_002ddirect_002dinput" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">lookup-package-direct-input <var>package</var> <var>name</var></span></dt>
+<dd><p>Look up <var>name</var> among <var>package</var>&rsquo;s inputs (or native, propagated,
+or direct inputs).  Return it if found, <code>#f</code> otherwise.
+</p>
+<p><var>name</var> is the name of a package depended on.  Here&rsquo;s how you might
+use it:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-use_002dmodules">use-modules</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <span class="syntax-symbol">packages</span></span>)</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">base</span></span>)</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="package-Reference.html#index-lookup_002dpackage_002ddirect_002dinput">lookup-package-direct-input</a> <span class="syntax-symbol">coreutils</span> <span class="syntax-string">"gmp"</span></span>)</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-symbol">#&lt;package</span> <span class="syntax-symbol">gmp@6.2.1</span> <span class="syntax-symbol">…&gt;</span>
+</pre></div>
+
+<p>In this example we obtain the <code>gmp</code> package that is among the
+direct inputs of <code>coreutils</code>.
+</p></dd></dl>
+
+<span id="index-development-inputs_002c-of-a-package"></span>
+<span id="index-implicit-inputs_002c-of-a-package"></span>
+<p>Sometimes you will want to obtain the list of inputs needed to
+<em>develop</em> a package&mdash;all the inputs that are visible when the
+package is compiled.  This is what the <code>package-development-inputs</code>
+procedure returns.
+</p>
+<dl>
+<dt id="index-package_002ddevelopment_002dinputs" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">package-development-inputs <var>package</var>    [<var>system</var>] [#:target #f]</span></dt>
+<dd><p>Return the list of inputs required by <var>package</var> for development
+purposes on <var>system</var>.  When <var>target</var> is true, return the inputs
+needed to cross-compile <var>package</var> from <var>system</var> to
+<var>target</var>, where <var>target</var> is a triplet such as
+<code>"aarch64-linux-gnu"</code>.
+</p>
+<p>Note that the result includes both explicit inputs and implicit
+inputs&mdash;inputs automatically added by the build system (see <a href="Build-Systems.html">Build Systems</a>).  Let us take the <code>hello</code> package to illustrate that:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-use_002dmodules">use-modules</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">base</span></span>)</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <span class="syntax-symbol">packages</span></span>)</span></span>)</span>
+
+<span class="syntax-symbol">hello</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-symbol">#&lt;package</span> <span class="syntax-symbol">hello@2.10</span> <span class="syntax-symbol">gnu/packages/base.scm:79</span> <span class="syntax-symbol">7f585d4f6790&gt;</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">package-direct-inputs</span> <span class="syntax-symbol">hello</span></span>)</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-paren0">(<span class="syntax-symbol"></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="package-Reference.html#index-package_002ddevelopment_002dinputs">package-development-inputs</a> <span class="syntax-symbol">hello</span></span>)</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-string">"source"</span> <span class="syntax-symbol">…</span></span>)</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-string">"tar"</span> <span class="syntax-symbol">#&lt;package</span> <span class="syntax-symbol">tar@1.32</span> <span class="syntax-symbol">…&gt;</span></span>)</span> <span class="syntax-symbol">…</span></span>)</span>
+</pre></div>
+
+<p>In this example, <code>package-direct-inputs</code> returns the empty list,
+because <code>hello</code> has zero explicit dependencies.  Conversely,
+<code>package-development-inputs</code> includes inputs implicitly added by
+<code>gnu-build-system</code> that are required to build <code>hello</code>: tar,
+gzip, GCC, libc, Bash, and more.  To visualize it, <code>guix graph
+hello</code> would show you explicit inputs, whereas <code>guix graph -t
+bag hello</code> would include implicit inputs (see <a href="Invoking-guix-graph.html">Invoking guix graph</a>).
+</p></dd></dl>
+
+<p>Because packages are regular Scheme objects that capture a complete
+dependency graph and associated build procedures, it is often useful to
+write procedures that take a package and return a modified version
+thereof according to some parameters.  Below are a few examples.
+</p>
+<span id="index-tool-chain_002c-choosing-a-package_0027s-tool-chain"></span>
+<dl>
+<dt id="index-package_002dwith_002dc_002dtoolchain" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">package-with-c-toolchain <var>package</var> <var>toolchain</var></span></dt>
+<dd><p>Return a variant of <var>package</var> that uses <var>toolchain</var> instead of
+the default GNU C/C++ toolchain.  <var>toolchain</var> must be a list of
+inputs (label/package tuples) providing equivalent functionality, such
+as the <code>gcc-toolchain</code> package.
+</p>
+<p>The example below returns a variant of the <code>hello</code> package built
+with GCC&nbsp;10.x and the rest of the GNU tool chain (Binutils and the
+GNU C Library) instead of the default tool chain:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">let</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">toolchain</span> <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">specification-&gt;package</span> <span class="syntax-string">"gcc-toolchain@10"</span></span>)</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="package-Reference.html#index-package_002dwith_002dc_002dtoolchain">package-with-c-toolchain</a> <span class="syntax-symbol">hello</span> <span class="syntax-symbol">`</span><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-string">"toolchain"</span> <span class="syntax-symbol">,toolchain</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>The build tool chain is part of the <em>implicit inputs</em> of
+packages&mdash;it&rsquo;s usually not listed as part of the various &ldquo;inputs&rdquo;
+fields and is instead pulled in by the build system.  Consequently, this
+procedure works by changing the build system of <var>package</var> so that it
+pulls in <var>toolchain</var> instead of the defaults.  <a href="Build-Systems.html">Build Systems</a>,
+for more on build systems.
+</p></dd></dl>
+
+<hr />
+<div class="header">
+<p>
+Next: <a href="origin-Reference.html" accesskey="n" rel="next">origin Reference</a>, Up: <a href="Defining-Packages.html" accesskey="u" rel="up">Defining Packages</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

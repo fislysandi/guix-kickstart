@@ -1,0 +1,669 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Invoking guix environment (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="Invoking guix environment (GNU Guix Reference Manual)" />
+<meta name="keywords" content="Invoking guix environment (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Development.html" rel="up" title="Development" />
+<link href="Invoking-guix-pack.html" rel="next" title="Invoking guix pack" />
+<link href="Invoking-guix-shell.html" rel="prev" title="Invoking guix shell" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="Invoking-guix-environment"></span><div class="header">
+<p>
+Next: <a href="Invoking-guix-pack.html" accesskey="n" rel="next">Invoking guix pack</a>, Previous: <a href="Invoking-guix-shell.html" accesskey="p" rel="prev">Invoking guix shell</a>, Up: <a href="Development.html" accesskey="u" rel="up">Development</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Invoking-guix-environment-1"></span><h3 class="section">8.2 Invoking <code>guix environment</code></h3>
+
+<span id="index-guix-environment-1"></span>
+
+<p>The purpose of <code>guix environment</code> is to assist in creating
+development environments.
+</p>
+<blockquote>
+<p><b>Deprecation warning:</b> The <code>guix environment</code> command is deprecated in favor of
+<code>guix shell</code>, which performs similar functions but is more
+convenient to use.  See <a href="Invoking-guix-shell.html">Invoking guix shell</a>.
+</p>
+<p>Being deprecated, <code>guix environment</code> is slated for eventual
+removal, but the Guix project is committed to keeping it until May 1st,
+2023.  Please get in touch with us at <a href="mailto:guix-devel@gnu.org">guix-devel@gnu.org</a> if you
+would like to discuss it.
+</p></blockquote>
+
+<p>The general syntax is:
+</p>
+<div class="example">
+<pre class="example">guix environment <var>options</var> <var>package</var>&hellip;
+</pre></div>
+
+<p>The following example spawns a new shell set up for the development of
+GNU&nbsp;Guile:
+</p>
+<div class="example">
+<pre class="example">guix environment guile
+</pre></div>
+
+<p>If the needed dependencies are not built yet, <code>guix environment</code>
+automatically builds them.  The environment of the new shell is an
+augmented version of the environment that <code>guix environment</code> was
+run in.  It contains the necessary search paths for building the given
+package added to the existing environment variables.  To create
+a &ldquo;pure&rdquo; environment, in which the original environment variables have
+been unset, use the <samp>--pure</samp> option<a id="DOCF16" href="Invoking-guix-environment.html#FOOT16"><sup>16</sup></a>.
+</p>
+<p>Exiting from a Guix environment is the same as exiting from the shell,
+and will place the user back in the old environment before <code>guix
+environment</code> was invoked.  The next garbage collection (see <a href="Invoking-guix-gc.html">Invoking guix gc</a>) will clean up packages that were installed from within the
+environment and are no longer used outside of it.
+</p>
+<span id="index-GUIX_005fENVIRONMENT-1"></span>
+<p><code>guix environment</code> defines the <code>GUIX_ENVIRONMENT</code>
+variable in the shell it spawns; its value is the file name of the
+profile of this environment.  This allows users to, say, define a
+specific prompt for development environments in their <samp>.bashrc</samp>
+(see <a href="https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html#Bash-Startup-Files">Bash Startup Files</a> in <cite>The GNU Bash Reference Manual</cite>):
+</p>
+<div class="example">
+<pre class="example">if [ -n "$GUIX_ENVIRONMENT" ]
+then
+    export PS1="\u@\h \w [dev]\$ "
+fi
+</pre></div>
+
+<p>... or to browse the profile:
+</p>
+<div class="example">
+<pre class="example">$ ls "$GUIX_ENVIRONMENT/bin"
+</pre></div>
+
+<p>Additionally, more than one package may be specified, in which case the
+union of the inputs for the given packages are used.  For example, the
+command below spawns a shell where all of the dependencies of both Guile
+and Emacs are available:
+</p>
+<div class="example">
+<pre class="example">guix environment guile emacs
+</pre></div>
+
+<p>Sometimes an interactive shell session is not desired.  An arbitrary
+command may be invoked by placing the <code>--</code> token to separate the
+command from the rest of the arguments:
+</p>
+<div class="example">
+<pre class="example">guix environment guile -- make -j4
+</pre></div>
+
+<p>In other situations, it is more convenient to specify the list of
+packages needed in the environment.  For example, the following command
+runs <code>python</code> from an environment containing Python&nbsp;3 and
+NumPy:
+</p>
+<div class="example">
+<pre class="example">guix environment --ad-hoc python-numpy python -- python3
+</pre></div>
+
+<p>Furthermore, one might want the dependencies of a package and also some
+additional packages that are not build-time or runtime dependencies, but
+are useful when developing nonetheless.  Because of this, the
+<samp>--ad-hoc</samp> flag is positional.  Packages appearing before
+<samp>--ad-hoc</samp> are interpreted as packages whose dependencies will be
+added to the environment.  Packages appearing after are interpreted as
+packages that will be added to the environment directly.  For example,
+the following command creates a Guix development environment that
+additionally includes Git and strace:
+</p>
+<div class="example">
+<pre class="example">guix environment --pure guix --ad-hoc git strace
+</pre></div>
+
+<span id="index-container-1"></span>
+<p>Sometimes it is desirable to isolate the environment as much as
+possible, for maximal purity and reproducibility.  In particular, when
+using Guix on a host distro that is not Guix System, it is desirable to
+prevent access to <samp>/usr/bin</samp> and other system-wide resources from
+the development environment.  For example, the following command spawns
+a Guile REPL in a &ldquo;container&rdquo; where only the store and the current
+working directory are mounted:
+</p>
+<div class="example">
+<pre class="example">guix environment --ad-hoc --container guile -- guile
+</pre></div>
+
+<blockquote>
+<p><b>Note:</b> The <samp>--container</samp> option requires Linux-libre 3.19 or newer.
+</p></blockquote>
+
+<span id="index-certificates"></span>
+<p>Another typical use case for containers is to run security-sensitive
+applications such as a web browser.  To run Eolie, we must expose and
+share some files and directories; we include <code>nss-certs</code> and expose
+<samp>/etc/ssl/certs/</samp> for HTTPS authentication; finally we preserve the
+<code>DISPLAY</code> environment variable since containerized graphical
+applications won&rsquo;t display without it.
+</p>
+<div class="example">
+<pre class="example">guix environment --preserve='^DISPLAY$' --container --network \
+  --expose=/etc/machine-id \
+  --expose=/etc/ssl/certs/ \
+  --share=$HOME/.local/share/eolie/=$HOME/.local/share/eolie/ \
+  --ad-hoc eolie nss-certs dbus --  eolie
+</pre></div>
+
+<p>The available options are summarized below.
+</p>
+<dl compact="compact">
+<dt><code>--check</code></dt>
+<dd><p>Set up the environment and check whether the shell would clobber
+environment variables.  See <a href="Invoking-guix-shell.html"><samp>--check</samp></a>,
+for more info.
+</p>
+</dd>
+<dt><code>--root=<var>file</var></code></dt>
+<dt><code>-r <var>file</var></code></dt>
+<dd><span id="index-persistent-environment-1"></span>
+<span id="index-garbage-collector-root_002c-for-environments-1"></span>
+<p>Make <var>file</var> a symlink to the profile for this environment, and
+register it as a garbage collector root.
+</p>
+<p>This is useful if you want to protect your environment from garbage
+collection, to make it &ldquo;persistent&rdquo;.
+</p>
+<p>When this option is omitted, the environment is protected from garbage
+collection only for the duration of the <code>guix environment</code>
+session.  This means that next time you recreate the same environment,
+you could have to rebuild or re-download packages.  See <a href="Invoking-guix-gc.html">Invoking guix gc</a>, for more on GC roots.
+</p>
+</dd>
+<dt><code>--expression=<var>expr</var></code></dt>
+<dt><code>-e <var>expr</var></code></dt>
+<dd><p>Create an environment for the package or list of packages that
+<var>expr</var> evaluates to.
+</p>
+<p>For example, running:
+</p>
+<div class="example">
+<pre class="example">guix environment -e '(@ (gnu packages maths) petsc-openmpi)'
+</pre></div>
+
+<p>starts a shell with the environment for this specific variant of the
+PETSc package.
+</p>
+<p>Running:
+</p>
+<div class="example">
+<pre class="example">guix environment --ad-hoc -e '(@ (gnu) %base-packages)'
+</pre></div>
+
+<p>starts a shell with all the base system packages available.
+</p>
+<p>The above commands only use the default output of the given packages.
+To select other outputs, two element tuples can be specified:
+</p>
+<div class="example">
+<pre class="example">guix environment --ad-hoc -e '(list (@ (gnu packages bash) bash) "include")'
+</pre></div>
+
+</dd>
+<dt><code>--load=<var>file</var></code></dt>
+<dt><code>-l <var>file</var></code></dt>
+<dd><p>Create an environment for the package or list of packages that the code
+within <var>file</var> evaluates to.
+</p>
+<p>As an example, <var>file</var> might contain a definition like this
+(see <a href="Defining-Packages.html">Defining Packages</a>):
+</p>
+<div class="lisp">
+<pre class="verbatim">(use-modules (guix)
+             (gnu packages gdb)
+             (gnu packages autotools)
+             (gnu packages texinfo))
+
+;; Augment the package definition of GDB with the build tools
+;; needed when developing GDB (and which are not needed when
+;; simply installing it.)
+(package
+  (inherit gdb)
+  (native-inputs (modify-inputs (package-native-inputs gdb)
+                   (prepend autoconf-2.64 automake texinfo))))
+</pre></div>
+
+</dd>
+<dt><code>--manifest=<var>file</var></code></dt>
+<dt><code>-m <var>file</var></code></dt>
+<dd><p>Create an environment for the packages contained in the manifest object
+returned by the Scheme code in <var>file</var>.  This option can be repeated
+several times, in which case the manifests are concatenated.
+</p>
+<p>This is similar to the same-named option in <code>guix package</code>
+(see <a href="Invoking-guix-package.html#profile_002dmanifest"><samp>--manifest</samp></a>) and uses the same
+manifest files.
+</p>
+<p>See <a href="Invoking-guix-shell.html#shell_002dexport_002dmanifest"><code>guix shell --export-manifest</code></a>,
+for information on how to &ldquo;convert&rdquo; command-line options into a
+manifest.
+</p>
+</dd>
+<dt><code>--ad-hoc</code></dt>
+<dd><p>Include all specified packages in the resulting environment, as if an
+<i>ad hoc</i> package were defined with them as inputs.  This option is
+useful for quickly creating an environment without having to write a
+package expression to contain the desired inputs.
+</p>
+<p>For instance, the command:
+</p>
+<div class="example">
+<pre class="example">guix environment --ad-hoc guile guile-sdl -- guile
+</pre></div>
+
+<p>runs <code>guile</code> in an environment where Guile and Guile-SDL are
+available.
+</p>
+<p>Note that this example implicitly asks for the default output of
+<code>guile</code> and <code>guile-sdl</code>, but it is possible to ask for a
+specific output&mdash;e.g., <code>glib:bin</code> asks for the <code>bin</code> output
+of <code>glib</code> (see <a href="Packages-with-Multiple-Outputs.html">Packages with Multiple Outputs</a>).
+</p>
+<p>This option may be composed with the default behavior of <code>guix
+environment</code>.  Packages appearing before <samp>--ad-hoc</samp> are
+interpreted as packages whose dependencies will be added to the
+environment, the default behavior.  Packages appearing after are
+interpreted as packages that will be added to the environment directly.
+</p>
+</dd>
+<dt><code>--profile=<var>profile</var></code></dt>
+<dt><code>-p <var>profile</var></code></dt>
+<dd><p>Create an environment containing the packages installed in <var>profile</var>. 
+Use <code>guix package</code> (see <a href="Invoking-guix-package.html">Invoking guix package</a>) to create
+and manage profiles.
+</p>
+</dd>
+<dt><code>--pure</code></dt>
+<dd><p>Unset existing environment variables when building the new environment, except
+those specified with <samp>--preserve</samp> (see below).  This has the effect of
+creating an environment in which search paths only contain package inputs.
+</p>
+</dd>
+<dt><code>--preserve=<var>regexp</var></code></dt>
+<dt><code>-E <var>regexp</var></code></dt>
+<dd><p>When used alongside <samp>--pure</samp>, preserve the environment variables
+matching <var>regexp</var>&mdash;in other words, put them on a &ldquo;white list&rdquo; of
+environment variables that must be preserved.  This option can be repeated
+several times.
+</p>
+<div class="example">
+<pre class="example">guix environment --pure --preserve=^SLURM --ad-hoc openmpi &hellip; \
+  -- mpirun &hellip;
+</pre></div>
+
+<p>This example runs <code>mpirun</code> in a context where the only environment
+variables defined are <code>PATH</code>, environment variables whose name starts
+with &lsquo;<samp>SLURM</samp>&rsquo;, as well as the usual &ldquo;precious&rdquo; variables (<code>HOME</code>,
+<code>USER</code>, etc.).
+</p>
+</dd>
+<dt><code>--search-paths</code></dt>
+<dd><p>Display the environment variable definitions that make up the
+environment.
+</p>
+</dd>
+<dt><code>--system=<var>system</var></code></dt>
+<dt><code>-s <var>system</var></code></dt>
+<dd><p>Attempt to build for <var>system</var>&mdash;e.g., <code>i686-linux</code>.
+</p>
+</dd>
+<dt><code>--container</code></dt>
+<dt><code>-C</code></dt>
+<dd><span id="index-container-2"></span>
+<p>Run <var>command</var> within an isolated container.  The current working
+directory outside the container is mapped inside the container.
+Additionally, unless overridden with <samp>--user</samp>, a dummy home
+directory is created that matches the current user&rsquo;s home directory, and
+<samp>/etc/passwd</samp> is configured accordingly.
+</p>
+<p>The spawned process runs as the current user outside the container.  Inside
+the container, it has the same UID and GID as the current user, unless
+<samp>--user</samp> is passed (see below).
+</p>
+</dd>
+<dt><code>--network</code></dt>
+<dt><code>-N</code></dt>
+<dd><p>For containers, share the network namespace with the host system.
+Containers created without this flag only have access to the loopback
+device.
+</p>
+</dd>
+<dt><code>--link-profile</code></dt>
+<dt><code>-P</code></dt>
+<dd><p>For containers, link the environment profile to <samp>~/.guix-profile</samp>
+within the container and set <code>GUIX_ENVIRONMENT</code> to that.
+This is equivalent to making <samp>~/.guix-profile</samp> a symlink to the
+actual profile within the container.
+Linking will fail and abort the environment if the directory already
+exists, which will certainly be the case if <code>guix environment</code>
+was invoked in the user&rsquo;s home directory.
+</p>
+<p>Certain packages are configured to look in <samp>~/.guix-profile</samp> for
+configuration files and data;<a id="DOCF17" href="Invoking-guix-environment.html#FOOT17"><sup>17</sup></a>  <samp>--link-profile</samp> allows these programs to
+behave as expected within the environment.
+</p>
+</dd>
+<dt><code>--user=<var>user</var></code></dt>
+<dt><code>-u <var>user</var></code></dt>
+<dd><p>For containers, use the username <var>user</var> in place of the current
+user.  The generated <samp>/etc/passwd</samp> entry within the container will
+contain the name <var>user</var>, the home directory will be
+<samp>/home/<var>user</var></samp>, and no user GECOS data will be copied.  Furthermore,
+the UID and GID inside the container are 1000.  <var>user</var>
+need not exist on the system.
+</p>
+<p>Additionally, any shared or exposed path (see <samp>--share</samp> and
+<samp>--expose</samp> respectively) whose target is within the current user&rsquo;s
+home directory will be remapped relative to <samp>/home/USER</samp>; this
+includes the automatic mapping of the current working directory.
+</p>
+<div class="example">
+<pre class="example"># will expose paths as /home/foo/wd, /home/foo/test, and /home/foo/target
+cd $HOME/wd
+guix environment --container --user=foo \
+     --expose=$HOME/test \
+     --expose=/tmp/target=$HOME/target
+</pre></div>
+
+<p>While this will limit the leaking of user identity through home paths
+and each of the user fields, this is only one useful component of a
+broader privacy/anonymity solution&mdash;not one in and of itself.
+</p>
+</dd>
+<dt><code>--no-cwd</code></dt>
+<dd><p>For containers, the default behavior is to share the current working
+directory with the isolated container and immediately change to that
+directory within the container.  If this is undesirable,
+<samp>--no-cwd</samp> will cause the current working directory to <em>not</em>
+be automatically shared and will change to the user&rsquo;s home directory
+within the container instead.  See also <samp>--user</samp>.
+</p>
+</dd>
+<dt><code>--expose=<var>source</var>[=<var>target</var>]</code></dt>
+<dt><code>--share=<var>source</var>[=<var>target</var>]</code></dt>
+<dd><p>For containers, <samp>--expose</samp> (resp. <samp>--share</samp>) exposes the
+file system <var>source</var> from the host system as the read-only
+(resp. writable) file system <var>target</var> within the container.  If
+<var>target</var> is not specified, <var>source</var> is used as the target mount
+point in the container.
+</p>
+<p>The example below spawns a Guile REPL in a container in which the user&rsquo;s
+home directory is accessible read-only via the <samp>/exchange</samp>
+directory:
+</p>
+<div class="example">
+<pre class="example">guix environment --container --expose=$HOME=/exchange --ad-hoc guile -- guile
+</pre></div>
+
+</dd>
+<dt><code>--emulate-fhs</code></dt>
+<dt><code>-F</code></dt>
+<dd><p>For containers, emulate a Filesystem Hierarchy Standard (FHS)
+configuration within the container, see
+<a href="https://refspecs.linuxfoundation.org/fhs.shtml">the official
+specification</a>.  As Guix deviates from the FHS specification, this
+option sets up the container to more closely mimic that of other
+GNU/Linux distributions.  This is useful for reproducing other
+development environments, testing, and using programs which expect the
+FHS specification to be followed.  With this option, the container will
+include a version of <code>glibc</code> which will read
+<code>/etc/ld.so.cache</code> within the container for the shared library
+cache (contrary to <code>glibc</code> in regular Guix usage) and set up the
+expected FHS directories: <code>/bin</code>, <code>/etc</code>, <code>/lib</code>, and
+<code>/usr</code> from the container&rsquo;s profile.
+</p>
+</dd>
+</dl>
+
+<p><code>guix environment</code>
+also supports all of the common build options that <code>guix
+build</code> supports (see <a href="Common-Build-Options.html">Common Build Options</a>) as well as package
+transformation options (see <a href="Package-Transformation-Options.html">Package Transformation Options</a>).
+</p>
+<div class="footnote">
+<hr />
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5><a id="FOOT16" href="Invoking-guix-environment.html#DOCF16">(16)</a>
+<p>Users sometimes
+wrongfully augment environment variables such as <code>PATH</code> in their
+<samp>~/.bashrc</samp> file.  As a consequence, when <code>guix
+environment</code> launches it, Bash may read <samp>~/.bashrc</samp>, thereby
+introducing &ldquo;impurities&rdquo; in these environment variables.  It is an
+error to define such environment variables in <samp>.bashrc</samp>; instead,
+they should be defined in <samp>.bash_profile</samp>, which is sourced only by
+log-in shells.  See <a href="https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html#Bash-Startup-Files">Bash Startup Files</a> in <cite>The GNU Bash Reference
+Manual</cite>, for details on Bash start-up files.</p>
+<h5><a id="FOOT17" href="Invoking-guix-environment.html#DOCF17">(17)</a>
+<p>For example, the
+<code>fontconfig</code> package inspects <samp>~/.guix-profile/share/fonts</samp>
+for additional fonts.</p>
+</h5></h5></div>
+<hr />
+<div class="header">
+<p>
+Next: <a href="Invoking-guix-pack.html" accesskey="n" rel="next">Invoking guix pack</a>, Previous: <a href="Invoking-guix-shell.html" accesskey="p" rel="prev">Invoking guix shell</a>, Up: <a href="Development.html" accesskey="u" rel="up">Development</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,1561 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Base Services (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="Base Services (GNU Guix Reference Manual)" />
+<meta name="keywords" content="Base Services (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Services.html" rel="up" title="Services" />
+<link href="Scheduled-Job-Execution.html" rel="next" title="Scheduled Job Execution" />
+<link href="Services.html" rel="prev" title="Services" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="Base-Services"></span><div class="header">
+<p>
+Next: <a href="Scheduled-Job-Execution.html" accesskey="n" rel="next">Scheduled Job Execution</a>, Up: <a href="Services.html" accesskey="u" rel="up">Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Base-Services-1"></span><h4 class="subsection">12.9.1 Base Services</h4>
+
+<p>The <code>(gnu services base)</code> module provides definitions for the basic
+services that one expects from the system.  The services exported by
+this module are listed below.
+</p>
+<dl>
+<dt id="index-_0025base_002dservices-1" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">%base-services </span></dt>
+<dd><p>This variable contains a list of basic services (see <a href="Service-Types-and-Services.html">Service Types and Services</a>, for more information on service objects) one would
+expect from the system: a login service (mingetty) on each tty, syslogd,
+the libc name service cache daemon (nscd), the udev device manager, and
+more.
+</p>
+<p>This is the default value of the <code>services</code> field of
+<code>operating-system</code> declarations.  Usually, when customizing a
+system, you will want to append services to <code>%base-services</code>, like
+this:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Append_002fReverse.html#index-append">append</a> <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Networking-Services.html#index-avahi_002dservice_002dtype">avahi-service-type</a></span>)</span>
+              <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Networking-Services.html#index-openssh_002dservice_002dtype">openssh-service-type</a></span>)</span></span>)</span>
+        <a class="syntax-symbol" href="Base-Services.html#index-_0025base_002dservices-1">%base-services</a></span>)</span>
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt id="index-special_002dfiles_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">special-files-service-type </span></dt>
+<dd><p>This is the service that sets up &ldquo;special files&rdquo; such as
+<samp>/bin/sh</samp>; an instance of it is part of <code>%base-services</code>.
+</p>
+<p>The value associated with <code>special-files-service-type</code> services
+must be a list of tuples where the first element is the &ldquo;special file&rdquo;
+and the second element is its target.  By default it is:
+</p>
+<span id="index-_002fbin_002fsh"></span>
+<span id="index-sh_002c-in-_002fbin"></span>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-symbol">`</span><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-string">"/bin/sh"</span> <span class="syntax-symbol">,</span><span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-file_002dappend">file-append</a> <span class="syntax-symbol">bash</span> <span class="syntax-string">"/bin/sh"</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-string">"/usr/bin/env"</span> <span class="syntax-symbol">,</span><span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-file_002dappend">file-append</a> <span class="syntax-symbol">coreutils</span> <span class="syntax-string">"/bin/env"</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<span id="index-_002fusr_002fbin_002fenv"></span>
+<span id="index-env_002c-in-_002fusr_002fbin"></span>
+<p>If you want to add, say, <code>/bin/bash</code> to your system, you can
+change it to:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-symbol">`</span><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-string">"/bin/sh"</span> <span class="syntax-symbol">,</span><span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-file_002dappend">file-append</a> <span class="syntax-symbol">bash</span> <span class="syntax-string">"/bin/sh"</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-string">"/usr/bin/env"</span> <span class="syntax-symbol">,</span><span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-file_002dappend">file-append</a> <span class="syntax-symbol">coreutils</span> <span class="syntax-string">"/bin/env"</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-string">"/bin/bash"</span> <span class="syntax-symbol">,</span><span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-file_002dappend">file-append</a> <span class="syntax-symbol">bash</span> <span class="syntax-string">"/bin/bash"</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>Since this is part of <code>%base-services</code>, you can use
+<code>modify-services</code> to customize the set of special files
+(see <a href="Service-Reference.html"><code>modify-services</code></a>).  But the simple way
+to add a special file is <i>via</i> the <code>extra-special-file</code> procedure
+(see below).
+</p></dd></dl>
+
+<dl>
+<dt id="index-extra_002dspecial_002dfile" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">extra-special-file <var>file</var> <var>target</var></span></dt>
+<dd><p>Use <var>target</var> as the &ldquo;special file&rdquo; <var>file</var>.
+</p>
+<p>For example, adding the following lines to the <code>services</code> field of
+your operating system declaration leads to a <samp>/usr/bin/env</samp>
+symlink:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Base-Services.html#index-extra_002dspecial_002dfile">extra-special-file</a> <span class="syntax-string">"/usr/bin/env"</span>
+                    <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-file_002dappend">file-append</a> <span class="syntax-symbol">coreutils</span> <span class="syntax-string">"/bin/env"</span></span>)</span></span>)</span>
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt id="index-host_002dname_002dservice" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">host-name-service <var>name</var></span></dt>
+<dd><p>Return a service that sets the host name to <var>name</var>.
+</p></dd></dl>
+
+<dl>
+<dt id="index-console_002dfont_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">console-font-service-type </span></dt>
+<dd><p>Install the given fonts on the specified ttys (fonts are per
+virtual console on the kernel Linux).  The value of this service is a list of
+tty/font pairs.  The font can be the name of a font provided by the <code>kbd</code>
+package or any valid argument to <code>setfont</code>, as in this example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-symbol">`</span><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-string">"tty1"</span> <span class="syntax-symbol">.</span> <span class="syntax-string">"LatGrkCyr-8x16"</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-string">"tty2"</span> <span class="syntax-symbol">.</span> <span class="syntax-symbol">,</span><span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-file_002dappend">file-append</a>
+                <span class="syntax-symbol">font-tamzen</span>
+                <span class="syntax-string">"/share/kbd/consolefonts/TamzenForPowerline10x20.psf"</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-string">"tty3"</span> <span class="syntax-symbol">.</span> <span class="syntax-symbol">,</span><span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-file_002dappend">file-append</a>
+                <span class="syntax-symbol">font-terminus</span>
+                <span class="syntax-string">"/share/consolefonts/ter-132n"</span></span>)</span></span>)</span></span>)</span> <span class="syntax-comment">; for HDPI
+</span></pre></div>
+</dd></dl>
+
+<dl>
+<dt id="index-login_002dservice" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">login-service <var>config</var></span></dt>
+<dd><p>Return a service to run login according to <var>config</var>, a
+<code>&lt;login-configuration&gt;</code> object, which specifies the message of the day,
+among other things.
+</p></dd></dl>
+
+<dl>
+<dt id="index-login_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">login-configuration </span></dt>
+<dd><p>This is the data type representing the configuration of login.
+</p>
+<dl compact="compact">
+<dt><code>motd</code></dt>
+<dd><span id="index-message-of-the-day"></span>
+<p>A file-like object containing the &ldquo;message of the day&rdquo;.
+</p>
+</dd>
+<dt><code>allow-empty-passwords?</code> (default: <code>#t</code>)</dt>
+<dd><p>Allow empty passwords by default so that first-time users can log in when
+the &rsquo;root&rsquo; account has just been created.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-mingetty_002dservice" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">mingetty-service <var>config</var></span></dt>
+<dd><p>Return a service to run mingetty according to <var>config</var>, a
+<code>&lt;mingetty-configuration&gt;</code> object, which specifies the tty to run, among
+other things.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mingetty_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">mingetty-configuration </span></dt>
+<dd><p>This is the data type representing the configuration of Mingetty, which
+provides the default implementation of virtual console log-in.
+</p>
+<dl compact="compact">
+<dt><code>tty</code></dt>
+<dd><p>The name of the console this Mingetty runs on&mdash;e.g., <code>"tty1"</code>.
+</p>
+</dd>
+<dt><code>auto-login</code> (default: <code>#f</code>)</dt>
+<dd><p>When true, this field must be a string denoting the user name under
+which the system automatically logs in.  When it is <code>#f</code>, a
+user name and password must be entered to log in.
+</p>
+</dd>
+<dt><code>login-program</code> (default: <code>#f</code>)</dt>
+<dd><p>This must be either <code>#f</code>, in which case the default log-in program
+is used (<code>login</code> from the Shadow tool suite), or a gexp denoting
+the name of the log-in program.
+</p>
+</dd>
+<dt><code>login-pause?</code> (default: <code>#f</code>)</dt>
+<dd><p>When set to <code>#t</code> in conjunction with <var>auto-login</var>, the user
+will have to press a key before the log-in shell is launched.
+</p>
+</dd>
+<dt><code>clear-on-logout?</code> (default: <code>#t</code>)</dt>
+<dd><p>When set to <code>#t</code>, the screen will be cleared after logout.
+</p>
+</dd>
+<dt><code>mingetty</code> (default: <var>mingetty</var>)</dt>
+<dd><p>The Mingetty package to use.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-agetty_002dservice" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">agetty-service <var>config</var></span></dt>
+<dd><p>Return a service to run agetty according to <var>config</var>, an
+<code>&lt;agetty-configuration&gt;</code> object, which specifies the tty to run,
+among other things.
+</p></dd></dl>
+
+<dl>
+<dt id="index-agetty_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">agetty-configuration </span></dt>
+<dd><p>This is the data type representing the configuration of agetty, which
+implements virtual and serial console log-in.  See the <code>agetty(8)</code>
+man page for more information.
+</p>
+<dl compact="compact">
+<dt><code>tty</code></dt>
+<dd><p>The name of the console this agetty runs on, as a string&mdash;e.g.,
+<code>"ttyS0"</code>.  This argument is optional, it will default to
+a reasonable default serial port used by the kernel Linux.
+</p>
+<p>For this, if there is a value for an option <code>agetty.tty</code> in the kernel
+command line, agetty will extract the device name of the serial port
+from it and use that.
+</p>
+<p>If not and if there is a value for an option <code>console</code> with a tty in
+the Linux command line, agetty will extract the device name of the
+serial port from it and use that.
+</p>
+<p>In both cases, agetty will leave the other serial device settings
+(baud rate etc.) alone&mdash;in the hope that Linux pinned them to the
+correct values.
+</p>
+</dd>
+<dt><code>baud-rate</code> (default: <code>#f</code>)</dt>
+<dd><p>A string containing a comma-separated list of one or more baud rates, in
+descending order.
+</p>
+</dd>
+<dt><code>term</code> (default: <code>#f</code>)</dt>
+<dd><p>A string containing the value used for the <code>TERM</code> environment
+variable.
+</p>
+</dd>
+<dt><code>eight-bits?</code> (default: <code>#f</code>)</dt>
+<dd><p>When <code>#t</code>, the tty is assumed to be 8-bit clean, and parity detection is
+disabled.
+</p>
+</dd>
+<dt><code>auto-login</code> (default: <code>#f</code>)</dt>
+<dd><p>When passed a login name, as a string, the specified user will be logged
+in automatically without prompting for their login name or password.
+</p>
+</dd>
+<dt><code>no-reset?</code> (default: <code>#f</code>)</dt>
+<dd><p>When <code>#t</code>, don&rsquo;t reset terminal cflags (control modes).
+</p>
+</dd>
+<dt><code>host</code> (default: <code>#f</code>)</dt>
+<dd><p>This accepts a string containing the &ldquo;login_host&rdquo;, which will be written
+into the <samp>/var/run/utmpx</samp> file.
+</p>
+</dd>
+<dt><code>remote?</code> (default: <code>#f</code>)</dt>
+<dd><p>When set to <code>#t</code> in conjunction with <var>host</var>, this will add an
+<code>-r</code> fakehost option to the command line of the login program
+specified in <var>login-program</var>.
+</p>
+</dd>
+<dt><code>flow-control?</code> (default: <code>#f</code>)</dt>
+<dd><p>When set to <code>#t</code>, enable hardware (RTS/CTS) flow control.
+</p>
+</dd>
+<dt><code>no-issue?</code> (default: <code>#f</code>)</dt>
+<dd><p>When set to <code>#t</code>, the contents of the <samp>/etc/issue</samp> file will
+not be displayed before presenting the login prompt.
+</p>
+</dd>
+<dt><code>init-string</code> (default: <code>#f</code>)</dt>
+<dd><p>This accepts a string that will be sent to the tty or modem before
+sending anything else.  It can be used to initialize a modem.
+</p>
+</dd>
+<dt><code>no-clear?</code> (default: <code>#f</code>)</dt>
+<dd><p>When set to <code>#t</code>, agetty will not clear the screen before showing
+the login prompt.
+</p>
+</dd>
+<dt><code>login-program</code> (default: (file-append shadow "/bin/login"))</dt>
+<dd><p>This must be either a gexp denoting the name of a log-in program, or
+unset, in which case the default value is the <code>login</code> from the
+Shadow tool suite.
+</p>
+</dd>
+<dt><code>local-line</code> (default: <code>#f</code>)</dt>
+<dd><p>Control the CLOCAL line flag.  This accepts one of three symbols as
+arguments, <code>'auto</code>, <code>'always</code>, or <code>'never</code>.  If <code>#f</code>,
+the default value chosen by agetty is <code>'auto</code>.
+</p>
+</dd>
+<dt><code>extract-baud?</code> (default: <code>#f</code>)</dt>
+<dd><p>When set to <code>#t</code>, instruct agetty to try to extract the baud rate
+from the status messages produced by certain types of modems.
+</p>
+</dd>
+<dt><code>skip-login?</code> (default: <code>#f</code>)</dt>
+<dd><p>When set to <code>#t</code>, do not prompt the user for a login name.  This
+can be used with <var>login-program</var> field to use non-standard login
+systems.
+</p>
+</dd>
+<dt><code>no-newline?</code> (default: <code>#f</code>)</dt>
+<dd><p>When set to <code>#t</code>, do not print a newline before printing the
+<samp>/etc/issue</samp> file.
+</p>
+</dd>
+<dt><code>login-options</code> (default: <code>#f</code>)</dt>
+<dd><p>This option accepts a string containing options that are passed to the
+login program.  When used with the <var>login-program</var>, be aware that a
+malicious user could try to enter a login name containing embedded
+options that could be parsed by the login program.
+</p>
+</dd>
+<dt><code>login-pause</code> (default: <code>#f</code>)</dt>
+<dd><p>When set to <code>#t</code>, wait for any key before showing the login prompt.
+This can be used in conjunction with <var>auto-login</var> to save memory by
+lazily spawning shells.
+</p>
+</dd>
+<dt><code>chroot</code> (default: <code>#f</code>)</dt>
+<dd><p>Change root to the specified directory.  This option accepts a directory
+path as a string.
+</p>
+</dd>
+<dt><code>hangup?</code> (default: <code>#f</code>)</dt>
+<dd><p>Use the Linux system call <code>vhangup</code> to do a virtual hangup of the
+specified terminal.
+</p>
+</dd>
+<dt><code>keep-baud?</code> (default: <code>#f</code>)</dt>
+<dd><p>When set to <code>#t</code>, try to keep the existing baud rate.  The baud
+rates from <var>baud-rate</var> are used when agetty receives a <tt class="key">BREAK</tt>
+character.
+</p>
+</dd>
+<dt><code>timeout</code> (default: <code>#f</code>)</dt>
+<dd><p>When set to an integer value, terminate if no user name could be read
+within <var>timeout</var> seconds.
+</p>
+</dd>
+<dt><code>detect-case?</code> (default: <code>#f</code>)</dt>
+<dd><p>When set to <code>#t</code>, turn on support for detecting an uppercase-only
+terminal.  This setting will detect a login name containing only
+uppercase letters as indicating an uppercase-only terminal and turn on
+some upper-to-lower case conversions.  Note that this will not support
+Unicode characters.
+</p>
+</dd>
+<dt><code>wait-cr?</code> (default: <code>#f</code>)</dt>
+<dd><p>When set to <code>#t</code>, wait for the user or modem to send a
+carriage-return or linefeed character before displaying
+<samp>/etc/issue</samp> or login prompt.  This is typically used with the
+<var>init-string</var> option.
+</p>
+</dd>
+<dt><code>no-hints?</code> (default: <code>#f</code>)</dt>
+<dd><p>When set to <code>#t</code>, do not print hints about Num, Caps, and Scroll
+locks.
+</p>
+</dd>
+<dt><code>no-hostname?</code> (default: <code>#f</code>)</dt>
+<dd><p>By default, the hostname is printed.  When this option is set to
+<code>#t</code>, no hostname will be shown at all.
+</p>
+</dd>
+<dt><code>long-hostname?</code> (default: <code>#f</code>)</dt>
+<dd><p>By default, the hostname is only printed until the first dot.  When this
+option is set to <code>#t</code>, the fully qualified hostname by
+<code>gethostname</code> or <code>getaddrinfo</code> is shown.
+</p>
+</dd>
+<dt><code>erase-characters</code> (default: <code>#f</code>)</dt>
+<dd><p>This option accepts a string of additional characters that should be
+interpreted as backspace when the user types their login name.
+</p>
+</dd>
+<dt><code>kill-characters</code> (default: <code>#f</code>)</dt>
+<dd><p>This option accepts a string that should be interpreted to mean &ldquo;ignore
+all previous characters&rdquo; (also called a &ldquo;kill&rdquo; character) when the user
+types their login name.
+</p>
+</dd>
+<dt><code>chdir</code> (default: <code>#f</code>)</dt>
+<dd><p>This option accepts, as a string, a directory path that will be changed
+to before login.
+</p>
+</dd>
+<dt><code>delay</code> (default: <code>#f</code>)</dt>
+<dd><p>This options accepts, as an integer, the number of seconds to sleep
+before opening the tty and displaying the login prompt.
+</p>
+</dd>
+<dt><code>nice</code> (default: <code>#f</code>)</dt>
+<dd><p>This option accepts, as an integer, the nice value with which to run the
+<code>login</code> program.
+</p>
+</dd>
+<dt><code>extra-options</code> (default: <code>'()</code>)</dt>
+<dd><p>This option provides an &ldquo;escape hatch&rdquo; for the user to provide arbitrary
+command-line arguments to <code>agetty</code> as a list of strings.
+</p>
+</dd>
+<dt><code>shepherd-requirement</code> (default: <code>'()</code>)</dt>
+<dd><p>The option can be used to provides extra shepherd requirements (for example
+<code>'syslogd</code>) to the respective <code>'term-</code>* shepherd service.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-kmscon_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">kmscon-service-type <var>config</var></span></dt>
+<dd><p>Return a service to run <a href="https://www.freedesktop.org/wiki/Software/kmscon">kmscon</a>
+according to <var>config</var>, a <code>&lt;kmscon-configuration&gt;</code> object, which
+specifies the tty to run, among other things.
+</p></dd></dl>
+
+<dl>
+<dt id="index-kmscon_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">kmscon-configuration </span></dt>
+<dd><p>This is the data type representing the configuration of Kmscon, which
+implements virtual console log-in.
+</p>
+<dl compact="compact">
+<dt><code>virtual-terminal</code></dt>
+<dd><p>The name of the console this Kmscon runs on&mdash;e.g., <code>"tty1"</code>.
+</p>
+</dd>
+<dt><code>login-program</code> (default: <code>#~(string-append #$shadow "/bin/login")</code>)</dt>
+<dd><p>A gexp denoting the name of the log-in program.  The default log-in program is
+<code>login</code> from the Shadow tool suite.
+</p>
+</dd>
+<dt><code>login-arguments</code> (default: <code>'("-p")</code>)</dt>
+<dd><p>A list of arguments to pass to <code>login</code>.
+</p>
+</dd>
+<dt><code>auto-login</code> (default: <code>#f</code>)</dt>
+<dd><p>When passed a login name, as a string, the specified user will be logged
+in automatically without prompting for their login name or password.
+</p>
+</dd>
+<dt><code>hardware-acceleration?</code> (default: #f)</dt>
+<dd><p>Whether to use hardware acceleration.
+</p>
+</dd>
+<dt><code>font-engine</code> (default: <code>"pango"</code>)</dt>
+<dd><p>Font engine used in Kmscon.
+</p>
+</dd>
+<dt><code>font-size</code> (default: <code>12</code>)</dt>
+<dd><p>Font size used in Kmscon.
+</p>
+</dd>
+<dt><code>keyboard-layout</code> (default: <code>#f</code>)</dt>
+<dd><p>If this is <code>#f</code>, Kmscon uses the default keyboard layout&mdash;usually US
+English (&ldquo;qwerty&rdquo;) for a 105-key PC keyboard.
+</p>
+<p>Otherwise this must be a <code>keyboard-layout</code> object specifying the
+keyboard layout.  See <a href="Keyboard-Layout.html">Keyboard Layout</a>, for more information on how to
+specify the keyboard layout.
+</p>
+</dd>
+<dt><code>kmscon</code> (default: <var>kmscon</var>)</dt>
+<dd><p>The Kmscon package to use.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span id="index-name-service-cache-daemon"></span>
+<span id="index-nscd"></span>
+<dl>
+<dt id="index-nscd_002dservice" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">nscd-service [<var>config</var>] [#:glibc glibc]                 [#:name-services '()]</span></dt>
+<dd><p>Return a service that runs the libc name service cache daemon (nscd) with the
+given <var>config</var>&mdash;an <code>&lt;nscd-configuration&gt;</code> object.  See <a href="Name-Service-Switch.html">Name Service Switch</a>, for an example.
+</p>
+<p>For convenience, the Shepherd service for nscd provides the following actions:
+</p>
+<dl compact="compact">
+<dt><code>invalidate</code></dt>
+<dd><span id="index-cache-invalidation_002c-nscd"></span>
+<span id="index-nscd_002c-cache-invalidation"></span>
+<p>This invalidate the given cache.  For instance, running:
+</p>
+<div class="example">
+<pre class="example">herd invalidate nscd hosts
+</pre></div>
+
+<p>invalidates the host name lookup cache of nscd.
+</p>
+</dd>
+<dt><code>statistics</code></dt>
+<dd><p>Running <code>herd statistics nscd</code> displays information about nscd usage
+and caches.
+</p></dd>
+</dl>
+
+</dd></dl>
+
+<dl>
+<dt id="index-_0025nscd_002ddefault_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">%nscd-default-configuration </span></dt>
+<dd><p>This is the default <code>&lt;nscd-configuration&gt;</code> value (see below) used
+by <code>nscd-service</code>.  It uses the caches defined by
+<code>%nscd-default-caches</code>; see below.
+</p></dd></dl>
+
+<dl>
+<dt id="index-nscd_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">nscd-configuration </span></dt>
+<dd><p>This is the data type representing the name service cache daemon (nscd)
+configuration.
+</p>
+<dl compact="compact">
+<dt><code>name-services</code> (default: <code>'()</code>)</dt>
+<dd><p>List of packages denoting <em>name services</em> that must be visible to
+the nscd&mdash;e.g., <code>(list <var>nss-mdns</var>)</code>.
+</p>
+</dd>
+<dt><code>glibc</code> (default: <var>glibc</var>)</dt>
+<dd><p>Package object denoting the GNU C Library providing the <code>nscd</code>
+command.
+</p>
+</dd>
+<dt><code>log-file</code> (default: <code>"/var/log/nscd.log"</code>)</dt>
+<dd><p>Name of the nscd log file.  This is where debugging output goes when
+<code>debug-level</code> is strictly positive.
+</p>
+</dd>
+<dt><code>debug-level</code> (default: <code>0</code>)</dt>
+<dd><p>Integer denoting the debugging levels.  Higher numbers mean that more
+debugging output is logged.
+</p>
+</dd>
+<dt><code>caches</code> (default: <code>%nscd-default-caches</code>)</dt>
+<dd><p>List of <code>&lt;nscd-cache&gt;</code> objects denoting things to be cached; see
+below.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-nscd_002dcache" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">nscd-cache </span></dt>
+<dd><p>Data type representing a cache database of nscd and its parameters.
+</p>
+<dl compact="compact">
+<dt><code>database</code></dt>
+<dd><p>This is a symbol representing the name of the database to be cached.
+Valid values are <code>passwd</code>, <code>group</code>, <code>hosts</code>, and
+<code>services</code>, which designate the corresponding NSS database
+(see <a href="https://www.gnu.org/software/libc/manual/html_node/NSS-Basics.html#NSS-Basics">NSS Basics</a> in <cite>The GNU C Library Reference Manual</cite>).
+</p>
+</dd>
+<dt><code>positive-time-to-live</code></dt>
+<dt><code>negative-time-to-live</code> (default: <code>20</code>)</dt>
+<dd><p>A number representing the number of seconds during which a positive or
+negative lookup result remains in cache.
+</p>
+</dd>
+<dt><code>check-files?</code> (default: <code>#t</code>)</dt>
+<dd><p>Whether to check for updates of the files corresponding to
+<var>database</var>.
+</p>
+<p>For instance, when <var>database</var> is <code>hosts</code>, setting this flag
+instructs nscd to check for updates in <samp>/etc/hosts</samp> and to take
+them into account.
+</p>
+</dd>
+<dt><code>persistent?</code> (default: <code>#t</code>)</dt>
+<dd><p>Whether the cache should be stored persistently on disk.
+</p>
+</dd>
+<dt><code>shared?</code> (default: <code>#t</code>)</dt>
+<dd><p>Whether the cache should be shared among users.
+</p>
+</dd>
+<dt><code>max-database-size</code> (default: 32&nbsp;MiB)</dt>
+<dd><p>Maximum size in bytes of the database cache.
+</p>
+
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-_0025nscd_002ddefault_002dcaches" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">%nscd-default-caches </span></dt>
+<dd><p>List of <code>&lt;nscd-cache&gt;</code> objects used by default by
+<code>nscd-configuration</code> (see above).
+</p>
+<p>It enables persistent and aggressive caching of service and host name
+lookups.  The latter provides better host name lookup performance,
+resilience in the face of unreliable name servers, and also better
+privacy&mdash;often the result of host name lookups is in local cache, so
+external name servers do not even need to be queried.
+</p></dd></dl>
+
+<span id="syslog_002dconfiguration_002dtype"></span><span id="index-syslog"></span>
+<span id="index-logging"></span>
+<dl>
+<dt id="index-syslog_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">syslog-configuration </span></dt>
+<dd><p>This data type represents the configuration of the syslog daemon.
+</p>
+<dl compact="compact">
+<dt><code>syslogd</code> (default: <code>#~(string-append #$inetutils "/libexec/syslogd")</code>)</dt>
+<dd><p>The syslog daemon to use.
+</p>
+</dd>
+<dt><code>config-file</code> (default: <code>%default-syslog.conf</code>)</dt>
+<dd><p>The syslog configuration file to use.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span id="syslog_002dservice"></span><span id="index-syslog-1"></span>
+<dl>
+<dt id="index-syslog_002dservice" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">syslog-service <var>config</var></span></dt>
+<dd><p>Return a service that runs a syslog daemon according to <var>config</var>.
+</p>
+<p>See <a href="https://www.gnu.org/software/inetutils/manual/html_node/syslogd-invocation.html#syslogd-invocation">syslogd invocation</a> in <cite>GNU Inetutils</cite>, for more
+information on the configuration file syntax.
+</p></dd></dl>
+
+<dl>
+<dt id="index-guix_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">guix-service-type </span></dt>
+<dd><p>This is the type of the service that runs the build daemon,
+<code>guix-daemon</code> (see <a href="Invoking-guix_002ddaemon.html">Invoking guix-daemon</a>).  Its value must be a
+<code>guix-configuration</code> record as described below.
+</p></dd></dl>
+
+<span id="guix_002dconfiguration_002dtype"></span><dl>
+<dt id="index-guix_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">guix-configuration </span></dt>
+<dd><p>This data type represents the configuration of the Guix build daemon.
+See <a href="Invoking-guix_002ddaemon.html">Invoking guix-daemon</a>, for more information.
+</p>
+<dl compact="compact">
+<dt><code>guix</code> (default: <var>guix</var>)</dt>
+<dd><p>The Guix package to use.
+</p>
+</dd>
+<dt><code>build-group</code> (default: <code>"guixbuild"</code>)</dt>
+<dd><p>Name of the group for build user accounts.
+</p>
+</dd>
+<dt><code>build-accounts</code> (default: <code>10</code>)</dt>
+<dd><p>Number of build user accounts to create.
+</p>
+</dd>
+<dt><code>authorize-key?</code> (default: <code>#t</code>)</dt>
+<dd><span id="index-substitutes_002c-authorization-thereof-2"></span>
+<p>Whether to authorize the substitute keys listed in
+<code>authorized-keys</code>&mdash;by default that of
+<code>ci.guix.gnu.org</code> and
+<code>bordeaux.guix.gnu.org</code>
+(see <a href="Substitutes.html">Substitutes</a>).
+</p>
+<p>When <code>authorize-key?</code> is true, <samp>/etc/guix/acl</samp> cannot be
+changed by invoking <code>guix archive --authorize</code>.  You must
+instead adjust <code>guix-configuration</code> as you wish and reconfigure the
+system.  This ensures that your operating system configuration file is
+self-contained.
+</p>
+<blockquote>
+<p><b>Note:</b> When booting or reconfiguring to a system where <code>authorize-key?</code>
+is true, the existing <samp>/etc/guix/acl</samp> file is backed up as
+<samp>/etc/guix/acl.bak</samp> if it was determined to be a manually modified
+file.  This is to facilitate migration from earlier versions, which
+allowed for in-place modifications to <samp>/etc/guix/acl</samp>.
+</p></blockquote>
+
+<span id="index-_0025default_002dauthorized_002dguix_002dkeys"></span>
+</dd>
+<dt><code>authorized-keys</code> (default: <code>%default-authorized-guix-keys</code>)</dt>
+<dd><p>The list of authorized key files for archive imports, as a list of
+string-valued gexps (see <a href="Invoking-guix-archive.html">Invoking guix archive</a>).  By default, it
+contains that of <code>ci.guix.gnu.org</code> and
+<code>bordeaux.guix.gnu.org</code> (see <a href="Substitutes.html">Substitutes</a>).  See
+<code>substitute-urls</code> below for an example on how to change it.
+</p>
+</dd>
+<dt><code>use-substitutes?</code> (default: <code>#t</code>)</dt>
+<dd><p>Whether to use substitutes.
+</p>
+</dd>
+<dt><code>substitute-urls</code> (default: <code>%default-substitute-urls</code>)</dt>
+<dd><p>The list of URLs where to look for substitutes by default.
+</p>
+<p>Suppose you would like to fetch substitutes from <code>guix.example.org</code>
+in addition to <code>ci.guix.gnu.org</code>.  You will need to do
+two things: (1) add <code>guix.example.org</code> to <code>substitute-urls</code>,
+and (2) authorize its signing key, having done appropriate checks
+(see <a href="Substitute-Server-Authorization.html">Substitute Server Authorization</a>).  The configuration below does
+exactly that:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Base-Services.html#index-guix_002dconfiguration">guix-configuration</a>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">substitute-urls</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Append_002fReverse.html#index-append">append</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-string">"https://guix.example.org"</span></span>)</span>
+           <span class="syntax-symbol">%default-substitute-urls</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">authorized-keys</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Append_002fReverse.html#index-append">append</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-local_002dfile">local-file</a> <span class="syntax-string">"./guix.example.org-key.pub"</span></span>)</span></span>)</span>
+           <span class="syntax-symbol">%default-authorized-guix-keys</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>This example assumes that the file <samp>./guix.example.org-key.pub</samp>
+contains the public key that <code>guix.example.org</code> uses to sign
+substitutes.
+</p>
+</dd>
+<dt><code>generate-substitute-key?</code> (default: <code>#t</code>)</dt>
+<dd><p>Whether to generate a <em>substitute key pair</em> under
+<samp>/etc/guix/signing-key.pub</samp> and <samp>/etc/guix/signing-key.sec</samp> if
+there is not already one.
+</p>
+<p>This key pair is used when exporting store items, for instance with
+<code>guix publish</code> (see <a href="Invoking-guix-publish.html">Invoking guix publish</a>) or <code>guix
+archive</code> (see <a href="Invoking-guix-archive.html">Invoking guix archive</a>).  Generating a key pair takes a
+few seconds when enough entropy is available and is only done once; you
+might want to turn it off for instance in a virtual machine that does
+not need it and where the extra boot time is a problem.
+</p>
+</dd>
+<dt><code>max-silent-time</code> (default: <code>0</code>)</dt>
+<dt><code>timeout</code> (default: <code>0</code>)</dt>
+<dd><p>The number of seconds of silence and the number of seconds of activity,
+respectively, after which a build process times out.  A value of zero
+disables the timeout.
+</p>
+</dd>
+<dt><code>log-compression</code> (default: <code>'gzip</code>)</dt>
+<dd><p>The type of compression used for build logs&mdash;one of <code>gzip</code>,
+<code>bzip2</code>, or <code>none</code>.
+</p>
+</dd>
+<dt><code>discover?</code> (default: <code>#f</code>)</dt>
+<dd><p>Whether to discover substitute servers on the local network using mDNS
+and DNS-SD.
+</p>
+</dd>
+<dt><code>extra-options</code> (default: <code>'()</code>)</dt>
+<dd><p>List of extra command-line options for <code>guix-daemon</code>.
+</p>
+</dd>
+<dt><code>log-file</code> (default: <code>"/var/log/guix-daemon.log"</code>)</dt>
+<dd><p>File where <code>guix-daemon</code>&rsquo;s standard output and standard error
+are written.
+</p>
+<span id="index-HTTP-proxy_002c-for-guix_002ddaemon"></span>
+<span id="index-proxy_002c-for-guix_002ddaemon-HTTP-access"></span>
+</dd>
+<dt><code>http-proxy</code> (default: <code>#f</code>)</dt>
+<dd><p>The URL of the HTTP and HTTPS proxy used for downloading fixed-output
+derivations and substitutes.
+</p>
+<p>It is also possible to change the daemon&rsquo;s proxy at run time through the
+<code>set-http-proxy</code> action, which restarts it:
+</p>
+<div class="example">
+<pre class="example">herd set-http-proxy guix-daemon http://localhost:8118
+</pre></div>
+
+<p>To clear the proxy settings, run:
+</p>
+<div class="example">
+<pre class="example">herd set-http-proxy guix-daemon
+</pre></div>
+
+</dd>
+<dt><code>tmpdir</code> (default: <code>#f</code>)</dt>
+<dd><p>A directory path where the <code>guix-daemon</code> will perform builds.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-guix_002dextension" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">guix-extension </span></dt>
+<dd>
+<p>This data type represents the parameters of the Guix build daemon that
+are extendable. This is the type of the object that must be used within
+a guix service extension.
+See <a href="Service-Composition.html">Service Composition</a>, for more information.
+</p>
+<dl compact="compact">
+<dt><code>authorized-keys</code> (default: <code>'()</code>)</dt>
+<dd><p>A list of file-like objects where each element contains a public key.
+</p>
+</dd>
+<dt><code>substitute-urls</code> (default: <code>'()</code>)</dt>
+<dd><p>A list of strings where each element is a substitute URL.
+</p>
+</dd>
+<dt><code>chroot-directories</code> (default: <code>'()</code>)</dt>
+<dd><p>A list of file-like objects or strings pointing to additional directories the build daemon can use.
+</p></dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-udev_002dservice" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">udev-service [#:udev <var>eudev</var> #:rules <code>'()</code>]</span></dt>
+<dd><p>Run <var>udev</var>, which populates the <samp>/dev</samp> directory dynamically.
+udev rules can be provided as a list of files through the <var>rules</var>
+variable.  The procedures <code>udev-rule</code>, <code>udev-rules-service</code>
+and <code>file-&gt;udev-rule</code> from <code>(gnu services base)</code> simplify the
+creation of such rule files.
+</p>
+<p>The <code>herd rules udev</code> command, as root, returns the name of the
+directory containing all the active udev rules.
+</p></dd></dl>
+
+<dl>
+<dt id="index-udev_002drule" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">udev-rule [<var>file-name</var> <var>contents</var>]</span></dt>
+<dd><p>Return a udev-rule file named <var>file-name</var> containing the rules
+defined by the <var>contents</var> literal.
+</p>
+<p>In the following example, a rule for a USB device is defined to be
+stored in the file <samp>90-usb-thing.rules</samp>.  The rule runs a script
+upon detecting a USB device with a given product identifier.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <span class="syntax-symbol">%example-udev-rule</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Base-Services.html#index-udev_002drule">udev-rule</a>
+    <span class="syntax-string">"90-usb-thing.rules"</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-string">"ACTION==\"add\", SUBSYSTEM==\"usb\", "</span>
+                   <span class="syntax-string">"ATTR{product}==\"Example\", "</span>
+                   <span class="syntax-string">"RUN+=\"/path/to/script\""</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt id="index-udev_002drules_002dservice" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">udev-rules-service [<var>name</var> <var>rules</var>]                [#:groups <var>groups</var>]</span></dt>
+<dd><p>Return a service that extends <code>udev-service-type </code> with <var>rules</var>
+and <code>account-service-type</code> with <var>groups</var> as system groups.
+This works by creating a singleton service type
+<code><var>name</var>-udev-rules</code>, of which the returned service is an
+instance.
+</p>
+<p>Here we show how it can be used to extend <code>udev-service-type</code> with the
+previously defined rule <code>%example-udev-rule</code>.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="operating_002dsystem-Reference.html#index-operating_002dsystem-1">operating-system</a>
+ <span class="syntax-comment">;; …
+</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">services</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Pairs.html#index-cons">cons</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Base-Services.html#index-udev_002drules_002dservice">udev-rules-service</a> <span class="syntax-symbol">'usb-thing</span> <span class="syntax-symbol">%example-udev-rule</span></span>)</span>
+         <a class="syntax-symbol" href="Desktop-Services.html#index-_0025desktop_002dservices">%desktop-services</a></span>)</span></span>)</span></span>)</span>
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt id="index-file_002d_003eudev_002drule" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">file-&gt;udev-rule [<var>file-name</var> <var>file</var>]</span></dt>
+<dd><p>Return a udev file named <var>file-name</var> containing the rules defined
+within <var>file</var>, a file-like object.
+</p>
+<p>The following example showcases how we can use an existing rule file.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-use_002dmodules">use-modules</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <span class="syntax-symbol">download</span></span>)</span>     <span class="syntax-comment">;for url-fetch
+</span>             <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <span class="syntax-symbol">packages</span></span>)</span>     <span class="syntax-comment">;for origin
+</span>             <span class="syntax-symbol">…</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <span class="syntax-symbol">%android-udev-rules</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Base-Services.html#index-file_002d_003eudev_002drule">file-&gt;udev-rule</a>
+    <span class="syntax-string">"51-android-udev.rules"</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-special">let</span> <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Build-Config.html#index-version">version</a> <span class="syntax-string">"20170910"</span></span>)</span></span>)</span>
+      <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="origin-Reference.html#index-origin">origin</a>
+       <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Method-Definition-Internals.html#index-method">method</a> <a class="syntax-symbol" href="origin-Reference.html#index-url_002dfetch">url-fetch</a></span>)</span>
+       <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">uri</span> <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-string">"https://raw.githubusercontent.com/M0Rf30/"</span>
+                           <span class="syntax-string">"android-udev-rules/"</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Build-Config.html#index-version">version</a> <span class="syntax-string">"/51-android.rules"</span></span>)</span></span>)</span>
+       <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">sha256</span>
+        <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">base32</span> <span class="syntax-string">"0lmmagpyb6xsq6zcr2w1cyx9qmjqmajkvrdbhjx32gqf1d9is003"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+</dd></dl>
+
+<p>Additionally, Guix package definitions can be included in <var>rules</var> in
+order to extend the udev rules with the definitions found under their
+<samp>lib/udev/rules.d</samp> sub-directory.  In lieu of the previous
+<var>file-&gt;udev-rule</var> example, we could have used the
+<var>android-udev-rules</var> package which exists in Guix in the <code>(gnu
+packages android)</code> module.
+</p>
+<p>The following example shows how to use the <var>android-udev-rules</var>
+package so that the Android tool <code>adb</code> can detect devices
+without root privileges.  It also details how to create the
+<code>adbusers</code> group, which is required for the proper functioning of
+the rules defined within the <code>android-udev-rules</code> package.  To
+create such a group, we must define it both as part of the
+<code>supplementary-groups</code> of our <code>user-account</code> declaration, as
+well as in the <var>groups</var> of the <code>udev-rules-service</code> procedure.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-use_002dmodules">use-modules</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">android</span></span>)</span>  <span class="syntax-comment">;for android-udev-rules
+</span>             <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Processes.html#index-system">system</a> <span class="syntax-symbol">shadow</span></span>)</span>     <span class="syntax-comment">;for user-group
+</span>             <span class="syntax-symbol">…</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="operating_002dsystem-Reference.html#index-operating_002dsystem-1">operating-system</a>
+  <span class="syntax-comment">;; …
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">users</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Pairs.html#index-cons">cons</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="User-Accounts.html#index-user_002daccount">user-account</a>
+                <span class="syntax-comment">;; …
+</span>                <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">supplementary-groups</span>
+                 <span class="syntax-symbol">'</span><span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-string">"adbusers"</span>   <span class="syntax-comment">;for adb
+</span>                   <span class="syntax-string">"wheel"</span> <span class="syntax-string">"netdev"</span> <span class="syntax-string">"audio"</span> <span class="syntax-string">"video"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+  <span class="syntax-comment">;; …
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">services</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Pairs.html#index-cons">cons</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Base-Services.html#index-udev_002drules_002dservice">udev-rules-service</a> <span class="syntax-symbol">'android</span> <span class="syntax-symbol">android-udev-rules</span>
+                              <span class="syntax-keyword">#:groups</span> <span class="syntax-symbol">'</span><span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-string">"adbusers"</span></span>)</span></span>)</span>
+          <a class="syntax-symbol" href="Desktop-Services.html#index-_0025desktop_002dservices">%desktop-services</a></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<dl>
+<dt id="index-urandom_002dseed_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">urandom-seed-service-type </span></dt>
+<dd><p>Save some entropy in <code>%random-seed-file</code> to seed <samp>/dev/urandom</samp>
+when rebooting.  It also tries to seed <samp>/dev/urandom</samp> from
+<samp>/dev/hwrng</samp> while booting, if <samp>/dev/hwrng</samp> exists and is
+readable.
+</p></dd></dl>
+
+<dl>
+<dt id="index-_0025random_002dseed_002dfile" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">%random-seed-file </span></dt>
+<dd><p>This is the name of the file where some random bytes are saved by
+<var>urandom-seed-service</var> to seed <samp>/dev/urandom</samp> when rebooting.
+It defaults to <samp>/var/lib/random-seed</samp>.
+</p></dd></dl>
+
+<span id="index-mouse"></span>
+<span id="index-gpm"></span>
+<dl>
+<dt id="index-gpm_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">gpm-service-type </span></dt>
+<dd><p>This is the type of the service that runs GPM, the <em>general-purpose
+mouse daemon</em>, which provides mouse support to the Linux console.  GPM
+allows users to use the mouse in the console, notably to select, copy,
+and paste text.
+</p>
+<p>The value for services of this type must be a <code>gpm-configuration</code>
+(see below).  This service is not part of <code>%base-services</code>.
+</p></dd></dl>
+
+<dl>
+<dt id="index-gpm_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">gpm-configuration </span></dt>
+<dd><p>Data type representing the configuration of GPM.
+</p>
+<dl compact="compact">
+<dt><code>options</code> (default: <code>%default-gpm-options</code>)</dt>
+<dd><p>Command-line options passed to <code>gpm</code>.  The default set of
+options instruct <code>gpm</code> to listen to mouse events on
+<samp>/dev/input/mice</samp>.  See <a href="https://guix.gnu.org/manual/en/gpm/Command-Line.html#Command-Line">Command Line</a> in <cite>gpm manual</cite>, for
+more information.
+</p>
+</dd>
+<dt><code>gpm</code> (default: <code>gpm</code>)</dt>
+<dd><p>The GPM package to use.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span id="guix_002dpublish_002dservice_002dtype"></span><dl>
+<dt id="index-guix_002dpublish_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">guix-publish-service-type </span></dt>
+<dd><p>This is the service type for <code>guix publish</code> (see <a href="Invoking-guix-publish.html">Invoking guix publish</a>).  Its value must be a <code>guix-publish-configuration</code>
+object, as described below.
+</p>
+<p>This assumes that <samp>/etc/guix</samp> already contains a signing key pair as
+created by <code>guix archive --generate-key</code> (see <a href="Invoking-guix-archive.html">Invoking guix archive</a>).  If that is not the case, the service will fail to start.
+</p></dd></dl>
+
+<dl>
+<dt id="index-guix_002dpublish_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">guix-publish-configuration </span></dt>
+<dd><p>Data type representing the configuration of the <code>guix publish</code>
+service.
+</p>
+<dl compact="compact">
+<dt><code>guix</code> (default: <code>guix</code>)</dt>
+<dd><p>The Guix package to use.
+</p>
+</dd>
+<dt><code>port</code> (default: <code>80</code>)</dt>
+<dd><p>The TCP port to listen for connections.
+</p>
+</dd>
+<dt><code>host</code> (default: <code>"localhost"</code>)</dt>
+<dd><p>The host (and thus, network interface) to listen to.  Use
+<code>"0.0.0.0"</code> to listen on all the network interfaces.
+</p>
+</dd>
+<dt><code>advertise?</code> (default: <code>#f</code>)</dt>
+<dd><p>When true, advertise the service on the local network <i>via</i> the DNS-SD
+protocol, using Avahi.
+</p>
+<p>This allows neighboring Guix devices with discovery on (see
+<code>guix-configuration</code> above) to discover this <code>guix publish</code>
+instance and to automatically download substitutes from it.
+</p>
+</dd>
+<dt><code>compression</code> (default: <code>'(("gzip" 3) ("zstd" 3))</code>)</dt>
+<dd><p>This is a list of compression method/level tuple used when compressing
+substitutes.  For example, to compress all substitutes with <em>both</em> lzip
+at level 7 and gzip at level 9, write:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-symbol">'</span><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-string">"lzip"</span> <span class="syntax-symbol">7</span></span>)</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-string">"gzip"</span> <span class="syntax-symbol">9</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>Level 9 achieves the best compression ratio at the expense of increased CPU
+usage, whereas level 1 achieves fast compression.  See <a href="Invoking-guix-publish.html">Invoking guix publish</a>, for more information on the available compression methods and
+the tradeoffs involved.
+</p>
+<p>An empty list disables compression altogether.
+</p>
+</dd>
+<dt><code>nar-path</code> (default: <code>"nar"</code>)</dt>
+<dd><p>The URL path at which &ldquo;nars&rdquo; can be fetched.  See <a href="Invoking-guix-publish.html"><samp>--nar-path</samp></a>, for details.
+</p>
+</dd>
+<dt><code>cache</code> (default: <code>#f</code>)</dt>
+<dd><p>When it is <code>#f</code>, disable caching and instead generate archives on
+demand.  Otherwise, this should be the name of a directory&mdash;e.g.,
+<code>"/var/cache/guix/publish"</code>&mdash;where <code>guix publish</code> caches
+archives and meta-data ready to be sent.  See <a href="Invoking-guix-publish.html"><samp>--cache</samp></a>, for more information on the tradeoffs involved.
+</p>
+</dd>
+<dt><code>workers</code> (default: <code>#f</code>)</dt>
+<dd><p>When it is an integer, this is the number of worker threads used for
+caching; when <code>#f</code>, the number of processors is used.
+See <a href="Invoking-guix-publish.html"><samp>--workers</samp></a>, for more information.
+</p>
+</dd>
+<dt><code>cache-bypass-threshold</code> (default: 10 MiB)</dt>
+<dd><p>When <code>cache</code> is true, this is the maximum size in bytes of a store
+item for which <code>guix publish</code> may bypass its cache in case of a
+cache miss.  See <a href="Invoking-guix-publish.html"><samp>--cache-bypass-threshold</samp></a>, for more information.
+</p>
+</dd>
+<dt><code>ttl</code> (default: <code>#f</code>)</dt>
+<dd><p>When it is an integer, this denotes the <em>time-to-live</em> in seconds
+of the published archives.  See <a href="Invoking-guix-publish.html"><samp>--ttl</samp></a>,
+for more information.
+</p>
+</dd>
+<dt><code>negative-ttl</code> (default: <code>#f</code>)</dt>
+<dd><p>When it is an integer, this denotes the <em>time-to-live</em> in
+seconds for the negative lookups.  See <a href="Invoking-guix-publish.html"><samp>--negative-ttl</samp></a>, for more information.
+</p></dd>
+</dl>
+</dd></dl>
+
+<span id="rngd_002dservice"></span><dl>
+<dt id="index-rngd_002dservice" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">rngd-service [#:rng-tools <var>rng-tools</var>]             [#:device "/dev/hwrng"]</span></dt>
+<dd><p>Return a service that runs the <code>rngd</code> program from <var>rng-tools</var>
+to add <var>device</var> to the kernel&rsquo;s entropy pool.  The service will fail if
+<var>device</var> does not exist.
+</p></dd></dl>
+
+<span id="pam_002dlimits_002dservice"></span><span id="index-session-limits"></span>
+<span id="index-ulimit"></span>
+<span id="index-priority"></span>
+<span id="index-realtime"></span>
+<span id="index-jackd"></span>
+<span id="index-nofile"></span>
+<span id="index-open-file-descriptors"></span>
+<dl>
+<dt id="index-pam_002dlimits_002dservice" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">pam-limits-service [#:limits <code>'()</code>]</span></dt>
+<dd>
+<p>Return a service that installs a configuration file for the
+<a href="http://linux-pam.org/Linux-PAM-html/sag-pam_limits.html"><code>pam_limits</code> module</a>.  The procedure optionally takes a list of
+<code>pam-limits-entry</code> values, which can be used to specify
+<code>ulimit</code> limits and <code>nice</code> priority limits to user sessions.
+</p>
+<p>The following limits definition sets two hard and soft limits for all
+login sessions of users in the <code>realtime</code> group:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Base-Services.html#index-pam_002dlimits_002dservice">pam-limits-service</a>
+ <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a>
+  <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">pam-limits-entry</span> <span class="syntax-string">"@realtime"</span> <span class="syntax-symbol">'both</span> <span class="syntax-symbol">'rtprio</span> <span class="syntax-symbol">99</span></span>)</span>
+  <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">pam-limits-entry</span> <span class="syntax-string">"@realtime"</span> <span class="syntax-symbol">'both</span> <span class="syntax-symbol">'memlock</span> <span class="syntax-symbol">'unlimited</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>The first entry increases the maximum realtime priority for
+non-privileged processes; the second entry lifts any restriction of the
+maximum address space that can be locked in memory.  These settings are
+commonly used for real-time audio systems.
+</p>
+<p>Another useful example is raising the maximum number of open file
+descriptors that can be used:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Base-Services.html#index-pam_002dlimits_002dservice">pam-limits-service</a>
+ <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a>
+  <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">pam-limits-entry</span> <span class="syntax-string">"*"</span> <span class="syntax-symbol">'both</span> <span class="syntax-symbol">'nofile</span> <span class="syntax-symbol">100000</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>In the above example, the asterisk means the limit should apply to any
+user.  It is important to ensure the chosen value doesn&rsquo;t exceed the
+maximum system value visible in the <samp>/proc/sys/fs/file-max</samp> file,
+else the users would be prevented from login in.  For more information
+about the Pluggable Authentication Module (PAM) limits, refer to the
+&lsquo;<samp>pam_limits</samp>&rsquo; man page from the <code>linux-pam</code> package.
+</p></dd></dl>
+
+<dl>
+<dt id="index-greetd_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">greetd-service-type </span></dt>
+<dd><p><a href="https://git.sr.ht/~kennylevinsen/greetd"><code>greetd</code></a> is a minimal and
+flexible login manager daemon, that makes no assumptions about what you
+want to launch.
+</p>
+<p>If you can run it from your shell in a TTY, greetd can start it. If it
+can be taught to speak a simple JSON-based IPC protocol, then it can be
+a geeter.
+</p>
+<p><code>greetd-service-type</code> provides necessary infrastructure for logging
+in users, including:
+</p>
+<ul>
+<li> <code>greetd</code> PAM service
+
+</li><li> Special variation of <code>pam-mount</code> to mount <code>XDG_RUNTIME_DIR</code>
+</li></ul>
+
+<p>Here is example of switching from <code>mingetty-service-type</code> to
+<code>greetd-service-type</code>, and how different terminals could be:
+</p>
+<div class="lisp">
+<pre class="lisp">  <span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Append_002fReverse.html#index-append">append</a>
+   <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-modify_002dservices-1">modify-services</a> <a class="syntax-symbol" href="Base-Services.html#index-_0025base_002dservices-1">%base-services</a>
+     <span class="syntax-comment">;; greetd-service-type provides "greetd" PAM service
+</span>     <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Modification.html#index-delete">delete</a> <span class="syntax-symbol">login-service-type</span></span>)</span>
+     <span class="syntax-comment">;; and can be used in place of mingetty-service-type
+</span>     <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Modification.html#index-delete">delete</a> <span class="syntax-symbol">mingetty-service-type</span></span>)</span></span>)</span>
+   <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Base-Services.html#index-greetd_002dservice_002dtype">greetd-service-type</a>
+             <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Base-Services.html#index-greetd_002dconfiguration">greetd-configuration</a>
+              <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">terminals</span>
+               <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a>
+                <span class="syntax-comment">;; we can make any terminal active by default
+</span>                <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="Base-Services.html#index-greetd_002dterminal_002dconfiguration">greetd-terminal-configuration</a> <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-symbol">terminal-vt</span> <span class="syntax-string">"1"</span></span>)</span> <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-symbol">terminal-switch</span> <span class="syntax-symbol">#t</span></span>)</span></span>)</span>
+                <span class="syntax-comment">;; we can make environment without XDG_RUNTIME_DIR set
+</span>                <span class="syntax-comment">;; even provide our own environment variables
+</span>                <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="Base-Services.html#index-greetd_002dterminal_002dconfiguration">greetd-terminal-configuration</a>
+                 <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-symbol">terminal-vt</span> <span class="syntax-string">"2"</span></span>)</span>
+                 <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-symbol">default-session-command</span>
+                   <span class="syntax-paren8">(<span class="syntax-symbol"><a class="syntax-symbol" href="Base-Services.html#index-greetd_002dagreety_002dsession">greetd-agreety-session</a>
+                    <span class="syntax-paren9">(<span class="syntax-symbol"><span class="syntax-symbol">extra-env</span> <span class="syntax-symbol">'</span><span class="syntax-paren10">(<span class="syntax-symbol"><span class="syntax-paren11">(<span class="syntax-symbol"><span class="syntax-string">"MY_VAR"</span> <span class="syntax-symbol">.</span> <span class="syntax-string">"1"</span></span>)</span></span>)</span></span>)</span>
+                    <span class="syntax-paren9">(<span class="syntax-symbol"><span class="syntax-symbol">xdg-env?</span> <span class="syntax-symbol">#f</span></span>)</span></span>)</span></span>)</span></span>)</span>
+                <span class="syntax-comment">;; we can use different shell instead of default bash
+</span>                <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="Base-Services.html#index-greetd_002dterminal_002dconfiguration">greetd-terminal-configuration</a>
+                 <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-symbol">terminal-vt</span> <span class="syntax-string">"3"</span></span>)</span>
+                 <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-symbol">default-session-command</span>
+                   <span class="syntax-paren8">(<span class="syntax-symbol"><a class="syntax-symbol" href="Base-Services.html#index-greetd_002dagreety_002dsession">greetd-agreety-session</a> <span class="syntax-paren9">(<span class="syntax-symbol"><span class="syntax-symbol">command</span> <span class="syntax-paren10">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-file_002dappend">file-append</a> <span class="syntax-symbol">zsh</span> <span class="syntax-string">"/bin/zsh"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+                <span class="syntax-comment">;; we can use any other executable command as greeter
+</span>                <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="Base-Services.html#index-greetd_002dterminal_002dconfiguration">greetd-terminal-configuration</a>
+                 <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-symbol">terminal-vt</span> <span class="syntax-string">"4"</span></span>)</span>
+                 <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-symbol">default-session-command</span> <span class="syntax-paren8">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-program_002dfile">program-file</a> <span class="syntax-string">"my-noop-greeter"</span> <span class="syntax-symbol">#~</span><span class="syntax-paren9">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Processes.html#index-exit">exit</a></span>)</span></span>)</span></span>)</span></span>)</span>
+                <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="Base-Services.html#index-greetd_002dterminal_002dconfiguration">greetd-terminal-configuration</a> <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-symbol">terminal-vt</span> <span class="syntax-string">"5"</span></span>)</span></span>)</span>
+                <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="Base-Services.html#index-greetd_002dterminal_002dconfiguration">greetd-terminal-configuration</a> <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-symbol">terminal-vt</span> <span class="syntax-string">"6"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+    <span class="syntax-comment">;; mingetty-service-type can be used in parallel
+</span>    <span class="syntax-comment">;; if needed to do so, do not (delete login-service-type)
+</span>    <span class="syntax-comment">;; as illustrated above
+</span>    <span class="syntax-multi-line-comment">#| (service mingetty-service-type (mingetty-configuration (tty "tty8"))) |#</span></span>)</span></span>)</span>
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt id="index-greetd_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">greetd-configuration </span></dt>
+<dd><p>Configuration record for the <code>greetd-service-type</code>.
+</p><dl compact="compact">
+<dt><code>motd</code></dt>
+<dd><p>A file-like object containing the &ldquo;message of the day&rdquo;.
+</p>
+</dd>
+<dt><code>allow-empty-passwords?</code> (default: <code>#t</code>)</dt>
+<dd><p>Allow empty passwords by default so that first-time users can log in when
+the &rsquo;root&rsquo; account has just been created.
+</p>
+</dd>
+<dt><code>terminals</code> (default: <code>'()</code>)</dt>
+<dd><p>List of <code>greetd-terminal-configuration</code> per terminal for which
+<code>greetd</code> should be started.
+</p>
+</dd>
+<dt><code>greeter-supplementary-groups</code> (default: <code>'()</code>)</dt>
+<dd><p>List of groups which should be added to <code>greeter</code> user. For instance:
+</p><div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">greeter-supplementary-groups</span> <span class="syntax-symbol">'</span><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-string">"seat"</span> <span class="syntax-string">"video"</span></span>)</span></span>)</span>
+</pre></div>
+<p>Note that this example will fail if <code>seat</code> group does not exist.
+</p></dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-greetd_002dterminal_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">greetd-terminal-configuration </span></dt>
+<dd><p>Configuration record for per terminal greetd daemon service.
+</p>
+<dl compact="compact">
+<dt><code>greetd</code> (default: <code>greetd</code>)</dt>
+<dd><p>The greetd package to use.
+</p>
+</dd>
+<dt><code>config-file-name</code></dt>
+<dd><p>Configuration file name to use for greetd daemon. Generally, autogenerated
+derivation based on <code>terminal-vt</code> value.
+</p>
+</dd>
+<dt><code>log-file-name</code></dt>
+<dd><p>Log file name to use for greetd daemon. Generally, autogenerated
+name based on <code>terminal-vt</code> value.
+</p>
+</dd>
+<dt><code>terminal-vt</code> (default: &lsquo;<samp>"7"</samp>&rsquo;)</dt>
+<dd><p>The VT to run on. Use of a specific VT with appropriate conflict avoidance
+is recommended.
+</p>
+</dd>
+<dt><code>terminal-switch</code> (default: <code>#f</code>)</dt>
+<dd><p>Make this terminal active on start of <code>greetd</code>.
+</p>
+</dd>
+<dt><code>default-session-user</code> (default: &lsquo;<samp>"greeter"</samp>&rsquo;)</dt>
+<dd><p>The user to use for running the greeter.
+</p>
+</dd>
+<dt><code>default-session-command</code> (default: <code>(greetd-agreety-session)</code>)</dt>
+<dd><p>Can be either instance of <code>greetd-agreety-session</code> configuration or
+<code>gexp-&gt;script</code> like object to use as greeter.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-greetd_002dagreety_002dsession" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">greetd-agreety-session </span></dt>
+<dd><p>Configuration record for the agreety greetd greeter.
+</p>
+<dl compact="compact">
+<dt><code>agreety</code> (default: <code>greetd</code>)</dt>
+<dd><p>The package with <code>/bin/agreety</code> command.
+</p>
+</dd>
+<dt><code>command</code> (default: <code>(file-append bash "/bin/bash")</code>)</dt>
+<dd><p>Command to be started by <code>/bin/agreety</code> on successful login.
+</p>
+</dd>
+<dt><code>command-args</code> (default: <code>'("-l")</code>)</dt>
+<dd><p>Command arguments to pass to command.
+</p>
+</dd>
+<dt><code>extra-env</code> (default: <code>'()</code>)</dt>
+<dd><p>Extra environment variables to set on login.
+</p>
+</dd>
+<dt><code>xdg-env?</code> (default: <code>#t</code>)</dt>
+<dd><p>If true <code>XDG_RUNTIME_DIR</code> and <code>XDG_SESSION_TYPE</code> will be set
+before starting command. One should note that, <code>extra-env</code> variables
+are set right after mentioned variables, so that they can be overriden.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-greetd_002dwlgreet_002dsession" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">greetd-wlgreet-session </span></dt>
+<dd><p>Generic configuration record for the wlgreet greetd greeter.
+</p>
+<dl compact="compact">
+<dt><code>wlgreet</code> (default: <code>wlgreet</code>)</dt>
+<dd><p>The package with the <code>/bin/wlgreet</code> command.
+</p>
+</dd>
+<dt><code>command</code> (default: <code>(file-append sway "/bin/sway")</code>)</dt>
+<dd><p>Command to be started by <code>/bin/wlgreet</code> on successful login.
+</p>
+</dd>
+<dt><code>command-args</code> (default: <code>'()</code>)</dt>
+<dd><p>Command arguments to pass to command.
+</p>
+</dd>
+<dt><code>output-mode</code> (default: <code>"all"</code>)</dt>
+<dd><p>Option to use for <code>outputMode</code> in the TOML configuration file.
+</p>
+</dd>
+<dt><code>scale</code> (default: <code>1</code>)</dt>
+<dd><p>Option to use for <code>scale</code> in the TOML configuration file.
+</p>
+</dd>
+<dt><code>background</code> (default: <code>'(0 0 0 0.9)</code>)</dt>
+<dd><p>RGBA list to use as the background colour of the login prompt.
+</p>
+</dd>
+<dt><code>headline</code> (default: <code>'(1 1 1 1)</code>)</dt>
+<dd><p>RGBA list to use as the headline colour of the UI popup.
+</p>
+</dd>
+<dt><code>prompt</code> (default: <code>'(1 1 1 1)</code>)</dt>
+<dd><p>RGBA list to use as the prompt colour of the UI popup.
+</p>
+</dd>
+<dt><code>prompt-error</code> (default: <code>'(1 1 1 1)</code>)</dt>
+<dd><p>RGBA list to use as the error colour of the UI popup.
+</p>
+</dd>
+<dt><code>border</code> (default: <code>'(1 1 1 1)</code>)</dt>
+<dd><p>RGBA list to use as the border colour of the UI popup.
+</p>
+</dd>
+<dt><code>extra-env</code> (default: <code>'()</code>)</dt>
+<dd><p>Extra environment variables to set on login.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-greetd_002dwlgreet_002dsway_002dsession" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">greetd-wlgreet-sway-session </span></dt>
+<dd><p>Sway-specific configuration record for the wlgreet greetd greeter.
+</p>
+<dl compact="compact">
+<dt><code>wlgreet-session</code> (default: <code>(greetd-wlgreet-session)</code>)</dt>
+<dd><p>A <code>greetd-wlgreet-session</code> record for generic wlgreet configuration,
+on top of the Sway-specific <code>greetd-wlgreet-sway-session</code>.
+</p>
+</dd>
+<dt><code>sway</code> (default: <code>sway</code>)</dt>
+<dd><p>The package providing the <code>/bin/sway</code> command.
+</p>
+</dd>
+<dt><code>sway-configuration</code> (default: #f)</dt>
+<dd><p>File-like object providing an additional Sway configuration file to be
+prepended to the mandatory part of the configuration.
+</p>
+</dd>
+</dl>
+
+<p>Here is an example of a greetd configuration that uses wlgreet and Sway:
+</p>
+<div class="lisp">
+<pre class="lisp">  <span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Base-Services.html#index-greetd_002dconfiguration">greetd-configuration</a>
+   <span class="syntax-comment">;; We need to give the greeter user these permissions, otherwise
+</span>   <span class="syntax-comment">;; Sway will crash on launch.
+</span>   <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">greeter-supplementary-groups</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-string">"video"</span> <span class="syntax-string">"input"</span> <span class="syntax-string">"seat"</span></span>)</span></span>)</span>
+   <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">terminals</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Base-Services.html#index-greetd_002dterminal_002dconfiguration">greetd-terminal-configuration</a>
+           <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">terminal-vt</span> <span class="syntax-string">"1"</span></span>)</span>
+           <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">terminal-switch</span> <span class="syntax-symbol">#t</span></span>)</span>
+           <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">default-session-command</span>
+            <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="Base-Services.html#index-greetd_002dwlgreet_002dsway_002dsession">greetd-wlgreet-sway-session</a>
+             <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">sway-configuration</span>
+              <span class="syntax-paren7">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-local_002dfile">local-file</a> <span class="syntax-string">"sway-greetd.conf"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+</dd></dl>
+
+<hr />
+<div class="header">
+<p>
+Next: <a href="Scheduled-Job-Execution.html" accesskey="n" rel="next">Scheduled Job Execution</a>, Up: <a href="Services.html" accesskey="u" rel="up">Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

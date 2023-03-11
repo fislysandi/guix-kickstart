@@ -1,0 +1,575 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Service Reference (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="Service Reference (GNU Guix Reference Manual)" />
+<meta name="keywords" content="Service Reference (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Defining-Services.html" rel="up" title="Defining Services" />
+<link href="Shepherd-Services.html" rel="next" title="Shepherd Services" />
+<link href="Service-Types-and-Services.html" rel="prev" title="Service Types and Services" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="Service-Reference"></span><div class="header">
+<p>
+Next: <a href="Shepherd-Services.html" accesskey="n" rel="next">Shepherd Services</a>, Previous: <a href="Service-Types-and-Services.html" accesskey="p" rel="prev">Service Types and Services</a>, Up: <a href="Defining-Services.html" accesskey="u" rel="up">Defining Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Service-Reference-1"></span><h4 class="subsection">12.18.3 Service Reference</h4>
+
+<p>We have seen an overview of service types (see <a href="Service-Types-and-Services.html">Service Types and Services</a>).  This section provides a reference on how to manipulate
+services and service types.  This interface is provided by the
+<code>(gnu services)</code> module.
+</p>
+<dl>
+<dt id="index-service" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">service <var>type</var> [<var>value</var>]</span></dt>
+<dd><p>Return a new service of <var>type</var>, a <code>&lt;service-type&gt;</code> object (see
+below).  <var>value</var> can be any object; it represents the parameters of
+this particular service instance.
+</p>
+<p>When <var>value</var> is omitted, the default value specified by <var>type</var>
+is used; if <var>type</var> does not specify a default value, an error is
+raised.
+</p>
+<p>For instance, this:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Networking-Services.html#index-openssh_002dservice_002dtype">openssh-service-type</a></span>)</span>
+</pre></div>
+
+<p>is equivalent to this:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Networking-Services.html#index-openssh_002dservice_002dtype">openssh-service-type</a>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Networking-Services.html#index-openssh_002dconfiguration">openssh-configuration</a></span>)</span></span>)</span>
+</pre></div>
+
+<p>In both cases the result is an instance of <code>openssh-service-type</code>
+with the default configuration.
+</p></dd></dl>
+
+<dl>
+<dt id="index-service_003f" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">service? <var>obj</var></span></dt>
+<dd><p>Return true if <var>obj</var> is a service.
+</p></dd></dl>
+
+<dl>
+<dt id="index-service_002dkind" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">service-kind <var>service</var></span></dt>
+<dd><p>Return the type of <var>service</var>&mdash;i.e., a <code>&lt;service-type&gt;</code> object.
+</p></dd></dl>
+
+<dl>
+<dt id="index-service_002dvalue" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">service-value <var>service</var></span></dt>
+<dd><p>Return the value associated with <var>service</var>.  It represents its
+parameters.
+</p></dd></dl>
+
+<p>Here is an example of how a service is created and manipulated:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <span class="syntax-symbol">s</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Web-Services.html#index-nginx_002dservice_002dtype">nginx-service-type</a>
+           <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="Web-Services.html#index-nginx_002dconfiguration">nginx-configuration</a>
+            <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">nginx</span> <span class="syntax-symbol">nginx</span></span>)</span>
+            <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">log-directory</span> <span class="syntax-symbol">log-directory</span></span>)</span>
+            <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">run-directory</span> <span class="syntax-symbol">run-directory</span></span>)</span>
+            <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">file</span> <span class="syntax-symbol">config-file</span></span>)</span></span>)</span></span>)</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service_003f">service?</a> <span class="syntax-symbol">s</span></span>)</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-symbol">#t</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Equality.html#index-eq_003f">eq?</a> <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service_002dkind">service-kind</a> <span class="syntax-symbol">s</span></span>)</span> <a class="syntax-symbol" href="Web-Services.html#index-nginx_002dservice_002dtype">nginx-service-type</a></span>)</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-symbol">#t</span>
+</pre></div>
+
+<p>The <code>modify-services</code> form provides a handy way to change the
+parameters of some of the services of a list such as
+<code>%base-services</code> (see <a href="Base-Services.html"><code>%base-services</code></a>).  It
+evaluates to a list of services.  Of course, you could always use
+standard list combinators such as <code>map</code> and <code>fold</code> to do that
+(see <a href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d1.html#SRFI_002d1">List Library</a> in <cite>GNU Guile Reference Manual</cite>);
+<code>modify-services</code> simply provides a more concise form for this
+common pattern.
+</p>
+<dl>
+<dt id="index-modify_002dservices-1" class="symbol-definition"><span class="symbol-definition-category">Scheme Syntax: </span><span class="symbol-definition-prototype">modify-services <var>services</var>   (<var>type</var> <var>variable</var> =&gt; <var>body</var>) &hellip;</span></dt>
+<dd>
+<p>Modify the services listed in <var>services</var> according to the given
+clauses.  Each clause has the form:
+</p>
+<div class="example">
+<pre class="example">(<var>type</var> <var>variable</var> =&gt; <var>body</var>)
+</pre></div>
+
+<p>where <var>type</var> is a service type&mdash;e.g.,
+<code>guix-service-type</code>&mdash;and <var>variable</var> is an identifier that is
+bound within the <var>body</var> to the service parameters&mdash;e.g., a
+<code>guix-configuration</code> instance&mdash;of the original service of that
+<var>type</var>.
+</p>
+<p>The <var>body</var> should evaluate to the new service parameters, which will
+be used to configure the new service.  This new service will replace the
+original in the resulting list.  Because a service&rsquo;s service parameters
+are created using <code>define-record-type*</code>, you can write a succinct
+<var>body</var> that evaluates to the new service parameters by using the
+<code>inherit</code> feature that <code>define-record-type*</code> provides.
+</p>
+<p>Clauses can also have the following form:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Modification.html#index-delete">delete</a> <span class="syntax-symbol">type</span></span>)</span>
+</pre></div>
+
+<p>Such a clause removes all services of the given <var>type</var> from
+<var>services</var>.
+</p>
+<p>See <a href="Using-the-Configuration-System.html">Using the Configuration System</a>, for example usage.
+</p>
+</dd></dl>
+
+<p>Next comes the programming interface for service types.  This is
+something you want to know when writing new service definitions, but not
+necessarily when simply looking for ways to customize your
+<code>operating-system</code> declaration.
+</p>
+<dl>
+<dt id="index-service_002dtype" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">service-type </span></dt>
+<dd><span id="index-service-type"></span>
+<p>This is the representation of a <em>service type</em> (see <a href="Service-Types-and-Services.html">Service Types and Services</a>).
+</p>
+<dl compact="compact">
+<dt><code>name</code></dt>
+<dd><p>This is a symbol, used only to simplify inspection and debugging.
+</p>
+</dd>
+<dt><code>extensions</code></dt>
+<dd><p>A non-empty list of <code>&lt;service-extension&gt;</code> objects (see below).
+</p>
+</dd>
+<dt><code>compose</code> (default: <code>#f</code>)</dt>
+<dd><p>If this is <code>#f</code>, then the service type denotes services that cannot
+be extended&mdash;i.e., services that do not receive &ldquo;values&rdquo; from other
+services.
+</p>
+<p>Otherwise, it must be a one-argument procedure.  The procedure is called
+by <code>fold-services</code> and is passed a list of values collected from
+extensions.  It may return any single value.
+</p>
+</dd>
+<dt><code>extend</code> (default: <code>#f</code>)</dt>
+<dd><p>If this is <code>#f</code>, services of this type cannot be extended.
+</p>
+<p>Otherwise, it must be a two-argument procedure: <code>fold-services</code>
+calls it, passing it the initial value of the service as the first
+argument and the result of applying <code>compose</code> to the extension
+values as the second argument.  It must return a value that is a valid
+parameter value for the service instance.
+</p>
+</dd>
+<dt><code>description</code></dt>
+<dd><p>This is a string, possibly using Texinfo markup, describing in a couple
+of sentences what the service is about.  This string allows users to
+find about the service through <code>guix system search</code>
+(see <a href="Invoking-guix-system.html">Invoking guix system</a>).
+</p>
+</dd>
+<dt><code>default-value</code> (default: <code>&amp;no-default-value</code>)</dt>
+<dd><p>The default value associated for instances of this service type.  This
+allows users to use the <code>service</code> form without its second argument:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <span class="syntax-symbol">type</span></span>)</span>
+</pre></div>
+
+<p>The returned service in this case has the default value specified by
+<var>type</var>.
+</p></dd>
+</dl>
+
+<p>See <a href="Service-Types-and-Services.html">Service Types and Services</a>, for examples.
+</p></dd></dl>
+
+<dl>
+<dt id="index-service_002dextension" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">service-extension <var>target-type</var>                               <var>compute</var></span></dt>
+<dd><p>Return a new extension for services of type <var>target-type</var>.
+<var>compute</var> must be a one-argument procedure: <code>fold-services</code>
+calls it, passing it the value associated with the service that provides
+the extension; it must return a valid value for the target service.
+</p></dd></dl>
+
+<dl>
+<dt id="index-service_002dextension_003f" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">service-extension? <var>obj</var></span></dt>
+<dd><p>Return true if <var>obj</var> is a service extension.
+</p></dd></dl>
+
+<p>Occasionally, you might want to simply extend an existing service.  This
+involves creating a new service type and specifying the extension of
+interest, which can be verbose; the <code>simple-service</code> procedure
+provides a shorthand for this.
+</p>
+<dl>
+<dt id="index-simple_002dservice" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">simple-service <var>name</var> <var>target</var> <var>value</var></span></dt>
+<dd><p>Return a service that extends <var>target</var> with <var>value</var>.  This works
+by creating a singleton service type <var>name</var>, of which the returned
+service is an instance.
+</p>
+<p>For example, this extends mcron (see <a href="Scheduled-Job-Execution.html">Scheduled Job Execution</a>) with
+an additional job:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-simple_002dservice">simple-service</a> <span class="syntax-symbol">'my-mcron-job</span> <a class="syntax-symbol" href="Scheduled-Job-Execution.html#index-mcron_002dservice_002dtype">mcron-service-type</a>
+                <span class="syntax-symbol">#~</span><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">job</span> <span class="syntax-symbol">'</span><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">next-hour</span> <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">3</span></span>)</span></span>)</span> <span class="syntax-string">"guix gc -F 2G"</span></span>)</span></span>)</span>
+</pre></div>
+</dd></dl>
+
+<p>At the core of the service abstraction lies the <code>fold-services</code>
+procedure, which is responsible for &ldquo;compiling&rdquo; a list of services
+down to a single directory that contains everything needed to boot and
+run the system&mdash;the directory shown by the <code>guix system build</code>
+command (see <a href="Invoking-guix-system.html">Invoking guix system</a>).  In essence, it propagates
+service extensions down the service graph, updating each node parameters
+on the way, until it reaches the root node.
+</p>
+<dl>
+<dt id="index-fold_002dservices" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">fold-services <var>services</var>                             [#:target-type <var>system-service-type</var>]</span></dt>
+<dd><p>Fold <var>services</var> by propagating their extensions down to the root of
+type <var>target-type</var>; return the root service adjusted accordingly.
+</p></dd></dl>
+
+<p>Lastly, the <code>(gnu services)</code> module also defines several essential
+service types, some of which are listed below.
+</p>
+<dl>
+<dt id="index-system_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">system-service-type </span></dt>
+<dd><p>This is the root of the service graph.  It produces the system directory
+as returned by the <code>guix system build</code> command.
+</p></dd></dl>
+
+<dl>
+<dt id="index-boot_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">boot-service-type </span></dt>
+<dd><p>The type of the &ldquo;boot service&rdquo;, which produces the <em>boot script</em>.
+The boot script is what the initial RAM disk runs when booting.
+</p></dd></dl>
+
+<dl>
+<dt id="index-etc_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">etc-service-type </span></dt>
+<dd><p>The type of the <samp>/etc</samp> service.  This service is used to create
+files under <samp>/etc</samp> and can be extended by
+passing it name/file tuples such as:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-symbol">`</span><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-string">"issue"</span> <span class="syntax-symbol">,</span><span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-plain_002dfile">plain-file</a> <span class="syntax-string">"issue"</span> <span class="syntax-string">"Welcome!\n"</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>In this example, the effect would be to add an <samp>/etc/issue</samp> file
+pointing to the given file.
+</p></dd></dl>
+
+<dl>
+<dt id="index-setuid_002dprogram_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">setuid-program-service-type </span></dt>
+<dd><p>Type for the &ldquo;setuid-program service&rdquo;.  This service collects lists of
+executable file names, passed as gexps, and adds them to the set of
+setuid and setgid programs on the system (see <a href="Setuid-Programs.html">Setuid Programs</a>).
+</p></dd></dl>
+
+<dl>
+<dt id="index-profile_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">profile-service-type </span></dt>
+<dd><p>Type of the service that populates the <em>system profile</em>&mdash;i.e., the
+programs under <samp>/run/current-system/profile</samp>.  Other services can
+extend it by passing it lists of packages to add to the system profile.
+</p></dd></dl>
+
+<span id="index-provenance-tracking_002c-of-the-operating-system-2"></span>
+<span id="provenance_002dservice_002dtype"></span><dl>
+<dt id="index-provenance_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">provenance-service-type </span></dt>
+<dd><p>This is the type of the service that records <em>provenance meta-data</em>
+in the system itself.  It creates several files under
+<samp>/run/current-system</samp>:
+</p>
+<dl compact="compact">
+<dt><samp>channels.scm</samp></dt>
+<dd><p>This is a &ldquo;channel file&rdquo; that can be passed to <code>guix pull -C</code>
+or <code>guix time-machine -C</code>, and which describes the channels used
+to build the system, if that information was available
+(see <a href="Channels.html">Channels</a>).
+</p>
+</dd>
+<dt><samp>configuration.scm</samp></dt>
+<dd><p>This is the file that was passed as the value for this
+<code>provenance-service-type</code> service.  By default, <code>guix
+system reconfigure</code> automatically passes the OS configuration file it
+received on the command line.
+</p>
+</dd>
+<dt><samp>provenance</samp></dt>
+<dd><p>This contains the same information as the two other files but in a
+format that is more readily processable.
+</p></dd>
+</dl>
+
+<p>In general, these two pieces of information (channels and configuration
+file) are enough to reproduce the operating system &ldquo;from source&rdquo;.
+</p>
+<blockquote>
+<p><b>Caveats:</b> This information is necessary to rebuild your operating system, but it
+is not always sufficient.  In particular, <samp>configuration.scm</samp>
+itself is insufficient if it is not self-contained&mdash;if it refers to
+external Guile modules or to extra files.  If you want
+<samp>configuration.scm</samp> to be self-contained, we recommend that modules
+or files it refers to be part of a channel.
+</p>
+<p>Besides, provenance meta-data is &ldquo;silent&rdquo; in the sense that it does
+not change the bits contained in your system, <em>except for the
+meta-data bits themselves</em>.  Two different OS configurations or sets of
+channels can lead to the same system, bit-for-bit; when
+<code>provenance-service-type</code> is used, these two systems will have
+different meta-data and thus different store file names, which makes
+comparison less trivial.
+</p></blockquote>
+
+<p>This service is automatically added to your operating system
+configuration when you use <code>guix system reconfigure</code>,
+<code>guix system init</code>, or <code>guix deploy</code>.
+</p></dd></dl>
+
+<dl>
+<dt id="index-linux_002dloadable_002dmodule_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">linux-loadable-module-service-type </span></dt>
+<dd><p>Type of the service that collects lists of packages containing
+kernel-loadable modules, and adds them to the set of kernel-loadable
+modules.
+</p>
+<p>This service type is intended to be extended by other service types,
+such as below:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-simple_002dservice">simple-service</a> <span class="syntax-symbol">'installing-module</span>
+                <a class="syntax-symbol" href="Service-Reference.html#index-linux_002dloadable_002dmodule_002dservice_002dtype">linux-loadable-module-service-type</a>
+                <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-symbol">module-to-install-1</span>
+                      <span class="syntax-symbol">module-to-install-2</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>This does not actually load modules at bootup, only adds it to the
+kernel profile so that it <em>can</em> be loaded by other means.
+</p></dd></dl>
+
+<hr />
+<div class="header">
+<p>
+Next: <a href="Shepherd-Services.html" accesskey="n" rel="next">Shepherd Services</a>, Previous: <a href="Service-Types-and-Services.html" accesskey="p" rel="prev">Service Types and Services</a>, Up: <a href="Defining-Services.html" accesskey="u" rel="up">Defining Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

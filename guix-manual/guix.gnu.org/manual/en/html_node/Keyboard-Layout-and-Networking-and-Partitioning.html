@@ -1,0 +1,509 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Keyboard Layout and Networking and Partitioning (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="Keyboard Layout and Networking and Partitioning (GNU Guix Reference Manual)" />
+<meta name="keywords" content="Keyboard Layout and Networking and Partitioning (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Manual-Installation.html" rel="up" title="Manual Installation" />
+<link href="Proceeding-with-the-Installation.html" rel="next" title="Proceeding with the Installation" />
+<link href="Manual-Installation.html" rel="prev" title="Manual Installation" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="Keyboard-Layout-and-Networking-and-Partitioning"></span><div class="header">
+<p>
+Next: <a href="Proceeding-with-the-Installation.html" accesskey="n" rel="next">Proceeding with the Installation</a>, Up: <a href="Manual-Installation.html" accesskey="u" rel="up">Manual Installation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Keyboard-Layout_002c-Networking_002c-and-Partitioning"></span><h4 class="subsection">3.6.1 Keyboard Layout, Networking, and Partitioning</h4>
+
+<p>Before you can install the system, you may want to adjust the keyboard layout,
+set up networking, and partition your target hard disk.  This section will
+guide you through this.
+</p>
+<span id="Keyboard-Layout-1"></span><h4 class="subsubsection">3.6.1.1 Keyboard Layout</h4>
+
+<span id="index-keyboard-layout"></span>
+<p>The installation image uses the US qwerty keyboard layout.  If you want
+to change it, you can use the <code>loadkeys</code> command.  For example,
+the following command selects the Dvorak keyboard layout:
+</p>
+<div class="example">
+<pre class="example">loadkeys dvorak
+</pre></div>
+
+<p>See the files under <samp>/run/current-system/profile/share/keymaps</samp> for
+a list of available keyboard layouts.  Run <code>man loadkeys</code> for
+more information.
+</p>
+<span id="manual_002dinstallation_002dnetworking"></span><span id="Networking"></span><h4 class="subsubsection">3.6.1.2 Networking</h4>
+
+<p>Run the following command to see what your network interfaces are called:
+</p>
+<div class="example">
+<pre class="example">ifconfig -a
+</pre></div>
+
+<p>&hellip; or, using the GNU/Linux-specific <code>ip</code> command:
+</p>
+<div class="example">
+<pre class="example">ip address
+</pre></div>
+
+<p>Wired interfaces have a name starting with &lsquo;<samp>e</samp>&rsquo;; for example, the
+interface corresponding to the first on-board Ethernet controller is
+called &lsquo;<samp>eno1</samp>&rsquo;.  Wireless interfaces have a name starting with
+&lsquo;<samp>w</samp>&rsquo;, like &lsquo;<samp>w1p2s0</samp>&rsquo;.
+</p>
+<dl compact="compact">
+<dt>Wired connection</dt>
+<dd><p>To configure a wired network run the following command, substituting
+<var>interface</var> with the name of the wired interface you want to use.
+</p>
+<div class="example">
+<pre class="example">ifconfig <var>interface</var> up
+</pre></div>
+
+<p>&hellip; or, using the GNU/Linux-specific <code>ip</code> command:
+</p>
+<div class="example">
+<pre class="example">ip link set <var>interface</var> up
+</pre></div>
+
+</dd>
+<dt>Wireless connection</dt>
+<dd><span id="index-wireless"></span>
+<span id="index-WiFi"></span>
+<p>To configure wireless networking, you can create a configuration file
+for the <code>wpa_supplicant</code> configuration tool (its location is not
+important) using one of the available text editors such as
+<code>nano</code>:
+</p>
+<div class="example">
+<pre class="example">nano wpa_supplicant.conf
+</pre></div>
+
+<p>As an example, the following stanza can go to this file and will work
+for many wireless networks, provided you give the actual SSID and
+passphrase for the network you are connecting to:
+</p>
+<div class="example">
+<pre class="example">network={
+  ssid="<var>my-ssid</var>"
+  key_mgmt=WPA-PSK
+  psk="the network's secret passphrase"
+}
+</pre></div>
+
+<p>Start the wireless service and run it in the background with the
+following command (substitute <var>interface</var> with the name of the
+network interface you want to use):
+</p>
+<div class="example">
+<pre class="example">wpa_supplicant -c wpa_supplicant.conf -i <var>interface</var> -B
+</pre></div>
+
+<p>Run <code>man wpa_supplicant</code> for more information.
+</p></dd>
+</dl>
+
+<span id="index-DHCP"></span>
+<p>At this point, you need to acquire an IP address.  On a network where IP
+addresses are automatically assigned <i>via</i> DHCP, you can run:
+</p>
+<div class="example">
+<pre class="example">dhclient -v <var>interface</var>
+</pre></div>
+
+<p>Try to ping a server to see if networking is up and running:
+</p>
+<div class="example">
+<pre class="example">ping -c 3 gnu.org
+</pre></div>
+
+<p>Setting up network access is almost always a requirement because the
+image does not contain all the software and tools that may be needed.
+</p>
+<span id="index-proxy_002c-during-system-installation"></span>
+<p>If you need HTTP and HTTPS access to go through a proxy, run the
+following command:
+</p>
+<div class="example">
+<pre class="example">herd set-http-proxy guix-daemon <var>URL</var>
+</pre></div>
+
+<p>where <var>URL</var> is the proxy URL, for example
+<code>http://example.org:8118</code>.
+</p>
+<span id="index-installing-over-SSH"></span>
+<p>If you want to, you can continue the installation remotely by starting
+an SSH server:
+</p>
+<div class="example">
+<pre class="example">herd start ssh-daemon
+</pre></div>
+
+<p>Make sure to either set a password with <code>passwd</code>, or configure
+OpenSSH public key authentication before logging in.
+</p>
+<span id="Disk-Partitioning"></span><h4 class="subsubsection">3.6.1.3 Disk Partitioning</h4>
+
+<p>Unless this has already been done, the next step is to partition, and
+then format the target partition(s).
+</p>
+<p>The installation image includes several partitioning tools, including
+Parted (see <a href="https://www.gnu.org/software/parted/manual/html_node/Overview.html#Overview">Overview</a> in <cite>GNU Parted User Manual</cite>),
+<code>fdisk</code>, and <code>cfdisk</code>.  Run it and set up your disk with
+the partition layout you want:
+</p>
+<div class="example">
+<pre class="example">cfdisk
+</pre></div>
+
+<p>If your disk uses the GUID Partition Table (GPT) format and you plan to
+install BIOS-based GRUB (which is the default), make sure a BIOS Boot
+Partition is available (see <a href="https://www.gnu.org/software/grub/manual/html_node/BIOS-installation.html#BIOS-installation">BIOS installation</a> in <cite>GNU GRUB
+manual</cite>).
+</p>
+<span id="index-EFI_002c-installation"></span>
+<span id="index-UEFI_002c-installation"></span>
+<span id="index-ESP_002c-EFI-system-partition"></span>
+<p>If you instead wish to use EFI-based GRUB, a FAT32 <em>EFI System Partition</em>
+(ESP) is required.  This partition can be mounted at <samp>/boot/efi</samp> for
+instance and must have the <code>esp</code> flag set.  E.g., for <code>parted</code>:
+</p>
+<div class="example">
+<pre class="example">parted /dev/sda set 1 esp on
+</pre></div>
+
+<blockquote>
+<span id="index-grub_002dbootloader"></span>
+<span id="index-grub_002defi_002dbootloader"></span>
+<p><b>Note:</b> Unsure whether to use EFI- or BIOS-based GRUB?  If the directory
+<samp>/sys/firmware/efi</samp> exists in the installation image, then you should
+probably perform an EFI installation, using <code>grub-efi-bootloader</code>.
+Otherwise you should use the BIOS-based GRUB, known as
+<code>grub-bootloader</code>.  See <a href="Bootloader-Configuration.html">Bootloader Configuration</a>, for more info on
+bootloaders.
+</p></blockquote>
+
+<p>Once you are done partitioning the target hard disk drive, you have to
+create a file system on the relevant partition(s)<a id="DOCF10" href="Keyboard-Layout-and-Networking-and-Partitioning.html#FOOT10"><sup>10</sup></a>.  For the ESP, if you have one and assuming it is
+<samp>/dev/sda1</samp>, run:
+</p>
+<div class="example">
+<pre class="example">mkfs.fat -F32 /dev/sda1
+</pre></div>
+
+<p>For the root file system, ext4 is the most widely used format.  Other
+file systems, such as Btrfs, support compression, which is reported to
+nicely complement file deduplication that the daemon performs
+independently of the file system (see <a href="Invoking-guix_002ddaemon.html">deduplication</a>).
+</p>
+<p>Preferably, assign file systems a label so that you can easily and
+reliably refer to them in <code>file-system</code> declarations (see <a href="File-Systems.html">File Systems</a>).  This is typically done using the <code>-L</code> option of
+<code>mkfs.ext4</code> and related commands.  So, assuming the target root
+partition lives at <samp>/dev/sda2</samp>, a file system with the label
+<code>my-root</code> can be created with:
+</p>
+<div class="example">
+<pre class="example">mkfs.ext4 -L my-root /dev/sda2
+</pre></div>
+
+<span id="index-encrypted-disk"></span>
+<p>If you are instead planning to encrypt the root partition, you can use
+the Cryptsetup/LUKS utilities to do that (see <a href="https://linux.die.net/man/8/cryptsetup"><code>man cryptsetup</code></a> for more information).
+</p>
+<blockquote>
+<p><b>Warning:</b> Note that GRUB can unlock LUKS2 devices since version 2.06, but only
+supports the PBKDF2 key derivation function, which is not the default
+for <code>cryptsetup luksFormat</code>.  You can check which key derivation
+function is being used by a device by running <code>cryptsetup
+luksDump <var>device</var></code>, and looking for the PBKDF field of your
+keyslots.
+</p></blockquote>
+
+<p>Assuming you want to store the root partition on <samp>/dev/sda2</samp>, the
+command sequence to format it as a LUKS2 partition would be along these
+lines:
+</p>
+<div class="example">
+<pre class="example">cryptsetup luksFormat --type luks2 --pbkdf pbkdf2 /dev/sda2
+cryptsetup open /dev/sda2 my-partition
+mkfs.ext4 -L my-root /dev/mapper/my-partition
+</pre></div>
+
+<p>Once that is done, mount the target file system under <samp>/mnt</samp>
+with a command like (again, assuming <code>my-root</code> is the label of the
+root file system):
+</p>
+<div class="example">
+<pre class="example">mount LABEL=my-root /mnt
+</pre></div>
+
+<p>Also mount any other file systems you would like to use on the target
+system relative to this path.  If you have opted for <samp>/boot/efi</samp> as an
+EFI mount point for example, mount it at <samp>/mnt/boot/efi</samp> now so it is
+found by <code>guix system init</code> afterwards.
+</p>
+<p>Finally, if you plan to use one or more swap partitions (see <a href="Swap-Space.html">Swap Space</a>), make sure to initialize them with <code>mkswap</code>.  Assuming
+you have one swap partition on <samp>/dev/sda3</samp>, you would run:
+</p>
+<div class="example">
+<pre class="example">mkswap /dev/sda3
+swapon /dev/sda3
+</pre></div>
+
+<p>Alternatively, you may use a swap file.  For example, assuming that in
+the new system you want to use the file <samp>/swapfile</samp> as a swap file,
+you would run<a id="DOCF11" href="Keyboard-Layout-and-Networking-and-Partitioning.html#FOOT11"><sup>11</sup></a>:
+</p>
+<div class="example">
+<pre class="example"># This is 10 GiB of swap space.  Adjust "count" to change the size.
+dd if=/dev/zero of=/mnt/swapfile bs=1MiB count=10240
+# For security, make the file readable and writable only by root.
+chmod 600 /mnt/swapfile
+mkswap /mnt/swapfile
+swapon /mnt/swapfile
+</pre></div>
+
+<p>Note that if you have encrypted the root partition and created a swap
+file in its file system as described above, then the encryption also
+protects the swap file, just like any other file in that file system.
+</p>
+<div class="footnote">
+<hr />
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5><a id="FOOT10" href="Keyboard-Layout-and-Networking-and-Partitioning.html#DOCF10">(10)</a>
+<p>Currently
+Guix System only supports ext4, btrfs, JFS, F2FS, and XFS file systems.  In
+particular, code that reads file system UUIDs and labels only works for these
+file system types.</p>
+<h5><a id="FOOT11" href="Keyboard-Layout-and-Networking-and-Partitioning.html#DOCF11">(11)</a>
+<p>This example will work for many types of file
+systems (e.g., ext4).  However, for copy-on-write file systems (e.g.,
+btrfs), the required steps may be different.  For details, see the
+manual pages for <code>mkswap</code> and <code>swapon</code>.</p>
+</h5></h5></div>
+<hr />
+<div class="header">
+<p>
+Next: <a href="Proceeding-with-the-Installation.html" accesskey="n" rel="next">Proceeding with the Installation</a>, Up: <a href="Manual-Installation.html" accesskey="u" rel="up">Manual Installation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

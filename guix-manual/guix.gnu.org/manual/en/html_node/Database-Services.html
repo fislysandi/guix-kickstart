@@ -1,0 +1,615 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Database Services (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="Database Services (GNU Guix Reference Manual)" />
+<meta name="keywords" content="Database Services (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Services.html" rel="up" title="Services" />
+<link href="Mail-Services.html" rel="next" title="Mail Services" />
+<link href="Sound-Services.html" rel="prev" title="Sound Services" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="Database-Services"></span><div class="header">
+<p>
+Next: <a href="Mail-Services.html" accesskey="n" rel="next">Mail Services</a>, Previous: <a href="Sound-Services.html" accesskey="p" rel="prev">Sound Services</a>, Up: <a href="Services.html" accesskey="u" rel="up">Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Database-Services-1"></span><h4 class="subsection">12.9.11 Database Services</h4>
+
+<span id="index-database"></span>
+<span id="index-SQL"></span>
+<p>The <code>(gnu services databases)</code> module provides the following services.
+</p>
+<span id="PostgreSQL"></span><h4 class="subsubheading">PostgreSQL</h4>
+
+<p>The following example describes a PostgreSQL service with the default
+configuration.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <span class="syntax-symbol">postgresql-service-type</span>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Database-Services.html#index-postgresql_002dconfiguration">postgresql-configuration</a>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">postgresql</span> <span class="syntax-symbol">postgresql-10</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>If the services fails to start, it may be due to an incompatible
+cluster already present in <var>data-directory</var>.  Adjust it (or, if you
+don&rsquo;t need the cluster anymore, delete <var>data-directory</var>), then
+restart the service.
+</p>
+<p>Peer authentication is used by default and the <code>postgres</code> user
+account has no shell, which prevents the direct execution of <code>psql</code>
+commands as this user.  To use <code>psql</code>, you can temporarily log in
+as <code>postgres</code> using a shell, create a PostgreSQL superuser with the
+same name as one of the system users and then create the associated
+database.
+</p>
+<div class="example">
+<pre class="example">sudo -u postgres -s /bin/sh
+createuser --interactive
+createdb $MY_USER_LOGIN      # Replace appropriately.
+</pre></div>
+
+<dl>
+<dt id="index-postgresql_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">postgresql-configuration </span></dt>
+<dd><p>Data type representing the configuration for the
+<code>postgresql-service-type</code>.
+</p>
+<dl compact="compact">
+<dt><code>postgresql</code></dt>
+<dd><p>PostgreSQL package to use for the service.
+</p>
+</dd>
+<dt><code>port</code> (default: <code>5432</code>)</dt>
+<dd><p>Port on which PostgreSQL should listen.
+</p>
+</dd>
+<dt><code>locale</code> (default: <code>"en_US.utf8"</code>)</dt>
+<dd><p>Locale to use as the default when creating the database cluster.
+</p>
+</dd>
+<dt><code>config-file</code> (default: <code>(postgresql-config-file)</code>)</dt>
+<dd><p>The configuration file to use when running PostgreSQL.  The default
+behaviour uses the postgresql-config-file record with the default values
+for the fields.
+</p>
+</dd>
+<dt><code>log-directory</code> (default: <code>"/var/log/postgresql"</code>)</dt>
+<dd><p>The directory where <code>pg_ctl</code> output will be written in a file
+named <code>"pg_ctl.log"</code>.  This file can be useful to debug PostgreSQL
+configuration errors for instance.
+</p>
+</dd>
+<dt><code>data-directory</code> (default: <code>"/var/lib/postgresql/data"</code>)</dt>
+<dd><p>Directory in which to store the data.
+</p>
+</dd>
+<dt><code>extension-packages</code> (default: <code>'()</code>)</dt>
+<dd><span id="index-postgresql-extension_002dpackages"></span>
+<p>Additional extensions are loaded from packages listed in
+<var>extension-packages</var>.  Extensions are available at runtime.  For instance,
+to create a geographic database using the <code>postgis</code> extension, a user can
+configure the postgresql-service as in this example:
+</p>
+<span id="index-postgis"></span>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">use-package-modules</span> <span class="syntax-symbol">databases</span> <span class="syntax-symbol">geo</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="operating_002dsystem-Reference.html#index-operating_002dsystem-1">operating-system</a>
+  <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Syntax-Rules.html#index-_002e_002e_002e">...</a>
+  <span class="syntax-comment">;; postgresql is required to run `psql' but postgis is not required for
+</span>  <span class="syntax-comment">;; proper operation.
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">packages</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-cons_002a">cons*</a> <span class="syntax-symbol">postgresql</span> <span class="syntax-symbol">%base-packages</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">services</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-cons_002a">cons*</a>
+      <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <span class="syntax-symbol">postgresql-service-type</span>
+               <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="Database-Services.html#index-postgresql_002dconfiguration">postgresql-configuration</a>
+                <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">postgresql</span> <span class="syntax-symbol">postgresql-10</span></span>)</span>
+                <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">extension-packages</span> <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-symbol">postgis</span></span>)</span></span>)</span></span>)</span></span>)</span>
+      <a class="syntax-symbol" href="Base-Services.html#index-_0025base_002dservices-1">%base-services</a></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>Then the extension becomes visible and you can initialise an empty geographic
+database in this way:
+</p>
+<div class="example">
+<pre class="example">psql -U postgres
+&gt; create database postgistest;
+&gt; \connect postgistest;
+&gt; create extension postgis;
+&gt; create extension postgis_topology;
+</pre></div>
+
+<p>There is no need to add this field for contrib extensions such as hstore or
+dblink as they are already loadable by postgresql.  This field is only
+required to add extensions provided by other packages.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-postgresql_002dconfig_002dfile" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">postgresql-config-file </span></dt>
+<dd><p>Data type representing the PostgreSQL configuration file.  As shown in
+the following example, this can be used to customize the configuration
+of PostgreSQL.  Note that you can use any G-expression or filename in
+place of this record, if you already have a configuration file you&rsquo;d
+like to use for example.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <span class="syntax-symbol">postgresql-service-type</span>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Database-Services.html#index-postgresql_002dconfiguration">postgresql-configuration</a>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">config-file</span>
+           <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Database-Services.html#index-postgresql_002dconfig_002dfile">postgresql-config-file</a>
+            <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">log-destination</span> <span class="syntax-string">"stderr"</span></span>)</span>
+            <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">hba-file</span>
+             <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-plain_002dfile">plain-file</a> <span class="syntax-string">"pg_hba.conf"</span>
+                         <span class="syntax-string">"
+local	all	all			trust
+host	all	all	127.0.0.1/32 	md5
+host	all	all	::1/128 	md5"</span></span>)</span></span>)</span>
+            <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">extra-config</span>
+             <span class="syntax-symbol">'</span><span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-string">"session_preload_libraries"</span>     <span class="syntax-string">"auto_explain"</span></span>)</span>
+               <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-string">"random_page_cost"</span>              <span class="syntax-symbol">2</span></span>)</span>
+               <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-string">"auto_explain.log_min_duration"</span> <span class="syntax-string">"100 ms"</span></span>)</span>
+               <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-string">"work_mem"</span>                      <span class="syntax-string">"500 MB"</span></span>)</span>
+               <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-string">"logging_collector"</span>             <span class="syntax-symbol">#t</span></span>)</span>
+               <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-string">"log_directory"</span>                 <span class="syntax-string">"/var/log/postgresql"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<dl compact="compact">
+<dt><code>log-destination</code> (default: <code>"syslog"</code>)</dt>
+<dd><p>The logging method to use for PostgreSQL.  Multiple values are accepted,
+separated by commas.
+</p>
+</dd>
+<dt><code>hba-file</code> (default: <code>%default-postgres-hba</code>)</dt>
+<dd><p>Filename or G-expression for the host-based authentication
+configuration.
+</p>
+</dd>
+<dt><code>ident-file</code> (default: <code>%default-postgres-ident</code>)</dt>
+<dd><p>Filename or G-expression for the user name mapping configuration.
+</p>
+</dd>
+<dt><code>socket-directory</code> (default: <code>"/var/run/postgresql"</code>)</dt>
+<dd><p>Specifies the directory of the Unix-domain socket(s) on which PostgreSQL
+is to listen for connections from client applications. If set to
+<code>""</code> PostgreSQL does not listen on any Unix-domain sockets, in
+which case only TCP/IP sockets can be used to connect to the server.
+</p>
+<p>By default, the <code>#false</code> value means the PostgreSQL default value
+will be used, which is currently &lsquo;<samp>/tmp</samp>&rsquo;.
+</p>
+</dd>
+<dt><code>extra-config</code> (default: <code>'()</code>)</dt>
+<dd><p>List of additional keys and values to include in the PostgreSQL config
+file.  Each entry in the list should be a list where the first element
+is the key, and the remaining elements are the values.
+</p>
+<p>The values can be numbers, booleans or strings and will be mapped to
+PostgreSQL parameters types <code>Boolean</code>, <code>String</code>,
+<code>Numeric</code>, <code>Numeric with Unit</code> and <code>Enumerated</code> described
+<a href="https://www.postgresql.org/docs/current/config-setting.html">here</a>.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-postgresql_002drole_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">postgresql-role-service-type </span></dt>
+<dd><p>This service allows to create PostgreSQL roles and databases after
+PostgreSQL service start.  Here is an example of its use.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Database-Services.html#index-postgresql_002drole_002dservice_002dtype">postgresql-role-service-type</a>
+            <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Database-Services.html#index-postgresql_002drole_002dconfiguration">postgresql-role-configuration</a>
+             <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">roles</span>
+              <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="Database-Services.html#index-postgresql_002drole">postgresql-role</a>
+                     <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">name</span> <span class="syntax-string">"test"</span></span>)</span>
+                     <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">create-database?</span> <span class="syntax-symbol">#t</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>This service can be extended with extra roles, as in this
+example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service_002dextension">service-extension</a> <a class="syntax-symbol" href="Database-Services.html#index-postgresql_002drole_002dservice_002dtype">postgresql-role-service-type</a>
+                   <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Higher_002dOrder-Functions.html#index-const">const</a> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="Database-Services.html#index-postgresql_002drole">postgresql-role</a>
+                           <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">name</span> <span class="syntax-string">"alice"</span></span>)</span>
+                           <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">create-database?</span> <span class="syntax-symbol">#t</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt id="index-postgresql_002drole" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">postgresql-role </span></dt>
+<dd><p>PostgreSQL manages database access permissions using the concept of
+roles.  A role can be thought of as either a database user, or a group
+of database users, depending on how the role is set up.  Roles can own
+database objects (for example, tables) and can assign privileges on
+those objects to other roles to control who has access to which objects.
+</p>
+<dl compact="compact">
+<dt><code>name</code></dt>
+<dd><p>The role name.
+</p>
+</dd>
+<dt><code>permissions</code> (default: <code>'(createdb login)</code>)</dt>
+<dd><p>The role permissions list.  Supported permissions are <code>bypassrls</code>,
+<code>createdb</code>, <code>createrole</code>, <code>login</code>, <code>replication</code> and
+<code>superuser</code>.
+</p>
+</dd>
+<dt><code>create-database?</code> (default: <code>#f</code>)</dt>
+<dd><p>Whether to create a database with the same name as the role.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-postgresql_002drole_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">postgresql-role-configuration </span></dt>
+<dd><p>Data type representing the configuration of
+<var>postgresql-role-service-type</var>.
+</p>
+<dl compact="compact">
+<dt><code>host</code> (default: <code>"/var/run/postgresql"</code>)</dt>
+<dd><p>The PostgreSQL host to connect to.
+</p>
+</dd>
+<dt><code>log</code> (default: <code>"/var/log/postgresql_roles.log"</code>)</dt>
+<dd><p>File name of the log file.
+</p>
+</dd>
+<dt><code>roles</code> (default: <code>'()</code>)</dt>
+<dd><p>The initial PostgreSQL roles to create.
+</p></dd>
+</dl>
+</dd></dl>
+
+<span id="MariaDB_002fMySQL"></span><h4 class="subsubheading">MariaDB/MySQL</h4>
+
+<dl>
+<dt id="index-mysql_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">mysql-service-type </span></dt>
+<dd><p>This is the service type for a MySQL or MariaDB database server.  Its value
+is a <code>mysql-configuration</code> object that specifies which package to use,
+as well as various settings for the <code>mysqld</code> daemon.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mysql_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">mysql-configuration </span></dt>
+<dd><p>Data type representing the configuration of <var>mysql-service-type</var>.
+</p>
+<dl compact="compact">
+<dt><code>mysql</code> (default: <var>mariadb</var>)</dt>
+<dd><p>Package object of the MySQL database server, can be either <var>mariadb</var>
+or <var>mysql</var>.
+</p>
+<p>For MySQL, a temporary root password will be displayed at activation time.
+For MariaDB, the root password is empty.
+</p>
+</dd>
+<dt><code>bind-address</code> (default: <code>"127.0.0.1"</code>)</dt>
+<dd><p>The IP on which to listen for network connections.  Use <code>"0.0.0.0"</code>
+to bind to all available network interfaces.
+</p>
+</dd>
+<dt><code>port</code> (default: <code>3306</code>)</dt>
+<dd><p>TCP port on which the database server listens for incoming connections.
+</p>
+</dd>
+<dt><code>socket</code> (default: <code>"/run/mysqld/mysqld.sock"</code>)</dt>
+<dd><p>Socket file to use for local (non-network) connections.
+</p>
+</dd>
+<dt><code>extra-content</code> (default: <code>""</code>)</dt>
+<dd><p>Additional settings for the <samp>my.cnf</samp> configuration file.
+</p>
+</dd>
+<dt><code>extra-environment</code> (default: <code>#~'()</code>)</dt>
+<dd><p>List of environment variables passed to the <code>mysqld</code> process.
+</p>
+</dd>
+<dt><code>auto-upgrade?</code> (default: <code>#t</code>)</dt>
+<dd><p>Whether to automatically run <code>mysql_upgrade</code> after starting the
+service.  This is necessary to upgrade the <em>system schema</em> after
+&ldquo;major&rdquo; updates (such as switching from MariaDB 10.4 to 10.5), but can
+be disabled if you would rather do that manually.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span id="Memcached"></span><h4 class="subsubheading">Memcached</h4>
+
+<dl>
+<dt id="index-memcached_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">memcached-service-type </span></dt>
+<dd><p>This is the service type for the <a href="https://memcached.org/">Memcached</a> service, which provides a distributed in memory cache.  The
+value for the service type is a <code>memcached-configuration</code> object.
+</p></dd></dl>
+
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Database-Services.html#index-memcached_002dservice_002dtype">memcached-service-type</a></span>)</span>
+</pre></div>
+
+<dl>
+<dt id="index-memcached_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">memcached-configuration </span></dt>
+<dd><p>Data type representing the configuration of memcached.
+</p>
+<dl compact="compact">
+<dt><code>memcached</code> (default: <code>memcached</code>)</dt>
+<dd><p>The Memcached package to use.
+</p>
+</dd>
+<dt><code>interfaces</code> (default: <code>'("0.0.0.0")</code>)</dt>
+<dd><p>Network interfaces on which to listen.
+</p>
+</dd>
+<dt><code>tcp-port</code> (default: <code>11211</code>)</dt>
+<dd><p>Port on which to accept connections.
+</p>
+</dd>
+<dt><code>udp-port</code> (default: <code>11211</code>)</dt>
+<dd><p>Port on which to accept UDP connections on, a value of 0 will disable
+listening on a UDP socket.
+</p>
+</dd>
+<dt><code>additional-options</code> (default: <code>'()</code>)</dt>
+<dd><p>Additional command line options to pass to <code>memcached</code>.
+</p></dd>
+</dl>
+</dd></dl>
+
+<span id="Redis"></span><h4 class="subsubheading">Redis</h4>
+
+<dl>
+<dt id="index-redis_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">redis-service-type </span></dt>
+<dd><p>This is the service type for the <a href="https://redis.io/">Redis</a>
+key/value store, whose value is a <code>redis-configuration</code> object.
+</p></dd></dl>
+
+<dl>
+<dt id="index-redis_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">redis-configuration </span></dt>
+<dd><p>Data type representing the configuration of redis.
+</p>
+<dl compact="compact">
+<dt><code>redis</code> (default: <code>redis</code>)</dt>
+<dd><p>The Redis package to use.
+</p>
+</dd>
+<dt><code>bind</code> (default: <code>"127.0.0.1"</code>)</dt>
+<dd><p>Network interface on which to listen.
+</p>
+</dd>
+<dt><code>port</code> (default: <code>6379</code>)</dt>
+<dd><p>Port on which to accept connections on, a value of 0 will disable
+listening on a TCP socket.
+</p>
+</dd>
+<dt><code>working-directory</code> (default: <code>"/var/lib/redis"</code>)</dt>
+<dd><p>Directory in which to store the database and related files.
+</p></dd>
+</dl>
+</dd></dl>
+
+<hr />
+<div class="header">
+<p>
+Next: <a href="Mail-Services.html" accesskey="n" rel="next">Mail Services</a>, Previous: <a href="Sound-Services.html" accesskey="p" rel="prev">Sound Services</a>, Up: <a href="Services.html" accesskey="u" rel="up">Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

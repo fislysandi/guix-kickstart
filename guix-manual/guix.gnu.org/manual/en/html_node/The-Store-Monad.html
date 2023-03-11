@@ -1,0 +1,576 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>The Store Monad (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="The Store Monad (GNU Guix Reference Manual)" />
+<meta name="keywords" content="The Store Monad (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Programming-Interface.html" rel="up" title="Programming Interface" />
+<link href="G_002dExpressions.html" rel="next" title="G-Expressions" />
+<link href="Derivations.html" rel="prev" title="Derivations" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="The-Store-Monad"></span><div class="header">
+<p>
+Next: <a href="G_002dExpressions.html" accesskey="n" rel="next">G-Expressions</a>, Previous: <a href="Derivations.html" accesskey="p" rel="prev">Derivations</a>, Up: <a href="Programming-Interface.html" accesskey="u" rel="up">Programming Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="The-Store-Monad-1"></span><h3 class="section">9.11 The Store Monad</h3>
+
+<span id="index-monad"></span>
+
+<p>The procedures that operate on the store described in the previous
+sections all take an open connection to the build daemon as their first
+argument.  Although the underlying model is functional, they either have
+side effects or depend on the current state of the store.
+</p>
+<p>The former is inconvenient: the connection to the build daemon has to be
+carried around in all those functions, making it impossible to compose
+functions that do not take that parameter with functions that do.  The
+latter can be problematic: since store operations have side effects
+and/or depend on external state, they have to be properly sequenced.
+</p>
+<span id="index-monadic-values"></span>
+<span id="index-monadic-functions"></span>
+<p>This is where the <code>(guix monads)</code> module comes in.  This module
+provides a framework for working with <em>monads</em>, and a particularly
+useful monad for our uses, the <em>store monad</em>.  Monads are a
+construct that allows two things: associating &ldquo;context&rdquo; with values
+(in our case, the context is the store), and building sequences of
+computations (here computations include accesses to the store).  Values
+in a monad&mdash;values that carry this additional context&mdash;are called
+<em>monadic values</em>; procedures that return such values are called
+<em>monadic procedures</em>.
+</p>
+<p>Consider this &ldquo;normal&rdquo; procedure:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">sh-symlink</span> <span class="syntax-symbol">store</span></span>)</span>
+  <span class="syntax-comment">;; Return a derivation that symlinks the 'bash' executable.
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-special">let*</span> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">drv</span> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="Defining-Packages.html#index-package_002dderivation">package-derivation</a> <span class="syntax-symbol">store</span> <span class="syntax-symbol">bash</span></span>)</span></span>)</span>
+         <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">out</span> <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">derivation-&gt;output-path</span> <span class="syntax-symbol">drv</span></span>)</span></span>)</span>
+         <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">sh</span>  <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-symbol">out</span> <span class="syntax-string">"/bin/bash"</span></span>)</span></span>)</span></span>)</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="Derivations.html#index-build_002dexpression_002d_003ederivation">build-expression-&gt;derivation</a> <span class="syntax-symbol">store</span> <span class="syntax-string">"sh"</span>
+                                  <span class="syntax-symbol">`</span><span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/File-System.html#index-symlink">symlink</a> <span class="syntax-symbol">,sh</span> <span class="syntax-symbol">%output</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>Using <code>(guix monads)</code> and <code>(guix gexp)</code>, it may be rewritten
+as a monadic function:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">sh-symlink</span></span>)</span>
+  <span class="syntax-comment">;; Same, but return a monadic value.
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="The-Store-Monad.html#index-mlet">mlet</a> <a class="syntax-symbol" href="The-Store-Monad.html#index-_0025store_002dmonad">%store-monad</a> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">drv</span> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="The-Store-Monad.html#index-package_002d_003ederivation">package-&gt;derivation</a> <span class="syntax-symbol">bash</span></span>)</span></span>)</span></span>)</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-gexp_002d_003ederivation">gexp-&gt;derivation</a> <span class="syntax-string">"sh"</span>
+                      <span class="syntax-symbol">#~</span><span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/File-System.html#index-symlink">symlink</a> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-symbol">#$drv</span> <span class="syntax-string">"/bin/bash"</span></span>)</span>
+                                 <span class="syntax-symbol">#$output</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>There are several things to note in the second version: the <code>store</code>
+parameter is now implicit and is &ldquo;threaded&rdquo; in the calls to the
+<code>package-&gt;derivation</code> and <code>gexp-&gt;derivation</code> monadic
+procedures, and the monadic value returned by <code>package-&gt;derivation</code>
+is <em>bound</em> using <code>mlet</code> instead of plain <code>let</code>.
+</p>
+<p>As it turns out, the call to <code>package-&gt;derivation</code> can even be
+omitted since it will take place implicitly, as we will see later
+(see <a href="G_002dExpressions.html">G-Expressions</a>):
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">sh-symlink</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-gexp_002d_003ederivation">gexp-&gt;derivation</a> <span class="syntax-string">"sh"</span>
+                    <span class="syntax-symbol">#~</span><span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/File-System.html#index-symlink">symlink</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-symbol">#$bash</span> <span class="syntax-string">"/bin/bash"</span></span>)</span>
+                               <span class="syntax-symbol">#$output</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>Calling the monadic <code>sh-symlink</code> has no effect.  As someone once
+said, &ldquo;you exit a monad like you exit a building on fire: by running&rdquo;.
+So, to exit the monad and get the desired effect, one must use
+<code>run-with-store</code>:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="The-Store-Monad.html#index-run_002dwith_002dstore">run-with-store</a> <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="The-Store.html#index-open_002dconnection">open-connection</a></span>)</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">sh-symlink</span></span>)</span></span>)</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-symbol">/gnu/store/...-sh-symlink</span>
+</pre></div>
+
+<p>Note that the <code>(guix monad-repl)</code> module extends the Guile REPL with
+new &ldquo;commands&rdquo; to make it easier to deal with monadic procedures:
+<code>run-in-store</code>, and <code>enter-store-monad</code> (see <a href="Using-Guix-Interactively.html">Using Guix Interactively</a>).  The former is used
+to &ldquo;run&rdquo; a single monadic value through the store:
+</p>
+<div class="example">
+<pre class="example">scheme@(guile-user)&gt; ,run-in-store (package-&gt;derivation hello)
+$1 = #&lt;derivation /gnu/store/&hellip;-hello-2.9.drv =&gt; &hellip;&gt;
+</pre></div>
+
+<p>The latter enters a recursive REPL, where all the return values are
+automatically run through the store:
+</p>
+<div class="example">
+<pre class="example">scheme@(guile-user)&gt; ,enter-store-monad
+store-monad@(guile-user) [1]&gt; (package-&gt;derivation hello)
+$2 = #&lt;derivation /gnu/store/&hellip;-hello-2.9.drv =&gt; &hellip;&gt;
+store-monad@(guile-user) [1]&gt; (text-file "foo" "Hello!")
+$3 = "/gnu/store/&hellip;-foo"
+store-monad@(guile-user) [1]&gt; ,q
+scheme@(guile-user)&gt;
+</pre></div>
+
+<p>Note that non-monadic values cannot be returned in the
+<code>store-monad</code> REPL.
+</p>
+<p>Other meta-commands are available at the REPL, such as <code>,build</code> to
+build a file-like object (see <a href="Using-Guix-Interactively.html">Using Guix Interactively</a>).
+</p>
+<p>The main syntactic forms to deal with monads in general are provided by
+the <code>(guix monads)</code> module and are described below.
+</p>
+<dl>
+<dt id="index-with_002dmonad" class="symbol-definition"><span class="symbol-definition-category">Scheme Syntax: </span><span class="symbol-definition-prototype">with-monad <var>monad</var> <var>body</var> ...</span></dt>
+<dd><p>Evaluate any <code>&gt;&gt;=</code> or <code>return</code> forms in <var>body</var> as being
+in <var>monad</var>.
+</p></dd></dl>
+
+<dl>
+<dt id="index-return" class="symbol-definition"><span class="symbol-definition-category">Scheme Syntax: </span><span class="symbol-definition-prototype">return <var>val</var></span></dt>
+<dd><p>Return a monadic value that encapsulates <var>val</var>.
+</p></dd></dl>
+
+<dl>
+<dt id="index-_003e_003e_003d" class="symbol-definition"><span class="symbol-definition-category">Scheme Syntax: </span><span class="symbol-definition-prototype">&gt;&gt;= <var>mval</var> <var>mproc</var> ...</span></dt>
+<dd><p><em>Bind</em> monadic value <var>mval</var>, passing its &ldquo;contents&rdquo; to monadic
+procedures <var>mproc</var>&hellip;<a id="DOCF22" href="The-Store-Monad.html#FOOT22"><sup>22</sup></a>.  There can be one <var>mproc</var> or several of them, as
+in this example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="The-Store-Monad.html#index-run_002dwith_002dstate">run-with-state</a>
+    <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="The-Store-Monad.html#index-with_002dmonad">with-monad</a> <a class="syntax-symbol" href="The-Store-Monad.html#index-_0025state_002dmonad">%state-monad</a>
+      <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="The-Store-Monad.html#index-_003e_003e_003d">&gt;&gt;=</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="The-Store-Monad.html#index-return">return</a> <span class="syntax-symbol">1</span></span>)</span>
+           <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-special">lambda</span> <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">x</span></span>)</span> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="The-Store-Monad.html#index-return">return</a> <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Arithmetic.html#index-_002b">+</a> <span class="syntax-symbol">1</span> <span class="syntax-symbol">x</span></span>)</span></span>)</span></span>)</span>
+           <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-special">lambda</span> <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">x</span></span>)</span> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="The-Store-Monad.html#index-return">return</a> <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Arithmetic.html#index-_002a">*</a> <span class="syntax-symbol">2</span> <span class="syntax-symbol">x</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+  <span class="syntax-symbol">'some-state</span></span>)</span>
+
+<span class="syntax-symbol">⇒</span> <span class="syntax-symbol">4</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-symbol">some-state</span>
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt id="index-mlet" class="symbol-definition"><span class="symbol-definition-category">Scheme Syntax: </span><span class="symbol-definition-prototype">mlet <var>monad</var> ((<var>var</var> <var>mval</var>) ...)        <var>body</var> ...</span></dt>
+<dt id="index-mlet_002a" class="symbol-definition"><span class="symbol-definition-category">Scheme Syntax: </span><span class="symbol-definition-prototype">mlet* <var>monad</var> ((<var>var</var> <var>mval</var>) ...)        <var>body</var> ...</span></dt>
+<dd><p>Bind the variables <var>var</var> to the monadic values <var>mval</var> in
+<var>body</var>, which is a sequence of expressions.  As with the bind
+operator, this can be thought of as &ldquo;unpacking&rdquo; the raw, non-monadic
+value &ldquo;contained&rdquo; in <var>mval</var> and making <var>var</var> refer to that
+raw, non-monadic value within the scope of the <var>body</var>.  The form
+(<var>var</var> -&gt; <var>val</var>) binds <var>var</var> to the &ldquo;normal&rdquo; value
+<var>val</var>, as per <code>let</code>.  The binding operations occur in sequence
+from left to right.  The last expression of <var>body</var> must be a monadic
+expression, and its result will become the result of the <code>mlet</code> or
+<code>mlet*</code> when run in the <var>monad</var>.
+</p>
+<p><code>mlet*</code> is to <code>mlet</code> what <code>let*</code> is to <code>let</code>
+(see <a href="https://www.gnu.org/software/guile/manual/html_node/Local-Bindings.html#Local-Bindings">Local Bindings</a> in <cite>GNU Guile Reference Manual</cite>).
+</p></dd></dl>
+
+<dl>
+<dt id="index-mbegin" class="symbol-definition"><span class="symbol-definition-category">Scheme System: </span><span class="symbol-definition-prototype">mbegin <var>monad</var> <var>mexp</var> ...</span></dt>
+<dd><p>Bind <var>mexp</var> and the following monadic expressions in sequence,
+returning the result of the last expression.  Every expression in the
+sequence must be a monadic expression.
+</p>
+<p>This is akin to <code>mlet</code>, except that the return values of the
+monadic expressions are ignored.  In that sense, it is analogous to
+<code>begin</code>, but applied to monadic expressions.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mwhen" class="symbol-definition"><span class="symbol-definition-category">Scheme System: </span><span class="symbol-definition-prototype">mwhen <var>condition</var> <var>mexp0</var> <var>mexp*</var> ...</span></dt>
+<dd><p>When <var>condition</var> is true, evaluate the sequence of monadic
+expressions <var>mexp0</var>..<var>mexp*</var> as in an <code>mbegin</code>.  When
+<var>condition</var> is false, return <code>*unspecified*</code> in the current
+monad.  Every expression in the sequence must be a monadic expression.
+</p></dd></dl>
+
+<dl>
+<dt id="index-munless" class="symbol-definition"><span class="symbol-definition-category">Scheme System: </span><span class="symbol-definition-prototype">munless <var>condition</var> <var>mexp0</var> <var>mexp*</var> ...</span></dt>
+<dd><p>When <var>condition</var> is false, evaluate the sequence of monadic
+expressions <var>mexp0</var>..<var>mexp*</var> as in an <code>mbegin</code>.  When
+<var>condition</var> is true, return <code>*unspecified*</code> in the current
+monad.  Every expression in the sequence must be a monadic expression.
+</p></dd></dl>
+
+<span id="index-state-monad"></span>
+<p>The <code>(guix monads)</code> module provides the <em>state monad</em>, which
+allows an additional value&mdash;the state&mdash;to be <em>threaded</em> through
+monadic procedure calls.
+</p>
+<dl>
+<dt id="index-_0025state_002dmonad" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">%state-monad </span></dt>
+<dd><p>The state monad.  Procedures in the state monad can access and change
+the state that is threaded.
+</p>
+<p>Consider the example below.  The <code>square</code> procedure returns a value
+in the state monad.  It returns the square of its argument, but also
+increments the current state value:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">square</span> <span class="syntax-symbol">x</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="The-Store-Monad.html#index-mlet">mlet</a> <a class="syntax-symbol" href="The-Store-Monad.html#index-_0025state_002dmonad">%state-monad</a> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d1-Length-Append-etc.html#index-count">count</a> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="The-Store-Monad.html#index-current_002dstate">current-state</a></span>)</span></span>)</span></span>)</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="The-Store-Monad.html#index-mbegin">mbegin</a> <a class="syntax-symbol" href="The-Store-Monad.html#index-_0025state_002dmonad">%state-monad</a>
+      <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="The-Store-Monad.html#index-set_002dcurrent_002dstate">set-current-state</a> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Arithmetic.html#index-_002b">+</a> <span class="syntax-symbol">1</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d1-Length-Append-etc.html#index-count">count</a></span>)</span></span>)</span>
+      <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="The-Store-Monad.html#index-return">return</a> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Arithmetic.html#index-_002a">*</a> <span class="syntax-symbol">x</span> <span class="syntax-symbol">x</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="The-Store-Monad.html#index-run_002dwith_002dstate">run-with-state</a> <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/PEG-Syntax-Reference.html#index-sequence">sequence</a> <a class="syntax-symbol" href="The-Store-Monad.html#index-_0025state_002dmonad">%state-monad</a> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-special">map</span> <span class="syntax-symbol">square</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d1-Constructors.html#index-iota">iota</a> <span class="syntax-symbol">3</span></span>)</span></span>)</span></span>)</span> <span class="syntax-symbol">0</span></span>)</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">0</span> <span class="syntax-symbol">1</span> <span class="syntax-symbol">4</span></span>)</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-symbol">3</span>
+</pre></div>
+
+<p>When &ldquo;run&rdquo; through <code>%state-monad</code>, we obtain that additional state
+value, which is the number of <code>square</code> calls.
+</p></dd></dl>
+
+<dl>
+<dt id="index-current_002dstate" class="symbol-definition"><span class="symbol-definition-category">Monadic Procedure: </span><span class="symbol-definition-prototype">current-state </span></dt>
+<dd><p>Return the current state as a monadic value.
+</p></dd></dl>
+
+<dl>
+<dt id="index-set_002dcurrent_002dstate" class="symbol-definition"><span class="symbol-definition-category">Monadic Procedure: </span><span class="symbol-definition-prototype">set-current-state <var>value</var></span></dt>
+<dd><p>Set the current state to <var>value</var> and return the previous state as a
+monadic value.
+</p></dd></dl>
+
+<dl>
+<dt id="index-state_002dpush" class="symbol-definition"><span class="symbol-definition-category">Monadic Procedure: </span><span class="symbol-definition-prototype">state-push <var>value</var></span></dt>
+<dd><p>Push <var>value</var> to the current state, which is assumed to be a list,
+and return the previous state as a monadic value.
+</p></dd></dl>
+
+<dl>
+<dt id="index-state_002dpop" class="symbol-definition"><span class="symbol-definition-category">Monadic Procedure: </span><span class="symbol-definition-prototype">state-pop </span></dt>
+<dd><p>Pop a value from the current state and return it as a monadic value.
+The state is assumed to be a list.
+</p></dd></dl>
+
+<dl>
+<dt id="index-run_002dwith_002dstate" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">run-with-state <var>mval</var> [<var>state</var>]</span></dt>
+<dd><p>Run monadic value <var>mval</var> starting with <var>state</var> as the initial
+state.  Return two values: the resulting value, and the resulting state.
+</p></dd></dl>
+
+<p>The main interface to the store monad, provided by the <code>(guix
+store)</code> module, is as follows.
+</p>
+<dl>
+<dt id="index-_0025store_002dmonad" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">%store-monad </span></dt>
+<dd><p>The store monad&mdash;an alias for <code>%state-monad</code>.
+</p>
+<p>Values in the store monad encapsulate accesses to the store.  When its
+effect is needed, a value of the store monad must be &ldquo;evaluated&rdquo; by
+passing it to the <code>run-with-store</code> procedure (see below).
+</p></dd></dl>
+
+<dl>
+<dt id="index-run_002dwith_002dstore" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">run-with-store <var>store</var> <var>mval</var> [#:guile-for-build] [#:system (%current-system)]</span></dt>
+<dd><p>Run <var>mval</var>, a monadic value in the store monad, in <var>store</var>, an
+open store connection.
+</p></dd></dl>
+
+<dl>
+<dt id="index-text_002dfile" class="symbol-definition"><span class="symbol-definition-category">Monadic Procedure: </span><span class="symbol-definition-prototype">text-file <var>name</var> <var>text</var> [<var>references</var>]</span></dt>
+<dd><p>Return as a monadic value the absolute file name in the store of the file
+containing <var>text</var>, a string.  <var>references</var> is a list of store items that the
+resulting text file refers to; it defaults to the empty list.
+</p></dd></dl>
+
+<dl>
+<dt id="index-binary_002dfile" class="symbol-definition"><span class="symbol-definition-category">Monadic Procedure: </span><span class="symbol-definition-prototype">binary-file <var>name</var> <var>data</var> [<var>references</var>]</span></dt>
+<dd><p>Return as a monadic value the absolute file name in the store of the file
+containing <var>data</var>, a bytevector.  <var>references</var> is a list of store
+items that the resulting binary file refers to; it defaults to the empty list.
+</p></dd></dl>
+
+<dl>
+<dt id="index-interned_002dfile" class="symbol-definition"><span class="symbol-definition-category">Monadic Procedure: </span><span class="symbol-definition-prototype">interned-file <var>file</var> [<var>name</var>]          [#:recursive? #t] [#:select? (const #t)]</span></dt>
+<dd><p>Return the name of <var>file</var> once interned in the store.  Use
+<var>name</var> as its store name, or the basename of <var>file</var> if
+<var>name</var> is omitted.
+</p>
+<p>When <var>recursive?</var> is true, the contents of <var>file</var> are added
+recursively; if <var>file</var> designates a flat file and <var>recursive?</var>
+is true, its contents are added, and its permission bits are kept.
+</p>
+<p>When <var>recursive?</var> is true, call <code>(<var>select?</var> <var>file</var>
+<var>stat</var>)</code> for each directory entry, where <var>file</var> is the entry&rsquo;s
+absolute file name and <var>stat</var> is the result of <code>lstat</code>; exclude
+entries for which <var>select?</var> does not return true.
+</p>
+<p>The example below adds a file to the store, under two different names:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="The-Store-Monad.html#index-run_002dwith_002dstore">run-with-store</a> <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="The-Store.html#index-open_002dconnection">open-connection</a></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="The-Store-Monad.html#index-mlet">mlet</a> <a class="syntax-symbol" href="The-Store-Monad.html#index-_0025store_002dmonad">%store-monad</a> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">a</span> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="The-Store-Monad.html#index-interned_002dfile">interned-file</a> <span class="syntax-string">"README"</span></span>)</span></span>)</span>
+                      <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">b</span> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="The-Store-Monad.html#index-interned_002dfile">interned-file</a> <span class="syntax-string">"README"</span> <span class="syntax-string">"LEGU-MIN"</span></span>)</span></span>)</span></span>)</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="The-Store-Monad.html#index-return">return</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-symbol">a</span> <span class="syntax-symbol">b</span></span>)</span></span>)</span></span>)</span></span>)</span>
+
+<span class="syntax-symbol">⇒</span> <span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-string">"/gnu/store/rwm…-README"</span> <span class="syntax-string">"/gnu/store/44i…-LEGU-MIN"</span></span>)</span>
+</pre></div>
+
+</dd></dl>
+
+<p>The <code>(guix packages)</code> module exports the following package-related
+monadic procedures:
+</p>
+<dl>
+<dt id="index-package_002dfile" class="symbol-definition"><span class="symbol-definition-category">Monadic Procedure: </span><span class="symbol-definition-prototype">package-file <var>package</var> [<var>file</var>]        [#:system (%current-system)] [#:target #f]        [#:output "out"]</span></dt>
+<dd><p>Return as a monadic
+value in the absolute file name of <var>file</var> within the <var>output</var>
+directory of <var>package</var>.  When <var>file</var> is omitted, return the name
+of the <var>output</var> directory of <var>package</var>.  When <var>target</var> is
+true, use it as a cross-compilation target triplet.
+</p>
+<p>Note that this procedure does <em>not</em> build <var>package</var>.  Thus, the
+result might or might not designate an existing file.  We recommend not
+using this procedure unless you know what you are doing.
+</p></dd></dl>
+
+<dl>
+<dt id="index-package_002d_003ederivation" class="symbol-definition"><span class="symbol-definition-category">Monadic Procedure: </span><span class="symbol-definition-prototype">package-&gt;derivation <var>package</var> [<var>system</var>]</span></dt>
+<dt id="index-package_002d_003ecross_002dderivation" class="symbol-definition"><span class="symbol-definition-category">Monadic Procedure: </span><span class="symbol-definition-prototype">package-&gt;cross-derivation <var>package</var>           <var>target</var> [<var>system</var>]</span></dt>
+<dd><p>Monadic version of <code>package-derivation</code> and
+<code>package-cross-derivation</code> (see <a href="Defining-Packages.html">Defining Packages</a>).
+</p></dd></dl>
+
+
+<div class="footnote">
+<hr />
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5><a id="FOOT22" href="The-Store-Monad.html#DOCF22">(22)</a>
+<p>This operation is commonly
+referred to as &ldquo;bind&rdquo;, but that name denotes an unrelated procedure in
+Guile.  Thus we use this somewhat cryptic symbol inherited from the
+Haskell language.</p>
+</h5></div>
+<hr />
+<div class="header">
+<p>
+Next: <a href="G_002dExpressions.html" accesskey="n" rel="next">G-Expressions</a>, Previous: <a href="Derivations.html" accesskey="p" rel="prev">Derivations</a>, Up: <a href="Programming-Interface.html" accesskey="u" rel="up">Programming Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

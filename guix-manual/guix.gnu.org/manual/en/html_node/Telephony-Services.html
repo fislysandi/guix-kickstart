@@ -1,0 +1,729 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Telephony Services (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="Telephony Services (GNU Guix Reference Manual)" />
+<meta name="keywords" content="Telephony Services (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Services.html" rel="up" title="Services" />
+<link href="File_002dSharing-Services.html" rel="next" title="File-Sharing Services" />
+<link href="Messaging-Services.html" rel="prev" title="Messaging Services" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="Telephony-Services"></span><div class="header">
+<p>
+Next: <a href="File_002dSharing-Services.html" accesskey="n" rel="next">File-Sharing Services</a>, Previous: <a href="Messaging-Services.html" accesskey="p" rel="prev">Messaging Services</a>, Up: <a href="Services.html" accesskey="u" rel="up">Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Telephony-Services-1"></span><h4 class="subsection">12.9.14 Telephony Services</h4>
+
+<span id="index-telephony_002c-services"></span>
+<p>The <code>(gnu services telephony)</code> module contains Guix service
+definitions for telephony services.  Currently it provides the following
+services:
+</p>
+<span id="Jami"></span><h4 class="subsubheading">Jami</h4>
+
+<span id="index-jami_002c-service"></span>
+
+<p>This section describes how to configure a Jami server that can be used
+to host video (or audio) conferences, among other uses.  The following
+example demonstrates how to specify Jami account archives (backups) to
+be provisioned automatically:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <span class="syntax-symbol">jami-service-type</span>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Telephony-Services.html#index-jami_002dconfiguration">jami-configuration</a>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">accounts</span>
+           <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="Telephony-Services.html#index-jami_002daccount">jami-account</a>
+                  <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">archive</span> <span class="syntax-string">"/etc/jami/unencrypted-account-1.gz"</span></span>)</span></span>)</span>
+                 <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="Telephony-Services.html#index-jami_002daccount">jami-account</a>
+                  <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">archive</span> <span class="syntax-string">"/etc/jami/unencrypted-account-2.gz"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>When the accounts field is specified, the Jami account files of the
+service found under <samp>/var/lib/jami</samp> are recreated every time the
+service starts.
+</p>
+<p>Jami accounts and their corresponding backup archives can be generated
+using the <code>jami</code> or <code>jami-gnome</code> Jami clients.  The accounts
+should not be password-protected, but it is wise to ensure their files
+are only readable by &lsquo;<samp>root</samp>&rsquo;.
+</p>
+<p>The next example shows how to declare that only some contacts should be
+allowed to communicate with a given account:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <span class="syntax-symbol">jami-service-type</span>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Telephony-Services.html#index-jami_002dconfiguration">jami-configuration</a>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">accounts</span>
+           <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="Telephony-Services.html#index-jami_002daccount">jami-account</a>
+                  <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">archive</span> <span class="syntax-string">"/etc/jami/unencrypted-account-1.gz"</span></span>)</span>
+                  <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">peer-discovery?</span> <span class="syntax-symbol">#t</span></span>)</span>
+                  <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">rendezvous-point?</span> <span class="syntax-symbol">#t</span></span>)</span>
+                  <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">allowed-contacts</span>
+                   <span class="syntax-symbol">'</span><span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-string">"1dbcb0f5f37324228235564b79f2b9737e9a008f"</span>
+                     <span class="syntax-string">"2dbcb0f5f37324228235564b79f2b9737e9a008f"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>In this mode, only the declared <code>allowed-contacts</code> can initiate
+communication with the Jami account.  This can be used, for example,
+with rendezvous point accounts to create a private video conferencing
+space.
+</p>
+<p>To put the system administrator in full control of the conferences
+hosted on their system, the Jami service supports the following actions:
+</p>
+<div class="example">
+<pre class="example"># herd doc jami list-actions
+(list-accounts
+ list-account-details
+ list-banned-contacts
+ list-contacts
+ list-moderators
+ add-moderator
+ ban-contact
+ enable-account
+ disable-account)
+</pre></div>
+
+<p>The above actions aim to provide the most valuable actions for
+moderation purposes, not to cover the whole Jami API.  Users wanting to
+interact with the Jami daemon from Guile may be interested in
+experimenting with the <code>(gnu build jami-service)</code> module, which
+powers the above Shepherd actions.
+</p>
+<p>The <code>add-moderator</code> and <code>ban-contact</code> actions accept a contact
+<em>fingerprint</em> (40 characters long hash) as first argument and an
+account fingerprint or username as second argument:
+</p>
+<div class="example">
+<pre class="example"># herd add-moderator jami 1dbcb0f5f37324228235564b79f2b9737e9a008f \
+  f3345f2775ddfe07a4b0d95daea111d15fbc1199
+
+# herd list-moderators jami
+Moderators for account f3345f2775ddfe07a4b0d95daea111d15fbc1199:
+  - 1dbcb0f5f37324228235564b79f2b9737e9a008f
+
+</pre></div>
+
+<p>In the case of <code>ban-contact</code>, the second username argument is
+optional; when omitted, the account is banned from all Jami accounts:
+</p>
+<div class="example">
+<pre class="example"># herd ban-contact jami 1dbcb0f5f37324228235564b79f2b9737e9a008f
+
+# herd list-banned-contacts jami
+Banned contacts for account f3345f2775ddfe07a4b0d95daea111d15fbc1199:
+  - 1dbcb0f5f37324228235564b79f2b9737e9a008f
+
+</pre></div>
+
+<p>Banned contacts are also stripped from their moderation privileges.
+</p>
+<p>The <code>disable-account</code> action allows to completely disconnect an
+account from the network, making it unreachable, while
+<code>enable-account</code> does the inverse.  They accept a single account
+username or fingerprint as first argument:
+</p>
+<div class="example">
+<pre class="example"># herd disable-account jami f3345f2775ddfe07a4b0d95daea111d15fbc1199
+
+# herd list-accounts jami
+The following Jami accounts are available:
+  - f3345f2775ddfe07a4b0d95daea111d15fbc1199 (dummy) [disabled]
+
+</pre></div>
+
+<p>The <code>list-account-details</code> action prints the detailed parameters of
+each accounts in the Recutils format, which means the <code>recsel</code>
+command can be used to select accounts of interest (see <a href="https://www.gnu.org/software/recutils/manual/html_node/Selection-Expressions.html#Selection-Expressions">Selection
+Expressions</a> in <cite>GNU recutils manual</cite>).  Note that period
+characters (&lsquo;<samp>.</samp>&rsquo;) found in the account parameter keys are mapped to
+underscores (&lsquo;<samp>_</samp>&rsquo;) in the output, to meet the requirements of the
+Recutils format.  The following example shows how to print the account
+fingerprints for all accounts operating in the rendezvous point mode:
+</p>
+<div class="example">
+<pre class="example"># herd list-account-details jami | \
+  recsel -p Account.username -e 'Account.rendezVous ~ "true"'
+Account_username: f3345f2775ddfe07a4b0d95daea111d15fbc1199
+</pre></div>
+
+<p>The remaining actions should be self-explanatory.
+</p>
+<p>The complete set of available configuration options is detailed below.
+</p>
+<dl>
+<dt id="index-jami_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">jami-configuration </span></dt>
+<dd><p>Available <code>jami-configuration</code> fields are:
+</p>
+<dl compact="compact">
+<dt><code>libjami</code> (default: <code>libjami</code>) (type: package)</dt>
+<dd><p>The Jami daemon package to use.
+</p>
+</dd>
+<dt><code>dbus</code> (default: <code>dbus-for-jami</code>) (type: package)</dt>
+<dd><p>The D-Bus package to use to start the required D-Bus session.
+</p>
+</dd>
+<dt><code>nss-certs</code> (default: <code>nss-certs</code>) (type: package)</dt>
+<dd><p>The nss-certs package to use to provide TLS certificates.
+</p>
+</dd>
+<dt><code>enable-logging?</code> (default: <code>#t</code>) (type: boolean)</dt>
+<dd><p>Whether to enable logging to syslog.
+</p>
+</dd>
+<dt><code>debug?</code> (default: <code>#f</code>) (type: boolean)</dt>
+<dd><p>Whether to enable debug level messages.
+</p>
+</dd>
+<dt><code>auto-answer?</code> (default: <code>#f</code>) (type: boolean)</dt>
+<dd><p>Whether to force automatic answer to incoming calls.
+</p>
+</dd>
+<dt><code>accounts</code> (type: maybe-jami-account-list)</dt>
+<dd><p>A list of Jami accounts to be (re-)provisioned every time the Jami
+daemon service starts.  When providing this field, the account
+directories under <samp>/var/lib/jami/</samp> are recreated every time the
+service starts, ensuring a consistent state.
+</p>
+</dd>
+</dl>
+
+</dd></dl>
+
+<dl>
+<dt id="index-jami_002daccount" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">jami-account </span></dt>
+<dd><p>Available <code>jami-account</code> fields are:
+</p>
+<dl compact="compact">
+<dt><code>archive</code> (type: string-or-computed-file)</dt>
+<dd><p>The account archive (backup) file name of the account.  This is used to
+provision the account when the service starts.  The account archive
+should <em>not</em> be encrypted.  It is highly recommended to make it
+readable only to the &lsquo;<samp>root</samp>&rsquo; user (i.e., not in the store), to guard
+against leaking the secret key material of the Jami account it contains.
+</p>
+</dd>
+<dt><code>allowed-contacts</code> (type: maybe-account-fingerprint-list)</dt>
+<dd><p>The list of allowed contacts for the account, entered as their 40
+characters long fingerprint.  Messages or calls from accounts not in
+that list will be rejected.  When left specified, the configuration of
+the account archive is used as-is with respect to contacts and public
+inbound calls/messaging allowance, which typically defaults to allow any
+contact to communicate with the account.
+</p>
+</dd>
+<dt><code>moderators</code> (type: maybe-account-fingerprint-list)</dt>
+<dd><p>The list of contacts that should have moderation privileges (to ban,
+mute, etc.  other users) in rendezvous conferences, entered as their 40
+characters long fingerprint.  When left unspecified, the configuration
+of the account archive is used as-is with respect to moderation, which
+typically defaults to allow anyone to moderate.
+</p>
+</dd>
+<dt><code>rendezvous-point?</code> (type: maybe-boolean)</dt>
+<dd><p>Whether the account should operate in the rendezvous mode.  In this
+mode, all the incoming audio/video calls are mixed into a conference.
+When left unspecified, the value from the account archive prevails.
+</p>
+</dd>
+<dt><code>peer-discovery?</code> (type: maybe-boolean)</dt>
+<dd><p>Whether peer discovery should be enabled.  Peer discovery is used to
+discover other OpenDHT nodes on the local network, which can be useful
+to maintain communication between devices on such network even when the
+connection to the Internet has been lost.  When left unspecified,
+the value from the account archive prevails.
+</p>
+</dd>
+<dt><code>bootstrap-hostnames</code> (type: maybe-string-list)</dt>
+<dd><p>A list of hostnames or IPs pointing to OpenDHT nodes, that should be
+used to initially join the OpenDHT network.  When left unspecified, the
+value from the account archive prevails.
+</p>
+</dd>
+<dt><code>name-server-uri</code> (type: maybe-string)</dt>
+<dd><p>The URI of the name server to use, that can be used to retrieve the
+account fingerprint for a registered username.
+</p>
+</dd>
+</dl>
+
+</dd></dl>
+
+<span id="Mumble-server"></span><h4 class="subsubheading">Mumble server</h4>
+
+<span id="index-Mumble"></span>
+<span id="index-Murmur"></span>
+<span id="index-VoIP-server"></span>
+<p>This section describes how to set up and run a
+<a href="https://mumble.info">Mumble</a> server (formerly known as Murmur).
+</p>
+<dl>
+<dt id="index-mumble_002dserver_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">mumble-server-configuration </span></dt>
+<dd><p>The service type for the Mumble server.  An example configuration can
+look like this:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <span class="syntax-symbol">mumble-server-service-type</span>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Telephony-Services.html#index-mumble_002dserver_002dconfiguration">mumble-server-configuration</a>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">welcome-text</span>
+            <span class="syntax-string">"Welcome to this Mumble server running on Guix!"</span></span>)</span>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">cert-required?</span> <span class="syntax-symbol">#t</span></span>)</span> <span class="syntax-comment">;disallow text password logins
+</span>          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">ssl-cert</span> <span class="syntax-string">"/etc/letsencrypt/live/mumble.example.com/fullchain.pem"</span></span>)</span>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">ssl-key</span> <span class="syntax-string">"/etc/letsencrypt/live/mumble.example.com/privkey.pem"</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>After reconfiguring your system, you can manually set the mumble-server
+<code>SuperUser</code>
+password with the command that is printed during the activation phase.
+</p>
+<p>It is recommended to register a normal Mumble user account
+and grant it admin or moderator rights.
+You can use the <code>mumble</code> client to
+login as new normal user, register yourself, and log out.
+For the next step login with the name <code>SuperUser</code> use
+the <code>SuperUser</code> password that you set previously,
+and grant your newly registered mumble user administrator or moderator
+rights and create some channels.
+</p>
+<p>Available <code>mumble-server-configuration</code> fields are:
+</p>
+<dl compact="compact">
+<dt><code>package</code> (default: <code>mumble</code>)</dt>
+<dd><p>Package that contains <code>bin/mumble-server</code>.
+</p>
+</dd>
+<dt><code>user</code> (default: <code>"mumble-server"</code>)</dt>
+<dd><p>User who will run the Mumble-Server server.
+</p>
+</dd>
+<dt><code>group</code> (default: <code>"mumble-server"</code>)</dt>
+<dd><p>Group of the user who will run the mumble-server server.
+</p>
+</dd>
+<dt><code>port</code> (default: <code>64738</code>)</dt>
+<dd><p>Port on which the server will listen.
+</p>
+</dd>
+<dt><code>welcome-text</code> (default: <code>""</code>)</dt>
+<dd><p>Welcome text sent to clients when they connect.
+</p>
+</dd>
+<dt><code>server-password</code> (default: <code>""</code>)</dt>
+<dd><p>Password the clients have to enter in order to connect.
+</p>
+</dd>
+<dt><code>max-users</code> (default: <code>100</code>)</dt>
+<dd><p>Maximum of users that can be connected to the server at once.
+</p>
+</dd>
+<dt><code>max-user-bandwidth</code> (default: <code>#f</code>)</dt>
+<dd><p>Maximum voice traffic a user can send per second.
+</p>
+</dd>
+<dt><code>database-file</code> (default: <code>"/var/lib/mumble-server/db.sqlite"</code>)</dt>
+<dd><p>File name of the sqlite database.
+The service&rsquo;s user will become the owner of the directory.
+</p>
+</dd>
+<dt><code>log-file</code> (default: <code>"/var/log/mumble-server/mumble-server.log"</code>)</dt>
+<dd><p>File name of the log file.
+The service&rsquo;s user will become the owner of the directory.
+</p>
+</dd>
+<dt><code>autoban-attempts</code> (default: <code>10</code>)</dt>
+<dd><p>Maximum number of logins a user can make in <code>autoban-timeframe</code>
+without getting auto banned for <code>autoban-time</code>.
+</p>
+</dd>
+<dt><code>autoban-timeframe</code> (default: <code>120</code>)</dt>
+<dd><p>Timeframe for autoban in seconds.
+</p>
+</dd>
+<dt><code>autoban-time</code> (default: <code>300</code>)</dt>
+<dd><p>Amount of time in seconds for which a client gets banned
+when violating the autoban limits.
+</p>
+</dd>
+<dt><code>opus-threshold</code> (default: <code>100</code>)</dt>
+<dd><p>Percentage of clients that need to support opus
+before switching over to opus audio codec.
+</p>
+</dd>
+<dt><code>channel-nesting-limit</code> (default: <code>10</code>)</dt>
+<dd><p>How deep channels can be nested at maximum.
+</p>
+</dd>
+<dt><code>channelname-regex</code> (default: <code>#f</code>)</dt>
+<dd><p>A string in form of a Qt regular expression that channel names must conform to.
+</p>
+</dd>
+<dt><code>username-regex</code> (default: <code>#f</code>)</dt>
+<dd><p>A string in form of a Qt regular expression that user names must conform to.
+</p>
+</dd>
+<dt><code>text-message-length</code> (default: <code>5000</code>)</dt>
+<dd><p>Maximum size in bytes that a user can send in one text chat message.
+</p>
+</dd>
+<dt><code>image-message-length</code> (default: <code>(* 128 1024)</code>)</dt>
+<dd><p>Maximum size in bytes that a user can send in one image message.
+</p>
+</dd>
+<dt><code>cert-required?</code> (default: <code>#f</code>)</dt>
+<dd><p>If it is set to <code>#t</code> clients that use weak password authentication
+will not be accepted.  Users must have completed the certificate wizard to join.
+</p>
+</dd>
+<dt><code>remember-channel?</code> (default: <code>#f</code>)</dt>
+<dd><p>Should mumble-server remember the last channel each user was in when
+they disconnected and put them into the remembered channel when they
+rejoin.
+</p>
+</dd>
+<dt><code>allow-html?</code> (default: <code>#f</code>)</dt>
+<dd><p>Should html be allowed in text messages, user comments, and channel descriptions.
+</p>
+</dd>
+<dt><code>allow-ping?</code> (default: <code>#f</code>)</dt>
+<dd><p>Setting to true exposes the current user count, the maximum user count, and
+the server&rsquo;s maximum bandwidth per client to unauthenticated users.  In the
+Mumble client, this information is shown in the Connect dialog.
+</p>
+<p>Disabling this setting will prevent public listing of the server.
+</p>
+</dd>
+<dt><code>bonjour?</code> (default: <code>#f</code>)</dt>
+<dd><p>Should the server advertise itself in the local network through the bonjour protocol.
+</p>
+</dd>
+<dt><code>send-version?</code> (default: <code>#f</code>)</dt>
+<dd><p>Should the mumble-server server version be exposed in ping requests.
+</p>
+</dd>
+<dt><code>log-days</code> (default: <code>31</code>)</dt>
+<dd><p>Mumble also stores logs in the database, which are accessible via RPC.
+The default is 31 days of months, but you can set this setting to 0 to keep logs forever,
+or -1 to disable logging to the database.
+</p>
+</dd>
+<dt><code>obfuscate-ips?</code> (default: <code>#t</code>)</dt>
+<dd><p>Should logged ips be obfuscated to protect the privacy of users.
+</p>
+</dd>
+<dt><code>ssl-cert</code> (default: <code>#f</code>)</dt>
+<dd><p>File name of the SSL/TLS certificate used for encrypted connections.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">ssl-cert</span> <span class="syntax-string">"/etc/letsencrypt/live/example.com/fullchain.pem"</span></span>)</span>
+</pre></div>
+</dd>
+<dt><code>ssl-key</code> (default: <code>#f</code>)</dt>
+<dd><p>Filepath to the ssl private key used for encrypted connections.
+</p><div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">ssl-key</span> <span class="syntax-string">"/etc/letsencrypt/live/example.com/privkey.pem"</span></span>)</span>
+</pre></div>
+
+</dd>
+<dt><code>ssl-dh-params</code> (default: <code>#f</code>)</dt>
+<dd><p>File name of a PEM-encoded file with Diffie-Hellman parameters
+for the SSL/TLS encryption.  Alternatively you set it to
+<code>"@ffdhe2048"</code>, <code>"@ffdhe3072"</code>, <code>"@ffdhe4096"</code>, <code>"@ffdhe6144"</code>
+or <code>"@ffdhe8192"</code> to use bundled parameters from RFC 7919.
+</p>
+</dd>
+<dt><code>ssl-ciphers</code> (default: <code>#f</code>)</dt>
+<dd><p>The <code>ssl-ciphers</code> option chooses the cipher suites to make available for use
+in SSL/TLS.
+</p>
+<p>This option is specified using
+<a href="https://www.openssl.org/docs/apps/ciphers.html#CIPHER-LIST-FORMAT">OpenSSL cipher list notation</a>.
+</p>
+<p>It is recommended that you try your cipher string using
+&rsquo;openssl ciphers &lt;string&gt;&rsquo; before setting it here, to get a feel for
+which cipher suites you will get.
+After setting this option, it is recommend that you inspect your Mumble
+server log to ensure that Mumble is using the cipher suites that you
+expected it to.
+</p>
+<blockquote>
+<p><b>Note:</b> Changing this option may impact the backwards compatibility of your
+Mumble-Server server, and can remove the ability for older Mumble clients to be able to connect to it.
+</p></blockquote>
+
+</dd>
+<dt><code>public-registration</code> (default: <code>#f</code>)</dt>
+<dd><p>Must be a <code>&lt;mumble-server-public-registration-configuration&gt;</code>
+record or <code>#f</code>.
+</p>
+<p>You can optionally register your server in the public server list that the
+<code>mumble</code> client shows on startup.
+You cannot register your server if you have set a <code>server-password</code>,
+or set <code>allow-ping</code> to <code>#f</code>.
+</p>
+<p>It might take a few hours until it shows up in the public list.
+</p>
+</dd>
+<dt><code>file</code> (default: <code>#f</code>)</dt>
+<dd><p>Optional alternative override for this configuration.
+</p></dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-mumble_002dserver_002dpublic_002dregistration_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">mumble-server-public-registration-configuration </span></dt>
+<dd><p>Configuration for public registration of a mumble-server service.
+</p>
+<dl compact="compact">
+<dt><code>name</code></dt>
+<dd><p>This is a display name for your server.  Not to be confused with the hostname.
+</p>
+</dd>
+<dt><code>password</code></dt>
+<dd><p>A password to identify your registration.
+Subsequent updates will need the same password.  Don&rsquo;t lose your password.
+</p>
+</dd>
+<dt><code>url</code></dt>
+<dd><p>This should be a <code>http://</code> or <code>https://</code> link to your web
+site.
+</p>
+</dd>
+<dt><code>hostname</code> (default: <code>#f</code>)</dt>
+<dd><p>By default your server will be listed by its IP address.
+If it is set your server will be linked by this host name instead.
+</p></dd>
+</dl>
+</dd></dl>
+
+<blockquote>
+<p><b>Deprecation notice:</b> Due to historical reasons, all of the above <code>mumble-server-</code>
+procedures are also exported with the <code>murmur-</code> prefix.
+It is recommended that you switch to using <code>mumble-server-</code>
+going forward.
+</p></blockquote>
+
+<hr />
+<div class="header">
+<p>
+Next: <a href="File_002dSharing-Services.html" accesskey="n" rel="next">File-Sharing Services</a>, Previous: <a href="Messaging-Services.html" accesskey="p" rel="prev">Messaging Services</a>, Up: <a href="Services.html" accesskey="u" rel="up">Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

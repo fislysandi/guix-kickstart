@@ -1,0 +1,706 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Networking Setup (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="Networking Setup (GNU Guix Reference Manual)" />
+<meta name="keywords" content="Networking Setup (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Services.html" rel="up" title="Services" />
+<link href="Networking-Services.html" rel="next" title="Networking Services" />
+<link href="Log-Rotation.html" rel="prev" title="Log Rotation" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="Networking-Setup"></span><div class="header">
+<p>
+Next: <a href="Networking-Services.html" accesskey="n" rel="next">Networking Services</a>, Previous: <a href="Log-Rotation.html" accesskey="p" rel="prev">Log Rotation</a>, Up: <a href="Services.html" accesskey="u" rel="up">Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Networking-Setup-1"></span><h4 class="subsection">12.9.4 Networking Setup</h4>
+
+<p>The <code>(gnu services networking)</code> module provides services to
+configure network interfaces and set up networking on your machine.
+Those services provide different ways for you to set up your machine: by
+declaring a static network configuration, by running a Dynamic Host
+Configuration Protocol (DHCP) client, or by running daemons such as
+NetworkManager and Connman that automate the whole process,
+automatically adapt to connectivity changes, and provide a high-level
+user interface.
+</p>
+<p>On a laptop, NetworkManager and Connman are by far the most convenient
+options, which is why the default desktop services include
+NetworkManager (see <a href="Desktop-Services.html"><code>%desktop-services</code></a>).
+For a server, or for a virtual machine or a container, static network
+configuration or a simple DHCP client are often more appropriate.
+</p>
+<p>This section describes the various network setup services available,
+starting with static network configuration.
+</p>
+<dl>
+<dt id="index-static_002dnetworking_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">static-networking-service-type </span></dt>
+<dd><p>This is the type for statically-configured network interfaces.  Its
+value must be a list of <code>static-networking</code> records.  Each of them
+declares a set of <em>addresses</em>, <em>routes</em>, and <em>links</em>, as
+shown below.
+</p>
+<span id="index-network-interface-controller-_0028NIC_0029"></span>
+<span id="index-NIC_002c-networking-interface-controller"></span>
+<p>Here is the simplest configuration, with only one network interface
+controller (NIC) and only IPv4 connectivity:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-comment">;; Static networking for one NIC, IPv4-only.
+</span><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Networking-Setup.html#index-static_002dnetworking_002dservice_002dtype">static-networking-service-type</a>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="Networking-Setup.html#index-static_002dnetworking">static-networking</a>
+                <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">addresses</span>
+                 <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="Networking-Setup.html#index-network_002daddress">network-address</a>
+                        <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">device</span> <span class="syntax-string">"eno1"</span></span>)</span>
+                        <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">value</span> <span class="syntax-string">"10.0.2.15/24"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+                <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">routes</span>
+                 <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="Networking-Setup.html#index-network_002droute">network-route</a>
+                        <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">destination</span> <span class="syntax-string">"default"</span></span>)</span>
+                        <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">gateway</span> <span class="syntax-string">"10.0.2.2"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+                <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">name-servers</span> <span class="syntax-symbol">'</span><span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-string">"10.0.2.3"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>The snippet above can be added to the <code>services</code> field of your
+operating system configuration (see <a href="Using-the-Configuration-System.html">Using the Configuration System</a>).
+It will configure your machine to have 10.0.2.15 as its IP address, with
+a 24-bit netmask for the local network&mdash;meaning that any 10.0.2.<var>x</var>
+address is on the local area network (LAN).  Traffic to addresses
+outside the local network is routed <i>via</i> 10.0.2.2.  Host names are
+resolved by sending domain name system (DNS) queries to 10.0.2.3.
+</p></dd></dl>
+
+<dl>
+<dt id="index-static_002dnetworking" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">static-networking </span></dt>
+<dd><p>This is the data type representing a static network configuration.
+</p>
+<p>As an example, here is how you would declare the configuration of a
+machine with a single network interface controller (NIC) available as
+<code>eno1</code>, and with one IPv4 and one IPv6 address:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-comment">;; Network configuration for one NIC, IPv4 + IPv6.
+</span><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Networking-Setup.html#index-static_002dnetworking">static-networking</a>
+ <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">addresses</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Networking-Setup.html#index-network_002daddress">network-address</a>
+                   <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">device</span> <span class="syntax-string">"eno1"</span></span>)</span>
+                   <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">value</span> <span class="syntax-string">"10.0.2.15/24"</span></span>)</span></span>)</span>
+                  <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Networking-Setup.html#index-network_002daddress">network-address</a>
+                   <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">device</span> <span class="syntax-string">"eno1"</span></span>)</span>
+                   <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">value</span> <span class="syntax-string">"2001:123:4567:101::1/64"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+ <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">routes</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Networking-Setup.html#index-network_002droute">network-route</a>
+                <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">destination</span> <span class="syntax-string">"default"</span></span>)</span>
+                <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">gateway</span> <span class="syntax-string">"10.0.2.2"</span></span>)</span></span>)</span>
+               <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Networking-Setup.html#index-network_002droute">network-route</a>
+                <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">destination</span> <span class="syntax-string">"default"</span></span>)</span>
+                <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">gateway</span> <span class="syntax-string">"2020:321:4567:42::1"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+ <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">name-servers</span> <span class="syntax-symbol">'</span><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"10.0.2.3"</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>If you are familiar with the <code>ip</code> command of the
+<a href="https://wiki.linuxfoundation.org/networking/iproute2"><code>iproute2</code> package</a> found on Linux-based systems, the declaration
+above is equivalent to typing:
+</p>
+<div class="example">
+<pre class="example">ip address add 10.0.2.15/24 dev eno1
+ip address add 2001:123:4567:101::1/64 dev eno1
+ip route add default via inet 10.0.2.2
+ip route add default via inet6 2020:321:4567:42::1
+</pre></div>
+
+<p>Run <code>man 8 ip</code> for more info.  Venerable GNU/Linux users will
+certainly know how to do it with <code>ifconfig</code> and <code>route</code>,
+but we&rsquo;ll spare you that.
+</p>
+<p>The available fields of this data type are as follows:
+</p>
+<dl compact="compact">
+<dt><code>addresses</code></dt>
+<dt><code>links</code> (default: <code>'()</code>)</dt>
+<dt><code>routes</code> (default: <code>'()</code>)</dt>
+<dd><p>The list of <code>network-address</code>, <code>network-link</code>, and
+<code>network-route</code> records for this network (see below).
+</p>
+</dd>
+<dt><code>name-servers</code> (default: <code>'()</code>)</dt>
+<dd><p>The list of IP addresses (strings) of domain name servers.  These IP
+addresses go to <samp>/etc/resolv.conf</samp>.
+</p>
+</dd>
+<dt><code>provision</code> (default: <code>'(networking)</code>)</dt>
+<dd><p>If true, this should be a list of symbols for the Shepherd service
+corresponding to this network configuration.
+</p>
+</dd>
+<dt><code>requirement</code> (default <code>'()</code>)</dt>
+<dd><p>The list of Shepherd services depended on.
+</p></dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-network_002daddress" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">network-address </span></dt>
+<dd><p>This is the data type representing the IP address of a network
+interface.
+</p>
+<dl compact="compact">
+<dt><code>device</code></dt>
+<dd><p>The name of the network interface for this address&mdash;e.g.,
+<code>"eno1"</code>.
+</p>
+</dd>
+<dt><code>value</code></dt>
+<dd><p>The actual IP address and network mask, in
+<a href="https://en.wikipedia.org/wiki/CIDR#CIDR_notation"><acronym title="Classless Inter-Domain Routing">CIDR</acronym> (Classless Inter-Domain Routing) notation</a>, as a string.
+</p>
+<p>For example, <code>"10.0.2.15/24"</code> denotes IPv4 address 10.0.2.15 on a
+24-bit sub-network&mdash;all 10.0.2.<var>x</var> addresses are on the same local
+network.
+</p>
+</dd>
+<dt><code>ipv6?</code></dt>
+<dd><p>Whether <code>value</code> denotes an IPv6 address.  By default this is
+automatically determined.
+</p></dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-network_002droute" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">network-route </span></dt>
+<dd><p>This is the data type representing a network route.
+</p>
+<dl compact="compact">
+<dt><code>destination</code></dt>
+<dd><p>The route destination (a string), either an IP address and network mask
+or <code>"default"</code> to denote the default route.
+</p>
+</dd>
+<dt><code>source</code> (default: <code>#f</code>)</dt>
+<dd><p>The route source.
+</p>
+</dd>
+<dt><code>device</code> (default: <code>#f</code>)</dt>
+<dd><p>The device used for this route&mdash;e.g., <code>"eno2"</code>.
+</p>
+</dd>
+<dt><code>ipv6?</code> (default: auto)</dt>
+<dd><p>Whether this is an IPv6 route.  By default this is automatically
+determined based on <code>destination</code> or <code>gateway</code>.
+</p>
+</dd>
+<dt><code>gateway</code> (default: <code>#f</code>)</dt>
+<dd><p>IP address (a string) through which traffic is routed.
+</p></dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-network_002dlink" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">network-link </span></dt>
+<dd><p>Data type for a network link (see <a href="https://git.lepiller.eu/guile-netlink/manual/manual.html#Link">Link</a> in <cite>Guile-Netlink Manual</cite>).
+</p>
+<dl compact="compact">
+<dt><code>name</code></dt>
+<dd><p>The name of the link&mdash;e.g., <code>"v0p0"</code>.
+</p>
+</dd>
+<dt><code>type</code></dt>
+<dd><p>A symbol denoting the type of the link&mdash;e.g., <code>'veth</code>.
+</p>
+</dd>
+<dt><code>arguments</code></dt>
+<dd><p>List of arguments for this type of link.
+</p></dd>
+</dl>
+</dd></dl>
+
+<span id="index-loopback-device"></span>
+<dl>
+<dt id="index-_0025loopback_002dstatic_002dnetworking" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">%loopback-static-networking </span></dt>
+<dd><p>This is the <code>static-networking</code> record representing the &ldquo;loopback
+device&rdquo;, <code>lo</code>, for IP addresses 127.0.0.1 and ::1, and providing
+the <code>loopback</code> Shepherd service.
+</p></dd></dl>
+
+<span id="index-networking_002c-with-QEMU"></span>
+<span id="index-QEMU_002c-networking"></span>
+<dl>
+<dt id="index-_0025qemu_002dstatic_002dnetworking" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">%qemu-static-networking </span></dt>
+<dd><p>This is the <code>static-networking</code> record representing network setup
+when using QEMU&rsquo;s user-mode network stack on <code>eth0</code> (see <a href="https://guix.gnu.org/manual/en/QEMU/Using-the-user-mode-network-stack.html#Using-the-user-mode-network-stack">Using
+the user mode network stack</a> in <cite>QEMU Documentation</cite>).
+</p></dd></dl>
+
+<span id="index-DHCP_002c-networking-service"></span>
+<dl>
+<dt id="index-dhcp_002dclient_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">dhcp-client-service-type </span></dt>
+<dd><p>This is the type of services that run <var>dhcp</var>, a Dynamic Host Configuration
+Protocol (DHCP) client.
+</p></dd></dl>
+
+<dl>
+<dt id="index-dhcp_002dclient_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">dhcp-client-configuration </span></dt>
+<dd><p>Data type representing the configuration of the DHCP client service.
+</p>
+<dl compact="compact">
+<dt><code>package</code> (default: <code>isc-dhcp</code>)</dt>
+<dd><p>DHCP client package to use.
+</p>
+</dd>
+<dt><code>interfaces</code> (default: <code>'all</code>)</dt>
+<dd><p>Either <code>'all</code> or the list of interface names that the DHCP client
+should listen on&mdash;e.g., <code>'("eno1")</code>.
+</p>
+<p>When set to <code>'all</code>, the DHCP client listens on all the available
+non-loopback interfaces that can be activated.  Otherwise the DHCP
+client listens only on the specified interfaces.
+</p></dd>
+</dl>
+</dd></dl>
+
+<span id="index-NetworkManager"></span>
+
+<dl>
+<dt id="index-network_002dmanager_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">network-manager-service-type </span></dt>
+<dd><p>This is the service type for the
+<a href="https://wiki.gnome.org/Projects/NetworkManager">NetworkManager</a>
+service. The value for this service type is a
+<code>network-manager-configuration</code> record.
+</p>
+<p>This service is part of <code>%desktop-services</code> (see <a href="Desktop-Services.html">Desktop Services</a>).
+</p></dd></dl>
+
+<dl>
+<dt id="index-network_002dmanager_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">network-manager-configuration </span></dt>
+<dd><p>Data type representing the configuration of NetworkManager.
+</p>
+<dl compact="compact">
+<dt><code>network-manager</code> (default: <code>network-manager</code>)</dt>
+<dd><p>The NetworkManager package to use.
+</p>
+</dd>
+<dt><code>dns</code> (default: <code>"default"</code>)</dt>
+<dd><p>Processing mode for DNS, which affects how NetworkManager uses the
+<code>resolv.conf</code> configuration file.
+</p>
+<dl compact="compact">
+<dt>&lsquo;<samp>default</samp>&rsquo;</dt>
+<dd><p>NetworkManager will update <code>resolv.conf</code> to reflect the nameservers
+provided by currently active connections.
+</p>
+</dd>
+<dt>&lsquo;<samp>dnsmasq</samp>&rsquo;</dt>
+<dd><p>NetworkManager will run <code>dnsmasq</code> as a local caching nameserver, using a
+<em>conditional forwarding</em> configuration if you are connected to a VPN, and
+then update <code>resolv.conf</code> to point to the local nameserver.
+</p>
+<p>With this setting, you can share your network connection.  For example when
+you want to share your network connection to another laptop <i>via</i> an
+Ethernet cable, you can open <code>nm-connection-editor</code> and configure the
+Wired connection&rsquo;s method for IPv4 and IPv6 to be &ldquo;Shared to other computers&rdquo;
+and reestablish the connection (or reboot).
+</p>
+<p>You can also set up a <em>host-to-guest connection</em> to QEMU VMs
+(see <a href="Installing-Guix-in-a-VM.html">Installing Guix in a VM</a>).  With a host-to-guest connection, you can
+e.g. access a Web server running on the VM (see <a href="Web-Services.html">Web Services</a>) from a Web
+browser on your host system, or connect to the VM <i>via</i> SSH
+(see <a href="Networking-Services.html"><code>openssh-service-type</code></a>).  To set up a
+host-to-guest connection, run this command once:
+</p>
+<div class="example">
+<pre class="example">nmcli connection add type tun \
+ connection.interface-name tap0 \
+ tun.mode tap tun.owner $(id -u) \
+ ipv4.method shared \
+ ipv4.addresses 172.28.112.1/24
+</pre></div>
+
+<p>Then each time you launch your QEMU VM (see <a href="Running-Guix-in-a-VM.html">Running Guix in a VM</a>), pass
+<samp>-nic tap,ifname=tap0,script=no,downscript=no</samp> to
+<code>qemu-system-...</code>.
+</p>
+</dd>
+<dt>&lsquo;<samp>none</samp>&rsquo;</dt>
+<dd><p>NetworkManager will not modify <code>resolv.conf</code>.
+</p></dd>
+</dl>
+
+</dd>
+<dt><code>vpn-plugins</code> (default: <code>'()</code>)</dt>
+<dd><p>This is the list of available plugins for virtual private networks
+(VPNs).  An example of this is the <code>network-manager-openvpn</code>
+package, which allows NetworkManager to manage VPNs <i>via</i> OpenVPN.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span id="index-Connman"></span>
+<dl>
+<dt id="index-connman_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">connman-service-type </span></dt>
+<dd><p>This is the service type to run <a href="https://01.org/connman">Connman</a>,
+a network connection manager.
+</p>
+<p>Its value must be an
+<code>connman-configuration</code> record as in this example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="Networking-Setup.html#index-connman_002dservice_002dtype">connman-service-type</a>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Networking-Setup.html#index-connman_002dconfiguration">connman-configuration</a>
+           <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">disable-vpn?</span> <span class="syntax-symbol">#t</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>See below for details about <code>connman-configuration</code>.
+</p></dd></dl>
+
+<dl>
+<dt id="index-connman_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">connman-configuration </span></dt>
+<dd><p>Data Type representing the configuration of connman.
+</p>
+<dl compact="compact">
+<dt><code>connman</code> (default: <var>connman</var>)</dt>
+<dd><p>The connman package to use.
+</p>
+</dd>
+<dt><code>disable-vpn?</code> (default: <code>#f</code>)</dt>
+<dd><p>When true, disable connman&rsquo;s vpn plugin.
+</p></dd>
+</dl>
+</dd></dl>
+
+<span id="index-WPA-Supplicant"></span>
+<dl>
+<dt id="index-wpa_002dsupplicant_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">wpa-supplicant-service-type </span></dt>
+<dd><p>This is the service type to run <a href="https://w1.fi/wpa_supplicant/">WPA
+supplicant</a>, an authentication daemon required to authenticate against
+encrypted WiFi or ethernet networks.
+</p></dd></dl>
+
+<dl>
+<dt id="index-wpa_002dsupplicant_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">wpa-supplicant-configuration </span></dt>
+<dd><p>Data type representing the configuration of WPA Supplicant.
+</p>
+<p>It takes the following parameters:
+</p>
+<dl compact="compact">
+<dt><code>wpa-supplicant</code> (default: <code>wpa-supplicant</code>)</dt>
+<dd><p>The WPA Supplicant package to use.
+</p>
+</dd>
+<dt><code>requirement</code> (default: <code>'(user-processes loopback syslogd)</code></dt>
+<dd><p>List of services that should be started before WPA Supplicant starts.
+</p>
+</dd>
+<dt><code>dbus?</code> (default: <code>#t</code>)</dt>
+<dd><p>Whether to listen for requests on D-Bus.
+</p>
+</dd>
+<dt><code>pid-file</code> (default: <code>"/var/run/wpa_supplicant.pid"</code>)</dt>
+<dd><p>Where to store the PID file.
+</p>
+</dd>
+<dt><code>interface</code> (default: <code>#f</code>)</dt>
+<dd><p>If this is set, it must specify the name of a network interface that
+WPA supplicant will control.
+</p>
+</dd>
+<dt><code>config-file</code> (default: <code>#f</code>)</dt>
+<dd><p>Optional configuration file to use.
+</p>
+</dd>
+<dt><code>extra-options</code> (default: <code>'()</code>)</dt>
+<dd><p>List of additional command-line arguments to pass to the daemon.
+</p></dd>
+</dl>
+</dd></dl>
+
+<span id="index-ModemManager"></span>
+<p>Some networking devices such as modems require special care, and this is
+what the services below focus on.
+</p>
+<dl>
+<dt id="index-modem_002dmanager_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">modem-manager-service-type </span></dt>
+<dd><p>This is the service type for the
+<a href="https://wiki.gnome.org/Projects/ModemManager">ModemManager</a>
+service.  The value for this service type is a
+<code>modem-manager-configuration</code> record.
+</p>
+<p>This service is part of <code>%desktop-services</code> (see <a href="Desktop-Services.html">Desktop Services</a>).
+</p></dd></dl>
+
+<dl>
+<dt id="index-modem_002dmanager_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">modem-manager-configuration </span></dt>
+<dd><p>Data type representing the configuration of ModemManager.
+</p>
+<dl compact="compact">
+<dt><code>modem-manager</code> (default: <code>modem-manager</code>)</dt>
+<dd><p>The ModemManager package to use.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span id="index-USB_005fModeSwitch"></span>
+<span id="index-Modeswitching"></span>
+
+<dl>
+<dt id="index-usb_002dmodeswitch_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">usb-modeswitch-service-type </span></dt>
+<dd><p>This is the service type for the
+<a href="https://www.draisberghof.de/usb_modeswitch/">USB_ModeSwitch</a>
+service.  The value for this service type is
+a <code>usb-modeswitch-configuration</code> record.
+</p>
+<p>When plugged in, some USB modems (and other USB devices) initially present
+themselves as a read-only storage medium and not as a modem.  They need to be
+<em>modeswitched</em> before they are usable.  The USB_ModeSwitch service type
+installs udev rules to automatically modeswitch these devices when they are
+plugged in.
+</p>
+<p>This service is part of <code>%desktop-services</code> (see <a href="Desktop-Services.html">Desktop Services</a>).
+</p></dd></dl>
+
+<dl>
+<dt id="index-usb_002dmodeswitch_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">usb-modeswitch-configuration </span></dt>
+<dd><p>Data type representing the configuration of USB_ModeSwitch.
+</p>
+<dl compact="compact">
+<dt><code>usb-modeswitch</code> (default: <code>usb-modeswitch</code>)</dt>
+<dd><p>The USB_ModeSwitch package providing the binaries for modeswitching.
+</p>
+</dd>
+<dt><code>usb-modeswitch-data</code> (default: <code>usb-modeswitch-data</code>)</dt>
+<dd><p>The package providing the device data and udev rules file used by
+USB_ModeSwitch.
+</p>
+</dd>
+<dt><code>config-file</code> (default: <code>#~(string-append #$usb-modeswitch:dispatcher "/etc/usb_modeswitch.conf")</code>)</dt>
+<dd><p>Which config file to use for the USB_ModeSwitch dispatcher.  By default the
+config file shipped with USB_ModeSwitch is used which disables logging to
+<samp>/var/log</samp> among other default settings.  If set to <code>#f</code>, no config
+file is used.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+
+<hr />
+<div class="header">
+<p>
+Next: <a href="Networking-Services.html" accesskey="n" rel="next">Networking Services</a>, Previous: <a href="Log-Rotation.html" accesskey="p" rel="prev">Log Rotation</a>, Up: <a href="Services.html" accesskey="u" rel="up">Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

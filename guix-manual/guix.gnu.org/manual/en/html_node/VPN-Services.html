@@ -1,0 +1,656 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>VPN Services (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="VPN Services (GNU Guix Reference Manual)" />
+<meta name="keywords" content="VPN Services (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Services.html" rel="up" title="Services" />
+<link href="Network-File-System.html" rel="next" title="Network File System" />
+<link href="VNC-Services.html" rel="prev" title="VNC Services" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="VPN-Services"></span><div class="header">
+<p>
+Next: <a href="Network-File-System.html" accesskey="n" rel="next">Network File System</a>, Previous: <a href="VNC-Services.html" accesskey="p" rel="prev">VNC Services</a>, Up: <a href="Services.html" accesskey="u" rel="up">Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="VPN-Services-1"></span><h4 class="subsection">12.9.23 VPN Services</h4>
+<span id="index-VPN-_0028virtual-private-network_0029"></span>
+<span id="index-virtual-private-network-_0028VPN_0029"></span>
+
+<p>The <code>(gnu services vpn)</code> module provides services related to
+<em>virtual private networks</em> (VPNs).
+</p>
+<span id="Bitmask"></span><h4 class="subsubheading">Bitmask</h4>
+
+<dl>
+<dt id="index-bitmask_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">bitmask-service-type </span></dt>
+<dd><p>A service type for the <a href="https://bitmask.net">Bitmask</a> VPN client.  It makes
+the client available in the system and loads its polkit policy.  Please note that
+the client expects an active polkit-agent, which is either run by your
+desktop-environment or should be run manually.
+</p></dd></dl>
+
+<span id="OpenVPN"></span><h4 class="subsubheading">OpenVPN</h4>
+
+<p>It provides a <em>client</em> service for your machine to connect to a
+VPN, and a <em>server</em> service for your machine to host a VPN.
+</p>
+<dl>
+<dt id="index-openvpn_002dclient_002dservice" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">openvpn-client-service [#:config (openvpn-client-configuration)]</span></dt>
+<dd>
+<p>Return a service that runs <code>openvpn</code>, a VPN daemon, as a client.
+</p></dd></dl>
+
+<dl>
+<dt id="index-openvpn_002dserver_002dservice" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">openvpn-server-service [#:config (openvpn-server-configuration)]</span></dt>
+<dd>
+<p>Return a service that runs <code>openvpn</code>, a VPN daemon, as a server.
+</p>
+<p>Both can be run simultaneously.
+</p></dd></dl>
+
+
+<dl>
+<dt id="index-openvpn_002dclient_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">openvpn-client-configuration </span></dt>
+<dd><p>Available <code>openvpn-client-configuration</code> fields are:
+</p>
+<dl compact="compact">
+<dt><code>openvpn</code> (default: <code>openvpn</code>) (type: file-like)</dt>
+<dd><p>The OpenVPN package.
+</p>
+</dd>
+<dt><code>pid-file</code> (default: <code>"/var/run/openvpn/openvpn.pid"</code>) (type: string)</dt>
+<dd><p>The OpenVPN pid file.
+</p>
+</dd>
+<dt><code>proto</code> (default: <code>udp</code>) (type: proto)</dt>
+<dd><p>The protocol (UDP or TCP) used to open a channel between clients and
+servers.
+</p>
+</dd>
+<dt><code>dev</code> (default: <code>tun</code>) (type: dev)</dt>
+<dd><p>The device type used to represent the VPN connection.
+</p>
+</dd>
+<dt><code>ca</code> (default: <code>"/etc/openvpn/ca.crt"</code>) (type: maybe-string)</dt>
+<dd><p>The certificate authority to check connections against.
+</p>
+</dd>
+<dt><code>cert</code> (default: <code>"/etc/openvpn/client.crt"</code>) (type: maybe-string)</dt>
+<dd><p>The certificate of the machine the daemon is running on.  It should be
+signed by the authority given in <code>ca</code>.
+</p>
+</dd>
+<dt><code>key</code> (default: <code>"/etc/openvpn/client.key"</code>) (type: maybe-string)</dt>
+<dd><p>The key of the machine the daemon is running on.  It must be the key
+whose certificate is <code>cert</code>.
+</p>
+</dd>
+<dt><code>comp-lzo?</code> (default: <code>#t</code>) (type: boolean)</dt>
+<dd><p>Whether to use the lzo compression algorithm.
+</p>
+</dd>
+<dt><code>persist-key?</code> (default: <code>#t</code>) (type: boolean)</dt>
+<dd><p>Don&rsquo;t re-read key files across SIGUSR1 or &ndash;ping-restart.
+</p>
+</dd>
+<dt><code>persist-tun?</code> (default: <code>#t</code>) (type: boolean)</dt>
+<dd><p>Don&rsquo;t close and reopen TUN/TAP device or run up/down scripts across
+SIGUSR1 or &ndash;ping-restart restarts.
+</p>
+</dd>
+<dt><code>fast-io?</code> (default: <code>#f</code>) (type: boolean)</dt>
+<dd><p>(Experimental) Optimize TUN/TAP/UDP I/O writes by avoiding a call to
+poll/epoll/select prior to the write operation.
+</p>
+</dd>
+<dt><code>verbosity</code> (default: <code>3</code>) (type: number)</dt>
+<dd><p>Verbosity level.
+</p>
+</dd>
+<dt><code>tls-auth</code> (default: <code>#f</code>) (type: tls-auth-client)</dt>
+<dd><p>Add an additional layer of HMAC authentication on top of the TLS control
+channel to protect against DoS attacks.
+</p>
+</dd>
+<dt><code>auth-user-pass</code> (type: maybe-string)</dt>
+<dd><p>Authenticate with server using username/password.  The option is a file
+containing username/password on 2 lines.  Do not use a file-like object
+as it would be added to the store and readable by any user.
+</p>
+</dd>
+<dt><code>verify-key-usage?</code> (default: <code>#t</code>) (type: key-usage)</dt>
+<dd><p>Whether to check the server certificate has server usage extension.
+</p>
+</dd>
+<dt><code>bind?</code> (default: <code>#f</code>) (type: bind)</dt>
+<dd><p>Bind to a specific local port number.
+</p>
+</dd>
+<dt><code>resolv-retry?</code> (default: <code>#t</code>) (type: resolv-retry)</dt>
+<dd><p>Retry resolving server address.
+</p>
+</dd>
+<dt><code>remote</code> (default: <code>()</code>) (type: openvpn-remote-list)</dt>
+<dd><p>A list of remote servers to connect to.
+</p>
+<dl>
+<dt id="index-openvpn_002dremote_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">openvpn-remote-configuration </span></dt>
+<dd><p>Available <code>openvpn-remote-configuration</code> fields are:
+</p>
+<dl compact="compact">
+<dt><code>name</code> (default: <code>"my-server"</code>) (type: string)</dt>
+<dd><p>Server name.
+</p>
+</dd>
+<dt><code>port</code> (default: <code>1194</code>) (type: number)</dt>
+<dd><p>Port number the server listens to.
+</p>
+</dd>
+</dl>
+
+</dd></dl>
+
+</dd>
+</dl>
+
+</dd></dl>
+
+
+
+<dl>
+<dt id="index-openvpn_002dserver_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">openvpn-server-configuration </span></dt>
+<dd><p>Available <code>openvpn-server-configuration</code> fields are:
+</p>
+<dl compact="compact">
+<dt><code>openvpn</code> (default: <code>openvpn</code>) (type: file-like)</dt>
+<dd><p>The OpenVPN package.
+</p>
+</dd>
+<dt><code>pid-file</code> (default: <code>"/var/run/openvpn/openvpn.pid"</code>) (type: string)</dt>
+<dd><p>The OpenVPN pid file.
+</p>
+</dd>
+<dt><code>proto</code> (default: <code>udp</code>) (type: proto)</dt>
+<dd><p>The protocol (UDP or TCP) used to open a channel between clients and
+servers.
+</p>
+</dd>
+<dt><code>dev</code> (default: <code>tun</code>) (type: dev)</dt>
+<dd><p>The device type used to represent the VPN connection.
+</p>
+</dd>
+<dt><code>ca</code> (default: <code>"/etc/openvpn/ca.crt"</code>) (type: maybe-string)</dt>
+<dd><p>The certificate authority to check connections against.
+</p>
+</dd>
+<dt><code>cert</code> (default: <code>"/etc/openvpn/client.crt"</code>) (type: maybe-string)</dt>
+<dd><p>The certificate of the machine the daemon is running on.  It should be
+signed by the authority given in <code>ca</code>.
+</p>
+</dd>
+<dt><code>key</code> (default: <code>"/etc/openvpn/client.key"</code>) (type: maybe-string)</dt>
+<dd><p>The key of the machine the daemon is running on.  It must be the key
+whose certificate is <code>cert</code>.
+</p>
+</dd>
+<dt><code>comp-lzo?</code> (default: <code>#t</code>) (type: boolean)</dt>
+<dd><p>Whether to use the lzo compression algorithm.
+</p>
+</dd>
+<dt><code>persist-key?</code> (default: <code>#t</code>) (type: boolean)</dt>
+<dd><p>Don&rsquo;t re-read key files across SIGUSR1 or &ndash;ping-restart.
+</p>
+</dd>
+<dt><code>persist-tun?</code> (default: <code>#t</code>) (type: boolean)</dt>
+<dd><p>Don&rsquo;t close and reopen TUN/TAP device or run up/down scripts across
+SIGUSR1 or &ndash;ping-restart restarts.
+</p>
+</dd>
+<dt><code>fast-io?</code> (default: <code>#f</code>) (type: boolean)</dt>
+<dd><p>(Experimental) Optimize TUN/TAP/UDP I/O writes by avoiding a call to
+poll/epoll/select prior to the write operation.
+</p>
+</dd>
+<dt><code>verbosity</code> (default: <code>3</code>) (type: number)</dt>
+<dd><p>Verbosity level.
+</p>
+</dd>
+<dt><code>tls-auth</code> (default: <code>#f</code>) (type: tls-auth-server)</dt>
+<dd><p>Add an additional layer of HMAC authentication on top of the TLS control
+channel to protect against DoS attacks.
+</p>
+</dd>
+<dt><code>port</code> (default: <code>1194</code>) (type: number)</dt>
+<dd><p>Specifies the port number on which the server listens.
+</p>
+</dd>
+<dt><code>server</code> (default: <code>"10.8.0.0 255.255.255.0"</code>) (type: ip-mask)</dt>
+<dd><p>An ip and mask specifying the subnet inside the virtual network.
+</p>
+</dd>
+<dt><code>server-ipv6</code> (default: <code>#f</code>) (type: cidr6)</dt>
+<dd><p>A CIDR notation specifying the IPv6 subnet inside the virtual network.
+</p>
+</dd>
+<dt><code>dh</code> (default: <code>"/etc/openvpn/dh2048.pem"</code>) (type: string)</dt>
+<dd><p>The Diffie-Hellman parameters file.
+</p>
+</dd>
+<dt><code>ifconfig-pool-persist</code> (default: <code>"/etc/openvpn/ipp.txt"</code>) (type: string)</dt>
+<dd><p>The file that records client IPs.
+</p>
+</dd>
+<dt><code>redirect-gateway?</code> (default: <code>#f</code>) (type: gateway)</dt>
+<dd><p>When true, the server will act as a gateway for its clients.
+</p>
+</dd>
+<dt><code>client-to-client?</code> (default: <code>#f</code>) (type: boolean)</dt>
+<dd><p>When true, clients are allowed to talk to each other inside the VPN.
+</p>
+</dd>
+<dt><code>keepalive</code> (default: <code>(10 120)</code>) (type: keepalive)</dt>
+<dd><p>Causes ping-like messages to be sent back and forth over the link so
+that each side knows when the other side has gone down.  <code>keepalive</code>
+requires a pair.  The first element is the period of the ping sending,
+and the second element is the timeout before considering the other side
+down.
+</p>
+</dd>
+<dt><code>max-clients</code> (default: <code>100</code>) (type: number)</dt>
+<dd><p>The maximum number of clients.
+</p>
+</dd>
+<dt><code>status</code> (default: <code>"/var/run/openvpn/status"</code>) (type: string)</dt>
+<dd><p>The status file.  This file shows a small report on current connection.
+It is truncated and rewritten every minute.
+</p>
+</dd>
+<dt><code>client-config-dir</code> (default: <code>()</code>) (type: openvpn-ccd-list)</dt>
+<dd><p>The list of configuration for some clients.
+</p>
+</dd>
+</dl>
+
+</dd></dl>
+
+
+<span id="strongSwan"></span><h4 class="subheading">strongSwan</h4>
+
+<p>Currently, the strongSwan service only provides legacy-style configuration with
+<samp>ipsec.conf</samp> and <samp>ipsec.secrets</samp> files.
+</p>
+<dl>
+<dt id="index-strongswan_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">strongswan-service-type </span></dt>
+<dd><p>A service type for configuring strongSwan for IPsec <acronym title="Virtual Private Networking">VPN</acronym> (Virtual Private Networking).  Its value must be a
+<code>strongswan-configuration</code> record as in this example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="VPN-Services.html#index-strongswan_002dservice_002dtype">strongswan-service-type</a>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="VPN-Services.html#index-strongswan_002dconfiguration">strongswan-configuration</a>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">ipsec-conf</span> <span class="syntax-string">"/etc/ipsec.conf"</span></span>)</span>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">ipsec-secrets</span> <span class="syntax-string">"/etc/ipsec.secrets"</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+</dd></dl>
+
+<dl>
+<dt id="index-strongswan_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">strongswan-configuration </span></dt>
+<dd><p>Data type representing the configuration of the StrongSwan service.
+</p>
+<dl compact="compact">
+<dt><code>strongswan</code></dt>
+<dd><p>The strongSwan package to use for this service.
+</p>
+</dd>
+<dt><code>ipsec-conf</code> (default: <code>#f</code>)</dt>
+<dd><p>The file name of your <samp>ipsec.conf</samp>.  If not <code>#f</code>, then this and
+<code>ipsec-secrets</code> must both be strings.
+</p>
+</dd>
+<dt><code>ipsec-secrets</code> (default <code>#f</code>)</dt>
+<dd><p>The file name of your <samp>ipsec.secrets</samp>.  If not <code>#f</code>, then this and
+<code>ipsec-conf</code> must both be strings.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span id="Wireguard"></span><h4 class="subsubheading">Wireguard</h4>
+
+<dl>
+<dt id="index-wireguard_002dservice_002dtype" class="symbol-definition"><span class="symbol-definition-category">Scheme Variable: </span><span class="symbol-definition-prototype">wireguard-service-type </span></dt>
+<dd><p>A service type for a Wireguard tunnel interface.  Its value must be a
+<code>wireguard-configuration</code> record as in this example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="VPN-Services.html#index-wireguard_002dservice_002dtype">wireguard-service-type</a>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="VPN-Services.html#index-wireguard_002dconfiguration">wireguard-configuration</a>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">peers</span>
+           <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a>
+            <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="VPN-Services.html#index-wireguard_002dpeer">wireguard-peer</a>
+             <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">name</span> <span class="syntax-string">"my-peer"</span></span>)</span>
+             <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">endpoint</span> <span class="syntax-string">"my.wireguard.com:51820"</span></span>)</span>
+             <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">public-key</span> <span class="syntax-string">"hzpKg9X1yqu1axN6iJp0mWf6BZGo8m1wteKwtTmDGF4="</span></span>)</span>
+             <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">allowed-ips</span> <span class="syntax-symbol">'</span><span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-string">"10.0.0.2/32"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+</dd></dl>
+
+<dl>
+<dt id="index-wireguard_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">wireguard-configuration </span></dt>
+<dd><p>Data type representing the configuration of the Wireguard service.
+</p>
+<dl compact="compact">
+<dt><code>wireguard</code></dt>
+<dd><p>The wireguard package to use for this service.
+</p>
+</dd>
+<dt><code>interface</code> (default: <code>"wg0"</code>)</dt>
+<dd><p>The interface name for the VPN.
+</p>
+</dd>
+<dt><code>addresses</code> (default: <code>'("10.0.0.1/32")</code>)</dt>
+<dd><p>The IP addresses to be assigned to the above interface.
+</p>
+</dd>
+<dt><code>port</code> (default: <code>51820</code>)</dt>
+<dd><p>The port on which to listen for incoming connections.
+</p>
+</dd>
+<dt><code>dns</code> (default: <code>#f</code>)</dt>
+<dd><p>The DNS server(s) to announce to VPN clients via DHCP.
+</p>
+</dd>
+<dt><code>private-key</code> (default: <code>"/etc/wireguard/private.key"</code>)</dt>
+<dd><p>The private key file for the interface.  It is automatically generated if
+the file does not exist.
+</p>
+</dd>
+<dt><code>peers</code> (default: <code>'()</code>)</dt>
+<dd><p>The authorized peers on this interface.  This is a list of
+<var>wireguard-peer</var> records.
+</p>
+</dd>
+<dt><code>pre-up</code> (default: <code>'()</code>)</dt>
+<dd><p>The script commands to be run before setting up the interface.
+</p>
+</dd>
+<dt><code>post-up</code> (default: <code>'()</code>)</dt>
+<dd><p>The script commands to be run after setting up the interface.
+</p>
+</dd>
+<dt><code>pre-down</code> (default: <code>'()</code>)</dt>
+<dd><p>The script commands to be run before tearing down the interface.
+</p>
+</dd>
+<dt><code>post-down</code> (default: <code>'()</code>)</dt>
+<dd><p>The script commands to be run after tearing down the interface.
+</p>
+</dd>
+<dt><code>table</code> (default: <code>"auto"</code>)</dt>
+<dd><p>The routing table to which routes are added, as a string.  There are two
+special values: <code>"off"</code> that disables the creation of routes
+altogether, and <code>"auto"</code> (the default) that adds routes to the
+default table and enables special handling of default routes.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-wireguard_002dpeer" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">wireguard-peer </span></dt>
+<dd><p>Data type representing a Wireguard peer attached to a given interface.
+</p>
+<dl compact="compact">
+<dt><code>name</code></dt>
+<dd><p>The peer name.
+</p>
+</dd>
+<dt><code>endpoint</code> (default: <code>#f</code>)</dt>
+<dd><p>The optional endpoint for the peer, such as
+<code>"demo.wireguard.com:51820"</code>.
+</p>
+</dd>
+<dt><code>public-key</code></dt>
+<dd><p>The peer public-key represented as a base64 string.
+</p>
+</dd>
+<dt><code>allowed-ips</code></dt>
+<dd><p>A list of IP addresses from which incoming traffic for this peer is
+allowed and to which incoming traffic for this peer is directed.
+</p>
+</dd>
+<dt><code>keep-alive</code> (default: <code>#f</code>)</dt>
+<dd><p>An optional time interval in seconds.  A packet will be sent to the
+server endpoint once per time interval.  This helps receiving
+incoming connections from this peer when you are behind a NAT or
+a firewall.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr />
+<div class="header">
+<p>
+Next: <a href="Network-File-System.html" accesskey="n" rel="next">Network File System</a>, Previous: <a href="VNC-Services.html" accesskey="p" rel="prev">VNC Services</a>, Up: <a href="Services.html" accesskey="u" rel="up">Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

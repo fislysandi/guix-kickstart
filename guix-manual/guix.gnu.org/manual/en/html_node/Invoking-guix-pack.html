@@ -1,0 +1,651 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Invoking guix pack (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="Invoking guix pack (GNU Guix Reference Manual)" />
+<meta name="keywords" content="Invoking guix pack (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Development.html" rel="up" title="Development" />
+<link href="The-GCC-toolchain.html" rel="next" title="The GCC toolchain" />
+<link href="Invoking-guix-environment.html" rel="prev" title="Invoking guix environment" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="Invoking-guix-pack"></span><div class="header">
+<p>
+Next: <a href="The-GCC-toolchain.html" accesskey="n" rel="next">The GCC toolchain</a>, Previous: <a href="Invoking-guix-environment.html" accesskey="p" rel="prev">Invoking guix environment</a>, Up: <a href="Development.html" accesskey="u" rel="up">Development</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Invoking-guix-pack-1"></span><h3 class="section">8.3 Invoking <code>guix pack</code></h3>
+
+<span id="index-guix-pack"></span>
+
+<p>Occasionally you want to pass software to people who are not (yet!)
+lucky enough to be using Guix.  You&rsquo;d tell them to run <code>guix
+package -i <var>something</var></code>, but that&rsquo;s not possible in this case.  This
+is where <code>guix pack</code> comes in.
+</p>
+<blockquote>
+<p><b>Note:</b> If you are looking for ways to exchange binaries among machines that
+already run Guix, see <a href="Invoking-guix-copy.html">Invoking guix copy</a>, <a href="Invoking-guix-publish.html">Invoking guix publish</a>, and <a href="Invoking-guix-archive.html">Invoking guix archive</a>.
+</p></blockquote>
+
+<span id="index-pack"></span>
+<span id="index-bundle"></span>
+<span id="index-application-bundle"></span>
+<span id="index-software-bundle"></span>
+<p>The <code>guix pack</code> command creates a shrink-wrapped <em>pack</em> or
+<em>software bundle</em>: it creates a tarball or some other archive
+containing the binaries of the software you&rsquo;re interested in, and all
+its dependencies.  The resulting archive can be used on any machine that
+does not have Guix, and people can run the exact same binaries as those
+you have with Guix.  The pack itself is created in a bit-reproducible
+fashion, so anyone can verify that it really contains the build results
+that you pretend to be shipping.
+</p>
+<p>For example, to create a bundle containing Guile, Emacs, Geiser, and all
+their dependencies, you can run:
+</p>
+<div class="example">
+<pre class="example">$ guix pack guile emacs emacs-geiser
+&hellip;
+/gnu/store/&hellip;-pack.tar.gz
+</pre></div>
+
+<p>The result here is a tarball containing a <samp>/gnu/store</samp> directory
+with all the relevant packages.  The resulting tarball contains a
+<em>profile</em> with the three packages of interest; the profile is the
+same as would be created by <code>guix package -i</code>.  It is this
+mechanism that is used to create Guix&rsquo;s own standalone binary tarball
+(see <a href="Binary-Installation.html">Binary Installation</a>).
+</p>
+<p>Users of this pack would have to run
+<samp>/gnu/store/&hellip;-profile/bin/guile</samp> to run Guile, which you may
+find inconvenient.  To work around it, you can create, say, a
+<samp>/opt/gnu/bin</samp> symlink to the profile:
+</p>
+<div class="example">
+<pre class="example">guix pack -S /opt/gnu/bin=bin guile emacs emacs-geiser
+</pre></div>
+
+<p>That way, users can happily type <samp>/opt/gnu/bin/guile</samp> and enjoy.
+</p>
+<span id="index-relocatable-binaries_002c-with-guix-pack"></span>
+<p>What if the recipient of your pack does not have root privileges on
+their machine, and thus cannot unpack it in the root file system?  In
+that case, you will want to use the <samp>--relocatable</samp> option (see
+below).  This option produces <em>relocatable binaries</em>, meaning they
+they can be placed anywhere in the file system hierarchy: in the example
+above, users can unpack your tarball in their home directory and
+directly run <samp>./opt/gnu/bin/guile</samp>.
+</p>
+<span id="index-Docker_002c-build-an-image-with-guix-pack"></span>
+<p>Alternatively, you can produce a pack in the Docker image format using
+the following command:
+</p>
+<div class="example">
+<pre class="example">guix pack -f docker -S /bin=bin guile guile-readline
+</pre></div>
+
+<p>The result is a tarball that can be passed to the <code>docker load</code>
+command, followed by <code>docker run</code>:
+</p>
+<div class="example">
+<pre class="example">docker load &lt; <var>file</var>
+docker run -ti guile-guile-readline /bin/guile
+</pre></div>
+
+<p>where <var>file</var> is the image returned by <var>guix pack</var>, and
+<code>guile-guile-readline</code> is its &ldquo;image tag&rdquo;.  See the
+<a href="https://docs.docker.com/engine/reference/commandline/load/">Docker
+documentation</a> for more information.
+</p>
+<span id="index-Singularity_002c-build-an-image-with-guix-pack"></span>
+<span id="index-SquashFS_002c-build-an-image-with-guix-pack"></span>
+<p>Yet another option is to produce a SquashFS image with the following
+command:
+</p>
+<div class="example">
+<pre class="example">guix pack -f squashfs bash guile emacs emacs-geiser
+</pre></div>
+
+<p>The result is a SquashFS file system image that can either be mounted or
+directly be used as a file system container image with the
+<a href="https://www.sylabs.io/docs/">Singularity container execution
+environment</a>, using commands like <code>singularity shell</code> or
+<code>singularity exec</code>.
+</p>
+<p>Several command-line options allow you to customize your pack:
+</p>
+<dl compact="compact">
+<dt><code>--format=<var>format</var></code></dt>
+<dt><code>-f <var>format</var></code></dt>
+<dd><p>Produce a pack in the given <var>format</var>.
+</p>
+<p>The available formats are:
+</p>
+<dl compact="compact">
+<dt><code>tarball</code></dt>
+<dd><p>This is the default format.  It produces a tarball containing all the
+specified binaries and symlinks.
+</p>
+</dd>
+<dt><code>docker</code></dt>
+<dd><p>This produces a tarball that follows the
+<a href="https://github.com/docker/docker/blob/master/image/spec/v1.2.md">Docker Image Specification</a>.  The &ldquo;repository name&rdquo; as it appears in
+the output of the <code>docker images</code> command is computed from
+package names passed on the command line or in the manifest file.
+</p>
+</dd>
+<dt><code>squashfs</code></dt>
+<dd><p>This produces a SquashFS image containing all the specified binaries and
+symlinks, as well as empty mount points for virtual file systems like
+procfs.
+</p>
+<blockquote>
+<p><b>Note:</b> Singularity <em>requires</em> you to provide <samp>/bin/sh</samp> in the image.
+For that reason, <code>guix pack -f squashfs</code> always implies <code>-S
+/bin=bin</code>.  Thus, your <code>guix pack</code> invocation must always start
+with something like:
+</p>
+<div class="example">
+<pre class="example">guix pack -f squashfs bash &hellip;
+</pre></div>
+
+<p>If you forget the <code>bash</code> (or similar) package, <code>singularity
+run</code> and <code>singularity exec</code> will fail with an unhelpful &ldquo;no
+such file or directory&rdquo; message.
+</p></blockquote>
+
+</dd>
+<dt><code>deb</code></dt>
+<dd><p>This produces a Debian archive (a package with the &lsquo;<samp>.deb</samp>&rsquo; file
+extension) containing all the specified binaries and symbolic links,
+that can be installed on top of any dpkg-based GNU(/Linux) distribution.
+Advanced options can be revealed via the <samp>--help-deb-format</samp>
+option.  They allow embedding control files for more fine-grained
+control, such as activating specific triggers or providing a maintainer
+configure script to run arbitrary setup code upon installation.
+</p>
+<div class="example">
+<pre class="example">guix pack -f deb -C xz -S /usr/bin/hello=bin/hello hello
+</pre></div>
+
+<blockquote>
+<p><b>Note:</b> Because archives produced with <code>guix pack</code> contain a collection
+of store items and because each <code>dpkg</code> package must not have
+conflicting files, in practice that means you likely won&rsquo;t be able to
+install more than one such archive on a given system.
+</p></blockquote>
+
+<blockquote>
+<p><b>Warning:</b> <code>dpkg</code> will assume ownership of any files contained in the pack
+that it does <em>not</em> know about.  It is unwise to install
+Guix-produced &lsquo;<samp>.deb</samp>&rsquo; files on a system where <samp>/gnu/store</samp> is
+shared by other software, such as a Guix installation or other, non-deb
+packs.
+</p></blockquote>
+
+</dd>
+</dl>
+
+<span id="index-relocatable-binaries"></span>
+</dd>
+<dt><code>--relocatable</code></dt>
+<dt><code>-R</code></dt>
+<dd><p>Produce <em>relocatable binaries</em>&mdash;i.e., binaries that can be placed
+anywhere in the file system hierarchy and run from there.
+</p>
+<p>When this option is passed once, the resulting binaries require support for
+<em>user namespaces</em> in the kernel Linux; when passed
+<em>twice</em><a id="DOCF18" href="Invoking-guix-pack.html#FOOT18"><sup>18</sup></a>, relocatable binaries fall to back to
+other techniques if user namespaces are unavailable, and essentially
+work anywhere&mdash;see below for the implications.
+</p>
+<p>For example, if you create a pack containing Bash with:
+</p>
+<div class="example">
+<pre class="example">guix pack -RR -S /mybin=bin bash
+</pre></div>
+
+<p>... you can copy that pack to a machine that lacks Guix, and from your
+home directory as a normal user, run:
+</p>
+<div class="example">
+<pre class="example">tar xf pack.tar.gz
+./mybin/sh
+</pre></div>
+
+<p>In that shell, if you type <code>ls /gnu/store</code>, you&rsquo;ll notice that
+<samp>/gnu/store</samp> shows up and contains all the dependencies of
+<code>bash</code>, even though the machine actually lacks <samp>/gnu/store</samp>
+altogether!  That is probably the simplest way to deploy Guix-built
+software on a non-Guix machine.
+</p>
+<blockquote>
+<p><b>Note:</b> By default, relocatable binaries rely on the <em>user namespace</em> feature of
+the kernel Linux, which allows unprivileged users to mount or change root.
+Old versions of Linux did not support it, and some GNU/Linux distributions
+turn it off.
+</p>
+<p>To produce relocatable binaries that work even in the absence of user
+namespaces, pass <samp>--relocatable</samp> or <samp>-R</samp> <em>twice</em>.  In that
+case, binaries will try user namespace support and fall back to another
+<em>execution engine</em> if user namespaces are not supported.  The
+following execution engines are supported:
+</p>
+<dl compact="compact">
+<dt><code>default</code></dt>
+<dd><p>Try user namespaces and fall back to PRoot if user namespaces are not
+supported (see below).
+</p>
+</dd>
+<dt><code>performance</code></dt>
+<dd><p>Try user namespaces and fall back to Fakechroot if user namespaces are
+not supported (see below).
+</p>
+</dd>
+<dt><code>userns</code></dt>
+<dd><p>Run the program through user namespaces and abort if they are not
+supported.
+</p>
+</dd>
+<dt><code>proot</code></dt>
+<dd><p>Run through PRoot.  The <a href="https://proot-me.github.io/">PRoot</a> program
+provides the necessary
+support for file system virtualization.  It achieves that by using the
+<code>ptrace</code> system call on the running program.  This approach has the
+advantage to work without requiring special kernel support, but it incurs
+run-time overhead every time a system call is made.
+</p>
+</dd>
+<dt><code>fakechroot</code></dt>
+<dd><p>Run through Fakechroot.  <a href="https://github.com/dex4er/fakechroot/">Fakechroot</a> virtualizes file system accesses by intercepting calls to C
+library functions such as <code>open</code>, <code>stat</code>, <code>exec</code>, and so
+on.  Unlike PRoot, it incurs very little overhead.  However, it does not
+always work: for example, some file system accesses made from within the
+C library are not intercepted, and file system accesses made <i>via</i>
+direct syscalls are not intercepted either, leading to erratic behavior.
+</p></dd>
+</dl>
+
+<span id="index-GUIX_005fEXECUTION_005fENGINE"></span>
+<p>When running a wrapped program, you can explicitly request one of the
+execution engines listed above by setting the
+<code>GUIX_EXECUTION_ENGINE</code> environment variable accordingly.
+</p></blockquote>
+
+<span id="index-entry-point_002c-for-Docker-images"></span>
+</dd>
+<dt><code>--entry-point=<var>command</var></code></dt>
+<dd><p>Use <var>command</var> as the <em>entry point</em> of the resulting pack, if the pack
+format supports it&mdash;currently <code>docker</code> and <code>squashfs</code> (Singularity)
+support it.  <var>command</var> must be relative to the profile contained in the
+pack.
+</p>
+<p>The entry point specifies the command that tools like <code>docker run</code> or
+<code>singularity run</code> automatically start by default.  For example, you can
+do:
+</p>
+<div class="example">
+<pre class="example">guix pack -f docker --entry-point=bin/guile guile
+</pre></div>
+
+<p>The resulting pack can easily be loaded and <code>docker run</code> with no extra
+arguments will spawn <code>bin/guile</code>:
+</p>
+<div class="example">
+<pre class="example">docker load -i pack.tar.gz
+docker run <var>image-id</var>
+</pre></div>
+
+</dd>
+<dt><code>--expression=<var>expr</var></code></dt>
+<dt><code>-e <var>expr</var></code></dt>
+<dd><p>Consider the package <var>expr</var> evaluates to.
+</p>
+<p>This has the same purpose as the same-named option in <code>guix
+build</code> (see <a href="Additional-Build-Options.html"><samp>--expression</samp> in
+<code>guix build</code></a>).
+</p>
+<span id="pack_002dmanifest"></span></dd>
+<dt><code>--manifest=<var>file</var></code></dt>
+<dt><code>-m <var>file</var></code></dt>
+<dd><p>Use the packages contained in the manifest object returned by the Scheme
+code in <var>file</var>.  This option can be repeated several times, in which
+case the manifests are concatenated.
+</p>
+<p>This has a similar purpose as the same-named option in <code>guix
+package</code> (see <a href="Invoking-guix-package.html#profile_002dmanifest"><samp>--manifest</samp></a>) and uses the
+same manifest files.  It allows you to define a collection of packages
+once and use it both for creating profiles and for creating archives
+for use on machines that do not have Guix installed.  Note that you can
+specify <em>either</em> a manifest file <em>or</em> a list of packages,
+but not both.
+</p>
+<p>See <a href="Writing-Manifests.html">Writing Manifests</a>, for information on how to write a manifest.
+See <a href="Invoking-guix-shell.html#shell_002dexport_002dmanifest"><code>guix shell --export-manifest</code></a>,
+for information on how to &ldquo;convert&rdquo; command-line options into a
+manifest.
+</p>
+</dd>
+<dt><code>--system=<var>system</var></code></dt>
+<dt><code>-s <var>system</var></code></dt>
+<dd><p>Attempt to build for <var>system</var>&mdash;e.g., <code>i686-linux</code>&mdash;instead of
+the system type of the build host.
+</p>
+</dd>
+<dt><code>--target=<var>triplet</var></code></dt>
+<dd><span id="index-cross_002dcompilation"></span>
+<p>Cross-build for <var>triplet</var>, which must be a valid GNU triplet, such
+as <code>"aarch64-linux-gnu"</code> (see <a href="https://www.gnu.org/software/autoconf/manual/html_node/Specifying-target-triplets.html#Specifying-target-triplets">GNU
+configuration triplets</a> in <cite>Autoconf</cite>).
+</p>
+</dd>
+<dt><code>--compression=<var>tool</var></code></dt>
+<dt><code>-C <var>tool</var></code></dt>
+<dd><p>Compress the resulting tarball using <var>tool</var>&mdash;one of <code>gzip</code>,
+<code>zstd</code>, <code>bzip2</code>, <code>xz</code>, <code>lzip</code>, or <code>none</code> for no
+compression.
+</p>
+<span id="pack_002dsymlink_002doption"></span></dd>
+<dt><code>--symlink=<var>spec</var></code></dt>
+<dt><code>-S <var>spec</var></code></dt>
+<dd><p>Add the symlinks specified by <var>spec</var> to the pack.  This option can
+appear several times.
+</p>
+<p><var>spec</var> has the form <code><var>source</var>=<var>target</var></code>, where
+<var>source</var> is the symlink that will be created and <var>target</var> is the
+symlink target.
+</p>
+<p>For instance, <code>-S /opt/gnu/bin=bin</code> creates a <samp>/opt/gnu/bin</samp>
+symlink pointing to the <samp>bin</samp> sub-directory of the profile.
+</p>
+</dd>
+<dt><code>--save-provenance</code></dt>
+<dd><p>Save provenance information for the packages passed on the command line.
+Provenance information includes the URL and commit of the channels in use
+(see <a href="Channels.html">Channels</a>).
+</p>
+<p>Provenance information is saved in the
+<samp>/gnu/store/&hellip;-profile/manifest</samp> file in the pack, along with the
+usual package metadata&mdash;the name and version of each package, their
+propagated inputs, and so on.  It is useful information to the recipient of
+the pack, who then knows how the pack was (supposedly) obtained.
+</p>
+<p>This option is not enabled by default because, like timestamps, provenance
+information contributes nothing to the build process.  In other words, there
+is an infinity of channel URLs and commit IDs that can lead to the same pack.
+Recording such &ldquo;silent&rdquo; metadata in the output thus potentially breaks the
+source-to-binary bitwise reproducibility property.
+</p>
+</dd>
+<dt><code>--root=<var>file</var></code></dt>
+<dt><code>-r <var>file</var></code></dt>
+<dd><span id="index-garbage-collector-root_002c-for-packs"></span>
+<p>Make <var>file</var> a symlink to the resulting pack, and register it as a garbage
+collector root.
+</p>
+</dd>
+<dt><code>--localstatedir</code></dt>
+<dt><code>--profile-name=<var>name</var></code></dt>
+<dd><p>Include the &ldquo;local state directory&rdquo;, <samp>/var/guix</samp>, in the resulting
+pack, and notably the <samp>/var/guix/profiles/per-user/root/<var>name</var></samp>
+profile&mdash;by default <var>name</var> is <code>guix-profile</code>, which corresponds to
+<samp>~root/.guix-profile</samp>.
+</p>
+<p><samp>/var/guix</samp> contains the store database (see <a href="The-Store.html">The Store</a>) as well
+as garbage-collector roots (see <a href="Invoking-guix-gc.html">Invoking guix gc</a>).  Providing it in
+the pack means that the store is &ldquo;complete&rdquo; and manageable by Guix;
+not providing it pack means that the store is &ldquo;dead&rdquo;: items cannot be
+added to it or removed from it after extraction of the pack.
+</p>
+<p>One use case for this is the Guix self-contained binary tarball
+(see <a href="Binary-Installation.html">Binary Installation</a>).
+</p>
+</dd>
+<dt><code>--derivation</code></dt>
+<dt><code>-d</code></dt>
+<dd><p>Print the name of the derivation that builds the pack.
+</p>
+</dd>
+<dt><code>--bootstrap</code></dt>
+<dd><p>Use the bootstrap binaries to build the pack.  This option is only
+useful to Guix developers.
+</p></dd>
+</dl>
+
+<p>In addition, <code>guix pack</code> supports all the common build options
+(see <a href="Common-Build-Options.html">Common Build Options</a>) and all the package transformation
+options (see <a href="Package-Transformation-Options.html">Package Transformation Options</a>).
+</p>
+
+<div class="footnote">
+<hr />
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5><a id="FOOT18" href="Invoking-guix-pack.html#DOCF18">(18)</a>
+<p>Here&rsquo;s a trick to memorize it: <code>-RR</code>, which adds
+PRoot support, can be thought of as the abbreviation of &ldquo;Really
+Relocatable&rdquo;.  Neat, isn&rsquo;t it?</p>
+</h5></div>
+<hr />
+<div class="header">
+<p>
+Next: <a href="The-GCC-toolchain.html" accesskey="n" rel="next">The GCC toolchain</a>, Previous: <a href="Invoking-guix-environment.html" accesskey="p" rel="prev">Invoking guix environment</a>, Up: <a href="Development.html" accesskey="u" rel="up">Development</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

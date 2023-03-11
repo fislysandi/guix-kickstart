@@ -1,0 +1,514 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Invoking guix publish (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="Invoking guix publish (GNU Guix Reference Manual)" />
+<meta name="keywords" content="Invoking guix publish (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Utilities.html" rel="up" title="Utilities" />
+<link href="Invoking-guix-challenge.html" rel="next" title="Invoking guix challenge" />
+<link href="Invoking-guix-graph.html" rel="prev" title="Invoking guix graph" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="Invoking-guix-publish"></span><div class="header">
+<p>
+Next: <a href="Invoking-guix-challenge.html" accesskey="n" rel="next">Invoking guix challenge</a>, Previous: <a href="Invoking-guix-graph.html" accesskey="p" rel="prev">Invoking guix graph</a>, Up: <a href="Utilities.html" accesskey="u" rel="up">Utilities</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Invoking-guix-publish-1"></span><h3 class="section">10.11 Invoking <code>guix publish</code></h3>
+
+<span id="index-guix-publish"></span>
+<p>The purpose of <code>guix publish</code> is to enable users to easily share
+their store with others, who can then use it as a substitute server
+(see <a href="Substitutes.html">Substitutes</a>).
+</p>
+<p>When <code>guix publish</code> runs, it spawns an HTTP server which allows
+anyone with network access to obtain substitutes from it.  This means
+that any machine running Guix can also act as if it were a build farm,
+since the HTTP interface is compatible with Cuirass, the software behind
+the <code>ci.guix.gnu.org</code> build farm.
+</p>
+<p>For security, each substitute is signed, allowing recipients to check
+their authenticity and integrity (see <a href="Substitutes.html">Substitutes</a>).  Because
+<code>guix publish</code> uses the signing key of the system, which is only
+readable by the system administrator, it must be started as root; the
+<samp>--user</samp> option makes it drop root privileges early on.
+</p>
+<p>The signing key pair must be generated before <code>guix publish</code> is
+launched, using <code>guix archive --generate-key</code> (see <a href="Invoking-guix-archive.html">Invoking guix archive</a>).
+</p>
+<p>When the <samp>--advertise</samp> option is passed, the server advertises
+its availability on the local network using multicast DNS (mDNS) and DNS
+service discovery (DNS-SD), currently <i>via</i> Guile-Avahi (see <cite><a href="http://nongnu.org/guile-avahi/doc/guile-avahi.html#Top">Using Avahi in Guile Scheme Programs</a></cite>).
+</p>
+<p>The general syntax is:
+</p>
+<div class="example">
+<pre class="example">guix publish <var>options</var>&hellip;
+</pre></div>
+
+<p>Running <code>guix publish</code> without any additional arguments will
+spawn an HTTP server on port 8080:
+</p>
+<div class="example">
+<pre class="example">guix publish
+</pre></div>
+
+<span id="index-socket-activation_002c-for-guix-publish"></span>
+<p><code>guix publish</code> can also be started following the systemd
+&ldquo;socket activation&rdquo; protocol (see <a href="https://www.gnu.org/software/shepherd/manual/html_node/Service-De_002d-and-Constructors.html#Service-De_002d-and-Constructors"><code>make-systemd-constructor</code></a> in <cite>The GNU Shepherd Manual</cite>).
+</p>
+<p>Once a publishing server has been authorized, the daemon may download
+substitutes from it.  See <a href="Getting-Substitutes-from-Other-Servers.html">Getting Substitutes from Other Servers</a>.
+</p>
+<p>By default, <code>guix publish</code> compresses archives on the fly as it
+serves them.  This &ldquo;on-the-fly&rdquo; mode is convenient in that it requires
+no setup and is immediately available.  However, when serving lots of
+clients, we recommend using the <samp>--cache</samp> option, which enables
+caching of the archives before they are sent to clients&mdash;see below for
+details.  The <code>guix weather</code> command provides a handy way to
+check what a server provides (see <a href="Invoking-guix-weather.html">Invoking guix weather</a>).
+</p>
+<p>As a bonus, <code>guix publish</code> also serves as a content-addressed
+mirror for source files referenced in <code>origin</code> records
+(see <a href="origin-Reference.html">origin Reference</a>).  For instance, assuming <code>guix
+publish</code> is running on <code>example.org</code>, the following URL returns the
+raw <samp>hello-2.10.tar.gz</samp> file with the given SHA256 hash
+(represented in <code>nix-base32</code> format, see <a href="Invoking-guix-hash.html">Invoking guix hash</a>):
+</p>
+<div class="example">
+<pre class="example">http://example.org/file/hello-2.10.tar.gz/sha256/0ssi1&hellip;ndq1i
+</pre></div>
+
+<p>Obviously, these URLs only work for files that are in the store; in
+other cases, they return 404 (&ldquo;Not Found&rdquo;).
+</p>
+<span id="index-build-logs_002c-publication"></span>
+<p>Build logs are available from <code>/log</code> URLs like:
+</p>
+<div class="example">
+<pre class="example">http://example.org/log/gwspk&hellip;-guile-2.2.3
+</pre></div>
+
+<p>When <code>guix-daemon</code> is configured to save compressed build logs,
+as is the case by default (see <a href="Invoking-guix_002ddaemon.html">Invoking guix-daemon</a>), <code>/log</code>
+URLs return the compressed log as-is, with an appropriate
+<code>Content-Type</code> and/or <code>Content-Encoding</code> header.  We recommend
+running <code>guix-daemon</code> with <samp>--log-compression=gzip</samp> since
+Web browsers can automatically decompress it, which is not the case with
+Bzip2 compression.
+</p>
+<p>The following options are available:
+</p>
+<dl compact="compact">
+<dt><code>--port=<var>port</var></code></dt>
+<dt><code>-p <var>port</var></code></dt>
+<dd><p>Listen for HTTP requests on <var>port</var>.
+</p>
+</dd>
+<dt><code>--listen=<var>host</var></code></dt>
+<dd><p>Listen on the network interface for <var>host</var>.  The default is to
+accept connections from any interface.
+</p>
+</dd>
+<dt><code>--user=<var>user</var></code></dt>
+<dt><code>-u <var>user</var></code></dt>
+<dd><p>Change privileges to <var>user</var> as soon as possible&mdash;i.e., once the
+server socket is open and the signing key has been read.
+</p>
+</dd>
+<dt><code>--compression[=<var>method</var>[:<var>level</var>]]</code></dt>
+<dt><code>-C [<var>method</var>[:<var>level</var>]]</code></dt>
+<dd><p>Compress data using the given <var>method</var> and <var>level</var>.  <var>method</var> is
+one of <code>lzip</code>, <code>zstd</code>, and <code>gzip</code>; when <var>method</var> is
+omitted, <code>gzip</code> is used.
+</p>
+<p>When <var>level</var> is zero, disable compression.  The range 1 to 9 corresponds
+to different compression levels: 1 is the fastest, and 9 is the best
+(CPU-intensive).  The default is 3.
+</p>
+<p>Usually, <code>lzip</code> compresses noticeably better than <code>gzip</code> for a
+small increase in CPU usage; see
+<a href="https://nongnu.org/lzip/lzip_benchmark.html">benchmarks on the lzip
+Web page</a>.  However, <code>lzip</code> achieves low decompression throughput
+(on the order of 50&nbsp;MiB/s on modern hardware), which can be a
+bottleneck for someone who downloads over a fast network connection.
+</p>
+<p>The compression ratio of <code>zstd</code> is between that of <code>lzip</code> and
+that of <code>gzip</code>; its main advantage is a
+<a href="https://facebook.github.io/zstd/">high decompression speed</a>.
+</p>
+<p>Unless <samp>--cache</samp> is used, compression occurs on the fly and
+the compressed streams are not
+cached.  Thus, to reduce load on the machine that runs <code>guix
+publish</code>, it may be a good idea to choose a low compression level, to
+run <code>guix publish</code> behind a caching proxy, or to use
+<samp>--cache</samp>.  Using <samp>--cache</samp> has the advantage that it
+allows <code>guix publish</code> to add <code>Content-Length</code> HTTP header
+to its responses.
+</p>
+<p>This option can be repeated, in which case every substitute gets compressed
+using all the selected methods, and all of them are advertised.  This is
+useful when users may not support all the compression methods: they can select
+the one they support.
+</p>
+</dd>
+<dt><code>--cache=<var>directory</var></code></dt>
+<dt><code>-c <var>directory</var></code></dt>
+<dd><p>Cache archives and meta-data (<code>.narinfo</code> URLs) to <var>directory</var>
+and only serve archives that are in cache.
+</p>
+<p>When this option is omitted, archives and meta-data are created
+on-the-fly.  This can reduce the available bandwidth, especially when
+compression is enabled, since this may become CPU-bound.  Another
+drawback of the default mode is that the length of archives is not known
+in advance, so <code>guix publish</code> does not add a
+<code>Content-Length</code> HTTP header to its responses, which in turn
+prevents clients from knowing the amount of data being downloaded.
+</p>
+<p>Conversely, when <samp>--cache</samp> is used, the first request for a store
+item (<i>via</i> a <code>.narinfo</code> URL) triggers a
+background process to <em>bake</em> the archive&mdash;computing its
+<code>.narinfo</code> and compressing the archive, if needed.  Once the
+archive is cached in <var>directory</var>, subsequent requests succeed and
+are served directly from the cache, which guarantees that clients get
+the best possible bandwidth.
+</p>
+<p>That first <code>.narinfo</code> request nonetheless returns 200, provided the
+requested store item is &ldquo;small enough&rdquo;, below the cache bypass
+threshold&mdash;see <samp>--cache-bypass-threshold</samp> below.  That way,
+clients do not have to wait until the archive is baked.  For larger
+store items, the first <code>.narinfo</code> request returns 404, meaning that
+clients have to wait until the archive is baked.
+</p>
+<p>The &ldquo;baking&rdquo; process is performed by worker threads.  By default, one
+thread per CPU core is created, but this can be customized.  See
+<samp>--workers</samp> below.
+</p>
+<p>When <samp>--ttl</samp> is used, cached entries are automatically deleted
+when they have expired.
+</p>
+</dd>
+<dt><code>--workers=<var>N</var></code></dt>
+<dd><p>When <samp>--cache</samp> is used, request the allocation of <var>N</var> worker
+threads to &ldquo;bake&rdquo; archives.
+</p>
+</dd>
+<dt><code>--ttl=<var>ttl</var></code></dt>
+<dd><p>Produce <code>Cache-Control</code> HTTP headers that advertise a time-to-live
+(TTL) of <var>ttl</var>.  <var>ttl</var> must denote a duration: <code>5d</code> means 5
+days, <code>1m</code> means 1 month, and so on.
+</p>
+<p>This allows the user&rsquo;s Guix to keep substitute information in cache for
+<var>ttl</var>.  However, note that <code>guix publish</code> does not itself
+guarantee that the store items it provides will indeed remain available
+for as long as <var>ttl</var>.
+</p>
+<p>Additionally, when <samp>--cache</samp> is used, cached entries that have
+not been accessed for <var>ttl</var> and that no longer have a corresponding
+item in the store, may be deleted.
+</p>
+</dd>
+<dt><code>--negative-ttl=<var>ttl</var></code></dt>
+<dd><p>Similarly produce <code>Cache-Control</code> HTTP headers to advertise the
+time-to-live (TTL) of <em>negative</em> lookups&mdash;missing store items, for
+which the HTTP 404 code is returned.  By default, no negative TTL is
+advertised.
+</p>
+<p>This parameter can help adjust server load and substitute latency by
+instructing cooperating clients to be more or less patient when a store
+item is missing.
+</p>
+</dd>
+<dt><code>--cache-bypass-threshold=<var>size</var></code></dt>
+<dd><p>When used in conjunction with <samp>--cache</samp>, store items smaller than
+<var>size</var> are immediately available, even when they are not yet in
+cache.  <var>size</var> is a size in bytes, or it can be suffixed by <code>M</code>
+for megabytes and so on.  The default is <code>10M</code>.
+</p>
+<p>&ldquo;Cache bypass&rdquo; allows you to reduce the publication delay for clients
+at the expense of possibly additional I/O and CPU use on the server
+side: depending on the client access patterns, those store items can end
+up being baked several times until a copy is available in cache.
+</p>
+<p>Increasing the threshold may be useful for sites that have few users, or
+to guarantee that users get substitutes even for store items that are
+not popular.
+</p>
+</dd>
+<dt><code>--nar-path=<var>path</var></code></dt>
+<dd><p>Use <var>path</var> as the prefix for the URLs of &ldquo;nar&rdquo; files
+(see <a href="Invoking-guix-archive.html">normalized archives</a>).
+</p>
+<p>By default, nars are served at a URL such as
+<code>/nar/gzip/&hellip;-coreutils-8.25</code>.  This option allows you to
+change the <code>/nar</code> part to <var>path</var>.
+</p>
+</dd>
+<dt><code>--public-key=<var>file</var></code></dt>
+<dt><code>--private-key=<var>file</var></code></dt>
+<dd><p>Use the specific <var>file</var>s as the public/private key pair used to sign
+the store items being published.
+</p>
+<p>The files must correspond to the same key pair (the private key is used
+for signing and the public key is merely advertised in the signature
+metadata).  They must contain keys in the canonical s-expression format
+as produced by <code>guix archive --generate-key</code> (see <a href="Invoking-guix-archive.html">Invoking guix archive</a>).  By default, <samp>/etc/guix/signing-key.pub</samp> and
+<samp>/etc/guix/signing-key.sec</samp> are used.
+</p>
+</dd>
+<dt><code>--repl[=<var>port</var>]</code></dt>
+<dt><code>-r [<var>port</var>]</code></dt>
+<dd><p>Spawn a Guile REPL server (see <a href="https://www.gnu.org/software/guile/manual/html_node/REPL-Servers.html#REPL-Servers">REPL Servers</a> in <cite>GNU Guile
+Reference Manual</cite>) on <var>port</var> (37146 by default).  This is used
+primarily for debugging a running <code>guix publish</code> server.
+</p></dd>
+</dl>
+
+<p>Enabling <code>guix publish</code> on Guix System is a one-liner: just
+instantiate a <code>guix-publish-service-type</code> service in the <code>services</code> field
+of the <code>operating-system</code> declaration (see <a href="Base-Services.html#guix_002dpublish_002dservice_002dtype"><code>guix-publish-service-type</code></a>).
+</p>
+<p>If you are instead running Guix on a &ldquo;foreign distro&rdquo;, follow these
+instructions:
+</p>
+<ul>
+<li> If your host distro uses the systemd init system:
+
+<div class="example">
+<pre class="example"># ln -s ~root/.guix-profile/lib/systemd/system/guix-publish.service \
+        /etc/systemd/system/
+# systemctl start guix-publish &amp;&amp; systemctl enable guix-publish
+</pre></div>
+
+</li><li> If your host distro uses the Upstart init system:
+
+<div class="example">
+<pre class="example"># ln -s ~root/.guix-profile/lib/upstart/system/guix-publish.conf /etc/init/
+# start guix-publish
+</pre></div>
+
+</li><li> Otherwise, proceed similarly with your distro&rsquo;s init system.
+</li></ul>
+
+<hr />
+<div class="header">
+<p>
+Next: <a href="Invoking-guix-challenge.html" accesskey="n" rel="next">Invoking guix challenge</a>, Previous: <a href="Invoking-guix-graph.html" accesskey="p" rel="prev">Invoking guix graph</a>, Up: <a href="Utilities.html" accesskey="u" rel="up">Utilities</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,879 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>G-Expressions (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="G-Expressions (GNU Guix Reference Manual)" />
+<meta name="keywords" content="G-Expressions (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Programming-Interface.html" rel="up" title="Programming Interface" />
+<link href="Invoking-guix-repl.html" rel="next" title="Invoking guix repl" />
+<link href="The-Store-Monad.html" rel="prev" title="The Store Monad" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="G_002dExpressions"></span><div class="header">
+<p>
+Next: <a href="Invoking-guix-repl.html" accesskey="n" rel="next">Invoking guix repl</a>, Previous: <a href="The-Store-Monad.html" accesskey="p" rel="prev">The Store Monad</a>, Up: <a href="Programming-Interface.html" accesskey="u" rel="up">Programming Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="G_002dExpressions-1"></span><h3 class="section">9.12 G-Expressions</h3>
+
+<span id="index-G_002dexpression"></span>
+<span id="index-build-code-quoting"></span>
+<p>So we have &ldquo;derivations&rdquo;, which represent a sequence of build actions
+to be performed to produce an item in the store (see <a href="Derivations.html">Derivations</a>).
+These build actions are performed when asking the daemon to actually
+build the derivations; they are run by the daemon in a container
+(see <a href="Invoking-guix_002ddaemon.html">Invoking guix-daemon</a>).
+</p>
+<span id="index-code-staging-1"></span>
+<span id="index-staging_002c-of-code-1"></span>
+<span id="index-strata-of-code"></span>
+<p>It should come as no surprise that we like to write these build actions
+in Scheme.  When we do that, we end up with two <em>strata</em> of Scheme
+code<a id="DOCF23" href="G_002dExpressions.html#FOOT23"><sup>23</sup></a>: the &ldquo;host code&rdquo;&mdash;code that defines packages, talks
+to the daemon, etc.&mdash;and the &ldquo;build code&rdquo;&mdash;code that actually
+performs build actions, such as making directories, invoking
+<code>make</code>, and so on (see <a href="Build-Phases.html">Build Phases</a>).
+</p>
+<p>To describe a derivation and its build actions, one typically needs to
+embed build code inside host code.  It boils down to manipulating build
+code as data, and the homoiconicity of Scheme&mdash;code has a direct
+representation as data&mdash;comes in handy for that.  But we need more than
+the normal <code>quasiquote</code> mechanism in Scheme to construct build
+expressions.
+</p>
+<p>The <code>(guix gexp)</code> module implements <em>G-expressions</em>, a form of
+S-expressions adapted to build expressions.  G-expressions, or
+<em>gexps</em>, consist essentially of three syntactic forms: <code>gexp</code>,
+<code>ungexp</code>, and <code>ungexp-splicing</code> (or simply: <code>#~</code>,
+<code>#$</code>, and <code>#$@</code>), which are comparable to
+<code>quasiquote</code>, <code>unquote</code>, and <code>unquote-splicing</code>,
+respectively (see <a href="https://www.gnu.org/software/guile/manual/html_node/Expression-Syntax.html#Expression-Syntax"><code>quasiquote</code></a> in <cite>GNU Guile Reference Manual</cite>).  However, there are major differences:
+</p>
+<ul>
+<li> Gexps are meant to be written to a file and run or manipulated by other
+processes.
+
+</li><li> When a high-level object such as a package or derivation is unquoted
+inside a gexp, the result is as if its output file name had been
+introduced.
+
+</li><li> Gexps carry information about the packages or derivations they refer to,
+and these dependencies are automatically added as inputs to the build
+processes that use them.
+</li></ul>
+
+<span id="index-lowering_002c-of-high_002dlevel-objects-in-gexps"></span>
+<p>This mechanism is not limited to package and derivation
+objects: <em>compilers</em> able to &ldquo;lower&rdquo; other high-level objects to
+derivations or files in the store can be defined,
+such that these objects can also be inserted
+into gexps.  For example, a useful type of high-level objects that can be
+inserted in a gexp is &ldquo;file-like objects&rdquo;, which make it easy to
+add files to the store and to refer to them in
+derivations and such (see <code>local-file</code> and <code>plain-file</code>
+below).
+</p>
+<p>To illustrate the idea, here is an example of a gexp:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Building-CPS.html#index-build_002dexp">build-exp</a>
+  <span class="syntax-symbol">#~</span><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-special">begin</span>
+      <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/File-System.html#index-mkdir">mkdir</a> <span class="syntax-symbol">#$output</span></span>)</span>
+      <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Processes.html#index-chdir">chdir</a> <span class="syntax-symbol">#$output</span></span>)</span>
+      <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/File-System.html#index-symlink">symlink</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-symbol">#$coreutils</span> <span class="syntax-string">"/bin/ls"</span></span>)</span>
+               <span class="syntax-string">"list-files"</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>This gexp can be passed to <code>gexp-&gt;derivation</code>; we obtain a
+derivation that builds a directory containing exactly one symlink to
+<samp>/gnu/store/&hellip;-coreutils-8.22/bin/ls</samp>:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-gexp_002d_003ederivation">gexp-&gt;derivation</a> <span class="syntax-string">"the-thing"</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Building-CPS.html#index-build_002dexp">build-exp</a></span>)</span>
+</pre></div>
+
+<p>As one would expect, the <code>"/gnu/store/&hellip;-coreutils-8.22"</code> string is
+substituted to the reference to the <var>coreutils</var> package in the
+actual build code, and <var>coreutils</var> is automatically made an input to
+the derivation.  Likewise, <code>#$output</code> (equivalent to <code>(ungexp
+output)</code>) is replaced by a string containing the directory name of the
+output of the derivation.
+</p>
+<span id="index-cross-compilation"></span>
+<p>In a cross-compilation context, it is useful to distinguish between
+references to the <em>native</em> build of a package&mdash;that can run on the
+host&mdash;versus references to cross builds of a package.  To that end, the
+<code>#+</code> plays the same role as <code>#$</code>, but is a reference to a
+native package build:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-gexp_002d_003ederivation">gexp-&gt;derivation</a> <span class="syntax-string">"vi"</span>
+   <span class="syntax-symbol">#~</span><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-special">begin</span>
+       <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/File-System.html#index-mkdir">mkdir</a> <span class="syntax-symbol">#$output</span></span>)</span>
+       <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/File-System.html#index-mkdir">mkdir</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-symbol">#$output</span> <span class="syntax-string">"/bin"</span></span>)</span></span>)</span>
+       <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Processes.html#index-system_002a">system*</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-symbol">#+coreutils</span> <span class="syntax-string">"/bin/ln"</span></span>)</span>
+                <span class="syntax-string">"-s"</span>
+                <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-symbol">#$emacs</span> <span class="syntax-string">"/bin/emacs"</span></span>)</span>
+                <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-symbol">#$output</span> <span class="syntax-string">"/bin/vi"</span></span>)</span></span>)</span></span>)</span>
+   <span class="syntax-keyword">#:target</span> <span class="syntax-string">"aarch64-linux-gnu"</span></span>)</span>
+</pre></div>
+
+<p>In the example above, the native build of <var>coreutils</var> is used, so
+that <code>ln</code> can actually run on the host; but then the
+cross-compiled build of <var>emacs</var> is referenced.
+</p>
+<span id="index-imported-modules_002c-for-gexps"></span>
+<span id="index-with_002dimported_002dmodules"></span>
+<p>Another gexp feature is <em>imported modules</em>: sometimes you want to be
+able to use certain Guile modules from the &ldquo;host environment&rdquo; in the
+gexp, so those modules should be imported in the &ldquo;build environment&rdquo;.
+The <code>with-imported-modules</code> form allows you to express that:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">let</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="Using-Guix-Interactively.html#index-build">build</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-with_002dimported_002dmodules-1">with-imported-modules</a> <span class="syntax-symbol">'</span><span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <a class="syntax-symbol" href="Using-Guix-Interactively.html#index-build">build</a> <span class="syntax-symbol">utils</span></span>)</span></span>)</span>
+               <span class="syntax-symbol">#~</span><span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-special">begin</span>
+                   <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-use_002dmodules">use-modules</a> <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <a class="syntax-symbol" href="Using-Guix-Interactively.html#index-build">build</a> <span class="syntax-symbol">utils</span></span>)</span></span>)</span>
+                   <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="Build-Utilities.html#index-mkdir_002dp">mkdir-p</a> <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-symbol">#$output</span> <span class="syntax-string">"/bin"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-gexp_002d_003ederivation">gexp-&gt;derivation</a> <span class="syntax-string">"empty-dir"</span>
+                    <span class="syntax-symbol">#~</span><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-special">begin</span>
+                        <span class="syntax-symbol">#$build</span>
+                        <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/GOOPS-Object-Miscellany.html#index-display-3">display</a> <span class="syntax-string">"success!\n"</span></span>)</span>
+                        <span class="syntax-symbol">#t</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>In this example, the <code>(guix build utils)</code> module is automatically
+pulled into the isolated build environment of our gexp, such that
+<code>(use-modules (guix build utils))</code> works as expected.
+</p>
+<span id="index-module-closure"></span>
+<span id="index-source_002dmodule_002dclosure"></span>
+<p>Usually you want the <em>closure</em> of the module to be imported&mdash;i.e.,
+the module itself and all the modules it depends on&mdash;rather than just
+the module; failing to do that, attempts to use the module will fail
+because of missing dependent modules.  The <code>source-module-closure</code>
+procedure computes the closure of a module by looking at its source file
+headers, which comes in handy in this case:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-use_002dmodules">use-modules</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <span class="syntax-symbol">modules</span></span>)</span></span>)</span>   <span class="syntax-comment">;for 'source-module-closure'
+</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-with_002dimported_002dmodules-1">with-imported-modules</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">source-module-closure</span>
+                         <span class="syntax-symbol">'</span><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <a class="syntax-symbol" href="Using-Guix-Interactively.html#index-build">build</a> <span class="syntax-symbol">utils</span></span>)</span>
+                           <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <a class="syntax-symbol" href="Using-Guix-Interactively.html#index-build">build</a> <a class="syntax-symbol" href="image-Reference.html#index-image">image</a></span>)</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-gexp_002d_003ederivation">gexp-&gt;derivation</a> <span class="syntax-string">"something-with-vms"</span>
+                    <span class="syntax-symbol">#~</span><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-special">begin</span>
+                        <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-use_002dmodules">use-modules</a> <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <a class="syntax-symbol" href="Using-Guix-Interactively.html#index-build">build</a> <span class="syntax-symbol">utils</span></span>)</span>
+                                     <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <a class="syntax-symbol" href="Using-Guix-Interactively.html#index-build">build</a> <a class="syntax-symbol" href="image-Reference.html#index-image">image</a></span>)</span></span>)</span>
+                        <span class="syntax-symbol">…</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<span id="index-extensions_002c-for-gexps"></span>
+<span id="index-with_002dextensions"></span>
+<p>In the same vein, sometimes you want to import not just pure-Scheme
+modules, but also &ldquo;extensions&rdquo; such as Guile bindings to C libraries
+or other &ldquo;full-blown&rdquo; packages.  Say you need the <code>guile-json</code>
+package available on the build side, here&rsquo;s how you would do it:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-use_002dmodules">use-modules</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">guile</span></span>)</span></span>)</span>  <span class="syntax-comment">;for 'guile-json'
+</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-with_002dextensions-1">with-extensions</a> <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-symbol">guile-json</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-gexp_002d_003ederivation">gexp-&gt;derivation</a> <span class="syntax-string">"something-with-json"</span>
+                    <span class="syntax-symbol">#~</span><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-special">begin</span>
+                        <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-use_002dmodules">use-modules</a> <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">json</span></span>)</span></span>)</span>
+                        <span class="syntax-symbol">…</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>The syntactic form to construct gexps is summarized below.
+</p>
+<dl>
+<dt id="index-_0023_007eexp">Scheme Syntax: <strong>#~<var>exp</var></strong></dt>
+<dt id="index-_0028gexp" class="symbol-definition"><span class="symbol-definition-category">Scheme Syntax: </span><span class="symbol-definition-prototype">(gexp <var>exp</var>)</span></dt>
+<dd><p>Return a G-expression containing <var>exp</var>.  <var>exp</var> may contain one
+or more of the following forms:
+</p>
+<dl compact="compact">
+<dt><code>#$<var>obj</var></code></dt>
+<dt><code>(ungexp <var>obj</var>)</code></dt>
+<dd><p>Introduce a reference to <var>obj</var>.  <var>obj</var> may have one of the
+supported types, for example a package or a
+derivation, in which case the <code>ungexp</code> form is replaced by its
+output file name&mdash;e.g., <code>"/gnu/store/&hellip;-coreutils-8.22</code>.
+</p>
+<p>If <var>obj</var> is a list, it is traversed and references to supported
+objects are substituted similarly.
+</p>
+<p>If <var>obj</var> is another gexp, its contents are inserted and its
+dependencies are added to those of the containing gexp.
+</p>
+<p>If <var>obj</var> is another kind of object, it is inserted as is.
+</p>
+</dd>
+<dt><code>#$<var>obj</var>:<var>output</var></code></dt>
+<dt><code>(ungexp <var>obj</var> <var>output</var>)</code></dt>
+<dd><p>This is like the form above, but referring explicitly to the
+<var>output</var> of <var>obj</var>&mdash;this is useful when <var>obj</var> produces
+multiple outputs (see <a href="Packages-with-Multiple-Outputs.html">Packages with Multiple Outputs</a>).
+</p>
+</dd>
+<dt><code>#+<var>obj</var></code></dt>
+<dt><code>#+<var>obj</var>:output</code></dt>
+<dt><code>(ungexp-native <var>obj</var>)</code></dt>
+<dt><code>(ungexp-native <var>obj</var> <var>output</var>)</code></dt>
+<dd><p>Same as <code>ungexp</code>, but produces a reference to the <em>native</em>
+build of <var>obj</var> when used in a cross compilation context.
+</p>
+</dd>
+<dt><code>#$output[:<var>output</var>]</code></dt>
+<dt><code>(ungexp output [<var>output</var>])</code></dt>
+<dd><p>Insert a reference to derivation output <var>output</var>, or to the main
+output when <var>output</var> is omitted.
+</p>
+<p>This only makes sense for gexps passed to <code>gexp-&gt;derivation</code>.
+</p>
+</dd>
+<dt><code>#$@<var>lst</var></code></dt>
+<dt><code>(ungexp-splicing <var>lst</var>)</code></dt>
+<dd><p>Like the above, but splices the contents of <var>lst</var> inside the
+containing list.
+</p>
+</dd>
+<dt><code>#+@<var>lst</var></code></dt>
+<dt><code>(ungexp-native-splicing <var>lst</var>)</code></dt>
+<dd><p>Like the above, but refers to native builds of the objects listed in
+<var>lst</var>.
+</p>
+</dd>
+</dl>
+
+<p>G-expressions created by <code>gexp</code> or <code>#~</code> are run-time objects
+of the <code>gexp?</code> type (see below).
+</p></dd></dl>
+
+<dl>
+<dt id="index-with_002dimported_002dmodules-1" class="symbol-definition"><span class="symbol-definition-category">Scheme Syntax: </span><span class="symbol-definition-prototype">with-imported-modules <var>modules</var> <var>body</var>&hellip;</span></dt>
+<dd><p>Mark the gexps defined in <var>body</var>&hellip; as requiring <var>modules</var>
+in their execution environment.
+</p>
+<p>Each item in <var>modules</var> can be the name of a module, such as
+<code>(guix build utils)</code>, or it can be a module name, followed by an
+arrow, followed by a file-like object:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-symbol">`</span><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <a class="syntax-symbol" href="Using-Guix-Interactively.html#index-build">build</a> <span class="syntax-symbol">utils</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <span class="syntax-symbol">gcrypt</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <span class="syntax-symbol">config</span></span>)</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Syntax-Rules.html#index-_003d_003e">=&gt;</a> <span class="syntax-symbol">,</span><span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-scheme_002dfile">scheme-file</a> <span class="syntax-string">"config.scm"</span>
+                                  <span class="syntax-symbol">#~</span><span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-special">define-module</span> <span class="syntax-symbol">…</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>In the example above, the first two modules are taken from the search
+path, and the last one is created from the given file-like object.
+</p>
+<p>This form has <em>lexical</em> scope: it has an effect on the gexps
+directly defined in <var>body</var>&hellip;, but not on those defined, say, in
+procedures called from <var>body</var>&hellip;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-with_002dextensions-1" class="symbol-definition"><span class="symbol-definition-category">Scheme Syntax: </span><span class="symbol-definition-prototype">with-extensions <var>extensions</var> <var>body</var>&hellip;</span></dt>
+<dd><p>Mark the gexps defined in <var>body</var>&hellip; as requiring
+<var>extensions</var> in their build and execution environment.
+<var>extensions</var> is typically a list of package objects such as those
+defined in the <code>(gnu packages guile)</code> module.
+</p>
+<p>Concretely, the packages listed in <var>extensions</var> are added to the
+load path while compiling imported modules in <var>body</var>&hellip;; they
+are also added to the load path of the gexp returned by
+<var>body</var>&hellip;.
+</p></dd></dl>
+
+<dl>
+<dt id="index-gexp_003f" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">gexp? <var>obj</var></span></dt>
+<dd><p>Return <code>#t</code> if <var>obj</var> is a G-expression.
+</p></dd></dl>
+
+<p>G-expressions are meant to be written to disk, either as code building
+some derivation, or as plain files in the store.  The monadic procedures
+below allow you to do that (see <a href="The-Store-Monad.html">The Store Monad</a>, for more
+information about monads).
+</p>
+<dl>
+<dt id="index-gexp_002d_003ederivation" class="symbol-definition"><span class="symbol-definition-category">Monadic Procedure: </span><span class="symbol-definition-prototype">gexp-&gt;derivation <var>name</var> <var>exp</var>        [#:system (%current-system)] [#:target #f] [#:graft? #t]        [#:hash #f] [#:hash-algo #f]        [#:recursive? #f] [#:env-vars '()] [#:modules '()]        [#:module-path <code>%load-path</code>]        [#:effective-version "2.2"]        [#:references-graphs #f] [#:allowed-references #f]        [#:disallowed-references #f]        [#:leaked-env-vars #f]        [#:script-name (string-append <var>name</var> "-builder")]        [#:deprecation-warnings #f]        [#:local-build? #f] [#:substitutable? #t]        [#:properties '()] [#:guile-for-build #f]</span></dt>
+<dd><p>Return a derivation <var>name</var> that runs <var>exp</var> (a gexp) with
+<var>guile-for-build</var> (a derivation) on <var>system</var>; <var>exp</var> is
+stored in a file called <var>script-name</var>.  When <var>target</var> is true,
+it is used as the cross-compilation target triplet for packages referred
+to by <var>exp</var>.
+</p>
+<p><var>modules</var> is deprecated in favor of <code>with-imported-modules</code>.
+Its meaning is to
+make <var>modules</var> available in the evaluation context of <var>exp</var>;
+<var>modules</var> is a list of names of Guile modules searched in
+<var>module-path</var> to be copied in the store, compiled, and made available in
+the load path during the execution of <var>exp</var>&mdash;e.g., <code>((guix
+build utils) (guix build gnu-build-system))</code>.
+</p>
+<p><var>effective-version</var> determines the string to use when adding extensions of
+<var>exp</var> (see <code>with-extensions</code>) to the search path&mdash;e.g., <code>"2.2"</code>.
+</p>
+<p><var>graft?</var> determines whether packages referred to by <var>exp</var> should be grafted when
+applicable.
+</p>
+<p>When <var>references-graphs</var> is true, it must be a list of tuples of one of the
+following forms:
+</p>
+<div class="example">
+<pre class="example">(<var>file-name</var> <var>package</var>)
+(<var>file-name</var> <var>package</var> <var>output</var>)
+(<var>file-name</var> <var>derivation</var>)
+(<var>file-name</var> <var>derivation</var> <var>output</var>)
+(<var>file-name</var> <var>store-item</var>)
+</pre></div>
+
+<p>The right-hand-side of each element of <var>references-graphs</var> is automatically made
+an input of the build process of <var>exp</var>.  In the build environment, each
+<var>file-name</var> contains the reference graph of the corresponding item, in a simple
+text format.
+</p>
+<p><var>allowed-references</var> must be either <code>#f</code> or a list of output names and packages.
+In the latter case, the list denotes store items that the result is allowed to
+refer to.  Any reference to another store item will lead to a build error.
+Similarly for <var>disallowed-references</var>, which can list items that must not be
+referenced by the outputs.
+</p>
+<p><var>deprecation-warnings</var> determines whether to show deprecation warnings while
+compiling modules.  It can be <code>#f</code>, <code>#t</code>, or <code>'detailed</code>.
+</p>
+<p>The other arguments are as for <code>derivation</code> (see <a href="Derivations.html">Derivations</a>).
+</p></dd></dl>
+
+<span id="index-file_002dlike-objects"></span>
+<p>The <code>local-file</code>, <code>plain-file</code>, <code>computed-file</code>,
+<code>program-file</code>, and <code>scheme-file</code> procedures below return
+<em>file-like objects</em>.  That is, when unquoted in a G-expression,
+these objects lead to a file in the store.  Consider this G-expression:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-symbol">#~</span><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Processes.html#index-system_002a">system*</a> <span class="syntax-symbol">#$</span><span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-file_002dappend">file-append</a> <span class="syntax-symbol">glibc</span> <span class="syntax-string">"/sbin/nscd"</span></span>)</span> <span class="syntax-string">"-f"</span>
+           <span class="syntax-symbol">#$</span><span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-local_002dfile">local-file</a> <span class="syntax-string">"/tmp/my-nscd.conf"</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>The effect here is to &ldquo;intern&rdquo; <samp>/tmp/my-nscd.conf</samp> by copying it
+to the store.  Once expanded, for instance <i>via</i>
+<code>gexp-&gt;derivation</code>, the G-expression refers to that copy under
+<samp>/gnu/store</samp>; thus, modifying or removing the file in <samp>/tmp</samp>
+does not have any effect on what the G-expression does.
+<code>plain-file</code> can be used similarly; it differs in that the file
+content is directly passed as a string.
+</p>
+<dl>
+<dt id="index-local_002dfile" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">local-file <var>file</var> [<var>name</var>]    [#:recursive? #f] [#:select? (const #t)]</span></dt>
+<dd><p>Return an object representing local file <var>file</var> to add to the store;
+this object can be used in a gexp.  If <var>file</var> is a literal string
+denoting a relative file name, it is looked up relative to the source
+file where it appears; if <var>file</var> is not a literal string, it is
+looked up relative to the current working directory at run time.
+<var>file</var> will be added to the store under <var>name</var>&ndash;by default the
+base name of <var>file</var>.
+</p>
+<p>When <var>recursive?</var> is true, the contents of <var>file</var> are added recursively; if <var>file</var>
+designates a flat file and <var>recursive?</var> is true, its contents are added, and its
+permission bits are kept.
+</p>
+<p>When <var>recursive?</var> is true, call <code>(<var>select?</var> <var>file</var>
+<var>stat</var>)</code> for each directory entry, where <var>file</var> is the entry&rsquo;s
+absolute file name and <var>stat</var> is the result of <code>lstat</code>; exclude
+entries for which <var>select?</var> does not return true.
+</p>
+<p>This is the declarative counterpart of the <code>interned-file</code> monadic
+procedure (see <a href="The-Store-Monad.html"><code>interned-file</code></a>).
+</p></dd></dl>
+
+<dl>
+<dt id="index-plain_002dfile" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">plain-file <var>name</var> <var>content</var></span></dt>
+<dd><p>Return an object representing a text file called <var>name</var> with the given
+<var>content</var> (a string or a bytevector) to be added to the store.
+</p>
+<p>This is the declarative counterpart of <code>text-file</code>.
+</p></dd></dl>
+
+<dl>
+<dt id="index-computed_002dfile" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">computed-file <var>name</var> <var>gexp</var>   [#:local-build? #t] [#:options '()]</span></dt>
+<dd><p>Return an object representing the store item <var>name</var>, a file or
+directory computed by <var>gexp</var>.  When <var>local-build?</var> is true (the
+default), the derivation is built locally.  <var>options</var> is a list of
+additional arguments to pass to <code>gexp-&gt;derivation</code>.
+</p>
+<p>This is the declarative counterpart of <code>gexp-&gt;derivation</code>.
+</p></dd></dl>
+
+<dl>
+<dt id="index-gexp_002d_003escript" class="symbol-definition"><span class="symbol-definition-category">Monadic Procedure: </span><span class="symbol-definition-prototype">gexp-&gt;script <var>name</var> <var>exp</var>   [#:guile (default-guile)] [#:module-path %load-path]   [#:system (%current-system)] [#:target #f]</span></dt>
+<dd><p>Return an executable script <var>name</var> that runs <var>exp</var> using
+<var>guile</var>, with <var>exp</var>&rsquo;s imported modules in its search path.
+Look up <var>exp</var>&rsquo;s modules in <var>module-path</var>.
+</p>
+<p>The example below builds a script that simply invokes the <code>ls</code>
+command:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-use_002dmodules">use-modules</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <span class="syntax-symbol">gexp</span></span>)</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">base</span></span>)</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-gexp_002d_003escript">gexp-&gt;script</a> <span class="syntax-string">"list-files"</span>
+              <span class="syntax-symbol">#~</span><span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Processes.html#index-execl">execl</a> <span class="syntax-symbol">#$</span><span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-file_002dappend">file-append</a> <span class="syntax-symbol">coreutils</span> <span class="syntax-string">"/bin/ls"</span></span>)</span>
+                       <span class="syntax-string">"ls"</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>When &ldquo;running&rdquo; it through the store (see <a href="The-Store-Monad.html"><code>run-with-store</code></a>), we obtain a derivation that produces an
+executable file <samp>/gnu/store/&hellip;-list-files</samp> along these lines:
+</p>
+<div class="example">
+<pre class="example">#!/gnu/store/&hellip;-guile-2.0.11/bin/guile -ds
+!#
+(execl "/gnu/store/&hellip;-coreutils-8.22"/bin/ls" "ls")
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt id="index-program_002dfile" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">program-file <var>name</var> <var>exp</var>           [#:guile #f] [#:module-path %load-path]</span></dt>
+<dd><p>Return an object representing the executable store item <var>name</var> that
+runs <var>gexp</var>.  <var>guile</var> is the Guile package used to execute that
+script.  Imported modules of <var>gexp</var> are looked up in <var>module-path</var>.
+</p>
+<p>This is the declarative counterpart of <code>gexp-&gt;script</code>.
+</p></dd></dl>
+
+<dl>
+<dt id="index-gexp_002d_003efile" class="symbol-definition"><span class="symbol-definition-category">Monadic Procedure: </span><span class="symbol-definition-prototype">gexp-&gt;file <var>name</var> <var>exp</var>             [#:set-load-path? #t] [#:module-path %load-path]             [#:splice? #f]             [#:guile (default-guile)]</span></dt>
+<dd><p>Return a derivation that builds a file <var>name</var> containing <var>exp</var>.
+When <var>splice?</var>  is true, <var>exp</var> is considered to be a list of
+expressions that will be spliced in the resulting file.
+</p>
+<p>When <var>set-load-path?</var> is true, emit code in the resulting file to
+set <code>%load-path</code> and <code>%load-compiled-path</code> to honor
+<var>exp</var>&rsquo;s imported modules.  Look up <var>exp</var>&rsquo;s modules in
+<var>module-path</var>.
+</p>
+<p>The resulting file holds references to all the dependencies of <var>exp</var>
+or a subset thereof.
+</p></dd></dl>
+
+<dl>
+<dt id="index-scheme_002dfile" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">scheme-file <var>name</var> <var>exp</var>           [#:splice? #f] [#:set-load-path? #t]</span></dt>
+<dd><p>Return an object representing the Scheme file <var>name</var> that contains
+<var>exp</var>.
+</p>
+<p>This is the declarative counterpart of <code>gexp-&gt;file</code>.
+</p></dd></dl>
+
+<dl>
+<dt id="index-text_002dfile_002a" class="symbol-definition"><span class="symbol-definition-category">Monadic Procedure: </span><span class="symbol-definition-prototype">text-file* <var>name</var> <var>text</var> &hellip;</span></dt>
+<dd><p>Return as a monadic value a derivation that builds a text file
+containing all of <var>text</var>.  <var>text</var> may list, in addition to
+strings, objects of any type that can be used in a gexp: packages,
+derivations, local file objects, etc.  The resulting store file holds
+references to all these.
+</p>
+<p>This variant should be preferred over <code>text-file</code> anytime the file
+to create will reference items from the store.  This is typically the
+case when building a configuration file that embeds store file names,
+like this:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">profile.sh</span></span>)</span>
+  <span class="syntax-comment">;; Return the name of a shell script in the store that
+</span>  <span class="syntax-comment">;; initializes the 'PATH' environment variable.
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-text_002dfile_002a">text-file*</a> <span class="syntax-string">"profile.sh"</span>
+              <span class="syntax-string">"export PATH="</span> <span class="syntax-symbol">coreutils</span> <span class="syntax-string">"/bin:"</span>
+              <span class="syntax-symbol">grep</span> <span class="syntax-string">"/bin:"</span> <span class="syntax-symbol">sed</span> <span class="syntax-string">"/bin\n"</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>In this example, the resulting <samp>/gnu/store/&hellip;-profile.sh</samp> file
+will reference <var>coreutils</var>, <var>grep</var>, and <var>sed</var>, thereby
+preventing them from being garbage-collected during its lifetime.
+</p></dd></dl>
+
+<dl>
+<dt id="index-mixed_002dtext_002dfile" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">mixed-text-file <var>name</var> <var>text</var> &hellip;</span></dt>
+<dd><p>Return an object representing store file <var>name</var> containing
+<var>text</var>.  <var>text</var> is a sequence of strings and file-like objects,
+as in:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-mixed_002dtext_002dfile">mixed-text-file</a> <span class="syntax-string">"profile"</span>
+                 <span class="syntax-string">"export PATH="</span> <span class="syntax-symbol">coreutils</span> <span class="syntax-string">"/bin:"</span> <span class="syntax-symbol">grep</span> <span class="syntax-string">"/bin"</span></span>)</span>
+</pre></div>
+
+<p>This is the declarative counterpart of <code>text-file*</code>.
+</p></dd></dl>
+
+<dl>
+<dt id="index-file_002dunion" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">file-union <var>name</var> <var>files</var></span></dt>
+<dd><p>Return a <code>&lt;computed-file&gt;</code> that builds a directory containing all of <var>files</var>.
+Each item in <var>files</var> must be a two-element list where the first element is the
+file name to use in the new directory, and the second element is a gexp
+denoting the target file.  Here&rsquo;s an example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-file_002dunion">file-union</a> <span class="syntax-string">"etc"</span>
+            <span class="syntax-symbol">`</span><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"hosts"</span> <span class="syntax-symbol">,</span><span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-plain_002dfile">plain-file</a> <span class="syntax-string">"hosts"</span>
+                                    <span class="syntax-string">"127.0.0.1 localhost"</span></span>)</span></span>)</span>
+              <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"bashrc"</span> <span class="syntax-symbol">,</span><span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-plain_002dfile">plain-file</a> <span class="syntax-string">"bashrc"</span>
+                                     <span class="syntax-string">"alias ls='ls --color=auto'"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>This yields an <code>etc</code> directory containing these two files.
+</p></dd></dl>
+
+<dl>
+<dt id="index-directory_002dunion" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">directory-union <var>name</var> <var>things</var></span></dt>
+<dd><p>Return a directory that is the union of <var>things</var>, where <var>things</var> is a list of
+file-like objects denoting directories.  For example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-directory_002dunion">directory-union</a> <span class="syntax-string">"guile+emacs"</span> <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-symbol">guile</span> <span class="syntax-symbol">emacs</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>yields a directory that is the union of the <code>guile</code> and <code>emacs</code> packages.
+</p></dd></dl>
+
+<dl>
+<dt id="index-file_002dappend" class="symbol-definition"><span class="symbol-definition-category">Scheme Procedure: </span><span class="symbol-definition-prototype">file-append <var>obj</var> <var>suffix</var> &hellip;</span></dt>
+<dd><p>Return a file-like object that expands to the concatenation of <var>obj</var>
+and <var>suffix</var>, where <var>obj</var> is a lowerable object and each
+<var>suffix</var> is a string.
+</p>
+<p>As an example, consider this gexp:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-gexp_002d_003escript">gexp-&gt;script</a> <span class="syntax-string">"run-uname"</span>
+              <span class="syntax-symbol">#~</span><span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Processes.html#index-system_002a">system*</a> <span class="syntax-symbol">#$</span><span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-file_002dappend">file-append</a> <span class="syntax-symbol">coreutils</span>
+                                        <span class="syntax-string">"/bin/uname"</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>The same effect could be achieved with:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-gexp_002d_003escript">gexp-&gt;script</a> <span class="syntax-string">"run-uname"</span>
+              <span class="syntax-symbol">#~</span><span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Processes.html#index-system_002a">system*</a> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-symbol">#$coreutils</span>
+                                        <span class="syntax-string">"/bin/uname"</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>There is one difference though: in the <code>file-append</code> case, the
+resulting script contains the absolute file name as a string, whereas in
+the second case, the resulting script contains a <code>(string-append
+&hellip;)</code> expression to construct the file name <em>at run time</em>.
+</p></dd></dl>
+
+<dl>
+<dt id="index-let_002dsystem" class="symbol-definition"><span class="symbol-definition-category">Scheme Syntax: </span><span class="symbol-definition-prototype">let-system <var>system</var> <var>body</var>&hellip;</span></dt>
+<dt id="index-let_002dsystem-1" class="symbol-definition"><span class="symbol-definition-category">Scheme Syntax: </span><span class="symbol-definition-prototype">let-system (<var>system</var> <var>target</var>) <var>body</var>&hellip;</span></dt>
+<dd><p>Bind <var>system</var> to the currently targeted system&mdash;e.g.,
+<code>"x86_64-linux"</code>&mdash;within <var>body</var>.
+</p>
+<p>In the second case, additionally bind <var>target</var> to the current
+cross-compilation target&mdash;a GNU triplet such as
+<code>"arm-linux-gnueabihf"</code>&mdash;or <code>#f</code> if we are not
+cross-compiling.
+</p>
+<p><code>let-system</code> is useful in the occasional case where the object
+spliced into the gexp depends on the target system, as in this example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-symbol">#~</span><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Processes.html#index-system_002a">system*</a>
+   <span class="syntax-symbol">#+</span><span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-let_002dsystem">let-system</a> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Processes.html#index-system">system</a>
+       <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-special">cond</span> <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/String-Searching.html#index-string_002dprefix_003f">string-prefix?</a> <span class="syntax-string">"armhf-"</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Processes.html#index-system">system</a></span>)</span>
+              <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-file_002dappend">file-append</a> <span class="syntax-symbol">qemu</span> <span class="syntax-string">"/bin/qemu-system-arm"</span></span>)</span></span>)</span>
+             <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/String-Searching.html#index-string_002dprefix_003f">string-prefix?</a> <span class="syntax-string">"x86_64-"</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Processes.html#index-system">system</a></span>)</span>
+              <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-file_002dappend">file-append</a> <span class="syntax-symbol">qemu</span> <span class="syntax-string">"/bin/qemu-system-x86_64"</span></span>)</span></span>)</span>
+             <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-special">else</span>
+              <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Debug-Commands.html#index-error">error</a> <span class="syntax-string">"dunno!"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+   <span class="syntax-string">"-net"</span> <span class="syntax-string">"user"</span> <span class="syntax-symbol">#$image</span></span>)</span>
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt id="index-with_002dparameters" class="symbol-definition"><span class="symbol-definition-category">Scheme Syntax: </span><span class="symbol-definition-prototype">with-parameters ((<var>parameter</var> <var>value</var>) &hellip;) <var>exp</var></span></dt>
+<dd><p>This macro is similar to the <code>parameterize</code> form for
+dynamically-bound <em>parameters</em> (see <a href="https://www.gnu.org/software/guile/manual/html_node/Parameters.html#Parameters">Parameters</a> in <cite>GNU
+Guile Reference Manual</cite>).  The key difference is that it takes effect
+when the file-like object returned by <var>exp</var> is lowered to a
+derivation or store item.
+</p>
+<p>A typical use of <code>with-parameters</code> is to force the system in effect
+for a given object:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-with_002dparameters">with-parameters</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">%current-system</span> <span class="syntax-string">"i686-linux"</span></span>)</span></span>)</span>
+  <span class="syntax-symbol">coreutils</span></span>)</span>
+</pre></div>
+
+<p>The example above returns an object that corresponds to the i686 build
+of Coreutils, regardless of the current value of <code>%current-system</code>.
+</p></dd></dl>
+
+
+<p>Of course, in addition to gexps embedded in &ldquo;host&rdquo; code, there are
+also modules containing build tools.  To make it clear that they are
+meant to be used in the build stratum, these modules are kept in the
+<code>(guix build &hellip;)</code> name space.
+</p>
+<span id="index-lowering_002c-of-high_002dlevel-objects-in-gexps-1"></span>
+<p>Internally, high-level objects are <em>lowered</em>, using their compiler,
+to either derivations or store items.  For instance, lowering a package
+yields a derivation, and lowering a <code>plain-file</code> yields a store
+item.  This is achieved using the <code>lower-object</code> monadic procedure.
+</p>
+<dl>
+<dt id="index-lower_002dobject" class="symbol-definition"><span class="symbol-definition-category">Monadic Procedure: </span><span class="symbol-definition-prototype">lower-object <var>obj</var> [<var>system</var>]            [#:target #f]</span></dt>
+<dd><p>Return as a value in <code>%store-monad</code> the derivation or store item
+corresponding to <var>obj</var> for <var>system</var>, cross-compiling for
+<var>target</var> if <var>target</var> is true.  <var>obj</var> must be an object that
+has an associated gexp compiler, such as a <code>&lt;package&gt;</code>.
+</p></dd></dl>
+
+<dl>
+<dt id="index-gexp_002d_003eapproximate_002dsexp" class="symbol-definition"><span class="symbol-definition-category">Procedure: </span><span class="symbol-definition-prototype">gexp-&gt;approximate-sexp <var>gexp</var></span></dt>
+<dd><p>Sometimes, it may be useful to convert a G-exp into a S-exp.  For
+example, some linters (see <a href="Invoking-guix-lint.html">Invoking guix lint</a>) peek into the build
+phases of a package to detect potential problems.  This conversion can
+be achieved with this procedure.  However, some information can be lost
+in the process.  More specifically, lowerable objects will be silently
+replaced with some arbitrary object &ndash; currently the list
+<code>(*approximate*)</code>, but this may change.
+</p></dd></dl>
+
+<div class="footnote">
+<hr />
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5><a id="FOOT23" href="G_002dExpressions.html#DOCF23">(23)</a>
+<p>The term <em>stratum</em> in this context was coined by
+Manuel Serrano et al. in the context of their work on Hop.  Oleg
+Kiselyov, who has written insightful
+<a href="http://okmij.org/ftp/meta-programming/#meta-scheme">essays and code
+on this topic</a>, refers to this kind of code generation as
+<em>staging</em>.</p>
+</h5></div>
+<hr />
+<div class="header">
+<p>
+Next: <a href="Invoking-guix-repl.html" accesskey="n" rel="next">Invoking guix repl</a>, Previous: <a href="The-Store-Monad.html" accesskey="p" rel="prev">The Store Monad</a>, Up: <a href="Programming-Interface.html" accesskey="u" rel="up">Programming Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

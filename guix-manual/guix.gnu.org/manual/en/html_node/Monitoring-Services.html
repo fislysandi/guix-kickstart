@@ -1,0 +1,714 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Monitoring Services (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="Monitoring Services (GNU Guix Reference Manual)" />
+<meta name="keywords" content="Monitoring Services (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Services.html" rel="up" title="Services" />
+<link href="Kerberos-Services.html" rel="next" title="Kerberos Services" />
+<link href="File_002dSharing-Services.html" rel="prev" title="File-Sharing Services" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="Monitoring-Services"></span><div class="header">
+<p>
+Next: <a href="Kerberos-Services.html" accesskey="n" rel="next">Kerberos Services</a>, Previous: <a href="File_002dSharing-Services.html" accesskey="p" rel="prev">File-Sharing Services</a>, Up: <a href="Services.html" accesskey="u" rel="up">Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Monitoring-Services-1"></span><h4 class="subsection">12.9.16 Monitoring Services</h4>
+
+<span id="Tailon-Service"></span><h4 class="subsubheading">Tailon Service</h4>
+
+<p><a href="https://tailon.readthedocs.io/">Tailon</a> is a web application for
+viewing and searching log files.
+</p>
+<p>The following example will configure the service with default values.
+By default, Tailon can be accessed on port 8080 (<code>http://localhost:8080</code>).
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <span class="syntax-symbol">tailon-service-type</span></span>)</span>
+</pre></div>
+
+<p>The following example customises more of the Tailon configuration,
+adding <code>sed</code> to the list of allowed commands.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <span class="syntax-symbol">tailon-service-type</span>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Monitoring-Services.html#index-tailon_002dconfiguration">tailon-configuration</a>
+           <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">config-file</span>
+             <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="Monitoring-Services.html#index-tailon_002dconfiguration_002dfile">tailon-configuration-file</a>
+               <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">allowed-commands</span> <span class="syntax-symbol">'</span><span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-string">"tail"</span> <span class="syntax-string">"grep"</span> <span class="syntax-string">"awk"</span> <span class="syntax-string">"sed"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+
+<dl>
+<dt id="index-tailon_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">tailon-configuration </span></dt>
+<dd><p>Data type representing the configuration of Tailon.
+This type has the following parameters:
+</p>
+<dl compact="compact">
+<dt><code>config-file</code> (default: <code>(tailon-configuration-file)</code>)</dt>
+<dd><p>The configuration file to use for Tailon.  This can be set to a
+<em>tailon-configuration-file</em> record value, or any gexp
+(see <a href="G_002dExpressions.html">G-Expressions</a>).
+</p>
+<p>For example, to instead use a local file, the <code>local-file</code> function
+can be used:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <span class="syntax-symbol">tailon-service-type</span>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Monitoring-Services.html#index-tailon_002dconfiguration">tailon-configuration</a>
+           <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">config-file</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="G_002dExpressions.html#index-local_002dfile">local-file</a> <span class="syntax-string">"./my-tailon.conf"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+</dd>
+<dt><code>package</code> (default: <code>tailon</code>)</dt>
+<dd><p>The tailon package to use.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt id="index-tailon_002dconfiguration_002dfile" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">tailon-configuration-file </span></dt>
+<dd><p>Data type representing the configuration options for Tailon.
+This type has the following parameters:
+</p>
+<dl compact="compact">
+<dt><code>files</code> (default: <code>(list "/var/log")</code>)</dt>
+<dd><p>List of files to display.  The list can include strings for a single file
+or directory, or a list, where the first item is the name of a
+subsection, and the remaining items are the files or directories in that
+subsection.
+</p>
+</dd>
+<dt><code>bind</code> (default: <code>"localhost:8080"</code>)</dt>
+<dd><p>Address and port to which Tailon should bind on.
+</p>
+</dd>
+<dt><code>relative-root</code> (default: <code>#f</code>)</dt>
+<dd><p>URL path to use for Tailon, set to <code>#f</code> to not use a path.
+</p>
+</dd>
+<dt><code>allow-transfers?</code> (default: <code>#t</code>)</dt>
+<dd><p>Allow downloading the log files in the web interface.
+</p>
+</dd>
+<dt><code>follow-names?</code> (default: <code>#t</code>)</dt>
+<dd><p>Allow tailing of not-yet existent files.
+</p>
+</dd>
+<dt><code>tail-lines</code> (default: <code>200</code>)</dt>
+<dd><p>Number of lines to read initially from each file.
+</p>
+</dd>
+<dt><code>allowed-commands</code> (default: <code>(list "tail" "grep" "awk")</code>)</dt>
+<dd><p>Commands to allow running.  By default, <code>sed</code> is disabled.
+</p>
+</dd>
+<dt><code>debug?</code> (default: <code>#f</code>)</dt>
+<dd><p>Set <code>debug?</code> to <code>#t</code> to show debug messages.
+</p>
+</dd>
+<dt><code>wrap-lines</code> (default: <code>#t</code>)</dt>
+<dd><p>Initial line wrapping state in the web interface.  Set to <code>#t</code> to
+initially wrap lines (the default), or to <code>#f</code> to initially not
+wrap lines.
+</p>
+</dd>
+<dt><code>http-auth</code> (default: <code>#f</code>)</dt>
+<dd><p>HTTP authentication type to use.   Set to <code>#f</code> to disable
+authentication (the default).  Supported values are <code>"digest"</code> or
+<code>"basic"</code>.
+</p>
+</dd>
+<dt><code>users</code> (default: <code>#f</code>)</dt>
+<dd><p>If HTTP authentication is enabled (see <code>http-auth</code>), access will be
+restricted to the credentials provided here.  To configure users, use a
+list of pairs, where the first element of the pair is the username, and
+the 2nd element of the pair is the password.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Monitoring-Services.html#index-tailon_002dconfiguration_002dfile">tailon-configuration-file</a>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">http-auth</span> <span class="syntax-string">"basic"</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">users</span>     <span class="syntax-symbol">'</span><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-string">"user1"</span> <span class="syntax-symbol">.</span> <span class="syntax-string">"password1"</span></span>)</span>
+               <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-string">"user2"</span> <span class="syntax-symbol">.</span> <span class="syntax-string">"password2"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+</dd>
+</dl>
+</dd></dl>
+
+
+<span id="Darkstat-Service"></span><h4 class="subsubheading">Darkstat Service</h4>
+<span id="index-darkstat"></span>
+<p>Darkstat is a packet sniffer that captures network traffic, calculates
+statistics about usage, and serves reports over HTTP.
+</p>
+<dl>
+<dt id="index-Scheme-Variable" class="symbol-definition"><span class="symbol-definition-category">Variable: </span><span class="symbol-definition-prototype">Scheme Variable darkstat-service-type</span></dt>
+<dd><p>This is the service type for the
+<a href="https://unix4lyfe.org/darkstat/">darkstat</a>
+service,  its value must be a <code>darkstat-configuration</code> record as in
+this example:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <span class="syntax-symbol">darkstat-service-type</span>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="Monitoring-Services.html#index-darkstat_002dconfiguration">darkstat-configuration</a>
+           <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">interface</span> <span class="syntax-string">"eno1"</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt id="index-darkstat_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">darkstat-configuration </span></dt>
+<dd><p>Data type representing the configuration of <code>darkstat</code>.
+</p>
+<dl compact="compact">
+<dt><code>package</code> (default: <code>darkstat</code>)</dt>
+<dd><p>The darkstat package to use.
+</p>
+</dd>
+<dt><code>interface</code></dt>
+<dd><p>Capture traffic on the specified network interface.
+</p>
+</dd>
+<dt><code>port</code> (default: <code>"667"</code>)</dt>
+<dd><p>Bind the web interface to the specified port.
+</p>
+</dd>
+<dt><code>bind-address</code> (default: <code>"127.0.0.1"</code>)</dt>
+<dd><p>Bind the web interface to the specified address.
+</p>
+</dd>
+<dt><code>base</code> (default: <code>"/"</code>)</dt>
+<dd><p>Specify the path of the base URL.  This can be useful if
+<code>darkstat</code> is accessed via a reverse proxy.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span id="prometheus_002dnode_002dexporter"></span><span id="Prometheus-Node-Exporter-Service"></span><h4 class="subsubheading">Prometheus Node Exporter Service</h4>
+<span id="index-prometheus_002dnode_002dexporter"></span>
+
+<p>The Prometheus &ldquo;node exporter&rdquo; makes hardware and operating system statistics
+provided by the Linux kernel available for the Prometheus monitoring system.
+This service should be deployed on all physical nodes and virtual machines,
+where monitoring these statistics is desirable.
+</p>
+<dl>
+<dt id="index-Scheme-variable" class="symbol-definition"><span class="symbol-definition-category">Variable: </span><span class="symbol-definition-prototype">Scheme variable prometheus-node-exporter-service-type</span></dt>
+<dd><p>This is the service type for the
+<a href="https://github.com/prometheus/node_exporter/">prometheus-node-exporter</a>
+service, its value must be a <code>prometheus-node-exporter-configuration</code>.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="Service-Reference.html#index-service">service</a> <span class="syntax-symbol">prometheus-node-exporter-service-type</span></span>)</span>
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt id="index-prometheus_002dnode_002dexporter_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">prometheus-node-exporter-configuration </span></dt>
+<dd><p>Data type representing the configuration of <code>node_exporter</code>.
+</p>
+<dl compact="compact">
+<dt><code>package</code> (default: <code>go-github-com-prometheus-node-exporter</code>)</dt>
+<dd><p>The prometheus-node-exporter package to use.
+</p>
+</dd>
+<dt><code>web-listen-address</code> (default: <code>":9100"</code>)</dt>
+<dd><p>Bind the web interface to the specified address.
+</p>
+</dd>
+<dt><code>textfile-directory</code> (default: <code>"/var/lib/prometheus/node-exporter"</code>)</dt>
+<dd><p>This directory can be used to export metrics specific to this machine.
+Files containing metrics in the text format, with the filename ending in
+<code>.prom</code> should be placed in this directory.
+</p>
+</dd>
+<dt><code>extra-options</code> (default: <code>'()</code>)</dt>
+<dd><p>Extra options to pass to the Prometheus node exporter.
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span id="Zabbix-server"></span><h4 class="subsubheading">Zabbix server</h4>
+<span id="index-zabbix-zabbix_002dserver"></span>
+<p>Zabbix is a high performance monitoring system that can collect data from a
+variety of sources and provide the results in a web-based interface.  Alerting
+and reporting is built-in, as well as <em>templates</em> for common operating
+system metrics such as network utilization, CPU load, and disk space consumption.
+</p>
+<p>This service provides the central Zabbix monitoring service; you also need
+<a href="Monitoring-Services.html#zabbix_002dfront_002dend"><code>zabbix-front-end-service-type</code></a> to configure Zabbix
+and display results, and optionally <a href="Monitoring-Services.html#zabbix_002dagent"><code>zabbix-agent-service-type</code></a> on machines that should be monitored (other
+data sources are supported, such as <a href="Monitoring-Services.html#prometheus_002dnode_002dexporter">Prometheus Node Exporter</a>).
+</p>
+<dl>
+<dt id="index-Scheme-variable-1" class="symbol-definition"><span class="symbol-definition-category">Variable: </span><span class="symbol-definition-prototype">Scheme variable zabbix-server-service-type</span></dt>
+<dd><p>This is the service type for the Zabbix server service.  Its value must be a
+<code>zabbix-server-configuration</code> record, shown below.
+</p></dd></dl>
+
+
+<dl>
+<dt id="index-zabbix_002dserver_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">zabbix-server-configuration </span></dt>
+<dd><p>Available <code>zabbix-server-configuration</code> fields are:
+</p>
+<dl compact="compact">
+<dt><code>zabbix-server</code> (default: <code>zabbix-server</code>) (type: file-like)</dt>
+<dd><p>The zabbix-server package.
+</p>
+</dd>
+<dt><code>user</code> (default: <code>"zabbix"</code>) (type: string)</dt>
+<dd><p>User who will run the Zabbix server.
+</p>
+</dd>
+<dt><code>group</code> (default: <code>"zabbix"</code>) (type: group)</dt>
+<dd><p>Group who will run the Zabbix server.
+</p>
+</dd>
+<dt><code>db-host</code> (default: <code>"127.0.0.1"</code>) (type: string)</dt>
+<dd><p>Database host name.
+</p>
+</dd>
+<dt><code>db-name</code> (default: <code>"zabbix"</code>) (type: string)</dt>
+<dd><p>Database name.
+</p>
+</dd>
+<dt><code>db-user</code> (default: <code>"zabbix"</code>) (type: string)</dt>
+<dd><p>Database user.
+</p>
+</dd>
+<dt><code>db-password</code> (default: <code>""</code>) (type: string)</dt>
+<dd><p>Database password.  Please, use <code>include-files</code> with
+<code>DBPassword=SECRET</code> inside a specified file instead.
+</p>
+</dd>
+<dt><code>db-port</code> (default: <code>5432</code>) (type: number)</dt>
+<dd><p>Database port.
+</p>
+</dd>
+<dt><code>log-type</code> (default: <code>""</code>) (type: string)</dt>
+<dd><p>Specifies where log messages are written to:
+</p>
+<ul>
+<li> <code>system</code> - syslog.
+
+</li><li> <code>file</code> - file specified with <code>log-file</code> parameter.
+
+</li><li> <code>console</code> - standard output.
+
+</li></ul>
+
+</dd>
+<dt><code>log-file</code> (default: <code>"/var/log/zabbix/server.log"</code>) (type: string)</dt>
+<dd><p>Log file name for <code>log-type</code> <code>file</code> parameter.
+</p>
+</dd>
+<dt><code>pid-file</code> (default: <code>"/var/run/zabbix/zabbix_server.pid"</code>) (type: string)</dt>
+<dd><p>Name of PID file.
+</p>
+</dd>
+<dt><code>ssl-ca-location</code> (default: <code>"/etc/ssl/certs/ca-certificates.crt"</code>) (type: string)</dt>
+<dd><p>The location of certificate authority (CA) files for SSL server
+certificate verification.
+</p>
+</dd>
+<dt><code>ssl-cert-location</code> (default: <code>"/etc/ssl/certs"</code>) (type: string)</dt>
+<dd><p>Location of SSL client certificates.
+</p>
+</dd>
+<dt><code>extra-options</code> (default: <code>""</code>) (type: extra-options)</dt>
+<dd><p>Extra options will be appended to Zabbix server configuration file.
+</p>
+</dd>
+<dt><code>include-files</code> (default: <code>()</code>) (type: include-files)</dt>
+<dd><p>You may include individual files or all files in a directory in the
+configuration file.
+</p>
+</dd>
+</dl>
+
+</dd></dl>
+
+
+
+<span id="zabbix_002dagent"></span><span id="Zabbix-agent"></span><h4 class="subsubheading">Zabbix agent</h4>
+<span id="index-zabbix-zabbix_002dagent"></span>
+
+<p>The Zabbix agent gathers information about the running system for the Zabbix
+monitoring server.  It has a variety of built-in checks, and can be extended
+with custom
+<a href="https://www.zabbix.com/documentation/current/en/manual/config/items/userparameters"><em>user parameters</em></a>.
+</p>
+<dl>
+<dt id="index-Scheme-variable-2" class="symbol-definition"><span class="symbol-definition-category">Variable: </span><span class="symbol-definition-prototype">Scheme variable zabbix-agent-service-type</span></dt>
+<dd><p>This is the service type for the Zabbix agent service.  Its value must be a
+<code>zabbix-agent-configuration</code> record, shown below.
+</p></dd></dl>
+
+
+<dl>
+<dt id="index-zabbix_002dagent_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">zabbix-agent-configuration </span></dt>
+<dd><p>Available <code>zabbix-agent-configuration</code> fields are:
+</p>
+<dl compact="compact">
+<dt><code>zabbix-agent</code> (default: <code>zabbix-agentd</code>) (type: file-like)</dt>
+<dd><p>The zabbix-agent package.
+</p>
+</dd>
+<dt><code>user</code> (default: <code>"zabbix"</code>) (type: string)</dt>
+<dd><p>User who will run the Zabbix agent.
+</p>
+</dd>
+<dt><code>group</code> (default: <code>"zabbix"</code>) (type: group)</dt>
+<dd><p>Group who will run the Zabbix agent.
+</p>
+</dd>
+<dt><code>hostname</code> (default: <code>""</code>) (type: string)</dt>
+<dd><p>Unique, case sensitive hostname which is required for active checks and
+must match hostname as configured on the server.
+</p>
+</dd>
+<dt><code>log-type</code> (default: <code>""</code>) (type: string)</dt>
+<dd><p>Specifies where log messages are written to:
+</p>
+<ul>
+<li> <code>system</code> - syslog.
+
+</li><li> <code>file</code> - file specified with
+<code>log-file</code> parameter.
+
+</li><li> <code>console</code> - standard output.
+
+</li></ul>
+
+</dd>
+<dt><code>log-file</code> (default: <code>"/var/log/zabbix/agent.log"</code>) (type: string)</dt>
+<dd><p>Log file name for <code>log-type</code> <code>file</code> parameter.
+</p>
+</dd>
+<dt><code>pid-file</code> (default: <code>"/var/run/zabbix/zabbix_agent.pid"</code>) (type: string)</dt>
+<dd><p>Name of PID file.
+</p>
+</dd>
+<dt><code>server</code> (default: <code>("127.0.0.1")</code>) (type: list)</dt>
+<dd><p>List of IP addresses, optionally in CIDR notation, or hostnames of
+Zabbix servers and Zabbix proxies.  Incoming connections will be
+accepted only from the hosts listed here.
+</p>
+</dd>
+<dt><code>server-active</code> (default: <code>("127.0.0.1")</code>) (type: list)</dt>
+<dd><p>List of IP:port (or hostname:port) pairs of Zabbix servers and Zabbix
+proxies for active checks.  If port is not specified, default port is
+used.  If this parameter is not specified, active checks are disabled.
+</p>
+</dd>
+<dt><code>extra-options</code> (default: <code>""</code>) (type: extra-options)</dt>
+<dd><p>Extra options will be appended to Zabbix server configuration file.
+</p>
+</dd>
+<dt><code>include-files</code> (default: <code>()</code>) (type: include-files)</dt>
+<dd><p>You may include individual files or all files in a directory in the
+configuration file.
+</p>
+</dd>
+</dl>
+
+</dd></dl>
+
+
+
+<span id="zabbix_002dfront_002dend"></span><span id="Zabbix-front_002dend"></span><h4 class="subsubheading">Zabbix front-end</h4>
+<span id="index-zabbix-zabbix_002dfront_002dend"></span>
+
+<p>The Zabbix front-end provides a web interface to Zabbix.  It does not need
+to run on the same machine as the Zabbix server.  This service works by
+extending the <a href="Web-Services.html#PHP_002dFPM">PHP-FPM</a> and <a href="Web-Services.html#NGINX">NGINX</a> services with the configuration
+necessary for loading the Zabbix user interface.
+</p>
+<dl>
+<dt id="index-Scheme-variable-3" class="symbol-definition"><span class="symbol-definition-category">Variable: </span><span class="symbol-definition-prototype">Scheme variable zabbix-front-end-service-type</span></dt>
+<dd><p>This is the service type for the Zabbix web frontend.  Its value must be a
+<code>zabbix-front-end-configuration</code> record, shown below.
+</p></dd></dl>
+
+
+<dl>
+<dt id="index-zabbix_002dfront_002dend_002dconfiguration" class="symbol-definition"><span class="symbol-definition-category">Data Type: </span><span class="symbol-definition-prototype">zabbix-front-end-configuration </span></dt>
+<dd><p>Available <code>zabbix-front-end-configuration</code> fields are:
+</p>
+<dl compact="compact">
+<dt><code>zabbix-server</code> (default: <code>zabbix-server</code>) (type: file-like)</dt>
+<dd><p>The Zabbix server package to use.
+</p>
+</dd>
+<dt><code>nginx</code> (default: <code>()</code>) (type: list)</dt>
+<dd><p>List of <a href="Web-Services.html#nginx_002dserver_002dconfiguration"><code>nginx-server-configuration</code></a>
+blocks for the Zabbix front-end.  When empty, a default that listens on
+port 80 is used.
+</p>
+</dd>
+<dt><code>db-host</code> (default: <code>"localhost"</code>) (type: string)</dt>
+<dd><p>Database host name.
+</p>
+</dd>
+<dt><code>db-port</code> (default: <code>5432</code>) (type: number)</dt>
+<dd><p>Database port.
+</p>
+</dd>
+<dt><code>db-name</code> (default: <code>"zabbix"</code>) (type: string)</dt>
+<dd><p>Database name.
+</p>
+</dd>
+<dt><code>db-user</code> (default: <code>"zabbix"</code>) (type: string)</dt>
+<dd><p>Database user.
+</p>
+</dd>
+<dt><code>db-password</code> (default: <code>""</code>) (type: string)</dt>
+<dd><p>Database password.  Please, use <code>db-secret-file</code> instead.
+</p>
+</dd>
+<dt><code>db-secret-file</code> (default: <code>""</code>) (type: string)</dt>
+<dd><p>Secret file which will be appended to <samp>zabbix.conf.php</samp> file.  This
+file contains credentials for use by Zabbix front-end.  You are expected
+to create it manually.
+</p>
+</dd>
+<dt><code>zabbix-host</code> (default: <code>"localhost"</code>) (type: string)</dt>
+<dd><p>Zabbix server hostname.
+</p>
+</dd>
+<dt><code>zabbix-port</code> (default: <code>10051</code>) (type: number)</dt>
+<dd><p>Zabbix server port.
+</p>
+</dd>
+</dl>
+
+</dd></dl>
+
+
+
+<hr />
+<div class="header">
+<p>
+Next: <a href="Kerberos-Services.html" accesskey="n" rel="next">Kerberos Services</a>, Previous: <a href="File_002dSharing-Services.html" accesskey="p" rel="prev">File-Sharing Services</a>, Up: <a href="Services.html" accesskey="u" rel="up">Services</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

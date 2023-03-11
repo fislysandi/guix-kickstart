@@ -1,0 +1,534 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2012-2022 Ludovic Courtès
+
+Copyright (C) 2013, 2014, 2016 Andreas Enge
+
+Copyright (C) 2013 Nikita Karetnikov
+
+Copyright (C) 2014, 2015, 2016 Alex Kost
+
+Copyright (C) 2015, 2016 Mathieu Lirzin
+
+Copyright (C) 2014 Pierre-Antoine Rault
+
+Copyright (C) 2015 Taylan Ulrich Bayırlı/Kammer
+
+Copyright (C) 2015, 2016, 2017, 2019, 2020, 2021 Leo Famulari
+
+Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Ricardo Wurmus
+
+Copyright (C) 2016 Ben Woodcroft
+
+Copyright (C) 2016, 2017, 2018, 2021 Chris Marusich
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Efraim Flashner
+
+Copyright (C) 2016 John Darrington
+
+Copyright (C) 2016, 2017 Nikita Gillmann
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020 Jan Nieuwenhuizen
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Julien Lepiller
+
+Copyright (C) 2016 Alex ter Weele
+
+Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Christopher Baines
+
+Copyright (C) 2017, 2018, 2019 Clément Lassieur
+
+Copyright (C) 2017, 2018, 2020, 2021, 2022 Mathieu Othacehe
+
+Copyright (C) 2017 Federico Beffa
+
+Copyright (C) 2017, 2018 Carlo Zancanaro
+
+Copyright (C) 2017 Thomas Danckaert
+
+Copyright (C) 2017 humanitiesNerd
+
+Copyright (C) 2017, 2021 Christine Lemmer-Webber
+
+Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Marius Bakke
+
+Copyright (C) 2017, 2019, 2020, 2022 Hartmut Goebel
+
+Copyright (C) 2017, 2019, 2020, 2021, 2022 Maxim Cournoyer
+
+Copyright (C) 2017–2022 Tobias Geerinckx-Rice
+
+Copyright (C) 2017 George Clemmer
+
+Copyright (C) 2017 Andy Wingo
+
+Copyright (C) 2017, 2018, 2019, 2020 Arun Isaac
+
+Copyright (C) 2017 nee
+
+Copyright (C) 2018 Rutger Helling
+
+Copyright (C) 2018, 2021 Oleg Pykhalov
+
+Copyright (C) 2018 Mike Gerwitz
+
+Copyright (C) 2018 Pierre-Antoine Rouby
+
+Copyright (C) 2018, 2019 Gábor Boskovits
+
+Copyright (C) 2018, 2019, 2020, 2022 Florian Pelz
+
+Copyright (C) 2018 Laura Lazzati
+
+Copyright (C) 2018 Alex Vong
+
+Copyright (C) 2019 Josh Holland
+
+Copyright (C) 2019, 2020 Diego Nicola Barbato
+
+Copyright (C) 2019 Ivan Petkov
+
+Copyright (C) 2019 Jakob L. Kreuze
+
+Copyright (C) 2019 Kyle Andrews
+
+Copyright (C) 2019 Alex Griffin
+
+Copyright (C) 2019, 2020, 2021, 2022 Guillaume Le Vaillant
+
+Copyright (C) 2020 Liliana Marie Prikler
+
+Copyright (C) 2019, 2020, 2021, 2022 Simon Tournier
+
+Copyright (C) 2020 Wiktor Żelazny
+
+Copyright (C) 2020 Damien Cassou
+
+Copyright (C) 2020 Jakub Kądziołka
+
+Copyright (C) 2020 Jack Hill
+
+Copyright (C) 2020 Naga Malleswari
+
+Copyright (C) 2020, 2021 Brice Waegeneire
+
+Copyright (C) 2020 R Veera Kumar
+
+Copyright (C) 2020, 2021 Pierre Langlois
+
+Copyright (C) 2020 pinoaffe
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020, 2021 Alexandru-Sergiu Marton
+
+Copyright (C) 2020 raingloom
+
+Copyright (C) 2020 Daniel Brooks
+
+Copyright (C) 2020 John Soo
+
+Copyright (C) 2020 Jonathan Brielmaier
+
+Copyright (C) 2020 Edgar Vincent
+
+Copyright (C) 2021, 2022 Maxime Devos
+
+Copyright (C) 2021 B. Wilson
+
+Copyright (C) 2021 Xinglu Chen
+
+Copyright (C) 2021 Raghav Gururajan
+
+Copyright (C) 2021 Domagoj Stolfa
+
+Copyright (C) 2021 Hui Lu
+
+Copyright (C) 2021 pukkamustard
+
+Copyright (C) 2021 Alice Brenon
+
+Copyright (C) 2021, 2022 Josselin Poiret
+
+Copyright (C) 2021 muradm
+
+Copyright (C) 2021, 2022 Andrew Tropin
+
+Copyright (C) 2021 Sarah Morgensen
+
+Copyright (C) 2022 Remco van 't Veer
+
+Copyright (C) 2022 Aleksandr Vityazev
+
+Copyright (C) 2022 Philip McGrath
+
+Copyright (C) 2022 Karl Hallsby
+
+Copyright (C) 2022 Justin Veilleux
+
+Copyright (C) 2022 Reily Siegel
+
+Copyright (C) 2022 Simon Streit
+
+Copyright (C) 2022 (
+
+Copyright (C) 2022 John Kehayias
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Invoking guix graph (GNU Guix Reference Manual)</title>
+
+<meta name="description" content="Invoking guix graph (GNU Guix Reference Manual)" />
+<meta name="keywords" content="Invoking guix graph (GNU Guix Reference Manual)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Utilities.html" rel="up" title="Utilities" />
+<link href="Invoking-guix-publish.html" rel="next" title="Invoking guix publish" />
+<link href="Invoking-guix-size.html" rel="prev" title="Invoking guix size" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/manual/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/es/html_node">Español</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/pt-br/html_node">Português</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/ru/html_node">русский</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/manual/zh-cn/html_node">中文</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-manual/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/manual/"></a></header>
+<span id="Invoking-guix-graph"></span><div class="header">
+<p>
+Next: <a href="Invoking-guix-publish.html" accesskey="n" rel="next">Invoking guix publish</a>, Previous: <a href="Invoking-guix-size.html" accesskey="p" rel="prev">Invoking guix size</a>, Up: <a href="Utilities.html" accesskey="u" rel="up">Utilities</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Invoking-guix-graph-1"></span><h3 class="section">10.10 Invoking <code>guix graph</code></h3>
+
+<span id="index-DAG"></span>
+<span id="index-guix-graph"></span>
+<span id="index-package-dependencies-1"></span>
+<p>Packages and their dependencies form a <em>graph</em>, specifically a
+directed acyclic graph (DAG).  It can quickly become difficult to have a
+mental model of the package DAG, so the <code>guix graph</code> command
+provides a visual representation of the DAG.  By default,
+<code>guix graph</code> emits a DAG representation in the input format of
+<a href="https://www.graphviz.org/">Graphviz</a>, so its output can be passed
+directly to the <code>dot</code> command of Graphviz.  It can also emit an
+HTML page with embedded JavaScript code to display a &ldquo;chord diagram&rdquo;
+in a Web browser, using the <a href="https://d3js.org/">d3.js</a> library, or
+emit Cypher queries to construct a graph in a graph database supporting
+the <a href="https://www.opencypher.org/">openCypher</a> query language.  With
+<samp>--path</samp>, it simply displays the shortest path between two
+packages.  The general syntax is:
+</p>
+<div class="example">
+<pre class="example">guix graph <var>options</var> <var>package</var>&hellip;
+</pre></div>
+
+<p>For example, the following command generates a PDF file representing the
+package DAG for the GNU&nbsp;Core Utilities, showing its build-time
+dependencies:
+</p>
+<div class="example">
+<pre class="example">guix graph coreutils | dot -Tpdf &gt; dag.pdf
+</pre></div>
+
+<p>The output looks like this:
+</p>
+<img src="images/coreutils-graph.png" alt="Dependency graph of the GNU Coreutils" />
+
+<p>Nice little graph, no?
+</p>
+<p>You may find it more pleasant to navigate the graph interactively with
+<code>xdot</code> (from the <code>xdot</code> package):
+</p>
+<div class="example">
+<pre class="example">guix graph coreutils | xdot -
+</pre></div>
+
+<p>But there is more than one graph!  The one above is concise: it is the
+graph of package objects, omitting implicit inputs such as GCC, libc,
+grep, etc.  It is often useful to have such a concise graph, but
+sometimes one may want to see more details.  <code>guix graph</code> supports
+several types of graphs, allowing you to choose the level of detail:
+</p>
+<dl compact="compact">
+<dt><code>package</code></dt>
+<dd><p>This is the default type used in the example above.  It shows the DAG of
+package objects, excluding implicit dependencies.  It is concise, but
+filters out many details.
+</p>
+</dd>
+<dt><code>reverse-package</code></dt>
+<dd><p>This shows the <em>reverse</em> DAG of packages.  For example:
+</p>
+<div class="example">
+<pre class="example">guix graph --type=reverse-package ocaml
+</pre></div>
+
+<p>... yields the graph of packages that <em>explicitly</em> depend on OCaml (if
+you are also interested in cases where OCaml is an implicit dependency, see
+<code>reverse-bag</code> below).
+</p>
+<p>Note that for core packages this can yield huge graphs.  If all you want
+is to know the number of packages that depend on a given package, use
+<code>guix refresh --list-dependent</code> (see <a href="Invoking-guix-refresh.html"><samp>--list-dependent</samp></a>).
+</p>
+</dd>
+<dt><code>bag-emerged</code></dt>
+<dd><p>This is the package DAG, <em>including</em> implicit inputs.
+</p>
+<p>For instance, the following command:
+</p>
+<div class="example">
+<pre class="example">guix graph --type=bag-emerged coreutils
+</pre></div>
+
+<p>... yields this bigger graph:
+</p>
+<img src="images/coreutils-bag-graph.png" alt="Detailed dependency graph of the GNU Coreutils" />
+
+<p>At the bottom of the graph, we see all the implicit inputs of
+<var>gnu-build-system</var> (see <a href="Build-Systems.html"><code>gnu-build-system</code></a>).
+</p>
+<p>Now, note that the dependencies of these implicit inputs&mdash;that is, the
+<em>bootstrap dependencies</em> (see <a href="Bootstrapping.html">Bootstrapping</a>)&mdash;are not shown
+here, for conciseness.
+</p>
+</dd>
+<dt><code>bag</code></dt>
+<dd><p>Similar to <code>bag-emerged</code>, but this time including all the bootstrap
+dependencies.
+</p>
+</dd>
+<dt><code>bag-with-origins</code></dt>
+<dd><p>Similar to <code>bag</code>, but also showing origins and their dependencies.
+</p>
+</dd>
+<dt><code>reverse-bag</code></dt>
+<dd><p>This shows the <em>reverse</em> DAG of packages.  Unlike <code>reverse-package</code>,
+it also takes implicit dependencies into account.  For example:
+</p>
+<div class="example">
+<pre class="example">guix graph -t reverse-bag dune
+</pre></div>
+
+<p>... yields the graph of all packages that depend on Dune, directly or
+indirectly.  Since Dune is an <em>implicit</em> dependency of many packages
+<i>via</i> <code>dune-build-system</code>, this shows a large number of packages,
+whereas <code>reverse-package</code> would show very few if any.
+</p>
+</dd>
+<dt><code>derivation</code></dt>
+<dd><p>This is the most detailed representation: It shows the DAG of
+derivations (see <a href="Derivations.html">Derivations</a>) and plain store items.  Compared to
+the above representation, many additional nodes are visible, including
+build scripts, patches, Guile modules, etc.
+</p>
+<p>For this type of graph, it is also possible to pass a <samp>.drv</samp> file
+name instead of a package name, as in:
+</p>
+<div class="example">
+<pre class="example">guix graph -t derivation $(guix system build -d my-config.scm)
+</pre></div>
+
+</dd>
+<dt><code>module</code></dt>
+<dd><p>This is the graph of <em>package modules</em> (see <a href="Package-Modules.html">Package Modules</a>).
+For example, the following command shows the graph for the package
+module that defines the <code>guile</code> package:
+</p>
+<div class="example">
+<pre class="example">guix graph -t module guile | xdot -
+</pre></div>
+</dd>
+</dl>
+
+<p>All the types above correspond to <em>build-time dependencies</em>.  The
+following graph type represents the <em>run-time dependencies</em>:
+</p>
+<dl compact="compact">
+<dt><code>references</code></dt>
+<dd><p>This is the graph of <em>references</em> of a package output, as returned
+by <code>guix gc --references</code> (see <a href="Invoking-guix-gc.html">Invoking guix gc</a>).
+</p>
+<p>If the given package output is not available in the store, <code>guix
+graph</code> attempts to obtain dependency information from substitutes.
+</p>
+<p>Here you can also pass a store file name instead of a package name.  For
+example, the command below produces the reference graph of your profile
+(which can be big!):
+</p>
+<div class="example">
+<pre class="example">guix graph -t references $(readlink -f ~/.guix-profile)
+</pre></div>
+
+</dd>
+<dt><code>referrers</code></dt>
+<dd><p>This is the graph of the <em>referrers</em> of a store item, as returned by
+<code>guix gc --referrers</code> (see <a href="Invoking-guix-gc.html">Invoking guix gc</a>).
+</p>
+<p>This relies exclusively on local information from your store.  For
+instance, let us suppose that the current Inkscape is available in 10
+profiles on your machine; <code>guix graph -t referrers inkscape</code>
+will show a graph rooted at Inkscape and with those 10 profiles linked
+to it.
+</p>
+<p>It can help determine what is preventing a store item from being garbage
+collected.
+</p>
+</dd>
+</dl>
+
+<span id="index-shortest-path_002c-between-packages"></span>
+<p>Often, the graph of the package you are interested in does not fit on
+your screen, and anyway all you want to know is <em>why</em> that package
+actually depends on some seemingly unrelated package.  The
+<samp>--path</samp> option instructs <code>guix graph</code> to display the
+shortest path between two packages (or derivations, or store items,
+etc.):
+</p>
+<div class="example">
+<pre class="example">$ guix graph --path emacs libunistring
+emacs@26.3
+mailutils@3.9
+libunistring@0.9.10
+$ guix graph --path -t derivation emacs libunistring
+/gnu/store/&hellip;-emacs-26.3.drv
+/gnu/store/&hellip;-mailutils-3.9.drv
+/gnu/store/&hellip;-libunistring-0.9.10.drv
+$ guix graph --path -t references emacs libunistring
+/gnu/store/&hellip;-emacs-26.3
+/gnu/store/&hellip;-libidn2-2.2.0
+/gnu/store/&hellip;-libunistring-0.9.10
+</pre></div>
+
+<p>Sometimes you still want to visualize the graph but would like to trim
+it so it can actually be displayed.  One way to do it is via the
+<samp>--max-depth</samp> (or <samp>-M</samp>) option, which lets you specify the
+maximum depth of the graph.  In the example below, we visualize only
+<code>libreoffice</code> and the nodes whose distance to <code>libreoffice</code> is
+at most 2:
+</p>
+<div class="example">
+<pre class="example">guix graph -M 2 libreoffice | xdot -f fdp -
+</pre></div>
+
+<p>Mind you, that&rsquo;s still a big ball of spaghetti, but at least
+<code>dot</code> can render it quickly and it can be browsed somewhat.
+</p>
+<p>The available options are the following:
+</p>
+<dl compact="compact">
+<dt><samp>--type=<var>type</var></samp></dt>
+<dt><samp>-t <var>type</var></samp></dt>
+<dd><p>Produce a graph output of <var>type</var>, where <var>type</var> must be one of
+the values listed above.
+</p>
+</dd>
+<dt><samp>--list-types</samp></dt>
+<dd><p>List the supported graph types.
+</p>
+</dd>
+<dt><samp>--backend=<var>backend</var></samp></dt>
+<dt><samp>-b <var>backend</var></samp></dt>
+<dd><p>Produce a graph using the selected <var>backend</var>.
+</p>
+</dd>
+<dt><samp>--list-backends</samp></dt>
+<dd><p>List the supported graph backends.
+</p>
+<p>Currently, the available backends are Graphviz and d3.js.
+</p>
+</dd>
+<dt><samp>--path</samp></dt>
+<dd><p>Display the shortest path between two nodes of the type specified by
+<samp>--type</samp>.  The example below shows the shortest path between
+<code>libreoffice</code> and <code>llvm</code> according to the references of
+<code>libreoffice</code>:
+</p>
+<div class="example">
+<pre class="example">$ guix graph --path -t references libreoffice llvm
+/gnu/store/&hellip;-libreoffice-6.4.2.2
+/gnu/store/&hellip;-libepoxy-1.5.4
+/gnu/store/&hellip;-mesa-19.3.4
+/gnu/store/&hellip;-llvm-9.0.1
+</pre></div>
+
+</dd>
+<dt><samp>--expression=<var>expr</var></samp></dt>
+<dt><samp>-e <var>expr</var></samp></dt>
+<dd><p>Consider the package <var>expr</var> evaluates to.
+</p>
+<p>This is useful to precisely refer to a package, as in this example:
+</p>
+<div class="example">
+<pre class="example">guix graph -e '(@@ (gnu packages commencement) gnu-make-final)'
+</pre></div>
+
+</dd>
+<dt><samp>--system=<var>system</var></samp></dt>
+<dt><samp>-s <var>system</var></samp></dt>
+<dd><p>Display the graph for <var>system</var>&mdash;e.g., <code>i686-linux</code>.
+</p>
+<p>The package dependency graph is largely architecture-independent, but there
+are some architecture-dependent bits that this option allows you to visualize.
+</p>
+</dd>
+<dt><samp>--load-path=<var>directory</var></samp></dt>
+<dt><samp>-L <var>directory</var></samp></dt>
+<dd><p>Add <var>directory</var> to the front of the package module search path
+(see <a href="Package-Modules.html">Package Modules</a>).
+</p>
+<p>This allows users to define their own packages and make them visible to
+the command-line tools.
+</p></dd>
+</dl>
+
+<p>On top of that, <code>guix graph</code> supports all the usual package
+transformation options (see <a href="Package-Transformation-Options.html">Package Transformation Options</a>).  This
+makes it easy to view the effect of a graph-rewriting transformation
+such as <samp>--with-input</samp>.  For example, the command below outputs
+the graph of <code>git</code> once <code>openssl</code> has been replaced by
+<code>libressl</code> everywhere in the graph:
+</p>
+<div class="example">
+<pre class="example">guix graph git --with-input=openssl=libressl
+</pre></div>
+
+<p>So many possibilities, so much fun!
+</p>
+<hr />
+<div class="header">
+<p>
+Next: <a href="Invoking-guix-publish.html" accesskey="n" rel="next">Invoking guix publish</a>, Previous: <a href="Invoking-guix-size.html" accesskey="p" rel="prev">Invoking guix size</a>, Up: <a href="Utilities.html" accesskey="u" rel="up">Utilities</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>
