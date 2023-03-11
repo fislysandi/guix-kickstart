@@ -10,9 +10,6 @@
              (guix gexp)
              (gnu home services shells))
 
-
-
-
 (home-environment
   ;; Below is the list of packages that will show up in your
   ;; Home profile, under ~/.guix-home/profile.
@@ -22,20 +19,31 @@
 					    "htop"
 					    "nyxt"
 					    "wayland"
-					    )))
+					    "stow")))
 
   ;; Below is the list of Home services.  To search for available
   ;; services, run 'guix home search KEYWORD' in a terminal.
   (services
    (list (service home-bash-service-type
                   (home-bash-configuration
-                   (aliases '(("hbuild" . "home-manager build")
+                   (aliases '(("gbuild" . "guix home container --no-substitutes")
+                              ("grep" . "grep --color=auto")
+                              ("gswitch" . "guix home switch --no-substitutes")
+                              ("hbuild" . "home-manager build")
                               ("hswitch" . "home-manager switch")
                               ("l" . "ls -CF")
                               ("la" . "ls -A")
                               ("ll" . "ls -alF")
                               ("ls" . "ls --color=auto")))
                    (bashrc (list (local-file
-                                  "/home/fislysandi/dev/git/guix_3drice/guix-config/.bashrc"
+                                  "/home/fislysandi/src/guix-config//.bashrc"
                                   "bashrc")))
-                                       )))))
+                   (bash-profile (list (local-file
+                                        "/home/fislysandi/src/guix-config//.bash_profile"
+                                        "bash_profile")))
+                   (bash-logout (list (local-file
+                                       "/home/fislysandi/src/guix-config//.bash_logout"
+                                       "bash_logout"))))))))
+
+
+

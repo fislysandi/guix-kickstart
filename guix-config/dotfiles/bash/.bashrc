@@ -127,19 +127,15 @@ umask 022
 
 # home manager aliases
 
-alias gbuild="guix home container --no-substitutes"
+alias gbuild="guix home container"
 
-alias gswitch="guix home switch --no-substitutes"
-
-
-
-
+alias gswitch="guix home switch"
 
 
 # Automatically added by the Guix install script.
 GUIX_PROFILE="$HOME/.guix-profile"
 
-GUIX_HOME="$HOME/.guix-home"
+
 
 
 if [ -n "$GUIX_ENVIRONMENT" ]; then
