@@ -36,8 +36,6 @@
                               ("ll" . "ls -alF")
                               ("ls" . "ls --color=auto")))
                    (bashrc (list (local-file
-                                  "/home/fislysandi/dev/git/guix_3drice/guix-config//.bashrc"
+                                  "/home/fislysandi/dev/git/guix_3drice/guix-config/.bashrc"
                                   "bashrc")))
-                   (bash-logout (list (local-file
-                                       "/home/fislysandi/dev/git/guix_3drice/guix-config//.bash_logout"
-                                       "bash_logout"))))))))
+                                       )))))
