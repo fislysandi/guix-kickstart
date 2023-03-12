@@ -1,0 +1,297 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2019, 2022 Ricardo Wurmus
+
+Copyright (C) 2019 Efraim Flashner
+
+Copyright (C) 2019 Pierre Neidhardt
+
+Copyright (C) 2020 Oleg Pykhalov
+
+Copyright (C) 2020 Matthew Brooks
+
+Copyright (C) 2020 Marcin Karpezo
+
+Copyright (C) 2020 Brice Waegeneire
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020 Christine Lemmer-Webber
+
+Copyright (C) 2021 Joshua Branson
+
+Copyright (C) 2022 Maxim Cournoyer
+
+Copyright (C) 2023 Ludovic Courtès
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Guix System Image API (GNU Guix Cookbook)</title>
+
+<meta name="description" content="Guix System Image API (GNU Guix Cookbook)" />
+<meta name="keywords" content="Guix System Image API (GNU Guix Cookbook)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="System-Configuration.html" rel="up" title="System Configuration" />
+<link href="Using-security-keys.html" rel="next" title="Using security keys" />
+<link href="Customizing-the-Kernel.html" rel="prev" title="Customizing the Kernel" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/en/cookbook/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/sk/html_node">Slovenský</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-cookbook/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/en/cookbook/"></a></header>
+<span id="Guix-System-Image-API"></span><div class="header">
+<p>
+Next: <a href="Using-security-keys.html" accesskey="n" rel="next">Using security keys</a>, Previous: <a href="Customizing-the-Kernel.html" accesskey="p" rel="prev">Customizing the Kernel</a>, Up: <a href="System-Configuration.html" accesskey="u" rel="up">System Configuration</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Guix-System-Image-API-1"></span><h3 class="section">3.3 Guix System Image API</h3>
+
+<p>Historically, Guix System is centered around an <code>operating-system</code>
+structure.  This structure contains various fields ranging from the
+bootloader and kernel declaration to the services to install.
+</p>
+<p>Depending on the target machine, that can go from a standard
+<code>x86_64</code> machine to a small ARM single board computer such as the
+Pine64, the image constraints can vary a lot.  The hardware
+manufacturers will impose different image formats with various partition
+sizes and offsets.
+</p>
+<p>To create images suitable for all those machines, a new abstraction is
+necessary: that&rsquo;s the goal of the <code>image</code> record.  This record
+contains all the required information to be transformed into a
+standalone image, that can be directly booted on any target machine.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define-record-type*</span> <span class="syntax-symbol">&lt;image&gt;</span>
+  <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/image-Reference.html#index-image">image</a> <span class="syntax-symbol">make-image</span>
+  <span class="syntax-symbol">image?</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">name</span>               <span class="syntax-symbol">image-name</span> <span class="syntax-comment">;symbol
+</span>                      <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">default</span> <span class="syntax-symbol">#f</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Formatted-Output.html#index-format-1">format</a>             <span class="syntax-symbol">image-format</span></span>)</span> <span class="syntax-comment">;symbol
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">target</span>             <span class="syntax-symbol">image-target</span>
+                      <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">default</span> <span class="syntax-symbol">#f</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">size</span>               <span class="syntax-symbol">image-size</span>  <span class="syntax-comment">;size in bytes as integer
+</span>                      <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">default</span> <span class="syntax-symbol">'guess</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/operating_002dsystem-Reference.html#index-operating_002dsystem-1">operating-system</a>   <span class="syntax-symbol">image-operating-system</span>  <span class="syntax-comment">;&lt;operating-system&gt;
+</span>                      <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">default</span> <span class="syntax-symbol">#f</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">partitions</span>         <span class="syntax-symbol">image-partitions</span> <span class="syntax-comment">;list of &lt;partition&gt;
+</span>                      <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">default</span> <span class="syntax-symbol">'</span><span class="syntax-paren3">(<span class="syntax-symbol"></span>)</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">compression?</span>       <span class="syntax-symbol">image-compression?</span> <span class="syntax-comment">;boolean
+</span>                      <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">default</span> <span class="syntax-symbol">#t</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">volatile-root?</span>     <span class="syntax-symbol">image-volatile-root?</span> <span class="syntax-comment">;boolean
+</span>                      <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">default</span> <span class="syntax-symbol">#t</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">substitutable?</span>     <span class="syntax-symbol">image-substitutable?</span> <span class="syntax-comment">;boolean
+</span>                      <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">default</span> <span class="syntax-symbol">#t</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>This record contains the operating-system to instantiate. The
+<code>format</code> field defines the image type and can be <code>efi-raw</code>,
+<code>qcow2</code> or <code>iso9660</code> for instance. In the future, it could be
+extended to <code>docker</code> or other image types.
+</p>
+<p>A new directory in the Guix sources is dedicated to images definition. For now
+there are four files:
+</p>
+<ul>
+<li> <samp>gnu/system/images/hurd.scm</samp>
+</li><li> <samp>gnu/system/images/pine64.scm</samp>
+</li><li> <samp>gnu/system/images/novena.scm</samp>
+</li><li> <samp>gnu/system/images/pinebook-pro.scm</samp>
+</li></ul>
+
+<p>Let&rsquo;s have a look to <samp>pine64.scm</samp>. It contains the
+<code>pine64-barebones-os</code> variable which is a minimal definition of an
+operating-system dedicated to the <b>Pine A64 LTS</b> board.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <span class="syntax-symbol">pine64-barebones-os</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/operating_002dsystem-Reference.html#index-operating_002dsystem-1">operating-system</a>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">host-name</span> <span class="syntax-string">"vignemale"</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">timezone</span> <span class="syntax-string">"Europe/Paris"</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">locale</span> <span class="syntax-string">"en_US.utf8"</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">bootloader</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Bootloader-Configuration.html#index-bootloader_002dconfiguration">bootloader-configuration</a>
+                <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">bootloader</span> <span class="syntax-symbol">u-boot-pine64-lts-bootloader</span></span>)</span>
+                <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">targets</span> <span class="syntax-symbol">'</span><span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-string">"/dev/vda"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">initrd-modules</span> <span class="syntax-symbol">'</span><span class="syntax-paren3">(<span class="syntax-symbol"></span>)</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">kernel</span> <span class="syntax-symbol">linux-libre-arm64-generic</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">file-systems</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Pairs.html#index-cons">cons</a> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/File-Systems.html#index-file_002dsystem">file-system</a>
+                        <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">device</span> <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/File-Systems.html#index-file_002dsystem_002dlabel-1">file-system-label</a> <span class="syntax-string">"my-root"</span></span>)</span></span>)</span>
+                        <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">mount-point</span> <span class="syntax-string">"/"</span></span>)</span>
+                        <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">type</span> <span class="syntax-string">"ext4"</span></span>)</span></span>)</span>
+                       <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/File-Systems.html#index-_0025base_002dfile_002dsystems">%base-file-systems</a></span>)</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">services</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Pairs.html#index-cons">cons</a> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Base-Services.html#index-agetty_002dservice_002dtype">agetty-service-type</a>
+                            <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Base-Services.html#index-agetty_002dconfiguration">agetty-configuration</a>
+                             <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">extra-options</span> <span class="syntax-symbol">'</span><span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-string">"-L"</span></span>)</span></span>)</span> <span class="syntax-comment">; no carrier detect
+</span>                             <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">baud-rate</span> <span class="syntax-string">"115200"</span></span>)</span>
+                             <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">term</span> <span class="syntax-string">"vt100"</span></span>)</span>
+                             <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">tty</span> <span class="syntax-string">"ttyS0"</span></span>)</span></span>)</span></span>)</span>
+                   <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Base-Services.html#index-_0025base_002dservices-1">%base-services</a></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>The <code>kernel</code> and <code>bootloader</code> fields are pointing to packages
+dedicated to this board.
+</p>
+<p>Right below, the <code>pine64-image-type</code> variable is also defined.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/image_002dtype-Reference.html#index-pine64_002dimage_002dtype">pine64-image-type</a>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/image_002dtype-Reference.html#index-image_002dtype">image-type</a>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">name</span> <span class="syntax-symbol">'pine64-raw</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">constructor</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d26.html#index-cut">cut</a> <span class="syntax-symbol">image-with-os</span> <span class="syntax-symbol">arm64-disk-image</span> <span class="syntax-symbol">&lt;&gt;</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>It&rsquo;s using a record we haven&rsquo;t talked about yet, the <code>image-type</code> record,
+defined this way:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define-record-type*</span> <span class="syntax-symbol">&lt;image-type&gt;</span>
+  <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/image_002dtype-Reference.html#index-image_002dtype">image-type</a> <span class="syntax-symbol">make-image-type</span>
+  <span class="syntax-symbol">image-type?</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">name</span>           <span class="syntax-symbol">image-type-name</span></span>)</span> <span class="syntax-comment">;symbol
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">constructor</span>    <span class="syntax-symbol">image-type-constructor</span></span>)</span></span>)</span> <span class="syntax-comment">;&lt;operating-system&gt; -&gt; &lt;image&gt;
+</span></pre></div>
+
+<p>The main purpose of this record is to associate a name to a procedure
+transforming an <code>operating-system</code> to an image.  To understand why
+it is necessary, let&rsquo;s have a look to the command producing an image
+from an <code>operating-system</code> configuration file:
+</p>
+<div class="example">
+<pre class="example">guix system image my-os.scm
+</pre></div>
+
+<p>This command expects an <code>operating-system</code> configuration but how
+should we indicate that we want an image targeting a Pine64 board?  We
+need to provide an extra information, the <code>image-type</code>, by passing
+the <code>--image-type</code> or <code>-t</code> flag, this way:
+</p>
+<div class="example">
+<pre class="example">guix system image --image-type=pine64-raw my-os.scm
+</pre></div>
+
+<p>This <code>image-type</code> parameter points to the <code>pine64-image-type</code>
+defined above. Hence, the <code>operating-system</code> declared in
+<code>my-os.scm</code> will be applied the <code>(cut image-with-os
+arm64-disk-image &lt;&gt;)</code> procedure to turn it into an image.
+</p>
+<p>The resulting image looks like:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/image-Reference.html#index-image">image</a>
+ <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Formatted-Output.html#index-format-1">format</a> <span class="syntax-symbol">'disk-image</span></span>)</span>
+ <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">target</span> <span class="syntax-string">"aarch64-linux-gnu"</span></span>)</span>
+ <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/operating_002dsystem-Reference.html#index-operating_002dsystem-1">operating-system</a> <span class="syntax-symbol">my-os</span></span>)</span>
+ <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">partitions</span>
+  <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d1-Filtering-and-Partitioning.html#index-partition">partition</a>
+         <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">inherit</span> <span class="syntax-symbol">root-partition</span></span>)</span>
+         <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">offset</span> <span class="syntax-symbol">root-offset</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>which is the aggregation of the <code>operating-system</code> defined in
+ <code>my-os.scm</code> to the <code>arm64-disk-image</code> record.
+</p>
+<p>But enough Scheme madness. What does this image API bring to the Guix user?
+</p>
+<p>One can run:
+</p>
+<div class="example">
+<pre class="example">mathieu@cervin:~$ guix system --list-image-types
+The available image types are:
+
+   - pinebook-pro-raw
+   - pine64-raw
+   - novena-raw
+   - hurd-raw
+   - hurd-qcow2
+   - qcow2
+   - uncompressed-iso9660
+   - efi-raw
+   - arm64-raw
+   - arm32-raw
+   - iso9660
+</pre></div>
+
+<p>and by writing an <code>operating-system</code> file based on
+<code>pine64-barebones-os</code>, you can customize your image to your
+preferences in a file (<samp>my-pine-os.scm</samp>) like this:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-use_002dmodules">use-modules</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">services</span> <span class="syntax-symbol">linux</span></span>)</span>
+             <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Processes.html#index-system">system</a> <span class="syntax-symbol">images</span> <span class="syntax-symbol">pine64</span></span>)</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">let</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">base-os</span> <span class="syntax-symbol">pine64-barebones-os</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/operating_002dsystem-Reference.html#index-operating_002dsystem-1">operating-system</a>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">inherit</span> <span class="syntax-symbol">base-os</span></span>)</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">timezone</span> <span class="syntax-string">"America/Indiana/Indianapolis"</span></span>)</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">services</span>
+     <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Pairs.html#index-cons">cons</a>
+      <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Linux-Services.html#index-earlyoom_002dservice_002dtype">earlyoom-service-type</a>
+               <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Linux-Services.html#index-earlyoom_002dconfiguration">earlyoom-configuration</a>
+                <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">prefer-regexp</span> <span class="syntax-string">"icecat|chromium"</span></span>)</span></span>)</span></span>)</span>
+      <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">operating-system-user-services</span> <span class="syntax-symbol">base-os</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>run:
+</p>
+<div class="example">
+<pre class="example">guix system image --image-type=pine64-raw my-pine-os.scm
+</pre></div>
+
+<p>or,
+</p>
+<div class="example">
+<pre class="example">guix system image --image-type=hurd-raw my-hurd-os.scm
+</pre></div>
+
+<p>to get an image that can be written directly to a hard drive and booted
+from.
+</p>
+<p>Without changing anything to <code>my-hurd-os.scm</code>, calling:
+</p>
+<div class="example">
+<pre class="example">guix system image --image-type=hurd-qcow2 my-hurd-os.scm
+</pre></div>
+
+<p>will instead produce a Hurd QEMU image.
+</p>
+<hr />
+<div class="header">
+<p>
+Next: <a href="Using-security-keys.html" accesskey="n" rel="next">Using security keys</a>, Previous: <a href="Customizing-the-Kernel.html" accesskey="p" rel="prev">Customizing the Kernel</a>, Up: <a href="System-Configuration.html" accesskey="u" rel="up">System Configuration</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

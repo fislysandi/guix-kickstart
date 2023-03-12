@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2019, 2022 Ricardo Wurmus
+
+Copyright (C) 2019 Efraim Flashner
+
+Copyright (C) 2019 Pierre Neidhardt
+
+Copyright (C) 2020 Oleg Pykhalov
+
+Copyright (C) 2020 Matthew Brooks
+
+Copyright (C) 2020 Marcin Karpezo
+
+Copyright (C) 2020 Brice Waegeneire
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020 Christine Lemmer-Webber
+
+Copyright (C) 2021 Joshua Branson
+
+Copyright (C) 2022 Maxim Cournoyer
+
+Copyright (C) 2023 Ludovic Courtès
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Guix environment via direnv (GNU Guix Cookbook)</title>
+
+<meta name="description" content="Guix environment via direnv (GNU Guix Cookbook)" />
+<meta name="keywords" content="Guix environment via direnv (GNU Guix Cookbook)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Environment-management.html" rel="up" title="Environment management" />
+<link href="Installing-Guix-on-a-Cluster.html" rel="next" title="Installing Guix on a Cluster" />
+<link href="Environment-management.html" rel="prev" title="Environment management" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/en/cookbook/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/sk/html_node">Slovenský</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-cookbook/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/en/cookbook/"></a></header>
+<span id="Guix-environment-via-direnv"></span><div class="header">
+<p>
+Up: <a href="Environment-management.html" accesskey="u" rel="up">Environment management</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Guix-environment-via-direnv-1"></span><h3 class="section">6.1 Guix environment via direnv</h3>
+
+<p>Guix provides a &lsquo;<samp>direnv</samp>&rsquo; package, which could extend shell after
+directory change.  This tool could be used to prepare a pure Guix
+environment.
+</p>
+<p>The following example provides a shell function for <samp>~/.direnvrc</samp>
+file, which could be used from Guix Git repository in
+<samp>~/src/guix/.envrc</samp> file to setup a build environment similar to
+described in see <a href="https://guix.gnu.org/manual/en/html_node/Building-from-Git.html#Building-from-Git">Building from Git</a> in <cite>GNU Guix Reference
+Manual</cite>.
+</p>
+<p>Create a <samp>~/.direnvrc</samp> with a Bash code:
+</p>
+<div class="example">
+<pre class="example"># Thanks &lt;https://github.com/direnv/direnv/issues/73#issuecomment-152284914&gt;
+export_function()
+{
+  local name=$1
+  local alias_dir=$PWD/.direnv/aliases
+  mkdir -p "$alias_dir"
+  PATH_add "$alias_dir"
+  local target="$alias_dir/$name"
+  if declare -f "$name" &gt;/dev/null; then
+    echo "#!$SHELL" &gt; "$target"
+    declare -f "$name" &gt;&gt; "$target" 2&gt;/dev/null
+    # Notice that we add shell variables to the function trigger.
+    echo "$name \$*" &gt;&gt; "$target"
+    chmod +x "$target"
+  fi
+}
+
+use_guix()
+{
+    # Set GitHub token.
+    export GUIX_GITHUB_TOKEN="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+    # Unset 'GUIX_PACKAGE_PATH'.
+    export GUIX_PACKAGE_PATH=""
+
+    # Recreate a garbage collector root.
+    gcroots="$HOME/.config/guix/gcroots"
+    mkdir -p "$gcroots"
+    gcroot="$gcroots/guix"
+    if [ -L "$gcroot" ]
+    then
+        rm -v "$gcroot"
+    fi
+
+    # Miscellaneous packages.
+    PACKAGES_MAINTENANCE=(
+        direnv
+        git
+        git:send-email
+        git-cal
+        gnupg
+        guile-colorized
+        guile-readline
+        less
+        ncurses
+        openssh
+        xdot
+    )
+
+    # Environment packages.
+    PACKAGES=(help2man guile-sqlite3 guile-gcrypt)
+
+    # Thanks &lt;https://lists.gnu.org/archive/html/guix-devel/2016-09/msg00859.html&gt;
+    eval "$(guix environment --search-paths --root="$gcroot" --pure guix --ad-hoc ${PACKAGES[@]} ${PACKAGES_MAINTENANCE[@]} "$@")"
+
+    # Predefine configure flags.
+    configure()
+    {
+        ./configure --localstatedir=/var --prefix=
+    }
+    export_function configure
+
+    # Run make and optionally build something.
+    build()
+    {
+        make -j 2
+        if [ $# -gt 0 ]
+        then
+            ./pre-inst-env guix build "$@"
+        fi
+    }
+    export_function build
+
+    # Predefine push Git command.
+    push()
+    {
+        git push --set-upstream origin
+    }
+    export_function push
+
+    clear                        # Clean up the screen.
+    git-cal --author='Your Name' # Show contributions calendar.
+
+    # Show commands help.
+    echo "
+build          build a package or just a project if no argument provided
+configure      run ./configure with predefined parameters
+push           push to upstream Git repository
+"
+}
+</pre></div>
+
+<p>Every project containing <samp>.envrc</samp> with a string <code>use guix</code>
+will have predefined environment variables and procedures.
+</p>
+<p>Run <code>direnv allow</code> to setup the environment for the first time.
+</p>
+
+<hr />
+<div class="header">
+<p>
+Up: <a href="Environment-management.html" accesskey="u" rel="up">Environment management</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2019, 2022 Ricardo Wurmus
+
+Copyright (C) 2019 Efraim Flashner
+
+Copyright (C) 2019 Pierre Neidhardt
+
+Copyright (C) 2020 Oleg Pykhalov
+
+Copyright (C) 2020 Matthew Brooks
+
+Copyright (C) 2020 Marcin Karpezo
+
+Copyright (C) 2020 Brice Waegeneire
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020 Christine Lemmer-Webber
+
+Copyright (C) 2021 Joshua Branson
+
+Copyright (C) 2022 Maxim Cournoyer
+
+Copyright (C) 2023 Ludovic Courtès
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Packaging Tutorial (GNU Guix Cookbook)</title>
+
+<meta name="description" content="Packaging Tutorial (GNU Guix Cookbook)" />
+<meta name="keywords" content="Packaging Tutorial (GNU Guix Cookbook)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Packaging.html" rel="up" title="Packaging" />
+<link href="A-_0060_0060Hello-World_0027_0027-package.html" rel="next" title="A ``Hello World'' package" />
+<link href="Packaging.html" rel="prev" title="Packaging" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/en/cookbook/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/sk/html_node">Slovenský</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-cookbook/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/en/cookbook/"></a></header>
+<span id="Packaging-Tutorial"></span><div class="header">
+<p>
+Up: <a href="Packaging.html" accesskey="u" rel="up">Packaging</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Packaging-Tutorial-1"></span><h3 class="section">2.1 Packaging Tutorial</h3>
+
+<p>GNU Guix stands out as the <em>hackable</em> package manager, mostly because it
+uses <a href="https://www.gnu.org/software/guile/">GNU Guile</a>, a powerful
+high-level programming language, one of the
+<a href="https://en.wikipedia.org/wiki/Scheme_%28programming_language%29">Scheme</a>
+dialects from the
+<a href="https://en.wikipedia.org/wiki/Lisp_%28programming_language%29">Lisp family</a>.
+</p>
+<p>Package definitions are also written in Scheme, which empowers Guix in some
+very unique ways, unlike most other package managers that use shell scripts or
+simple languages.
+</p>
+<ul>
+<li> Use functions, structures, macros and all of Scheme expressiveness for your
+package definitions.
+
+</li><li> Inheritance makes it easy to customize a package by inheriting from it and
+modifying only what is needed.
+
+</li><li> Batch processing: the whole package collection can be parsed, filtered and
+processed.  Building a headless server with all graphical interfaces stripped
+out?  It&rsquo;s possible.  Want to rebuild everything from source using specific
+compiler optimization flags?  Pass the <code>#:make-flags "..."</code> argument to
+the list of packages.  It wouldn&rsquo;t be a stretch to think
+<a href="https://wiki.gentoo.org/wiki/USE_flag">Gentoo USE flags</a> here, but this
+goes even further: the changes don&rsquo;t have to be thought out beforehand by the
+packager, they can be <em>programmed</em> by the user!
+</li></ul>
+
+<p>The following tutorial covers all the basics around package creation with Guix.
+It does not assume much knowledge of the Guix system nor of the Lisp language.
+The reader is only expected to be familiar with the command line and to have some
+basic programming knowledge.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="A-_0060_0060Hello-World_0027_0027-package.html" accesskey="1">A &ldquo;Hello World&rdquo; package</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Setup.html" accesskey="2">Setup</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Extended-example.html" accesskey="3">Extended example</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Other-build-systems.html" accesskey="4">Other build systems</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Programmable-and-automated-package-definition.html" accesskey="5">Programmable and automated package definition</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Getting-help.html" accesskey="6">Getting help</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Conclusion.html" accesskey="7">Conclusion</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="References.html" accesskey="8">References</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr />
+<div class="header">
+<p>
+Up: <a href="Packaging.html" accesskey="u" rel="up">Packaging</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

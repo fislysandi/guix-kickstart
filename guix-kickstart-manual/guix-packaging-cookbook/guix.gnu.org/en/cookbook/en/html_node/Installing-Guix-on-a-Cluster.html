@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2019, 2022 Ricardo Wurmus
+
+Copyright (C) 2019 Efraim Flashner
+
+Copyright (C) 2019 Pierre Neidhardt
+
+Copyright (C) 2020 Oleg Pykhalov
+
+Copyright (C) 2020 Matthew Brooks
+
+Copyright (C) 2020 Marcin Karpezo
+
+Copyright (C) 2020 Brice Waegeneire
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020 Christine Lemmer-Webber
+
+Copyright (C) 2021 Joshua Branson
+
+Copyright (C) 2022 Maxim Cournoyer
+
+Copyright (C) 2023 Ludovic Courtès
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Installing Guix on a Cluster (GNU Guix Cookbook)</title>
+
+<meta name="description" content="Installing Guix on a Cluster (GNU Guix Cookbook)" />
+<meta name="keywords" content="Installing Guix on a Cluster (GNU Guix Cookbook)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="index.html" rel="up" title="Top" />
+<link href="Setting-Up-a-Head-Node.html" rel="next" title="Setting Up a Head Node" />
+<link href="Guix-environment-via-direnv.html" rel="prev" title="Guix environment via direnv" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/en/cookbook/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/sk/html_node">Slovenský</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-cookbook/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/en/cookbook/"></a></header>
+<span id="Installing-Guix-on-a-Cluster"></span><div class="header">
+<p>
+Next: <a href="Acknowledgments.html" accesskey="n" rel="next">Acknowledgments</a>, Previous: <a href="Environment-management.html" accesskey="p" rel="prev">Environment management</a>, Up: <a href="index.html" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Installing-Guix-on-a-Cluster-1"></span><h2 class="chapter">7 Installing Guix on a Cluster</h2>
+
+<span id="index-cluster-installation"></span>
+<span id="index-high_002dperformance-computing_002c-HPC"></span>
+<span id="index-HPC_002c-high_002dperformance-computing"></span>
+<p>Guix is appealing to scientists and <acronym title="high-performance
+computing">HPC</acronym> (high-performance
+computing) practitioners: it makes it easy to deploy potentially complex
+software stacks, and it lets you do so in a reproducible fashion&mdash;you
+can redeploy the exact same software on different machines and at
+different points in time.
+</p>
+<p>In this chapter we look at how a cluster sysadmin can install Guix for
+system-wide use, such that it can be used on all the cluster nodes, and
+discuss the various tradeoffs<a id="DOCF1" href="Installing-Guix-on-a-Cluster.html#FOOT1"><sup>1</sup></a>.
+</p>
+<blockquote>
+<p><b>Note:</b> Here we assume that the cluster is running a GNU/Linux distro other than
+Guix System and that we are going to install Guix on top of it.
+</p></blockquote>
+
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Setting-Up-a-Head-Node.html" accesskey="1">Setting Up a Head Node</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The node that runs the daemon.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Setting-Up-Compute-Nodes.html" accesskey="2">Setting Up Compute Nodes</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Client nodes.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Cluster-Network-Access.html" accesskey="3">Cluster Network Access</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Dealing with network access restrictions.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Cluster-Disk-Usage.html" accesskey="4">Cluster Disk Usage</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Disk usage considerations.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Cluster-Security-Considerations.html" accesskey="5">Cluster Security Considerations</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Keeping the cluster secure.
+</td></tr>
+</table>
+
+<div class="footnote">
+<hr />
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5><a id="FOOT1" href="Installing-Guix-on-a-Cluster.html#DOCF1">(1)</a>
+<p>This chapter is adapted from a
+<a href="https://hpc.guix.info/blog/2017/11/installing-guix-on-a-cluster/">blog post published on the Guix-HPC web site in 2017</a>.</p>
+</h5></div>
+
+
+
+</body>
+</html>

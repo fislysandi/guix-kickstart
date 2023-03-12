@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2019, 2022 Ricardo Wurmus
+
+Copyright (C) 2019 Efraim Flashner
+
+Copyright (C) 2019 Pierre Neidhardt
+
+Copyright (C) 2020 Oleg Pykhalov
+
+Copyright (C) 2020 Matthew Brooks
+
+Copyright (C) 2020 Marcin Karpezo
+
+Copyright (C) 2020 Brice Waegeneire
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020 Christine Lemmer-Webber
+
+Copyright (C) 2021 Joshua Branson
+
+Copyright (C) 2022 Maxim Cournoyer
+
+Copyright (C) 2023 Ludovic Courtès
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>A ``Hello World'' package (GNU Guix Cookbook)</title>
+
+<meta name="description" content="A ``Hello World'' package (GNU Guix Cookbook)" />
+<meta name="keywords" content="A ``Hello World'' package (GNU Guix Cookbook)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Packaging-Tutorial.html" rel="up" title="Packaging Tutorial" />
+<link href="Setup.html" rel="next" title="Setup" />
+<link href="Packaging-Tutorial.html" rel="prev" title="Packaging Tutorial" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/en/cookbook/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/sk/html_node">Slovenský</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-cookbook/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/en/cookbook/"></a></header>
+<span id="A-_0060_0060Hello-World_0027_0027-package"></span><div class="header">
+<p>
+Next: <a href="Setup.html" accesskey="n" rel="next">Setup</a>, Up: <a href="Packaging-Tutorial.html" accesskey="u" rel="up">Packaging Tutorial</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="A-_0060_0060Hello-World_0027_0027-package-1"></span><h4 class="subsection">2.1.1 A &ldquo;Hello World&rdquo; package</h4>
+
+<p>The &ldquo;Defining Packages&rdquo; section of the manual introduces the basics of Guix
+packaging (see <a href="https://guix.gnu.org/manual/en/html_node/Defining-Packages.html#Defining-Packages">Defining Packages</a> in <cite>GNU Guix Reference Manual</cite>).  In
+the following section, we will partly go over those basics again.
+</p>
+<p>GNU&nbsp;Hello is a dummy project that serves as an idiomatic example for
+packaging.  It uses the GNU build system (<code>./configure &amp;&amp; make &amp;&amp; make
+install</code>).  Guix already provides a package definition which is a perfect
+example to start with.  You can look up its declaration with <code>guix edit
+hello</code> from the command line.  Let&rsquo;s see how it looks:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define-public</span> <span class="syntax-symbol">hello</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/package-Reference.html#index-package">package</a>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">name</span> <span class="syntax-string">"hello"</span></span>)</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Build-Config.html#index-version">version</a> <span class="syntax-string">"2.10"</span></span>)</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">source</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/origin-Reference.html#index-origin">origin</a>
+              <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Method-Definition-Internals.html#index-method">method</a> <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/origin-Reference.html#index-url_002dfetch">url-fetch</a></span>)</span>
+              <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">uri</span> <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-string">"mirror://gnu/hello/hello-"</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Build-Config.html#index-version">version</a>
+                                  <span class="syntax-string">".tar.gz"</span></span>)</span></span>)</span>
+              <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">sha256</span>
+               <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">base32</span>
+                <span class="syntax-string">"0ssi1wpaf7plaswqqjwigppsg5fyh99vdlb9kzl7c9lng89ndq1i"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">build-system</span> <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Build-Systems.html#index-gnu_002dbuild_002dsystem">gnu-build-system</a></span>)</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">synopsis</span> <span class="syntax-string">"Hello, GNU world: An example GNU package"</span></span>)</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">description</span>
+     <span class="syntax-string">"GNU Hello prints the message \"Hello, world!\" and then exits.  It
+serves as an example of standard GNU coding practices.  As such, it supports
+command-line arguments, multiple languages, and so on."</span></span>)</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">home-page</span> <span class="syntax-string">"https://www.gnu.org/software/hello/"</span></span>)</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">license</span> <span class="syntax-symbol">gpl3+</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>As you can see, most of it is rather straightforward.  But let&rsquo;s review the
+fields together:
+</p>
+<dl compact="compact">
+<dt>&lsquo;<samp>name</samp>&rsquo;</dt>
+<dd><p>The project name.  Using Scheme conventions, we prefer to keep it
+lower case, without underscore and using dash-separated words.
+</p>
+</dd>
+<dt>&lsquo;<samp>source</samp>&rsquo;</dt>
+<dd><p>This field contains a description of the source code origin.  The
+<code>origin</code> record contains these fields:
+</p>
+<ol>
+<li> The method, here <code>url-fetch</code> to download via HTTP/FTP, but other methods
+    exist, such as <code>git-fetch</code> for Git repositories.
+</li><li> The URI, which is typically some <code>https://</code> location for <code>url-fetch</code>.  Here
+    the special &lsquo;mirror://gnu&lsquo; refers to a set of well known locations, all of
+    which can be used by Guix to fetch the source, should some of them fail.
+</li><li> The <code>sha256</code> checksum of the requested file.  This is essential to ensure
+    the source is not corrupted.  Note that Guix works with base32 strings,
+    hence the call to the <code>base32</code> function.
+</li></ol>
+
+</dd>
+<dt>&lsquo;<samp>build-system</samp>&rsquo;</dt>
+<dd>
+<p>This is where the power of abstraction provided by the Scheme language really
+shines: in this case, the <code>gnu-build-system</code> abstracts away the famous
+<code>./configure &amp;&amp; make &amp;&amp; make install</code> shell invocations.  Other build
+systems include the <code>trivial-build-system</code> which does not do anything and
+requires from the packager to program all the build steps, the
+<code>python-build-system</code>, the <code>emacs-build-system</code>, and many more
+(see <a href="https://guix.gnu.org/manual/en/html_node/Build-Systems.html#Build-Systems">Build Systems</a> in <cite>GNU Guix Reference Manual</cite>).
+</p>
+</dd>
+<dt>&lsquo;<samp>synopsis</samp>&rsquo;</dt>
+<dd><p>It should be a concise summary of what the package does.  For many packages a
+tagline from the project&rsquo;s home page can be used as the synopsis.
+</p>
+</dd>
+<dt>&lsquo;<samp>description</samp>&rsquo;</dt>
+<dd><p>Same as for the synopsis, it&rsquo;s fine to re-use the project description from the
+homepage.  Note that Guix uses Texinfo syntax.
+</p>
+</dd>
+<dt>&lsquo;<samp>home-page</samp>&rsquo;</dt>
+<dd><p>Use HTTPS if available.
+</p>
+</dd>
+<dt>&lsquo;<samp>license</samp>&rsquo;</dt>
+<dd><p>See <code>guix/licenses.scm</code> in the project source for a full list of
+available licenses.
+</p></dd>
+</dl>
+
+<p>Time to build our first package!  Nothing fancy here for now: we will stick to a
+dummy <code>my-hello</code>, a copy of the above declaration.
+</p>
+<p>As with the ritualistic &ldquo;Hello World&rdquo; taught with most programming languages,
+this will possibly be the most &ldquo;manual&rdquo; approach.  We will work out an ideal
+setup later; for now we will go the simplest route.
+</p>
+<p>Save the following to a file <samp>my-hello.scm</samp>.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-use_002dmodules">use-modules</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <span class="syntax-symbol">packages</span></span>)</span>
+             <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <span class="syntax-symbol">download</span></span>)</span>
+             <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <span class="syntax-symbol">build-system</span> <span class="syntax-symbol">gnu</span></span>)</span>
+             <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <span class="syntax-symbol">licenses</span></span>)</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/package-Reference.html#index-package">package</a>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">name</span> <span class="syntax-string">"my-hello"</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Build-Config.html#index-version">version</a> <span class="syntax-string">"2.10"</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">source</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/origin-Reference.html#index-origin">origin</a>
+            <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Method-Definition-Internals.html#index-method">method</a> <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/origin-Reference.html#index-url_002dfetch">url-fetch</a></span>)</span>
+            <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">uri</span> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-string">"mirror://gnu/hello/hello-"</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Build-Config.html#index-version">version</a>
+                                <span class="syntax-string">".tar.gz"</span></span>)</span></span>)</span>
+            <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">sha256</span>
+             <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">base32</span>
+              <span class="syntax-string">"0ssi1wpaf7plaswqqjwigppsg5fyh99vdlb9kzl7c9lng89ndq1i"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">build-system</span> <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Build-Systems.html#index-gnu_002dbuild_002dsystem">gnu-build-system</a></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">synopsis</span> <span class="syntax-string">"Hello, Guix world: An example custom Guix package"</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">description</span>
+   <span class="syntax-string">"GNU Hello prints the message \"Hello, world!\" and then exits.  It
+serves as an example of standard GNU coding practices.  As such, it supports
+command-line arguments, multiple languages, and so on."</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">home-page</span> <span class="syntax-string">"https://www.gnu.org/software/hello/"</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">license</span> <span class="syntax-symbol">gpl3+</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>We will explain the extra code in a moment.
+</p>
+<p>Feel free to play with the different values of the various fields.  If you
+change the source, you&rsquo;ll need to update the checksum.  Indeed, Guix refuses to
+build anything if the given checksum does not match the computed checksum of the
+source code.  To obtain the correct checksum of the package declaration, we
+need to download the source, compute the sha256 checksum and convert it to
+base32.
+</p>
+<p>Thankfully, Guix can automate this task for us; all we need is to provide the
+URI:
+</p>
+<div class="example">
+<pre class="example">$ guix download mirror://gnu/hello/hello-2.10.tar.gz
+
+Starting download of /tmp/guix-file.JLYgL7
+From https://ftpmirror.gnu.org/gnu/hello/hello-2.10.tar.gz...
+following redirection to `https://mirror.ibcp.fr/pub/gnu/hello/hello-2.10.tar.gz'...
+ …10.tar.gz  709KiB                                 2.5MiB/s 00:00 [##################] 100.0%
+/gnu/store/hbdalsf5lpf01x4dcknwx6xbn6n5km6k-hello-2.10.tar.gz
+0ssi1wpaf7plaswqqjwigppsg5fyh99vdlb9kzl7c9lng89ndq1i
+</pre></div>
+
+<p>In this specific case the output tells us which mirror was chosen.
+If the result of the above command is not the same as in the above snippet,
+update your <code>my-hello</code> declaration accordingly.
+</p>
+<p>Note that GNU package tarballs come with an OpenPGP signature, so you
+should definitely check the signature of this tarball with &lsquo;gpg&lsquo; to
+authenticate it before going further:
+</p>
+<div class="example">
+<pre class="example">$ guix download mirror://gnu/hello/hello-2.10.tar.gz.sig
+
+Starting download of /tmp/guix-file.03tFfb
+From https://ftpmirror.gnu.org/gnu/hello/hello-2.10.tar.gz.sig...
+following redirection to `https://ftp.igh.cnrs.fr/pub/gnu/hello/hello-2.10.tar.gz.sig'...
+ ….tar.gz.sig  819B                                                                                                                       1.2MiB/s 00:00 [##################] 100.0%
+/gnu/store/rzs8wba9ka7grrmgcpfyxvs58mly0sx6-hello-2.10.tar.gz.sig
+0q0v86n3y38z17rl146gdakw9xc4mcscpk8dscs412j22glrv9jf
+$ gpg --verify /gnu/store/rzs8wba9ka7grrmgcpfyxvs58mly0sx6-hello-2.10.tar.gz.sig /gnu/store/hbdalsf5lpf01x4dcknwx6xbn6n5km6k-hello-2.10.tar.gz
+gpg: Signature made Sun 16 Nov 2014 01:08:37 PM CET
+gpg:                using RSA key A9553245FDE9B739
+gpg: Good signature from "Sami Kerola &lt;kerolasa@iki.fi&gt;" [unknown]
+gpg:                 aka "Sami Kerola (http://www.iki.fi/kerolasa/) &lt;kerolasa@iki.fi&gt;" [unknown]
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: 8ED3 96E3 7E38 D471 A005  30D3 A955 3245 FDE9 B739
+</pre></div>
+
+<p>You can then happily run
+</p>
+<div class="example">
+<pre class="example">$ guix package --install-from-file=my-hello.scm
+</pre></div>
+
+<p>You should now have <code>my-hello</code> in your profile!
+</p>
+<div class="example">
+<pre class="example">$ guix package --list-installed=my-hello
+my-hello	2.10	out
+/gnu/store/f1db2mfm8syb8qvc357c53slbvf1g9m9-my-hello-2.10
+</pre></div>
+
+<p>We&rsquo;ve gone as far as we could without any knowledge of Scheme.  Before moving
+on to more complex packages, now is the right time to brush up on your Scheme
+knowledge.  see <a href="A-Scheme-Crash-Course.html">A Scheme Crash Course</a> to get up to speed.
+</p>
+<hr />
+<div class="header">
+<p>
+Next: <a href="Setup.html" accesskey="n" rel="next">Setup</a>, Up: <a href="Packaging-Tutorial.html" accesskey="u" rel="up">Packaging Tutorial</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

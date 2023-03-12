@@ -1,4 +1,14 @@
 ;; -*- mode: guile -*-
+
+(define-module (guix packages fim
+  #:use-module (guix build-system gnu)
+  #:use-module (guix download)
+  #:use-module (guix packages)
+  #:use-module (guix build-system make)
+  #:use-module (gnu packages)))
+
+
+
 (define-public fim
 	(package "fim")
 	(version "0.6")

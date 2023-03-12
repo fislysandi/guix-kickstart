@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2019, 2022 Ricardo Wurmus
+
+Copyright (C) 2019 Efraim Flashner
+
+Copyright (C) 2019 Pierre Neidhardt
+
+Copyright (C) 2020 Oleg Pykhalov
+
+Copyright (C) 2020 Matthew Brooks
+
+Copyright (C) 2020 Marcin Karpezo
+
+Copyright (C) 2020 Brice Waegeneire
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020 Christine Lemmer-Webber
+
+Copyright (C) 2021 Joshua Branson
+
+Copyright (C) 2022 Maxim Cournoyer
+
+Copyright (C) 2023 Ludovic Courtès
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Connecting to Wireguard VPN (GNU Guix Cookbook)</title>
+
+<meta name="description" content="Connecting to Wireguard VPN (GNU Guix Cookbook)" />
+<meta name="keywords" content="Connecting to Wireguard VPN (GNU Guix Cookbook)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="System-Configuration.html" rel="up" title="System Configuration" />
+<link href="Customizing-a-Window-Manager.html" rel="next" title="Customizing a Window Manager" />
+<link href="Using-security-keys.html" rel="prev" title="Using security keys" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/en/cookbook/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/sk/html_node">Slovenský</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-cookbook/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/en/cookbook/"></a></header>
+<span id="Connecting-to-Wireguard-VPN"></span><div class="header">
+<p>
+Next: <a href="Customizing-a-Window-Manager.html" accesskey="n" rel="next">Customizing a Window Manager</a>, Previous: <a href="Using-security-keys.html" accesskey="p" rel="prev">Using security keys</a>, Up: <a href="System-Configuration.html" accesskey="u" rel="up">System Configuration</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Connecting-to-Wireguard-VPN-1"></span><h3 class="section">3.5 Connecting to Wireguard VPN</h3>
+
+<p>To connect to a Wireguard VPN server you need the kernel module to be
+loaded in memory and a package providing networking tools that support
+it (e.g.  <code>wireguard-tools</code> or <code>network-manager</code>).
+</p>
+<p>Here is a configuration example for Linux-Libre &lt; 5.6, where the module
+is out of tree and need to be loaded manually&mdash;following revisions of
+the kernel have it built-in and so don&rsquo;t need such configuration:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-use_002dmodules">use-modules</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span></span>)</span></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">use-service-modules</span> <span class="syntax-symbol">desktop</span></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">use-package-modules</span> <span class="syntax-symbol">vpn</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/operating_002dsystem-Reference.html#index-operating_002dsystem-1">operating-system</a>
+  <span class="syntax-comment">;; …
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">services</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Pairs.html#index-cons">cons</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Service-Reference.html#index-simple_002dservice">simple-service</a> <span class="syntax-symbol">'wireguard-module</span>
+                                  <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Linux-Services.html#index-kernel_002dmodule_002dloader_002dservice_002dtype">kernel-module-loader-service-type</a>
+                                  <span class="syntax-symbol">'</span><span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-string">"wireguard"</span></span>)</span></span>)</span>
+                  <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Desktop-Services.html#index-_0025desktop_002dservices">%desktop-services</a></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">packages</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Pairs.html#index-cons">cons</a> <span class="syntax-symbol">wireguard-tools</span> <span class="syntax-symbol">%base-packages</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">kernel-loadable-modules</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-symbol">wireguard-linux-compat</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>After reconfiguring and restarting your system you can either use
+Wireguard tools or NetworkManager to connect to a VPN server.
+</p>
+<span id="Using-Wireguard-tools"></span><h4 class="subsection">3.5.1 Using Wireguard tools</h4>
+
+<p>To test your Wireguard setup it is convenient to use <code>wg-quick</code>.
+Just give it a configuration file <code>wg-quick up ./wg0.conf</code>; or
+put that file in <samp>/etc/wireguard</samp> and run <code>wg-quick up wg0</code>
+instead.
+</p>
+<blockquote>
+<p><b>Note:</b> Be warned that the author described this command as a: “[…] very quick
+and dirty bash script […]”.
+</p></blockquote>
+
+<span id="Using-NetworkManager"></span><h4 class="subsection">3.5.2 Using NetworkManager</h4>
+
+<p>Thanks to NetworkManager support for Wireguard we can connect to our VPN
+using <code>nmcli</code> command.  Up to this point this guide assumes that
+you&rsquo;re using Network Manager service provided by
+<code>%desktop-services</code>.  Ortherwise you need to adjust your services
+list to load <code>network-manager-service-type</code> and reconfigure your
+Guix system.
+</p>
+<p>To import your VPN configuration execute nmcli import command:
+</p>
+<div class="example">
+<pre class="example"># nmcli connection import type wireguard file wg0.conf
+Connection 'wg0' (edbee261-aa5a-42db-b032-6c7757c60fde) successfully added
+</pre></div>
+
+<p>This will create a configuration file in
+<samp>/etc/NetworkManager/wg0.nmconnection</samp>.  Next connect to the
+Wireguard server:
+</p>
+<div class="example">
+<pre class="example">$ nmcli connection up wg0
+Connection successfully activated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/6)
+</pre></div>
+
+<p>By default NetworkManager will connect automatically on system boot.  To
+change that behaviour you need to edit your config:
+</p>
+<div class="example">
+<pre class="example"># nmcli connection modify wg0 connection.autoconnect no
+</pre></div>
+
+<p>For more specific information about NetworkManager and wireguard
+<a href="https://blogs.gnome.org/thaller/2019/03/15/wireguard-in-networkmanager/">see
+this post by thaller</a>.
+</p>
+<hr />
+<div class="header">
+<p>
+Next: <a href="Customizing-a-Window-Manager.html" accesskey="n" rel="next">Customizing a Window Manager</a>, Previous: <a href="Using-security-keys.html" accesskey="p" rel="prev">Using security keys</a>, Up: <a href="System-Configuration.html" accesskey="u" rel="up">System Configuration</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

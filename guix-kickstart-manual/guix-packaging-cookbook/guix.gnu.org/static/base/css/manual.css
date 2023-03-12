@@ -1,0 +1,326 @@
+/* Additional CSS for the on-line manual.  It complements GNU's
+   default CSS at <https://www.gnu.org/software/gnulib/manual.css>.
+
+   Public domain 2017, 2022. All rights waived.  */
+
+/* Navigation bar for the language menu, copied from navbar.css with
+   minor changes.  */
+
+.navbar {
+    background-color: #333;
+    border-color: #1A1A1A;
+    border-style: none none solid none;
+    border-width: thin;
+    color: white;
+    height: 55px;
+    overflow: hidden;
+}
+
+.navbar > h1 {
+    display: inline-block;
+    margin: 0px;
+}
+
+.branding {
+    position: relative;
+    overflow: hidden;
+}
+
+.branding:link,
+.branding:visited {
+    background-image: url("../img/Guix-logo.png");
+    background-position: bottom;
+    background-repeat: no-repeat;
+    border-style: none;
+    display: inline-block;
+    height: 55px;
+    width: 170px;
+}
+
+.branding:active,
+.branding:focus,
+.branding:hover {
+    background-position: top;
+}
+
+/* Note: Compared to navbar.css, changed 'menu' to 'navbar-menu' to
+   avoid clash with the "menu" class used in the Texinfo-generated
+   HTML.  */
+
+.navbar-menu {
+    position: relative;
+}
+
+.navbar-menu ul {
+    display: block;
+    margin: 0px;
+    padding: 0px;
+    list-style-type: none;
+}
+
+.navbar-menu > ul > li {
+    display: block;
+    position: relative;
+}
+
+.navbar-menu-hidden-input {
+    display: none;
+}
+
+.navbar-menu-item:link,
+.navbar-menu-item:visited,
+label.navbar-menu-item {
+    background-color: transparent;
+    background-image: url("../img/link-arrow.png");
+    background-position: 97% 50%;
+    background-repeat: no-repeat;
+    border-color: #1A1A1A;
+    border-style: solid none none none;
+    border-width: thin;
+    color: white;
+    display: block;
+    line-height: 55px;
+    padding: 0px 10px;
+    text-align: left;
+    text-decoration: none;
+}
+
+.navbar-menu-item:active,
+.navbar-menu-item:focus,
+.navbar-menu-item:hover,
+.navbar-menu-item-active:link,
+.navbar-menu-item-active:visited {
+    color: #F4BB15;
+}
+
+.navbar-submenu .navbar-menu-item:link,
+.navbar-submenu .navbar-menu-item:visited {
+    background-color: #434343;
+    padding: 0px 25px;
+}
+
+.navbar-menu-btn:link,
+.navbar-menu-btn:visited {
+    background-image: url("../img/menu-btn-bg.png");
+    background-position: bottom;
+    background-repeat: no-repeat;
+    border-style: none;
+    display: block;
+    height: 55px;
+    position: absolute;
+    right: 10px;
+    top: 0px;
+    width: 55px;
+}
+
+.navbar-menu-btn:active,
+.navbar-menu-btn:focus,
+.navbar-menu-btn:hover {
+    background-image: url("../img/menu-btn-bg.png");
+    background-position: top;
+}
+
+.hskip {
+    padding-left: 10px;
+}
+
+.hline {
+    display: none;
+}
+
+@media screen and (min-width: 920px) {
+    .navbar {
+	position: relative;
+	overflow: visible;
+    }
+
+    .navbar-menu {
+	display: inline-block;
+	padding-right: 10px;
+        position: absolute;
+        right: 0px;
+    }
+
+    .navbar-menu > ul > li {
+	display: inline-block;
+	line-height: 55px;
+    }
+
+    .navbar-menu-item:link,
+    .navbar-menu-item:visited {
+        background-image: none;
+        border-style: none;
+        display: inline-block;
+        margin: 0px 2px;
+        text-align: center;
+    }
+
+    a.navbar-menu-item:active,
+    a.navbar-menu-item:focus,
+    a.navbar-menu-item:hover,
+    a.navbar-menu-item-active:link,
+    a.navbar-menu-item-active:visited {
+	background-image: url("../img/menu-item-active-bg.png");
+	background-position: bottom center;
+	background-repeat: no-repeat;
+    }
+
+    .dropdown {
+	position: relative;
+    }
+
+    .dropdown:hover .navbar-submenu {
+        min-width: 150px;
+        width: max-content;
+        height: auto;
+        overflow: visible;
+    }
+
+    /* This CSS rule is separate from the rule for :hover
+       because :hover should still be applied even when
+       the browser does not support :focus-within. */
+    .navbar-submenu:focus-within {
+        min-width: 150px;
+        width: max-content;
+        height: auto;
+        overflow: visible;
+    }
+
+    .dropdown-btn {
+	background-image: url("../img/dropdown-bg.png");
+	background-position: bottom right;
+	background-repeat: no-repeat;
+        padding: 0px 10px;
+        cursor: pointer;
+        margin: 0px 2px;
+    }
+
+    .dropdown-btn:active,
+    .dropdown-btn:hover {
+        background-image: url("../img/dropdown-bg.png");
+        background-position: top right;
+    }
+
+    .navbar label {
+        cursor: pointer;
+    }
+
+    label[for=all-dropdowns-hidden] {
+        text-shadow: #fff 0px -2px 15px, #fff 0px -2px 10px;
+    }
+
+    .hline {
+        display: block;
+        margin: auto;
+        width: 150px;
+        height: 1px;
+    }
+
+    .navbar-submenu {
+	background-color: transparent;
+        z-index: 10;
+        display: block;
+        overflow: hidden;
+        width: 0;
+        height: 0;
+	padding-top: 20px;
+	position: absolute;
+        right: 0px;
+    }
+
+    .navbar-submenu-triangle {
+	background-color: #333;
+	border-color: black;
+	border-style: solid none none solid;
+	border-width: thin;
+	height: 10px;
+	position: absolute;
+	right: 30px;
+	top: 15px;
+	transform: rotate(45deg);
+	width: 10px;
+    }
+
+    .navbar-submenu > ul {
+	background-color: #333;
+	border-color: black;
+	border-radius: 4px;
+	border-style: solid;
+	border-width: thin;
+	box-shadow: 0 0 4px #202020;
+	padding: 8px 0px;
+    }
+
+    .navbar-submenu li,
+    .navbar-submenu .navbar-menu-item:active,
+    .navbar-submenu .navbar-menu-item:link {
+	background-color: transparent;
+	display: block;
+	line-height: 30px;
+	margin: 0px;
+	text-align: left;
+    }
+
+    .navbar-submenu .navbar-menu-item:link,
+    .navbar-submenu .navbar-menu-item:visited {
+	font-size: 0.9em;
+	color: white;
+    }
+
+    .navbar-submenu .navbar-menu-item:active,
+    .navbar-submenu .navbar-menu-item:focus,
+    .navbar-submenu .navbar-menu-item:hover,
+    .navbar-submenu .navbar-menu-item-active:link,
+    .navbar-submenu .navbar-menu-item-active:visited {
+	background-color: #414141;
+	background-image: none;
+	color: #F4BB15;
+    }
+
+    .navbar-menu-btn:link {
+	display: none;
+    }
+}
+
+/* Bits adapted from components.scm.  */
+
+#visible-dropdown:checked ~ #navbar-submenu {
+    min-width: 150px;
+    width: max-content;
+
+    /* reset to initial values: */
+    height: auto;
+    overflow: visible;
+}
+
+label[for=all-dropdowns-hidden] {
+    display: none;
+}
+
+#visible-dropdown:checked ~ label[for=visible-dropdown] {
+    display: none;
+}
+
+/* Fonts.  */
+
+@font-face {
+    font-family: 'Fira Sans';
+    src: url('../fonts/FiraSans-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+/* In title and node titles, use Fira Sans as it is more pleasant and
+   more compact than Helvetica.  */
+.settitle, .top, .chapter, .section, .subsection, .subsubsection {
+    font-family: Fira Sans, sans;
+    font-weight: bold;
+}
+
+/* Texinfo footnotes are in a "footnote" <div> but each of them is
+   wrapped in <h5> (go figure).  Have them use a regular font instead
+   of bold.  */
+.footnote > h5 {
+    font-weight: normal;
+    font-size: 0.9em;
+}

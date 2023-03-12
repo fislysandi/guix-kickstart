@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2019, 2022 Ricardo Wurmus
+
+Copyright (C) 2019 Efraim Flashner
+
+Copyright (C) 2019 Pierre Neidhardt
+
+Copyright (C) 2020 Oleg Pykhalov
+
+Copyright (C) 2020 Matthew Brooks
+
+Copyright (C) 2020 Marcin Karpezo
+
+Copyright (C) 2020 Brice Waegeneire
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020 Christine Lemmer-Webber
+
+Copyright (C) 2021 Joshua Branson
+
+Copyright (C) 2022 Maxim Cournoyer
+
+Copyright (C) 2023 Ludovic Courtès
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Cluster Network Access (GNU Guix Cookbook)</title>
+
+<meta name="description" content="Cluster Network Access (GNU Guix Cookbook)" />
+<meta name="keywords" content="Cluster Network Access (GNU Guix Cookbook)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Installing-Guix-on-a-Cluster.html" rel="up" title="Installing Guix on a Cluster" />
+<link href="Cluster-Disk-Usage.html" rel="next" title="Cluster Disk Usage" />
+<link href="Setting-Up-Compute-Nodes.html" rel="prev" title="Setting Up Compute Nodes" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/en/cookbook/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/sk/html_node">Slovenský</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-cookbook/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/en/cookbook/"></a></header>
+<span id="Cluster-Network-Access"></span><div class="header">
+<p>
+Next: <a href="Cluster-Disk-Usage.html" accesskey="n" rel="next">Cluster Disk Usage</a>, Previous: <a href="Setting-Up-Compute-Nodes.html" accesskey="p" rel="prev">Setting Up Compute Nodes</a>, Up: <a href="Installing-Guix-on-a-Cluster.html" accesskey="u" rel="up">Installing Guix on a Cluster</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Network-Access"></span><h3 class="section">7.3 Network Access</h3>
+
+<p>Guix requires network access to download source code and pre-built
+binaries.  The good news is that only the head node needs that since
+compute nodes simply delegate to it.
+</p>
+<p>It is customary for cluster nodes to have access at best to a
+<em>white list</em> of hosts.  Our head node needs at least
+<code>ci.guix.gnu.org</code> in this white list since this is where it gets
+pre-built binaries from by default, for all the packages that are in
+Guix proper.
+</p>
+<p>Incidentally, <code>ci.guix.gnu.org</code> also serves as a
+<em>content-addressed mirror</em> of the source code of those packages.
+Consequently, it is sufficient to have <em>only</em>
+<code>ci.guix.gnu.org</code> in that white list.
+</p>
+<p>Software packages maintained in a separate repository such as one of the
+various <a href="https://hpc.guix.info/channels">HPC channels</a> are of
+course unavailable from <code>ci.guix.gnu.org</code>.  For these packages, you
+may want to extend the white list such that source and pre-built
+binaries (assuming this-party servers provide binaries for these
+packages) can be downloaded.  As a last resort, users can always
+download source on their workstation and add it to the cluster&rsquo;s
+<samp>/gnu/store</samp>, like this:
+</p>
+<pre class="verbatim">GUIX_DAEMON_SOCKET=ssh://compute-node.example.org \
+  guix download http://starpu.gforge.inria.fr/files/starpu-1.2.3/starpu-1.2.3.tar.gz
+</pre>
+<p>The above command downloads <code>starpu-1.2.3.tar.gz</code> <em>and</em> sends
+it to the cluster&rsquo;s <code>guix-daemon</code> instance over SSH.
+</p>
+<p>Air-gapped clusters require more work.  At the moment, our suggestion
+would be to download all the necessary source code on a workstation
+running Guix.  For instance, using the <samp>--sources</samp> option of
+<code>guix build</code> (see <a href="https://guix.gnu.org/manual/en/html_node/Invoking-guix-build.html#Invoking-guix-build">Invoking guix build</a> in <cite>GNU Guix
+Reference Manual</cite>), the example below downloads all the source code the
+<code>openmpi</code> package depends on:
+</p>
+<div class="example">
+<pre class="example">$ guix build --sources=transitive openmpi
+
+&hellip;
+
+/gnu/store/xc17sm60fb8nxadc4qy0c7rqph499z8s-openmpi-1.10.7.tar.bz2
+/gnu/store/s67jx92lpipy2nfj5cz818xv430n4b7w-gcc-5.4.0.tar.xz
+/gnu/store/npw9qh8a46lrxiwh9xwk0wpi3jlzmjnh-gmp-6.0.0a.tar.xz
+/gnu/store/hcz0f4wkdbsvsdky3c0vdvcawhdkyldb-mpfr-3.1.5.tar.xz
+/gnu/store/y9akh452n3p4w2v631nj0injx7y0d68x-mpc-1.0.3.tar.gz
+/gnu/store/6g5c35q8avfnzs3v14dzl54cmrvddjm2-glibc-2.25.tar.xz
+/gnu/store/p9k48dk3dvvk7gads7fk30xc2pxsd66z-hwloc-1.11.8.tar.bz2
+/gnu/store/cry9lqidwfrfmgl0x389cs3syr15p13q-gcc-5.4.0.tar.xz
+/gnu/store/7ak0v3rzpqm2c5q1mp3v7cj0rxz0qakf-libfabric-1.4.1.tar.bz2
+/gnu/store/vh8syjrsilnbfcf582qhmvpg1v3rampf-rdma-core-14.tar.gz
+…
+</pre></div>
+
+<p>(In case you&rsquo;re wondering, that&rsquo;s more than 320&nbsp;MiB of
+<em>compressed</em> source code.)
+</p>
+<p>We can then make a big archive containing all of this (see <a href="https://guix.gnu.org/manual/en/html_node/Invoking-guix-archive.html#Invoking-guix-archive">Invoking
+guix archive</a> in <cite>GNU Guix Reference Manual</cite>):
+</p>
+<pre class="verbatim">$ guix archive --export \
+    `guix build --sources=transitive openmpi` \
+    &gt; openmpi-source-code.nar
+</pre>
+<p>&hellip; and we can eventually transfer that archive to the cluster on
+removable storage and unpack it there:
+</p>
+<pre class="verbatim">$ guix archive --import &lt; openmpi-source-code.nar
+</pre>
+<p>This process has to be repeated every time new source code needs to be
+brought to the cluster.
+</p>
+<p>As we write this, the research institutes involved in Guix-HPC do not
+have air-gapped clusters though. If you have experience with such
+setups, we would like to hear feedback and suggestions.
+</p>
+<hr />
+<div class="header">
+<p>
+Next: <a href="Cluster-Disk-Usage.html" accesskey="n" rel="next">Cluster Disk Usage</a>, Previous: <a href="Setting-Up-Compute-Nodes.html" accesskey="p" rel="prev">Setting Up Compute Nodes</a>, Up: <a href="Installing-Guix-on-a-Cluster.html" accesskey="u" rel="up">Installing Guix on a Cluster</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

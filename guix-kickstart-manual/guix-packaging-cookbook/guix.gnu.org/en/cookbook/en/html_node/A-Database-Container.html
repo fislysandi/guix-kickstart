@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2019, 2022 Ricardo Wurmus
+
+Copyright (C) 2019 Efraim Flashner
+
+Copyright (C) 2019 Pierre Neidhardt
+
+Copyright (C) 2020 Oleg Pykhalov
+
+Copyright (C) 2020 Matthew Brooks
+
+Copyright (C) 2020 Marcin Karpezo
+
+Copyright (C) 2020 Brice Waegeneire
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020 Christine Lemmer-Webber
+
+Copyright (C) 2021 Joshua Branson
+
+Copyright (C) 2022 Maxim Cournoyer
+
+Copyright (C) 2023 Ludovic Courtès
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>A Database Container (GNU Guix Cookbook)</title>
+
+<meta name="description" content="A Database Container (GNU Guix Cookbook)" />
+<meta name="keywords" content="A Database Container (GNU Guix Cookbook)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Guix-System-Containers.html" rel="up" title="Guix System Containers" />
+<link href="Container-Networking.html" rel="next" title="Container Networking" />
+<link href="Guix-System-Containers.html" rel="prev" title="Guix System Containers" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/en/cookbook/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/sk/html_node">Slovenský</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-cookbook/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/en/cookbook/"></a></header>
+<span id="A-Database-Container"></span><div class="header">
+<p>
+Next: <a href="Container-Networking.html" accesskey="n" rel="next">Container Networking</a>, Up: <a href="Guix-System-Containers.html" accesskey="u" rel="up">Guix System Containers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="A-Database-Container-1"></span><h4 class="subsection">4.2.1 A Database Container</h4>
+
+<p>A good example might be a PostgreSQL database server.  Much of the
+complexity of setting up such a database server is encapsulated in this
+deceptively short service declaration:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Service-Reference.html#index-service">service</a> <span class="syntax-symbol">postgresql-service-type</span>
+         <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Database-Services.html#index-postgresql_002dconfiguration">postgresql-configuration</a>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">postgresql</span> <span class="syntax-symbol">postgresql-14</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>A complete operating system declaration for use with a Guix System
+container would look something like this:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-use_002dmodules">use-modules</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span></span>)</span></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">use-package-modules</span> <span class="syntax-symbol">databases</span></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">use-service-modules</span> <span class="syntax-symbol">databases</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/operating_002dsystem-Reference.html#index-operating_002dsystem-1">operating-system</a>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">host-name</span> <span class="syntax-string">"container"</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">timezone</span> <span class="syntax-string">"Europe/Berlin"</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">file-systems</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Pairs.html#index-cons">cons</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/File-Systems.html#index-file_002dsystem">file-system</a>
+                        <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">device</span> <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/File-Systems.html#index-file_002dsystem_002dlabel-1">file-system-label</a> <span class="syntax-string">"does-not-matter"</span></span>)</span></span>)</span>
+                        <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">mount-point</span> <span class="syntax-string">"/"</span></span>)</span>
+                        <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">type</span> <span class="syntax-string">"ext4"</span></span>)</span></span>)</span>
+                      <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/File-Systems.html#index-_0025base_002dfile_002dsystems">%base-file-systems</a></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">bootloader</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Bootloader-Configuration.html#index-bootloader_002dconfiguration">bootloader-configuration</a>
+               <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">bootloader</span> <span class="syntax-symbol">grub-bootloader</span></span>)</span>
+               <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">targets</span> <span class="syntax-symbol">'</span><span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-string">"/dev/sdX"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">services</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-cons_002a">cons*</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Service-Reference.html#index-service">service</a> <span class="syntax-symbol">postgresql-service-type</span>
+                   <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Database-Services.html#index-postgresql_002dconfiguration">postgresql-configuration</a>
+                    <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">postgresql</span> <span class="syntax-symbol">postgresql-14</span></span>)</span>
+                    <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">config-file</span>
+                     <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Database-Services.html#index-postgresql_002dconfig_002dfile">postgresql-config-file</a>
+                      <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-symbol">log-destination</span> <span class="syntax-string">"stderr"</span></span>)</span>
+                      <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-symbol">hba-file</span>
+                       <span class="syntax-paren8">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/G_002dExpressions.html#index-plain_002dfile">plain-file</a> <span class="syntax-string">"pg_hba.conf"</span>
+                                   <span class="syntax-string">"\
+local	all	all			trust
+host	all	all	10.0.0.1/32 	trust"</span></span>)</span></span>)</span>
+                      <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-symbol">extra-config</span>
+                       <span class="syntax-symbol">'</span><span class="syntax-paren8">(<span class="syntax-symbol"><span class="syntax-paren9">(<span class="syntax-symbol"><span class="syntax-string">"listen_addresses"</span> <span class="syntax-string">"*"</span></span>)</span>
+                         <span class="syntax-paren9">(<span class="syntax-symbol"><span class="syntax-string">"log_directory"</span>    <span class="syntax-string">"/var/log/postgresql"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+          <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Database-Services.html#index-postgresql_002drole_002dservice_002dtype">postgresql-role-service-type</a>
+                   <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Database-Services.html#index-postgresql_002drole_002dconfiguration">postgresql-role-configuration</a>
+                    <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">roles</span>
+                     <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren7">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Database-Services.html#index-postgresql_002drole">postgresql-role</a>
+                            <span class="syntax-paren8">(<span class="syntax-symbol"><span class="syntax-symbol">name</span> <span class="syntax-string">"test"</span></span>)</span>
+                            <span class="syntax-paren8">(<span class="syntax-symbol"><span class="syntax-symbol">create-database?</span> <span class="syntax-symbol">#t</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+          <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Base-Services.html#index-_0025base_002dservices-1">%base-services</a></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>With <code>postgresql-role-service-type</code> we define a role &ldquo;test&rdquo; and
+create a matching database, so that we can test right away without any
+further manual setup.  The <code>postgresql-config-file</code> settings allow
+a client from IP address 10.0.0.1 to connect without requiring
+authentication&mdash;a bad idea in production systems, but convenient for
+this example.
+</p>
+<p>Let&rsquo;s build a script that will launch an instance of this Guix System as
+a container.  Write the <code>operating-system</code> declaration above to a
+file <samp>os.scm</samp> and then use <code>guix system container</code> to build
+the launcher.  (see <a href="https://guix.gnu.org/manual/en/html_node/Invoking-guix-system.html#Invoking-guix-system">Invoking guix system</a> in <cite>GNU Guix Reference
+Manual</cite>).
+</p>
+<div class="example">
+<pre class="example">$ guix system container os.scm
+The following derivations will be built:
+  /gnu/store/&hellip;-run-container.drv
+  &hellip;
+building /gnu/store/&hellip;-run-container.drv...
+/gnu/store/&hellip;-run-container
+</pre></div>
+
+<p>Now that we have a launcher script we can run it to spawn the new system
+with a running PostgreSQL service.  Note that due to some as yet
+unresolved limitations we need to run the launcher as the root user, for
+example with <code>sudo</code>.
+</p>
+<div class="example">
+<pre class="example">$ sudo /gnu/store/&hellip;-run-container
+system container is running as PID 5983
+&hellip;
+</pre></div>
+
+<p>Background the process with <tt class="key">Ctrl-z</tt> followed by <code>bg</code>.  Note
+the process ID in the output; we will need it to connect to the
+container later.  You know what?  Let&rsquo;s try attaching to the container
+right now.  We will use <code>nsenter</code>, a tool provided by the
+<code>util-linux</code> package:
+</p>
+<div class="example">
+<pre class="example">$ guix shell util-linux
+$ sudo nsenter -a -t 5983
+root@container /# pgrep -a postgres
+49 /gnu/store/&hellip;-postgresql-14.4/bin/postgres -D /var/lib/postgresql/data --config-file=/gnu/store/&hellip;-postgresql.conf -p 5432
+51 postgres: checkpointer
+52 postgres: background writer
+53 postgres: walwriter
+54 postgres: autovacuum launcher
+55 postgres: stats collector
+56 postgres: logical replication launcher
+root@container /# exit
+</pre></div>
+
+<p>The PostgreSQL service is running in the container!
+</p>
+
+<hr />
+<div class="header">
+<p>
+Next: <a href="Container-Networking.html" accesskey="n" rel="next">Container Networking</a>, Up: <a href="Guix-System-Containers.html" accesskey="u" rel="up">Guix System Containers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

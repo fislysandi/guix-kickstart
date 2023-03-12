@@ -1,0 +1,323 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2019, 2022 Ricardo Wurmus
+
+Copyright (C) 2019 Efraim Flashner
+
+Copyright (C) 2019 Pierre Neidhardt
+
+Copyright (C) 2020 Oleg Pykhalov
+
+Copyright (C) 2020 Matthew Brooks
+
+Copyright (C) 2020 Marcin Karpezo
+
+Copyright (C) 2020 Brice Waegeneire
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020 Christine Lemmer-Webber
+
+Copyright (C) 2021 Joshua Branson
+
+Copyright (C) 2022 Maxim Cournoyer
+
+Copyright (C) 2023 Ludovic Courtès
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Customizing the Kernel (GNU Guix Cookbook)</title>
+
+<meta name="description" content="Customizing the Kernel (GNU Guix Cookbook)" />
+<meta name="keywords" content="Customizing the Kernel (GNU Guix Cookbook)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="System-Configuration.html" rel="up" title="System Configuration" />
+<link href="Guix-System-Image-API.html" rel="next" title="Guix System Image API" />
+<link href="Auto_002dLogin-to-a-Specific-TTY.html" rel="prev" title="Auto-Login to a Specific TTY" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/en/cookbook/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/sk/html_node">Slovenský</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-cookbook/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/en/cookbook/"></a></header>
+<span id="Customizing-the-Kernel"></span><div class="header">
+<p>
+Next: <a href="Guix-System-Image-API.html" accesskey="n" rel="next">Guix System Image API</a>, Previous: <a href="Auto_002dLogin-to-a-Specific-TTY.html" accesskey="p" rel="prev">Auto-Login to a Specific TTY</a>, Up: <a href="System-Configuration.html" accesskey="u" rel="up">System Configuration</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Customizing-the-Kernel-1"></span><h3 class="section">3.2 Customizing the Kernel</h3>
+
+<p>Guix is, at its core, a source based distribution with substitutes
+(see <a href="https://guix.gnu.org/manual/en/html_node/Substitutes.html#Substitutes">Substitutes</a> in <cite>GNU Guix Reference Manual</cite>), and as such building
+packages from their source code is an expected part of regular package
+installations and upgrades.  Given this starting point, it makes sense that
+efforts are made to reduce the amount of time spent compiling packages, and
+recent changes and upgrades to the building and distribution of substitutes
+continues to be a topic of discussion within Guix.
+</p>
+<p>The kernel, while not requiring an overabundance of RAM to build, does take a
+rather long time on an average machine.  The official kernel configuration, as
+is the case with many GNU/Linux distributions, errs on the side of
+inclusiveness, and this is really what causes the build to take such a long
+time when the kernel is built from source.
+</p>
+<p>The Linux kernel, however, can also just be described as a regular old
+package, and as such can be customized just like any other package.  The
+procedure is a little bit different, although this is primarily due to the
+nature of how the package definition is written.
+</p>
+<p>The <code>linux-libre</code> kernel package definition is actually a procedure which
+creates a package.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define*</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">make-linux-libre*</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Build-Config.html#index-version">version</a> <span class="syntax-symbol">gnu-revision</span> <span class="syntax-symbol">source</span> <span class="syntax-symbol">supported-systems</span>
+                            <span class="syntax-keyword">#:key</span>
+                            <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">extra-version</span> <span class="syntax-symbol">#f</span></span>)</span>
+                            <span class="syntax-comment">;; A function that takes an arch and a variant.
+</span>                            <span class="syntax-comment">;; See kernel-config for an example.
+</span>                            <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">configuration-file</span> <span class="syntax-symbol">#f</span></span>)</span>
+                            <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">defconfig</span> <span class="syntax-string">"defconfig"</span></span>)</span>
+                            <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">extra-options</span> <span class="syntax-symbol">%default-extra-linux-options</span></span>)</span></span>)</span>
+  <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Syntax-Rules.html#index-_002e_002e_002e">...</a></span>)</span>
+</pre></div>
+
+<p>The current <code>linux-libre</code> package is for the 5.15.x series, and is
+declared like this:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define-public</span> <span class="syntax-symbol">linux-libre-5.15</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">make-linux-libre*</span> <span class="syntax-symbol">linux-libre-5.15-version</span>
+                     <span class="syntax-symbol">linux-libre-5.15-gnu-revision</span>
+                     <span class="syntax-symbol">linux-libre-5.15-source</span>
+                     <span class="syntax-symbol">'</span><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"x86_64-linux"</span> <span class="syntax-string">"i686-linux"</span> <span class="syntax-string">"armhf-linux"</span> <span class="syntax-string">"aarch64-linux"</span> <span class="syntax-string">"riscv64-linux"</span></span>)</span>
+                     <span class="syntax-keyword">#:configuration-file</span> <span class="syntax-symbol">kernel-config</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>Any keys which are not assigned values inherit their default value from the
+<code>make-linux-libre</code> definition.  When comparing the two snippets above,
+notice the code comment that refers to <code>#:configuration-file</code>.  Because of
+this, it is not actually easy to include a custom kernel configuration from the
+definition, but don&rsquo;t worry, there are other ways to work with what we do have.
+</p>
+<p>There are two ways to create a kernel with a custom kernel configuration.  The
+first is to provide a standard <samp>.config</samp> file during the build process by
+including an actual <samp>.config</samp> file as a native input to our custom
+kernel.  The following is a snippet from the custom <code>'configure</code> phase of
+the <code>make-linux-libre</code> package definition:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">let</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Using-Guix-Interactively.html#index-build">build</a>  <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Retrieving-Alist-Entries.html#index-assoc_002dref">assoc-ref</a> <span class="syntax-symbol">%standard-phases</span> <span class="syntax-symbol">'build</span></span>)</span></span>)</span>
+      <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">config</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Retrieving-Alist-Entries.html#index-assoc_002dref">assoc-ref</a> <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-special">or</span> <span class="syntax-symbol">native-inputs</span> <span class="syntax-symbol">inputs</span></span>)</span> <span class="syntax-string">"kconfig"</span></span>)</span></span>)</span></span>)</span>
+
+  <span class="syntax-comment">;; Use a custom kernel configuration file or a default
+</span>  <span class="syntax-comment">;; configuration file.
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-special">if</span> <span class="syntax-symbol">config</span>
+      <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-special">begin</span>
+        <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/File-System.html#index-copy_002dfile">copy-file</a> <span class="syntax-symbol">config</span> <span class="syntax-string">".config"</span></span>)</span>
+        <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/File-System.html#index-chmod">chmod</a> <span class="syntax-string">".config"</span> <span class="syntax-symbol">#o666</span></span>)</span></span>)</span>
+      <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Build-Utilities.html#index-invoke">invoke</a> <span class="syntax-string">"make"</span> <span class="syntax-symbol">,defconfig</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>Below is a sample kernel package.  The <code>linux-libre</code> package is nothing
+special and can be inherited from and have its fields overridden like any
+other package:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define-public</span> <span class="syntax-symbol">linux-libre/E2140</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/package-Reference.html#index-package">package</a>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">inherit</span> <span class="syntax-symbol">linux-libre</span></span>)</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">native-inputs</span>
+     <span class="syntax-symbol">`</span><span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-string">"kconfig"</span> <span class="syntax-symbol">,</span><span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/G_002dExpressions.html#index-local_002dfile">local-file</a> <span class="syntax-string">"E2140.config"</span></span>)</span></span>)</span>
+      <span class="syntax-symbol">,@</span><span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d1-Association-Lists.html#index-alist_002ddelete">alist-delete</a> <span class="syntax-string">"kconfig"</span>
+                      <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">package-native-inputs</span> <span class="syntax-symbol">linux-libre</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>In the same directory as the file defining <code>linux-libre-E2140</code> is a file
+named <samp>E2140.config</samp>, which is an actual kernel configuration file.  The
+<code>defconfig</code> keyword of <code>make-linux-libre</code> is left blank here, so the
+only kernel configuration in the package is the one which was included in the
+<code>native-inputs</code> field.
+</p>
+<p>The second way to create a custom kernel is to pass a new value to the
+<code>extra-options</code> keyword of the <code>make-linux-libre</code> procedure.  The
+<code>extra-options</code> keyword works with another function defined right below
+it:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <span class="syntax-symbol">%default-extra-linux-options</span>
+  <span class="syntax-symbol">`</span><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-comment">;; https://lists.gnu.org/archive/html/guix-devel/2014-04/msg00039.html
+</span>   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"CONFIG_DEVPTS_MULTIPLE_INSTANCES"</span> <span class="syntax-symbol">.</span> <span class="syntax-symbol">#true</span></span>)</span>
+   <span class="syntax-comment">;; Modules required for initrd:
+</span>   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"CONFIG_NET_9P"</span> <span class="syntax-symbol">.</span> <span class="syntax-symbol">m</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"CONFIG_NET_9P_VIRTIO"</span> <span class="syntax-symbol">.</span> <span class="syntax-symbol">m</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"CONFIG_VIRTIO_BLK"</span> <span class="syntax-symbol">.</span> <span class="syntax-symbol">m</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"CONFIG_VIRTIO_NET"</span> <span class="syntax-symbol">.</span> <span class="syntax-symbol">m</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"CONFIG_VIRTIO_PCI"</span> <span class="syntax-symbol">.</span> <span class="syntax-symbol">m</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"CONFIG_VIRTIO_BALLOON"</span> <span class="syntax-symbol">.</span> <span class="syntax-symbol">m</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"CONFIG_VIRTIO_MMIO"</span> <span class="syntax-symbol">.</span> <span class="syntax-symbol">m</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"CONFIG_FUSE_FS"</span> <span class="syntax-symbol">.</span> <span class="syntax-symbol">m</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"CONFIG_CIFS"</span> <span class="syntax-symbol">.</span> <span class="syntax-symbol">m</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"CONFIG_9P_FS"</span> <span class="syntax-symbol">.</span> <span class="syntax-symbol">m</span></span>)</span></span>)</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">config-&gt;string</span> <span class="syntax-symbol">options</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/String-Constructors.html#index-string_002djoin">string-join</a> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-special">map</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Pattern-Matching.html#index-match_002dlambda">match-lambda</a>
+                      <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d37.html#index-option-1">option</a> <span class="syntax-symbol">.</span> <span class="syntax-symbol">'m</span></span>)</span>
+                       <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d37.html#index-option-1">option</a> <span class="syntax-string">"=m"</span></span>)</span></span>)</span>
+                      <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d37.html#index-option-1">option</a> <span class="syntax-symbol">.</span> <span class="syntax-symbol">#true</span></span>)</span>
+                       <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d37.html#index-option-1">option</a> <span class="syntax-string">"=y"</span></span>)</span></span>)</span>
+                      <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d37.html#index-option-1">option</a> <span class="syntax-symbol">.</span> <span class="syntax-symbol">#false</span></span>)</span>
+                       <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d37.html#index-option-1">option</a> <span class="syntax-string">"=n"</span></span>)</span></span>)</span></span>)</span>
+                    <span class="syntax-symbol">options</span></span>)</span>
+               <span class="syntax-string">"\n"</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>And in the custom configure script from the &lsquo;make-linux-libre&lsquo; package:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-comment">;; Appending works even when the option wasn't in the
+</span><span class="syntax-comment">;; file.  The last one prevails if duplicated.
+</span><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">let</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">port</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/File-Ports.html#index-open_002dfile">open-file</a> <span class="syntax-string">".config"</span> <span class="syntax-string">"a"</span></span>)</span></span>)</span>
+      <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">extra-configuration</span> <span class="syntax-symbol">,</span><span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">config-&gt;string</span> <span class="syntax-symbol">extra-options</span></span>)</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/GOOPS-Object-Miscellany.html#index-display-3">display</a> <span class="syntax-symbol">extra-configuration</span> <span class="syntax-symbol">port</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Ports.html#index-close_002dport">close-port</a> <span class="syntax-symbol">port</span></span>)</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Build-Utilities.html#index-invoke">invoke</a> <span class="syntax-string">"make"</span> <span class="syntax-string">"oldconfig"</span></span>)</span>
+</pre></div>
+
+<p>So by not providing a configuration-file the <samp>.config</samp> starts blank, and
+then we write into it the collection of flags that we want.  Here&rsquo;s another
+custom kernel:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <span class="syntax-symbol">%macbook41-full-config</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Append_002fReverse.html#index-append">append</a> <span class="syntax-symbol">%macbook41-config-options</span>
+          <span class="syntax-symbol">%file-systems</span>
+          <span class="syntax-symbol">%efi-support</span>
+          <span class="syntax-symbol">%emulation</span>
+          <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-_0040_0040">@@</a> <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">linux</span></span>)</span> <span class="syntax-symbol">%default-extra-linux-options</span></span>)</span></span>)</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define-public</span> <span class="syntax-symbol">linux-libre-macbook41</span>
+  <span class="syntax-comment">;; XXX: Access the internal 'make-linux-libre*' procedure, which is
+</span>  <span class="syntax-comment">;; private and unexported, and is liable to change in the future.
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-_0040_0040">@@</a> <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">linux</span></span>)</span> <span class="syntax-symbol">make-linux-libre*</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-_0040_0040">@@</a> <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">linux</span></span>)</span> <span class="syntax-symbol">linux-libre-version</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-_0040_0040">@@</a> <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">linux</span></span>)</span> <span class="syntax-symbol">linux-libre-gnu-revision</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-_0040_0040">@@</a> <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">linux</span></span>)</span> <span class="syntax-symbol">linux-libre-source</span></span>)</span>
+   <span class="syntax-symbol">'</span><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"x86_64-linux"</span></span>)</span>
+   <span class="syntax-keyword">#:extra-version</span> <span class="syntax-string">"macbook41"</span>
+   <span class="syntax-keyword">#:extra-options</span> <span class="syntax-symbol">%macbook41-config-options</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>In the above example <code>%file-systems</code> is a collection of flags enabling
+different file system support, <code>%efi-support</code> enables EFI support and
+<code>%emulation</code> enables a x86_64-linux machine to act in 32-bit mode also.
+<code>%default-extra-linux-options</code> are the ones quoted above, which had to be
+added in since they were replaced in the <code>extra-options</code> keyword.
+</p>
+<p>This all sounds like it should be doable, but how does one even know which
+modules are required for a particular system?  Two places that can be helpful
+in trying to answer this question is the
+<a href="https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Kernel">Gentoo
+Handbook</a> and the
+<a href="https://www.kernel.org/doc/html/latest/admin-guide/README.html?highlight=localmodconfig">documentation from the kernel itself</a>.  From the kernel documentation, it
+seems that <code>make localmodconfig</code> is the command we want.
+</p>
+<p>In order to actually run <code>make localmodconfig</code> we first need to get and
+unpack the kernel source code:
+</p>
+<div class="example">
+<pre class="example">tar xf $(guix build linux-libre --source)
+</pre></div>
+
+<p>Once inside the directory containing the source code run <code>touch .config</code>
+to create an initial, empty <samp>.config</samp> to start with.  <code>make
+localmodconfig</code> works by seeing what you already have in <samp>.config</samp> and
+letting you know what you&rsquo;re missing.  If the file is blank then you&rsquo;re
+missing everything.  The next step is to run:
+</p>
+<div class="example">
+<pre class="example">guix shell -D linux-libre -- make localmodconfig
+</pre></div>
+
+<p>and note the output.  Do note that the <samp>.config</samp> file is still empty.
+The output generally contains two types of warnings.  The first start with
+"WARNING" and can actually be ignored in our case.  The second read:
+</p>
+<div class="example">
+<pre class="example">module pcspkr did not have configs CONFIG_INPUT_PCSPKR
+</pre></div>
+
+<p>For each of these lines, copy the <code>CONFIG_XXXX_XXXX</code> portion into the
+<samp>.config</samp> in the directory, and append <code>=m</code>, so in the end it looks
+like this:
+</p>
+<div class="example">
+<pre class="example">CONFIG_INPUT_PCSPKR=m
+CONFIG_VIRTIO=m
+</pre></div>
+
+<p>After copying all the configuration options, run <code>make localmodconfig</code>
+again to make sure that you don&rsquo;t have any output starting with &ldquo;module&rdquo;.
+After all of these machine specific modules there are a couple more left that
+are also needed.  <code>CONFIG_MODULES</code> is necessary so that you can build and
+load modules separately and not have everything built into the kernel.
+<code>CONFIG_BLK_DEV_SD</code> is required for reading from hard drives.  It is
+possible that there are other modules which you will need.
+</p>
+<p>This post does not aim to be a guide to configuring your own kernel however,
+so if you do decide to build a custom kernel you&rsquo;ll have to seek out other
+guides to create a kernel which is just right for your needs.
+</p>
+<p>The second way to setup the kernel configuration makes more use of Guix&rsquo;s
+features and allows you to share configuration segments between different
+kernels.  For example, all machines using EFI to boot have a number of EFI
+configuration flags that they need.  It is likely that all the kernels will
+share a list of file systems to support.  By using variables it is easier to
+see at a glance what features are enabled and to make sure you don&rsquo;t have
+features in one kernel but missing in another.
+</p>
+<p>Left undiscussed however, is Guix&rsquo;s initrd and its customization.  It is
+likely that you&rsquo;ll need to modify the initrd on a machine using a custom
+kernel, since certain modules which are expected to be built may not be
+available for inclusion into the initrd.
+</p>
+<hr />
+<div class="header">
+<p>
+Next: <a href="Guix-System-Image-API.html" accesskey="n" rel="next">Guix System Image API</a>, Previous: <a href="Auto_002dLogin-to-a-Specific-TTY.html" accesskey="p" rel="prev">Auto-Login to a Specific TTY</a>, Up: <a href="System-Configuration.html" accesskey="u" rel="up">System Configuration</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,495 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2019, 2022 Ricardo Wurmus
+
+Copyright (C) 2019 Efraim Flashner
+
+Copyright (C) 2019 Pierre Neidhardt
+
+Copyright (C) 2020 Oleg Pykhalov
+
+Copyright (C) 2020 Matthew Brooks
+
+Copyright (C) 2020 Marcin Karpezo
+
+Copyright (C) 2020 Brice Waegeneire
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020 Christine Lemmer-Webber
+
+Copyright (C) 2021 Joshua Branson
+
+Copyright (C) 2022 Maxim Cournoyer
+
+Copyright (C) 2023 Ludovic Courtès
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Extended example (GNU Guix Cookbook)</title>
+
+<meta name="description" content="Extended example (GNU Guix Cookbook)" />
+<meta name="keywords" content="Extended example (GNU Guix Cookbook)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Packaging-Tutorial.html" rel="up" title="Packaging Tutorial" />
+<link href="Other-build-systems.html" rel="next" title="Other build systems" />
+<link href="Direct-checkout-hacking.html" rel="prev" title="Direct checkout hacking" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/en/cookbook/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/sk/html_node">Slovenský</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-cookbook/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/en/cookbook/"></a></header>
+<span id="Extended-example"></span><div class="header">
+<p>
+Next: <a href="Other-build-systems.html" accesskey="n" rel="next">Other build systems</a>, Previous: <a href="Setup.html" accesskey="p" rel="prev">Setup</a>, Up: <a href="Packaging-Tutorial.html" accesskey="u" rel="up">Packaging Tutorial</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Extended-example-1"></span><h4 class="subsection">2.1.3 Extended example</h4>
+
+<p>The above &ldquo;Hello World&rdquo; example is as simple as it goes.  Packages can be more
+complex than that and Guix can handle more advanced scenarios.  Let&rsquo;s look at
+another, more sophisticated package (slightly modified from the source):
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define-module</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">version-control</span></span>)</span>
+  <span class="syntax-keyword">#:use-module</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <span class="syntax-symbol">licenses</span></span>)</span> <span class="syntax-keyword">#:prefix</span> <span class="syntax-symbol">license:</span></span>)</span>
+  <span class="syntax-keyword">#:use-module</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <span class="syntax-symbol">utils</span></span>)</span>
+  <span class="syntax-keyword">#:use-module</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <span class="syntax-symbol">packages</span></span>)</span>
+  <span class="syntax-keyword">#:use-module</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <span class="syntax-symbol">git-download</span></span>)</span>
+  <span class="syntax-keyword">#:use-module</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <span class="syntax-symbol">build-system</span> <span class="syntax-symbol">cmake</span></span>)</span>
+  <span class="syntax-keyword">#:use-module</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">ssh</span></span>)</span>
+  <span class="syntax-keyword">#:use-module</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">web</span></span>)</span>
+  <span class="syntax-keyword">#:use-module</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">pkg-config</span></span>)</span>
+  <span class="syntax-keyword">#:use-module</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">python</span></span>)</span>
+  <span class="syntax-keyword">#:use-module</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">compression</span></span>)</span>
+  <span class="syntax-keyword">#:use-module</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span> <span class="syntax-symbol">packages</span> <span class="syntax-symbol">tls</span></span>)</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define-public</span> <span class="syntax-symbol">my-libgit2</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-special">let</span> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">commit</span> <span class="syntax-string">"e98d0a37c93574d2c6107bf7f31140b548c6a7bf"</span></span>)</span>
+        <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">revision</span> <span class="syntax-string">"1"</span></span>)</span></span>)</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/package-Reference.html#index-package">package</a>
+      <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">name</span> <span class="syntax-string">"my-libgit2"</span></span>)</span>
+      <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Build-Config.html#index-version">version</a> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Version-Numbers.html#index-git_002dversion">git-version</a> <span class="syntax-string">"0.26.6"</span> <span class="syntax-symbol">revision</span> <span class="syntax-symbol">commit</span></span>)</span></span>)</span>
+      <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">source</span> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/origin-Reference.html#index-origin">origin</a>
+                <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Method-Definition-Internals.html#index-method">method</a> <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/origin-Reference.html#index-git_002dfetch">git-fetch</a></span>)</span>
+                <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">uri</span> <span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/origin-Reference.html#index-git_002dreference">git-reference</a>
+                      <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-symbol">url</span> <span class="syntax-string">"https://github.com/libgit2/libgit2/"</span></span>)</span>
+                      <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-symbol">commit</span> <span class="syntax-symbol">commit</span></span>)</span></span>)</span></span>)</span>
+                <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">file-name</span> <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">git-file-name</span> <span class="syntax-symbol">name</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Build-Config.html#index-version">version</a></span>)</span></span>)</span>
+                <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">sha256</span>
+                 <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">base32</span>
+                  <span class="syntax-string">"17pjvprmdrx4h6bb1hhc98w9qi6ki7yl57f090n9kbhswxqfs7s3"</span></span>)</span></span>)</span>
+                <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">patches</span> <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">search-patches</span> <span class="syntax-string">"libgit2-mtime-0.patch"</span></span>)</span></span>)</span>
+                <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">modules</span> <span class="syntax-symbol">'</span><span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Using-Guix-Interactively.html#index-build">build</a> <span class="syntax-symbol">utils</span></span>)</span></span>)</span></span>)</span>
+                <span class="syntax-comment">;; Remove bundled software.
+</span>                <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">snippet</span> <span class="syntax-symbol">'</span><span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Build-Utilities.html#index-delete_002dfile_002drecursively">delete-file-recursively</a> <span class="syntax-string">"deps"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+      <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">build-system</span> <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Build-Systems.html#index-cmake_002dbuild_002dsystem">cmake-build-system</a></span>)</span>
+      <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">outputs</span> <span class="syntax-symbol">'</span><span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-string">"out"</span> <span class="syntax-string">"debug"</span></span>)</span></span>)</span>
+      <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">arguments</span>
+       <span class="syntax-symbol">`</span><span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-keyword">#:tests?</span> <span class="syntax-symbol">#true</span>                         <span class="syntax-comment">; Run the test suite (this is the default)
+</span>         <span class="syntax-keyword">#:configure-flags</span> <span class="syntax-symbol">'</span><span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-string">"-DUSE_SHA1DC=ON"</span></span>)</span> <span class="syntax-comment">; SHA-1 collision detection
+</span>         <span class="syntax-keyword">#:phases</span>
+         <span class="syntax-paren5">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Build-Utilities.html#index-modify_002dphases">modify-phases</a> <span class="syntax-symbol">%standard-phases</span>
+           <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">add-after</span> <span class="syntax-symbol">'unpack</span> <span class="syntax-symbol">'fix-hardcoded-paths</span>
+             <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-special">lambda</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Syntax-Rules.html#index-_005f">_</a>
+               <span class="syntax-paren8">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Build-Utilities.html#index-substitute_002a">substitute*</a> <span class="syntax-string">"tests/repo/init.c"</span>
+                 <span class="syntax-paren9">(<span class="syntax-symbol"><span class="syntax-paren10">(<span class="syntax-symbol"><span class="syntax-string">"#!/bin/sh"</span></span>)</span> <span class="syntax-paren10">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-string">"#!"</span> <span class="syntax-paren11">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Build-Utilities.html#index-which">which</a> <span class="syntax-string">"sh"</span></span>)</span></span>)</span></span>)</span></span>)</span>
+               <span class="syntax-paren8">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Build-Utilities.html#index-substitute_002a">substitute*</a> <span class="syntax-string">"tests/clar/fs.h"</span>
+                 <span class="syntax-paren9">(<span class="syntax-symbol"><span class="syntax-paren10">(<span class="syntax-symbol"><span class="syntax-string">"/bin/cp"</span></span>)</span> <span class="syntax-paren10">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Build-Utilities.html#index-which">which</a> <span class="syntax-string">"cp"</span></span>)</span></span>)</span>
+                 <span class="syntax-paren9">(<span class="syntax-symbol"><span class="syntax-paren10">(<span class="syntax-symbol"><span class="syntax-string">"/bin/rm"</span></span>)</span> <span class="syntax-paren10">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Build-Utilities.html#index-which">which</a> <span class="syntax-string">"rm"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+           <span class="syntax-comment">;; Run checks more verbosely.
+</span>           <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">replace</span> <span class="syntax-symbol">'check</span>
+             <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-special">lambda</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Syntax-Rules.html#index-_005f">_</a> <span class="syntax-paren8">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Build-Utilities.html#index-invoke">invoke</a> <span class="syntax-string">"./libgit2_clar"</span> <span class="syntax-string">"-v"</span> <span class="syntax-string">"-Q"</span></span>)</span></span>)</span></span>)</span>
+           <span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-symbol">add-after</span> <span class="syntax-symbol">'unpack</span> <span class="syntax-symbol">'make-files-writable-for-tests</span>
+             <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-special">lambda</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Syntax-Rules.html#index-_005f">_</a> <span class="syntax-paren8">(<span class="syntax-symbol"><span class="syntax-special">for-each</span> <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Build-Utilities.html#index-make_002dfile_002dwritable">make-file-writable</a> <span class="syntax-paren9">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Build-Utilities.html#index-find_002dfiles">find-files</a> <span class="syntax-string">"."</span> <span class="syntax-string">".*"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+      <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">inputs</span>
+       <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-symbol">libssh2</span> <span class="syntax-symbol">http-parser</span> <span class="syntax-symbol">python-wrapper</span></span>)</span></span>)</span>
+      <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">native-inputs</span>
+       <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-symbol">pkg-config</span></span>)</span></span>)</span>
+      <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">propagated-inputs</span>
+       <span class="syntax-comment">;; These two libraries are in 'Requires.private' in libgit2.pc.
+</span>       <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-symbol">openssl</span> <span class="syntax-symbol">zlib</span></span>)</span></span>)</span>
+      <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">home-page</span> <span class="syntax-string">"https://libgit2.github.com/"</span></span>)</span>
+      <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">synopsis</span> <span class="syntax-string">"Library providing Git core methods"</span></span>)</span>
+      <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">description</span>
+       <span class="syntax-string">"Libgit2 is a portable, pure C implementation of the Git core methods
+provided as a re-entrant linkable library with a solid API, allowing you to
+write native speed custom Git applications in any language with bindings."</span></span>)</span>
+      <span class="syntax-comment">;; GPLv2 with linking exception
+</span>      <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">license</span> <span class="syntax-symbol">license:gpl2</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>(In those cases were you only want to tweak a few fields from a package
+definition, you should rely on inheritance instead of copy-pasting everything.
+See below.)
+</p>
+<p>Let&rsquo;s discuss those fields in depth.
+</p>
+<span id="git_002dfetch-method"></span><h4 class="subsubsection">2.1.3.1 <code>git-fetch</code> method</h4>
+
+<p>Unlike the <code>url-fetch</code> method, <code>git-fetch</code> expects a <code>git-reference</code> which takes
+a Git repository and a commit.  The commit can be any Git reference such as
+tags, so if the <code>version</code> is tagged, then it can be used directly.  Sometimes
+the tag is prefixed with a <code>v</code>, in which case you&rsquo;d use <code>(commit (string-append
+"v" version))</code>.
+</p>
+<p>To ensure that the source code from the Git repository is stored in a
+directory with a descriptive name, we use <code>(file-name (git-file-name name
+version))</code>.
+</p>
+<p>The <code>git-version</code> procedure can be used to derive the
+version when packaging programs for a specific commit, following the
+Guix contributor guidelines (see <a href="https://guix.gnu.org/manual/en/html_node/Version-Numbers.html#Version-Numbers">Version Numbers</a> in <cite>GNU Guix
+Reference Manual</cite>).
+</p>
+<p>How does one obtain the <code>sha256</code> hash that&rsquo;s in there, you ask?  By
+invoking <code>guix hash</code> on a checkout of the desired commit, along
+these lines:
+</p>
+<div class="example">
+<pre class="example">git clone https://github.com/libgit2/libgit2/
+cd libgit2
+git checkout v0.26.6
+guix hash -rx .
+</pre></div>
+
+<p><code>guix hash -rx</code> computes a SHA256 hash over the whole directory,
+excluding the <samp>.git</samp> sub-directory (see <a href="https://guix.gnu.org/manual/en/html_node/Invoking-guix-hash.html#Invoking-guix-hash">Invoking guix hash</a> in <cite>GNU Guix Reference Manual</cite>).
+</p>
+<p>In the future, <code>guix download</code> will hopefully be able to do
+these steps for you, just like it does for regular downloads.
+</p>
+<span id="Snippets"></span><h4 class="subsubsection">2.1.3.2 Snippets</h4>
+
+<p>Snippets are quoted (i.e. non-evaluated) Scheme code that are a means of patching
+the source.  They are a Guix-y alternative to the traditional <samp>.patch</samp> files.
+Because of the quote, the code in only evaluated when passed to the Guix daemon
+for building.  There can be as many snippets as needed.
+</p>
+<p>Snippets might need additional Guile modules which can be imported from the
+<code>modules</code> field.
+</p>
+<span id="Inputs"></span><h4 class="subsubsection">2.1.3.3 Inputs</h4>
+
+<p>There are 3 different input types.  In short:
+</p>
+<dl compact="compact">
+<dt>native-inputs</dt>
+<dd><p>Required for building but not runtime &ndash; installing a package
+through a substitute won&rsquo;t install these inputs.
+</p></dd>
+<dt>inputs</dt>
+<dd><p>Installed in the store but not in the profile, as well as being
+present at build time.
+</p></dd>
+<dt>propagated-inputs</dt>
+<dd><p>Installed in the store and in the profile, as well as
+being present at build time.
+</p></dd>
+</dl>
+
+<p>See <a href="https://guix.gnu.org/manual/en/html_node/package-Reference.html#package-Reference">package Reference</a> in <cite>GNU Guix Reference Manual</cite> for more details.
+</p>
+<p>The distinction between the various inputs is important: if a dependency can be
+handled as an <em>input</em> instead of a <em>propagated input</em>, it should be done so, or
+else it &ldquo;pollutes&rdquo; the user profile for no good reason.
+</p>
+<p>For instance, a user installing a graphical program that depends on a
+command line tool might only be interested in the graphical part, so there is no
+need to force the command line tool into the user profile.  The dependency is a
+concern to the package, not to the user.  <em>Inputs</em> make it possible to handle
+dependencies without bugging the user by adding undesired executable files (or
+libraries) to their profile.
+</p>
+<p>Same goes for <em>native-inputs</em>: once the program is installed, build-time
+dependencies can be safely garbage-collected.
+It also matters when a substitute is available, in which case only the <em>inputs</em>
+and <em>propagated inputs</em> will be fetched: the <em>native inputs</em> are not required to
+install a package from a substitute.
+</p>
+<blockquote>
+<p><b>Note:</b> You may see here and there snippets where package inputs are written
+quite differently, like so:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-comment">;; The "old style" for inputs.
+</span><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">inputs</span>
+ <span class="syntax-symbol">`</span><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"libssh2"</span> <span class="syntax-symbol">,libssh2</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"http-parser"</span> <span class="syntax-symbol">,http-parser</span></span>)</span>
+   <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-string">"python"</span> <span class="syntax-symbol">,python-wrapper</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>This is the &ldquo;old style&rdquo;, where each input in the list is explicitly
+given a label (a string).  It is still supported but we recommend using
+the style above instead.  See <a href="https://guix.gnu.org/manual/en/html_node/package-Reference.html#package-Reference">package Reference</a> in <cite>GNU Guix
+Reference Manual</cite>, for more info.
+</p></blockquote>
+
+<span id="Outputs"></span><h4 class="subsubsection">2.1.3.4 Outputs</h4>
+
+<p>Just like how a package can have multiple inputs, it can also produce multiple
+outputs.
+</p>
+<p>Each output corresponds to a separate directory in the store.
+</p>
+<p>The user can choose which output to install; this is useful to save space or
+to avoid polluting the user profile with unwanted executables or libraries.
+</p>
+<p>Output separation is optional.  When the <code>outputs</code> field is left out, the
+default and only output (the complete package) is referred to as <code>"out"</code>.
+</p>
+<p>Typical separate output names include <code>debug</code> and <code>doc</code>.
+</p>
+<p>It&rsquo;s advised to separate outputs only when you&rsquo;ve shown it&rsquo;s worth it: if the
+output size is significant (compare with <code>guix size</code>) or in case the package is
+modular.
+</p>
+<span id="Build-system-arguments"></span><h4 class="subsubsection">2.1.3.5 Build system arguments</h4>
+
+<p>The <code>arguments</code> is a keyword-value list used to configure the build process.
+</p>
+<p>The simplest argument <code>#:tests?</code> can be used to disable the test suite when
+building the package.  This is mostly useful when the package does not feature
+any test suite.  It&rsquo;s strongly recommended to keep the test suite on if there is
+one.
+</p>
+<p>Another  common argument is <code>:make-flags</code>, which specifies a list of flags to
+append when running make, as you would from the command line.  For instance, the
+following flags
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-keyword">#:make-flags</span> <span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-string">"prefix="</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Retrieving-Alist-Entries.html#index-assoc_002dref">assoc-ref</a> <span class="syntax-symbol">%outputs</span> <span class="syntax-string">"out"</span></span>)</span></span>)</span>
+                   <span class="syntax-string">"CC=gcc"</span></span>)</span>
+</pre></div>
+
+<p>translate into
+</p>
+<div class="example">
+<pre class="example">$ make CC=gcc prefix=/gnu/store/...-&lt;out&gt;
+</pre></div>
+
+<p>This sets the C compiler to <code>gcc</code> and the <code>prefix</code> variable (the installation
+directory in Make parlance) to <code>(assoc-ref %outputs "out")</code>, which is a build-stage
+global variable pointing to the destination directory in the store (something like
+<samp>/gnu/store/...-my-libgit2-20180408</samp>).
+</p>
+<p>Similarly, it&rsquo;s possible to set the configure flags:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-keyword">#:configure-flags</span> <span class="syntax-symbol">'</span><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-string">"-DUSE_SHA1DC=ON"</span></span>)</span>
+</pre></div>
+
+<p>The <code>%build-inputs</code> variable is also generated in scope.  It&rsquo;s an association
+table that maps the input names to their store directories.
+</p>
+<p>The <code>phases</code> keyword lists the sequential steps of the build system.  Typically
+phases include <code>unpack</code>, <code>configure</code>, <code>build</code>, <code>install</code> and <code>check</code>.  To know
+more about those phases, you need to work out the appropriate build system
+definition in &lsquo;<samp>$GUIX_CHECKOUT/guix/build/gnu-build-system.scm</samp>&rsquo;:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <span class="syntax-symbol">%standard-phases</span>
+  <span class="syntax-comment">;; Standard build phases, as a list of symbol/procedure pairs.
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-special">let-syntax</span> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">phases</span> <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-special">syntax-rules</span> <span class="syntax-paren5">(<span class="syntax-symbol"></span>)</span>
+                         <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Syntax-Rules.html#index-_005f">_</a> <span class="syntax-symbol">p</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Syntax-Rules.html#index-_002e_002e_002e">...</a></span>)</span> <span class="syntax-symbol">`</span><span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-symbol">p</span> <span class="syntax-symbol">.</span> <span class="syntax-symbol">,p</span></span>)</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Syntax-Rules.html#index-_002e_002e_002e">...</a></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+    <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">phases</span> <span class="syntax-symbol">set-SOURCE-DATE-EPOCH</span> <span class="syntax-symbol">set-paths</span> <span class="syntax-symbol">install-locale</span> <span class="syntax-symbol">unpack</span>
+            <span class="syntax-symbol">bootstrap</span>
+            <span class="syntax-symbol">patch-usr-bin-file</span>
+            <span class="syntax-symbol">patch-source-shebangs</span> <span class="syntax-symbol">configure</span> <span class="syntax-symbol">patch-generated-file-shebangs</span>
+            <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Using-Guix-Interactively.html#index-build">build</a> <span class="syntax-symbol">check</span> <span class="syntax-symbol">install</span>
+            <span class="syntax-symbol">patch-shebangs</span> <span class="syntax-symbol">strip</span>
+            <span class="syntax-symbol">validate-runpath</span>
+            <span class="syntax-symbol">validate-documentation-location</span>
+            <span class="syntax-symbol">delete-info-dir-file</span>
+            <span class="syntax-symbol">patch-dot-desktop-files</span>
+            <span class="syntax-symbol">install-license-files</span>
+            <span class="syntax-symbol">reset-gzip-timestamps</span>
+            <span class="syntax-symbol">compress-documentation</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>Or from the REPL:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Load-Paths.html#index-add_002dto_002dload_002dpath">add-to-load-path</a> <span class="syntax-string">"/path/to/guix/checkout"</span></span>)</span>
+<span class="syntax-symbol">,use</span> <span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Using-Guix-Interactively.html#index-build">build</a> <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Build-Systems.html#index-gnu_002dbuild_002dsystem">gnu-build-system</a></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">map</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/SRFI_002d1-Selectors.html#index-first">first</a> <span class="syntax-symbol">%standard-phases</span></span>)</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">set-SOURCE-DATE-EPOCH</span> <span class="syntax-symbol">set-paths</span> <span class="syntax-symbol">install-locale</span> <span class="syntax-symbol">unpack</span> <span class="syntax-symbol">bootstrap</span> <span class="syntax-symbol">patch-usr-bin-file</span> <span class="syntax-symbol">patch-source-shebangs</span> <span class="syntax-symbol">configure</span> <span class="syntax-symbol">patch-generated-file-shebangs</span> <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Using-Guix-Interactively.html#index-build">build</a> <span class="syntax-symbol">check</span> <span class="syntax-symbol">install</span> <span class="syntax-symbol">patch-shebangs</span> <span class="syntax-symbol">strip</span> <span class="syntax-symbol">validate-runpath</span> <span class="syntax-symbol">validate-documentation-location</span> <span class="syntax-symbol">delete-info-dir-file</span> <span class="syntax-symbol">patch-dot-desktop-files</span> <span class="syntax-symbol">install-license-files</span> <span class="syntax-symbol">reset-gzip-timestamps</span> <span class="syntax-symbol">compress-documentation</span></span>)</span>
+</pre></div>
+
+<p>If you want to know more about what happens during those phases, consult the
+associated procedures.
+</p>
+<p>For instance, as of this writing the definition of <code>unpack</code> for the GNU build
+system is:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define*</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">unpack</span> <span class="syntax-keyword">#:key</span> <span class="syntax-symbol">source</span> <span class="syntax-keyword">#:allow-other-keys</span></span>)</span>
+  <span class="syntax-string">"Unpack SOURCE in the working directory, and change directory within the
+source.  When SOURCE is a directory, copy it in a sub-directory of the current
+working directory."</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-special">if</span> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">file-is-directory?</span> <span class="syntax-symbol">source</span></span>)</span>
+      <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-special">begin</span>
+        <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/File-System.html#index-mkdir">mkdir</a> <span class="syntax-string">"source"</span></span>)</span>
+        <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Processes.html#index-chdir">chdir</a> <span class="syntax-string">"source"</span></span>)</span>
+
+        <span class="syntax-comment">;; Preserve timestamps (set to the Epoch) on the copied tree so that
+</span>        <span class="syntax-comment">;; things work deterministically.
+</span>        <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Build-Utilities.html#index-copy_002drecursively">copy-recursively</a> <span class="syntax-symbol">source</span> <span class="syntax-string">"."</span>
+                          <span class="syntax-keyword">#:keep-mtime?</span> <span class="syntax-symbol">#true</span></span>)</span></span>)</span>
+      <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-special">begin</span>
+        <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-special">if</span> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/String-Searching.html#index-string_002dsuffix_003f">string-suffix?</a> <span class="syntax-string">".zip"</span> <span class="syntax-symbol">source</span></span>)</span>
+            <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Build-Utilities.html#index-invoke">invoke</a> <span class="syntax-string">"unzip"</span> <span class="syntax-symbol">source</span></span>)</span>
+            <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Build-Utilities.html#index-invoke">invoke</a> <span class="syntax-string">"tar"</span> <span class="syntax-string">"xvf"</span> <span class="syntax-symbol">source</span></span>)</span></span>)</span>
+        <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Processes.html#index-chdir">chdir</a> <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">first-subdirectory</span> <span class="syntax-string">"."</span></span>)</span></span>)</span></span>)</span></span>)</span>
+  <span class="syntax-symbol">#true</span></span>)</span>
+</pre></div>
+
+<p>Note the <code>chdir</code> call: it changes the working directory to where the source was
+unpacked.
+Thus every phase following the <code>unpack</code> will use the source as a working
+directory, which is why we can directly work on the source files.
+That is to say, unless a later phase changes the working directory to something
+else.
+</p>
+<p>We modify the list of <code>%standard-phases</code> of the build system with the
+<code>modify-phases</code> macro as per the list of specified modifications, which may have
+the following forms:
+</p>
+<ul>
+<li> <code>(add-before <var>phase</var> <var>new-phase</var> <var>procedure</var>)</code>: Run <var>procedure</var> named <var>new-phase</var> before <var>phase</var>.
+</li><li> <code>(add-after <var>phase</var> <var>new-phase</var> <var>procedure</var>)</code>: Same, but afterwards.
+</li><li> <code>(replace <var>phase</var> <var>procedure</var>)</code>.
+</li><li> <code>(delete <var>phase</var>)</code>.
+</li></ul>
+
+<p>The <var>procedure</var> supports the keyword arguments <code>inputs</code> and <code>outputs</code>.  Each
+input (whether <em>native</em>, <em>propagated</em> or not) and output directory is referenced
+by their name in those variables.  Thus <code>(assoc-ref outputs "out")</code> is the store
+directory of the main output of the package.  A phase procedure may look like
+this:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/lambda_002a-and-define_002a.html#index-lambda_002a">lambda*</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-keyword">#:key</span> <span class="syntax-symbol">inputs</span> <span class="syntax-symbol">outputs</span> <span class="syntax-keyword">#:allow-other-keys</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-special">let</span> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">bash-directory</span> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Retrieving-Alist-Entries.html#index-assoc_002dref">assoc-ref</a> <span class="syntax-symbol">inputs</span> <span class="syntax-string">"bash"</span></span>)</span></span>)</span>
+        <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">output-directory</span> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Retrieving-Alist-Entries.html#index-assoc_002dref">assoc-ref</a> <span class="syntax-symbol">outputs</span> <span class="syntax-string">"out"</span></span>)</span></span>)</span>
+        <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">doc-directory</span> <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Retrieving-Alist-Entries.html#index-assoc_002dref">assoc-ref</a> <span class="syntax-symbol">outputs</span> <span class="syntax-string">"doc"</span></span>)</span></span>)</span></span>)</span>
+    <span class="syntax-comment">;; ...
+</span>    <span class="syntax-symbol">#true</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>The procedure must return <code>#true</code> on success.  It&rsquo;s brittle to rely on the return
+value of the last expression used to tweak the phase because there is no
+guarantee it would be a <code>#true</code>.  Hence the trailing <code>#true</code> to ensure the right value
+is returned on success.
+</p>
+<span id="Code-staging"></span><h4 class="subsubsection">2.1.3.6 Code staging</h4>
+
+<p>The astute reader may have noticed the quasi-quote and comma syntax in the
+argument field.  Indeed, the build code in the package declaration should not be
+evaluated on the client side, but only when passed to the Guix daemon.  This
+mechanism of passing code around two running processes is called <a href="https://arxiv.org/abs/1709.00833">code staging</a>.
+</p>
+<span id="Utility-functions"></span><h4 class="subsubsection">2.1.3.7 Utility functions</h4>
+
+<p>When customizing <code>phases</code>, we often need to write code that mimics the
+equivalent system invocations (<code>make</code>, <code>mkdir</code>, <code>cp</code>, etc.) commonly used during
+regular &ldquo;Unix-style&rdquo; installations.
+</p>
+<p>Some like <code>chmod</code> are native to Guile.
+See <cite><a href="https://www.gnu.org/software/guile/manual/html_node/index.html">Guile reference manual</a></cite> for a complete list.
+</p>
+<p>Guix provides additional helper functions which prove especially handy in the
+context of package management.
+</p>
+<p>Some of those functions can be found in
+&lsquo;<samp>$GUIX_CHECKOUT/guix/guix/build/utils.scm</samp>&rsquo;.  Most of them mirror the behaviour
+of the traditional Unix system commands:
+</p>
+<dl compact="compact">
+<dt><code>which</code></dt>
+<dd><p>Like the &lsquo;<samp>which</samp>&rsquo; system command.
+</p></dd>
+<dt><code>find-files</code></dt>
+<dd><p>Akin to the &lsquo;<samp>find</samp>&rsquo; system command.
+</p></dd>
+<dt><code>mkdir-p</code></dt>
+<dd><p>Like &lsquo;<samp>mkdir -p</samp>&rsquo;, which creates all parents as needed.
+</p></dd>
+<dt><code>install-file</code></dt>
+<dd><p>Similar to &lsquo;<samp>install</samp>&rsquo; when installing a file to a (possibly
+non-existing) directory.  Guile has <code>copy-file</code> which works
+like &lsquo;<samp>cp</samp>&rsquo;.
+</p></dd>
+<dt><code>copy-recursively</code></dt>
+<dd><p>Like &lsquo;<samp>cp -r</samp>&rsquo;.
+</p></dd>
+<dt><code>delete-file-recursively</code></dt>
+<dd><p>Like &lsquo;<samp>rm -rf</samp>&rsquo;.
+</p></dd>
+<dt><code>invoke</code></dt>
+<dd><p>Run an executable.  This should be used instead of <code>system*</code>.
+</p></dd>
+<dt><code>with-directory-excursion</code></dt>
+<dd><p>Run the body in a different working directory,
+then restore the previous working directory.
+</p></dd>
+<dt><code>substitute*</code></dt>
+<dd><p>A &ldquo;<code>sed</code>-like&rdquo; function.
+</p></dd>
+</dl>
+
+<p>See <a href="https://guix.gnu.org/manual/en/html_node/Build-Utilities.html#Build-Utilities">Build Utilities</a> in <cite>GNU Guix Reference Manual</cite>, for more
+information on these utilities.
+</p>
+<span id="Module-prefix"></span><h4 class="subsubsection">2.1.3.8 Module prefix</h4>
+
+<p>The license in our last example needs a prefix: this is because of how the
+<code>license</code> module was imported in the package, as <code>#:use-module ((guix licenses)
+#:prefix license:)</code>.  The Guile module import mechanism
+(see <a href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#Using-Guile-Modules">Using Guile Modules</a> in <cite>Guile reference manual</cite>)
+gives the user full control over namespacing: this is needed to avoid
+clashes between, say, the
+&lsquo;<samp>zlib</samp>&rsquo; variable from &lsquo;<samp>licenses.scm</samp>&rsquo; (a <em>license</em> value) and the &lsquo;<samp>zlib</samp>&rsquo; variable
+from &lsquo;<samp>compression.scm</samp>&rsquo; (a <em>package</em> value).
+</p>
+<hr />
+<div class="header">
+<p>
+Next: <a href="Other-build-systems.html" accesskey="n" rel="next">Other build systems</a>, Previous: <a href="Setup.html" accesskey="p" rel="prev">Setup</a>, Up: <a href="Packaging-Tutorial.html" accesskey="u" rel="up">Packaging Tutorial</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2019, 2022 Ricardo Wurmus
+
+Copyright (C) 2019 Efraim Flashner
+
+Copyright (C) 2019 Pierre Neidhardt
+
+Copyright (C) 2020 Oleg Pykhalov
+
+Copyright (C) 2020 Matthew Brooks
+
+Copyright (C) 2020 Marcin Karpezo
+
+Copyright (C) 2020 Brice Waegeneire
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020 Christine Lemmer-Webber
+
+Copyright (C) 2021 Joshua Branson
+
+Copyright (C) 2022 Maxim Cournoyer
+
+Copyright (C) 2023 Ludovic Courtès
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>A Scheme Crash Course (GNU Guix Cookbook)</title>
+
+<meta name="description" content="A Scheme Crash Course (GNU Guix Cookbook)" />
+<meta name="keywords" content="A Scheme Crash Course (GNU Guix Cookbook)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Scheme-tutorials.html" rel="up" title="Scheme tutorials" />
+<link href="Packaging.html" rel="next" title="Packaging" />
+<link href="Scheme-tutorials.html" rel="prev" title="Scheme tutorials" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/en/cookbook/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/sk/html_node">Slovenský</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-cookbook/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/en/cookbook/"></a></header>
+<span id="A-Scheme-Crash-Course"></span><div class="header">
+<p>
+Up: <a href="Scheme-tutorials.html" accesskey="u" rel="up">Scheme tutorials</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="A-Scheme-Crash-Course-1"></span><h3 class="section">1.1 A Scheme Crash Course</h3>
+
+<span id="index-Scheme_002c-crash-course"></span>
+
+<p>Guix uses the Guile implementation of Scheme.  To start playing with the
+language, install it with <code>guix install guile</code> and start a
+<em>REPL</em>&mdash;short for <a href="https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop"><em>read-eval-print loop</em></a>&mdash;by running <code>guile</code> from the command line.
+</p>
+<p>Alternatively you can also run <code>guix shell guile -- guile</code>
+if you&rsquo;d rather not have Guile installed in your user profile.
+</p>
+<p>In the following examples, lines show what you would type at the REPL;
+lines starting with &ldquo;&rArr;&rdquo; show evaluation results, while lines
+starting with &ldquo;-|&rdquo; show things that get printed.  See <a href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Interactively.html#Using-Guile-Interactively">Using Guile
+Interactively</a> in <cite>GNU Guile Reference Manual</cite>, for more details on the
+REPL.
+</p>
+<ul>
+<li> Scheme syntax boils down to a tree of expressions (or <em>s-expression</em> in
+Lisp lingo).  An expression can be a literal such as numbers and strings, or a
+compound which is a parenthesized list of compounds and literals.  <code>#true</code>
+and <code>#false</code> (abbreviated <code>#t</code> and <code>#f</code>) stand for the
+Booleans &ldquo;true&rdquo; and &ldquo;false&rdquo;, respectively.
+
+<p>Examples of valid expressions:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-string">"Hello World!"</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-string">"Hello World!"</span>
+
+<span class="syntax-symbol">17</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-symbol">17</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/GOOPS-Object-Miscellany.html#index-display-3">display</a> <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-string">"Hello "</span> <span class="syntax-string">"Guix"</span> <span class="syntax-string">"\n"</span></span>)</span></span>)</span>
+<span class="syntax-symbol">-|</span> <span class="syntax-symbol">Hello</span> <span class="syntax-symbol">Guix!</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-symbol">#&lt;unspecified&gt;</span>
+</pre></div>
+
+</li><li> This last example is a function call nested in another function call.  When a
+parenthesized expression is evaluated, the first term is the function and the
+rest are the arguments passed to the function.  Every function returns the
+last evaluated expression as its return value.
+
+</li><li> Anonymous functions are declared with the <code>lambda</code> term:
+
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">lambda</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">x</span></span>)</span> <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Arithmetic.html#index-_002a">*</a> <span class="syntax-symbol">x</span> <span class="syntax-symbol">x</span></span>)</span></span>)</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-symbol">#&lt;procedure</span> <span class="syntax-symbol">120e348</span> <span class="syntax-symbol">at</span> <span class="syntax-symbol">&lt;unknown</span> <span class="syntax-symbol">port&gt;:24:0</span> <span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">x</span></span>)</span><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Comparison.html#index-_003e">&gt;</a>
+</pre></div>
+
+<p>The above procedure returns the square of its argument.  Since everything is
+an expression, the <code>lambda</code> expression returns an anonymous procedure,
+which can in turn be applied to an argument:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-special">lambda</span> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">x</span></span>)</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Arithmetic.html#index-_002a">*</a> <span class="syntax-symbol">x</span> <span class="syntax-symbol">x</span></span>)</span></span>)</span> <span class="syntax-symbol">3</span></span>)</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-symbol">9</span>
+</pre></div>
+
+</li><li> Anything can be assigned a global name with <code>define</code>:
+
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <span class="syntax-symbol">a</span> <span class="syntax-symbol">3</span></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <span class="syntax-symbol">square</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-special">lambda</span> <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">x</span></span>)</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Arithmetic.html#index-_002a">*</a> <span class="syntax-symbol">x</span> <span class="syntax-symbol">x</span></span>)</span></span>)</span></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">square</span> <span class="syntax-symbol">a</span></span>)</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-symbol">9</span>
+</pre></div>
+
+</li><li> Procedures can be defined more concisely with the following syntax:
+
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">square</span> <span class="syntax-symbol">x</span></span>)</span> <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Arithmetic.html#index-_002a">*</a> <span class="syntax-symbol">x</span> <span class="syntax-symbol">x</span></span>)</span></span>)</span>
+</pre></div>
+
+</li><li> A list structure can be created with the <code>list</code> procedure:
+
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-symbol">2</span> <span class="syntax-symbol">a</span> <span class="syntax-symbol">5</span> <span class="syntax-symbol">7</span></span>)</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">2</span> <span class="syntax-symbol">3</span> <span class="syntax-symbol">5</span> <span class="syntax-symbol">7</span></span>)</span>
+</pre></div>
+
+</li><li> The <em>quote</em> disables evaluation of a parenthesized expression: the
+first term is not called over the other terms (see <a href="https://www.gnu.org/software/guile/manual/html_node/Expression-Syntax.html#Expression-Syntax">quote</a> in <cite>GNU Guile Reference Manual</cite>).  Thus it effectively
+returns a list of terms.
+
+<div class="lisp">
+<pre class="lisp"><span class="syntax-symbol">'</span><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/GOOPS-Object-Miscellany.html#index-display-3">display</a> <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-string">"Hello "</span> <span class="syntax-string">"Guix"</span> <span class="syntax-string">"\n"</span></span>)</span></span>)</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/GOOPS-Object-Miscellany.html#index-display-3">display</a> <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Reversing-and-Appending-Strings.html#index-string_002dappend">string-append</a> <span class="syntax-string">"Hello "</span> <span class="syntax-string">"Guix"</span> <span class="syntax-string">"\n"</span></span>)</span></span>)</span>
+
+<span class="syntax-symbol">'</span><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">2</span> <span class="syntax-symbol">a</span> <span class="syntax-symbol">5</span> <span class="syntax-symbol">7</span></span>)</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">2</span> <span class="syntax-symbol">a</span> <span class="syntax-symbol">5</span> <span class="syntax-symbol">7</span></span>)</span>
+</pre></div>
+
+</li><li> The <em>quasiquote</em> disables evaluation of a parenthesized expression
+until <em>unquote</em> (a comma) re-enables it.  Thus it provides us with
+fine-grained control over what is evaluated and what is not.
+
+<div class="lisp">
+<pre class="lisp"><span class="syntax-symbol">`</span><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">2</span> <span class="syntax-symbol">a</span> <span class="syntax-symbol">5</span> <span class="syntax-symbol">7</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">2</span> <span class="syntax-symbol">,a</span> <span class="syntax-symbol">5</span> <span class="syntax-symbol">,</span><span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Arithmetic.html#index-_002b">+</a> <span class="syntax-symbol">a</span> <span class="syntax-symbol">4</span></span>)</span></span>)</span></span>)</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">2</span> <span class="syntax-symbol">a</span> <span class="syntax-symbol">5</span> <span class="syntax-symbol">7</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">2</span> <span class="syntax-symbol">3</span> <span class="syntax-symbol">5</span> <span class="syntax-symbol">7</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>Note that the above result is a list of mixed elements: numbers, symbols (here
+<code>a</code>) and the last element is a list itself.
+</p>
+</li><li> Multiple variables can be named locally with <code>let</code> (see <a href="https://www.gnu.org/software/guile/manual/html_node/Local-Bindings.html#Local-Bindings">Local
+Bindings</a> in <cite>GNU Guile Reference Manual</cite>):
+
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define</span> <span class="syntax-symbol">x</span> <span class="syntax-symbol">10</span></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">let</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">x</span> <span class="syntax-symbol">2</span></span>)</span>
+      <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">y</span> <span class="syntax-symbol">3</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-symbol">x</span> <span class="syntax-symbol">y</span></span>)</span></span>)</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">2</span> <span class="syntax-symbol">3</span></span>)</span>
+
+<span class="syntax-symbol">x</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-symbol">10</span>
+
+<span class="syntax-symbol">y</span>
+<span class="syntax-symbol">error→</span> <span class="syntax-symbol">In</span> <a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Procedures-with-Setters.html#index-procedure">procedure</a> <span class="syntax-symbol">module-lookup:</span> <span class="syntax-symbol">Unbound</span> <span class="syntax-symbol">variable:</span> <span class="syntax-symbol">y</span>
+</pre></div>
+
+<p>Use <code>let*</code> to allow later variable declarations to refer to earlier
+definitions.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">let*</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">x</span> <span class="syntax-symbol">2</span></span>)</span>
+       <span class="syntax-paren2">(<span class="syntax-symbol"><span class="syntax-symbol">y</span> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Arithmetic.html#index-_002a">*</a> <span class="syntax-symbol">x</span> <span class="syntax-symbol">3</span></span>)</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-symbol">x</span> <span class="syntax-symbol">y</span></span>)</span></span>)</span>
+<span class="syntax-symbol">⇒</span> <span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">2</span> <span class="syntax-symbol">6</span></span>)</span>
+</pre></div>
+
+</li><li> <em>Keywords</em> are typically used to identify the named parameters of a
+procedure.  They are prefixed by <code>#:</code> (hash, colon) followed by
+alphanumeric characters: <code>#:like-this</code>.
+See <a href="https://www.gnu.org/software/guile/manual/html_node/Keywords.html#Keywords">Keywords</a> in <cite>GNU Guile Reference Manual</cite>.
+
+</li><li> The percentage <code>%</code> is typically used for read-only global variables in
+the build stage.  Note that it is merely a convention, like <code>_</code> in C.
+Scheme treats <code>%</code> exactly the same as any other letter.
+
+</li><li> Modules are created with <code>define-module</code> (see <a href="https://www.gnu.org/software/guile/manual/html_node/Creating-Guile-Modules.html#Creating-Guile-Modules">Creating Guile
+Modules</a> in <cite>GNU Guile Reference Manual</cite>).  For instance
+
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-special">define-module</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <span class="syntax-symbol">build-system</span> <span class="syntax-symbol">ruby</span></span>)</span>
+  <span class="syntax-keyword">#:use-module</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <span class="syntax-symbol">store</span></span>)</span>
+  <span class="syntax-keyword">#:export</span> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">ruby-build</span>
+            <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Build-Systems.html#index-ruby_002dbuild_002dsystem">ruby-build-system</a></span>)</span></span>)</span>
+</pre></div>
+
+<p>defines the module <code>guix build-system ruby</code> which must be located in
+<samp>guix/build-system/ruby.scm</samp> somewhere in the Guile load path.  It
+depends on the <code>(guix store)</code> module and it exports two variables,
+<code>ruby-build</code> and <code>ruby-build-system</code>.
+</p></li></ul>
+
+<blockquote>
+<p><b>Going further:</b> Scheme is a language that has been widely used to teach programming and
+you&rsquo;ll find plenty of material using it as a vehicle.  Here&rsquo;s a
+selection of documents to learn more about Scheme:
+</p>
+<ul>
+<li> <a href="https://spritely.institute/static/papers/scheme-primer.html"><i>A
+Scheme Primer</i></a>, by Christine Lemmer-Webber and the Spritely Institute.
+
+</li><li> <a href="http://www.troubleshooters.com/codecorn/scheme_guile/hello.htm"><i>Scheme at a Glance</i></a>, by Steve Litt.
+
+</li><li> <a href="https://sarabander.github.io/sicp/"><i>Structure and Interpretation of Computer Programs</i></a>, by Harold
+Abelson and Gerald Jay Sussman, with Julie Sussman.  Colloquially known
+as &ldquo;SICP&rdquo;, this book is a reference.
+
+<p>You can also install it and read it from your computer:
+</p>
+<div class="example">
+<pre class="example">guix install sicp info-reader
+info sicp
+</pre></div>
+
+</li></ul>
+
+<p>You&rsquo;ll find more books, tutorials and other resources at
+<a href="https://schemers.org/">https://schemers.org/</a>.
+</p></blockquote>
+
+
+<hr />
+<div class="header">
+<p>
+Up: <a href="Scheme-tutorials.html" accesskey="u" rel="up">Scheme tutorials</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

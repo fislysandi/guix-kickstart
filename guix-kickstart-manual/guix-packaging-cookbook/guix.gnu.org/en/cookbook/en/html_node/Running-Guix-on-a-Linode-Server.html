@@ -1,0 +1,316 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2019, 2022 Ricardo Wurmus
+
+Copyright (C) 2019 Efraim Flashner
+
+Copyright (C) 2019 Pierre Neidhardt
+
+Copyright (C) 2020 Oleg Pykhalov
+
+Copyright (C) 2020 Matthew Brooks
+
+Copyright (C) 2020 Marcin Karpezo
+
+Copyright (C) 2020 Brice Waegeneire
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020 Christine Lemmer-Webber
+
+Copyright (C) 2021 Joshua Branson
+
+Copyright (C) 2022 Maxim Cournoyer
+
+Copyright (C) 2023 Ludovic Courtès
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Running Guix on a Linode Server (GNU Guix Cookbook)</title>
+
+<meta name="description" content="Running Guix on a Linode Server (GNU Guix Cookbook)" />
+<meta name="keywords" content="Running Guix on a Linode Server (GNU Guix Cookbook)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="System-Configuration.html" rel="up" title="System Configuration" />
+<link href="Setting-up-a-bind-mount.html" rel="next" title="Setting up a bind mount" />
+<link href="Xorg.html" rel="prev" title="Xorg" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/en/cookbook/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/sk/html_node">Slovenský</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-cookbook/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/en/cookbook/"></a></header>
+<span id="Running-Guix-on-a-Linode-Server"></span><div class="header">
+<p>
+Next: <a href="Setting-up-a-bind-mount.html" accesskey="n" rel="next">Setting up a bind mount</a>, Previous: <a href="Customizing-a-Window-Manager.html" accesskey="p" rel="prev">Customizing a Window Manager</a>, Up: <a href="System-Configuration.html" accesskey="u" rel="up">System Configuration</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Running-Guix-on-a-Linode-Server-1"></span><h3 class="section">3.7 Running Guix on a Linode Server</h3>
+<span id="index-linode_002c-Linode"></span>
+
+<p>To run Guix on a server hosted by <a href="https://www.linode.com">Linode</a>,
+start with a recommended Debian server.  We recommend using the default
+distro as a way to bootstrap Guix. Create your SSH keys.
+</p>
+<div class="example">
+<pre class="example">ssh-keygen
+</pre></div>
+
+<p>Be sure to add your SSH key for easy login to the remote server.
+This is trivially done via Linode&rsquo;s graphical interface for adding
+SSH keys.  Go to your profile and click add SSH Key.
+Copy into it the output of:
+</p>
+<div class="example">
+<pre class="example">cat ~/.ssh/&lt;username&gt;_rsa.pub
+</pre></div>
+
+<p>Power the Linode down.
+</p>
+<p>In the Linode&rsquo;s Storage tab, resize the Debian disk to be smaller.
+30 GB free space is recommended.  Then click "Add a disk", and fill
+out the form with the following:
+</p>
+<ul>
+<li> Label: "Guix"
+
+</li><li> Filesystem: ext4
+
+</li><li> Set it to the remaining size
+</li></ul>
+
+<p>In the Configurations tab, press "Edit" on the default Debian profile.
+Under "Block Device Assignment" click "Add a Device". It should be
+<samp>/dev/sdc</samp> and you can select the "Guix" disk. Save Changes.
+</p>
+<p>Now "Add a Configuration", with the following:
+</p><ul>
+<li> Label: Guix
+
+</li><li> Kernel:GRUB 2 (it&rsquo;s at the bottom!  This step is <b>IMPORTANT!</b>)
+
+</li><li> Block device assignment:
+
+</li><li> <samp>/dev/sda</samp>: Guix
+
+</li><li> <samp>/dev/sdb</samp>: swap
+
+</li><li> Root device: <samp>/dev/sda</samp>
+
+</li><li> Turn off all the filesystem/boot helpers
+</li></ul>
+
+<p>Now power it back up, booting with the Debian configuration.  Once it&rsquo;s
+running, ssh to your server via <code>ssh
+root@<var>&lt;your-server-IP-here&gt;</var></code>. (You can find your server IP address in
+your Linode Summary section.) Now you can run the "install guix from
+see <a href="https://guix.gnu.org/manual/en/html_node/Binary-Installation.html#Binary-Installation">Binary Installation</a> in <cite>GNU Guix</cite>" steps:
+</p>
+<div class="example">
+<pre class="example">sudo apt-get install gpg
+wget https://sv.gnu.org/people/viewgpg.php?user_id=15145 -qO - | gpg --import -
+wget https://git.savannah.gnu.org/cgit/guix.git/plain/etc/guix-install.sh
+chmod +x guix-install.sh
+./guix-install.sh
+guix pull
+</pre></div>
+
+<p>Now it&rsquo;s time to write out a config for the server.  The key information
+is below. Save the resulting file as <samp>guix-config.scm</samp>.
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Using-Guile-Modules.html#index-use_002dmodules">use-modules</a> <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">gnu</span></span>)</span>
+             <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">guix</span> <span class="syntax-symbol">modules</span></span>)</span></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">use-service-modules</span> <span class="syntax-symbol">networking</span>
+                     <span class="syntax-symbol">ssh</span></span>)</span>
+<span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">use-package-modules</span> <span class="syntax-symbol">admin</span>
+                     <span class="syntax-symbol">certs</span>
+                     <span class="syntax-symbol">package-management</span>
+                     <span class="syntax-symbol">ssh</span>
+                     <span class="syntax-symbol">tls</span></span>)</span>
+
+<span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/operating_002dsystem-Reference.html#index-operating_002dsystem-1">operating-system</a>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">host-name</span> <span class="syntax-string">"my-server"</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">timezone</span> <span class="syntax-string">"America/New_York"</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">locale</span> <span class="syntax-string">"en_US.UTF-8"</span></span>)</span>
+  <span class="syntax-comment">;; This goofy code will generate the grub.cfg
+</span>  <span class="syntax-comment">;; without installing the grub bootloader on disk.
+</span>  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">bootloader</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Bootloader-Configuration.html#index-bootloader_002dconfiguration">bootloader-configuration</a>
+               <span class="syntax-paren3">(<span class="syntax-symbol"><span class="syntax-symbol">bootloader</span>
+                <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">bootloader</span>
+                 <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">inherit</span> <span class="syntax-symbol">grub-bootloader</span></span>)</span>
+                 <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">installer</span> <span class="syntax-symbol">#~</span><span class="syntax-paren6">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Higher_002dOrder-Functions.html#index-const">const</a> <span class="syntax-symbol">#true</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">file-systems</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Pairs.html#index-cons">cons</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/File-Systems.html#index-file_002dsystem">file-system</a>
+                        <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">device</span> <span class="syntax-string">"/dev/sda"</span></span>)</span>
+                        <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">mount-point</span> <span class="syntax-string">"/"</span></span>)</span>
+                        <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">type</span> <span class="syntax-string">"ext4"</span></span>)</span></span>)</span>
+                      <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/File-Systems.html#index-_0025base_002dfile_002dsystems">%base-file-systems</a></span>)</span></span>)</span>
+
+
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">swap-devices</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-string">"/dev/sdb"</span></span>)</span></span>)</span>
+
+
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">initrd-modules</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Pairs.html#index-cons">cons</a> <span class="syntax-string">"virtio_scsi"</span>    <span class="syntax-comment">; Needed to find the disk
+</span>                        <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Initial-RAM-Disk.html#index-_0025base_002dinitrd_002dmodules">%base-initrd-modules</a></span>)</span></span>)</span>
+
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">users</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/Pairs.html#index-cons">cons</a> <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/User-Accounts.html#index-user_002daccount">user-account</a>
+                <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">name</span> <span class="syntax-string">"janedoe"</span></span>)</span>
+                <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">group</span> <span class="syntax-string">"users"</span></span>)</span>
+                <span class="syntax-comment">;; Adding the account to the "wheel" group
+</span>                <span class="syntax-comment">;; makes it a sudoer.
+</span>                <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">supplementary-groups</span> <span class="syntax-symbol">'</span><span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-string">"wheel"</span></span>)</span></span>)</span>
+                <span class="syntax-paren4">(<span class="syntax-symbol"><span class="syntax-symbol">home-directory</span> <span class="syntax-string">"/home/janedoe"</span></span>)</span></span>)</span>
+               <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/User-Accounts.html#index-_0025base_002duser_002daccounts">%base-user-accounts</a></span>)</span></span>)</span>
+
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">packages</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-cons_002a">cons*</a> <span class="syntax-symbol">nss-certs</span>            <span class="syntax-comment">;for HTTPS access
+</span>                   <span class="syntax-symbol">openssh-sans-x</span>
+                   <span class="syntax-symbol">%base-packages</span></span>)</span></span>)</span>
+
+  <span class="syntax-paren1">(<span class="syntax-symbol"><span class="syntax-symbol">services</span> <span class="syntax-paren2">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-cons_002a">cons*</a>
+             <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Networking-Setup.html#index-dhcp_002dclient_002dservice_002dtype">dhcp-client-service-type</a></span>)</span>
+             <span class="syntax-paren3">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Service-Reference.html#index-service">service</a> <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Networking-Services.html#index-openssh_002dservice_002dtype">openssh-service-type</a>
+                      <span class="syntax-paren4">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Networking-Services.html#index-openssh_002dconfiguration">openssh-configuration</a>
+                       <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">openssh</span> <span class="syntax-symbol">openssh-sans-x</span></span>)</span>
+                       <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">password-authentication?</span> <span class="syntax-symbol">#false</span></span>)</span>
+                       <span class="syntax-paren5">(<span class="syntax-symbol"><span class="syntax-symbol">authorized-keys</span>
+                        <span class="syntax-symbol">`</span><span class="syntax-paren6">(<span class="syntax-symbol"><span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-string">"janedoe"</span> <span class="syntax-symbol">,</span><span class="syntax-paren8">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/G_002dExpressions.html#index-local_002dfile">local-file</a> <span class="syntax-string">"janedoe_rsa.pub"</span></span>)</span></span>)</span>
+                          <span class="syntax-paren7">(<span class="syntax-symbol"><span class="syntax-string">"root"</span> <span class="syntax-symbol">,</span><span class="syntax-paren8">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/G_002dExpressions.html#index-local_002dfile">local-file</a> <span class="syntax-string">"janedoe_rsa.pub"</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span>
+             <a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Base-Services.html#index-_0025base_002dservices-1">%base-services</a></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>Replace the following fields in the above configuration:
+</p><div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">host-name</span> <span class="syntax-string">"my-server"</span></span>)</span>       <span class="syntax-comment">; replace with your server name
+</span><span class="syntax-comment">; if you chose a linode server outside the U.S., then
+</span><span class="syntax-comment">; use tzselect to find a correct timezone string
+</span><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">timezone</span> <span class="syntax-string">"America/New_York"</span></span>)</span> <span class="syntax-comment">; if needed replace timezone
+</span><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-symbol">name</span> <span class="syntax-string">"janedoe"</span></span>)</span>              <span class="syntax-comment">; replace with your username
+</span><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-string">"janedoe"</span> <span class="syntax-symbol">,</span><span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/G_002dExpressions.html#index-local_002dfile">local-file</a> <span class="syntax-string">"janedoe_rsa.pub"</span></span>)</span></span>)</span> <span class="syntax-comment">; replace with your ssh key
+</span><span class="syntax-paren0">(<span class="syntax-symbol"><span class="syntax-string">"root"</span> <span class="syntax-symbol">,</span><span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/G_002dExpressions.html#index-local_002dfile">local-file</a> <span class="syntax-string">"janedoe_rsa.pub"</span></span>)</span></span>)</span> <span class="syntax-comment">; replace with your ssh key
+</span></pre></div>
+
+<p>The last line in the above example lets you log into the server as root
+and set the initial root password (see the note at the end of this
+recipe about root login).  After you have done this, you may
+delete that line from your configuration and reconfigure to prevent root
+login.
+</p>
+<p>Copy your ssh public key (eg: <samp>~/.ssh/id_rsa.pub</samp>) as
+<samp><var>&lt;your-username-here&gt;</var>_rsa.pub</samp> and put
+<samp>guix-config.scm</samp> in the same directory.  In a new terminal run
+these commands.
+</p>
+<div class="example">
+<pre class="example">sftp root@&lt;remote server ip address&gt;
+put /path/to/files/&lt;username&gt;_rsa.pub .
+put /path/to/files/guix-config.scm .
+</pre></div>
+
+<p>In your first terminal, mount the guix drive:
+</p>
+<div class="example">
+<pre class="example">mkdir /mnt/guix
+mount /dev/sdc /mnt/guix
+</pre></div>
+
+<p>Due to the way we set up the bootloader section of the guix-config.scm,
+only the grub configuration file will be installed.  So, we need to copy
+over some of the other GRUB stuff already installed on the Debian system:
+</p>
+<div class="example">
+<pre class="example">mkdir -p /mnt/guix/boot/grub
+cp -r /boot/grub/* /mnt/guix/boot/grub/
+</pre></div>
+
+<p>Now initialize the Guix installation:
+</p>
+<div class="example">
+<pre class="example">guix system init guix-config.scm /mnt/guix
+</pre></div>
+
+<p>Ok, power it down!
+Now from the Linode console, select boot and select "Guix".
+</p>
+<p>Once it boots, you should be able to log in via SSH!  (The server config
+will have changed though.)  You may encounter an error like:
+</p>
+<div class="example">
+<pre class="example">$ ssh root@&lt;server ip address&gt;
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&nbsp;&nbsp;   WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     &nbsp;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&nbsp;IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
+Someone could be eavesdropping on you right now (man-in-the-middle attack)!
+It is also possible that a host key has just been changed.
+The fingerprint for the ECDSA key sent by the remote host is
+SHA256:0B+wp33w57AnKQuHCvQP0+ZdKaqYrI/kyU7CfVbS7R4.
+Please contact your system administrator.
+Add correct host key in /home/joshua/.ssh/known_hosts to get rid of this message.
+Offending ECDSA key in /home/joshua/.ssh/known_hosts:3
+ECDSA host key for 198.58.98.76 has changed and you have requested strict checking.
+Host key verification failed.
+</pre></div>
+
+<p>Either delete <samp>~/.ssh/known_hosts</samp> file, or delete the offending line
+starting with your server IP address.
+</p>
+<p>Be sure to set your password and root&rsquo;s password.
+</p>
+<div class="example">
+<pre class="example">ssh root@&lt;remote ip address&gt;
+passwd  ; for the root password
+passwd &lt;username&gt; ; for the user password
+</pre></div>
+
+<p>You may not be able to run the above commands at this point.  If you
+have issues remotely logging into your linode box via SSH, then you may
+still need to set your root and user password initially by clicking on
+the &ldquo;Launch Console&rdquo; option in your linode.  Choose the &ldquo;Glish&rdquo;
+instead of &ldquo;Weblish&rdquo;.  Now you should be able to ssh into the machine.
+</p>
+<p>Hooray!  At this point you can shut down the server, delete the
+Debian disk, and resize the Guix to the rest of the size.
+Congratulations!
+</p>
+<p>By the way, if you save it as a disk image right at this point, you&rsquo;ll
+have an easy time spinning up new Guix images!  You may need to
+down-size the Guix image to 6144MB, to save it as an image.  Then you
+can resize it again to the max size.
+</p>
+<hr />
+<div class="header">
+<p>
+Next: <a href="Setting-up-a-bind-mount.html" accesskey="n" rel="next">Setting up a bind mount</a>, Previous: <a href="Customizing-a-Window-Manager.html" accesskey="p" rel="prev">Customizing a Window Manager</a>, Up: <a href="System-Configuration.html" accesskey="u" rel="up">System Configuration</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

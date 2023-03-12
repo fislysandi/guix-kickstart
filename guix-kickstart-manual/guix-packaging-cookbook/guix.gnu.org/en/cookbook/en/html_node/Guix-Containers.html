@@ -1,0 +1,235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2019, 2022 Ricardo Wurmus
+
+Copyright (C) 2019 Efraim Flashner
+
+Copyright (C) 2019 Pierre Neidhardt
+
+Copyright (C) 2020 Oleg Pykhalov
+
+Copyright (C) 2020 Matthew Brooks
+
+Copyright (C) 2020 Marcin Karpezo
+
+Copyright (C) 2020 Brice Waegeneire
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020 Christine Lemmer-Webber
+
+Copyright (C) 2021 Joshua Branson
+
+Copyright (C) 2022 Maxim Cournoyer
+
+Copyright (C) 2023 Ludovic Courtès
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Guix Containers (GNU Guix Cookbook)</title>
+
+<meta name="description" content="Guix Containers (GNU Guix Cookbook)" />
+<meta name="keywords" content="Guix Containers (GNU Guix Cookbook)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Containers.html" rel="up" title="Containers" />
+<link href="Guix-System-Containers.html" rel="next" title="Guix System Containers" />
+<link href="Containers.html" rel="prev" title="Containers" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/en/cookbook/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/sk/html_node">Slovenský</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-cookbook/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/en/cookbook/"></a></header>
+<span id="Guix-Containers"></span><div class="header">
+<p>
+Next: <a href="Guix-System-Containers.html" accesskey="n" rel="next">Guix System Containers</a>, Up: <a href="Containers.html" accesskey="u" rel="up">Containers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Guix-Containers-1"></span><h3 class="section">4.1 Guix Containers</h3>
+
+<p>The easiest way to get started is to use <code>guix shell</code> with the
+<samp>--container</samp> option.  See <a href="https://guix.gnu.org/manual/en/html_node/Invoking-guix-shell.html#Invoking-guix-shell">Invoking guix shell</a> in <cite>GNU
+Guix Reference Manual</cite> for a reference of valid options.
+</p>
+<p>The following snippet spawns a minimal shell process with most
+namespaces unshared from the system.  The current working directory is
+visible to the process, but anything else on the file system is
+unavailable.  This extreme isolation can be very useful when you want to
+rule out any sort of interference from environment variables, globally
+installed libraries, or configuration files.
+</p>
+<div class="example">
+<pre class="example">guix shell --container
+</pre></div>
+
+<p>It is a bleak environment, barren, desolate.  You will find that not
+even the GNU coreutils are available here, so to explore this deserted
+wasteland you need to use built-in shell commands.  Even the usually
+gigantic <samp>/gnu/store</samp> directory is reduced to a faint shadow of
+itself.
+</p>
+<div class="example">
+<pre class="example">$ echo /gnu/store/*
+/gnu/store/&hellip;-gcc-10.3.0-lib
+/gnu/store/&hellip;-glibc-2.33
+/gnu/store/&hellip;-bash-static-5.1.8
+/gnu/store/&hellip;-ncurses-6.2.20210619
+/gnu/store/&hellip;-bash-5.1.8
+/gnu/store/&hellip;-profile
+/gnu/store/&hellip;-readline-8.1.1
+</pre></div>
+
+<span id="index-exiting-a-container"></span>
+<p>There isn&rsquo;t much you can do in an environment like this other than
+exiting it.  You can use <tt class="key">^D</tt> or <code>exit</code> to terminate this
+limited shell environment.
+</p>
+<span id="index-exposing-directories_002c-container"></span>
+<span id="index-sharing-directories_002c-container"></span>
+<span id="index-mapping-locations_002c-container"></span>
+<p>You can make other directories available inside of the container
+environment; use <samp>--expose=DIRECTORY</samp> to bind-mount the given
+directory as a read-only location inside the container, or use
+<samp>--share=DIRECTORY</samp> to make the location writable.  With an
+additional mapping argument after the directory name you can control the
+name of the directory inside the container.  In the following example we
+map <samp>/etc</samp> on the host system to <samp>/the/host/etc</samp> inside a
+container in which the GNU coreutils are installed.
+</p>
+<div class="example">
+<pre class="example">$ guix shell --container --share=/etc=/the/host/etc coreutils
+$ ls /the/host/etc
+</pre></div>
+
+<p>Similarly, you can prevent the current working directory from being
+mapped into the container with the <samp>--no-cwd</samp> option.  Another
+good idea is to create a dedicated directory that will serve as the
+container&rsquo;s home directory, and spawn the container shell from that
+directory.
+</p>
+<span id="index-hide-system-libraries_002c-container"></span>
+<span id="index-avoid-ABI-mismatch_002c-container"></span>
+<p>On a foreign system a container environment can be used to compile
+software that cannot possibly be linked with system libraries or with
+the system&rsquo;s compiler toolchain.  A common use-case in a research
+context is to install packages from within an R session.  Outside of a
+container environment there is a good chance that the foreign compiler
+toolchain and incompatible system libraries are found first, resulting
+in incompatible binaries that cannot be used by R.  In a container shell
+this problem disappears, as system libraries and executables simply
+aren&rsquo;t available due to the unshared <code>mount</code> namespace.
+</p>
+<p>Let&rsquo;s take a comprehensive manifest providing a comfortable development
+environment for use with R:
+</p>
+<div class="lisp">
+<pre class="lisp"><span class="syntax-paren0">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://guix.gnu.org/manual/devel/en/html_node/Writing-Manifests.html#index-specifications_002d_003emanifest">specifications-&gt;manifest</a>
+  <span class="syntax-paren1">(<span class="syntax-symbol"><a class="syntax-symbol" href="https://www.gnu.org/software/guile/manual/html_node/List-Constructors.html#index-list-1">list</a> <span class="syntax-string">"r-minimal"</span>
+
+        <span class="syntax-comment">;; base packages
+</span>        <span class="syntax-string">"bash-minimal"</span>
+        <span class="syntax-string">"glibc-locales"</span>
+        <span class="syntax-string">"nss-certs"</span>
+
+        <span class="syntax-comment">;; Common command line tools lest the container is too empty.
+</span>        <span class="syntax-string">"coreutils"</span>
+        <span class="syntax-string">"grep"</span>
+        <span class="syntax-string">"which"</span>
+        <span class="syntax-string">"wget"</span>
+        <span class="syntax-string">"sed"</span>
+
+        <span class="syntax-comment">;; R markdown tools
+</span>        <span class="syntax-string">"pandoc"</span>
+
+        <span class="syntax-comment">;; Toolchain and common libraries for "install.packages"
+</span>        <span class="syntax-string">"gcc-toolchain@10"</span>
+        <span class="syntax-string">"gfortran-toolchain"</span>
+        <span class="syntax-string">"gawk"</span>
+        <span class="syntax-string">"tar"</span>
+        <span class="syntax-string">"gzip"</span>
+        <span class="syntax-string">"unzip"</span>
+        <span class="syntax-string">"make"</span>
+        <span class="syntax-string">"cmake"</span>
+        <span class="syntax-string">"pkg-config"</span>
+        <span class="syntax-string">"cairo"</span>
+        <span class="syntax-string">"libxt"</span>
+        <span class="syntax-string">"openssl"</span>
+        <span class="syntax-string">"curl"</span>
+        <span class="syntax-string">"zlib"</span></span>)</span></span>)</span>
+</pre></div>
+
+<p>Let&rsquo;s use this to run R inside a container environment.  For convenience
+we share the <code>net</code> namespace to use the host system&rsquo;s network
+interfaces.  Now we can build R packages from source the traditional way
+without having to worry about ABI mismatch or incompatibilities.
+</p>
+<div class="example">
+<pre class="example">$ guix shell --container --network --manifest=manifest.scm -- R
+
+R version 4.2.1 (2022-06-23) -- "Funny-Looking Kid"
+Copyright (C) 2022 The R Foundation for Statistical Computing
+&hellip;
+&gt; e &lt;- Sys.getenv("GUIX_ENVIRONMENT")
+&gt; Sys.setenv(GIT_SSL_CAINFO=paste0(e, "/etc/ssl/certs/ca-certificates.crt"))
+&gt; Sys.setenv(SSL_CERT_FILE=paste0(e, "/etc/ssl/certs/ca-certificates.crt"))
+&gt; Sys.setenv(SSL_CERT_DIR=paste0(e, "/etc/ssl/certs"))
+&gt; install.packages("Cairo", lib=paste0(getwd()))
+&hellip;
+* installing *source* package 'Cairo' ...
+&hellip;
+* DONE (Cairo)
+
+The downloaded source packages are in
+	'/tmp/RtmpCuwdwM/downloaded_packages'
+&gt; library("Cairo", lib=getwd())
+&gt; # success!
+</pre></div>
+
+<p>Using container shells is fun, but they can become a little cumbersome
+when you want to go beyond just a single interactive process.  Some
+tasks become a lot easier when they sit on the rock solid foundation of
+a proper Guix System and its rich set of system services.  The next
+section shows you how to launch a complete Guix System inside of a
+container.
+</p>
+
+<hr />
+<div class="header">
+<p>
+Next: <a href="Guix-System-Containers.html" accesskey="n" rel="next">Guix System Containers</a>, Up: <a href="Containers.html" accesskey="u" rel="up">Containers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

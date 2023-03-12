@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2019, 2022 Ricardo Wurmus
+
+Copyright (C) 2019 Efraim Flashner
+
+Copyright (C) 2019 Pierre Neidhardt
+
+Copyright (C) 2020 Oleg Pykhalov
+
+Copyright (C) 2020 Matthew Brooks
+
+Copyright (C) 2020 Marcin Karpezo
+
+Copyright (C) 2020 Brice Waegeneire
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020 Christine Lemmer-Webber
+
+Copyright (C) 2021 Joshua Branson
+
+Copyright (C) 2022 Maxim Cournoyer
+
+Copyright (C) 2023 Ludovic Courtès
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Top (GNU Guix Cookbook)</title>
+
+<meta name="description" content="Top (GNU Guix Cookbook)" />
+<meta name="keywords" content="Top (GNU Guix Cookbook)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html#Top" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="https://guix.gnu.org/manual/en" rel="up" title="(dir)" />
+<link href="Scheme-tutorials.html" rel="next" title="Scheme tutorials" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/en/cookbook/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/sk/html_node">Slovenský</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-cookbook/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/en/cookbook/"></a></header>
+<h1 class="settitle" align="center">GNU Guix Cookbook</h1>
+
+
+
+
+
+<span id="SEC_Contents"></span>
+<h2 class="contents-heading">Table of Contents</h2>
+
+<div class="contents">
+
+<ul class="no-bullet">
+  <li><a id="toc-Scheme-tutorials-1" href="Scheme-tutorials.html#Scheme-tutorials">1 Scheme tutorials</a>
+  <ul class="no-bullet">
+    <li><a id="toc-A-Scheme-Crash-Course-1" href="A-Scheme-Crash-Course.html#A-Scheme-Crash-Course">1.1 A Scheme Crash Course</a></li>
+  </ul></li>
+  <li><a id="toc-Packaging-1" href="Packaging.html#Packaging">2 Packaging</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Packaging-Tutorial-1" href="Packaging-Tutorial.html#Packaging-Tutorial">2.1 Packaging Tutorial</a>
+    <ul class="no-bullet">
+      <li><a id="toc-A-_0060_0060Hello-World_0027_0027-package-1" href="A-_0060_0060Hello-World_0027_0027-package.html#A-_0060_0060Hello-World_0027_0027-package">2.1.1 A &ldquo;Hello World&rdquo; package</a></li>
+      <li><a id="toc-Setup-1" href="Setup.html#Setup">2.1.2 Setup</a>
+      <ul class="no-bullet">
+        <li><a id="toc-Local-file-1" href="Local-file.html#Local-file">2.1.2.1 Local file</a></li>
+        <li><a id="toc-GUIX_005fPACKAGE_005fPATH-1" href="GUIX_005fPACKAGE_005fPATH.html#GUIX_005fPACKAGE_005fPATH">2.1.2.2 &lsquo;<samp>GUIX_PACKAGE_PATH</samp>&rsquo;</a></li>
+        <li><a id="toc-Guix-channels-1" href="Guix-channels.html#Guix-channels">2.1.2.3 Guix channels</a></li>
+        <li><a id="toc-Direct-checkout-hacking-1" href="Direct-checkout-hacking.html#Direct-checkout-hacking">2.1.2.4 Direct checkout hacking</a></li>
+      </ul></li>
+      <li><a id="toc-Extended-example-1" href="Extended-example.html#Extended-example">2.1.3 Extended example</a>
+      <ul class="no-bullet">
+        <li><a id="toc-git_002dfetch-method" href="Extended-example.html#git_002dfetch-method">2.1.3.1 <code>git-fetch</code> method</a></li>
+        <li><a id="toc-Snippets" href="Extended-example.html#Snippets">2.1.3.2 Snippets</a></li>
+        <li><a id="toc-Inputs" href="Extended-example.html#Inputs">2.1.3.3 Inputs</a></li>
+        <li><a id="toc-Outputs" href="Extended-example.html#Outputs">2.1.3.4 Outputs</a></li>
+        <li><a id="toc-Build-system-arguments" href="Extended-example.html#Build-system-arguments">2.1.3.5 Build system arguments</a></li>
+        <li><a id="toc-Code-staging" href="Extended-example.html#Code-staging">2.1.3.6 Code staging</a></li>
+        <li><a id="toc-Utility-functions" href="Extended-example.html#Utility-functions">2.1.3.7 Utility functions</a></li>
+        <li><a id="toc-Module-prefix" href="Extended-example.html#Module-prefix">2.1.3.8 Module prefix</a></li>
+      </ul></li>
+      <li><a id="toc-Other-build-systems-1" href="Other-build-systems.html#Other-build-systems">2.1.4 Other build systems</a></li>
+      <li><a id="toc-Programmable-and-automated-package-definition-1" href="Programmable-and-automated-package-definition.html#Programmable-and-automated-package-definition">2.1.5 Programmable and automated package definition</a>
+      <ul class="no-bullet">
+        <li><a id="toc-Recursive-importers-1" href="Recursive-importers.html#Recursive-importers">2.1.5.1 Recursive importers</a></li>
+        <li><a id="toc-Automatic-update-1" href="Automatic-update.html#Automatic-update">2.1.5.2 Automatic update</a></li>
+        <li><a id="toc-Inheritance-1" href="Inheritance.html#Inheritance">2.1.5.3 Inheritance</a></li>
+      </ul></li>
+      <li><a id="toc-Getting-help-1" href="Getting-help.html#Getting-help">2.1.6 Getting help</a></li>
+      <li><a id="toc-Conclusion-1" href="Conclusion.html#Conclusion">2.1.7 Conclusion</a></li>
+      <li><a id="toc-References-1" href="References.html#References">2.1.8 References</a></li>
+    </ul></li>
+  </ul></li>
+  <li><a id="toc-System-Configuration-1" href="System-Configuration.html#System-Configuration">3 System Configuration</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Auto_002dLogin-to-a-Specific-TTY-1" href="Auto_002dLogin-to-a-Specific-TTY.html#Auto_002dLogin-to-a-Specific-TTY">3.1 Auto-Login to a Specific TTY</a></li>
+    <li><a id="toc-Customizing-the-Kernel-1" href="Customizing-the-Kernel.html#Customizing-the-Kernel">3.2 Customizing the Kernel</a></li>
+    <li><a id="toc-Guix-System-Image-API-1" href="Guix-System-Image-API.html#Guix-System-Image-API">3.3 Guix System Image API</a></li>
+    <li><a id="toc-Using-security-keys-1" href="Using-security-keys.html#Using-security-keys">3.4 Using security keys</a>
+    <ul class="no-bullet">
+      <li><a id="toc-Configuration-for-use-as-a-two_002dfactor-authenticator-_00282FA_0029" href="Using-security-keys.html#Configuration-for-use-as-a-two_002dfactor-authenticator-_00282FA_0029">3.4.1 Configuration for use as a two-factor authenticator (2FA)</a></li>
+    </ul></li>
+    <li><a id="toc-Connecting-to-Wireguard-VPN-1" href="Connecting-to-Wireguard-VPN.html#Connecting-to-Wireguard-VPN">3.5 Connecting to Wireguard VPN</a>
+    <ul class="no-bullet">
+      <li><a id="toc-Using-Wireguard-tools" href="Connecting-to-Wireguard-VPN.html#Using-Wireguard-tools">3.5.1 Using Wireguard tools</a></li>
+      <li><a id="toc-Using-NetworkManager" href="Connecting-to-Wireguard-VPN.html#Using-NetworkManager">3.5.2 Using NetworkManager</a></li>
+    </ul></li>
+    <li><a id="toc-Customizing-a-Window-Manager-1" href="Customizing-a-Window-Manager.html#Customizing-a-Window-Manager">3.6 Customizing a Window Manager</a>
+    <ul class="no-bullet">
+      <li><a id="toc-StumpWM-1" href="StumpWM.html#StumpWM">3.6.1 StumpWM</a></li>
+      <li><a id="toc-Session-lock-1" href="Session-lock.html#Session-lock">3.6.2 Session lock</a>
+      <ul class="no-bullet">
+        <li><a id="toc-Xorg-1" href="Xorg.html#Xorg">3.6.2.1 Xorg</a></li>
+      </ul></li>
+    </ul></li>
+    <li><a id="toc-Running-Guix-on-a-Linode-Server-1" href="Running-Guix-on-a-Linode-Server.html#Running-Guix-on-a-Linode-Server">3.7 Running Guix on a Linode Server</a></li>
+    <li><a id="toc-Setting-up-a-bind-mount-1" href="Setting-up-a-bind-mount.html#Setting-up-a-bind-mount">3.8 Setting up a bind mount</a></li>
+    <li><a id="toc-Getting-substitutes-from-Tor-1" href="Getting-substitutes-from-Tor.html#Getting-substitutes-from-Tor">3.9 Getting substitutes from Tor</a></li>
+    <li><a id="toc-Setting-up-NGINX-with-Lua-1" href="Setting-up-NGINX-with-Lua.html#Setting-up-NGINX-with-Lua">3.10 Setting up NGINX with Lua</a></li>
+    <li><a id="toc-Music-Server-with-Bluetooth-Audio-1" href="Music-Server-with-Bluetooth-Audio.html#Music-Server-with-Bluetooth-Audio">3.11 Music Server with Bluetooth Audio</a></li>
+  </ul></li>
+  <li><a id="toc-Containers-1" href="Containers.html#Containers">4 Containers</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Guix-Containers-1" href="Guix-Containers.html#Guix-Containers">4.1 Guix Containers</a></li>
+    <li><a id="toc-Guix-System-Containers-1" href="Guix-System-Containers.html#Guix-System-Containers">4.2 Guix System Containers</a>
+    <ul class="no-bullet">
+      <li><a id="toc-A-Database-Container-1" href="A-Database-Container.html#A-Database-Container">4.2.1 A Database Container</a></li>
+      <li><a id="toc-Container-Networking-1" href="Container-Networking.html#Container-Networking">4.2.2 Container Networking</a></li>
+    </ul></li>
+  </ul></li>
+  <li><a id="toc-Advanced-package-management-1" href="Advanced-package-management.html#Advanced-package-management">5 Advanced package management</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Guix-Profiles-in-Practice-1" href="Guix-Profiles-in-Practice.html#Guix-Profiles-in-Practice">5.1 Guix Profiles in Practice</a>
+    <ul class="no-bullet">
+      <li><a id="toc-Basic-setup-with-manifests-1" href="Basic-setup-with-manifests.html#Basic-setup-with-manifests">5.1.1 Basic setup with manifests</a></li>
+      <li><a id="toc-Required-packages-1" href="Required-packages.html#Required-packages">5.1.2 Required packages</a></li>
+      <li><a id="toc-Default-profile-1" href="Default-profile.html#Default-profile">5.1.3 Default profile</a></li>
+      <li><a id="toc-The-benefits-of-manifests-1" href="The-benefits-of-manifests.html#The-benefits-of-manifests">5.1.4 The benefits of manifests</a></li>
+      <li><a id="toc-Reproducible-profiles-1" href="Reproducible-profiles.html#Reproducible-profiles">5.1.5 Reproducible profiles</a></li>
+    </ul></li>
+  </ul></li>
+  <li><a id="toc-Environment-management-1" href="Environment-management.html#Environment-management">6 Environment management</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Guix-environment-via-direnv-1" href="Guix-environment-via-direnv.html#Guix-environment-via-direnv">6.1 Guix environment via direnv</a></li>
+  </ul></li>
+  <li><a id="toc-Installing-Guix-on-a-Cluster-1" href="Installing-Guix-on-a-Cluster.html#Installing-Guix-on-a-Cluster">7 Installing Guix on a Cluster</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Setting-Up-a-Head-Node-1" href="Setting-Up-a-Head-Node.html#Setting-Up-a-Head-Node">7.1 Setting Up a Head Node</a></li>
+    <li><a id="toc-Setting-Up-Compute-Nodes-1" href="Setting-Up-Compute-Nodes.html#Setting-Up-Compute-Nodes">7.2 Setting Up Compute Nodes</a></li>
+    <li><a id="toc-Network-Access" href="Cluster-Network-Access.html#Cluster-Network-Access">7.3 Network Access</a></li>
+    <li><a id="toc-Disk-Usage" href="Cluster-Disk-Usage.html#Cluster-Disk-Usage">7.4 Disk Usage</a></li>
+    <li><a id="toc-Security-Considerations" href="Cluster-Security-Considerations.html#Cluster-Security-Considerations">7.5 Security Considerations</a></li>
+  </ul></li>
+  <li><a id="toc-Acknowledgments-1" href="Acknowledgments.html#Acknowledgments">8 Acknowledgments</a></li>
+  <li><a id="toc-GNU-Free-Documentation-License-1" href="GNU-Free-Documentation-License.html#GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a></li>
+  <li><a id="toc-Concept-Index-1" href="Concept-Index.html#Concept-Index" rel="index">Concept Index</a></li>
+</ul>
+</div>
+
+
+<span id="Top"></span><div class="header">
+<p>
+Next: <a href="Scheme-tutorials.html" accesskey="n" rel="next">Scheme tutorials</a>, Up: <a href="https://guix.gnu.org/manual/en" accesskey="u" rel="up">(dir)</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="GNU-Guix-Cookbook"></span><h1 class="top">GNU Guix Cookbook</h1>
+
+<p>This document presents tutorials and detailed examples for GNU&nbsp;Guix, a
+functional package management tool written for the GNU system.  Please
+see <cite><a href="https://guix.gnu.org/manual/en/html_node/index.html#Top">GNU Guix reference manual</a></cite> for details about the system,
+its API, and related concepts.
+</p>
+<p>This manual is also available in French (see <cite><a href="https://guix.gnu.org/cookbook/fr/html_node/index.html#Top">Livre de recettes de GNU Guix</a></cite>) and German (see <cite><a href="https://guix.gnu.org/cookbook/de/html_node/index.html#Top">GNU-Guix-Kochbuch</a></cite>).  If you would like to translate
+this document in your native language, consider joining
+<a href="https://translate.fedoraproject.org/projects/guix/documentation-cookbook">Weblate</a> (see <a href="https://guix.gnu.org/manual/en/html_node/Translating-Guix.html#Translating-Guix">Translating Guix</a> in <cite>GNU Guix reference manual</cite>).
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Scheme-tutorials.html" accesskey="1">Scheme tutorials</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Meet your new favorite language!
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Packaging.html" accesskey="2">Packaging</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Packaging tutorials
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="System-Configuration.html" accesskey="3">System Configuration</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Customizing the GNU System
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Containers.html" accesskey="4">Containers</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Isolated environments and nested systems
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Advanced-package-management.html" accesskey="5">Advanced package management</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Power to the users!
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Environment-management.html" accesskey="6">Environment management</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Control environment
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Installing-Guix-on-a-Cluster.html" accesskey="7">Installing Guix on a Cluster</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">High-performance computing.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Acknowledgments.html" accesskey="8">Acknowledgments</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Thanks!
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="GNU-Free-Documentation-License.html" accesskey="9">GNU Free Documentation License</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The license of this document.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Concept-Index.html" rel="index">Concept Index</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Concepts.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+</pre></th></tr><tr><th colspan="3" align="left" valign="top"><pre class="menu-comment"> &mdash; The Detailed Node Listing &mdash;
+
+Packaging
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Packaging-Tutorial.html">Packaging Tutorial</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A tutorial on how to add packages to Guix.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+System Configuration
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Auto_002dLogin-to-a-Specific-TTY.html">Auto-Login to a Specific TTY</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Automatically Login a User to a Specific TTY
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Customizing-the-Kernel.html">Customizing the Kernel</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Creating and using a custom Linux kernel on Guix System.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Guix-System-Image-API.html">Guix System Image API</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Customizing images to target specific platforms.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Using-security-keys.html">Using security keys</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to use security keys with Guix System.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Connecting-to-Wireguard-VPN.html">Connecting to Wireguard VPN</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Connecting to a Wireguard VPN.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Customizing-a-Window-Manager.html">Customizing a Window Manager</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Handle customization of a Window manager on Guix System.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Running-Guix-on-a-Linode-Server.html">Running Guix on a Linode Server</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Running Guix on a Linode Server
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Setting-up-a-bind-mount.html">Setting up a bind mount</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Setting up a bind mount in the file-systems definition.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Getting-substitutes-from-Tor.html">Getting substitutes from Tor</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Configuring Guix daemon to get substitutes through Tor.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Setting-up-NGINX-with-Lua.html">Setting up NGINX with Lua</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Configuring NGINX web-server to load Lua modules.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Music-Server-with-Bluetooth-Audio.html">Music Server with Bluetooth Audio</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Headless music player with Bluetooth output.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Containers
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Guix-Containers.html">Guix Containers</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Perfectly isolated environments
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Guix-System-Containers.html">Guix System Containers</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A system inside your system
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Advanced package management
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Guix-Profiles-in-Practice.html">Guix Profiles in Practice</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Strategies for multiple profiles and manifests.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Environment management
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Guix-environment-via-direnv.html">Guix environment via direnv</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Setup Guix environment with direnv
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+Installing Guix on a Cluster
+
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Setting-Up-a-Head-Node.html">Setting Up a Head Node</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The node that runs the daemon.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Setting-Up-Compute-Nodes.html">Setting Up Compute Nodes</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Client nodes.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Cluster-Network-Access.html">Cluster Network Access</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Dealing with network access restrictions.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Cluster-Disk-Usage.html">Cluster Disk Usage</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Disk usage considerations.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Cluster-Security-Considerations.html">Cluster Security Considerations</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Keeping the cluster secure.
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+
+</pre></th></tr></table>
+
+<hr />
+<div class="header">
+<p>
+Next: <a href="Scheme-tutorials.html" accesskey="n" rel="next">Scheme tutorials</a>, Up: <a href="https://guix.gnu.org/manual/en" accesskey="u" rel="up">(dir)</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

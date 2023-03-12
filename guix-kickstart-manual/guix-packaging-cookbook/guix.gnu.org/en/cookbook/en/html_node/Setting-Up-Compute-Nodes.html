@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2019, 2022 Ricardo Wurmus
+
+Copyright (C) 2019 Efraim Flashner
+
+Copyright (C) 2019 Pierre Neidhardt
+
+Copyright (C) 2020 Oleg Pykhalov
+
+Copyright (C) 2020 Matthew Brooks
+
+Copyright (C) 2020 Marcin Karpezo
+
+Copyright (C) 2020 Brice Waegeneire
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020 Christine Lemmer-Webber
+
+Copyright (C) 2021 Joshua Branson
+
+Copyright (C) 2022 Maxim Cournoyer
+
+Copyright (C) 2023 Ludovic Courtès
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Setting Up Compute Nodes (GNU Guix Cookbook)</title>
+
+<meta name="description" content="Setting Up Compute Nodes (GNU Guix Cookbook)" />
+<meta name="keywords" content="Setting Up Compute Nodes (GNU Guix Cookbook)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Installing-Guix-on-a-Cluster.html" rel="up" title="Installing Guix on a Cluster" />
+<link href="Cluster-Network-Access.html" rel="next" title="Cluster Network Access" />
+<link href="Setting-Up-a-Head-Node.html" rel="prev" title="Setting Up a Head Node" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/en/cookbook/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/sk/html_node">Slovenský</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-cookbook/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/en/cookbook/"></a></header>
+<span id="Setting-Up-Compute-Nodes"></span><div class="header">
+<p>
+Next: <a href="Cluster-Network-Access.html" accesskey="n" rel="next">Cluster Network Access</a>, Previous: <a href="Setting-Up-a-Head-Node.html" accesskey="p" rel="prev">Setting Up a Head Node</a>, Up: <a href="Installing-Guix-on-a-Cluster.html" accesskey="u" rel="up">Installing Guix on a Cluster</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Setting-Up-Compute-Nodes-1"></span><h3 class="section">7.2 Setting Up Compute Nodes</h3>
+
+<p>First of all, we need compute nodes to mount those NFS directories that
+the head node exports.  This can be done by adding the following lines
+to <a href="https://linux.die.net/man/5/fstab"><samp>/etc/fstab</samp></a>:
+</p>
+<div class="example">
+<pre class="example"><var>head-node</var>:/gnu/store    /gnu/store    nfs  defaults,_netdev,vers=3 0 0
+<var>head-node</var>:/var/guix     /var/guix     nfs  defaults,_netdev,vers=3 0 0
+<var>head-node</var>:/var/log/guix /var/log/guix nfs  defaults,_netdev,vers=3 0 0
+</pre></div>
+
+<p>... where <var>head-node</var> is the name or IP address of your head node.
+From there on, assuming the mount points exist, you should be able to
+mount each of these on the compute nodes.
+</p>
+<p>Next, we need to provide a default <code>guix</code> command that users can
+run when they first connect to the cluster (eventually they will invoke
+<code>guix pull</code>, which will provide them with their &ldquo;own&rdquo;
+<code>guix</code> command).  Similar to what the binary installation script
+did on the head node, we&rsquo;ll store that in <samp>/usr/local/bin</samp>:
+</p>
+<div class="example">
+<pre class="example">mkdir -p /usr/local/bin
+ln -s /var/guix/profiles/per-user/root/current-guix/bin/guix \
+      /usr/local/bin/guix
+</pre></div>
+
+<p>We then need to tell <code>guix</code> to talk to the daemon running on our
+master node, by adding these lines to <code>/etc/profile</code>:
+</p>
+<div class="example">
+<pre class="example">GUIX_DAEMON_SOCKET="guix://<var>head-node</var>"
+export GUIX_DAEMON_SOCKET
+</pre></div>
+
+<p>To avoid warnings and make sure <code>guix</code> uses the right locale, we
+need to tell it to use locale data provided by Guix (see <a href="https://guix.gnu.org/manual/en/html_node/Application-Setup.html#Application-Setup">Application
+Setup</a> in <cite>GNU Guix Reference Manual</cite>):
+</p>
+<div class="example">
+<pre class="example">GUIX_LOCPATH=/var/guix/profiles/per-user/root/guix-profile/lib/locale
+export GUIX_LOCPATH
+
+# Here we must use a valid locale name.  Try "ls $GUIX_LOCPATH/*"
+# to see what names can be used.
+LC_ALL=fr_FR.utf8
+export LC_ALL
+</pre></div>
+
+<p>For convenience, <code>guix package</code> automatically generates
+<samp>~/.guix-profile/etc/profile</samp>, which defines all the environment
+variables necessary to use the packages&mdash;<code>PATH</code>,
+<code>C_INCLUDE_PATH</code>, <code>PYTHONPATH</code>, etc.  Thus it&rsquo;s a good idea to
+source it from <code>/etc/profile</code>:
+</p>
+<div class="example">
+<pre class="example">GUIX_PROFILE="$HOME/.guix-profile"
+if [ -f "$GUIX_PROFILE/etc/profile" ]; then
+  . "$GUIX_PROFILE/etc/profile"
+fi
+</pre></div>
+
+<p>Last but not least, Guix provides command-line completion notably for
+Bash and zsh.  In <code>/etc/bashrc</code>, consider adding this line:
+</p>
+<pre class="verbatim">. /var/guix/profiles/per-user/root/current-guix/etc/bash_completion.d/guix
+</pre>
+<p>Voilà!
+</p>
+<p>You can check that everything&rsquo;s in place by logging in on a compute node
+and running:
+</p>
+<div class="example">
+<pre class="example">guix install hello
+</pre></div>
+
+<p>The daemon on the head node should download pre-built binaries on your
+behalf and unpack them in <samp>/gnu/store</samp>, and <code>guix install</code>
+should create <samp>~/.guix-profile</samp> containing the
+<samp>~/.guix-profile/bin/hello</samp> command.
+</p>
+<hr />
+<div class="header">
+<p>
+Next: <a href="Cluster-Network-Access.html" accesskey="n" rel="next">Cluster Network Access</a>, Previous: <a href="Setting-Up-a-Head-Node.html" accesskey="p" rel="prev">Setting Up a Head Node</a>, Up: <a href="Installing-Guix-on-a-Cluster.html" accesskey="u" rel="up">Installing Guix on a Cluster</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

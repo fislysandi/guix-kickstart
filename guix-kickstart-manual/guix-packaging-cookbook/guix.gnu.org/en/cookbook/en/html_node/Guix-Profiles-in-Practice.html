@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2019, 2022 Ricardo Wurmus
+
+Copyright (C) 2019 Efraim Flashner
+
+Copyright (C) 2019 Pierre Neidhardt
+
+Copyright (C) 2020 Oleg Pykhalov
+
+Copyright (C) 2020 Matthew Brooks
+
+Copyright (C) 2020 Marcin Karpezo
+
+Copyright (C) 2020 Brice Waegeneire
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020 Christine Lemmer-Webber
+
+Copyright (C) 2021 Joshua Branson
+
+Copyright (C) 2022 Maxim Cournoyer
+
+Copyright (C) 2023 Ludovic Courtès
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Guix Profiles in Practice (GNU Guix Cookbook)</title>
+
+<meta name="description" content="Guix Profiles in Practice (GNU Guix Cookbook)" />
+<meta name="keywords" content="Guix Profiles in Practice (GNU Guix Cookbook)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Advanced-package-management.html" rel="up" title="Advanced package management" />
+<link href="Basic-setup-with-manifests.html" rel="next" title="Basic setup with manifests" />
+<link href="Advanced-package-management.html" rel="prev" title="Advanced package management" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/en/cookbook/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/sk/html_node">Slovenský</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-cookbook/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/en/cookbook/"></a></header>
+<span id="Guix-Profiles-in-Practice"></span><div class="header">
+<p>
+Up: <a href="Advanced-package-management.html" accesskey="u" rel="up">Advanced package management</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Guix-Profiles-in-Practice-1"></span><h3 class="section">5.1 Guix Profiles in Practice</h3>
+
+<p>Guix provides a very useful feature that may be quite foreign to newcomers:
+<em>profiles</em>.  They are a way to group package installations together and all users
+on the same system are free to use as many profiles as they want.
+</p>
+<p>Whether you&rsquo;re a developer or not, you may find that multiple profiles bring you
+great power and flexibility.  While they shift the paradigm somewhat compared to
+<em>traditional package managers</em>, they are very convenient to use once you&rsquo;ve
+understood how to set them up.
+</p>
+<p>If you are familiar with Python&rsquo;s &lsquo;<samp>virtualenv</samp>&rsquo;, you can think of a profile as a
+kind of universal &lsquo;<samp>virtualenv</samp>&rsquo; that can hold any kind of software whatsoever, not
+just Python software.  Furthermore, profiles are self-sufficient: they capture
+all the runtime dependencies which guarantees that all programs within a profile
+will always work at any point in time.
+</p>
+<p>Multiple profiles have many benefits:
+</p>
+<ul>
+<li> Clean semantic separation of the various packages a user needs for different contexts.
+
+</li><li> Multiple profiles can be made available into the environment either on login
+or within a dedicated shell.
+
+</li><li> Profiles can be loaded on demand.  For instance, the user can use multiple
+shells, each of them running different profiles.
+
+</li><li> Isolation: Programs from one profile will not use programs from the other, and
+the user can even install different versions of the same programs to the two
+profiles without conflict.
+
+</li><li> Deduplication: Profiles share dependencies that happens to be the exact same.
+This makes multiple profiles storage-efficient.
+
+</li><li> Reproducible: when used with declarative manifests, a profile can be fully
+specified by the Guix commit that was active when it was set up.  This means
+that the exact same profile can be
+<a href="https://guix.gnu.org/blog/2018/multi-dimensional-transactions-and-rollbacks-oh-my/">set up anywhere and anytime</a>, with just the commit information.  See the
+section on <a href="Reproducible-profiles.html">Reproducible profiles</a>.
+
+</li><li> Easier upgrades and maintenance: Multiple profiles make it easy to keep
+package listings at hand and make upgrades completely frictionless.
+</li></ul>
+
+<p>Concretely, here follows some typical profiles:
+</p>
+<ul>
+<li> The dependencies of a project you are working on.
+
+</li><li> Your favourite programming language libraries.
+
+</li><li> Laptop-specific programs (like &lsquo;<samp>powertop</samp>&rsquo;) that you don&rsquo;t need on a desktop.
+
+</li><li> TeXlive (this one can be really useful when you need to install just one
+package for this one document you&rsquo;ve just received over email).
+
+</li><li> Games.
+</li></ul>
+
+<p>Let&rsquo;s dive in the set up!
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Basic-setup-with-manifests.html" accesskey="1">Basic setup with manifests</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Required-packages.html" accesskey="2">Required packages</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Default-profile.html" accesskey="3">Default profile</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="The-benefits-of-manifests.html" accesskey="4">The benefits of manifests</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Reproducible-profiles.html" accesskey="5">Reproducible profiles</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr />
+<div class="header">
+<p>
+Up: <a href="Advanced-package-management.html" accesskey="u" rel="up">Advanced package management</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!--   Copyright (C) 2019, 2022 Ricardo Wurmus
+
+Copyright (C) 2019 Efraim Flashner
+
+Copyright (C) 2019 Pierre Neidhardt
+
+Copyright (C) 2020 Oleg Pykhalov
+
+Copyright (C) 2020 Matthew Brooks
+
+Copyright (C) 2020 Marcin Karpezo
+
+Copyright (C) 2020 Brice Waegeneire
+
+Copyright (C) 2020 André Batista
+
+Copyright (C) 2020 Christine Lemmer-Webber
+
+Copyright (C) 2021 Joshua Branson
+
+Copyright (C) 2022 Maxim Cournoyer
+
+Copyright (C) 2023 Ludovic Courtès
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".   -->
+<!--   Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/   -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Direct checkout hacking (GNU Guix Cookbook)</title>
+
+<meta name="description" content="Direct checkout hacking (GNU Guix Cookbook)" />
+<meta name="keywords" content="Direct checkout hacking (GNU Guix Cookbook)" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="Generator" content="makeinfo" />
+<link href="index.html" rel="start" title="Top" />
+<link href="Concept-Index.html" rel="index" title="Concept Index" />
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents" />
+<link href="Setup.html" rel="up" title="Setup" />
+<link href="Extended-example.html" rel="next" title="Extended example" />
+<link href="Guix-channels.html" rel="prev" title="Guix channels" />
+<style type="text/css">
+&amp;lt;!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+--&amp;gt;
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" href="../../../../static/base/css/manual.css" /><link rel="stylesheet" type="text/css" href="../../../../static/base/css/code.css" /></head>
+
+<body lang="en"><header class="navbar"><h1><a class="branding" href="https://guix.gnu.org/en/cookbook/en/"></a></h1><nav class="navbar-menu"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="all-dropdowns-hidden" /><ul><li class="navbar-menu-item dropdown dropdown-btn"><input class="navbar-menu-hidden-input" type="radio" name="dropdown" id="visible-dropdown" /><label for="visible-dropdown"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><label for="all-dropdowns-hidden"><img alt="Language" src="../../../../static/base/img/language-picker.svg" /></label><div class="navbar-submenu" id="navbar-submenu"><div class="navbar-submenu-triangle"> </div><ul><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/de/html_node">Deutsch</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/en/html_node">English</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/fr/html_node">français</a></li><li><a class="navbar-menu-item" href="https://guix.gnu.org/en/cookbook/sk/html_node">Slovenský</a></li><li><a class="navbar-menu-item" href="https://translate.fedoraproject.org/projects/guix/documentation-cookbook/">⊕</a></li></ul></div></li></ul></nav><a class="navbar-menu-btn" href="https://guix.gnu.org/en/cookbook/"></a></header>
+<span id="Direct-checkout-hacking"></span><div class="header">
+<p>
+Previous: <a href="Guix-channels.html" accesskey="p" rel="prev">Guix channels</a>, Up: <a href="Setup.html" accesskey="u" rel="up">Setup</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr />
+<span id="Direct-checkout-hacking-1"></span><h4 class="subsubsection">2.1.2.4 Direct checkout hacking</h4>
+
+<p>Working directly on the Guix project is recommended: it reduces the friction
+when the time comes to submit your changes upstream to let the community benefit
+from your hard work!
+</p>
+<p>Unlike most software distributions, the Guix repository holds in one place both
+the tooling (including the package manager) and the package definitions.  This
+choice was made so that it would give developers the flexibility to modify the
+API without breakage by updating all packages at the same time.  This reduces
+development inertia.
+</p>
+<p>Check out the official <a href="https://git-scm.com/">Git</a> repository:
+</p>
+<div class="example">
+<pre class="example">$ git clone https://git.savannah.gnu.org/git/guix.git
+</pre></div>
+
+<p>In the rest of this article, we use &lsquo;<samp>$GUIX_CHECKOUT</samp>&rsquo; to refer to the location of
+the checkout.
+</p>
+
+<p>Follow the instructions in the manual (see <a href="https://guix.gnu.org/manual/en/html_node/Contributing.html#Contributing">Contributing</a> in <cite>GNU Guix
+Reference Manual</cite>) to set up the repository environment.
+</p>
+<p>Once ready, you should be able to use the package definitions from the
+repository environment.
+</p>
+<p>Feel free to edit package definitions found in &lsquo;<samp>$GUIX_CHECKOUT/gnu/packages</samp>&rsquo;.
+</p>
+<p>The &lsquo;<samp>$GUIX_CHECKOUT/pre-inst-env</samp>&rsquo; script lets you use &lsquo;<samp>guix</samp>&rsquo; over the package
+collection of the repository (see <a href="https://guix.gnu.org/manual/en/html_node/Running-Guix-Before-It-Is-Installed.html#Running-Guix-Before-It-Is-Installed">Running Guix Before It Is
+Installed</a> in <cite>GNU Guix Reference Manual</cite>).
+</p>
+<ul>
+<li> Search packages, such as Ruby:
+
+<div class="example">
+<pre class="example">  $ cd $GUIX_CHECKOUT
+  $ ./pre-inst-env guix package --list-available=ruby
+      ruby    1.8.7-p374      out     gnu/packages/ruby.scm:119:2
+      ruby    2.1.6   out     gnu/packages/ruby.scm:91:2
+      ruby    2.2.2   out     gnu/packages/ruby.scm:39:2
+</pre></div>
+
+</li><li> Build a package, here Ruby version 2.1:
+
+<div class="example">
+<pre class="example">  $ ./pre-inst-env guix build --keep-failed ruby@2.1
+  /gnu/store/c13v73jxmj2nir2xjqaz5259zywsa9zi-ruby-2.1.6
+</pre></div>
+
+</li><li> Install it to your user profile:
+
+<div class="example">
+<pre class="example">  $ ./pre-inst-env guix package --install ruby@2.1
+</pre></div>
+
+</li><li> Check for common mistakes:
+
+<div class="example">
+<pre class="example">  $ ./pre-inst-env guix lint ruby@2.1
+</pre></div>
+</li></ul>
+
+<p>Guix strives at maintaining a high packaging standard; when contributing to the
+Guix project, remember to
+</p>
+<ul>
+<li> follow the coding style (see <a href="https://guix.gnu.org/manual/en/html_node/Coding-Style.html#Coding-Style">Coding Style</a> in <cite>GNU Guix Reference Manual</cite>),
+</li><li> and review the check list from the manual (see <a href="https://guix.gnu.org/manual/en/html_node/Submitting-Patches.html#Submitting-Patches">Submitting Patches</a> in <cite>GNU Guix Reference Manual</cite>).
+</li></ul>
+
+<p>Once you are happy with the result, you are welcome to send your contribution to
+make it part of Guix.  This process is also detailed in the manual.  (see <a href="https://guix.gnu.org/manual/en/html_node/Contributing.html#Contributing">Contributing</a> in <cite>GNU Guix Reference Manual</cite>)
+</p>
+
+<p>It&rsquo;s a community effort so the more join in, the better Guix becomes!
+</p>
+<hr />
+<div class="header">
+<p>
+Previous: <a href="Guix-channels.html" accesskey="p" rel="prev">Guix channels</a>, Up: <a href="Setup.html" accesskey="u" rel="up">Setup</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

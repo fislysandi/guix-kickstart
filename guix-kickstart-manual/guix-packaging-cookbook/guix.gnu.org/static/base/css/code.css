@@ -1,0 +1,82 @@
+/* Syntax highlighting code, by David Thompson, borrowed
+   from:
+     https://git.dthompson.us/blog.git/blob_plain/refs/heads/haunt-migration:/css/dthompson.css
+   David Thompson gives permission for this to be GPLv3+ and CC BY-SA 4.0
+
+   Modified significantly since.
+*/
+
+
+.syntax-special, .syntax-element {
+    color: #856;
+    font-weight: bold;
+}
+
+.syntax-symbol, a[href].syntax-symbol, .syntax-default {
+    color: #423;
+    background-color: #f2efe4;	/* This must match pre.lisp! */
+}
+
+a[href].syntax-symbol:hover {
+    border-bottom-width: 1px;
+    border-bottom-color: color: grey;
+    border-bottom-style: dotted;
+}
+
+.syntax-string {
+    color: #484;
+}
+
+.syntax-keyword, .syntax-attribute {
+    color: #921;
+}
+
+.syntax-comment {
+    color: #666;
+}
+
+.syntax-open, .syntax-close {
+    color: #688;
+}
+
+.syntax-paren0, .syntax-paren1, .syntax-paren2, .syntax-paren3, .syntax-paren4, .syntax-paren5, .syntax-paren6, .syntax-paren7, .syntax-paren8, .syntax-paren9 { color: #688; }
+
+/* Rainbow paren matching.  */
+.syntax-paren0:hover { background-color:#EE9977; }
+.syntax-paren1:hover { background-color:#78DB59; }
+.syntax-paren2:hover { background-color:#55DDFF; }
+.syntax-paren3:hover { background-color:#DBDB59; }
+.syntax-paren4:hover { background-color:#FF8811; }
+.syntax-paren5:hover { background-color:#88CC44; }
+.syntax-paren6:hover { background-color:#AA22FF; }
+.syntax-paren7:hover { background-color:#DB7859; }
+.syntax-paren8:hover { background-color:#78DB59; }
+.syntax-paren9:hover { background-color:#5978DB; }
+
+/* Additional syntax for the post-processed manual.  */
+
+.symbol-definition {
+    font-weight: normal;
+    border-top: 3px solid #d4cbb6;
+    background: #eee;
+    margin: 0;
+    padding: .5em 0;
+}
+
+.symbol-definition-category { 	/* first argument to @deffn etc. */
+    font-size: 80%;
+    color: #333;
+    margin-right: 10px;
+    padding: 5px;
+}
+
+.symbol-definition-prototype { /* remaining arguments to @deffn etc. */
+    font-family: monospace;
+    font-size: 110%;
+}
+
+.symbol-definition + dd {
+    background: #fafafa;
+    margin: 0;
+    padding: .5em 3% 1em 3%;
+}
