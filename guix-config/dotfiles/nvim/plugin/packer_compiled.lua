@@ -99,6 +99,11 @@ _G.packer_plugins = {
     path = "/home/fislysandi/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
     url = "https://github.com/nvim-treesitter/nvim-treesitter"
   },
+  ["plenary.nvim"] = {
+    loaded = true,
+    path = "/home/fislysandi/.local/share/nvim/site/pack/packer/start/plenary.nvim",
+    url = "https://github.com/nvim-lua/plenary.nvim"
+  },
   ["telescope.nvim"] = {
     loaded = true,
     path = "/home/fislysandi/.local/share/nvim/site/pack/packer/start/telescope.nvim",

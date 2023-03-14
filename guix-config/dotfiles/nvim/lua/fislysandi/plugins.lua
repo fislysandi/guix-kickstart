@@ -12,7 +12,8 @@ return require('packer').startup(function()
   use 'tpope/vim-commentary'
   use 'mg979/vim-visual-multi' 
   use 'hrsh7th/nvim-cmp'
-  use 'nvim-treesitter/nvim-treesitter'
+  use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
   use 'nvim-lua/plenary.nvim'
+  
 end)
 
