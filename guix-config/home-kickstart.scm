@@ -20,6 +20,8 @@
 					    "nyxt"
 					    "wayland"
 					    "stow"
+					    "guile"
+						"neovim-packer"
 					    "pandoc")))
 
   ;; Below is the list of Home services.  To search for available

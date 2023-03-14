@@ -8,9 +8,10 @@ return require('packer').startup(function()
   use 'justinmk/vim-sneak'
   use 'itchyny/lightline.vim'
   use 'vijaymarupudi/nvim-fzf'
-  use 'mg979/vim-visual-multi'
   use 'kylechui/nvim-surround'
   use 'tpope/vim-commentary'
   use 'mg979/vim-visual-multi' 
+  use 'Olical/conjure'
+  use 'hrsh7th/nvim-cmp'
 end)
 
