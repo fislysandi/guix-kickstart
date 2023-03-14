@@ -11,7 +11,7 @@ return require('packer').startup(function()
   use 'kylechui/nvim-surround'
   use 'tpope/vim-commentary'
   use 'mg979/vim-visual-multi' 
-  use 'Olical/conjure'
   use 'hrsh7th/nvim-cmp'
+  use 'nvim-treesitter/nvim-treesitter'
 end)
 
