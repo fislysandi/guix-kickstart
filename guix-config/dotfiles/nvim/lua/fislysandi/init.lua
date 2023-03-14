@@ -1,3 +1,20 @@
+-- load packer
+require('packer').init()
+
+-- source packer configuration
+require('fislysandi.packer')
+
+-- source plugin definitions
+require('fislysandi.plugins')
+
+require('fislysandi.keymaps')
+
+
+-- Enable syntax highlighting
+
+
+
+
 local options = {
   number = true,
   relativenumber = true,
@@ -10,11 +27,12 @@ local options = {
   langmenu = 'en_US',
 }
 
+vim.cmd("syntax on")
 
-vim.api.nvim_set_keymap('n', 'Y', '"+y', { noremap = true })
+--vim.api.nvim_set_keymap('n', 'Y', '"+y', { noremap = true })
 
-
-vim.o.shell = "pwsh"
+-- if you use windows uncomment this
+--vim.o.shell = "pwsh"
 
 
 
@@ -27,17 +45,4 @@ end
 -- Set the runtime path
 --vim.o.runtimepath = vim.o.runtimepath .. ';' .. 'C:/Users/angryteapodthebonedo/AppData/Local/nvim'
 
--- load packer
-require('packer').init()
-
--- source packer configuration
-require('packer')
-
--- source plugin definitions
-require('config.plugins')
-
-require('config.keymaps')
-
--- Enable syntax highlighting
-vim.cmd("syntax on")
 

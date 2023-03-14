@@ -10,5 +10,10 @@ vim.api.nvim_set_keymap('n', '<M-v>', '<C-v>', { noremap = true })
 
 vim.api.nvim_set_keymap('v', 'Y', '"+y', { noremap = true })
 
+vim.g.mapleader = " "
+
+vim.keymap.set('n', '<leader>fe', vim.cmd.Ex)
+
 
 --wsl yank to cliboard
+

@@ -13,5 +13,6 @@ return require('packer').startup(function()
   use 'mg979/vim-visual-multi' 
   use 'hrsh7th/nvim-cmp'
   use 'nvim-treesitter/nvim-treesitter'
+  use 'nvim-lua/plenary.nvim'
 end)
 
