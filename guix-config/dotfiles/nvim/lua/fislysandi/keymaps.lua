@@ -32,23 +32,28 @@ vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
 vim.keymap.set("n", "<leader>gc", function()
   local message = vim.fn.input("Commit message: ")
-  local add_output = vim.fn.systemlist("git add . 2>&1")
-  local add_success = vim.v.shell_error == 0
-  local commit_output = vim.fn.systemlist("git commit -m '" .. message .. "' 2>&1")
-  local commit_success = vim.v.shell_error == 0
-
-  if not add_success then
+  local add_output = vim.fn.systemlist("git add .")
+  if #add_output > 0 then
     vim.api.nvim_err_writeln("Error running git add: " .. table.concat(add_output, "\n"))
     return
   end
-
-  if not commit_success then
+  local commit_output = vim.fn.systemlist("git commit -m '" .. message .. "'")
+  if #commit_output > 0 then
     vim.api.nvim_err_writeln("Error running git commit: " .. table.concat(commit_output, "\n"))
     return
   end
-
-  vim.api.nvim_out_write("Git commit successful!\n")
+  local diff_output = vim.fn.systemlist("git diff --color")
+  local files_output = vim.fn.systemlist("git diff --name-only")
+  if #diff_output > 0 then
+    vim.api.nvim_out_write("Git commit successful!\n")
+    vim.api.nvim_out_write(table.concat(diff_output, "\n"))
+    vim.api.nvim_out_write("\nChanged files:\n")
+    vim.api.nvim_out_write(table.concat(files_output, "\n"))
+  else
+    vim.api.nvim_out_write("No changes made\n")
+  end
 end)
+
 
 vim.keymap.set("n", "<leader>gp", function()
   local push_output = vim.fn.systemlist("git push origin HEAD:master")
