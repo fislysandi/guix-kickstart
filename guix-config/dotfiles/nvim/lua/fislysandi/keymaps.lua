@@ -33,17 +33,11 @@ vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 vim.keymap.set("n", "<leader>gc", function()
   local message = vim.fn.input("Commit message: ")
   local add_output = vim.fn.systemlist("git add .")
-  if #add_output > 0 then
-    vim.api.nvim_err_writeln("Error running git add: " .. table.concat(add_output, "\n"))
-    return
-  end
+  vim.api.nvim_out_write("Git add output: " .. table.concat(add_output, "\n"))
   local commit_output = vim.fn.systemlist("git commit -m '" .. message .. "'")
-  if #commit_output > 0 then
-    vim.api.nvim_err_writeln("Error running git commit: " .. table.concat(commit_output, "\n"))
-    return
-  end
-  vim.api.nvim_out_write("Git commit successful!\n")
+  vim.api.nvim_out_write("Git commit output: " .. table.concat(commit_output, "\n"))
 end)
+
 
 vim.keymap.set("n", "<leader>gp", function()
   local push_output = vim.fn.systemlist("git push origin HEAD:master")
