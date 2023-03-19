@@ -9,6 +9,5 @@ end)
 
 vim.keymap.set("n", "<leader>gp", function()
   vim.cmd("G push origin master")
-  vim.api.nvim_out_write("Git push successful!\n")
-end)
+ end)
 
