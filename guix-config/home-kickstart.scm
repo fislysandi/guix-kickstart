@@ -23,6 +23,7 @@
 						"gcc"
 						"glibc"
 						"clang-toolchain"
+						"gh"
 					    "pandoc")))
 
   ;; Below is the list of Home services.  To search for available
