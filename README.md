@@ -40,4 +40,4 @@ DO NOT JUMP STRAIGHT INTO THIS and try to do everything at once, take your time 
 
 ## KEEP IN MIND
 
-this repo is still under construction.
+this repo is still under construction and mainainter is working hard on it!
