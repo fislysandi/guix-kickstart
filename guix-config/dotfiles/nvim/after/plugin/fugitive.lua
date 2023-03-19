@@ -1,10 +1,9 @@
 vim.keymap.set("n", "<leader>gs", vim.cmd.Git);
 
-vim.keymap.set("n", "<leader>g", function()
+vim.keymap.set("n", "<leader>ge", function()
   local message = vim.fn.input("Commit message: ")
   vim.api.nvim_command("G add .")
   vim.api.nvim_command("G commit -m '" .. message .. "'")
-  vim.api.nvim_out_write("Git commit successful!\n")
 end)
 
 
