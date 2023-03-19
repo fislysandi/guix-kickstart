@@ -1,6 +1,6 @@
-### INTRODUCTION
+## INTRODUCTION
 
-## GUIX-KICKSTART
+### GUIX-KICKSTART
 
 are you -
 - Tired of setting up your pc from scratch each time after you distrohop?
@@ -13,16 +13,16 @@ are you -
 
 
 
-## DONT WORRY
+### DONT WORRY
 
 i created this repo just for you, this repo will handhold you with some of the most detailed documentation you will find, you will : 
 
 1. learn how to package/compile something yourself from source or from another packaging format along using 'Gentoo flags'
 
-2. learn how to declare  your entire configuration inside of a git repo and automatically symlink it with Gnu Stow.
+2. learn how to declare your entire configuration inside of a git repo and automatically symlink it with Gnu Stow.
 
 3. learn how to manage users or profiles so you can setup your pc for multiple users and having multiple isolated profiles for each work enviroment 
 
-4. learn how to make isolated dev enviroment 
+4. learn how to make isolated dev enviroment for your projects.
 
 find,this will help you slowly transition your entire configuration into a reproducible workstation that you can use across all of your machines on the go, on the fly, EVERYWHERE.
