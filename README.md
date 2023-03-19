@@ -16,9 +16,9 @@ are you -
 
 i created this repo just for you, this repo will handhold you with some of the most detailed documentation you will find, you will : 
 
-1. learn how to package/compile something yourself from source or from another packaging format along using 'Gentoo flags'
+1. learn how to package/compile something yourself from source or from another packaging format along using something i call 'Gentoo flags'
 
-2. learn how to declare your entire configuration inside of a git repo and automatically symlink it with Gnu Stow.
+2. learn how to declare your entire configuration inside of a git repo and automatically symlink it with Gnu Stow and sync it with git.
 
 3. learn how to manage users or profiles so you can setup your pc for multiple users and having multiple isolated profiles for each work enviroment 
 
