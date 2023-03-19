@@ -14,14 +14,15 @@
   ;; Below is the list of packages that will show up in your
   ;; Home profile, under ~/.guix-home/profile.
   (packages (specifications->packages (list "guix"
-					    "keepassxc"
-					    "dolphin"
-					    "htop"
-					    "nyxt"
-					    "wayland"
+						"htop"
 					    "stow"
 					    "guile"
+					    "neovim"
 						"neovim-packer"
+						"binutils"
+						"gcc"
+						"glibc"
+						"clang-toolchain"
 					    "pandoc")))
 
   ;; Below is the list of Home services.  To search for available

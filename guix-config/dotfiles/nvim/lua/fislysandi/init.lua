@@ -12,7 +12,7 @@ require('fislysandi.keymaps')
 
 -- Enable syntax highlighting
 
-
+require("nvim-treesitter.install").prefer_git = true
 
 
 local options = {
