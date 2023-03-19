@@ -1,7 +1,6 @@
-## INTRODUCTION
+## GUIX-KICKSTART
 
-### GUIX-KICKSTART
-
+### INTRODUCTION
 are you -
 - Tired of setting up your pc from scratch each time after you distrohop?
 - Tired of the dependency hell and packages breaking because of it?
