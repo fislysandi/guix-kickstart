@@ -17,11 +17,14 @@ i created this repo just for you, this repo will handhold you with some of the m
 
 2. learn how to declare your entire configuration inside of a git repo and automatically symlink it with Gnu Stow and sync it across youw machines with git.
 
-3. learn how to manage users or profiles so you can setup your pc for multiple users and having multiple isolated profiles for each work enviroment 
+3. learn how to manage users or profiles so you can setup your pc for multiple users and having multiple isolated profiles for each work enviroment. 
 
 4. learn how to make isolated dev enviroment for your projects.
 
-5. learn how to create your custom channels or replace guix upstream with your faster mirror.
+5. learn how to create your custom channels or replace guix upstream with your mirror.
+
+6. handhold you through learning basics of guile scheme, and learn some tools that will help you immensely with that
+
 
 ### SO
 this will help you slowly transition your entire configuration into a reproducible workstation that you can use across all of your machines on the go, on the fly, EVERYWHERE.
@@ -34,10 +37,20 @@ this is GUIX, this. is... GUIX-KICKSTART.
 
 ok you will encounter some challenges making this configuration. but i will assure you this will be worth it. because after learning this package manager and a little of guile scheme you will never ever EVER have to learn another package manager again.
 
-DO NOT JUMP STRAIGHT INTO THIS and try to do everything at once, take your time reading the documentation i wrote,testing,trying out stuff.
+DO NOT JUMP STRAIGHT INTO THIS and try to do everything at once, take your time reading the documentation ,testing stuff,trying out stuff,remind yourself that its a slow learning process
 
 
 
 ## KEEP IN MIND
 
 this repo is still under construction and mainainter is working hard on it!
+
+### ROADMAP
+
+1. make an shell init script that will do all the heavylifting for you.
+
+2. make an uninstallation script that will purge guix cleanly from your system if you did not like it also restoring your configs to default.
+
+3. setup gnu stow automatic symlink hook, along with guix executing our symlink script if guix and guix-config points to the wrong folder.
+
+4.
