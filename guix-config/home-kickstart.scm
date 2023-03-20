@@ -1,4 +1,4 @@
-;; This "home-environment" file can be passed to 'guix home reconfigure'
+; This "home-environment" file can be passed to 'guix home reconfigure'
 ;; to reproduce the content of your profile.  This is "symbolic": it only
 ;; specifies package names.  To reproduce the exact same profile, you also
 ;; need to capture the channels being used, as returned by "guix describe".
@@ -14,17 +14,18 @@
   ;; Below is the list of packages that will show up in your
   ;; Home profile, under ~/.guix-home/profile.
   (packages (specifications->packages (list "guix"
-						"htop"
+					    "htop"
 					    "stow"
 					    "guile"
 					    "neovim"
-						"neovim-packer"
-						"binutils"
-						"gcc"
-						"glibc"
-						"clang-toolchain"
-						"gh"
-					    "pandoc")))
+					    "neovim-packer"
+					    "binutils"
+				            "gcc"
+					    "glibc"
+					    "clang-toolchain"
+					    "pandoc"
+					    "flex"
+				            "tmux")))
 
   ;; Below is the list of Home services.  To search for available
   ;; services, run 'guix home search KEYWORD' in a terminal.

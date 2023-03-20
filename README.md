@@ -39,7 +39,7 @@ ok you will encounter some challenges making this configuration. but i will assu
 
 DO NOT JUMP STRAIGHT INTO THIS and try to do everything at once, take your time reading the documentation ,testing stuff,trying out stuff,failing ,remind yourself that its a slow learning process and you should be patient and disciplined to achieve your goal.
 
-i reccomend you to start out with a WSL debian or a virtual machine and slowly build it from there untill you thoughtfully tested it and it works 100 % of the time without issues ,you are ready to jump.
+i reccomend you to start out with a WSL debian instance or a virtual machine and slowly build it from there untill you thoughtfully tested it and it works 100 % of the time without issues ,you are ready to jump.
 
 so what are we waiting for, lets go! (put install script there)
 
