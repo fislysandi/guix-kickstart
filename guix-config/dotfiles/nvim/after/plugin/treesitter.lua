@@ -9,6 +9,8 @@ require'nvim-treesitter.configs'.setup {
   -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
   auto_install = true,
 
+
+  ignore_install = { "bash" },
   -- List of parsers to ignore installing (for "all")
 
   ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)

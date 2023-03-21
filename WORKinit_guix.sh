@@ -1,9 +1,10 @@
 #!/bin/bash
 
 # sometimes Guix Doesnt make this folder so i do that manuallly
-sudo mkdir -p /var/guix/profiles/per-user/$USER
-sudo chown -R $USER:$USER /var/guix/profiles/per-user/$USER
+#sudo mkdir -p /var/guix/profiles/per-user/$USER
+#sudo chown -R $USER:$USER /var/guix/profiles/per-user/$USER
 
+mkdir ~/.config
 # Exit immediately if any command fails
 set -e
 
@@ -24,12 +25,13 @@ echo "Updating package repository..."
 sudo guix pull
 
 # installing git
-guix install git --no-substitutes
+#guix install git --no-substitutes
 
 mkdir ~/Desktop
 cd ~/Desktop
 git clone https://github.com/fislysandi/guix-kickstart
 
-cd guix-kickstart/guix-config/
+cd guix-kickstart/guix-config/scripts/
+. /guixlinks.sh
 
 guix home reconfigure home-kickstart.scm --no-substitutes
