@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Modules (Guile Reference Manual)</title>
+
+<meta name="description" content="Modules (Guile Reference Manual)">
+<meta name="keywords" content="Modules (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="API-Reference.html" rel="up" title="API Reference">
+<link href="Foreign-Function-Interface.html" rel="next" title="Foreign Function Interface">
+<link href="Memory-Management.html" rel="prev" title="Memory Management">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Modules">
+<div class="nav-panel">
+<p>
+Next: <a href="Foreign-Function-Interface.html" accesskey="n" rel="next">Foreign Function Interface</a>, Previous: <a href="Memory-Management.html" accesskey="p" rel="prev">Memory Management and Garbage Collection</a>, Up: <a href="API-Reference.html" accesskey="u" rel="up">API Reference</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Modules-1">6.18 Modules</h3>
+<a class="index-entry-id" id="index-modules"></a>
+
+<p>When programs become large, naming conflicts can occur when a function
+or global variable defined in one file has the same name as a function
+or global variable in another file.  Even just a <em class="emph">similarity</em>
+between function names can cause hard-to-find bugs, since a programmer
+might type the wrong function name.
+</p>
+<p>The approach used to tackle this problem is called <em class="emph">information
+encapsulation</em>, which consists of packaging functional units into a
+given name space that is clearly separated from other name spaces.
+<a class="index-entry-id" id="index-encapsulation"></a>
+<a class="index-entry-id" id="index-information-encapsulation"></a>
+<a class="index-entry-id" id="index-name-space"></a>
+</p>
+<p>The language features that allow this are usually called <em class="emph">the
+module system</em> because programs are broken up into modules that are
+compiled separately (or loaded separately in an interpreter).
+</p>
+<p>Older languages, like C, have limited support for name space
+manipulation and protection.  In C a variable or function is public by
+default, and can be made local to a module with the <code class="code">static</code>
+keyword.  But you cannot reference public variables and functions from
+another module with different names.
+</p>
+<p>More advanced module systems have become a common feature in recently
+designed languages: ML, Python, Perl, and Modula 3 all allow the
+<em class="emph">renaming</em> of objects from a foreign module, so they will not
+clutter the global name space.
+<a class="index-entry-id" id="index-name-space-_002d-private"></a>
+</p>
+<p>In addition, Guile offers variables as first-class objects.  They can
+be used for interacting with the module system.
+</p>
+
+<ul class="mini-toc">
+<li><a href="General-Information-about-Modules.html" accesskey="1">General Information about Modules</a></li>
+<li><a href="Using-Guile-Modules.html" accesskey="2">Using Guile Modules</a></li>
+<li><a href="Creating-Guile-Modules.html" accesskey="3">Creating Guile Modules</a></li>
+<li><a href="Modules-and-the-File-System.html" accesskey="4">Modules and the File System</a></li>
+<li><a href="R6RS-Version-References.html" accesskey="5">R6RS Version References</a></li>
+<li><a href="R6RS-Libraries.html" accesskey="6">R6RS Libraries</a></li>
+<li><a href="Variables.html" accesskey="7">Variables</a></li>
+<li><a href="Module-System-Reflection.html" accesskey="8">Module System Reflection</a></li>
+<li><a href="Declarative-Modules.html" accesskey="9">Declarative Modules</a></li>
+<li><a href="Accessing-Modules-from-C.html">Accessing Modules from C</a></li>
+<li><a href="provide-and-require.html">provide and require</a></li>
+<li><a href="Environments.html">Environments</a></li>
+</ul>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Foreign-Function-Interface.html">Foreign Function Interface</a>, Previous: <a href="Memory-Management.html">Memory Management and Garbage Collection</a>, Up: <a href="API-Reference.html">API Reference</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

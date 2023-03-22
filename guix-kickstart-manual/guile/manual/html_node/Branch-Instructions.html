@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Branch Instructions (Guile Reference Manual)</title>
+
+<meta name="description" content="Branch Instructions (Guile Reference Manual)">
+<meta name="keywords" content="Branch Instructions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Instruction-Set.html" rel="up" title="Instruction Set">
+<link href="Raw-Memory-Access-Instructions.html" rel="next" title="Raw Memory Access Instructions">
+<link href="Comparison-Instructions.html" rel="prev" title="Comparison Instructions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Branch-Instructions">
+<div class="nav-panel">
+<p>
+Next: <a href="Raw-Memory-Access-Instructions.html" accesskey="n" rel="next">Raw Memory Access Instructions</a>, Previous: <a href="Comparison-Instructions.html" accesskey="p" rel="prev">Comparison Instructions</a>, Up: <a href="Instruction-Set.html" accesskey="u" rel="up">Instruction Set</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Branch-Instructions-1">9.3.7.15 Branch Instructions</h4>
+
+<p>All offsets to branch instructions are 24-bit signed numbers, which
+count 32-bit units.  This gives Guile effectively a 26-bit address range
+for relative jumps.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-j"><span class="category-def">Instruction: </span><span><strong class="def-name">j</strong> <code class="def-code-arguments">l24:<var class="var">offset</var></code><a class="copiable-link" href='#index-j'> &para;</a></span></dt>
+<dd><p>Add <var class="var">offset</var> to the current instruction pointer.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-jl"><span class="category-def">Instruction: </span><span><strong class="def-name">jl</strong> <code class="def-code-arguments">l24:<var class="var">offset</var></code><a class="copiable-link" href='#index-jl'> &para;</a></span></dt>
+<dd><p>If the last comparison result is <code class="code">LESS_THAN</code>, add <var class="var">offset</var>, a
+signed 24-bit number, to the current instruction pointer.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-je"><span class="category-def">Instruction: </span><span><strong class="def-name">je</strong> <code class="def-code-arguments">l24:<var class="var">offset</var></code><a class="copiable-link" href='#index-je'> &para;</a></span></dt>
+<dd><p>If the last comparison result is <code class="code">EQUAL</code>, add <var class="var">offset</var>, a
+signed 24-bit number, to the current instruction pointer.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-jnl"><span class="category-def">Instruction: </span><span><strong class="def-name">jnl</strong> <code class="def-code-arguments">l24:<var class="var">offset</var></code><a class="copiable-link" href='#index-jnl'> &para;</a></span></dt>
+<dd><p>If the last comparison result is not <code class="code">LESS_THAN</code>, add <var class="var">offset</var>,
+a signed 24-bit number, to the current instruction pointer.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-jne"><span class="category-def">Instruction: </span><span><strong class="def-name">jne</strong> <code class="def-code-arguments">l24:<var class="var">offset</var></code><a class="copiable-link" href='#index-jne'> &para;</a></span></dt>
+<dd><p>If the last comparison result is not <code class="code">EQUAL</code>, add <var class="var">offset</var>, a
+signed 24-bit number, to the current instruction pointer.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-jge"><span class="category-def">Instruction: </span><span><strong class="def-name">jge</strong> <code class="def-code-arguments">l24:<var class="var">offset</var></code><a class="copiable-link" href='#index-jge'> &para;</a></span></dt>
+<dd><p>If the last comparison result is <code class="code">NONE</code>, add <var class="var">offset</var>, a
+signed 24-bit number, to the current instruction pointer.
+</p>
+<p>This is intended for use after a <code class="code">&lt;?</code> comparison, and is different
+from <code class="code">jnl</code> in the way it handles not-a-number (NaN) values:
+<code class="code">&lt;?</code> sets <code class="code">INVALID</code> instead of <code class="code">NONE</code> if either value is
+a NaN.  For exact numbers, <code class="code">jge</code> is the same as <code class="code">jnl</code>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-jnge"><span class="category-def">Instruction: </span><span><strong class="def-name">jnge</strong> <code class="def-code-arguments">l24:<var class="var">offset</var></code><a class="copiable-link" href='#index-jnge'> &para;</a></span></dt>
+<dd><p>If the last comparison result is not <code class="code">NONE</code>, add <var class="var">offset</var>, a
+signed 24-bit number, to the current instruction pointer.
+</p>
+<p>This is intended for use after a <code class="code">&lt;?</code> comparison, and is different
+from <code class="code">jl</code> in the way it handles not-a-number (NaN) values:
+<code class="code">&lt;?</code> sets <code class="code">INVALID</code> instead of <code class="code">NONE</code> if either value is
+a NaN.  For exact numbers, <code class="code">jnge</code> is the same as <code class="code">jl</code>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-jtable"><span class="category-def">Instruction: </span><span><strong class="def-name">jtable</strong> <code class="def-code-arguments">s24:<var class="var">idx</var> v32:<var class="var">length</var> [x8:_ l24:<var class="var">offset</var>]...</code><a class="copiable-link" href='#index-jtable'> &para;</a></span></dt>
+<dd><p>Branch to an entry in a table, as in C&rsquo;s <code class="code">switch</code> statement.
+<var class="var">idx</var> is a <code class="code">u64</code> local indicating which entry to branch to.
+The immediate <var class="var">len</var> indicates the number of entries in the table,
+and should be greater than or equal to 1.  The last entry in the table
+is the &quot;catch-all&quot; entry.  The <var class="var">offset</var>... values are signed 24-bit
+immediates (<code class="code">l24</code> encoding), indicating a memory address as a
+number of 32-bit words away from the current instruction pointer.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Raw-Memory-Access-Instructions.html">Raw Memory Access Instructions</a>, Previous: <a href="Comparison-Instructions.html">Comparison Instructions</a>, Up: <a href="Instruction-Set.html">Instruction Set</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

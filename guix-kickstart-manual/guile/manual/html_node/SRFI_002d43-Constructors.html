@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-43 Constructors (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-43 Constructors (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-43 Constructors (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI_002d43.html" rel="up" title="SRFI-43">
+<link href="SRFI_002d43-Predicates.html" rel="next" title="SRFI-43 Predicates">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="SRFI_002d43-Constructors">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d43-Predicates.html" accesskey="n" rel="next">SRFI-43 Predicates</a>, Up: <a href="SRFI_002d43.html" accesskey="u" rel="up">SRFI-43 - Vector Library</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="SRFI_002d43-Constructors-1">7.5.30.1 SRFI-43 Constructors</h4>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dvector-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-vector</strong> <var class="def-var-arguments">size [fill]</var><a class="copiable-link" href='#index-make_002dvector-1'> &para;</a></span></dt>
+<dd><p>Create and return a vector of size <var class="var">size</var>, optionally filling it
+with <var class="var">fill</var>.  The default value of <var class="var">fill</var> is unspecified.
+</p>
+<div class="example">
+<pre class="example-preformatted">(make-vector 5 3) &rArr; #(3 3 3 3 3)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector</strong> <var class="def-var-arguments">x &hellip;</var><a class="copiable-link" href='#index-vector-1'> &para;</a></span></dt>
+<dd><p>Create and return a vector whose elements are <var class="var">x</var> <small class="enddots">...</small>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(vector 0 1 2 3 4) &rArr; #(0 1 2 3 4)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dunfold"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-unfold</strong> <var class="def-var-arguments">f length initial-seed &hellip;</var><a class="copiable-link" href='#index-vector_002dunfold'> &para;</a></span></dt>
+<dd><p>The fundamental vector constructor.  Create a vector whose length
+is <var class="var">length</var> and iterates across each index k from 0 up to
+<var class="var">length</var> - 1, applying <var class="var">f</var> at each iteration to the current
+index and current seeds, in that order, to receive n + 1 values: the
+element to put in the kth slot of the new vector, and n new seeds for
+the next iteration.  It is an error for the number of seeds to vary
+between iterations.
+</p>
+<div class="example">
+<pre class="example-preformatted">(vector-unfold (lambda (i x) (values x (- x 1)))
+               10 0)
+&rArr; #(0 -1 -2 -3 -4 -5 -6 -7 -8 -9)
+
+(vector-unfold values 10)
+&rArr; #(0 1 2 3 4 5 6 7 8 9)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dunfold_002dright"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-unfold-right</strong> <var class="def-var-arguments">f length initial-seed &hellip;</var><a class="copiable-link" href='#index-vector_002dunfold_002dright'> &para;</a></span></dt>
+<dd><p>Like <code class="code">vector-unfold</code>, but it uses <var class="var">f</var> to generate elements from
+right-to-left, rather than left-to-right.
+</p>
+<div class="example">
+<pre class="example-preformatted">(vector-unfold-right (lambda (i x) (values x (+ x 1)))
+                     10 0)
+&rArr; #(9 8 7 6 5 4 3 2 1 0)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dcopy-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-copy</strong> <var class="def-var-arguments">vec [start [end [fill]]]</var><a class="copiable-link" href='#index-vector_002dcopy-1'> &para;</a></span></dt>
+<dd><p>Allocate a new vector whose length is <var class="var">end</var> - <var class="var">start</var> and fills
+it with elements from <var class="var">vec</var>, taking elements from <var class="var">vec</var> starting
+at index <var class="var">start</var> and stopping at index <var class="var">end</var>.  <var class="var">start</var>
+defaults to 0 and <var class="var">end</var> defaults to the value of
+<code class="code">(vector-length vec)</code>.  If <var class="var">end</var> extends beyond the length of
+<var class="var">vec</var>, the slots in the new vector that obviously cannot be filled
+by elements from <var class="var">vec</var> are filled with <var class="var">fill</var>, whose default
+value is unspecified.
+</p>
+<div class="example">
+<pre class="example-preformatted">(vector-copy '#(a b c d e f g h i))
+&rArr; #(a b c d e f g h i)
+
+(vector-copy '#(a b c d e f g h i) 6)
+&rArr; #(g h i)
+
+(vector-copy '#(a b c d e f g h i) 3 6)
+&rArr; #(d e f)
+
+(vector-copy '#(a b c d e f g h i) 6 12 'x)
+&rArr; #(g h i x x x)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dreverse_002dcopy"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-reverse-copy</strong> <var class="def-var-arguments">vec [start [end]]</var><a class="copiable-link" href='#index-vector_002dreverse_002dcopy'> &para;</a></span></dt>
+<dd><p>Like <code class="code">vector-copy</code>, but it copies the elements in the reverse order
+from <var class="var">vec</var>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(vector-reverse-copy '#(5 4 3 2 1 0) 1 5)
+&rArr; #(1 2 3 4)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dappend"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-append</strong> <var class="def-var-arguments">vec &hellip;</var><a class="copiable-link" href='#index-vector_002dappend'> &para;</a></span></dt>
+<dd><p>Return a newly allocated vector that contains all elements in order from
+the subsequent locations in <var class="var">vec</var> <small class="enddots">...</small>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(vector-append '#(a) '#(b c d))
+&rArr; #(a b c d)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dconcatenate"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-concatenate</strong> <var class="def-var-arguments">list-of-vectors</var><a class="copiable-link" href='#index-vector_002dconcatenate'> &para;</a></span></dt>
+<dd><p>Append each vector in <var class="var">list-of-vectors</var>.  Equivalent to
+<code class="code">(apply vector-append list-of-vectors)</code>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(vector-concatenate '(#(a b) #(c d)))
+&rArr; #(a b c d)
+</pre></div>
+</dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d43-Predicates.html">SRFI-43 Predicates</a>, Up: <a href="SRFI_002d43.html">SRFI-43 - Vector Library</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Creating Character Sets (Guile Reference Manual)</title>
+
+<meta name="description" content="Creating Character Sets (Guile Reference Manual)">
+<meta name="keywords" content="Creating Character Sets (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Character-Sets.html" rel="up" title="Character Sets">
+<link href="Querying-Character-Sets.html" rel="next" title="Querying Character Sets">
+<link href="Iterating-Over-Character-Sets.html" rel="prev" title="Iterating Over Character Sets">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Creating-Character-Sets">
+<div class="nav-panel">
+<p>
+Next: <a href="Querying-Character-Sets.html" accesskey="n" rel="next">Querying Character Sets</a>, Previous: <a href="Iterating-Over-Character-Sets.html" accesskey="p" rel="prev">Iterating Over Character Sets</a>, Up: <a href="Character-Sets.html" accesskey="u" rel="up">Character Sets</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Creating-Character-Sets-1">6.6.4.3 Creating Character Sets</h4>
+
+<p>New character sets are produced with these procedures.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dcopy"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-copy</strong> <var class="def-var-arguments">cs</var><a class="copiable-link" href='#index-char_002dset_002dcopy'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fcopy"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_copy</strong> <var class="def-var-arguments">(cs)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fcopy'> &para;</a></span></dt>
+<dd><p>Return a newly allocated character set containing all
+characters in <var class="var">cs</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set</strong> <var class="def-var-arguments">chr &hellip;</var><a class="copiable-link" href='#index-char_002dset'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set</strong> <var class="def-var-arguments">(chrs)</var><a class="copiable-link" href='#index-scm_005fchar_005fset'> &para;</a></span></dt>
+<dd><p>Return a character set containing all given characters.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-list_002d_003echar_002dset"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list-&gt;char-set</strong> <var class="def-var-arguments">list [base_cs]</var><a class="copiable-link" href='#index-list_002d_003echar_002dset'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flist_005fto_005fchar_005fset"><span class="category-def">C Function: </span><span><strong class="def-name">scm_list_to_char_set</strong> <var class="def-var-arguments">(list, base_cs)</var><a class="copiable-link" href='#index-scm_005flist_005fto_005fchar_005fset'> &para;</a></span></dt>
+<dd><p>Convert the character list <var class="var">list</var> to a character set.  If
+the character set <var class="var">base_cs</var> is given, the character in this
+set are also included in the result.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-list_002d_003echar_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list-&gt;char-set!</strong> <var class="def-var-arguments">list base_cs</var><a class="copiable-link" href='#index-list_002d_003echar_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flist_005fto_005fchar_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_list_to_char_set_x</strong> <var class="def-var-arguments">(list, base_cs)</var><a class="copiable-link" href='#index-scm_005flist_005fto_005fchar_005fset_005fx'> &para;</a></span></dt>
+<dd><p>Convert the character list <var class="var">list</var> to a character set.  The
+characters are added to <var class="var">base_cs</var> and <var class="var">base_cs</var> is
+returned.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002d_003echar_002dset"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-&gt;char-set</strong> <var class="def-var-arguments">str [base_cs]</var><a class="copiable-link" href='#index-string_002d_003echar_002dset'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fto_005fchar_005fset"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_to_char_set</strong> <var class="def-var-arguments">(str, base_cs)</var><a class="copiable-link" href='#index-scm_005fstring_005fto_005fchar_005fset'> &para;</a></span></dt>
+<dd><p>Convert the string <var class="var">str</var> to a character set.  If the
+character set <var class="var">base_cs</var> is given, the characters in this
+set are also included in the result.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002d_003echar_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-&gt;char-set!</strong> <var class="def-var-arguments">str base_cs</var><a class="copiable-link" href='#index-string_002d_003echar_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fto_005fchar_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_to_char_set_x</strong> <var class="def-var-arguments">(str, base_cs)</var><a class="copiable-link" href='#index-scm_005fstring_005fto_005fchar_005fset_005fx'> &para;</a></span></dt>
+<dd><p>Convert the string <var class="var">str</var> to a character set.  The
+characters from the string are added to <var class="var">base_cs</var>, and
+<var class="var">base_cs</var> is returned.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dfilter"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-filter</strong> <var class="def-var-arguments">pred cs [base_cs]</var><a class="copiable-link" href='#index-char_002dset_002dfilter'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005ffilter"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_filter</strong> <var class="def-var-arguments">(pred, cs, base_cs)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005ffilter'> &para;</a></span></dt>
+<dd><p>Return a character set containing every character from <var class="var">cs</var>
+so that it satisfies <var class="var">pred</var>.  If provided, the characters
+from <var class="var">base_cs</var> are added to the result.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dfilter_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-filter!</strong> <var class="def-var-arguments">pred cs base_cs</var><a class="copiable-link" href='#index-char_002dset_002dfilter_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005ffilter_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_filter_x</strong> <var class="def-var-arguments">(pred, cs, base_cs)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005ffilter_005fx'> &para;</a></span></dt>
+<dd><p>Return a character set containing every character from <var class="var">cs</var>
+so that it satisfies <var class="var">pred</var>.  The characters are added to
+<var class="var">base_cs</var> and <var class="var">base_cs</var> is returned.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ucs_002drange_002d_003echar_002dset"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ucs-range-&gt;char-set</strong> <var class="def-var-arguments">lower upper [error [base_cs]]</var><a class="copiable-link" href='#index-ucs_002drange_002d_003echar_002dset'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fucs_005frange_005fto_005fchar_005fset"><span class="category-def">C Function: </span><span><strong class="def-name">scm_ucs_range_to_char_set</strong> <var class="def-var-arguments">(lower, upper, error, base_cs)</var><a class="copiable-link" href='#index-scm_005fucs_005frange_005fto_005fchar_005fset'> &para;</a></span></dt>
+<dd><p>Return a character set containing all characters whose
+character codes lie in the half-open range
+[<var class="var">lower</var>,<var class="var">upper</var>).
+</p>
+<p>If <var class="var">error</var> is a true value, an error is signalled if the
+specified range contains characters which are not contained in
+the implemented character range.  If <var class="var">error</var> is <code class="code">#f</code>,
+these characters are silently left out of the resulting
+character set.
+</p>
+<p>The characters in <var class="var">base_cs</var> are added to the result, if
+given.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ucs_002drange_002d_003echar_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ucs-range-&gt;char-set!</strong> <var class="def-var-arguments">lower upper error base_cs</var><a class="copiable-link" href='#index-ucs_002drange_002d_003echar_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fucs_005frange_005fto_005fchar_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_ucs_range_to_char_set_x</strong> <var class="def-var-arguments">(lower, upper, error, base_cs)</var><a class="copiable-link" href='#index-scm_005fucs_005frange_005fto_005fchar_005fset_005fx'> &para;</a></span></dt>
+<dd><p>Return a character set containing all characters whose
+character codes lie in the half-open range
+[<var class="var">lower</var>,<var class="var">upper</var>).
+</p>
+<p>If <var class="var">error</var> is a true value, an error is signalled if the
+specified range contains characters which are not contained in
+the implemented character range.  If <var class="var">error</var> is <code class="code">#f</code>,
+these characters are silently left out of the resulting
+character set.
+</p>
+<p>The characters are added to <var class="var">base_cs</var> and <var class="var">base_cs</var> is
+returned.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_002d_003echar_002dset"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">-&gt;char-set</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-_002d_003echar_002dset'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fto_005fchar_005fset"><span class="category-def">C Function: </span><span><strong class="def-name">scm_to_char_set</strong> <var class="def-var-arguments">(x)</var><a class="copiable-link" href='#index-scm_005fto_005fchar_005fset'> &para;</a></span></dt>
+<dd><p>Coerces x into a char-set. <var class="var">x</var> may be a string, character or
+char-set. A string is converted to the set of its constituent
+characters; a character is converted to a singleton set; a char-set is
+returned as-is.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Querying-Character-Sets.html">Querying Character Sets</a>, Previous: <a href="Iterating-Over-Character-Sets.html">Iterating Over Character Sets</a>, Up: <a href="Character-Sets.html">Character Sets</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

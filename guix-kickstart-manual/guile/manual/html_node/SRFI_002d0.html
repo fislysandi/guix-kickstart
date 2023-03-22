@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-0 (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-0 (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-0 (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI-Support.html" rel="up" title="SRFI Support">
+<link href="SRFI_002d1.html" rel="next" title="SRFI-1">
+<link href="About-SRFI-Usage.html" rel="prev" title="About SRFI Usage">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="SRFI_002d0">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d1.html" accesskey="n" rel="next">SRFI-1 - List library</a>, Previous: <a href="About-SRFI-Usage.html" accesskey="p" rel="prev">About SRFI Usage</a>, Up: <a href="SRFI-Support.html" accesskey="u" rel="up">SRFI Support Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="SRFI_002d0-_002d-cond_002dexpand">7.5.2 SRFI-0 - cond-expand</h4>
+<a class="index-entry-id" id="index-SRFI_002d0"></a>
+
+<p>This SRFI lets a portable Scheme program test for the presence of
+certain features, and adapt itself by using different blocks of code,
+or fail if the necessary features are not available.  There&rsquo;s no
+module to load, this is in the Guile core.
+</p>
+<p>A program designed only for Guile will generally not need this
+mechanism, such a program can of course directly use the various
+documented parts of Guile.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-cond_002dexpand"><span class="category-def">syntax: </span><span><strong class="def-name">cond-expand</strong> <var class="def-var-arguments">(feature body&hellip;) &hellip;</var><a class="copiable-link" href='#index-cond_002dexpand'> &para;</a></span></dt>
+<dd><p>Expand to the <var class="var">body</var> of the first clause whose <var class="var">feature</var>
+specification is satisfied.  It is an error if no <var class="var">feature</var> is
+satisfied.
+</p>
+<p>Features are symbols such as <code class="code">srfi-1</code>, and a feature
+specification can use <code class="code">and</code>, <code class="code">or</code> and <code class="code">not</code> forms to
+test combinations.  The last clause can be an <code class="code">else</code>, to be used
+if no other passes.
+</p>
+<p>For example, define a private version of <code class="code">alist-cons</code> if SRFI-1
+is not available.
+</p>
+<div class="example">
+<pre class="example-preformatted">(cond-expand (srfi-1
+              )
+             (else
+              (define (alist-cons key val alist)
+                (cons (cons key val) alist))))
+</pre></div>
+
+<p>Or demand a certain set of SRFIs (list operations, string ports,
+<code class="code">receive</code> and string operations), failing if they&rsquo;re not
+available.
+</p>
+<div class="example">
+<pre class="example-preformatted">(cond-expand ((and srfi-1 srfi-6 srfi-8 srfi-13)
+              ))
+</pre></div>
+</dd></dl>
+
+<p>The Guile core has the following features,
+</p>
+<div class="example">
+<pre class="example-preformatted">guile
+guile-2   ;; starting from Guile 2.x
+guile-2.2 ;; starting from Guile 2.2
+guile-3   ;; starting from Guile 3.x
+guile-3.0 ;; starting from Guile 3.0
+r5rs
+r6rs
+r7rs
+exact-closed ieee-float full-unicode ratios ;; R7RS features
+srfi-0
+srfi-4
+srfi-6
+srfi-13
+srfi-14
+srfi-16
+srfi-23
+srfi-30
+srfi-39
+srfi-46
+srfi-55
+srfi-61
+srfi-62
+srfi-87
+srfi-105
+</pre></div>
+
+<p>Other SRFI feature symbols are defined once their code has been loaded
+with <code class="code">use-modules</code>, since only then are their bindings available.
+</p>
+<p>The &lsquo;<samp class="samp">--use-srfi</samp>&rsquo; command line option (see <a class="pxref" href="Invoking-Guile.html">Invoking Guile</a>) is
+a good way to load SRFIs to satisfy <code class="code">cond-expand</code> when running a
+portable program.
+</p>
+<p>Testing the <code class="code">guile</code> feature allows a program to adapt itself to
+the Guile module system, but still run on other Scheme systems.  For
+example the following demands SRFI-8 (<code class="code">receive</code>), but also knows
+how to load it with the Guile mechanism.
+</p>
+<div class="example">
+<pre class="example-preformatted">(cond-expand (srfi-8
+              )
+             (guile
+              (use-modules (srfi srfi-8))))
+</pre></div>
+
+<a class="index-entry-id" id="index-guile_002d2-SRFI_002d0-feature"></a>
+<a class="index-entry-id" id="index-portability-between-2_002e0-and-older-versions"></a>
+<p>Likewise, testing the <code class="code">guile-2</code> feature allows code to be portable
+between Guile 2.<var class="var">x</var> and previous versions of Guile.  For instance, it
+makes it possible to write code that accounts for Guile 2.<var class="var">x</var>&rsquo;s compiler,
+yet be correctly interpreted on 1.8 and earlier versions:
+</p>
+<div class="example">
+<pre class="example-preformatted">(cond-expand (guile-2 (eval-when (compile)
+                        ;; This must be evaluated at compile time.
+                        (fluid-set! current-reader my-reader)))
+             (guile
+                      ;; Earlier versions of Guile do not have a
+                      ;; separate compilation phase.
+                      (fluid-set! current-reader my-reader)))
+</pre></div>
+
+<p>It should be noted that <code class="code">cond-expand</code> is separate from the
+<code class="code">*features*</code> mechanism (see <a class="pxref" href="Feature-Tracking.html">Feature Tracking</a>), feature
+symbols in one are unrelated to those in the other.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d1.html">SRFI-1 - List library</a>, Previous: <a href="About-SRFI-Usage.html">About SRFI Usage</a>, Up: <a href="SRFI-Support.html">SRFI Support Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

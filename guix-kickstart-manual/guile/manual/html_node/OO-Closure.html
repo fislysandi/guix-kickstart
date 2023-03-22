@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>OO Closure (Guile Reference Manual)</title>
+
+<meta name="description" content="OO Closure (Guile Reference Manual)">
+<meta name="keywords" content="OO Closure (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="About-Closure.html" rel="up" title="About Closure">
+<link href="Callback-Closure.html" rel="prev" title="Callback Closure">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="OO-Closure">
+<div class="nav-panel">
+<p>
+Previous: <a href="Callback-Closure.html" accesskey="p" rel="prev">Example 3: The Callback Closure Problem</a>, Up: <a href="About-Closure.html" accesskey="u" rel="up">The Concept of Closure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Example-4_003a-Object-Orientation">3.4.9 Example 4: Object Orientation</h4>
+
+<p>Closure is the capture of an environment, containing persistent variable
+bindings, within the definition of a procedure or a set of related
+procedures.  This is rather similar to the idea in some object oriented
+languages of encapsulating a set of related data variables inside an
+&ldquo;object&rdquo;, together with a set of &ldquo;methods&rdquo; that operate on the
+encapsulated data.  The following example shows how closure can be used
+to emulate the ideas of objects, methods and encapsulation in Scheme.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define (make-account)
+  (let ((balance 0))
+    (define (get-balance)
+      balance)
+    (define (deposit amount)
+      (set! balance (+ balance amount))
+      balance)
+    (define (withdraw amount)
+      (deposit (- amount)))
+
+    (lambda args
+      (apply
+        (case (car args)
+          ((get-balance) get-balance)
+          ((deposit) deposit)
+          ((withdraw) withdraw)
+          (else (error &quot;Invalid method!&quot;)))
+        (cdr args)))))
+</pre></div>
+
+<p>Each call to <code class="code">make-account</code> creates and returns a new procedure,
+created by the expression in the example code that begins &ldquo;(lambda
+args&rdquo;.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define my-account (make-account))
+
+my-account
+&rArr;
+#&lt;procedure args&gt;
+</pre></div>
+
+<p>This procedure acts as an account object with methods
+<code class="code">get-balance</code>, <code class="code">deposit</code> and <code class="code">withdraw</code>.  To apply one of
+the methods to the account, you call the procedure with a symbol
+indicating the required method as the first parameter, followed by any
+other parameters that are required by that method.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(my-account 'get-balance)
+&rArr;
+0
+
+(my-account 'withdraw 5)
+&rArr;
+-5
+
+(my-account 'deposit 396)
+&rArr;
+391
+
+(my-account 'get-balance)
+&rArr;
+391
+</pre></div>
+
+<p>Note how, in this example, both the current balance and the helper
+procedures <code class="code">get-balance</code>, <code class="code">deposit</code> and <code class="code">withdraw</code>, used
+to implement the guts of the account object&rsquo;s methods, are all stored in
+variable bindings within the private local environment captured by the
+<code class="code">lambda</code> expression that creates the account object procedure.
+</p>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Callback-Closure.html">Example 3: The Callback Closure Problem</a>, Up: <a href="About-Closure.html">The Concept of Closure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

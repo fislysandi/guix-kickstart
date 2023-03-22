@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Accessing Slots (Guile Reference Manual)</title>
+
+<meta name="description" content="Accessing Slots (Guile Reference Manual)">
+<meta name="keywords" content="Accessing Slots (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Introspection.html" rel="up" title="Introspection">
+<link href="Generic-Functions.html" rel="prev" title="Generic Functions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Accessing-Slots">
+<div class="nav-panel">
+<p>
+Previous: <a href="Generic-Functions.html" accesskey="p" rel="prev">Generic Functions</a>, Up: <a href="Introspection.html" accesskey="u" rel="up">Introspection</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Accessing-Slots-1">8.8.5 Accessing Slots</h4>
+
+<p>Any slot, regardless of its allocation, can be queried, referenced and
+set using the following four primitive procedures.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-slot_002dexists_003f"><span class="category-def">primitive procedure: </span><span><strong class="def-name">slot-exists?</strong> <var class="def-var-arguments">obj slot-name</var><a class="copiable-link" href='#index-slot_002dexists_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> has a slot with name <var class="var">slot-name</var>,
+otherwise <code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-slot_002dbound_003f"><span class="category-def">primitive procedure: </span><span><strong class="def-name">slot-bound?</strong> <var class="def-var-arguments">obj slot-name</var><a class="copiable-link" href='#index-slot_002dbound_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if the slot named <var class="var">slot-name</var> in <var class="var">obj</var> has a
+value, otherwise <code class="code">#f</code>.
+</p>
+<p><code class="code">slot-bound?</code> calls the generic function <code class="code">slot-missing</code> if
+<var class="var">obj</var> does not have a slot called <var class="var">slot-name</var> (see <a class="pxref" href="#Accessing-Slots">slot-missing</a>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-slot_002dref-1"><span class="category-def">primitive procedure: </span><span><strong class="def-name">slot-ref</strong> <var class="def-var-arguments">obj slot-name</var><a class="copiable-link" href='#index-slot_002dref-1'> &para;</a></span></dt>
+<dd><p>Return the value of the slot named <var class="var">slot-name</var> in <var class="var">obj</var>.
+</p>
+<p><code class="code">slot-ref</code> calls the generic function <code class="code">slot-missing</code> if
+<var class="var">obj</var> does not have a slot called <var class="var">slot-name</var> (see <a class="pxref" href="#Accessing-Slots">slot-missing</a>).
+</p>
+<p><code class="code">slot-ref</code> calls the generic function <code class="code">slot-unbound</code> if the
+named slot in <var class="var">obj</var> does not have a value (see <a class="pxref" href="#Accessing-Slots">slot-unbound</a>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-slot_002dset_0021-1"><span class="category-def">primitive procedure: </span><span><strong class="def-name">slot-set!</strong> <var class="def-var-arguments">obj slot-name value</var><a class="copiable-link" href='#index-slot_002dset_0021-1'> &para;</a></span></dt>
+<dd><p>Set the value of the slot named <var class="var">slot-name</var> in <var class="var">obj</var> to <var class="var">value</var>.
+</p>
+<p><code class="code">slot-set!</code> calls the generic function <code class="code">slot-missing</code> if
+<var class="var">obj</var> does not have a slot called <var class="var">slot-name</var> (see <a class="pxref" href="#Accessing-Slots">slot-missing</a>).
+</p></dd></dl>
+
+<p>GOOPS stores information about slots in classes.  Internally,
+all of these procedures work by looking up the slot definition for the
+slot named <var class="var">slot-name</var> in the class <code class="code">(class-of
+<var class="var">obj</var>)</code>, and then using the slot definition&rsquo;s &ldquo;getter&rdquo; and
+&ldquo;setter&rdquo; closures to get and set the slot value.
+</p>
+<p>The next four procedures differ from the previous ones in that they take
+the class as an explicit argument, rather than assuming
+<code class="code">(class-of <var class="var">obj</var>)</code>.  Therefore they allow you to apply the
+&ldquo;getter&rdquo; and &ldquo;setter&rdquo; closures of a slot definition in one class to
+an instance of a different class.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-slot_002dexists_002dusing_002dclass_003f"><span class="category-def">primitive procedure: </span><span><strong class="def-name">slot-exists-using-class?</strong> <var class="def-var-arguments">class obj slot-name</var><a class="copiable-link" href='#index-slot_002dexists_002dusing_002dclass_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">class</var> has a slot definition for a slot with
+name <var class="var">slot-name</var>, otherwise <code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-slot_002dbound_002dusing_002dclass_003f"><span class="category-def">primitive procedure: </span><span><strong class="def-name">slot-bound-using-class?</strong> <var class="def-var-arguments">class obj slot-name</var><a class="copiable-link" href='#index-slot_002dbound_002dusing_002dclass_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if applying <code class="code">slot-ref-using-class</code> to the same
+arguments would call the generic function <code class="code">slot-unbound</code>, otherwise
+<code class="code">#f</code>.
+</p>
+<p><code class="code">slot-bound-using-class?</code> calls the generic function
+<code class="code">slot-missing</code> if <var class="var">class</var> does not have a slot definition for a
+slot called <var class="var">slot-name</var> (see <a class="pxref" href="#Accessing-Slots">slot-missing</a>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-slot_002dref_002dusing_002dclass"><span class="category-def">primitive procedure: </span><span><strong class="def-name">slot-ref-using-class</strong> <var class="def-var-arguments">class obj slot-name</var><a class="copiable-link" href='#index-slot_002dref_002dusing_002dclass'> &para;</a></span></dt>
+<dd><p>Apply the &ldquo;getter&rdquo; closure for the slot named <var class="var">slot-name</var> in
+<var class="var">class</var> to <var class="var">obj</var>, and return its result.
+</p>
+<p><code class="code">slot-ref-using-class</code> calls the generic function
+<code class="code">slot-missing</code> if <var class="var">class</var> does not have a slot definition for a
+slot called <var class="var">slot-name</var> (see <a class="pxref" href="#Accessing-Slots">slot-missing</a>).
+</p>
+<p><code class="code">slot-ref-using-class</code> calls the generic function
+<code class="code">slot-unbound</code> if the application of the &ldquo;getter&rdquo; closure to
+<var class="var">obj</var> returns an unbound value (see <a class="pxref" href="#Accessing-Slots">slot-unbound</a>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-slot_002dset_002dusing_002dclass_0021"><span class="category-def">primitive procedure: </span><span><strong class="def-name">slot-set-using-class!</strong> <var class="def-var-arguments">class obj slot-name value</var><a class="copiable-link" href='#index-slot_002dset_002dusing_002dclass_0021'> &para;</a></span></dt>
+<dd><p>Apply the &ldquo;setter&rdquo; closure for the slot named <var class="var">slot-name</var> in
+<var class="var">class</var> to <var class="var">obj</var> and <var class="var">value</var>.
+</p>
+<p><code class="code">slot-set-using-class!</code> calls the generic function
+<code class="code">slot-missing</code> if <var class="var">class</var> does not have a slot definition for a
+slot called <var class="var">slot-name</var> (see <a class="pxref" href="#Accessing-Slots">slot-missing</a>).
+</p></dd></dl>
+
+<p>Slots whose allocation is per-class rather than per-instance can be
+referenced and set without needing to specify any particular instance.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-class_002dslot_002dref"><span class="category-def">procedure: </span><span><strong class="def-name">class-slot-ref</strong> <var class="def-var-arguments">class slot-name</var><a class="copiable-link" href='#index-class_002dslot_002dref'> &para;</a></span></dt>
+<dd><p>Return the value of the slot named <var class="var">slot-name</var> in class <var class="var">class</var>.
+The named slot must have <code class="code">#:class</code> or <code class="code">#:each-subclass</code>
+allocation (see <a class="pxref" href="Slot-Options.html">allocation</a>).
+</p>
+<p>If there is no such slot with <code class="code">#:class</code> or <code class="code">#:each-subclass</code>
+allocation, <code class="code">class-slot-ref</code> calls the <code class="code">slot-missing</code> generic
+function with arguments <var class="var">class</var> and <var class="var">slot-name</var>.  Otherwise, if
+the slot value is unbound, <code class="code">class-slot-ref</code> calls the
+<code class="code">slot-unbound</code> generic function, with the same arguments.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-class_002dslot_002dset_0021"><span class="category-def">procedure: </span><span><strong class="def-name">class-slot-set!</strong> <var class="def-var-arguments">class slot-name value</var><a class="copiable-link" href='#index-class_002dslot_002dset_0021'> &para;</a></span></dt>
+<dd><p>Set the value of the slot named <var class="var">slot-name</var> in class <var class="var">class</var> to
+<var class="var">value</var>.  The named slot must have <code class="code">#:class</code> or
+<code class="code">#:each-subclass</code> allocation (see <a class="pxref" href="Slot-Options.html">allocation</a>).
+</p>
+<p>If there is no such slot with <code class="code">#:class</code> or <code class="code">#:each-subclass</code>
+allocation, <code class="code">class-slot-ref</code> calls the <code class="code">slot-missing</code> generic
+function with arguments <var class="var">class</var> and <var class="var">slot-name</var>.
+</p></dd></dl>
+
+<p>When a <code class="code">slot-ref</code> or <code class="code">slot-set!</code> call specifies a non-existent
+slot name, or tries to reference a slot whose value is unbound, GOOPS
+calls one of the following generic functions.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-slot_002dmissing"><span class="category-def">generic: </span><span><strong class="def-name">slot-missing</strong><a class="copiable-link" href='#index-slot_002dmissing'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-slot_002dmissing-1"><span class="category-def">method: </span><span><strong class="def-name">slot-missing</strong> <var class="def-var-arguments">(class &lt;class&gt;) slot-name</var><a class="copiable-link" href='#index-slot_002dmissing-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-slot_002dmissing-2"><span class="category-def">method: </span><span><strong class="def-name">slot-missing</strong> <var class="def-var-arguments">(class &lt;class&gt;) (object &lt;object&gt;) slot-name</var><a class="copiable-link" href='#index-slot_002dmissing-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-slot_002dmissing-3"><span class="category-def">method: </span><span><strong class="def-name">slot-missing</strong> <var class="def-var-arguments">(class &lt;class&gt;) (object &lt;object&gt;) slot-name value</var><a class="copiable-link" href='#index-slot_002dmissing-3'> &para;</a></span></dt>
+<dd><p>When an application attempts to reference or set a class or instance
+slot by name, and the slot name is invalid for the specified <var class="var">class</var>
+or <var class="var">object</var>, GOOPS calls the <code class="code">slot-missing</code> generic function.
+</p>
+<p>The default methods all call <code class="code">goops-error</code> with an appropriate
+message.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-slot_002dunbound"><span class="category-def">generic: </span><span><strong class="def-name">slot-unbound</strong><a class="copiable-link" href='#index-slot_002dunbound'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-slot_002dunbound-1"><span class="category-def">method: </span><span><strong class="def-name">slot-unbound</strong> <var class="def-var-arguments">(object &lt;object&gt;)</var><a class="copiable-link" href='#index-slot_002dunbound-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-slot_002dunbound-2"><span class="category-def">method: </span><span><strong class="def-name">slot-unbound</strong> <var class="def-var-arguments">(class &lt;class&gt;) slot-name</var><a class="copiable-link" href='#index-slot_002dunbound-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-slot_002dunbound-3"><span class="category-def">method: </span><span><strong class="def-name">slot-unbound</strong> <var class="def-var-arguments">(class &lt;class&gt;) (object &lt;object&gt;) slot-name</var><a class="copiable-link" href='#index-slot_002dunbound-3'> &para;</a></span></dt>
+<dd><p>When an application attempts to reference a class or instance slot, and
+the slot&rsquo;s value is unbound, GOOPS calls the <code class="code">slot-unbound</code> generic
+function.
+</p>
+<p>The default methods all call <code class="code">goops-error</code> with an appropriate
+message.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Generic-Functions.html">Generic Functions</a>, Up: <a href="Introspection.html">Introspection</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

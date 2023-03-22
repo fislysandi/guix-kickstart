@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Object Properties (Guile Reference Manual)</title>
+
+<meta name="description" content="Object Properties (Guile Reference Manual)">
+<meta name="keywords" content="Object Properties (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Utility-Functions.html" rel="up" title="Utility Functions">
+<link href="Sorting.html" rel="next" title="Sorting">
+<link href="Equality.html" rel="prev" title="Equality">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Object-Properties">
+<div class="nav-panel">
+<p>
+Next: <a href="Sorting.html" accesskey="n" rel="next">Sorting</a>, Previous: <a href="Equality.html" accesskey="p" rel="prev">Equality</a>, Up: <a href="Utility-Functions.html" accesskey="u" rel="up">General Utility Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Object-Properties-1">6.9.2 Object Properties</h4>
+
+<p>It&rsquo;s often useful to associate a piece of additional information with a
+Scheme object even though that object does not have a dedicated slot
+available in which the additional information could be stored.  Object
+properties allow you to do just that.
+</p>
+<p>Guile&rsquo;s representation of an object property is a procedure-with-setter
+(see <a class="pxref" href="Procedures-with-Setters.html">Procedures with Setters</a>) that can be used with the generalized
+form of <code class="code">set!</code> to set and retrieve that property for any Scheme object.  So, setting a
+property looks like this:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(set! (my-property obj1) value-for-obj1)
+(set! (my-property obj2) value-for-obj2)
+</pre></div>
+
+<p>And retrieving values of the same property looks like this:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(my-property obj1)
+&rArr;
+value-for-obj1
+
+(my-property obj2)
+&rArr;
+value-for-obj2
+</pre></div>
+
+<p>To create an object property in the first place, use the
+<code class="code">make-object-property</code> procedure:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define my-property (make-object-property))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dobject_002dproperty"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-object-property</strong><a class="copiable-link" href='#index-make_002dobject_002dproperty'> &para;</a></span></dt>
+<dd><p>Create and return an object property.  An object property is a
+procedure-with-setter that can be called in two ways.  <code class="code">(set!
+(<var class="var">property</var> <var class="var">obj</var>) <var class="var">val</var>)</code> sets <var class="var">obj</var>&rsquo;s <var class="var">property</var>
+to <var class="var">val</var>.  <code class="code">(<var class="var">property</var> <var class="var">obj</var>)</code> returns the current
+setting of <var class="var">obj</var>&rsquo;s <var class="var">property</var>.
+</p></dd></dl>
+
+<p>A single object property created by <code class="code">make-object-property</code> can
+associate distinct property values with all Scheme values that are
+distinguishable by <code class="code">eq?</code> (ruling out numeric values).
+</p>
+<p>Internally, object properties are implemented using a weak key hash
+table.  This means that, as long as a Scheme value with property values
+is protected from garbage collection, its property values are also
+protected.  When the Scheme value is collected, its entry in the
+property table is removed and so the (ex-) property values are no longer
+protected by the table.
+</p>
+<p>Guile also implements a more traditional Lispy interface to properties,
+in which each object has an list of key-value pairs associated with it.
+Properties in that list are keyed by symbols.  This is a legacy
+interface; you should use weak hash tables or object properties instead.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-object_002dproperties"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">object-properties</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-object_002dproperties'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fobject_005fproperties"><span class="category-def">C Function: </span><span><strong class="def-name">scm_object_properties</strong> <var class="def-var-arguments">(obj)</var><a class="copiable-link" href='#index-scm_005fobject_005fproperties'> &para;</a></span></dt>
+<dd><p>Return <var class="var">obj</var>&rsquo;s property list.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-set_002dobject_002dproperties_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-object-properties!</strong> <var class="def-var-arguments">obj alist</var><a class="copiable-link" href='#index-set_002dobject_002dproperties_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fset_005fobject_005fproperties_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_set_object_properties_x</strong> <var class="def-var-arguments">(obj, alist)</var><a class="copiable-link" href='#index-scm_005fset_005fobject_005fproperties_005fx'> &para;</a></span></dt>
+<dd><p>Set <var class="var">obj</var>&rsquo;s property list to <var class="var">alist</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-object_002dproperty"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">object-property</strong> <var class="def-var-arguments">obj key</var><a class="copiable-link" href='#index-object_002dproperty'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fobject_005fproperty"><span class="category-def">C Function: </span><span><strong class="def-name">scm_object_property</strong> <var class="def-var-arguments">(obj, key)</var><a class="copiable-link" href='#index-scm_005fobject_005fproperty'> &para;</a></span></dt>
+<dd><p>Return the property of <var class="var">obj</var> with name <var class="var">key</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-set_002dobject_002dproperty_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-object-property!</strong> <var class="def-var-arguments">obj key value</var><a class="copiable-link" href='#index-set_002dobject_002dproperty_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fset_005fobject_005fproperty_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_set_object_property_x</strong> <var class="def-var-arguments">(obj, key, value)</var><a class="copiable-link" href='#index-scm_005fset_005fobject_005fproperty_005fx'> &para;</a></span></dt>
+<dd><p>In <var class="var">obj</var>&rsquo;s property list, set the property named <var class="var">key</var>
+to <var class="var">value</var>.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Sorting.html">Sorting</a>, Previous: <a href="Equality.html">Equality</a>, Up: <a href="Utility-Functions.html">General Utility Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

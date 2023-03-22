@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Class Definition Protocol (Guile Reference Manual)</title>
+
+<meta name="description" content="Class Definition Protocol (Guile Reference Manual)">
+<meta name="keywords" content="Class Definition Protocol (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="The-Metaobject-Protocol.html" rel="up" title="The Metaobject Protocol">
+<link href="Customizing-Class-Definition.html" rel="next" title="Customizing Class Definition">
+<link href="Instance-Creation-Protocol.html" rel="prev" title="Instance Creation Protocol">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Class-Definition-Protocol">
+<div class="nav-panel">
+<p>
+Next: <a href="Customizing-Class-Definition.html" accesskey="n" rel="next">Customizing Class Definition</a>, Previous: <a href="Instance-Creation-Protocol.html" accesskey="p" rel="prev">Instance Creation Protocol</a>, Up: <a href="The-Metaobject-Protocol.html" accesskey="u" rel="up">The Metaobject Protocol</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Class-Definition-Protocol-1">8.11.5 Class Definition Protocol</h4>
+
+<p>Here is a summary diagram of the syntax, procedures and generic
+functions that may be involved in class definition.
+</p>
+<p><code class="code">define-class</code> (syntax)
+</p>
+<ul class="itemize mark-bullet">
+<li><code class="code">class</code> (syntax)
+
+<ul class="itemize mark-bullet">
+<li><code class="code">make-class</code> (procedure)
+
+<ul class="itemize mark-bullet">
+<li><code class="code">ensure-metaclass</code> (procedure)
+
+</li><li><code class="code">make <var class="var">metaclass</var> &hellip;</code> (generic)
+
+<ul class="itemize mark-bullet">
+<li><code class="code">allocate-instance</code> (generic)
+
+</li><li><code class="code">initialize</code> (generic)
+
+<ul class="itemize mark-bullet">
+<li><code class="code">compute-cpl</code> (generic)
+
+<ul class="itemize mark-bullet">
+<li><code class="code">compute-std-cpl</code> (procedure)
+</li></ul>
+
+</li><li><code class="code">compute-slots</code> (generic)
+
+</li><li><code class="code">compute-get-n-set</code> (generic)
+
+</li><li><code class="code">compute-getter-method</code> (generic)
+
+</li><li><code class="code">compute-setter-method</code> (generic)
+</li></ul>
+</li></ul>
+</li></ul>
+</li></ul>
+
+</li><li><code class="code">class-redefinition</code> (generic)
+
+<ul class="itemize mark-bullet">
+<li><code class="code">remove-class-accessors</code> (generic)
+
+</li><li><code class="code">update-direct-method!</code> (generic)
+
+</li><li><code class="code">update-direct-subclass!</code> (generic)
+</li></ul>
+</li></ul>
+
+<p>Wherever a step above is marked as &ldquo;generic&rdquo;, it can be customized,
+and the detail shown below it is only &ldquo;correct&rdquo; insofar as it
+describes what the default method of that generic function does.  For
+example, if you write an <code class="code">initialize</code> method, for some metaclass,
+that does not call <code class="code">next-method</code> and does not call
+<code class="code">compute-cpl</code>, then <code class="code">compute-cpl</code> will not be called when a
+class is defined with that metaclass. 
+</p>
+<p>A <code class="code">(define-class ...)</code> form (see <a class="pxref" href="Class-Definition.html">Class Definition</a>) expands to
+an expression which
+</p>
+<ul class="itemize mark-bullet">
+<li>checks that it is being evaluated only at top level
+
+</li><li>defines any accessors that are implied by the <var class="var">slot-definition</var>s
+
+</li><li>uses <code class="code">class</code> to create the new class
+
+</li><li>checks for a previous class definition for <var class="var">name</var> and, if found,
+handles the redefinition by invoking <code class="code">class-redefinition</code>
+(see <a class="pxref" href="Redefining-a-Class.html">Redefining a Class</a>).
+</li></ul>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-class-1"><span class="category-def">syntax: </span><span><strong class="def-name">class</strong> <var class="def-var-arguments">name (super &hellip;)               slot-definition &hellip; class-option &hellip;</var><a class="copiable-link" href='#index-class-1'> &para;</a></span></dt>
+<dd><p>Return a newly created class that inherits from <var class="var">super</var>s, with
+direct slots defined by <var class="var">slot-definition</var>s and <var class="var">class-option</var>s.
+For the format of <var class="var">slot-definition</var>s and <var class="var">class-option</var>s, see
+<a class="ref" href="Class-Definition.html">define-class</a>.
+</p></dd></dl>
+
+<p><code class="code">class</code> expands to an expression which
+</p>
+<ul class="itemize mark-bullet">
+<li>processes the class and slot definition options to check that they are
+well-formed, to convert the <code class="code">#:init-form</code> option to an
+<code class="code">#:init-thunk</code> option, to supply a default environment parameter
+(the current top-level environment) and to evaluate all the bits that
+need to be evaluated
+
+</li><li>calls <code class="code">make-class</code> to create the class with the processed and
+evaluated parameters.
+</li></ul>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dclass"><span class="category-def">procedure: </span><span><strong class="def-name">make-class</strong> <var class="def-var-arguments">supers slots class-option &hellip;</var><a class="copiable-link" href='#index-make_002dclass'> &para;</a></span></dt>
+<dd><p>Return a newly created class that inherits from <var class="var">supers</var>, with
+direct slots defined by <var class="var">slots</var> and <var class="var">class-option</var>s.  For the
+format of <var class="var">slots</var> and <var class="var">class-option</var>s, see <a class="ref" href="Class-Definition.html">define-class</a>, except note that for <code class="code">make-class</code>,
+<var class="var">slots</var> is a separate list of slot definitions.
+</p></dd></dl>
+
+<p><code class="code">make-class</code>
+</p>
+<ul class="itemize mark-bullet">
+<li>adds <code class="code">&lt;object&gt;</code> to the <var class="var">supers</var> list if <var class="var">supers</var> is empty
+or if none of the classes in <var class="var">supers</var> have <code class="code">&lt;object&gt;</code> in their
+class precedence list
+
+</li><li>defaults the <code class="code">#:environment</code>, <code class="code">#:name</code> and <code class="code">#:metaclass</code>
+options, if they are not specified by <var class="var">options</var>, to the current
+top-level environment, the unbound value, and <code class="code">(ensure-metaclass
+<var class="var">supers</var>)</code> respectively
+
+</li><li>checks for duplicate classes in <var class="var">supers</var> and duplicate slot names in
+<var class="var">slots</var>, and signals an error if there are any duplicates
+
+</li><li>calls <code class="code">make</code>, passing the metaclass as the first parameter and all
+other parameters as option keywords with values.
+</li></ul>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ensure_002dmetaclass"><span class="category-def">procedure: </span><span><strong class="def-name">ensure-metaclass</strong> <var class="def-var-arguments">supers env</var><a class="copiable-link" href='#index-ensure_002dmetaclass'> &para;</a></span></dt>
+<dd><p>Return a metaclass suitable for a class that inherits from the list of
+classes in <var class="var">supers</var>.  The returned metaclass is the union by
+inheritance of the metaclasses of the classes in <var class="var">supers</var>.
+</p>
+<p>In the simplest case, where all the <var class="var">supers</var> are straightforward
+classes with metaclass <code class="code">&lt;class&gt;</code>, the returned metaclass is just
+<code class="code">&lt;class&gt;</code>.
+</p>
+<p>For a more complex example, suppose that <var class="var">supers</var> contained one
+class with metaclass <code class="code">&lt;operator-class&gt;</code> and one with metaclass
+<code class="code">&lt;foreign-object-class&gt;</code>.  Then the returned metaclass would be a
+class that inherits from both <code class="code">&lt;operator-class&gt;</code> and
+<code class="code">&lt;foreign-object-class&gt;</code>.
+</p>
+<p>If <var class="var">supers</var> is the empty list, <code class="code">ensure-metaclass</code> returns the
+default GOOPS metaclass <code class="code">&lt;class&gt;</code>.
+</p>
+<p>GOOPS keeps a list of the metaclasses created by
+<code class="code">ensure-metaclass</code>, so that each required type of metaclass only
+has to be created once.
+</p>
+<p>The <code class="code">env</code> parameter is ignored.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make-3"><span class="category-def">generic: </span><span><strong class="def-name">make</strong> <var class="def-var-arguments">metaclass initarg &hellip;</var><a class="copiable-link" href='#index-make-3'> &para;</a></span></dt>
+<dd><p><var class="var">metaclass</var> is the metaclass of the class being defined, either
+taken from the <code class="code">#:metaclass</code> class option or computed by
+<code class="code">ensure-metaclass</code>.  The applied method must create and return the
+fully initialized class metaobject for the new class definition.
+</p></dd></dl>
+
+<p>The <code class="code">(make <var class="var">metaclass</var> <var class="var">initarg</var> &hellip;)</code> invocation is a
+particular case of the instance creation protocol covered in the
+previous section.  It will create an class metaobject with metaclass
+<var class="var">metaclass</var>.  By default, this metaobject will be initialized by the
+<code class="code">initialize</code> method that is specialized for instances of type
+<code class="code">&lt;class&gt;</code>.
+</p>
+<p>The <code class="code">initialize</code> method for classes (signature <code class="code">(initialize
+&lt;class&gt; initargs)</code>) calls the following generic functions.
+</p>
+<ul class="itemize mark-bullet">
+<li><code class="code">compute-cpl <var class="var">class</var></code> (generic)
+
+<p>The applied method should compute and return the class precedence list
+for <var class="var">class</var> as a list of class metaobjects.  When <code class="code">compute-cpl</code>
+is called, the following <var class="var">class</var> metaobject slots have all been
+initialized: <code class="code">name</code>, <code class="code">direct-supers</code>, <code class="code">direct-slots</code>,
+<code class="code">direct-subclasses</code> (empty), <code class="code">direct-methods</code>.  The value
+returned by <code class="code">compute-cpl</code> will be stored in the <code class="code">cpl</code> slot.
+</p>
+</li><li><code class="code">compute-slots <var class="var">class</var></code> (generic)
+
+<p>The applied method should compute and return the slots (union of direct
+and inherited) for <var class="var">class</var> as a list of slot definitions.  When
+<code class="code">compute-slots</code> is called, all the <var class="var">class</var> metaobject slots
+mentioned for <code class="code">compute-cpl</code> have been initialized, plus the
+following: <code class="code">cpl</code>, <code class="code">redefined</code> (<code class="code">#f</code>), <code class="code">environment</code>.
+The value returned by <code class="code">compute-slots</code> will be stored in the
+<code class="code">slots</code> slot.
+</p>
+</li><li><code class="code">compute-get-n-set <var class="var">class</var> <var class="var">slot-def</var></code> (generic)
+
+<p><code class="code">initialize</code> calls <code class="code">compute-get-n-set</code> for each slot computed
+by <code class="code">compute-slots</code>.  The applied method should compute and return a
+pair of closures that, respectively, get and set the value of the specified
+slot.  The get closure should have arity 1 and expect a single argument
+that is the instance whose slot value is to be retrieved.  The set closure
+should have arity 2 and expect two arguments, where the first argument is
+the instance whose slot value is to be set and the second argument is the
+new value for that slot.  The closures should be returned in a two element
+list: <code class="code">(list <var class="var">get</var> <var class="var">set</var>)</code>.
+</p>
+<p>The closures returned by <code class="code">compute-get-n-set</code> are stored as part of
+the value of the <var class="var">class</var> metaobject&rsquo;s <code class="code">getters-n-setters</code> slot.
+Specifically, the value of this slot is a list with the same number of
+elements as there are slots in the class, and each element looks either like
+</p>
+<div class="example">
+<pre class="example-preformatted"><code class="code">(<var class="var">slot-name-symbol</var> <var class="var">init-function</var> . <var class="var">index</var>)</code>
+</pre></div>
+
+<p>or like
+</p>
+<div class="example">
+<pre class="example-preformatted"><code class="code">(<var class="var">slot-name-symbol</var> <var class="var">init-function</var> <var class="var">get</var> <var class="var">set</var>)</code>
+</pre></div>
+
+<p>Where the get and set closures are replaced by <var class="var">index</var>, the slot is
+an instance slot and <var class="var">index</var> is the slot&rsquo;s index in the underlying
+structure: GOOPS knows how to get and set the value of such slots and so
+does not need specially constructed get and set closures.  Otherwise,
+<var class="var">get</var> and <var class="var">set</var> are the closures returned by <code class="code">compute-get-n-set</code>.
+</p>
+<p>The structure of the <code class="code">getters-n-setters</code> slot value is important when
+understanding the next customizable generic functions that <code class="code">initialize</code>
+calls&hellip;
+</p>
+</li><li><code class="code">compute-getter-method <var class="var">class</var> <var class="var">gns</var></code> (generic)
+
+<p><code class="code">initialize</code> calls <code class="code">compute-getter-method</code> for each of the
+class&rsquo;s slots (as determined by <code class="code">compute-slots</code>) that includes a
+<code class="code">#:getter</code> or <code class="code">#:accessor</code> slot option.  <var class="var">gns</var> is the
+element of the <var class="var">class</var> metaobject&rsquo;s <code class="code">getters-n-setters</code> slot
+that specifies how the slot in question is referenced and set, as
+described above under <code class="code">compute-get-n-set</code>.  The applied method
+should create and return a method that is specialized for instances of
+type <var class="var">class</var> and uses the get closure to retrieve the slot&rsquo;s value.
+<code class="code">initialize</code> uses <code class="code">add-method!</code> to add the returned method to
+the generic function named by the slot definition&rsquo;s <code class="code">#:getter</code> or
+<code class="code">#:accessor</code> option.
+</p>
+</li><li><code class="code">compute-setter-method <var class="var">class</var> <var class="var">gns</var></code> (generic)
+
+<p><code class="code">compute-setter-method</code> is invoked with the same arguments as
+<code class="code">compute-getter-method</code>, for each of the class&rsquo;s slots that includes
+a <code class="code">#:setter</code> or <code class="code">#:accessor</code> slot option.  The applied method
+should create and return a method that is specialized for instances of
+type <var class="var">class</var> and uses the set closure to set the slot&rsquo;s value.
+<code class="code">initialize</code> then uses <code class="code">add-method!</code> to add the returned method
+to the generic function named by the slot definition&rsquo;s <code class="code">#:setter</code>
+or <code class="code">#:accessor</code> option.
+</p></li></ul>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Customizing-Class-Definition.html">Customizing Class Definition</a>, Previous: <a href="Instance-Creation-Protocol.html">Instance Creation Protocol</a>, Up: <a href="The-Metaobject-Protocol.html">The Metaobject Protocol</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

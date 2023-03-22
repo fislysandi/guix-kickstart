@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Streams (Guile Reference Manual)</title>
+
+<meta name="description" content="Streams (Guile Reference Manual)">
+<meta name="keywords" content="Streams (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Guile-Modules.html" rel="up" title="Guile Modules">
+<link href="Buffered-Input.html" rel="next" title="Buffered Input">
+<link href="Queues.html" rel="prev" title="Queues">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Streams">
+<div class="nav-panel">
+<p>
+Next: <a href="Buffered-Input.html" accesskey="n" rel="next">Buffered Input</a>, Previous: <a href="Queues.html" accesskey="p" rel="prev">Queues</a>, Up: <a href="Guile-Modules.html" accesskey="u" rel="up">Guile Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Streams-1">7.14 Streams</h3>
+<a class="index-entry-id" id="index-streams"></a>
+
+<p>This section documents Guile&rsquo;s legacy stream module.  For a more
+complete and portable stream library, see <a class="pxref" href="SRFI_002d41.html">SRFI-41 - Streams</a>.
+</p>
+<p>A stream represents a sequence of values, each of which is calculated
+only when required.  This allows large or even infinite sequences to
+be represented and manipulated with familiar operations like &ldquo;car&rdquo;,
+&ldquo;cdr&rdquo;, &ldquo;map&rdquo; or &ldquo;fold&rdquo;.  In such manipulations only as much as
+needed is actually held in memory at any one time.  The functions in
+this section are available from
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 streams))
+</pre></div>
+
+<p>Streams are implemented using promises (see <a class="pxref" href="Delayed-Evaluation.html">Delayed Evaluation</a>),
+which is how the underlying calculation of values is made only when
+needed, and the values then retained so the calculation is not
+repeated.
+</p>
+<p>Here is a simple example producing a stream of all odd numbers,
+</p>
+<div class="example">
+<pre class="example-preformatted">(define odds (make-stream (lambda (state)
+                            (cons state (+ state 2)))
+                          1))
+(stream-car odds)              &rArr; 1
+(stream-car (stream-cdr odds)) &rArr; 3
+</pre></div>
+
+<p><code class="code">stream-map</code> could be used to derive a stream of odd squares,
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (square n) (* n n))
+(define oddsquares (stream-map square odds))
+</pre></div>
+
+<p>These are infinite sequences, so it&rsquo;s not possible to convert them to
+a list, but they could be printed (infinitely) with for example
+</p>
+<div class="example">
+<pre class="example-preformatted">(stream-for-each (lambda (n sq)
+                   (format #t &quot;~a squared is ~a\n&quot; n sq))
+                 odds oddsquares)
+-|
+1 squared is 1
+3 squared is 9
+5 squared is 25
+7 squared is 49
+&hellip;
+</pre></div>
+
+<br>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dstream"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-stream</strong> <var class="def-var-arguments">proc initial-state</var><a class="copiable-link" href='#index-make_002dstream'> &para;</a></span></dt>
+<dd><p>Return a new stream, formed by calling <var class="var">proc</var> successively.
+</p>
+<p>Each call is <code class="code">(<var class="var">proc</var> <var class="var">state</var>)</code>, it should return a pair,
+the <code class="code">car</code> being the value for the stream, and the <code class="code">cdr</code>
+being the new <var class="var">state</var> for the next call.  For the first call
+<var class="var">state</var> is the given <var class="var">initial-state</var>.  At the end of the
+stream, <var class="var">proc</var> should return some non-pair object.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dcar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-car</strong> <var class="def-var-arguments">stream</var><a class="copiable-link" href='#index-stream_002dcar-1'> &para;</a></span></dt>
+<dd><p>Return the first element from <var class="var">stream</var>.  <var class="var">stream</var> must not be
+empty.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dcdr-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-cdr</strong> <var class="def-var-arguments">stream</var><a class="copiable-link" href='#index-stream_002dcdr-1'> &para;</a></span></dt>
+<dd><p>Return a stream which is the second and subsequent elements of
+<var class="var">stream</var>.  <var class="var">stream</var> must not be empty.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dnull_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-null?</strong> <var class="def-var-arguments">stream</var><a class="copiable-link" href='#index-stream_002dnull_003f-1'> &para;</a></span></dt>
+<dd><p>Return true if <var class="var">stream</var> is empty.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-list_002d_003estream-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list-&gt;stream</strong> <var class="def-var-arguments">list</var><a class="copiable-link" href='#index-list_002d_003estream-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-vector_002d_003estream"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-&gt;stream</strong> <var class="def-var-arguments">vector</var><a class="copiable-link" href='#index-vector_002d_003estream'> &para;</a></span></dt>
+<dd><p>Return a stream with the contents of <var class="var">list</var> or <var class="var">vector</var>.
+</p>
+<p><var class="var">list</var> or <var class="var">vector</var> should not be modified subsequently, since
+it&rsquo;s unspecified whether changes there will be reflected in the stream
+returned.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-port_002d_003estream-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">port-&gt;stream</strong> <var class="def-var-arguments">port readproc</var><a class="copiable-link" href='#index-port_002d_003estream-1'> &para;</a></span></dt>
+<dd><p>Return a stream which is the values obtained by reading from <var class="var">port</var>
+using <var class="var">readproc</var>.  Each read call is <code class="code">(<var class="var">readproc</var>
+<var class="var">port</var>)</code>, and it should return an EOF object (see <a class="pxref" href="Binary-I_002fO.html">Binary I/O</a>) at
+the end of input.
+</p>
+<p>For example a stream of characters from a file,
+</p>
+<div class="example">
+<pre class="example-preformatted">(port-&gt;stream (open-input-file &quot;/foo/bar.txt&quot;) read-char)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002d_003elist-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-&gt;list</strong> <var class="def-var-arguments">stream</var><a class="copiable-link" href='#index-stream_002d_003elist-1'> &para;</a></span></dt>
+<dd><p>Return a list which is the entire contents of <var class="var">stream</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002d_003ereversed_002dlist"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-&gt;reversed-list</strong> <var class="def-var-arguments">stream</var><a class="copiable-link" href='#index-stream_002d_003ereversed_002dlist'> &para;</a></span></dt>
+<dd><p>Return a list which is the entire contents of <var class="var">stream</var>, but in
+reverse order.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002d_003elist_0026length"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-&gt;list&amp;length</strong> <var class="def-var-arguments">stream</var><a class="copiable-link" href='#index-stream_002d_003elist_0026length'> &para;</a></span></dt>
+<dd><p>Return two values (see <a class="pxref" href="Multiple-Values.html">Returning and Accepting Multiple Values</a>), being firstly a list
+which is the entire contents of <var class="var">stream</var>, and secondly the number
+of elements in that list.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002d_003ereversed_002dlist_0026length"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-&gt;reversed-list&amp;length</strong> <var class="def-var-arguments">stream</var><a class="copiable-link" href='#index-stream_002d_003ereversed_002dlist_0026length'> &para;</a></span></dt>
+<dd><p>Return two values (see <a class="pxref" href="Multiple-Values.html">Returning and Accepting Multiple Values</a>) being firstly a list which
+is the entire contents of <var class="var">stream</var>, but in reverse order, and
+secondly the number of elements in that list.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002d_003evector"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-&gt;vector</strong> <var class="def-var-arguments">stream</var><a class="copiable-link" href='#index-stream_002d_003evector'> &para;</a></span></dt>
+<dd><p>Return a vector which is the entire contents of <var class="var">stream</var>.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-stream_002dfold-1"><span class="category-def">Function: </span><span><strong class="def-name">stream-fold</strong> <var class="def-var-arguments">proc init stream1 stream2 &hellip;</var><a class="copiable-link" href='#index-stream_002dfold-1'> &para;</a></span></dt>
+<dd><p>Apply <var class="var">proc</var> successively over the elements of the given streams,
+from first to last until the end of the shortest stream is reached.
+Return the result from the last <var class="var">proc</var> call.
+</p>
+<p>Each call is <code class="code">(<var class="var">proc</var> elem1 elem2 &hellip; prev)</code>, where each
+<var class="var">elem</var> is from the corresponding <var class="var">stream</var>.  <var class="var">prev</var> is the
+return from the previous <var class="var">proc</var> call, or the given <var class="var">init</var> for
+the first call.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-stream_002dfor_002deach-1"><span class="category-def">Function: </span><span><strong class="def-name">stream-for-each</strong> <var class="def-var-arguments">proc stream1 stream2 &hellip;</var><a class="copiable-link" href='#index-stream_002dfor_002deach-1'> &para;</a></span></dt>
+<dd><p>Call <var class="var">proc</var> on the elements from the given <var class="var">stream</var>s.  The
+return value is unspecified.
+</p>
+<p>Each call is <code class="code">(<var class="var">proc</var> elem1 elem2 &hellip;)</code>, where each
+<var class="var">elem</var> is from the corresponding <var class="var">stream</var>.
+<code class="code">stream-for-each</code> stops when it reaches the end of the shortest
+<var class="var">stream</var>.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-stream_002dmap-1"><span class="category-def">Function: </span><span><strong class="def-name">stream-map</strong> <var class="def-var-arguments">proc stream1 stream2 &hellip;</var><a class="copiable-link" href='#index-stream_002dmap-1'> &para;</a></span></dt>
+<dd><p>Return a new stream which is the results of applying <var class="var">proc</var> to the
+elements of the given <var class="var">stream</var>s.
+</p>
+<p>Each call is <code class="code">(<var class="var">proc</var> elem1 elem2 &hellip;)</code>, where each
+<var class="var">elem</var> is from the corresponding <var class="var">stream</var>.  The new stream
+ends when the end of the shortest given <var class="var">stream</var> is reached.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Buffered-Input.html">Buffered Input</a>, Previous: <a href="Queues.html">Queues</a>, Up: <a href="Guile-Modules.html">Guile Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

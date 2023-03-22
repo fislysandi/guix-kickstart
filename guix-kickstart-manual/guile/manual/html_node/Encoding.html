@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Encoding (Guile Reference Manual)</title>
+
+<meta name="description" content="Encoding (Guile Reference Manual)">
+<meta name="keywords" content="Encoding (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Input-and-Output.html" rel="up" title="Input and Output">
+<link href="Textual-I_002fO.html" rel="next" title="Textual I/O">
+<link href="Binary-I_002fO.html" rel="prev" title="Binary I/O">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Encoding">
+<div class="nav-panel">
+<p>
+Next: <a href="Textual-I_002fO.html" accesskey="n" rel="next">Textual I/O</a>, Previous: <a href="Binary-I_002fO.html" accesskey="p" rel="prev">Binary I/O</a>, Up: <a href="Input-and-Output.html" accesskey="u" rel="up">Input and Output</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Encoding-1">6.12.3 Encoding</h4>
+
+<p>Textual input and output on Guile ports is layered on top of binary
+operations.  To this end, each port has an associated character encoding
+that controls how bytes read from the port are converted to characters,
+and how characters written to the port are converted to bytes.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-port_002dencoding"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">port-encoding</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-port_002dencoding'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fport_005fencoding"><span class="category-def">C Function: </span><span><strong class="def-name">scm_port_encoding</strong> <var class="def-var-arguments">(port)</var><a class="copiable-link" href='#index-scm_005fport_005fencoding'> &para;</a></span></dt>
+<dd><p>Returns, as a string, the character encoding that <var class="var">port</var> uses to
+interpret its input and output.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-set_002dport_002dencoding_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-port-encoding!</strong> <var class="def-var-arguments">port enc</var><a class="copiable-link" href='#index-set_002dport_002dencoding_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fset_005fport_005fencoding_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_set_port_encoding_x</strong> <var class="def-var-arguments">(port, enc)</var><a class="copiable-link" href='#index-scm_005fset_005fport_005fencoding_005fx'> &para;</a></span></dt>
+<dd><p>Sets the character encoding that will be used to interpret I/O to
+<var class="var">port</var>.  <var class="var">enc</var> is a string containing the name of an encoding.
+Valid encoding names are those
+<a class="url" href="http://www.iana.org/assignments/character-sets">defined by IANA</a>,
+for example <code class="code">&quot;UTF-8&quot;</code> or <code class="code">&quot;ISO-8859-1&quot;</code>.
+</p></dd></dl>
+
+<p>When ports are created, they are assigned an encoding.  The usual
+process to determine the initial encoding for a port is to take the
+value of the <code class="code">%default-port-encoding</code> fluid.
+</p>
+<dl class="first-defvr">
+<dt class="defvr" id="index-_0025default_002dport_002dencoding"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">%default-port-encoding</strong><a class="copiable-link" href='#index-_0025default_002dport_002dencoding'> &para;</a></span></dt>
+<dd><p>A fluid containing name of the encoding to be used by default for newly
+created ports (see <a class="pxref" href="Fluids-and-Dynamic-States.html">Fluids and Dynamic States</a>).  As a special case,
+the value <code class="code">#f</code> is equivalent to <code class="code">&quot;ISO-8859-1&quot;</code>.
+</p></dd></dl>
+
+<p>The <code class="code">%default-port-encoding</code> itself defaults to the encoding
+appropriate for the current locale, if <code class="code">setlocale</code> has been called.
+See <a class="xref" href="Locales.html">Locales</a>, for more on locales and when you might need to call
+<code class="code">setlocale</code> explicitly.
+</p>
+<p>Some port types have other ways of determining their initial locales.
+String ports, for example, default to the UTF-8 encoding, in order to be
+able to represent all characters regardless of the current locale.  File
+ports can optionally sniff their file for a <code class="code">coding:</code> declaration;
+See <a class="xref" href="File-Ports.html">File Ports</a>.  Binary ports might be initialized to the ISO-8859-1
+encoding in which each codepoint between 0 and 255 corresponds to a byte
+with that value.
+</p>
+<p>Currently, the ports only work with <em class="emph">non-modal</em> encodings.  Most
+encodings are non-modal, meaning that the conversion of bytes to a
+string doesn&rsquo;t depend on its context: the same byte sequence will always
+return the same string.  A couple of modal encodings are in common use,
+like ISO-2022-JP and ISO-2022-KR, and they are not yet supported.
+</p>
+<a class="index-entry-id" id="index-port-conversion-strategy"></a>
+<a class="index-entry-id" id="index-conversion-strategy_002c-port"></a>
+<a class="index-entry-id" id="index-decoding-error"></a>
+<a class="index-entry-id" id="index-encoding-error"></a>
+<p>Each port also has an associated conversion strategy, which determines
+what to do when a Guile character can&rsquo;t be converted to the port&rsquo;s
+encoded character representation for output.  There are three possible
+strategies: to raise an error, to replace the character with a hex
+escape, or to replace the character with a substitute character.  Port
+conversion strategies are also used when decoding characters from an
+input port.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-port_002dconversion_002dstrategy"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">port-conversion-strategy</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-port_002dconversion_002dstrategy'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fport_005fconversion_005fstrategy"><span class="category-def">C Function: </span><span><strong class="def-name">scm_port_conversion_strategy</strong> <var class="def-var-arguments">(port)</var><a class="copiable-link" href='#index-scm_005fport_005fconversion_005fstrategy'> &para;</a></span></dt>
+<dd><p>Returns the behavior of the port when outputting a character that is not
+representable in the port&rsquo;s current encoding.
+</p>
+<p>If <var class="var">port</var> is <code class="code">#f</code>, then the current default behavior will be
+returned.  New ports will have this default behavior when they are
+created.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-set_002dport_002dconversion_002dstrategy_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-port-conversion-strategy!</strong> <var class="def-var-arguments">port sym</var><a class="copiable-link" href='#index-set_002dport_002dconversion_002dstrategy_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fset_005fport_005fconversion_005fstrategy_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_set_port_conversion_strategy_x</strong> <var class="def-var-arguments">(port, sym)</var><a class="copiable-link" href='#index-scm_005fset_005fport_005fconversion_005fstrategy_005fx'> &para;</a></span></dt>
+<dd><p>Sets the behavior of Guile when outputting a character that is not
+representable in the port&rsquo;s current encoding, or when Guile encounters a
+decoding error when trying to read a character.  <var class="var">sym</var> can be either
+<code class="code">error</code>, <code class="code">substitute</code>, or <code class="code">escape</code>.
+</p>
+<p>If <var class="var">port</var> is an open port, the conversion error behavior is set for
+that port.  If it is <code class="code">#f</code>, it is set as the default behavior for
+any future ports that get created in this thread.
+</p></dd></dl>
+
+<p>As with port encodings, there is a fluid which determines the initial
+conversion strategy for a port.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0025default_002dport_002dconversion_002dstrategy"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">%default-port-conversion-strategy</strong><a class="copiable-link" href='#index-_0025default_002dport_002dconversion_002dstrategy'> &para;</a></span></dt>
+<dd><p>The fluid that defines the conversion strategy for newly created ports,
+and also for other conversion routines such as <code class="code">scm_to_stringn</code>,
+<code class="code">scm_from_stringn</code>, <code class="code">string-&gt;pointer</code>, and
+<code class="code">pointer-&gt;string</code>.
+</p>
+<p>Its value must be one of the symbols described above, with the same
+semantics: <code class="code">error</code>, <code class="code">substitute</code>, or <code class="code">escape</code>.
+</p>
+<p>When Guile starts, its value is <code class="code">substitute</code>.
+</p>
+<p>Note that <code class="code">(set-port-conversion-strategy! #f <var class="var">sym</var>)</code> is
+equivalent to <code class="code">(fluid-set! %default-port-conversion-strategy
+<var class="var">sym</var>)</code>.
+</p></dd></dl>
+
+<p>As mentioned above, for an output port there are three possible port
+conversion strategies.  The <code class="code">error</code> strategy will throw an error
+when a nonconvertible character is encountered.  The <code class="code">substitute</code>
+strategy will replace nonconvertible characters with a question mark
+(&lsquo;<samp class="samp">?</samp>&rsquo;).  Finally the <code class="code">escape</code> strategy will print
+nonconvertible characters as a hex escape, using the escaping that is
+recognized by Guile&rsquo;s string syntax.  Note that if the port&rsquo;s encoding
+is a Unicode encoding, like <code class="code">UTF-8</code>, then encoding errors are
+impossible.
+</p>
+<p>For an input port, the <code class="code">error</code> strategy will cause Guile to throw
+an error if it encounters an invalid encoding, such as might happen if
+you tried to read <code class="code">ISO-8859-1</code> as <code class="code">UTF-8</code>.  The error is
+thrown before advancing the read position.  The <code class="code">substitute</code>
+strategy will replace the bad bytes with a U+FFFD replacement character,
+in accordance with Unicode recommendations.  When reading from an input
+port, the <code class="code">escape</code> strategy is treated as if it were <code class="code">error</code>.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Textual-I_002fO.html">Textual I/O</a>, Previous: <a href="Binary-I_002fO.html">Binary I/O</a>, Up: <a href="Input-and-Output.html">Input and Output</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

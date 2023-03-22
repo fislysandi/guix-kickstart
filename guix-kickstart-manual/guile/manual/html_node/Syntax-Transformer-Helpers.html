@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Syntax Transformer Helpers (Guile Reference Manual)</title>
+
+<meta name="description" content="Syntax Transformer Helpers (Guile Reference Manual)">
+<meta name="keywords" content="Syntax Transformer Helpers (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Macros.html" rel="up" title="Macros">
+<link href="Defmacros.html" rel="next" title="Defmacros">
+<link href="Syntax-Case.html" rel="prev" title="Syntax Case">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Syntax-Transformer-Helpers">
+<div class="nav-panel">
+<p>
+Next: <a href="Defmacros.html" accesskey="n" rel="next">Lisp-style Macro Definitions</a>, Previous: <a href="Syntax-Case.html" accesskey="p" rel="prev">Support for the <code class="code">syntax-case</code> System</a>, Up: <a href="Macros.html" accesskey="u" rel="up">Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Syntax-Transformer-Helpers-1">6.8.4 Syntax Transformer Helpers</h4>
+
+<p>As noted in the previous section, Guile&rsquo;s syntax expander operates on
+syntax objects.  Procedural macros consume and produce syntax objects.
+This section describes some of the auxiliary helpers that procedural
+macros can use to compare, generate, and query objects of this data
+type.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-bound_002didentifier_003d_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bound-identifier=?</strong> <var class="def-var-arguments">a b</var><a class="copiable-link" href='#index-bound_002didentifier_003d_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if the syntax objects <var class="var">a</var> and <var class="var">b</var> refer to the
+same lexically-bound identifier, or <code class="code">#f</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-free_002didentifier_003d_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">free-identifier=?</strong> <var class="def-var-arguments">a b</var><a class="copiable-link" href='#index-free_002didentifier_003d_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if the syntax objects <var class="var">a</var> and <var class="var">b</var> refer to the
+same free identifier, or <code class="code">#f</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-generate_002dtemporaries"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">generate-temporaries</strong> <var class="def-var-arguments">ls</var><a class="copiable-link" href='#index-generate_002dtemporaries'> &para;</a></span></dt>
+<dd><p>Return a list of temporary identifiers as long as <var class="var">ls</var> is long.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-syntax_002dsource"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">syntax-source</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-syntax_002dsource'> &para;</a></span></dt>
+<dd><p>Return the source properties that correspond to the syntax object
+<var class="var">x</var>.  See <a class="xref" href="Source-Properties.html">Source Properties</a>, for more information.
+</p></dd></dl>
+
+<p>Guile also offers some more experimental interfaces in a separate
+module.  As was the case with the Large Hadron Collider, it is unclear
+to our senior macrologists whether adding these interfaces will result
+in awesomeness or in the destruction of Guile via the creation of a
+singularity.  We will preserve their functionality through the 2.0
+series, but we reserve the right to modify them in a future stable
+series, to a more than usual degree.
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (system syntax))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-syntax_002dmodule"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">syntax-module</strong> <var class="def-var-arguments">id</var><a class="copiable-link" href='#index-syntax_002dmodule'> &para;</a></span></dt>
+<dd><p>Return the name of the module whose source contains the identifier
+<var class="var">id</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-syntax_002dsourcev"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">syntax-sourcev</strong> <var class="def-var-arguments">stx</var><a class="copiable-link" href='#index-syntax_002dsourcev'> &para;</a></span></dt>
+<dd><p>Like <code class="code">syntax-source</code>, but returns its result in a more compact
+<code class="code">#(<var class="var">filename</var> <var class="var">line</var> <var class="var">column</var>)</code> format.  This format is
+used as the internal representation of source locations for syntax
+objects.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-syntax_002dlocal_002dbinding"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">syntax-local-binding</strong> <var class="def-var-arguments">id [#:resolve-syntax-parameters?=#t]</var><a class="copiable-link" href='#index-syntax_002dlocal_002dbinding'> &para;</a></span></dt>
+<dd><p>Resolve the identifer <var class="var">id</var>, a syntax object, within the current
+lexical environment, and return two values, the binding type and a
+binding value.  The binding type is a symbol, which may be one of the
+following:
+</p>
+<dl class="table">
+<dt><code class="code">lexical</code></dt>
+<dd><p>A lexically-bound variable.  The value is a unique token (in the sense
+of <code class="code">eq?</code>) identifying this binding.
+</p></dd>
+<dt><code class="code">macro</code></dt>
+<dd><p>A syntax transformer, either local or global.  The value is the
+transformer procedure.
+</p></dd>
+<dt><code class="code">syntax-parameter</code></dt>
+<dd><p>A syntax parameter (see <a class="pxref" href="Syntax-Parameters.html">Syntax Parameters</a>).  By default,
+<code class="code">syntax-local-binding</code> will resolve syntax parameters, so that this
+value will not be returned.  Pass <code class="code">#:resolve-syntax-parameters? #f</code>
+to indicate that you are interested in syntax parameters.  The value is
+the default transformer procedure, as in <code class="code">macro</code>.
+</p></dd>
+<dt><code class="code">pattern-variable</code></dt>
+<dd><p>A pattern variable, bound via <code class="code">syntax-case</code>.  The value is an
+opaque object, internal to the expander.
+</p></dd>
+<dt><code class="code">ellipsis</code></dt>
+<dd><p>An internal binding, bound via <code class="code">with-ellipsis</code>.  The value is the
+(anti-marked) local ellipsis identifier.
+</p></dd>
+<dt><code class="code">displaced-lexical</code></dt>
+<dd><p>A lexical variable that has gone out of scope.  This can happen if a
+badly-written procedural macro saves a syntax object, then attempts to
+introduce it in a context in which it is unbound.  The value is
+<code class="code">#f</code>.
+</p></dd>
+<dt><code class="code">global</code></dt>
+<dd><p>A global binding.  The value is a pair, whose head is the symbol, and
+whose tail is the name of the module in which to resolve the symbol.
+</p></dd>
+<dt><code class="code">other</code></dt>
+<dd><p>Some other binding, like <code class="code">lambda</code> or other core bindings.  The
+value is <code class="code">#f</code>.
+</p></dd>
+</dl>
+
+<p>This is a very low-level procedure, with limited uses.  One case in
+which it is useful is to build abstractions that associate auxiliary
+information with macros:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define aux-property (make-object-property))
+(define-syntax-rule (with-aux aux value)
+  (let ((trans value))
+    (set! (aux-property trans) aux)
+    trans))
+(define-syntax retrieve-aux
+  (lambda (x)
+    (syntax-case x ()
+      ((x id)
+       (call-with-values (lambda () (syntax-local-binding #'id))
+         (lambda (type val)
+           (with-syntax ((aux (datum-&gt;syntax #'here
+                                             (and (eq? type 'macro)
+                                                  (aux-property val)))))
+             #''aux)))))))
+(define-syntax foo
+  (with-aux 'bar
+    (syntax-rules () ((_) 'foo))))
+(foo)
+&rArr; foo
+(retrieve-aux foo)
+&rArr; bar
+</pre></div>
+
+<p><code class="code">syntax-local-binding</code> must be called within the dynamic extent of
+a syntax transformer; to call it otherwise will signal an error.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-syntax_002dlocally_002dbound_002didentifiers"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">syntax-locally-bound-identifiers</strong> <var class="def-var-arguments">id</var><a class="copiable-link" href='#index-syntax_002dlocally_002dbound_002didentifiers'> &para;</a></span></dt>
+<dd><p>Return a list of identifiers that were visible lexically when the
+identifier <var class="var">id</var> was created, in order from outermost to innermost.
+</p>
+<p>This procedure is intended to be used in specialized procedural macros,
+to provide a macro with the set of bound identifiers that the macro can
+reference.
+</p>
+<p>As a technical implementation detail, the identifiers returned by
+<code class="code">syntax-locally-bound-identifiers</code> will be anti-marked, like the
+syntax object that is given as input to a macro.  This is to signal to
+the macro expander that these bindings were present in the original
+source, and do not need to be hygienically renamed, as would be the case
+with other introduced identifiers.  See the discussion of hygiene in
+section 12.1 of the R6RS, for more information on marks.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (local-lexicals id)
+  (filter (lambda (x)
+            (eq? (syntax-local-binding x) 'lexical))
+          (syntax-locally-bound-identifiers id)))
+(define-syntax lexicals
+  (lambda (x)
+    (syntax-case x ()
+      ((lexicals) #'(lexicals lexicals))
+      ((lexicals scope)
+       (with-syntax (((id ...) (local-lexicals #'scope)))
+         #'(list (cons 'id id) ...))))))
+
+(let* ((x 10) (x 20)) (lexicals))
+&rArr; ((x . 10) (x . 20))
+</pre></div>
+</dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Defmacros.html">Lisp-style Macro Definitions</a>, Previous: <a href="Syntax-Case.html">Support for the <code class="code">syntax-case</code> System</a>, Up: <a href="Macros.html">Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

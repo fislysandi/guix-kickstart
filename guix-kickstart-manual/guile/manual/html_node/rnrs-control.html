@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>rnrs control (Guile Reference Manual)</title>
+
+<meta name="description" content="rnrs control (Guile Reference Manual)">
+<meta name="keywords" content="rnrs control (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="R6RS-Standard-Libraries.html" rel="up" title="R6RS Standard Libraries">
+<link href="R6RS-Records.html" rel="next" title="R6RS Records">
+<link href="rnrs-sorting.html" rel="prev" title="rnrs sorting">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="rnrs-control">
+<div class="nav-panel">
+<p>
+Next: <a href="R6RS-Records.html" accesskey="n" rel="next">R6RS Records</a>, Previous: <a href="rnrs-sorting.html" accesskey="p" rel="prev">rnrs sorting</a>, Up: <a href="R6RS-Standard-Libraries.html" accesskey="u" rel="up">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="rnrs-control-1">7.6.2.7 rnrs control</h4>
+
+<p>The <code class="code">(rnrs control (6))</code> library provides syntactic forms useful 
+for constructing conditional expressions and controlling the flow of
+execution.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-when-2"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">when</strong> <var class="def-var-arguments">test expression1 expression2 ...</var><a class="copiable-link" href='#index-when-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-unless-2"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">unless</strong> <var class="def-var-arguments">test expression1 expression2 ...</var><a class="copiable-link" href='#index-unless-2'> &para;</a></span></dt>
+<dd><p>The <code class="code">when</code> form is evaluated by evaluating the specified <var class="var">test</var>
+expression; if the result is a true value, the <var class="var">expression</var>s that
+follow it are evaluated in order, and the value of the final 
+<var class="var">expression</var> becomes the value of the entire <code class="code">when</code> expression.
+</p>
+<p>The <code class="code">unless</code> form behaves similarly, with the exception that the 
+specified <var class="var">expression</var>s are only evaluated if the value of 
+<var class="var">test</var> is false.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-do-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">do</strong> <var class="def-var-arguments">((variable init step) ...) (test expression ...) command ...</var><a class="copiable-link" href='#index-do-1'> &para;</a></span></dt>
+<dd><p>This form is identical to the one provided by Guile&rsquo;s core library.
+See <a class="xref" href="while-do.html">Iteration mechanisms</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-case_002dlambda-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">case-lambda</strong> <var class="def-var-arguments">clause ...</var><a class="copiable-link" href='#index-case_002dlambda-1'> &para;</a></span></dt>
+<dd><p>This form is identical to the one provided by Guile&rsquo;s core library.
+See <a class="xref" href="Case_002dlambda.html">Case-lambda</a>, for documentation.
+</p></dd></dl>
+
+</div>
+
+
+
+</body>
+</html>

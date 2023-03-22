@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Symbol Data (Guile Reference Manual)</title>
+
+<meta name="description" content="Symbol Data (Guile Reference Manual)">
+<meta name="keywords" content="Symbol Data (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Symbols.html" rel="up" title="Symbols">
+<link href="Symbol-Keys.html" rel="next" title="Symbol Keys">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Symbol-Data">
+<div class="nav-panel">
+<p>
+Next: <a href="Symbol-Keys.html" accesskey="n" rel="next">Symbols as Lookup Keys</a>, Up: <a href="Symbols.html" accesskey="u" rel="up">Symbols</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Symbols-as-Discrete-Data">6.6.6.1 Symbols as Discrete Data</h4>
+
+<p>Numbers and symbols are similar to the extent that they both lend
+themselves to <code class="code">eq?</code> comparison.  But symbols are more descriptive
+than numbers, because a symbol&rsquo;s name can be used directly to describe
+the concept for which that symbol stands.
+</p>
+<p>For example, imagine that you need to represent some colours in a
+computer program.  Using numbers, you would have to choose arbitrarily
+some mapping between numbers and colours, and then take care to use that
+mapping consistently:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">;; 1=red, 2=green, 3=purple
+
+(if (eq? (colour-of vehicle) 1)
+    ...)
+</pre></div>
+
+<p>You can make the mapping more explicit and the code more readable by
+defining constants:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define red 1)
+(define green 2)
+(define purple 3)
+
+(if (eq? (colour-of vehicle) red)
+    ...)
+</pre></div>
+
+<p>But the simplest and clearest approach is not to use numbers at all, but
+symbols whose names specify the colours that they refer to:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(if (eq? (colour-of vehicle) 'red)
+    ...)
+</pre></div>
+
+<p>The descriptive advantages of symbols over numbers increase as the set
+of concepts that you want to describe grows.  Suppose that a car object
+can have other properties as well, such as whether it has or uses:
+</p>
+<ul class="itemize mark-bullet">
+<li>automatic or manual transmission
+</li><li>leaded or unleaded fuel
+</li><li>power steering (or not).
+</li></ul>
+
+<p>Then a car&rsquo;s combined property set could be naturally represented and
+manipulated as a list of symbols:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(properties-of vehicle1)
+&rArr;
+(red manual unleaded power-steering)
+
+(if (memq 'power-steering (properties-of vehicle1))
+    (display &quot;Unfit people can drive this vehicle.\n&quot;)
+    (display &quot;You'll need strong arms to drive this vehicle!\n&quot;))
+-|
+Unfit people can drive this vehicle.
+</pre></div>
+
+<p>Remember, the fundamental property of symbols that we are relying on
+here is that an occurrence of <code class="code">'red</code> in one part of a program is an
+<em class="emph">indistinguishable</em> symbol from an occurrence of <code class="code">'red</code> in
+another part of a program; this means that symbols can usefully be
+compared using <code class="code">eq?</code>.  At the same time, symbols have naturally
+descriptive names.  This combination of efficiency and descriptive power
+makes them ideal for use as discrete data.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Symbol-Keys.html">Symbols as Lookup Keys</a>, Up: <a href="Symbols.html">Symbols</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

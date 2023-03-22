@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Module System Reflection (Guile Reference Manual)</title>
+
+<meta name="description" content="Module System Reflection (Guile Reference Manual)">
+<meta name="keywords" content="Module System Reflection (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Modules.html" rel="up" title="Modules">
+<link href="Declarative-Modules.html" rel="next" title="Declarative Modules">
+<link href="Variables.html" rel="prev" title="Variables">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Module-System-Reflection">
+<div class="nav-panel">
+<p>
+Next: <a href="Declarative-Modules.html" accesskey="n" rel="next">Declarative Modules</a>, Previous: <a href="Variables.html" accesskey="p" rel="prev">Variables</a>, Up: <a href="Modules.html" accesskey="u" rel="up">Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Module-System-Reflection-1">6.18.8 Module System Reflection</h4>
+
+<p>The previous sections have described a declarative view of the module
+system.  You can also work with it programmatically by accessing and
+modifying various parts of the Scheme objects that Guile uses to
+implement the module system.
+</p>
+<p>At any time, there is a <em class="dfn">current module</em>.  This module is the one
+where a top-level <code class="code">define</code> and similar syntax will add new
+bindings.  You can find other module objects with <code class="code">resolve-module</code>,
+for example.
+</p>
+<p>These module objects can be used as the second argument to <code class="code">eval</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-current_002dmodule"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">current-module</strong><a class="copiable-link" href='#index-current_002dmodule'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcurrent_005fmodule"><span class="category-def">C Function: </span><span><strong class="def-name">scm_current_module</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fcurrent_005fmodule'> &para;</a></span></dt>
+<dd><p>Return the current module object.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-set_002dcurrent_002dmodule"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-current-module</strong> <var class="def-var-arguments">module</var><a class="copiable-link" href='#index-set_002dcurrent_002dmodule'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fset_005fcurrent_005fmodule"><span class="category-def">C Function: </span><span><strong class="def-name">scm_set_current_module</strong> <var class="def-var-arguments">(module)</var><a class="copiable-link" href='#index-scm_005fset_005fcurrent_005fmodule'> &para;</a></span></dt>
+<dd><p>Set the current module to <var class="var">module</var> and return
+the previous current module.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-save_002dmodule_002dexcursion"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">save-module-excursion</strong> <var class="def-var-arguments">thunk</var><a class="copiable-link" href='#index-save_002dmodule_002dexcursion'> &para;</a></span></dt>
+<dd><p>Call <var class="var">thunk</var> within a <code class="code">dynamic-wind</code> such that the module that
+is current at invocation time is restored when <var class="var">thunk</var>&rsquo;s dynamic
+extent is left (see <a class="pxref" href="Dynamic-Wind.html">Dynamic Wind</a>).
+</p>
+<p>More precisely, if <var class="var">thunk</var> escapes non-locally, the current module
+(at the time of escape) is saved, and the original current module (at
+the time <var class="var">thunk</var>&rsquo;s dynamic extent was last entered) is restored.  If
+<var class="var">thunk</var>&rsquo;s dynamic extent is re-entered, then the current module is
+saved, and the previously saved inner module is set current again.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-resolve_002dmodule"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">resolve-module</strong> <var class="def-var-arguments">name [autoload=#t] [version=#f]                           [#:ensure=#t]</var><a class="copiable-link" href='#index-resolve_002dmodule'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fresolve_005fmodule"><span class="category-def">C Function: </span><span><strong class="def-name">scm_resolve_module</strong> <var class="def-var-arguments">(name)</var><a class="copiable-link" href='#index-scm_005fresolve_005fmodule'> &para;</a></span></dt>
+<dd><p>Find the module named <var class="var">name</var> and return it.  When it has not already
+been defined and <var class="var">autoload</var> is true, try to auto-load it.  When it
+can&rsquo;t be found that way either, create an empty module if <var class="var">ensure</var>
+is true, otherwise return <code class="code">#f</code>.  If <var class="var">version</var> is true, ensure
+that the resulting module is compatible with the given version reference
+(see <a class="pxref" href="R6RS-Version-References.html">R6RS Version References</a>).  The name is a list of symbols.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-resolve_002dinterface"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">resolve-interface</strong> <var class="def-var-arguments">name [#:select=#f]                           [#:hide=&rsquo;()] [#:prefix=#f]                           [#:renamer=#f] [#:version=#f]</var><a class="copiable-link" href='#index-resolve_002dinterface'> &para;</a></span></dt>
+<dd><p>Find the module named <var class="var">name</var> as with <code class="code">resolve-module</code> and
+return its interface.  The interface of a module is also a module
+object, but it contains only the exported bindings.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-module_002duses"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">module-uses</strong> <var class="def-var-arguments">module</var><a class="copiable-link" href='#index-module_002duses'> &para;</a></span></dt>
+<dd><p>Return a list of the interfaces used by <var class="var">module</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-module_002duse_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">module-use!</strong> <var class="def-var-arguments">module interface</var><a class="copiable-link" href='#index-module_002duse_0021'> &para;</a></span></dt>
+<dd><p>Add <var class="var">interface</var> to the front of the use-list of <var class="var">module</var>.  Both
+arguments should be module objects, and <var class="var">interface</var> should very
+likely be a module returned by <code class="code">resolve-interface</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-reload_002dmodule"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">reload-module</strong> <var class="def-var-arguments">module</var><a class="copiable-link" href='#index-reload_002dmodule'> &para;</a></span></dt>
+<dd><p>Revisit the source file that corresponds to <var class="var">module</var>.  Raises an
+error if no source file is associated with the given module.
+</p></dd></dl>
+
+<p>As mentioned in the previous section, modules contain a mapping between
+identifiers (as symbols) and storage locations (as variables).  Guile
+defines a number of procedures to allow access to this mapping.  If you
+are programming in C, <a class="ref" href="Accessing-Modules-from-C.html">Accessing Modules from C</a>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-module_002dvariable"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">module-variable</strong> <var class="def-var-arguments">module name</var><a class="copiable-link" href='#index-module_002dvariable'> &para;</a></span></dt>
+<dd><p>Return the variable bound to <var class="var">name</var> (a symbol) in <var class="var">module</var>, or
+<code class="code">#f</code> if <var class="var">name</var> is unbound.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-module_002dadd_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">module-add!</strong> <var class="def-var-arguments">module name var</var><a class="copiable-link" href='#index-module_002dadd_0021'> &para;</a></span></dt>
+<dd><p>Define a new binding between <var class="var">name</var> (a symbol) and <var class="var">var</var> (a
+variable) in <var class="var">module</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-module_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">module-ref</strong> <var class="def-var-arguments">module name</var><a class="copiable-link" href='#index-module_002dref'> &para;</a></span></dt>
+<dd><p>Look up the value bound to <var class="var">name</var> in <var class="var">module</var>.  Like
+<code class="code">module-variable</code>, but also does a <code class="code">variable-ref</code> on the
+resulting variable, raising an error if <var class="var">name</var> is unbound.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-module_002ddefine_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">module-define!</strong> <var class="def-var-arguments">module name value</var><a class="copiable-link" href='#index-module_002ddefine_0021'> &para;</a></span></dt>
+<dd><p>Locally bind <var class="var">name</var> to <var class="var">value</var> in <var class="var">module</var>.  If <var class="var">name</var>
+was already locally bound in <var class="var">module</var>, i.e., defined locally and not
+by an imported module, the value stored in the existing variable will be
+updated.  Otherwise, a new variable will be added to the module, via
+<code class="code">module-add!</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-module_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">module-set!</strong> <var class="def-var-arguments">module name value</var><a class="copiable-link" href='#index-module_002dset_0021'> &para;</a></span></dt>
+<dd><p>Update the binding of <var class="var">name</var> in <var class="var">module</var> to <var class="var">value</var>, raising
+an error if <var class="var">name</var> is not already bound in <var class="var">module</var>.
+</p></dd></dl>
+
+<p>There are many other reflective procedures available in the default
+environment.  If you find yourself using one of them, please contact the
+Guile developers so that we can commit to stability for that interface.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Declarative-Modules.html">Declarative Modules</a>, Previous: <a href="Variables.html">Variables</a>, Up: <a href="Modules.html">Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

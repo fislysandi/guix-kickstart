@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Foreign Objects (Guile Reference Manual)</title>
+
+<meta name="description" content="Foreign Objects (Guile Reference Manual)">
+<meta name="keywords" content="Foreign Objects (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="API-Reference.html" rel="up" title="API Reference">
+<link href="Smobs.html" rel="next" title="Smobs">
+<link href="Foreign-Function-Interface.html" rel="prev" title="Foreign Function Interface">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Foreign-Objects">
+<div class="nav-panel">
+<p>
+Next: <a href="Smobs.html" accesskey="n" rel="next">Smobs</a>, Previous: <a href="Foreign-Function-Interface.html" accesskey="p" rel="prev">Foreign Function Interface</a>, Up: <a href="API-Reference.html" accesskey="u" rel="up">API Reference</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Foreign-Objects-1">6.20 Foreign Objects</h3>
+
+<a class="index-entry-id" id="index-foreign-object"></a>
+
+<p>This chapter contains reference information related to defining and
+working with foreign objects.  See <a class="xref" href="Defining-New-Foreign-Object-Types.html">Defining New Foreign Object Types</a>,
+for a tutorial-like introduction to foreign objects.
+</p>
+<dl class="first-deftp">
+<dt class="deftp" id="index-scm_005ft_005fstruct_005ffinalize"><span class="category-def">C Type: </span><span><strong class="def-name">scm_t_struct_finalize</strong><a class="copiable-link" href='#index-scm_005ft_005fstruct_005ffinalize'> &para;</a></span></dt>
+<dd><p>This function type returns <code class="code">void</code> and takes one <code class="code">SCM</code>
+argument.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fmake_005fforeign_005fobject_005ftype"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_make_foreign_object_type</strong> <code class="def-code-arguments">(SCM name, SCM slots, scm_t_struct_finalize finalizer)</code><a class="copiable-link" href='#index-scm_005fmake_005fforeign_005fobject_005ftype'> &para;</a></span></dt>
+<dd><p>Create a fresh foreign object type.  <var class="var">name</var> is a symbol naming the
+type.  <var class="var">slots</var> is a list of symbols, each one naming a field in the
+foreign object type.  <var class="var">finalizer</var> indicates the finalizer, and may
+be <code class="code">NULL</code>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-finalizer-1"></a>
+<a class="index-entry-id" id="index-finalization-1"></a>
+
+<p>We recommend that finalizers be avoided if possible.  See <a class="xref" href="Foreign-Object-Memory-Management.html">Foreign Object Memory Management</a>.  Finalizers must be async-safe and
+thread-safe.  Again, see <a class="pxref" href="Foreign-Object-Memory-Management.html">Foreign Object Memory Management</a>.  If you
+are embedding Guile in an application that is not thread-safe, and you
+define foreign object types that need finalization, you might want to
+disable automatic finalization, and arrange to call
+<code class="code">scm_manually_run_finalizers ()</code> yourself.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fset_005fautomatic_005ffinalization_005fenabled"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_set_automatic_finalization_enabled</strong> <code class="def-code-arguments">(int enabled_p)</code><a class="copiable-link" href='#index-scm_005fset_005fautomatic_005ffinalization_005fenabled'> &para;</a></span></dt>
+<dd><p>Enable or disable automatic finalization.  By default, Guile arranges to
+invoke object finalizers automatically, in a separate thread if
+possible.  Passing a zero value for <var class="var">enabled_p</var> will disable
+automatic finalization for Guile as a whole.  If you disable automatic
+finalization, you will have to call <code class="code">scm_run_finalizers ()</code>
+periodically.
+</p>
+<p>Unlike most other Guile functions, you can call
+<code class="code">scm_set_automatic_finalization_enabled</code> before Guile has been
+initialized.
+</p>
+<p>Return the previous status of automatic finalization.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005frun_005ffinalizers"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_run_finalizers</strong> <code class="def-code-arguments">(void)</code><a class="copiable-link" href='#index-scm_005frun_005ffinalizers'> &para;</a></span></dt>
+<dd><p>Invoke any pending finalizers.  Returns the number of finalizers that
+were invoked.  This function should be called when automatic
+finalization is disabled, though it may be called if it is enabled as
+well.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fassert_005fforeign_005fobject_005ftype"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_assert_foreign_object_type</strong> <code class="def-code-arguments">(SCM type, SCM val)</code><a class="copiable-link" href='#index-scm_005fassert_005fforeign_005fobject_005ftype'> &para;</a></span></dt>
+<dd><p>When <var class="var">val</var> is a foreign object of the given <var class="var">type</var>, do nothing.
+Otherwise, signal an error.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fmake_005fforeign_005fobject_005f0"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_make_foreign_object_0</strong> <code class="def-code-arguments">(SCM type)</code><a class="copiable-link" href='#index-scm_005fmake_005fforeign_005fobject_005f0'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fmake_005fforeign_005fobject_005f1"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_make_foreign_object_1</strong> <code class="def-code-arguments">(SCM type, void *val0)</code><a class="copiable-link" href='#index-scm_005fmake_005fforeign_005fobject_005f1'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fmake_005fforeign_005fobject_005f2"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_make_foreign_object_2</strong> <code class="def-code-arguments">(SCM type, void *val0, void *val1)</code><a class="copiable-link" href='#index-scm_005fmake_005fforeign_005fobject_005f2'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fmake_005fforeign_005fobject_005f3"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_make_foreign_object_3</strong> <code class="def-code-arguments">(SCM type, void *val0, void *val1, void *val2)</code><a class="copiable-link" href='#index-scm_005fmake_005fforeign_005fobject_005f3'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fmake_005fforeign_005fobject_005fn"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_make_foreign_object_n</strong> <code class="def-code-arguments">(SCM type, size_t n, void *vals[])</code><a class="copiable-link" href='#index-scm_005fmake_005fforeign_005fobject_005fn'> &para;</a></span></dt>
+<dd><p>Make a new foreign object of the type with type <var class="var">type</var> and
+initialize the first <var class="var">n</var> fields to the given values, as appropriate.
+</p>
+<p>The number of fields for objects of a given type is fixed when the type
+is created.  It is an error to give more initializers than there are
+fields in the value.  It is perfectly fine to give fewer initializers
+than needed; this is convenient when some fields are of non-pointer
+types, and would be easier to initialize with the setters described
+below.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fforeign_005fobject_005fref"><span class="category-def">C Function: </span><span><code class="def-type">void*</code> <strong class="def-name">scm_foreign_object_ref</strong> <code class="def-code-arguments">(SCM obj, size_t n);</code><a class="copiable-link" href='#index-scm_005fforeign_005fobject_005fref'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fforeign_005fobject_005funsigned_005fref"><span class="category-def">C Function: </span><span><code class="def-type">scm_t_bits</code> <strong class="def-name">scm_foreign_object_unsigned_ref</strong> <code class="def-code-arguments">(SCM obj, size_t n);</code><a class="copiable-link" href='#index-scm_005fforeign_005fobject_005funsigned_005fref'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fforeign_005fobject_005fsigned_005fref"><span class="category-def">C Function: </span><span><code class="def-type">scm_t_signed_bits</code> <strong class="def-name">scm_foreign_object_signed_ref</strong> <code class="def-code-arguments">(SCM obj, size_t n);</code><a class="copiable-link" href='#index-scm_005fforeign_005fobject_005fsigned_005fref'> &para;</a></span></dt>
+<dd><p>Return the value of the <var class="var">n</var>th field of the foreign object <var class="var">obj</var>.
+The backing store for the fields is as wide as a <code class="code">scm_t_bits</code>
+value, which is at least as wide as a pointer.  The different variants
+handle casting in a portable way.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fforeign_005fobject_005fset_005fx"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_foreign_object_set_x</strong> <code class="def-code-arguments">(SCM obj, size_t n, void *val);</code><a class="copiable-link" href='#index-scm_005fforeign_005fobject_005fset_005fx'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fforeign_005fobject_005funsigned_005fset_005fx"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_foreign_object_unsigned_set_x</strong> <code class="def-code-arguments">(SCM obj, size_t n, scm_t_bits val);</code><a class="copiable-link" href='#index-scm_005fforeign_005fobject_005funsigned_005fset_005fx'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fforeign_005fobject_005fsigned_005fset_005fx"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_foreign_object_signed_set_x</strong> <code class="def-code-arguments">(SCM obj, size_t n, scm_t_signed_bits val);</code><a class="copiable-link" href='#index-scm_005fforeign_005fobject_005fsigned_005fset_005fx'> &para;</a></span></dt>
+<dd><p>Set the value of the <var class="var">n</var>th field of the foreign object <var class="var">obj</var> to
+<var class="var">val</var>, after portably converting to a <code class="code">scm_t_bits</code> value, if
+needed.
+</p></dd></dl>
+
+<p>One can also access foreign objects from Scheme.  See <a class="xref" href="Foreign-Objects-and-Scheme.html">Foreign Objects and Scheme</a>, for some examples.
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (system foreign-object))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dforeign_002dobject_002dtype"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-foreign-object-type</strong> <var class="def-var-arguments">name slots [#:finalizer=#f]</var><a class="copiable-link" href='#index-make_002dforeign_002dobject_002dtype'> &para;</a></span></dt>
+<dd><p>Make a new foreign object type.  See the above documentation for
+<code class="code">scm_make_foreign_object_type</code>; these functions are exactly
+equivalent, except for the way in which the finalizer gets attached to
+instances (an internal detail).
+</p>
+<p>The resulting value is a GOOPS class.  See <a class="xref" href="GOOPS.html">GOOPS</a>, for more on classes
+in Guile.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-define_002dforeign_002dobject_002dtype"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">define-foreign-object-type</strong> <var class="def-var-arguments">name constructor (slot ...) [#:finalizer=#f]</var><a class="copiable-link" href='#index-define_002dforeign_002dobject_002dtype'> &para;</a></span></dt>
+<dd><p>A convenience macro to define a type, using
+<code class="code">make-foreign-object-type</code>, and bind it to <var class="var">name</var>.  A
+constructor will be bound to <var class="var">constructor</var>, and getters will be
+bound to each of <var class="var">slot...</var>.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Smobs.html">Smobs</a>, Previous: <a href="Foreign-Function-Interface.html">Foreign Function Interface</a>, Up: <a href="API-Reference.html">API Reference</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

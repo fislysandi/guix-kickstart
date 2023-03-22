@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>rnrs conditions (Guile Reference Manual)</title>
+
+<meta name="description" content="rnrs conditions (Guile Reference Manual)">
+<meta name="keywords" content="rnrs conditions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="R6RS-Standard-Libraries.html" rel="up" title="R6RS Standard Libraries">
+<link href="R6RS-I_002fO-Conditions.html" rel="next" title="R6RS I/O Conditions">
+<link href="rnrs-exceptions.html" rel="prev" title="rnrs exceptions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="rnrs-conditions">
+<div class="nav-panel">
+<p>
+Next: <a href="R6RS-I_002fO-Conditions.html" accesskey="n" rel="next">I/O Conditions</a>, Previous: <a href="rnrs-exceptions.html" accesskey="p" rel="prev">rnrs exceptions</a>, Up: <a href="R6RS-Standard-Libraries.html" accesskey="u" rel="up">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="rnrs-conditions-1">7.6.2.13 rnrs conditions</h4>
+
+<p>The <code class="code">(rnrs condition (6))</code> library provides forms and procedures
+for constructing new condition types, as well as a library of 
+pre-defined condition types that represent a variety of common 
+exceptional situations.  Conditions are records of a subtype of the
+<code class="code">&amp;condition</code> record type, which is neither sealed nor opaque.
+See <a class="xref" href="R6RS-Records.html">R6RS Records</a>.
+</p>
+<p>Conditions may be manipulated singly, as <em class="dfn">simple conditions</em>, or 
+when composed with other conditions to form <em class="dfn">compound conditions</em>.
+Compound conditions do not &ldquo;nest&rdquo;&mdash;constructing a new compound
+condition out of existing compound conditions will &ldquo;flatten&rdquo; them
+into their component simple conditions.  For example, making a new
+condition out of a <code class="code">&amp;message</code> condition and a compound condition
+that contains an <code class="code">&amp;assertion</code> condition and another <code class="code">&amp;message</code> 
+condition will produce a compound condition that contains two 
+<code class="code">&amp;message</code> conditions and one <code class="code">&amp;assertion</code> condition.
+</p>
+<p>The record type predicates and field accessors described below can
+operate on either simple or compound conditions.  In the latter case,
+the predicate returns <code class="code">#t</code> if the compound condition contains a
+component simple condition of the appropriate type; the field accessors
+return the requisite fields from the first component simple condition 
+found to be of the appropriate type.
+</p>
+<p>Guile&rsquo;s R6RS layer uses core exception types from the <code class="code">(ice-9
+exceptions)</code> module as the basis for its R6RS condition system.  Guile
+prefers to use the term &ldquo;exception object&rdquo; and &ldquo;exception type&rdquo;
+rather than &ldquo;condition&rdquo; or &ldquo;condition type&rdquo;, but that&rsquo;s just a
+naming difference.  Guile also has different names for the types in the
+condition hierarchy.  See <a class="xref" href="Exception-Objects.html">Exception Objects</a>, for full details.
+</p>
+<p>This library is quite similar to the SRFI-35 conditions module
+(see <a class="pxref" href="SRFI_002d35.html">SRFI-35 - Conditions</a>).  Among other minor differences, the <code class="code">(rnrs
+conditions)</code> library features slightly different semantics around
+condition field accessors, and comes with a larger number of pre-defined
+condition types.  The two APIs are compatible; the <code class="code">condition?</code>
+predicate from one API will return <code class="code">#t</code> when applied to a condition
+object created in the other.   of the condition types are the same,
+also.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026condition"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;condition</strong><a class="copiable-link" href='#index-_0026condition'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-condition_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">condition?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-condition_003f'> &para;</a></span></dt>
+<dd><p>The base record type for conditions.  Known as <code class="code">&amp;exception</code> in core
+Guile.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-condition-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">condition</strong> <var class="def-var-arguments">condition1 ...</var><a class="copiable-link" href='#index-condition-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-simple_002dconditions"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">simple-conditions</strong> <var class="def-var-arguments">condition</var><a class="copiable-link" href='#index-simple_002dconditions'> &para;</a></span></dt>
+<dd><p>The <code class="code">condition</code> procedure creates a new compound condition out of
+its condition arguments, flattening any specified compound conditions 
+into their component simple conditions as described above.
+</p>
+<p><code class="code">simple-conditions</code> returns a list of the component simple 
+conditions of the compound condition <code class="code">condition</code>, in the order in
+which they were specified at construction time.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-condition_002dpredicate"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">condition-predicate</strong> <var class="def-var-arguments">rtd</var><a class="copiable-link" href='#index-condition_002dpredicate'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-condition_002daccessor"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">condition-accessor</strong> <var class="def-var-arguments">rtd proc</var><a class="copiable-link" href='#index-condition_002daccessor'> &para;</a></span></dt>
+<dd><p>These procedures return condition predicate and accessor procedures for
+the specified condition record type <var class="var">rtd</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-define_002dcondition_002dtype-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">define-condition-type</strong> <var class="def-var-arguments">condition-type supertype constructor predicate field-spec ...</var><a class="copiable-link" href='#index-define_002dcondition_002dtype-1'> &para;</a></span></dt>
+<dd><p>Evaluates to a new record type definition for a condition type with the
+name <var class="var">condition-type</var> that has the condition type <var class="var">supertype</var> as
+its parent.  A default constructor, which binds its arguments to the 
+fields of this type and its parent types, will be bound to the 
+identifier <var class="var">constructor</var>; a condition predicate will be bound to
+<var class="var">predicate</var>.  The fields of the new type, which are immutable, are 
+specified by the <var class="var">field-spec</var>s, each of which must be of the form:
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(field accessor)
+</pre></div>
+<p>where <var class="var">field</var> gives the name of the field and <var class="var">accessor</var> gives
+the name for a binding to an accessor procedure created for this field.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026message"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;message</strong><a class="copiable-link" href='#index-_0026message'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002dmessage_002dcondition"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-message-condition</strong> <var class="def-var-arguments">message</var><a class="copiable-link" href='#index-make_002dmessage_002dcondition'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-message_002dcondition_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">message-condition?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-message_002dcondition_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-condition_002dmessage-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">condition-message</strong> <var class="def-var-arguments">condition</var><a class="copiable-link" href='#index-condition_002dmessage-1'> &para;</a></span></dt>
+<dd><p>A type that includes a message describing the condition that occurred.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026warning"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;warning</strong><a class="copiable-link" href='#index-_0026warning'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002dwarning-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-warning</strong><a class="copiable-link" href='#index-make_002dwarning-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-warning_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">warning?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-warning_003f-1'> &para;</a></span></dt>
+<dd><p>A base type for representing non-fatal conditions during execution.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026serious"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;serious</strong><a class="copiable-link" href='#index-_0026serious'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002dserious_002dcondition"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-serious-condition</strong><a class="copiable-link" href='#index-make_002dserious_002dcondition'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-serious_002dcondition_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">serious-condition?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-serious_002dcondition_003f-1'> &para;</a></span></dt>
+<dd><p>A base type for conditions representing errors serious enough that
+cannot be ignored.  Known as <code class="code">&amp;error</code> in core Guile.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026error"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;error</strong><a class="copiable-link" href='#index-_0026error'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002derror-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-error</strong><a class="copiable-link" href='#index-make_002derror-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-error_003f-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">error?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-error_003f-2'> &para;</a></span></dt>
+<dd><p>A base type for conditions representing errors.  Known as
+<code class="code">&amp;external-error</code> in core Guile.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026violation"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;violation</strong><a class="copiable-link" href='#index-_0026violation'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002dviolation"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-violation</strong><a class="copiable-link" href='#index-make_002dviolation'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-violation_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">violation?</strong><a class="copiable-link" href='#index-violation_003f'> &para;</a></span></dt>
+<dd><p>A subtype of <code class="code">&amp;serious</code> that can be used to represent violations of
+a language or library standard.  Known as <code class="code">&amp;programming-error</code> in
+core Guile.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026assertion"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;assertion</strong><a class="copiable-link" href='#index-_0026assertion'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002dassertion_002dviolation"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-assertion-violation</strong><a class="copiable-link" href='#index-make_002dassertion_002dviolation'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-assertion_002dviolation_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">assertion-violation?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-assertion_002dviolation_003f'> &para;</a></span></dt>
+<dd><p>A subtype of <code class="code">&amp;violation</code> that indicates an invalid call to a
+procedure.  Known as <code class="code">&amp;assertion-failure</code> in core Guile.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026irritants"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;irritants</strong><a class="copiable-link" href='#index-_0026irritants'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002dirritants_002dcondition"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-irritants-condition</strong> <var class="def-var-arguments">irritants</var><a class="copiable-link" href='#index-make_002dirritants_002dcondition'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-irritants_002dcondition_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">irritants-condition?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-irritants_002dcondition_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-condition_002dirritants"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">condition-irritants</strong> <var class="def-var-arguments">condition</var><a class="copiable-link" href='#index-condition_002dirritants'> &para;</a></span></dt>
+<dd><p>A base type used for storing information about the causes of another
+condition in a compound condition.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026who"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;who</strong><a class="copiable-link" href='#index-_0026who'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002dwho_002dcondition"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-who-condition</strong> <var class="def-var-arguments">who</var><a class="copiable-link" href='#index-make_002dwho_002dcondition'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-who_002dcondition_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">who-condition?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-who_002dcondition_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-condition_002dwho"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">condition-who</strong> <var class="def-var-arguments">condition</var><a class="copiable-link" href='#index-condition_002dwho'> &para;</a></span></dt>
+<dd><p>A base type used for storing the identity, a string or symbol, of the
+entity responsible for another condition in a compound condition.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026non_002dcontinuable"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;non-continuable</strong><a class="copiable-link" href='#index-_0026non_002dcontinuable'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002dnon_002dcontinuable_002dviolation"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-non-continuable-violation</strong><a class="copiable-link" href='#index-make_002dnon_002dcontinuable_002dviolation'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-non_002dcontinuable_002dviolation_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">non-continuable-violation?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-non_002dcontinuable_002dviolation_003f'> &para;</a></span></dt>
+<dd><p>A subtype of <code class="code">&amp;violation</code> used to indicate that an exception 
+handler invoked by <code class="code">raise</code> has returned locally.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026implementation_002drestriction"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;implementation-restriction</strong><a class="copiable-link" href='#index-_0026implementation_002drestriction'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002dimplementation_002drestriction_002dviolation"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-implementation-restriction-violation</strong><a class="copiable-link" href='#index-make_002dimplementation_002drestriction_002dviolation'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-implementation_002drestriction_002dviolation_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">implementation-restriction-violation?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-implementation_002drestriction_002dviolation_003f'> &para;</a></span></dt>
+<dd><p>A subtype of <code class="code">&amp;violation</code> used to indicate a violation of an
+implementation restriction.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026lexical"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;lexical</strong><a class="copiable-link" href='#index-_0026lexical'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002dlexical_002dviolation"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-lexical-violation</strong><a class="copiable-link" href='#index-make_002dlexical_002dviolation'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-lexical_002dviolation_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">lexical-violation?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-lexical_002dviolation_003f'> &para;</a></span></dt>
+<dd><p>A subtype of <code class="code">&amp;violation</code> used to indicate a syntax violation at
+the level of the datum syntax.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026syntax"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;syntax</strong><a class="copiable-link" href='#index-_0026syntax'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002dsyntax_002dviolation"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-syntax-violation</strong> <var class="def-var-arguments">form subform</var><a class="copiable-link" href='#index-make_002dsyntax_002dviolation'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-syntax_002dviolation_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">syntax-violation?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-syntax_002dviolation_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-syntax_002dviolation_002dform"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">syntax-violation-form</strong> <var class="def-var-arguments">condition</var><a class="copiable-link" href='#index-syntax_002dviolation_002dform'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-syntax_002dviolation_002dsubform"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">syntax-violation-subform</strong> <var class="def-var-arguments">condition</var><a class="copiable-link" href='#index-syntax_002dviolation_002dsubform'> &para;</a></span></dt>
+<dd><p>A subtype of <code class="code">&amp;violation</code> that indicates a syntax violation.  The
+<var class="var">form</var> and <var class="var">subform</var> fields, which must be datum values,
+indicate the syntactic form responsible for the condition.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026undefined"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;undefined</strong><a class="copiable-link" href='#index-_0026undefined'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002dundefined_002dviolation"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-undefined-violation</strong><a class="copiable-link" href='#index-make_002dundefined_002dviolation'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-undefined_002dviolation_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">undefined-violation?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-undefined_002dviolation_003f'> &para;</a></span></dt>
+<dd><p>A subtype of <code class="code">&amp;violation</code> that indicates a reference to an unbound
+identifier.  Known as <code class="code">&amp;undefined-variable</code> in core Guile.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="R6RS-I_002fO-Conditions.html">I/O Conditions</a>, Previous: <a href="rnrs-exceptions.html">rnrs exceptions</a>, Up: <a href="R6RS-Standard-Libraries.html">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

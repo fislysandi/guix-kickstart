@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Allocating Heap Objects (Guile Reference Manual)</title>
+
+<meta name="description" content="Allocating Heap Objects (Guile Reference Manual)">
+<meta name="keywords" content="Allocating Heap Objects (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="The-SCM-Type-in-Guile.html" rel="up" title="The SCM Type in Guile">
+<link href="Heap-Object-Type-Information.html" rel="next" title="Heap Object Type Information">
+<link href="Non_002dImmediate-Objects.html" rel="prev" title="Non-Immediate Objects">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Allocating-Heap-Objects">
+<div class="nav-panel">
+<p>
+Next: <a href="Heap-Object-Type-Information.html" accesskey="n" rel="next">Heap Object Type Information</a>, Previous: <a href="Non_002dImmediate-Objects.html" accesskey="p" rel="prev">Non-Immediate Objects</a>, Up: <a href="The-SCM-Type-in-Guile.html" accesskey="u" rel="up">The SCM Type in Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Allocating-Heap-Objects-1">9.2.5.4 Allocating Heap Objects</h4>
+
+<p>Heap objects are heap-allocated data pointed to by non-immediate
+<code class="code">SCM</code> value.  The first word of the heap object should contain a
+type code.  The object may be any number of words in length, and is
+generally scanned by the garbage collector for additional unless the
+object was allocated using a &ldquo;pointerless&rdquo; allocation function.
+</p>
+<p>You should generally not need these functions, unless you are
+implementing a new data type, and thoroughly understand the code in
+<code class="code">&lt;libguile/scm.h&gt;</code>.
+</p>
+<p>If you just want to allocate pairs, use <code class="code">scm_cons</code>.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fwords"><span class="category-def">Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_words</strong> <code class="def-code-arguments">(scm_t_bits word_0, uint32_t n_words)</code><a class="copiable-link" href='#index-scm_005fwords'> &para;</a></span></dt>
+<dd><p>Allocate a new heap object containing <var class="var">n_words</var>, and initialize the
+first slot to <var class="var">word_0</var>, and return a non-immediate <code class="code">SCM</code> value
+encoding a pointer to the object.  Typically <var class="var">word_0</var> will contain
+the type tag.
+</p></dd></dl>
+
+<p>There are also deprecated but common variants of <code class="code">scm_words</code> that
+use the term &ldquo;cell&rdquo; to indicate 2-word objects.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fcell"><span class="category-def">Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_cell</strong> <code class="def-code-arguments">(scm_t_bits word_0, scm_t_bits word_1)</code><a class="copiable-link" href='#index-scm_005fcell'> &para;</a></span></dt>
+<dd><p>Allocate a new 2-word heap object, initialize the two slots with
+<var class="var">word_0</var> and <var class="var">word_1</var>, and return it.  Just like calling
+<code class="code">scm_words (<var class="var">word_0</var>, 2)</code>, then initializing the second slot to
+<var class="var">word_1</var>.
+</p>
+<p>Note that <var class="var">word_0</var> and <var class="var">word_1</var> are of type <code class="code">scm_t_bits</code>.
+If you want to pass a <code class="code">SCM</code> object, you need to use
+<code class="code">SCM_UNPACK</code>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fdouble_005fcell"><span class="category-def">Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_double_cell</strong> <code class="def-code-arguments">(scm_t_bits word_0, scm_t_bits word_1, scm_t_bits word_2, scm_t_bits word_3)</code><a class="copiable-link" href='#index-scm_005fdouble_005fcell'> &para;</a></span></dt>
+<dd><p>Like <code class="code">scm_cell</code>, but allocates a 4-word heap object.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Heap-Object-Type-Information.html">Heap Object Type Information</a>, Previous: <a href="Non_002dImmediate-Objects.html">Non-Immediate Objects</a>, Up: <a href="The-SCM-Type-in-Guile.html">The SCM Type in Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

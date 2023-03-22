@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>texinfo (Guile Reference Manual)</title>
+
+<meta name="description" content="texinfo (Guile Reference Manual)">
+<meta name="keywords" content="texinfo (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Texinfo-Processing.html" rel="up" title="Texinfo Processing">
+<link href="texinfo-docbook.html" rel="next" title="texinfo docbook">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="texinfo">
+<div class="nav-panel">
+<p>
+Next: <a href="texinfo-docbook.html" accesskey="n" rel="next">(texinfo docbook)</a>, Up: <a href="Texinfo-Processing.html" accesskey="u" rel="up">Texinfo Processing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="g_t_0028texinfo_0029">7.22.1 (texinfo)</h4>
+<ul class="mini-toc">
+<li><a href="#Overview-5" accesskey="1">Overview</a></li>
+<li><a href="#Usage-5" accesskey="2">Usage</a></li>
+</ul>
+<div class="subsubsection-level-extent" id="Overview-5">
+<h4 class="subsubsection">7.22.1.1 Overview</h4>
+<h4 class="subheading" id="Texinfo-processing-in-scheme">Texinfo processing in scheme</h4>
+<p>This module parses texinfo into SXML. TeX will always be the processor
+of choice for print output, of course. However, although <code class="code">makeinfo</code>
+works well for info, its output in other formats is not very
+customizable, and the program is not extensible as a whole. This module
+aims to provide an extensible framework for texinfo processing that
+integrates texinfo into the constellation of SXML processing tools.
+</p>
+<h4 class="subheading" id="Notes-on-the-SXML-vocabulary">Notes on the SXML vocabulary</h4>
+<p>Consider the following texinfo fragment:
+</p>
+<div class="example">
+<pre class="example-preformatted"> @deffn Primitive set-car! pair value
+ This function...
+ @end deffn
+</pre></div>
+
+<p>Logically, the category (Primitive), name (set-car!), and arguments
+(pair value) are &ldquo;attributes&rdquo; of the deffn, with the description as
+the content. However, texinfo allows for @-commands within the
+arguments to an environment, like <code class="code">@deffn</code>, which means that
+texinfo &ldquo;attributes&rdquo; are PCDATA. XML attributes, on the other hand,
+are CDATA. For this reason, &ldquo;attributes&rdquo; of texinfo @-commands are
+called &ldquo;arguments&rdquo;, and are grouped under the special element, &lsquo;%&rsquo;.
+</p>
+<p>Because &lsquo;%&rsquo; is not a valid NCName, stexinfo is a superset of SXML. In
+the interests of interoperability, this module provides a conversion
+function to replace the &lsquo;%&rsquo; with &lsquo;texinfo-arguments&rsquo;.
+</p>
+</div>
+<div class="subsubsection-level-extent" id="Usage-5">
+<h4 class="subsubsection">7.22.1.2 Usage</h4>
+<a class="anchor" id="texinfo-call_002dwith_002dfile_002dand_002ddir"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-call_002dwith_002dfile_002dand_002ddir"><span class="category-def">Function: </span><span><strong class="def-name">call-with-file-and-dir</strong> <var class="def-var-arguments">filename proc</var><a class="copiable-link" href='#index-call_002dwith_002dfile_002dand_002ddir'> &para;</a></span></dt>
+<dd><p>Call the one-argument procedure <var class="var">proc</var> with an input port that reads
+from <var class="var">filename</var>. During the dynamic extent of <var class="var">proc</var>&rsquo;s
+execution, the current directory will be <code class="code">(dirname
+<var class="var">filename</var>)</code>. This is useful for parsing documents that can include
+files by relative path name.
+</p>
+</dd></dl>
+
+<a class="anchor" id="texinfo-texi_002dcommand_002dspecs"></a><dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-texi_002dcommand_002dspecs"><span class="category-def">Variable: </span><span><strong class="def-name">texi-command-specs</strong><a class="copiable-link" href='#index-texi_002dcommand_002dspecs'> &para;</a></span></dt>
+</dl>
+
+<a class="anchor" id="texinfo-texi_002dcommand_002ddepth"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-texi_002dcommand_002ddepth"><span class="category-def">Function: </span><span><strong class="def-name">texi-command-depth</strong> <var class="def-var-arguments">command max-depth</var><a class="copiable-link" href='#index-texi_002dcommand_002ddepth'> &para;</a></span></dt>
+<dd><p>Given the texinfo command <var class="var">command</var>, return its nesting level, or
+<code class="code">#f</code> if it nests too deep for <var class="var">max-depth</var>.
+</p>
+<p>Examples:
+</p>
+<div class="example">
+<pre class="example-preformatted"> (texi-command-depth 'chapter 4)        &rArr; 1
+ (texi-command-depth 'top 4)            &rArr; 0
+ (texi-command-depth 'subsection 4)     &rArr; 3
+ (texi-command-depth 'appendixsubsec 4) &rArr; 3
+ (texi-command-depth 'subsection 2)     &rArr; #f
+</pre></div>
+
+</dd></dl>
+
+<a class="anchor" id="texinfo-texi_002dfragment_002d_003estexi"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-texi_002dfragment_002d_003estexi"><span class="category-def">Function: </span><span><strong class="def-name">texi-fragment-&gt;stexi</strong> <var class="def-var-arguments">string-or-port</var><a class="copiable-link" href='#index-texi_002dfragment_002d_003estexi'> &para;</a></span></dt>
+<dd><p>Parse the texinfo commands in <var class="var">string-or-port</var>, and return the
+resultant stexi tree. The head of the tree will be the special command,
+<code class="code">*fragment*</code>.
+</p>
+</dd></dl>
+
+<a class="anchor" id="texinfo-texi_002d_003estexi"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-texi_002d_003estexi"><span class="category-def">Function: </span><span><strong class="def-name">texi-&gt;stexi</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-texi_002d_003estexi'> &para;</a></span></dt>
+<dd><p>Read a full texinfo document from <var class="var">port</var> and return the parsed stexi
+tree. The parsing will start at the <code class="code">@settitle</code> and end at
+<code class="code">@bye</code> or EOF.
+</p>
+</dd></dl>
+
+<a class="anchor" id="texinfo-stexi_002d_003esxml"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-stexi_002d_003esxml"><span class="category-def">Function: </span><span><strong class="def-name">stexi-&gt;sxml</strong> <var class="def-var-arguments">tree</var><a class="copiable-link" href='#index-stexi_002d_003esxml'> &para;</a></span></dt>
+<dd><p>Transform the stexi tree <var class="var">tree</var> into sxml. This involves replacing
+the <code class="code">%</code> element that keeps the texinfo arguments with an element
+for each argument.
+</p>
+<p>FIXME: right now it just changes % to <code class="code">texinfo-arguments</code> &ndash; that
+doesn&rsquo;t hang with the idea of making a dtd at some point
+</p>
+</dd></dl>
+
+</div>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="texinfo-docbook.html">(texinfo docbook)</a>, Up: <a href="Texinfo-Processing.html">Texinfo Processing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

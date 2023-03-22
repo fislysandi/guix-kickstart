@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-171 Reducers (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-171 Reducers (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-171 Reducers (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI_002d171.html" rel="up" title="SRFI-171">
+<link href="SRFI_002d171-Transducers.html" rel="next" title="SRFI-171 Transducers">
+<link href="SRFI_002d171-Applying-Transducers.html" rel="prev" title="SRFI-171 Applying Transducers">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="SRFI_002d171-Reducers">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d171-Transducers.html" accesskey="n" rel="next">Transducers</a>, Previous: <a href="SRFI_002d171-Applying-Transducers.html" accesskey="p" rel="prev">Applying Transducers</a>, Up: <a href="SRFI_002d171.html" accesskey="u" rel="up">Transducers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Reducers">7.5.46.3 Reducers</h4>
+<a class="index-entry-id" id="index-transducers-reducers"></a>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-rcons"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">rcons</strong><a class="copiable-link" href='#index-rcons'> &para;</a></span></dt>
+<dd><p>a simple consing reducer. When called without values, it returns its
+identity, <code class="code">'()</code>.  With one value, which will be a list, it reverses
+the list (using <code class="code">reverse!</code>).  When called with two values, it conses
+the second value to the first.
+</p>
+<div class="example">
+<pre class="example-preformatted">(list-transduce (tmap (lambda (x) (+ x 1)) rcons (list 0 1 2 3))
+&rArr; (1 2 3 4)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-reverse_002drcons"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">reverse-rcons</strong><a class="copiable-link" href='#index-reverse_002drcons'> &para;</a></span></dt>
+<dd><p>same as rcons, but leaves the values in their reversed order.
+</p><div class="example">
+<pre class="example-preformatted">(list-transduce (tmap (lambda (x) (+ x 1))) reverse-rcons (list 0 1 2 3))
+&rArr; (4 3 2 1)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-rany"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">rany</strong> <var class="def-var-arguments">pred?</var><a class="copiable-link" href='#index-rany'> &para;</a></span></dt>
+<dd><p>The reducer version of any.  Returns <code class="code">(reduced (pred? value))</code> if
+any <code class="code">(pred? value)</code> returns non-#f.  The identity is #f.
+</p>
+<div class="example">
+<pre class="example-preformatted">(list-transduce (tmap (lambda (x) (+ x 1))) (rany odd?) (list 1 3 5))
+&rArr; #f
+
+(list-transduce (tmap (lambda (x) (+ x 1))) (rany odd?) (list 1 3 4 5))
+&rArr; #t
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-revery"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">revery</strong> <var class="def-var-arguments">pred?</var><a class="copiable-link" href='#index-revery'> &para;</a></span></dt>
+<dd><p>The reducer version of every.  Stops the transduction and returns
+<code class="code">(reduced #f)</code> if any <code class="code">(pred? value)</code> returns #f.  If every
+<code class="code">(pred? value)</code> returns true, it returns the result of the last
+invocation of <code class="code">(pred? value)</code>.  The identity is #t.
+</p>
+<div class="example">
+<pre class="example-preformatted">(list-transduce
+  (tmap (lambda (x) (+ x 1)))
+  (revery (lambda (v) (if (odd? v) v #f)))
+  (list 2 4 6))
+  &rArr; 7
+
+(list-transduce (tmap (lambda (x) (+ x 1)) (revery odd?) (list 2 4 5 6))
+&rArr; #f
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-rcount"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">rcount</strong><a class="copiable-link" href='#index-rcount'> &para;</a></span></dt>
+<dd><p>A simple counting reducer.  Counts the values that pass through the
+transduction.
+</p><div class="example">
+<pre class="example-preformatted">(list-transduce (tfilter odd?) rcount (list 1 2 3 4)) &rArr; 2.
+</pre></div>
+</dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d171-Transducers.html">Transducers</a>, Previous: <a href="SRFI_002d171-Applying-Transducers.html">Applying Transducers</a>, Up: <a href="SRFI_002d171.html">Transducers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

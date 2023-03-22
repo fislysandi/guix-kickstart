@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>GC Hooks (Guile Reference Manual)</title>
+
+<meta name="description" content="GC Hooks (Guile Reference Manual)">
+<meta name="keywords" content="GC Hooks (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Hooks.html" rel="up" title="Hooks">
+<link href="REPL-Hooks.html" rel="next" title="REPL Hooks">
+<link href="C-Hooks.html" rel="prev" title="C Hooks">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="GC-Hooks">
+<div class="nav-panel">
+<p>
+Next: <a href="REPL-Hooks.html" accesskey="n" rel="next">Hooks into the Guile REPL</a>, Previous: <a href="C-Hooks.html" accesskey="p" rel="prev">Hooks For C Code.</a>, Up: <a href="Hooks.html" accesskey="u" rel="up">Hooks</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Hooks-for-Garbage-Collection">6.9.6.4 Hooks for Garbage Collection</h4>
+
+<p>Whenever Guile performs a garbage collection, it calls the following
+hooks in the order shown.
+</p>
+<dl class="first-defvr">
+<dt class="defvr" id="index-scm_005fbefore_005fgc_005fc_005fhook"><span class="category-def">C Hook: </span><span><strong class="def-name">scm_before_gc_c_hook</strong><a class="copiable-link" href='#index-scm_005fbefore_005fgc_005fc_005fhook'> &para;</a></span></dt>
+<dd><p>C hook called at the very start of a garbage collection, after setting
+<code class="code">scm_gc_running_p</code> to 1, but before entering the GC critical
+section.
+</p>
+<p>If garbage collection is blocked because <code class="code">scm_block_gc</code> is
+non-zero, GC exits early soon after calling this hook, and no further
+hooks will be called.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-scm_005fbefore_005fmark_005fc_005fhook"><span class="category-def">C Hook: </span><span><strong class="def-name">scm_before_mark_c_hook</strong><a class="copiable-link" href='#index-scm_005fbefore_005fmark_005fc_005fhook'> &para;</a></span></dt>
+<dd><p>C hook called before beginning the mark phase of garbage collection,
+after the GC thread has entered a critical section.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-scm_005fbefore_005fsweep_005fc_005fhook"><span class="category-def">C Hook: </span><span><strong class="def-name">scm_before_sweep_c_hook</strong><a class="copiable-link" href='#index-scm_005fbefore_005fsweep_005fc_005fhook'> &para;</a></span></dt>
+<dd><p>C hook called before beginning the sweep phase of garbage collection.
+This is the same as at the end of the mark phase, since nothing else
+happens between marking and sweeping.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-scm_005fafter_005fsweep_005fc_005fhook"><span class="category-def">C Hook: </span><span><strong class="def-name">scm_after_sweep_c_hook</strong><a class="copiable-link" href='#index-scm_005fafter_005fsweep_005fc_005fhook'> &para;</a></span></dt>
+<dd><p>C hook called after the end of the sweep phase of garbage collection,
+but while the GC thread is still inside its critical section.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-scm_005fafter_005fgc_005fc_005fhook"><span class="category-def">C Hook: </span><span><strong class="def-name">scm_after_gc_c_hook</strong><a class="copiable-link" href='#index-scm_005fafter_005fgc_005fc_005fhook'> &para;</a></span></dt>
+<dd><p>C hook called at the very end of a garbage collection, after the GC
+thread has left its critical section.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-after_002dgc_002dhook"><span class="category-def">Scheme Hook: </span><span><strong class="def-name">after-gc-hook</strong><a class="copiable-link" href='#index-after_002dgc_002dhook'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-scm_005fafter_005fgc_005fhook"></a>
+<p>Scheme hook with arity 0.  This hook is run asynchronously
+(see <a class="pxref" href="Asyncs.html">Asynchronous Interrupts</a>) soon after the GC has completed and any other events
+that were deferred during garbage collection have been processed.  (Also
+accessible from C with the name <code class="code">scm_after_gc_hook</code>.)
+</p></dd></dl>
+
+<p>All the C hooks listed here have type <code class="code">SCM_C_HOOK_NORMAL</code>, are
+initialized with hook closure data NULL, are invoked by
+<code class="code">scm_c_hook_run</code> with call closure data NULL.
+</p>
+<a class="index-entry-id" id="index-guardians_002c-testing-for-GC_0027d-objects"></a>
+<p>The Scheme hook <code class="code">after-gc-hook</code> is particularly useful in
+conjunction with guardians (see <a class="pxref" href="Guardians.html">Guardians</a>).  Typically, if you are
+using a guardian, you want to call the guardian after garbage collection
+to see if any of the objects added to the guardian have been collected.
+By adding a thunk that performs this call to <code class="code">after-gc-hook</code>, you
+can ensure that your guardian is tested after every garbage collection
+cycle.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="REPL-Hooks.html">Hooks into the Guile REPL</a>, Previous: <a href="C-Hooks.html">Hooks For C Code.</a>, Up: <a href="Hooks.html">Hooks</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

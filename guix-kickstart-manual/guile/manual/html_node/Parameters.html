@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Parameters (Guile Reference Manual)</title>
+
+<meta name="description" content="Parameters (Guile Reference Manual)">
+<meta name="keywords" content="Parameters (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Control-Mechanisms.html" rel="up" title="Control Mechanisms">
+<link href="Handling-Errors.html" rel="next" title="Handling Errors">
+<link href="Fluids-and-Dynamic-States.html" rel="prev" title="Fluids and Dynamic States">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Parameters">
+<div class="nav-panel">
+<p>
+Next: <a href="Handling-Errors.html" accesskey="n" rel="next">How to Handle Errors</a>, Previous: <a href="Fluids-and-Dynamic-States.html" accesskey="p" rel="prev">Fluids and Dynamic States</a>, Up: <a href="Control-Mechanisms.html" accesskey="u" rel="up">Controlling the Flow of Program Execution</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Parameters-1">6.11.12 Parameters</h4>
+
+<a class="index-entry-id" id="index-SRFI_002d39"></a>
+<a class="index-entry-id" id="index-parameter-object"></a>
+<a class="index-entry-id" id="index-Parameter"></a>
+
+<p>Parameters are Guile&rsquo;s facility for dynamically bound variables.
+</p>
+<p>On the most basic level, a parameter object is a procedure.  Calling it
+with no arguments returns its value.  Calling it with one argument sets
+the value.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define my-param (make-parameter 123))
+(my-param) &rArr; 123
+(my-param 456)
+(my-param) &rArr; 456
+</pre></div>
+
+<p>The <code class="code">parameterize</code> special form establishes new locations for
+parameters, those new locations having effect within the dynamic extent
+of the <code class="code">parameterize</code> body.  Leaving restores the previous
+locations.  Re-entering (through a saved continuation) will again use
+the new locations.
+</p>
+<div class="example">
+<pre class="example-preformatted">(parameterize ((my-param 789))
+  (my-param)) &rArr; 789
+(my-param) &rArr; 456
+</pre></div>
+
+<p>Parameters are like dynamically bound variables in other Lisp dialects.
+They allow an application to establish parameter settings (as the name
+suggests) just for the execution of a particular bit of code, restoring
+when done.  Examples of such parameters might be case-sensitivity for a
+search, or a prompt for user input.
+</p>
+<p>Global variables are not as good as parameter objects for this sort of
+thing.  Changes to them are visible to all threads, but in Guile
+parameter object locations are per-thread, thereby truly limiting the
+effect of <code class="code">parameterize</code> to just its dynamic execution.
+</p>
+<p>Passing arguments to functions is thread-safe, but that soon becomes
+tedious when there&rsquo;s more than a few or when they need to pass down
+through several layers of calls before reaching the point they should
+affect.  Introducing a new setting to existing code is often easier with
+a parameter object than adding arguments.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dparameter"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-parameter</strong> <var class="def-var-arguments">init [converter]</var><a class="copiable-link" href='#index-make_002dparameter'> &para;</a></span></dt>
+<dd><p>Return a new parameter object, with initial value <var class="var">init</var>.
+</p>
+<p>If a <var class="var">converter</var> is given, then a call <code class="code">(<var class="var">converter</var>
+val)</code> is made for each value set, its return is the value stored.
+Such a call is made for the <var class="var">init</var> initial value too.
+</p>
+<p>A <var class="var">converter</var> allows values to be validated, or put into a
+canonical form.  For example,
+</p>
+<div class="example">
+<pre class="example-preformatted">(define my-param (make-parameter 123
+                   (lambda (val)
+                     (if (not (number? val))
+                         (error &quot;must be a number&quot;))
+                     (inexact-&gt;exact val))))
+(my-param 0.75)
+(my-param) &rArr; 3/4
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-parameterize"><span class="category-def">library syntax: </span><span><strong class="def-name">parameterize</strong> <var class="def-var-arguments">((param value) &hellip;) body1 body2 &hellip;</var><a class="copiable-link" href='#index-parameterize'> &para;</a></span></dt>
+<dd><p>Establish a new dynamic scope with the given <var class="var">param</var>s bound to new
+locations and set to the given <var class="var">value</var>s.  <var class="var">body1</var> <var class="var">body2</var>
+&hellip; is evaluated in that environment.  The value returned is that of
+last body form.
+</p>
+<p>Each <var class="var">param</var> is an expression which is evaluated to get the
+parameter object.  Often this will just be the name of a variable
+holding the object, but it can be anything that evaluates to a
+parameter.
+</p>
+<p>The <var class="var">param</var> expressions and <var class="var">value</var> expressions are all
+evaluated before establishing the new dynamic bindings, and they&rsquo;re
+evaluated in an unspecified order.
+</p>
+<p>For example,
+</p>
+<div class="example">
+<pre class="example-preformatted">(define prompt (make-parameter &quot;Type something: &quot;))
+(define (get-input)
+  (display (prompt))
+  ...)
+
+(parameterize ((prompt &quot;Type a number: &quot;))
+  (get-input)
+  ...)
+</pre></div>
+</dd></dl>
+
+<p>Parameter objects are implemented using fluids (see <a class="pxref" href="Fluids-and-Dynamic-States.html">Fluids and Dynamic States</a>), so each dynamic state has its own parameter
+locations.  That includes the separate locations when outside any
+<code class="code">parameterize</code> form.  When a parameter is created it gets a
+separate initial location in each dynamic state, all initialized to the
+given <var class="var">init</var> value.
+</p>
+<p>New code should probably just use parameters instead of fluids, because
+the interface is better.  But for migrating old code or otherwise
+providing interoperability, Guile provides the <code class="code">fluid-&gt;parameter</code>
+procedure:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-fluid_002d_003eparameter"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fluid-&gt;parameter</strong> <var class="def-var-arguments">fluid [conv]</var><a class="copiable-link" href='#index-fluid_002d_003eparameter'> &para;</a></span></dt>
+<dd><p>Make a parameter that wraps a fluid.
+</p>
+<p>The value of the parameter will be the same as the value of the fluid.
+If the parameter is rebound in some dynamic extent, perhaps via
+<code class="code">parameterize</code>, the new value will be run through the optional
+<var class="var">conv</var> procedure, as with any parameter.  Note that unlike
+<code class="code">make-parameter</code>, <var class="var">conv</var> is not applied to the initial value.
+</p></dd></dl>
+
+<p>As alluded to above, because each thread usually has a separate dynamic
+state, each thread has its own locations behind parameter objects, and
+changes in one thread are not visible to any other.  When a new dynamic
+state or thread is created, the values of parameters in the originating
+context are copied, into new locations.
+</p>
+<a class="index-entry-id" id="index-SRFI_002d39-1"></a>
+<p>Guile&rsquo;s parameters conform to SRFI-39 (see <a class="pxref" href="SRFI_002d39.html">SRFI-39 - Parameters</a>).
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Handling-Errors.html">How to Handle Errors</a>, Previous: <a href="Fluids-and-Dynamic-States.html">Fluids and Dynamic States</a>, Up: <a href="Control-Mechanisms.html">Controlling the Flow of Program Execution</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

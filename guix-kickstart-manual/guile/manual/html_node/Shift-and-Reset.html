@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Shift and Reset (Guile Reference Manual)</title>
+
+<meta name="description" content="Shift and Reset (Guile Reference Manual)">
+<meta name="keywords" content="Shift and Reset (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Prompts.html" rel="up" title="Prompts">
+<link href="Prompt-Primitives.html" rel="prev" title="Prompt Primitives">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Shift-and-Reset">
+<div class="nav-panel">
+<p>
+Previous: <a href="Prompt-Primitives.html" accesskey="p" rel="prev">Prompt Primitives</a>, Up: <a href="Prompts.html" accesskey="u" rel="up">Prompts</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Shift_002c-Reset_002c-and-All-That">6.11.5.2 Shift, Reset, and All That</h4>
+
+<p>There is a whole zoo of delimited control operators, and as it does not
+seem to be a bounded set, Guile implements support for them in a
+separate module:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 control))
+</pre></div>
+
+<p>Firstly, we have a helpful abbreviation for the <code class="code">call-with-prompt</code>
+operator.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0025"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">%</strong> <var class="def-var-arguments">expr</var><a class="copiable-link" href='#index-_0025'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_0025-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">%</strong> <var class="def-var-arguments">expr handler</var><a class="copiable-link" href='#index-_0025-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_0025-2"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">%</strong> <var class="def-var-arguments">tag expr handler</var><a class="copiable-link" href='#index-_0025-2'> &para;</a></span></dt>
+<dd><p>Evaluate <var class="var">expr</var> in a prompt, optionally specifying a tag and a
+handler.  If no tag is given, the default prompt tag is used.
+</p>
+<p>If no handler is given, a default handler is installed.  The default
+handler accepts a procedure of one argument, which will be called on
+the captured continuation, within a prompt.
+</p>
+<p>Sometimes it&rsquo;s easier just to show code, as in this case:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (default-prompt-handler k proc)
+  (% (default-prompt-tag)
+     (proc k)
+     default-prompt-handler))
+</pre></div>
+
+<p>The <code class="code">%</code> symbol is chosen because it looks like a prompt.
+</p></dd></dl>
+
+<p>Likewise there is an abbreviation for <code class="code">abort-to-prompt</code>, which
+assumes the default prompt tag:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-abort"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">abort</strong> <var class="def-var-arguments">val1 val2 &hellip;</var><a class="copiable-link" href='#index-abort'> &para;</a></span></dt>
+<dd><p>Abort to the default prompt tag, passing <var class="var">val1</var> <var class="var">val2</var> &hellip;
+to the handler.
+</p></dd></dl>
+
+<p>As mentioned before, <code class="code">(ice-9 control)</code> also provides other
+delimited control operators.  This section is a bit technical, and
+first-time users of delimited continuations should probably come back to
+it after some practice with <code class="code">%</code>.
+</p>
+<p>Still here?  So, when one implements a delimited control operator like
+<code class="code">call-with-prompt</code>, one needs to make two decisions.  Firstly, does
+the handler run within or outside the prompt?  Having the handler run
+within the prompt allows an abort inside the handler to return to the
+same prompt handler, which is often useful.  However it prevents tail
+calls from the handler, so it is less general.
+</p>
+<p>Similarly, does invoking a captured continuation reinstate a prompt?
+Again we have the tradeoff of convenience versus proper tail calls.
+</p>
+<p>These decisions are captured in the Felleisen <em class="dfn">F</em> operator.  If
+neither the continuations nor the handlers implicitly add a prompt, the
+operator is known as <em class="dfn">&ndash;F&ndash;</em>.  This is the case for Guile&rsquo;s
+<code class="code">call-with-prompt</code> and <code class="code">abort-to-prompt</code>.
+</p>
+<p>If both continuation and handler implicitly add prompts, then the
+operator is <em class="dfn">+F+</em>.  <code class="code">shift</code> and <code class="code">reset</code> are such
+operators.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-reset"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">reset</strong> <var class="def-var-arguments">body1 body2 &hellip;</var><a class="copiable-link" href='#index-reset'> &para;</a></span></dt>
+<dd><p>Establish a prompt, and evaluate <var class="var">body1</var> <var class="var">body2</var> &hellip; within
+that prompt.
+</p>
+<p>The prompt handler is designed to work with <code class="code">shift</code>, described
+below.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-shift"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">shift</strong> <var class="def-var-arguments">cont body1 body2 &hellip;</var><a class="copiable-link" href='#index-shift'> &para;</a></span></dt>
+<dd><p>Abort to the nearest <code class="code">reset</code>, and evaluate <var class="var">body1</var> <var class="var">body2</var>
+&hellip; in a context in which the captured continuation is bound to
+<var class="var">cont</var>.
+</p>
+<p>As mentioned above, taken together, the <var class="var">body1</var> <var class="var">body2</var> &hellip;
+expressions and the invocations of <var class="var">cont</var> implicitly establish a
+prompt.
+</p></dd></dl>
+
+<p>Interested readers are invited to explore Oleg Kiselyov&rsquo;s wonderful web
+site at <a class="uref" href="http://okmij.org/ftp/">http://okmij.org/ftp/</a>, for more information on these
+operators.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Prompt-Primitives.html">Prompt Primitives</a>, Up: <a href="Prompts.html">Prompts</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

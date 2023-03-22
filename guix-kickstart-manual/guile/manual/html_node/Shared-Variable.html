@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Shared Variable (Guile Reference Manual)</title>
+
+<meta name="description" content="Shared Variable (Guile Reference Manual)">
+<meta name="keywords" content="Shared Variable (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="About-Closure.html" rel="up" title="About Closure">
+<link href="Callback-Closure.html" rel="next" title="Callback Closure">
+<link href="Serial-Number.html" rel="prev" title="Serial Number">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Shared-Variable">
+<div class="nav-panel">
+<p>
+Next: <a href="Callback-Closure.html" accesskey="n" rel="next">Example 3: The Callback Closure Problem</a>, Previous: <a href="Serial-Number.html" accesskey="p" rel="prev">Example 1: A Serial Number Generator</a>, Up: <a href="About-Closure.html" accesskey="u" rel="up">The Concept of Closure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Example-2_003a-A-Shared-Persistent-Variable">3.4.7 Example 2: A Shared Persistent Variable</h4>
+
+<p>This example uses closure to create two procedures, <code class="code">get-balance</code>
+and <code class="code">deposit</code>, that both refer to the same captured local
+environment so that they can both access the <code class="code">balance</code> variable
+binding inside that environment.  The value of this variable binding
+persists between calls to either procedure.
+</p>
+<p>Note that the captured <code class="code">balance</code> variable binding is private to
+these two procedures: it is not directly accessible to any other code.
+It can only be accessed indirectly via <code class="code">get-balance</code> or
+<code class="code">deposit</code>, as illustrated by the <code class="code">withdraw</code> procedure.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define get-balance #f)
+(define deposit #f)
+
+(let ((balance 0))
+  (set! get-balance
+        (lambda ()
+          balance))
+  (set! deposit
+        (lambda (amount)
+          (set! balance (+ balance amount))
+          balance)))
+
+(define (withdraw amount)
+  (deposit (- amount)))
+
+(get-balance)
+&rArr;
+0
+
+(deposit 50)
+&rArr;
+50
+
+(withdraw 75)
+&rArr;
+-25
+</pre></div>
+
+<p>An important detail here is that the <code class="code">get-balance</code> and
+<code class="code">deposit</code> variables must be set up by <code class="code">define</code>ing them at top
+level and then <code class="code">set!</code>ing their values inside the <code class="code">let</code> body.
+Using <code class="code">define</code> within the <code class="code">let</code> body would not work: this
+would create variable bindings within the local <code class="code">let</code> environment
+that would not be accessible at top level.
+</p>
+
+</div>
+
+
+
+</body>
+</html>

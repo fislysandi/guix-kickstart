@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Garbage Collection Functions (Guile Reference Manual)</title>
+
+<meta name="description" content="Garbage Collection Functions (Guile Reference Manual)">
+<meta name="keywords" content="Garbage Collection Functions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Memory-Management.html" rel="up" title="Memory Management">
+<link href="Memory-Blocks.html" rel="next" title="Memory Blocks">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Garbage-Collection-Functions">
+<div class="nav-panel">
+<p>
+Next: <a href="Memory-Blocks.html" accesskey="n" rel="next">Memory Blocks</a>, Up: <a href="Memory-Management.html" accesskey="u" rel="up">Memory Management and Garbage Collection</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Function-related-to-Garbage-Collection">6.17.1 Function related to Garbage Collection</h4>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-gc-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">gc</strong><a class="copiable-link" href='#index-gc-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgc"><span class="category-def">C Function: </span><span><strong class="def-name">scm_gc</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fgc'> &para;</a></span></dt>
+<dd><p>Finds all of the &ldquo;live&rdquo; <code class="code">SCM</code> objects and reclaims for further
+use those that are no longer accessible.  You normally don&rsquo;t need to
+call this function explicitly.  Its functionality is invoked
+automatically as needed.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fgc_005fprotect_005fobject"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_gc_protect_object</strong> <code class="def-code-arguments">(SCM <var class="var">obj</var>)</code><a class="copiable-link" href='#index-scm_005fgc_005fprotect_005fobject'> &para;</a></span></dt>
+<dd><p>Protects <var class="var">obj</var> from being freed by the garbage collector, when it
+otherwise might be.  When you are done with the object, call
+<code class="code">scm_gc_unprotect_object</code> on the object. Calls to
+<code class="code">scm_gc_protect_object</code>/<code class="code">scm_gc_unprotect_object</code> can be nested, and
+the object remains protected until it has been unprotected as many times
+as it was protected. It is an error to unprotect an object more times
+than it has been protected. Returns the SCM object it was passed.
+</p>
+<p>Note that storing <var class="var">obj</var> in a C global variable has the same
+effect<a class="footnote" id="DOCF17" href="#FOOT17"><sup>17</sup></a>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fgc_005funprotect_005fobject"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_gc_unprotect_object</strong> <code class="def-code-arguments">(SCM <var class="var">obj</var>)</code><a class="copiable-link" href='#index-scm_005fgc_005funprotect_005fobject'> &para;</a></span></dt>
+<dd>
+<p>Unprotects an object from the garbage collector which was protected by
+<code class="code">scm_gc_unprotect_object</code>. Returns the SCM object it was passed.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fpermanent_005fobject"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_permanent_object</strong> <code class="def-code-arguments">(SCM <var class="var">obj</var>)</code><a class="copiable-link" href='#index-scm_005fpermanent_005fobject'> &para;</a></span></dt>
+<dd>
+<p>Similar to <code class="code">scm_gc_protect_object</code> in that it causes the
+collector to always mark the object, except that it should not be
+nested (only call <code class="code">scm_permanent_object</code> on an object once), and
+it has no corresponding unpermanent function. Once an object is
+declared permanent, it will never be freed. Returns the SCM object it
+was passed.
+</p></dd></dl>
+
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fremember_005fupto_005fhere_005f1"><span class="category-def">C Macro: </span><span><code class="def-type">void</code> <strong class="def-name">scm_remember_upto_here_1</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-scm_005fremember_005fupto_005fhere_005f1'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fremember_005fupto_005fhere_005f2"><span class="category-def">C Macro: </span><span><code class="def-type">void</code> <strong class="def-name">scm_remember_upto_here_2</strong> <code class="def-code-arguments">(SCM obj1, SCM obj2)</code><a class="copiable-link" href='#index-scm_005fremember_005fupto_005fhere_005f2'> &para;</a></span></dt>
+<dd><p>Create a reference to the given object or objects, so they&rsquo;re certain
+to be present on the stack or in a register and hence will not be
+freed by the garbage collector before this point.
+</p>
+<p>Note that these functions can only be applied to ordinary C local
+variables (ie. &ldquo;automatics&rdquo;).  Objects held in global or static
+variables or some malloced block or the like cannot be protected with
+this mechanism.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-gc_002dstats"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">gc-stats</strong><a class="copiable-link" href='#index-gc_002dstats'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgc_005fstats"><span class="category-def">C Function: </span><span><strong class="def-name">scm_gc_stats</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fgc_005fstats'> &para;</a></span></dt>
+<dd><p>Return an association list of statistics about Guile&rsquo;s current
+use of storage.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-gc_002dlive_002dobject_002dstats"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">gc-live-object-stats</strong><a class="copiable-link" href='#index-gc_002dlive_002dobject_002dstats'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgc_005flive_005fobject_005fstats"><span class="category-def">C Function: </span><span><strong class="def-name">scm_gc_live_object_stats</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fgc_005flive_005fobject_005fstats'> &para;</a></span></dt>
+<dd><p>Return an alist of statistics of the current live objects. 
+</p></dd></dl>
+
+<dl class="first-deftypefn first-deftypefun-alias-first-deftypefn">
+<dt class="deftypefn deftypefun-alias-deftypefn" id="index-scm_005fgc_005fmark"><span class="category-def">Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_gc_mark</strong> <code class="def-code-arguments">(SCM <var class="var">x</var>)</code><a class="copiable-link" href='#index-scm_005fgc_005fmark'> &para;</a></span></dt>
+<dd><p>Mark the object <var class="var">x</var>, and recurse on any objects <var class="var">x</var> refers to.
+If <var class="var">x</var>&rsquo;s mark bit is already set, return immediately.  This function
+must only be called during the mark-phase of garbage collection,
+typically from a smob <em class="emph">mark</em> function.
+</p></dd></dl>
+
+
+</div>
+<div class="footnotes-segment">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5 class="footnote-body-heading"><a id="FOOT17" href="#DOCF17">(17)</a></h5>
+<p>In Guile up to version 1.8, C global variables were not
+visited by the garbage collector in the mark phase; hence,
+<code class="code">scm_gc_protect_object</code> was the only way in C to prevent a Scheme
+object from being freed.</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Memory-Blocks.html">Memory Blocks</a>, Up: <a href="Memory-Management.html">Memory Management and Garbage Collection</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

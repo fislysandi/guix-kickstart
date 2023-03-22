@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Bytevector Procedures in R7RS (Guile Reference Manual)</title>
+
+<meta name="description" content="Bytevector Procedures in R7RS (Guile Reference Manual)">
+<meta name="keywords" content="Bytevector Procedures in R7RS (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Bytevectors.html" rel="up" title="Bytevectors">
+<link href="Bytevector-Slices.html" rel="next" title="Bytevector Slices">
+<link href="Bytevectors-as-Uniform-Vectors.html" rel="prev" title="Bytevectors as Uniform Vectors">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Bytevector-Procedures-in-R7RS">
+<div class="nav-panel">
+<p>
+Next: <a href="Bytevector-Slices.html" accesskey="n" rel="next">Bytevector Slices</a>, Previous: <a href="Bytevectors-as-Uniform-Vectors.html" accesskey="p" rel="prev">Accessing Bytevectors with the SRFI-4 API</a>, Up: <a href="Bytevectors.html" accesskey="u" rel="up">Bytevectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Bytevector-Procedures-in-R7RS-1">6.6.12.9 Bytevector Procedures in R7RS</h4>
+
+<p>The <a class="ref" href="R7RS-Support.html">R7RS</a> (Section 6.9) defines a set of
+bytevector manipulation procedures, accessible with
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (scheme base))
+</pre></div>
+
+<p>Of these, <a class="ref" href="Bytevector-Manipulation.html#x_002dmake_002dbytevector"><code class="code">make-bytevector</code></a>,
+<a class="ref" href="Bytevector-Manipulation.html#x_002dbytevector_003f"><code class="code">bytevector?</code></a>,
+<a class="ref" href="Bytevector-Manipulation.html#x_002dbytevector_002dlength"><code class="code">bytevector-length</code></a>,
+<a class="ref" href="Bytevectors-as-Integers.html#x_002dbytevector_002du8_002dref"><code class="code">bytevector-u8-ref</code></a> and
+<a class="ref" href="Bytevectors-as-Integers.html#x_002dbytevector_002du8_002dset_0021"><code class="code">bytevector-u8-set!</code></a> have the same
+definition as in R6RS.  The procedures listed below either have a
+different definition in R7RS and R6RS, or are not defined in R6RS.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-bytevector-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector</strong> <var class="def-var-arguments">arg &hellip;</var><a class="copiable-link" href='#index-bytevector-1'> &para;</a></span></dt>
+<dd><p>Return a newly allocated bytevector composed of the given arguments.
+Analogous to <code class="code">list</code>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(bytevector 2 3 4) &rArr; #vu8(2 3 4)
+</pre></div>
+
+<p>See also <a class="ref" href="Bytevectors-and-Integer-Lists.html#x_002du8_002dlist_002d_003ebytevector"><code class="code">u8-list-&gt;bytevector</code></a>.
+</p></dd></dl>
+
+<a class="anchor" id="x_002dr7_003abytevector_002dcopy"></a><dl class="first-deffn">
+<dt class="deffn" id="index-bytevector_002dcopy-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-copy</strong> <var class="def-var-arguments">bv [start [end]]</var><a class="copiable-link" href='#index-bytevector_002dcopy-1'> &para;</a></span></dt>
+<dd><p>Returns a newly allocated bytevector containing the elements of <var class="var">bv</var>
+in the range [<var class="var">start</var> ... <var class="var">end</var>).  <var class="var">start</var> defaults to 0 and
+<var class="var">end</var> defaults to the length of <var class="var">bv</var>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define bv #vu8(0 1 2 3 4 5))
+(bytevector-copy bv) &rArr; #vu8(0 1 2 3 4 5)
+(bytevector-copy bv 2) &rArr; #vu8(2 3 4 5)
+(bytevector-copy bv 2 4) &rArr; #vu8(2 3)
+</pre></div>
+
+<p>See also <a class="ref" href="Bytevector-Manipulation.html#x_002dr6_003abytevector_002dcopy">the R6RS version</a>.
+</p></dd></dl>
+
+<a class="anchor" id="x_002dr7_003abytevector_002dcopy_0021"></a><dl class="first-deffn">
+<dt class="deffn" id="index-bytevector_002dcopy_0021-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-copy!</strong> <var class="def-var-arguments">dst at src [start [end]]</var><a class="copiable-link" href='#index-bytevector_002dcopy_0021-1'> &para;</a></span></dt>
+<dd><p>Copy the block of elements from bytevector <var class="var">src</var> in the range
+[<var class="var">start</var> ... <var class="var">end</var>) into bytevector <var class="var">dst</var>, starting at
+position <var class="var">at</var>.  <var class="var">start</var> defaults to 0 and <var class="var">end</var> defaults to
+the length of <var class="var">src</var>.  It is an error for <var class="var">dst</var>
+to have a length less than <var class="var">at</var> + (<var class="var">end</var> - <var class="var">start</var>).
+</p>
+<p>See also <a class="ref" href="Bytevector-Manipulation.html#x_002dr6_003abytevector_002dcopy_0021">the R6RS version</a>.  With
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(use-modules ((rnrs bytevectors) #:prefix r6:)
+             ((scheme base) #:prefix r7:))
+</pre></div>
+
+<p>the following calls are equivalent:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(r6:bytevector-copy! source source-start target target-start len)
+(r7:bytevector-copy! target target-start source source-start (+ source-start len))
+</pre></div>
+
+</dd></dl>
+
+<a class="index-entry-id" id="index-bytevector_002dappend-1"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-bytevector_002dappend"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-append</strong> <var class="def-var-arguments">arg &hellip;</var><a class="copiable-link" href='#index-bytevector_002dappend'> &para;</a></span></dt>
+<dd><p>Return a newly allocated bytevector whose characters form the
+concatenation of the given bytevectors <var class="var">arg</var> <small class="enddots">...</small>
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(bytevector-append #vu8(0 1 2) #vu8(3 4 5))
+&rArr; #vu8(0 1 2 3 4 5)
+</pre></div>
+</dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Bytevector-Slices.html">Bytevector Slices</a>, Previous: <a href="Bytevectors-as-Uniform-Vectors.html">Accessing Bytevectors with the SRFI-4 API</a>, Up: <a href="Bytevectors.html">Bytevectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

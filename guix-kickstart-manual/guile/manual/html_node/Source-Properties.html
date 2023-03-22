@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Source Properties (Guile Reference Manual)</title>
+
+<meta name="description" content="Source Properties (Guile Reference Manual)">
+<meta name="keywords" content="Source Properties (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Debugging.html" rel="up" title="Debugging">
+<link href="Programmatic-Error-Handling.html" rel="next" title="Programmatic Error Handling">
+<link href="Evaluation-Model.html" rel="prev" title="Evaluation Model">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Source-Properties">
+<div class="nav-panel">
+<p>
+Next: <a href="Programmatic-Error-Handling.html" accesskey="n" rel="next">Programmatic Error Handling</a>, Previous: <a href="Evaluation-Model.html" accesskey="p" rel="prev">Evaluation and the Scheme Stack</a>, Up: <a href="Debugging.html" accesskey="u" rel="up">Debugging Infrastructure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Source-Properties-1">6.26.2 Source Properties</h4>
+
+<p>How best to associate source locations with datums parsed from a port?
+The right way to do this is to annotate all components of each parsed
+datum.  See <a class="xref" href="Annotated-Scheme-Read.html">Reading Scheme Code, For the Compiler</a>, for more on <code class="code">read-syntax</code>.
+</p>
+<a class="index-entry-id" id="index-source-properties"></a>
+<p>Guile only switched to use <code class="code">read-syntax</code> in 2021, however.  For the
+previous thirty years, it used a mechanism known as <em class="dfn">source
+properties</em>.
+</p>
+<p>As Guile reads in Scheme code from file or from standard input, it can
+record the file name, line number and column number where each
+expression begins in a side table.
+</p>
+<p>The way that this side table associates datums with source properties
+has a limitation, however: Guile can only associate source properties
+with freshly allocated objects.  This notably excludes individual
+symbols, keywords, characters, booleans, or small integers.  This
+limitation finally motivated the switch to <code class="code">read-syntax</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-supports_002dsource_002dproperties_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">supports-source-properties?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-supports_002dsource_002dproperties_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsupports_005fsource_005fproperties_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_supports_source_properties_p</strong> <var class="def-var-arguments">(obj)</var><a class="copiable-link" href='#index-scm_005fsupports_005fsource_005fproperties_005fp'> &para;</a></span></dt>
+<dd><p>Return #t if source properties can be associated with <var class="var">obj</var>,
+otherwise return #f.
+</p></dd></dl>
+
+<p>The recording of source properties is controlled by the read option
+named &ldquo;positions&rdquo; (see <a class="pxref" href="Scheme-Read.html">Reading Scheme Code</a>).  This option is switched
+<em class="emph">on</em> by default.  Now that <code class="code">read-syntax</code> is available,
+however, Guile may change the default for this flag to off in the
+future.
+</p>
+<p>The following procedures can be used to access and set the source
+properties of read expressions.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-set_002dsource_002dproperties_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-source-properties!</strong> <var class="def-var-arguments">obj alist</var><a class="copiable-link" href='#index-set_002dsource_002dproperties_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fset_005fsource_005fproperties_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_set_source_properties_x</strong> <var class="def-var-arguments">(obj, alist)</var><a class="copiable-link" href='#index-scm_005fset_005fsource_005fproperties_005fx'> &para;</a></span></dt>
+<dd><p>Install the association list <var class="var">alist</var> as the source property
+list for <var class="var">obj</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-set_002dsource_002dproperty_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-source-property!</strong> <var class="def-var-arguments">obj key datum</var><a class="copiable-link" href='#index-set_002dsource_002dproperty_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fset_005fsource_005fproperty_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_set_source_property_x</strong> <var class="def-var-arguments">(obj, key, datum)</var><a class="copiable-link" href='#index-scm_005fset_005fsource_005fproperty_005fx'> &para;</a></span></dt>
+<dd><p>Set the source property of object <var class="var">obj</var>, which is specified by
+<var class="var">key</var> to <var class="var">datum</var>.  Normally, the key will be a symbol.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-source_002dproperties"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">source-properties</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-source_002dproperties'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsource_005fproperties"><span class="category-def">C Function: </span><span><strong class="def-name">scm_source_properties</strong> <var class="def-var-arguments">(obj)</var><a class="copiable-link" href='#index-scm_005fsource_005fproperties'> &para;</a></span></dt>
+<dd><p>Return the source property association list of <var class="var">obj</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-source_002dproperty"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">source-property</strong> <var class="def-var-arguments">obj key</var><a class="copiable-link" href='#index-source_002dproperty'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsource_005fproperty"><span class="category-def">C Function: </span><span><strong class="def-name">scm_source_property</strong> <var class="def-var-arguments">(obj, key)</var><a class="copiable-link" href='#index-scm_005fsource_005fproperty'> &para;</a></span></dt>
+<dd><p>Return the property specified by <var class="var">key</var> from <var class="var">obj</var>&rsquo;s source
+properties.
+</p></dd></dl>
+
+<p>If the <code class="code">positions</code> reader option is enabled, supported expressions
+will have values set for the <code class="code">filename</code>, <code class="code">line</code> and
+<code class="code">column</code> properties.
+</p>
+<p>Source properties are also associated with syntax objects.  Procedural
+macros can get at the source location of their input using the
+<code class="code">syntax-source</code> accessor.  See <a class="xref" href="Syntax-Transformer-Helpers.html">Syntax Transformer Helpers</a>, for
+more.
+</p>
+<p>Guile also defines a couple of convenience macros built on
+<code class="code">syntax-source</code>:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-current_002dsource_002dlocation"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">current-source-location</strong><a class="copiable-link" href='#index-current_002dsource_002dlocation'> &para;</a></span></dt>
+<dd><p>Expands to the source properties corresponding to the location of the
+<code class="code">(current-source-location)</code> form.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-current_002dfilename"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">current-filename</strong><a class="copiable-link" href='#index-current_002dfilename'> &para;</a></span></dt>
+<dd><p>Expands to the current filename: the filename that the
+<code class="code">(current-filename)</code> form appears in.  Expands to <code class="code">#f</code> if this
+information is unavailable.
+</p></dd></dl>
+
+<p>If you&rsquo;re stuck with defmacros (see <a class="pxref" href="Defmacros.html">Lisp-style Macro Definitions</a>), and want to preserve
+source information, the following helper function might be useful to
+you:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-cons_002dsource"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cons-source</strong> <var class="def-var-arguments">xorig x y</var><a class="copiable-link" href='#index-cons_002dsource'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcons_005fsource"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cons_source</strong> <var class="def-var-arguments">(xorig, x, y)</var><a class="copiable-link" href='#index-scm_005fcons_005fsource'> &para;</a></span></dt>
+<dd><p>Create and return a new pair whose car and cdr are <var class="var">x</var> and <var class="var">y</var>.
+Any source properties associated with <var class="var">xorig</var> are also associated
+with the new pair.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Programmatic-Error-Handling.html">Programmatic Error Handling</a>, Previous: <a href="Evaluation-Model.html">Evaluation and the Scheme Stack</a>, Up: <a href="Debugging.html">Debugging Infrastructure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

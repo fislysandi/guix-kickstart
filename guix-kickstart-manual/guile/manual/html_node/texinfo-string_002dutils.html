@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>texinfo string-utils (Guile Reference Manual)</title>
+
+<meta name="description" content="texinfo string-utils (Guile Reference Manual)">
+<meta name="keywords" content="texinfo string-utils (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Texinfo-Processing.html" rel="up" title="Texinfo Processing">
+<link href="texinfo-plain_002dtext.html" rel="next" title="texinfo plain-text">
+<link href="texinfo-indexing.html" rel="prev" title="texinfo indexing">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="texinfo-string_002dutils">
+<div class="nav-panel">
+<p>
+Next: <a href="texinfo-plain_002dtext.html" accesskey="n" rel="next">(texinfo plain-text)</a>, Previous: <a href="texinfo-indexing.html" accesskey="p" rel="prev">(texinfo indexing)</a>, Up: <a href="Texinfo-Processing.html" accesskey="u" rel="up">Texinfo Processing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="g_t_0028texinfo-string_002dutils_0029">7.22.5 (texinfo string-utils)</h4>
+<ul class="mini-toc">
+<li><a href="#Overview-9" accesskey="1">Overview</a></li>
+<li><a href="#Usage-9" accesskey="2">Usage</a></li>
+</ul>
+<div class="subsubsection-level-extent" id="Overview-9">
+<h4 class="subsubsection">7.22.5.1 Overview</h4>
+<p>Module &lsquo;<samp class="samp">(texinfo string-utils)</samp>&rsquo; provides various string-related
+functions useful to Guile&rsquo;s texinfo support.
+</p>
+</div>
+<div class="subsubsection-level-extent" id="Usage-9">
+<h4 class="subsubsection">7.22.5.2 Usage</h4>
+<a class="anchor" id="texinfo-string_002dutils-escape_002dspecial_002dchars"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-escape_002dspecial_002dchars"><span class="category-def">Function: </span><span><strong class="def-name">escape-special-chars</strong> <var class="def-var-arguments">str special-chars escape-char</var><a class="copiable-link" href='#index-escape_002dspecial_002dchars'> &para;</a></span></dt>
+<dd><p>Returns a copy of <var class="var">str</var> with all given special characters preceded
+by the given <var class="var">escape-char</var>.
+</p>
+<p><var class="var">special-chars</var> can either be a single character, or a string
+consisting of all the special characters.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">;; make a string regexp-safe...
+ (escape-special-chars &quot;***(Example String)***&quot;  
+                      &quot;[]()/*.&quot; 
+                      #\\)
+=&gt; &quot;\\*\\*\\*\\(Example String\\)\\*\\*\\*&quot;
+
+;; also can escape a singe char...
+ (escape-special-chars &quot;richardt@vzavenue.net&quot;
+                      #\@
+                      #\@)
+=&gt; &quot;richardt@@vzavenue.net&quot;
+</pre></div>
+
+</dd></dl>
+
+<a class="anchor" id="texinfo-string_002dutils-transform_002dstring"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-transform_002dstring"><span class="category-def">Function: </span><span><strong class="def-name">transform-string</strong> <var class="def-var-arguments">str match? replace [start] [end]</var><a class="copiable-link" href='#index-transform_002dstring'> &para;</a></span></dt>
+<dd><p>Uses <var class="var">match?</var> against each character in <var class="var">str</var>, and performs a
+replacement on each character for which matches are found.
+</p>
+<p><var class="var">match?</var> may either be a function, a character, a string, or
+<code class="code">#t</code>. If <var class="var">match?</var> is a function, then it takes a single
+character as input, and should return &lsquo;<samp class="samp">#t</samp>&rsquo; for matches.
+<var class="var">match?</var> is a character, it is compared to each string character
+using <code class="code">char=?</code>. If <var class="var">match?</var> is a string, then any character in
+that string will be considered a match. <code class="code">#t</code> will cause every
+character to be a match.
+</p>
+<p>If <var class="var">replace</var> is a function, it is called with the matched character
+as an argument, and the returned value is sent to the output string via
+&lsquo;<samp class="samp">display</samp>&rsquo;. If <var class="var">replace</var> is anything else, it is sent through
+the output string via &lsquo;<samp class="samp">display</samp>&rsquo;.
+</p>
+<p>Note that the replacement for the matched characters does not need to be
+a single character. That is what differentiates this function from
+&lsquo;<samp class="samp">string-map</samp>&rsquo;, and what makes it useful for applications such as
+converting &lsquo;<samp class="samp">#\&amp;</samp>&rsquo; to &lsquo;<samp class="samp">&quot;&amp;amp;&quot;</samp>&rsquo; in web page text. Some other
+functions in this module are just wrappers around common uses of
+&lsquo;<samp class="samp">transform-string</samp>&rsquo;. Transformations not possible with this function
+should probably be done with regular expressions.
+</p>
+<p>If <var class="var">start</var> and <var class="var">end</var> are given, they control which portion of
+the string undergoes transformation. The entire input string is still
+output, though. So, if <var class="var">start</var> is &lsquo;<samp class="samp">5</samp>&rsquo;, then the first five
+characters of <var class="var">str</var> will still appear in the returned string.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">; these two are equivalent...
+ (transform-string str #\space #\-) ; change all spaces to -'s
+ (transform-string str (lambda (c) (char=? #\space c)) #\-)
+</pre></div>
+
+</dd></dl>
+
+<a class="anchor" id="texinfo-string_002dutils-expand_002dtabs"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-expand_002dtabs"><span class="category-def">Function: </span><span><strong class="def-name">expand-tabs</strong> <var class="def-var-arguments">str [tab-size]</var><a class="copiable-link" href='#index-expand_002dtabs'> &para;</a></span></dt>
+<dd><p>Returns a copy of <var class="var">str</var> with all tabs expanded to spaces.
+<var class="var">tab-size</var> defaults to 8.
+</p>
+<p>Assuming tab size of 8, this is equivalent to:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted"> (transform-string str #\tab &quot;        &quot;)
+</pre></div>
+
+</dd></dl>
+
+<a class="anchor" id="texinfo-string_002dutils-center_002dstring"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-center_002dstring"><span class="category-def">Function: </span><span><strong class="def-name">center-string</strong> <var class="def-var-arguments">str [width] [chr] [rchr]</var><a class="copiable-link" href='#index-center_002dstring'> &para;</a></span></dt>
+<dd><p>Returns a copy of <var class="var">str</var> centered in a field of <var class="var">width</var>
+characters. Any needed padding is done by character <var class="var">chr</var>, which
+defaults to &lsquo;<samp class="samp">#\space</samp>&rsquo;. If <var class="var">rchr</var> is provided, then the padding
+to the right will use it instead. See the examples below. left and
+<var class="var">rchr</var> on the right. The default <var class="var">width</var> is 80. The default
+<var class="var">chr</var> and <var class="var">rchr</var> is &lsquo;<samp class="samp">#\space</samp>&rsquo;. The string is never
+truncated.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted"> (center-string &quot;Richard Todd&quot; 24)
+=&gt; &quot;      Richard Todd      &quot;
+
+ (center-string &quot; Richard Todd &quot; 24 #\=)
+=&gt; &quot;===== Richard Todd =====&quot;
+
+ (center-string &quot; Richard Todd &quot; 24 #\&lt; #\&gt;)
+=&gt; &quot;&lt;&lt;&lt;&lt;&lt; Richard Todd &gt;&gt;&gt;&gt;&gt;&quot;
+</pre></div>
+
+</dd></dl>
+
+<a class="anchor" id="texinfo-string_002dutils-left_002djustify_002dstring"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-left_002djustify_002dstring"><span class="category-def">Function: </span><span><strong class="def-name">left-justify-string</strong> <var class="def-var-arguments">str [width] [chr]</var><a class="copiable-link" href='#index-left_002djustify_002dstring'> &para;</a></span></dt>
+<dd><p><code class="code">left-justify-string str [width chr]</code>. Returns a copy of <var class="var">str</var>
+padded with <var class="var">chr</var> such that it is left justified in a field of
+<var class="var">width</var> characters. The default <var class="var">width</var> is 80. Unlike
+&lsquo;<samp class="samp">string-pad</samp>&rsquo; from srfi-13, the string is never truncated.
+</p>
+</dd></dl>
+
+<a class="anchor" id="texinfo-string_002dutils-right_002djustify_002dstring"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-right_002djustify_002dstring"><span class="category-def">Function: </span><span><strong class="def-name">right-justify-string</strong> <var class="def-var-arguments">str [width] [chr]</var><a class="copiable-link" href='#index-right_002djustify_002dstring'> &para;</a></span></dt>
+<dd><p>Returns a copy of <var class="var">str</var> padded with <var class="var">chr</var> such that it is right
+justified in a field of <var class="var">width</var> characters. The default <var class="var">width</var>
+is 80. The default <var class="var">chr</var> is &lsquo;<samp class="samp">#\space</samp>&rsquo;. Unlike &lsquo;<samp class="samp">string-pad</samp>&rsquo;
+from srfi-13, the string is never truncated.
+</p>
+</dd></dl>
+
+<a class="anchor" id="texinfo-string_002dutils-collapse_002drepeated_002dchars"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-collapse_002drepeated_002dchars"><span class="category-def">Function: </span><span><strong class="def-name">collapse-repeated-chars</strong> <var class="def-var-arguments">str [chr] [num]</var><a class="copiable-link" href='#index-collapse_002drepeated_002dchars'> &para;</a></span></dt>
+<dd><p>Returns a copy of <var class="var">str</var> with all repeated instances of <var class="var">chr</var>
+collapsed down to at most <var class="var">num</var> instances. The default value for
+<var class="var">chr</var> is &lsquo;<samp class="samp">#\space</samp>&rsquo;, and the default value for <var class="var">num</var> is 1.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted"> (collapse-repeated-chars &quot;H  e  l  l  o&quot;)
+=&gt; &quot;H e l l o&quot;
+ (collapse-repeated-chars &quot;H--e--l--l--o&quot; #\-)
+=&gt; &quot;H-e-l-l-o&quot;
+ (collapse-repeated-chars &quot;H-e--l---l----o&quot; #\- 2)
+=&gt; &quot;H-e--l--l--o&quot;
+</pre></div>
+
+</dd></dl>
+
+<a class="anchor" id="texinfo-string_002dutils-make_002dtext_002dwrapper"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-make_002dtext_002dwrapper"><span class="category-def">Function: </span><span><strong class="def-name">make-text-wrapper</strong> <var class="def-var-arguments">[#:line-width] [#:expand-tabs?] [#:tab-width] [#:collapse-whitespace?] [#:subsequent-indent] [#:initial-indent] [#:break-long-words?]</var><a class="copiable-link" href='#index-make_002dtext_002dwrapper'> &para;</a></span></dt>
+<dd><p>Returns a procedure that will split a string into lines according to the
+given parameters.
+</p>
+<dl class="table">
+<dt><code class="code">#:line-width</code></dt>
+<dd><p>This is the target length used when deciding where to wrap lines.
+Default is 80.
+</p>
+</dd>
+<dt><code class="code">#:expand-tabs?</code></dt>
+<dd><p>Boolean describing whether tabs in the input should be expanded. Default
+is #t.
+</p>
+</dd>
+<dt><code class="code">#:tab-width</code></dt>
+<dd><p>If tabs are expanded, this will be the number of spaces to which they
+expand. Default is 8.
+</p>
+</dd>
+<dt><code class="code">#:collapse-whitespace?</code></dt>
+<dd><p>Boolean describing whether the whitespace inside the existing text
+should be removed or not. Default is #t.
+</p>
+<p>If text is already well-formatted, and is just being wrapped to fit in a
+different width, then set this to &lsquo;<samp class="samp">#f</samp>&rsquo;. This way, many common text
+conventions (such as two spaces between sentences) can be preserved if
+in the original text. If the input text spacing cannot be trusted, then
+leave this setting at the default, and all repeated whitespace will be
+collapsed down to a single space.
+</p>
+</dd>
+<dt><code class="code">#:initial-indent</code></dt>
+<dd><p>Defines a string that will be put in front of the first line of wrapped
+text. Default is the empty string, &ldquo;&rdquo;.
+</p>
+</dd>
+<dt><code class="code">#:subsequent-indent</code></dt>
+<dd><p>Defines a string that will be put in front of all lines of wrapped text,
+except the first one. Default is the empty string, &ldquo;&rdquo;.
+</p>
+</dd>
+<dt><code class="code">#:break-long-words?</code></dt>
+<dd><p>If a single word is too big to fit on a line, this setting tells the
+wrapper what to do. Defaults to #t, which will break up long words. When
+set to #f, the line will be allowed, even though it is longer than the
+defined <code class="code">#:line-width</code>.
+</p>
+</dd>
+</dl>
+
+<p>The return value is a procedure of one argument, the input string, which
+returns a list of strings, where each element of the list is one line.
+</p>
+</dd></dl>
+
+<a class="anchor" id="texinfo-string_002dutils-fill_002dstring"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-fill_002dstring"><span class="category-def">Function: </span><span><strong class="def-name">fill-string</strong> <var class="def-var-arguments">str . kwargs</var><a class="copiable-link" href='#index-fill_002dstring'> &para;</a></span></dt>
+<dd><p>Wraps the text given in string <var class="var">str</var> according to the parameters
+provided in <var class="var">kwargs</var>, or the default setting if they are not given.
+Returns a single string with the wrapped text. Valid keyword arguments
+are discussed in <code class="code">make-text-wrapper</code>.
+</p>
+</dd></dl>
+
+<a class="anchor" id="texinfo-string_002dutils-string_002d_003ewrapped_002dlines"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-string_002d_003ewrapped_002dlines"><span class="category-def">Function: </span><span><strong class="def-name">string-&gt;wrapped-lines</strong> <var class="def-var-arguments">str . kwargs</var><a class="copiable-link" href='#index-string_002d_003ewrapped_002dlines'> &para;</a></span></dt>
+<dd><p><code class="code">string-&gt;wrapped-lines str keywds ...</code>. Wraps the text given in
+string <var class="var">str</var> according to the parameters provided in <var class="var">keywds</var>,
+or the default setting if they are not given. Returns a list of strings
+representing the formatted lines. Valid keyword arguments are discussed
+in <code class="code">make-text-wrapper</code>.
+</p>
+</dd></dl>
+
+</div>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="texinfo-plain_002dtext.html">(texinfo plain-text)</a>, Previous: <a href="texinfo-indexing.html">(texinfo indexing)</a>, Up: <a href="Texinfo-Processing.html">Texinfo Processing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

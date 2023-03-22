@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Bytevectors (Guile Reference Manual)</title>
+
+<meta name="description" content="Bytevectors (Guile Reference Manual)">
+<meta name="keywords" content="Bytevectors (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Data-Types.html" rel="up" title="Data Types">
+<link href="Arrays.html" rel="next" title="Arrays">
+<link href="Bit-Vectors.html" rel="prev" title="Bit Vectors">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Bytevectors">
+<div class="nav-panel">
+<p>
+Next: <a href="Arrays.html" accesskey="n" rel="next">Arrays</a>, Previous: <a href="Bit-Vectors.html" accesskey="p" rel="prev">Bit Vectors</a>, Up: <a href="Data-Types.html" accesskey="u" rel="up">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Bytevectors-1">6.6.12 Bytevectors</h4>
+
+<a class="index-entry-id" id="index-bytevector"></a>
+<a class="index-entry-id" id="index-R6RS"></a>
+
+<p>A <em class="dfn">bytevector</em> is a raw byte string.  The <code class="code">(rnrs bytevectors)</code>
+module provides the programming interface specified by the
+<a class="uref" href="http://www.r6rs.org/">Revised^6 Report on the Algorithmic Language
+Scheme (R6RS)</a>.  It contains procedures to manipulate bytevectors and
+interpret their contents in a number of ways: as signed or unsigned
+integer of various sizes and endianness, as IEEE-754 floating point
+numbers, or as strings.  It is a useful tool to encode and decode binary
+data.  The <a class="ref" href="R7RS-Support.html">R7RS</a> offers its own set of bytevector
+procedures (see <a class="pxref" href="Bytevector-Procedures-in-R7RS.html">Bytevector Procedures in R7RS</a>).
+</p>
+<p>The R6RS (Section 4.3.4) specifies an external representation for
+bytevectors, whereby the octets (integers in the range 0&ndash;255) contained
+in the bytevector are represented as a list prefixed by <code class="code">#vu8</code>:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">#vu8(1 53 204)
+</pre></div>
+
+<p>denotes a 3-byte bytevector containing the octets 1, 53, and 204.  Like
+string literals, booleans, etc., bytevectors are &ldquo;self-quoting&rdquo;, i.e.,
+they do not need to be quoted:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">#vu8(1 53 204)
+&rArr; #vu8(1 53 204)
+</pre></div>
+
+<p>Bytevectors can be used with the binary input/output primitives
+(see <a class="pxref" href="Binary-I_002fO.html">Binary I/O</a>).
+</p>
+
+<ul class="mini-toc">
+<li><a href="Bytevector-Endianness.html" accesskey="1">Endianness</a></li>
+<li><a href="Bytevector-Manipulation.html" accesskey="2">Manipulating Bytevectors</a></li>
+<li><a href="Bytevectors-as-Integers.html" accesskey="3">Interpreting Bytevector Contents as Integers</a></li>
+<li><a href="Bytevectors-and-Integer-Lists.html" accesskey="4">Converting Bytevectors to/from Integer Lists</a></li>
+<li><a href="Bytevectors-as-Floats.html" accesskey="5">Interpreting Bytevector Contents as Floating Point Numbers</a></li>
+<li><a href="Bytevectors-as-Strings.html" accesskey="6">Interpreting Bytevector Contents as Unicode Strings</a></li>
+<li><a href="Bytevectors-as-Arrays.html" accesskey="7">Accessing Bytevectors with the Array API</a></li>
+<li><a href="Bytevectors-as-Uniform-Vectors.html" accesskey="8">Accessing Bytevectors with the SRFI-4 API</a></li>
+<li><a href="Bytevector-Procedures-in-R7RS.html" accesskey="9">Bytevector Procedures in R7RS</a></li>
+<li><a href="Bytevector-Slices.html">Bytevector Slices</a></li>
+</ul>
+</div>
+
+
+
+</body>
+</html>

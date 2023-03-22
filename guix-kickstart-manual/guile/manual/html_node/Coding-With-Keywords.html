@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Coding With Keywords (Guile Reference Manual)</title>
+
+<meta name="description" content="Coding With Keywords (Guile Reference Manual)">
+<meta name="keywords" content="Coding With Keywords (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Keywords.html" rel="up" title="Keywords">
+<link href="Keyword-Read-Syntax.html" rel="next" title="Keyword Read Syntax">
+<link href="Why-Use-Keywords_003f.html" rel="prev" title="Why Use Keywords?">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Coding-With-Keywords">
+<div class="nav-panel">
+<p>
+Next: <a href="Keyword-Read-Syntax.html" accesskey="n" rel="next">Keyword Read Syntax</a>, Previous: <a href="Why-Use-Keywords_003f.html" accesskey="p" rel="prev">Why Use Keywords?</a>, Up: <a href="Keywords.html" accesskey="u" rel="up">Keywords</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Coding-With-Keywords-1">6.6.7.2 Coding With Keywords</h4>
+
+<p>If a procedure wants to support keywords, it should take a rest argument
+and then use whatever means is convenient to extract keywords and their
+corresponding arguments from the contents of that rest argument.
+</p>
+<p>The following example illustrates the principle: the code for
+<code class="code">make-window</code> uses a helper procedure called
+<code class="code">get-keyword-value</code> to extract individual keyword arguments from
+the rest argument.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define (get-keyword-value args keyword default)
+  (let ((kv (memq keyword args)))
+    (if (and kv (&gt;= (length kv) 2))
+        (cadr kv)
+        default)))
+
+(define (make-window . args)
+  (let ((depth  (get-keyword-value args #:depth  screen-depth))
+        (bg     (get-keyword-value args #:bg     &quot;white&quot;))
+        (width  (get-keyword-value args #:width  800))
+        (height (get-keyword-value args #:height 100))
+        &hellip;)
+    &hellip;))
+</pre></div>
+
+<p>But you don&rsquo;t need to write <code class="code">get-keyword-value</code>.  The <code class="code">(ice-9
+optargs)</code> module provides a set of powerful macros that you can use to
+implement keyword-supporting procedures like this:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(use-modules (ice-9 optargs))
+
+(define (make-window . args)
+  (let-keywords args #f ((depth  screen-depth)
+                         (bg     &quot;white&quot;)
+                         (width  800)
+                         (height 100))
+    ...))
+</pre></div>
+
+<p>Or, even more economically, like this:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(use-modules (ice-9 optargs))
+
+(define* (make-window #:key (depth  screen-depth)
+                            (bg     &quot;white&quot;)
+                            (width  800)
+                            (height 100))
+  ...)
+</pre></div>
+
+<p>For further details on <code class="code">let-keywords</code>, <code class="code">define*</code> and other
+facilities provided by the <code class="code">(ice-9 optargs)</code> module, see
+<a class="ref" href="Optional-Arguments.html">Optional Arguments</a>.
+</p>
+<p>To handle keyword arguments from procedures implemented in C,
+use <code class="code">scm_c_bind_keyword_arguments</code> (see <a class="pxref" href="Keyword-Procedures.html">Keyword Procedures</a>).
+</p>
+</div>
+
+
+
+</body>
+</html>

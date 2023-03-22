@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Non-Blocking I/O (Guile Reference Manual)</title>
+
+<meta name="description" content="Non-Blocking I/O (Guile Reference Manual)">
+<meta name="keywords" content="Non-Blocking I/O (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Input-and-Output.html" rel="up" title="Input and Output">
+<link href="BOM-Handling.html" rel="next" title="BOM Handling">
+<link href="I_002fO-Extensions.html" rel="prev" title="I/O Extensions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Non_002dBlocking-I_002fO">
+<div class="nav-panel">
+<p>
+Next: <a href="BOM-Handling.html" accesskey="n" rel="next">Handling of Unicode Byte Order Marks</a>, Previous: <a href="I_002fO-Extensions.html" accesskey="p" rel="prev">Implementing New Port Types in C</a>, Up: <a href="Input-and-Output.html" accesskey="u" rel="up">Input and Output</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Non_002dBlocking-I_002fO-1">6.12.14 Non-Blocking I/O</h4>
+
+<p>Most ports in Guile are <em class="dfn">blocking</em>: when you try to read a character
+from a port, Guile will block on the read until a character is ready, or
+end-of-stream is detected.  Likewise whenever Guile goes to write
+(possibly buffered) data to an output port, Guile will block until all
+the data is written.
+</p>
+<p>Interacting with ports in blocking mode is very convenient: you can
+write straightforward, sequential algorithms whose code flow reflects
+the flow of data.  However, blocking I/O has two main limitations.
+</p>
+<p>The first is that it&rsquo;s easy to get into a situation where code is
+waiting on data.  Time spent waiting on data when code could be doing
+something else is wasteful and prevents your program from reaching its
+peak throughput.  If you implement a web server that sequentially
+handles requests from clients, it&rsquo;s very easy for the server to end up
+waiting on a client to finish its HTTP request, or waiting on it to
+consume the response.  The end result is that you are able to serve
+fewer requests per second than you&rsquo;d like to serve.
+</p>
+<p>The second limitation is related: a blocking parser over user-controlled
+input is a denial-of-service vulnerability.  Indeed the so-called &ldquo;slow
+loris&rdquo; attack of the early 2010s was just that: an attack on common web
+servers that drip-fed HTTP requests, one character at a time.  All it
+took was a handful of slow loris connections to occupy an entire web
+server.
+</p>
+<p>In Guile we would like to preserve the ability to write straightforward
+blocking networking processes of all kinds, but under the hood to allow
+those processes to suspend their requests if they would block.
+</p>
+<p>To do this, the first piece is to allow Guile ports to declare
+themselves as being nonblocking.  This is currently supported only for
+file ports, which also includes sockets, terminals, or any other port
+that is backed by a file descriptor.  To do that, we use an arcane UNIX
+incantation:
+</p>
+<div class="example">
+<pre class="example-preformatted">(let ((flags (fcntl socket F_GETFL)))
+  (fcntl socket F_SETFL (logior O_NONBLOCK flags)))
+</pre></div>
+
+<p>Now the file descriptor is open in non-blocking mode.  If Guile tries to
+read or write from this file and the read or write returns a result
+indicating that more data can only be had by doing a blocking read or
+write, Guile will block by polling on the socket&rsquo;s <code class="code">read-wait-fd</code>
+or <code class="code">write-wait-fd</code>, to preserve the illusion of a blocking read or
+write.  See <a class="xref" href="I_002fO-Extensions.html">Implementing New Port Types in C</a> for more on those internal interfaces.
+</p>
+<p>So far we have just reproduced the status quo: the file descriptor is
+non-blocking, but the operations on the port do block.  To go farther,
+it would be nice if we could suspend the &ldquo;thread&rdquo; using delimited
+continuations, and only resume the thread once the file descriptor is
+readable or writable.  (See <a class="xref" href="Prompts.html">Prompts</a>).
+</p>
+<p>But here we run into a difficulty.  The ports code is implemented in C,
+which means that although we can suspend the computation to some outer
+prompt, we can&rsquo;t resume it because Guile can&rsquo;t resume delimited
+continuations that capture the C stack.
+</p>
+<p>To overcome this difficulty we have created a compatible but entirely
+parallel implementation of port operations.  To use this implementation,
+do the following:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 suspendable-ports))
+(install-suspendable-ports!)
+</pre></div>
+
+<p>This will replace the core I/O primitives like <code class="code">get-char</code> and
+<code class="code">put-bytevector</code> with new versions that are exactly the same as the
+ones in the standard library, but with two differences.  One is that
+when a read or a write would block, the suspendable port operations call
+out the value of the <code class="code">current-read-waiter</code> or
+<code class="code">current-write-waiter</code> parameter, as appropriate.
+See <a class="xref" href="Parameters.html">Parameters</a>.  The default read and write waiters do the same thing
+that the C read and write waiters do, which is to poll.  User code can
+parameterize the waiters, though, enabling the computation to suspend
+and allow the program to process other I/O operations.  Because the new
+suspendable ports implementation is written in Scheme, that suspended
+computation can resume again later when it is able to make progress.
+Success!
+</p>
+<p>The other main difference is that because the new ports implementation
+is written in Scheme, it is slower than C, currently by a factor of 3 or
+4, though it depends on many factors.  For this reason we have to keep
+the C implementations as the default ones.  One day when Guile&rsquo;s
+compiler is better, we can close this gap and have only one port
+operation implementation again.
+</p>
+<p>Note that Guile does not currently include an implementation of the
+facility to suspend the current thread and schedule other threads in the
+meantime.  Before adding such a thing, we want to make sure that we&rsquo;re
+providing the right primitives that can be used to build schedulers and
+other user-space concurrency patterns, and that the patterns that we
+settle on are the right patterns.  In the meantime, have a look at 8sync
+(<a class="url" href="https://gnu.org/software/8sync">https://gnu.org/software/8sync</a>) for a prototype of an
+asynchronous I/O and concurrency facility.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-install_002dsuspendable_002dports_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">install-suspendable-ports!</strong><a class="copiable-link" href='#index-install_002dsuspendable_002dports_0021'> &para;</a></span></dt>
+<dd><p>Replace the core ports implementation with suspendable ports, as
+described above.  This will mutate the values of the bindings like
+<code class="code">get-char</code>, <code class="code">put-u8</code>, and so on in place.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-uninstall_002dsuspendable_002dports_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">uninstall-suspendable-ports!</strong><a class="copiable-link" href='#index-uninstall_002dsuspendable_002dports_0021'> &para;</a></span></dt>
+<dd><p>Restore the original core ports implementation, un-doing the effect of
+<code class="code">install-suspendable-ports!</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-current_002dread_002dwaiter"><span class="category-def">Scheme Parameter: </span><span><strong class="def-name">current-read-waiter</strong><a class="copiable-link" href='#index-current_002dread_002dwaiter'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-current_002dwrite_002dwaiter"><span class="category-def">Scheme Parameter: </span><span><strong class="def-name">current-write-waiter</strong><a class="copiable-link" href='#index-current_002dwrite_002dwaiter'> &para;</a></span></dt>
+<dd><p>Parameters whose values are procedures of one argument, called when a
+suspendable port operation would block on a port while reading or
+writing, respectively.  The default values of these parameters do a
+blocking <code class="code">poll</code> on the port&rsquo;s file descriptor.  The procedures are
+passed the port in question as their one argument.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="BOM-Handling.html">Handling of Unicode Byte Order Marks</a>, Previous: <a href="I_002fO-Extensions.html">Implementing New Port Types in C</a>, Up: <a href="Input-and-Output.html">Input and Output</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>String Syntax (Guile Reference Manual)</title>
+
+<meta name="description" content="String Syntax (Guile Reference Manual)">
+<meta name="keywords" content="String Syntax (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Strings.html" rel="up" title="Strings">
+<link href="String-Predicates.html" rel="next" title="String Predicates">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="String-Syntax">
+<div class="nav-panel">
+<p>
+Next: <a href="String-Predicates.html" accesskey="n" rel="next">String Predicates</a>, Up: <a href="Strings.html" accesskey="u" rel="up">Strings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="String-Read-Syntax">6.6.5.1 String Read Syntax</h4>
+
+
+<p>The read syntax for strings is an arbitrarily long sequence of
+characters enclosed in double quotes (<code class="code">&quot;</code>).
+</p>
+<p>Backslash is an escape character and can be used to insert the following
+special characters.  <code class="code">\&quot;</code> and <code class="code">\\</code> are R5RS standard,
+<code class="code">\|</code> is R7RS standard, the next seven are R6RS standard &mdash;
+notice they follow C syntax &mdash; and the remaining four are Guile
+extensions.
+</p>
+<dl class="table">
+<dt><code class="code">\\</code></dt>
+<dd><p>Backslash character.
+</p>
+</dd>
+<dt><code class="code">\&quot;</code></dt>
+<dd><p>Double quote character (an unescaped <code class="code">&quot;</code> is otherwise the end
+of the string).
+</p>
+</dd>
+<dt><code class="code">\|</code></dt>
+<dd><p>Vertical bar character.
+</p>
+</dd>
+<dt><code class="code">\a</code></dt>
+<dd><p>Bell character (ASCII 7).
+</p>
+</dd>
+<dt><code class="code">\f</code></dt>
+<dd><p>Formfeed character (ASCII 12).
+</p>
+</dd>
+<dt><code class="code">\n</code></dt>
+<dd><p>Newline character (ASCII 10).
+</p>
+</dd>
+<dt><code class="code">\r</code></dt>
+<dd><p>Carriage return character (ASCII 13).
+</p>
+</dd>
+<dt><code class="code">\t</code></dt>
+<dd><p>Tab character (ASCII 9).
+</p>
+</dd>
+<dt><code class="code">\v</code></dt>
+<dd><p>Vertical tab character (ASCII 11).
+</p>
+</dd>
+<dt><code class="code">\b</code></dt>
+<dd><p>Backspace character (ASCII 8).
+</p>
+</dd>
+<dt><code class="code">\0</code></dt>
+<dd><p>NUL character (ASCII 0).
+</p>
+</dd>
+<dt><code class="code">\(</code></dt>
+<dd><p>Open parenthesis.  This is intended for use at the beginning of lines in
+multiline strings to avoid confusing Emacs lisp modes.
+</p>
+</dd>
+<dt><code class="code">\</code> followed by newline (ASCII 10)</dt>
+<dd><p>Nothing.  This way if <code class="code">\</code> is the last character in a line, the
+string will continue with the first character from the next line,
+without a line break.
+</p>
+<p>If the <code class="code">hungry-eol-escapes</code> reader option is enabled, which is not
+the case by default, leading whitespace on the next line is discarded.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">&quot;foo\
+  bar&quot;
+&rArr; &quot;foo  bar&quot;
+(read-enable 'hungry-eol-escapes)
+&quot;foo\
+  bar&quot;
+&rArr; &quot;foobar&quot;
+</pre></div>
+</dd>
+<dt><code class="code">\xHH</code></dt>
+<dd><p>Character code given by two hexadecimal digits.  For example
+<code class="code">\x7f</code> for an ASCII DEL (127).
+</p>
+</dd>
+<dt><code class="code">\uHHHH</code></dt>
+<dd><p>Character code given by four hexadecimal digits.  For example
+<code class="code">\u0100</code> for a capital A with macron (U+0100).
+</p>
+</dd>
+<dt><code class="code">\UHHHHHH</code></dt>
+<dd><p>Character code given by six hexadecimal digits.  For example
+<code class="code">\U010402</code>.
+</p></dd>
+</dl>
+
+<p>The following are examples of string literals:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">&quot;foo&quot;
+&quot;bar plonk&quot;
+&quot;Hello World&quot;
+&quot;\&quot;Hi\&quot;, he said.&quot;
+</pre></div>
+
+<p>The three escape sequences <code class="code">\xHH</code>, <code class="code">\uHHHH</code> and <code class="code">\UHHHHHH</code> were
+chosen to not break compatibility with code written for previous versions of
+Guile.  The R6RS specification suggests a different, incompatible syntax for hex
+escapes: <code class="code">\xHHHH;</code> &ndash; a character code followed by one to eight hexadecimal
+digits terminated with a semicolon.  If this escape format is desired instead,
+it can be enabled with the reader option <code class="code">r6rs-hex-escapes</code>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(read-enable 'r6rs-hex-escapes)
+</pre></div>
+
+<p>For more on reader options, See <a class="xref" href="Scheme-Read.html">Reading Scheme Code</a>.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="String-Predicates.html">String Predicates</a>, Up: <a href="Strings.html">Strings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

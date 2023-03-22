@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Eval Procedure (Guile Reference Manual)</title>
+
+<meta name="description" content="Eval Procedure (Guile Reference Manual)">
+<meta name="keywords" content="Eval Procedure (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Evaluating.html" rel="up" title="Evaluating">
+<link href="Eval-Special.html" rel="next" title="Eval Special">
+<link href="Eval-Variable.html" rel="prev" title="Eval Variable">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Eval-Procedure">
+<div class="nav-panel">
+<p>
+Next: <a href="Eval-Special.html" accesskey="n" rel="next">Evaluating Special Syntactic Expressions</a>, Previous: <a href="Eval-Variable.html" accesskey="p" rel="prev">Evaluating a Variable Reference</a>, Up: <a href="Evaluating.html" accesskey="u" rel="up">Evaluating Expressions and Executing Programs</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Evaluating-a-Procedure-Invocation-Expression">3.3.1.3 Evaluating a Procedure Invocation Expression</h4>
+
+<p>This is where evaluation starts getting interesting!  As already noted,
+a procedure invocation expression has the form
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(<var class="var">procedure</var> [<var class="var">arg1</var> [<var class="var">arg2</var> &hellip;]])
+</pre></div>
+
+<p>where <var class="var">procedure</var> must be an expression whose value, when evaluated,
+is a procedure.
+</p>
+<p>The evaluation of a procedure invocation expression like this proceeds
+by
+</p>
+<ul class="itemize mark-bullet">
+<li>evaluating individually the expressions <var class="var">procedure</var>, <var class="var">arg1</var>,
+<var class="var">arg2</var>, and so on
+
+</li><li>calling the procedure that is the value of the <var class="var">procedure</var>
+expression with the list of values obtained from the evaluations of
+<var class="var">arg1</var>, <var class="var">arg2</var> etc. as its parameters.
+</li></ul>
+
+<p>For a procedure defined in Scheme, &ldquo;calling the procedure with the list
+of values as its parameters&rdquo; means binding the values to the
+procedure&rsquo;s formal parameters and then evaluating the sequence of
+expressions that make up the body of the procedure definition.  The
+value of the procedure invocation expression is the value of the last
+evaluated expression in the procedure body.  The side effects of calling
+the procedure are the combination of the side effects of the sequence of
+evaluations of expressions in the procedure body.
+</p>
+<p>For a built-in procedure, the value and side-effects of calling the
+procedure are best described by that procedure&rsquo;s documentation.
+</p>
+<p>Note that the complete side effects of evaluating a procedure invocation
+expression consist not only of the side effects of the procedure call,
+but also of any side effects of the preceding evaluation of the
+expressions <var class="var">procedure</var>, <var class="var">arg1</var>, <var class="var">arg2</var>, and so on.
+</p>
+<p>To illustrate this, let&rsquo;s look again at the procedure invocation
+expression:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(string-length (string-append &quot;/home&quot; &quot;/&quot; &quot;andrew&quot;))
+</pre></div>
+
+<p>In the outermost expression, <var class="var">procedure</var> is <code class="code">string-length</code> and
+<var class="var">arg1</var> is <code class="code">(string-append &quot;/home&quot; &quot;/&quot; &quot;andrew&quot;)</code>.
+</p>
+<ul class="itemize mark-bullet">
+<li>Evaluation of <code class="code">string-length</code>, which is a variable, gives a
+procedure value that implements the expected behaviour for
+&ldquo;string-length&rdquo;.
+
+</li><li>Evaluation of <code class="code">(string-append &quot;/home&quot; &quot;/&quot; &quot;andrew&quot;)</code>, which is
+another procedure invocation expression, means evaluating each of
+
+<ul class="itemize mark-bullet">
+<li><code class="code">string-append</code>, which gives a procedure value that implements the
+expected behaviour for &ldquo;string-append&rdquo;
+
+</li><li><code class="code">&quot;/home&quot;</code>, which gives the string value <code class="code">&quot;/home&quot;</code>
+
+</li><li><code class="code">&quot;/&quot;</code>, which gives the string value <code class="code">&quot;/&quot;</code>
+
+</li><li><code class="code">&quot;andrew&quot;</code>, which gives the string value <code class="code">&quot;andrew&quot;</code>
+</li></ul>
+
+<p>and then invoking the procedure value with this list of string values as
+its arguments.  The resulting value is a single string value that is the
+concatenation of all the arguments, namely <code class="code">&quot;/home/andrew&quot;</code>.
+</p></li></ul>
+
+<p>In the evaluation of the outermost expression, the interpreter can now
+invoke the procedure value obtained from <var class="var">procedure</var> with the value
+obtained from <var class="var">arg1</var> as its arguments.  The resulting value is a
+numeric value that is the length of the argument string, which is 12.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Eval-Special.html">Evaluating Special Syntactic Expressions</a>, Previous: <a href="Eval-Variable.html">Evaluating a Variable Reference</a>, Up: <a href="Evaluating.html">Evaluating Expressions and Executing Programs</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-19 Date to string (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-19 Date to string (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-19 Date to string (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI_002d19.html" rel="up" title="SRFI-19">
+<link href="SRFI_002d19-String-to-date.html" rel="next" title="SRFI-19 String to date">
+<link href="SRFI_002d19-Time_002fDate-conversions.html" rel="prev" title="SRFI-19 Time/Date conversions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="SRFI_002d19-Date-to-string">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d19-String-to-date.html" accesskey="n" rel="next">SRFI-19 String to date</a>, Previous: <a href="SRFI_002d19-Time_002fDate-conversions.html" accesskey="p" rel="prev">SRFI-19 Time/Date conversions</a>, Up: <a href="SRFI_002d19.html" accesskey="u" rel="up">SRFI-19 - Time/Date Library</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="SRFI_002d19-Date-to-string-1">7.5.16.5 SRFI-19 Date to string</h4>
+<a class="index-entry-id" id="index-date-to-string"></a>
+<a class="index-entry-id" id="index-string_002c-from-date"></a>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-date_002d_003estring"><span class="category-def">Function: </span><span><strong class="def-name">date-&gt;string</strong> <var class="def-var-arguments">date [format]</var><a class="copiable-link" href='#index-date_002d_003estring'> &para;</a></span></dt>
+<dd><p>Convert a date to a string under the control of a format.
+<var class="var">format</var> should be a string containing &lsquo;<samp class="samp">~</samp>&rsquo; escapes, which
+will be expanded as per the following conversion table.  The default
+<var class="var">format</var> is &lsquo;<samp class="samp">~c</samp>&rsquo;, a locale-dependent date and time.
+</p>
+<p>Many of these conversion characters are the same as POSIX
+<code class="code">strftime</code> (see <a class="pxref" href="Time.html">Time</a>), but there are some extras and some
+variations.
+</p>
+<table class="multitable">
+<tbody><tr><td><code class="code">~~</code></td><td>literal ~</td></tr>
+<tr><td><code class="code">~a</code></td><td>locale abbreviated weekday, eg. &lsquo;<samp class="samp">Sun</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~A</code></td><td>locale full weekday, eg. &lsquo;<samp class="samp">Sunday</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~b</code></td><td>locale abbreviated month, eg. &lsquo;<samp class="samp">Jan</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~B</code></td><td>locale full month, eg. &lsquo;<samp class="samp">January</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~c</code></td><td>locale date and time, eg. <br>
+&lsquo;<samp class="samp">Fri Jul 14 20:28:42-0400 2000</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~d</code></td><td>day of month, zero padded, &lsquo;<samp class="samp">01</samp>&rsquo; to &lsquo;<samp class="samp">31</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~e</code></td><td>day of month, blank padded, &lsquo;<samp class="samp"> 1</samp>&rsquo; to &lsquo;<samp class="samp">31</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~f</code></td><td>seconds and fractional seconds,
+with locale decimal point, eg. &lsquo;<samp class="samp">5.2</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~h</code></td><td>same as <code class="code">~b</code></td></tr>
+<tr><td><code class="code">~H</code></td><td>hour, 24-hour clock, zero padded, &lsquo;<samp class="samp">00</samp>&rsquo; to &lsquo;<samp class="samp">23</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~I</code></td><td>hour, 12-hour clock, zero padded, &lsquo;<samp class="samp">01</samp>&rsquo; to &lsquo;<samp class="samp">12</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~j</code></td><td>day of year, zero padded, &lsquo;<samp class="samp">001</samp>&rsquo; to &lsquo;<samp class="samp">366</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~k</code></td><td>hour, 24-hour clock, blank padded, &lsquo;<samp class="samp"> 0</samp>&rsquo; to &lsquo;<samp class="samp">23</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~l</code></td><td>hour, 12-hour clock, blank padded, &lsquo;<samp class="samp"> 1</samp>&rsquo; to &lsquo;<samp class="samp">12</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~m</code></td><td>month, zero padded, &lsquo;<samp class="samp">01</samp>&rsquo; to &lsquo;<samp class="samp">12</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~M</code></td><td>minute, zero padded, &lsquo;<samp class="samp">00</samp>&rsquo; to &lsquo;<samp class="samp">59</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~n</code></td><td>newline</td></tr>
+<tr><td><code class="code">~N</code></td><td>nanosecond, zero padded, &lsquo;<samp class="samp">000000000</samp>&rsquo; to &lsquo;<samp class="samp">999999999</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~p</code></td><td>locale AM or PM</td></tr>
+<tr><td><code class="code">~r</code></td><td>time, 12 hour clock, &lsquo;<samp class="samp">~I:~M:~S ~p</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~s</code></td><td>number of full seconds since &ldquo;the epoch&rdquo; in UTC</td></tr>
+<tr><td><code class="code">~S</code></td><td>second, zero padded &lsquo;<samp class="samp">00</samp>&rsquo; to &lsquo;<samp class="samp">60</samp>&rsquo; <br>
+(usual limit is 59, 60 is a leap second)</td></tr>
+<tr><td><code class="code">~t</code></td><td>horizontal tab character</td></tr>
+<tr><td><code class="code">~T</code></td><td>time, 24 hour clock, &lsquo;<samp class="samp">~H:~M:~S</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~U</code></td><td>week of year, Sunday first day of week,
+&lsquo;<samp class="samp">00</samp>&rsquo; to &lsquo;<samp class="samp">52</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~V</code></td><td>week of year, Monday first day of week,
+&lsquo;<samp class="samp">01</samp>&rsquo; to &lsquo;<samp class="samp">53</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~w</code></td><td>day of week, 0 for Sunday, &lsquo;<samp class="samp">0</samp>&rsquo; to &lsquo;<samp class="samp">6</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~W</code></td><td>week of year, Monday first day of week,
+&lsquo;<samp class="samp">00</samp>&rsquo; to &lsquo;<samp class="samp">52</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~y</code></td><td>year, two digits, &lsquo;<samp class="samp">00</samp>&rsquo; to &lsquo;<samp class="samp">99</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~Y</code></td><td>year, full, eg. &lsquo;<samp class="samp">2003</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~z</code></td><td>time zone, RFC-822 style</td></tr>
+<tr><td><code class="code">~Z</code></td><td>time zone symbol (not currently implemented)</td></tr>
+<tr><td><code class="code">~1</code></td><td>ISO-8601 date, &lsquo;<samp class="samp">~Y-~m-~d</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~2</code></td><td>ISO-8601 time+zone, &lsquo;<samp class="samp">~H:~M:~S~z</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~3</code></td><td>ISO-8601 time, &lsquo;<samp class="samp">~H:~M:~S</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~4</code></td><td>ISO-8601 date/time+zone, &lsquo;<samp class="samp">~Y-~m-~dT~H:~M:~S~z</samp>&rsquo;</td></tr>
+<tr><td><code class="code">~5</code></td><td>ISO-8601 date/time, &lsquo;<samp class="samp">~Y-~m-~dT~H:~M:~S</samp>&rsquo;</td></tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Conversions &lsquo;<samp class="samp">~D</samp>&rsquo;, &lsquo;<samp class="samp">~x</samp>&rsquo; and &lsquo;<samp class="samp">~X</samp>&rsquo; are not currently
+described here, since the specification and reference implementation
+differ.
+</p>
+<p>Conversion is locale-dependent on systems that support it
+(see <a class="pxref" href="Accessing-Locale-Information.html">Accessing Locale Information</a>).  See <a class="xref" href="Locales.html"><code class="code">setlocale</code></a>, for information on how to change the current
+locale.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d19-String-to-date.html">SRFI-19 String to date</a>, Previous: <a href="SRFI_002d19-Time_002fDate-conversions.html">SRFI-19 Time/Date conversions</a>, Up: <a href="SRFI_002d19.html">SRFI-19 - Time/Date Library</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

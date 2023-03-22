@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-43 Mutators (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-43 Mutators (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-43 Mutators (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI_002d43.html" rel="up" title="SRFI-43">
+<link href="SRFI_002d43-Conversion.html" rel="next" title="SRFI-43 Conversion">
+<link href="SRFI_002d43-Searching.html" rel="prev" title="SRFI-43 Searching">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="SRFI_002d43-Mutators">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d43-Conversion.html" accesskey="n" rel="next">SRFI-43 Conversion</a>, Previous: <a href="SRFI_002d43-Searching.html" accesskey="p" rel="prev">SRFI-43 Searching</a>, Up: <a href="SRFI_002d43.html" accesskey="u" rel="up">SRFI-43 - Vector Library</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="SRFI_002d43-Mutators-1">7.5.30.6 SRFI-43 Mutators</h4>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dset_0021-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-set!</strong> <var class="def-var-arguments">vec i value</var><a class="copiable-link" href='#index-vector_002dset_0021-1'> &para;</a></span></dt>
+<dd><p>Assign the contents of the location at <var class="var">i</var> in <var class="var">vec</var> to
+<var class="var">value</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dswap_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-swap!</strong> <var class="def-var-arguments">vec i j</var><a class="copiable-link" href='#index-vector_002dswap_0021'> &para;</a></span></dt>
+<dd><p>Swap the values of the locations in <var class="var">vec</var> at <var class="var">i</var> and <var class="var">j</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dfill_0021-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-fill!</strong> <var class="def-var-arguments">vec fill [start [end]]</var><a class="copiable-link" href='#index-vector_002dfill_0021-1'> &para;</a></span></dt>
+<dd><p>Assign the value of every location in <var class="var">vec</var> between <var class="var">start</var> and
+<var class="var">end</var> to <var class="var">fill</var>.  <var class="var">start</var> defaults to 0 and <var class="var">end</var>
+defaults to the length of <var class="var">vec</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dreverse_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-reverse!</strong> <var class="def-var-arguments">vec [start [end]]</var><a class="copiable-link" href='#index-vector_002dreverse_0021'> &para;</a></span></dt>
+<dd><p>Destructively reverse the contents of <var class="var">vec</var> between <var class="var">start</var> and
+<var class="var">end</var>.  <var class="var">start</var> defaults to 0 and <var class="var">end</var> defaults to the
+length of <var class="var">vec</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dcopy_0021-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-copy!</strong> <var class="def-var-arguments">target tstart source [sstart [send]]</var><a class="copiable-link" href='#index-vector_002dcopy_0021-1'> &para;</a></span></dt>
+<dd><p>Copy a block of elements from <var class="var">source</var> to <var class="var">target</var>, both of
+which must be vectors, starting in <var class="var">target</var> at <var class="var">tstart</var> and
+starting in <var class="var">source</var> at <var class="var">sstart</var>, ending when (<var class="var">send</var> -
+<var class="var">sstart</var>) elements have been copied.  It is an error for
+<var class="var">target</var> to have a length less than (<var class="var">tstart</var> + <var class="var">send</var> -
+<var class="var">sstart</var>).  <var class="var">sstart</var> defaults to 0 and <var class="var">send</var> defaults to
+the length of <var class="var">source</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dreverse_002dcopy_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-reverse-copy!</strong> <var class="def-var-arguments">target tstart source [sstart [send]]</var><a class="copiable-link" href='#index-vector_002dreverse_002dcopy_0021'> &para;</a></span></dt>
+<dd><p>Like <code class="code">vector-copy!</code>, but this copies the elements in the reverse
+order.  It is an error if <var class="var">target</var> and <var class="var">source</var> are identical
+vectors and the <var class="var">target</var> and <var class="var">source</var> ranges overlap; however,
+if <var class="var">tstart</var> = <var class="var">sstart</var>, <code class="code">vector-reverse-copy!</code> behaves as
+<code class="code">(vector-reverse! target tstart send)</code> would.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d43-Conversion.html">SRFI-43 Conversion</a>, Previous: <a href="SRFI_002d43-Searching.html">SRFI-43 Searching</a>, Up: <a href="SRFI_002d43.html">SRFI-43 - Vector Library</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>PEG API Reference (Guile Reference Manual)</title>
+
+<meta name="description" content="PEG API Reference (Guile Reference Manual)">
+<meta name="keywords" content="PEG API Reference (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="PEG-Parsing.html" rel="up" title="PEG Parsing">
+<link href="PEG-Tutorial.html" rel="next" title="PEG Tutorial">
+<link href="PEG-Syntax-Reference.html" rel="prev" title="PEG Syntax Reference">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="PEG-API-Reference">
+<div class="nav-panel">
+<p>
+Next: <a href="PEG-Tutorial.html" accesskey="n" rel="next">PEG Tutorial</a>, Previous: <a href="PEG-Syntax-Reference.html" accesskey="p" rel="prev">PEG Syntax Reference</a>, Up: <a href="PEG-Parsing.html" accesskey="u" rel="up">PEG Parsing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="PEG-API-Reference-1">6.15.2 PEG API Reference</h4>
+
+<h4 class="subsubheading" id="Define-Macros">Define Macros</h4>
+
+<p>The most straightforward way to define a PEG is by using one of the
+define macros (both of these macroexpand into <code class="code">define</code>
+expressions).  These macros bind parsing functions to variables.  These
+parsing functions may be invoked by <code class="code">match-pattern</code> or
+<code class="code">search-for-pattern</code>, which return a PEG match record.  Raw data can be
+retrieved from this record with the PEG match deconstructor functions.
+More complicated (and perhaps enlightening) examples can be found in the
+tutorial.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-define_002dpeg_002dstring_002dpatterns"><span class="category-def">Scheme Macro: </span><span><strong class="def-name">define-peg-string-patterns</strong> <var class="def-var-arguments">peg-string</var><a class="copiable-link" href='#index-define_002dpeg_002dstring_002dpatterns'> &para;</a></span></dt>
+<dd><p>Defines all the nonterminals in the PEG <var class="var">peg-string</var>.  More
+precisely, <code class="code">define-peg-string-patterns</code> takes a superset of PEGs.  A normal PEG
+has a <code class="code">&lt;-</code> between the nonterminal and the pattern.
+<code class="code">define-peg-string-patterns</code> uses this symbol to determine what information it
+should propagate up the parse tree.  The normal <code class="code">&lt;-</code> propagates the
+matched text up the parse tree, <code class="code">&lt;--</code> propagates the matched text
+up the parse tree tagged with the name of the nonterminal, and <code class="code">&lt;</code>
+discards that matched text and propagates nothing up the parse tree.
+Also, nonterminals may consist of any alphanumeric character or a &ldquo;-&rdquo;
+character (in normal PEGs nonterminals can only be alphabetic).
+</p>
+<p>For example, if we:
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(define-peg-string-patterns 
+  &quot;as &lt;- 'a'+
+bs &lt;- 'b'+
+as-or-bs &lt;- as/bs&quot;)
+(define-peg-string-patterns 
+  &quot;as-tag &lt;-- 'a'+
+bs-tag &lt;-- 'b'+
+as-or-bs-tag &lt;-- as-tag/bs-tag&quot;)
+</pre></div>
+<p>Then:
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(match-pattern as-or-bs &quot;aabbcc&quot;) &rArr;
+#&lt;peg start: 0 end: 2 string: aabbcc tree: aa&gt;
+(match-pattern as-or-bs-tag &quot;aabbcc&quot;) &rArr;
+#&lt;peg start: 0 end: 2 string: aabbcc tree: (as-or-bs-tag (as-tag aa))&gt;
+</pre></div>
+
+<p>Note that in doing this, we have bound 6 variables at the toplevel
+(<var class="var">as</var>, <var class="var">bs</var>, <var class="var">as-or-bs</var>, <var class="var">as-tag</var>, <var class="var">bs-tag</var>, and
+<var class="var">as-or-bs-tag</var>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-define_002dpeg_002dpattern"><span class="category-def">Scheme Macro: </span><span><strong class="def-name">define-peg-pattern</strong> <var class="def-var-arguments">name capture-type peg-sexp</var><a class="copiable-link" href='#index-define_002dpeg_002dpattern'> &para;</a></span></dt>
+<dd><p>Defines a single nonterminal <var class="var">name</var>.  <var class="var">capture-type</var> determines
+how much information is passed up the parse tree.  <var class="var">peg-sexp</var> is a
+PEG in S-expression form.
+</p>
+<p>Possible values for capture-type:
+</p>
+<dl class="table">
+<dt><code class="code">all</code></dt>
+<dd><p>passes the matched text up the parse tree tagged with the name of the
+nonterminal.
+</p></dd>
+<dt><code class="code">body</code></dt>
+<dd><p>passes the matched text up the parse tree.
+</p></dd>
+<dt><code class="code">none</code></dt>
+<dd><p>passes nothing up the parse tree.
+</p></dd>
+</dl>
+
+<p>For Example, if we:
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(define-peg-pattern as body (+ &quot;a&quot;))
+(define-peg-pattern bs body (+ &quot;b&quot;))
+(define-peg-pattern as-or-bs body (or as bs))
+(define-peg-pattern as-tag all (+ &quot;a&quot;))
+(define-peg-pattern bs-tag all (+ &quot;b&quot;))
+(define-peg-pattern as-or-bs-tag all (or as-tag bs-tag))
+</pre></div>
+<p>Then:
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(match-pattern as-or-bs &quot;aabbcc&quot;) &rArr; 
+#&lt;peg start: 0 end: 2 string: aabbcc tree: aa&gt;
+(match-pattern as-or-bs-tag &quot;aabbcc&quot;) &rArr; 
+#&lt;peg start: 0 end: 2 string: aabbcc tree: (as-or-bs-tag (as-tag aa))&gt;
+</pre></div>
+
+<p>Note that in doing this, we have bound 6 variables at the toplevel
+(<var class="var">as</var>, <var class="var">bs</var>, <var class="var">as-or-bs</var>, <var class="var">as-tag</var>, <var class="var">bs-tag</var>, and
+<var class="var">as-or-bs-tag</var>).
+</p></dd></dl>
+
+<h4 class="subsubheading" id="Compile-Functions">Compile Functions</h4>
+<p>It is sometimes useful to be able to compile anonymous PEG patterns at
+runtime.  These functions let you do that using either syntax.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-peg_002dstring_002dcompile"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">peg-string-compile</strong> <var class="def-var-arguments">peg-string capture-type</var><a class="copiable-link" href='#index-peg_002dstring_002dcompile'> &para;</a></span></dt>
+<dd><p>Compiles the PEG pattern in <var class="var">peg-string</var> propagating according to
+<var class="var">capture-type</var> (capture-type can be any of the values from
+<code class="code">define-peg-pattern</code>).
+</p></dd></dl>
+
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-compile_002dpeg_002dpattern"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">compile-peg-pattern</strong> <var class="def-var-arguments">peg-sexp capture-type</var><a class="copiable-link" href='#index-compile_002dpeg_002dpattern'> &para;</a></span></dt>
+<dd><p>Compiles the PEG pattern in <var class="var">peg-sexp</var> propagating according to
+<var class="var">capture-type</var> (capture-type can be any of the values from
+<code class="code">define-peg-pattern</code>).
+</p></dd></dl>
+
+<p>The functions return syntax objects, which can be useful if you want to
+use them in macros. If all you want is to define a new nonterminal, you
+can do the following:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define exp '(+ &quot;a&quot;))
+(define as (compile (compile-peg-pattern exp 'body)))
+</pre></div>
+
+<p>You can use this nonterminal with all of the regular PEG functions:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(match-pattern as &quot;aaaaa&quot;) &rArr;
+#&lt;peg start: 0 end: 5 string: bbbbb tree: bbbbb&gt;
+</pre></div>
+
+<h4 class="subsubheading" id="Parsing-_0026-Matching-Functions">Parsing &amp; Matching Functions</h4>
+
+<p>For our purposes, &ldquo;parsing&rdquo; means parsing a string into a tree
+starting from the first character, while &ldquo;matching&rdquo; means searching
+through the string for a substring.  In practice, the only difference
+between the two functions is that <code class="code">match-pattern</code> gives up if it can&rsquo;t
+find a valid substring starting at index 0 and <code class="code">search-for-pattern</code> keeps
+looking.  They are both equally capable of &ldquo;parsing&rdquo; and &ldquo;matching&rdquo;
+given those constraints.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-match_002dpattern"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">match-pattern</strong> <var class="def-var-arguments">nonterm string</var><a class="copiable-link" href='#index-match_002dpattern'> &para;</a></span></dt>
+<dd><p>Parses <var class="var">string</var> using the PEG stored in <var class="var">nonterm</var>.  If no match
+was found, <code class="code">match-pattern</code> returns false.  If a match was found, a PEG
+match record is returned.
+</p>
+<p>The <code class="code">capture-type</code> argument to <code class="code">define-peg-pattern</code> allows you to
+choose what information to hold on to while parsing.  The options are:
+</p>
+<dl class="table">
+<dt><code class="code">all</code></dt>
+<dd><p>tag the matched text with the nonterminal
+</p></dd>
+<dt><code class="code">body</code></dt>
+<dd><p>just the matched text
+</p></dd>
+<dt><code class="code">none</code></dt>
+<dd><p>nothing
+</p></dd>
+</dl>
+
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-peg-pattern as all (+ &quot;a&quot;))
+(match-pattern as &quot;aabbcc&quot;) &rArr; 
+#&lt;peg start: 0 end: 2 string: aabbcc tree: (as aa)&gt;
+
+(define-peg-pattern as body (+ &quot;a&quot;))
+(match-pattern as &quot;aabbcc&quot;) &rArr; 
+#&lt;peg start: 0 end: 2 string: aabbcc tree: aa&gt;
+
+(define-peg-pattern as none (+ &quot;a&quot;))
+(match-pattern as &quot;aabbcc&quot;) &rArr; 
+#&lt;peg start: 0 end: 2 string: aabbcc tree: ()&gt;
+
+(define-peg-pattern bs body (+ &quot;b&quot;))
+(match-pattern bs &quot;aabbcc&quot;) &rArr; 
+#f
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-search_002dfor_002dpattern"><span class="category-def">Scheme Macro: </span><span><strong class="def-name">search-for-pattern</strong> <var class="def-var-arguments">nonterm-or-peg string</var><a class="copiable-link" href='#index-search_002dfor_002dpattern'> &para;</a></span></dt>
+<dd><p>Searches through <var class="var">string</var> looking for a matching subexpression.
+<var class="var">nonterm-or-peg</var> can either be a nonterminal or a literal PEG
+pattern.  When a literal PEG pattern is provided, <code class="code">search-for-pattern</code> works
+very similarly to the regular expression searches many hackers are used
+to.  If no match was found, <code class="code">search-for-pattern</code> returns false.  If a match
+was found, a PEG match record is returned.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-peg-pattern as body (+ &quot;a&quot;))
+(search-for-pattern as &quot;aabbcc&quot;) &rArr; 
+#&lt;peg start: 0 end: 2 string: aabbcc tree: aa&gt;
+(search-for-pattern (+ &quot;a&quot;) &quot;aabbcc&quot;) &rArr; 
+#&lt;peg start: 0 end: 2 string: aabbcc tree: aa&gt;
+(search-for-pattern &quot;'a'+&quot; &quot;aabbcc&quot;) &rArr; 
+#&lt;peg start: 0 end: 2 string: aabbcc tree: aa&gt;
+
+(define-peg-pattern as all (+ &quot;a&quot;))
+(search-for-pattern as &quot;aabbcc&quot;) &rArr; 
+#&lt;peg start: 0 end: 2 string: aabbcc tree: (as aa)&gt;
+
+(define-peg-pattern bs body (+ &quot;b&quot;))
+(search-for-pattern bs &quot;aabbcc&quot;) &rArr; 
+#&lt;peg start: 2 end: 4 string: aabbcc tree: bb&gt;
+(search-for-pattern (+ &quot;b&quot;) &quot;aabbcc&quot;) &rArr; 
+#&lt;peg start: 2 end: 4 string: aabbcc tree: bb&gt;
+(search-for-pattern &quot;'b'+&quot; &quot;aabbcc&quot;) &rArr; 
+#&lt;peg start: 2 end: 4 string: aabbcc tree: bb&gt;
+
+(define-peg-pattern zs body (+ &quot;z&quot;))
+(search-for-pattern zs &quot;aabbcc&quot;) &rArr; 
+#f
+(search-for-pattern (+ &quot;z&quot;) &quot;aabbcc&quot;) &rArr; 
+#f
+(search-for-pattern &quot;'z'+&quot; &quot;aabbcc&quot;) &rArr; 
+#f
+</pre></div>
+</dd></dl>
+
+<h4 class="subsubheading" id="PEG-Match-Records">PEG Match Records</h4>
+<p>The <code class="code">match-pattern</code> and <code class="code">search-for-pattern</code> functions both return PEG
+match records.  Actual information can be extracted from these with the
+following functions.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-peg_003astring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">peg:string</strong> <var class="def-var-arguments">match-record</var><a class="copiable-link" href='#index-peg_003astring'> &para;</a></span></dt>
+<dd><p>Returns the original string that was parsed in the creation of
+<code class="code">match-record</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-peg_003astart"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">peg:start</strong> <var class="def-var-arguments">match-record</var><a class="copiable-link" href='#index-peg_003astart'> &para;</a></span></dt>
+<dd><p>Returns the index of the first parsed character in the original string
+(from <code class="code">peg:string</code>).  If this is the same as <code class="code">peg:end</code>,
+nothing was parsed.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-peg_003aend"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">peg:end</strong> <var class="def-var-arguments">match-record</var><a class="copiable-link" href='#index-peg_003aend'> &para;</a></span></dt>
+<dd><p>Returns one more than the index of the last parsed character in the
+original string (from <code class="code">peg:string</code>).  If this is the same as
+<code class="code">peg:start</code>, nothing was parsed.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-peg_003asubstring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">peg:substring</strong> <var class="def-var-arguments">match-record</var><a class="copiable-link" href='#index-peg_003asubstring'> &para;</a></span></dt>
+<dd><p>Returns the substring parsed by <code class="code">match-record</code>.  This is equivalent to
+<code class="code">(substring (peg:string match-record) (peg:start match-record) (peg:end
+match-record))</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-peg_003atree"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">peg:tree</strong> <var class="def-var-arguments">match-record</var><a class="copiable-link" href='#index-peg_003atree'> &para;</a></span></dt>
+<dd><p>Returns the tree parsed by <code class="code">match-record</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-peg_002drecord_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">peg-record?</strong> <var class="def-var-arguments">match-record</var><a class="copiable-link" href='#index-peg_002drecord_003f'> &para;</a></span></dt>
+<dd><p>Returns true if <code class="code">match-record</code> is a PEG match record, or false
+otherwise.
+</p></dd></dl>
+
+<p>Example:
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(define-peg-pattern bs all (peg &quot;'b'+&quot;))
+
+(search-for-pattern bs &quot;aabbcc&quot;) &rArr;
+#&lt;peg start: 2 end: 4 string: aabbcc tree: (bs bb)&gt;
+
+(let ((pm (search-for-pattern bs &quot;aabbcc&quot;)))
+   `((string ,(peg:string pm))
+     (start ,(peg:start pm))
+     (end ,(peg:end pm))
+     (substring ,(peg:substring pm))
+     (tree ,(peg:tree pm))
+     (record? ,(peg-record? pm)))) &rArr;
+((string &quot;aabbcc&quot;)
+ (start 2)
+ (end 4)
+ (substring &quot;bb&quot;)
+ (tree (bs &quot;bb&quot;))
+ (record? #t))
+</pre></div>
+
+<h4 class="subsubheading" id="Miscellaneous">Miscellaneous</h4>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-context_002dflatten"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">context-flatten</strong> <var class="def-var-arguments">tst lst</var><a class="copiable-link" href='#index-context_002dflatten'> &para;</a></span></dt>
+<dd><p>Takes a predicate <var class="var">tst</var> and a list <var class="var">lst</var>.  Flattens <var class="var">lst</var>
+until all elements are either atoms or satisfy <var class="var">tst</var>.  If <var class="var">lst</var>
+itself satisfies <var class="var">tst</var>, <code class="code">(list lst)</code> is returned (this is a
+flat list whose only element satisfies <var class="var">tst</var>).
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(context-flatten (lambda (x) (and (number? (car x)) (= (car x) 1))) '(2 2 (1 1 (2 2)) (2 2 (1 1)))) &rArr; 
+(2 2 (1 1 (2 2)) 2 2 (1 1))
+(context-flatten (lambda (x) (and (number? (car x)) (= (car x) 1))) '(1 1 (1 1 (2 2)) (2 2 (1 1)))) &rArr; 
+((1 1 (1 1 (2 2)) (2 2 (1 1))))
+</pre></div>
+
+<p>If you&rsquo;re wondering why this is here, take a look at the tutorial.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-keyword_002dflatten"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">keyword-flatten</strong> <var class="def-var-arguments">terms lst</var><a class="copiable-link" href='#index-keyword_002dflatten'> &para;</a></span></dt>
+<dd><p>A less general form of <code class="code">context-flatten</code>.  Takes a list of terminal
+atoms <code class="code">terms</code> and flattens <var class="var">lst</var> until all elements are either
+atoms, or lists which have an atom from <code class="code">terms</code> as their first
+element.
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(keyword-flatten '(a b) '(c a b (a c) (b c) (c (b a) (c a)))) &rArr;
+(c a b (a c) (b c) c (b a) c a)
+</pre></div>
+
+<p>If you&rsquo;re wondering why this is here, take a look at the tutorial.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="PEG-Tutorial.html">PEG Tutorial</a>, Previous: <a href="PEG-Syntax-Reference.html">PEG Syntax Reference</a>, Up: <a href="PEG-Parsing.html">PEG Parsing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

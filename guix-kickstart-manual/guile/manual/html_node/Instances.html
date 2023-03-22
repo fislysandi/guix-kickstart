@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Instances (Guile Reference Manual)</title>
+
+<meta name="description" content="Instances (Guile Reference Manual)">
+<meta name="keywords" content="Instances (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Introspection.html" rel="up" title="Introspection">
+<link href="Slots.html" rel="next" title="Slots">
+<link href="Classes.html" rel="prev" title="Classes">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Instances">
+<div class="nav-panel">
+<p>
+Next: <a href="Slots.html" accesskey="n" rel="next">Slots</a>, Previous: <a href="Classes.html" accesskey="p" rel="prev">Classes</a>, Up: <a href="Introspection.html" accesskey="u" rel="up">Introspection</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Instances-1">8.8.2 Instances</h4>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-class_002dof"><span class="category-def">primitive procedure: </span><span><strong class="def-name">class-of</strong> <var class="def-var-arguments">value</var><a class="copiable-link" href='#index-class_002dof'> &para;</a></span></dt>
+<dd><p>Return the GOOPS class of any Scheme <var class="var">value</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-instance_003f"><span class="category-def">primitive procedure: </span><span><strong class="def-name">instance?</strong> <var class="def-var-arguments">object</var><a class="copiable-link" href='#index-instance_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">object</var> is any GOOPS instance, otherwise
+<code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-is_002da_003f"><span class="category-def">procedure: </span><span><strong class="def-name">is-a?</strong> <var class="def-var-arguments">object class</var><a class="copiable-link" href='#index-is_002da_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">object</var> is an instance of <var class="var">class</var> or one of
+its subclasses.
+</p></dd></dl>
+
+<p>You can use the <code class="code">is-a?</code> predicate to ask whether any given value
+belongs to a given class, or <code class="code">class-of</code> to discover the class of a
+given value.  Note that when GOOPS is loaded (by code using the
+<code class="code">(oop goops)</code> module) built-in classes like <code class="code">&lt;string&gt;</code>,
+<code class="code">&lt;list&gt;</code> and <code class="code">&lt;number&gt;</code> are automatically set up,
+corresponding to all Guile Scheme types.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(is-a? 2.3 &lt;number&gt;) &rArr; #t
+(is-a? 2.3 &lt;real&gt;) &rArr; #t
+(is-a? 2.3 &lt;string&gt;) &rArr; #f
+(is-a? '(&quot;a&quot; &quot;b&quot;) &lt;string&gt;) &rArr; #f
+(is-a? '(&quot;a&quot; &quot;b&quot;) &lt;list&gt;) &rArr; #t
+(is-a? (car '(&quot;a&quot; &quot;b&quot;)) &lt;string&gt;) &rArr; #t
+(is-a? &lt;string&gt; &lt;class&gt;) &rArr; #t
+(is-a? &lt;class&gt; &lt;string&gt;) &rArr; #f
+
+(class-of 2.3) &rArr; #&lt;&lt;class&gt; &lt;real&gt; 908c708&gt;
+(class-of #(1 2 3)) &rArr; #&lt;&lt;class&gt; &lt;vector&gt; 908cd20&gt;
+(class-of &lt;string&gt;) &rArr; #&lt;&lt;class&gt; &lt;class&gt; 8bd3e10&gt;
+(class-of &lt;class&gt;) &rArr; #&lt;&lt;class&gt; &lt;class&gt; 8bd3e10&gt;
+</pre></div>
+
+
+</div>
+
+
+
+</body>
+</html>

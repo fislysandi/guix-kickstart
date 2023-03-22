@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Textual I/O (Guile Reference Manual)</title>
+
+<meta name="description" content="Textual I/O (Guile Reference Manual)">
+<meta name="keywords" content="Textual I/O (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Input-and-Output.html" rel="up" title="Input and Output">
+<link href="Simple-Output.html" rel="next" title="Simple Output">
+<link href="Encoding.html" rel="prev" title="Encoding">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Textual-I_002fO">
+<div class="nav-panel">
+<p>
+Next: <a href="Simple-Output.html" accesskey="n" rel="next">Simple Textual Output</a>, Previous: <a href="Encoding.html" accesskey="p" rel="prev">Encoding</a>, Up: <a href="Input-and-Output.html" accesskey="u" rel="up">Input and Output</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Textual-I_002fO-1">6.12.4 Textual I/O</h4>
+<a class="index-entry-id" id="index-textual-input"></a>
+<a class="index-entry-id" id="index-textual-output"></a>
+
+<p>This section describes Guile&rsquo;s core textual I/O operations on characters
+and strings.  See <a class="xref" href="Binary-I_002fO.html">Binary I/O</a>, for input and output of bytes and
+bytevectors.  See <a class="xref" href="Encoding.html">Encoding</a>, for more on how characters relate to
+bytes.  To read general S-expressions from ports, See <a class="xref" href="Scheme-Read.html">Reading Scheme Code</a>.
+See <a class="xref" href="Scheme-Write.html">Writing Scheme Values</a>, for interfaces that write generic Scheme datums.
+</p>
+<p>To use these routines, first include the textual I/O module:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 textual-ports))
+</pre></div>
+
+<p>Note that although this module&rsquo;s name suggests that textual ports are
+some different kind of port, that&rsquo;s not the case: all ports in Guile are
+both binary and textual ports.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-get_002dchar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-char</strong> <var class="def-var-arguments">input-port</var><a class="copiable-link" href='#index-get_002dchar'> &para;</a></span></dt>
+<dd><p>Reads from <var class="var">input-port</var>, blocking as necessary, until a
+complete character is available from <var class="var">input-port</var>,
+or until an end of file is reached.
+</p>
+<p>If a complete character is available before the next end of file,
+<code class="code">get-char</code> returns that character and updates the input port to
+point past the character. If an end of file is reached before any
+character is read, <code class="code">get-char</code> returns the end-of-file object.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-lookahead_002dchar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">lookahead-char</strong> <var class="def-var-arguments">input-port</var><a class="copiable-link" href='#index-lookahead_002dchar'> &para;</a></span></dt>
+<dd><p>The <code class="code">lookahead-char</code> procedure is like <code class="code">get-char</code>, but it does
+not update <var class="var">input-port</var> to point past the character.
+</p></dd></dl>
+
+<p>In the same way that it&rsquo;s possible to &quot;unget&quot; a byte or bytes, it&rsquo;s
+possible to &quot;unget&quot; the bytes corresponding to an encoded character.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-unget_002dchar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">unget-char</strong> <var class="def-var-arguments">port char</var><a class="copiable-link" href='#index-unget_002dchar'> &para;</a></span></dt>
+<dd><p>Place character <var class="var">char</var> in <var class="var">port</var> so that it will be read by the
+next read operation.  If called multiple times, the unread characters
+will be read again in last-in first-out order.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-unget_002dstring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">unget-string</strong> <var class="def-var-arguments">port str</var><a class="copiable-link" href='#index-unget_002dstring'> &para;</a></span></dt>
+<dd><p>Place the string <var class="var">str</var> in <var class="var">port</var> so that its characters will
+be read from left-to-right as the next characters from <var class="var">port</var>
+during subsequent read operations.  If called multiple times, the
+unread characters will be read again in last-in first-out order.
+</p></dd></dl>
+
+<p>Reading in a character at a time can be inefficient.  If it&rsquo;s possible
+to perform I/O over multiple characters at a time, via strings, that
+might be faster.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-get_002dstring_002dn"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-string-n</strong> <var class="def-var-arguments">input-port count</var><a class="copiable-link" href='#index-get_002dstring_002dn'> &para;</a></span></dt>
+<dd><p>The <code class="code">get-string-n</code> procedure reads from <var class="var">input-port</var>, blocking
+as necessary, until <var class="var">count</var> characters are available, or until an
+end of file is reached.  <var class="var">count</var> must be an exact, non-negative
+integer, representing the number of characters to be read.
+</p>
+<p>If <var class="var">count</var> characters are available before end of file,
+<code class="code">get-string-n</code> returns a string consisting of those <var class="var">count</var>
+characters. If fewer characters are available before an end of file, but
+one or more characters can be read, <code class="code">get-string-n</code> returns a string
+containing those characters. In either case, the input port is updated
+to point just past the characters read. If no characters can be read
+before an end of file, the end-of-file object is returned.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-get_002dstring_002dn_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-string-n!</strong> <var class="def-var-arguments">input-port string start count</var><a class="copiable-link" href='#index-get_002dstring_002dn_0021'> &para;</a></span></dt>
+<dd><p>The <code class="code">get-string-n!</code> procedure reads from <var class="var">input-port</var> in the
+same manner as <code class="code">get-string-n</code>.  <var class="var">start</var> and <var class="var">count</var> must be
+exact, non-negative integer objects, with <var class="var">count</var> representing the
+number of characters to be read.  <var class="var">string</var> must be a string with at
+least $<var class="var">start</var> + <var class="var">count</var>$ characters.
+</p>
+<p>If <var class="var">count</var> characters are available before an end of file, they are
+written into <var class="var">string</var> starting at index <var class="var">start</var>, and <var class="var">count</var>
+is returned. If fewer characters are available before an end of file,
+but one or more can be read, those characters are written into
+<var class="var">string</var> starting at index <var class="var">start</var> and the number of characters
+actually read is returned as an exact integer object. If no characters
+can be read before an end of file, the end-of-file object is returned.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-get_002dstring_002dall"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-string-all</strong> <var class="def-var-arguments">input-port</var><a class="copiable-link" href='#index-get_002dstring_002dall'> &para;</a></span></dt>
+<dd><p>Reads from <var class="var">input-port</var> until an end of file, decoding characters in
+the same manner as <code class="code">get-string-n</code> and <code class="code">get-string-n!</code>.
+</p>
+<p>If characters are available before the end of file, a string containing
+all the characters decoded from that data are returned. If no character
+precedes the end of file, the end-of-file object is returned.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-get_002dline"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-line</strong> <var class="def-var-arguments">input-port</var><a class="copiable-link" href='#index-get_002dline'> &para;</a></span></dt>
+<dd><p>Reads from <var class="var">input-port</var> up to and including the linefeed
+character or end of file, decoding characters in the same manner as
+<code class="code">get-string-n</code> and <code class="code">get-string-n!</code>.
+</p>
+<p>If a linefeed character is read, a string containing all of the text up
+to (but not including) the linefeed character is returned, and the port
+is updated to point just past the linefeed character. If an end of file
+is encountered before any linefeed character is read, but some
+characters have been read and decoded as characters, a string containing
+those characters is returned. If an end of file is encountered before
+any characters are read, the end-of-file object is returned.
+</p></dd></dl>
+
+<p>Finally, there are just two core procedures to write characters to a
+port.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-put_002dchar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">put-char</strong> <var class="def-var-arguments">port char</var><a class="copiable-link" href='#index-put_002dchar'> &para;</a></span></dt>
+<dd><p>Writes <var class="var">char</var> to the port. The <code class="code">put-char</code> procedure returns
+an unspecified value.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-put_002dstring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">put-string</strong> <var class="def-var-arguments">port string</var><a class="copiable-link" href='#index-put_002dstring'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-put_002dstring-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">put-string</strong> <var class="def-var-arguments">port string start</var><a class="copiable-link" href='#index-put_002dstring-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-put_002dstring-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">put-string</strong> <var class="def-var-arguments">port string start count</var><a class="copiable-link" href='#index-put_002dstring-2'> &para;</a></span></dt>
+<dd><p>Write the <var class="var">count</var> characters of <var class="var">string</var> starting at index
+<var class="var">start</var> to the port.
+</p>
+<p><var class="var">start</var> and <var class="var">count</var> must be non-negative exact integer objects.
+<var class="var">string</var> must have a length of at least <em class="math"><var class="var">start</var> +
+<var class="var">count</var></em>.  <var class="var">start</var> defaults to 0.  <var class="var">count</var> defaults to
+<em class="math"><code class="code">(string-length <var class="var">string</var>)</code> - <var class="var">start</var></em>$.
+</p>
+<p>Calling <code class="code">put-string</code> is equivalent in all respects to calling
+<code class="code">put-char</code> on the relevant sequence of characters, except that it
+will attempt to write multiple characters to the port at a time, even if
+the port is unbuffered.
+</p>
+<p>The <code class="code">put-string</code> procedure returns an unspecified value.
+</p></dd></dl>
+
+<p>Textual ports have a textual position associated with them: a line and a
+column.  Reading in characters or writing them out advances the line and
+the column appropriately.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-port_002dcolumn"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">port-column</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-port_002dcolumn'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-port_002dline"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">port-line</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-port_002dline'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fport_005fcolumn"><span class="category-def">C Function: </span><span><strong class="def-name">scm_port_column</strong> <var class="def-var-arguments">(port)</var><a class="copiable-link" href='#index-scm_005fport_005fcolumn'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fport_005fline"><span class="category-def">C Function: </span><span><strong class="def-name">scm_port_line</strong> <var class="def-var-arguments">(port)</var><a class="copiable-link" href='#index-scm_005fport_005fline'> &para;</a></span></dt>
+<dd><p>Return the current column number or line number of <var class="var">port</var>.
+</p></dd></dl>
+
+<p>Port lines and positions are represented as 0-origin integers, which is
+to say that the the first character of the first line is line 0, column
+0.  However, when you display a line number, for example in an error
+message, we recommend you add 1 to get 1-origin integers.  This is
+because lines numbers traditionally start with 1, and that is what
+non-programmers will find most natural.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-set_002dport_002dcolumn_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-port-column!</strong> <var class="def-var-arguments">port column</var><a class="copiable-link" href='#index-set_002dport_002dcolumn_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-set_002dport_002dline_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-port-line!</strong> <var class="def-var-arguments">port line</var><a class="copiable-link" href='#index-set_002dport_002dline_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fset_005fport_005fcolumn_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_set_port_column_x</strong> <var class="def-var-arguments">(port, column)</var><a class="copiable-link" href='#index-scm_005fset_005fport_005fcolumn_005fx'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fset_005fport_005fline_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_set_port_line_x</strong> <var class="def-var-arguments">(port, line)</var><a class="copiable-link" href='#index-scm_005fset_005fport_005fline_005fx'> &para;</a></span></dt>
+<dd><p>Set the current column or line number of <var class="var">port</var>.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Simple-Output.html">Simple Textual Output</a>, Previous: <a href="Encoding.html">Encoding</a>, Up: <a href="Input-and-Output.html">Input and Output</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

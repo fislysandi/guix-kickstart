@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Weak References (Guile Reference Manual)</title>
+
+<meta name="description" content="Weak References (Guile Reference Manual)">
+<meta name="keywords" content="Weak References (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Memory-Management.html" rel="up" title="Memory Management">
+<link href="Guardians.html" rel="next" title="Guardians">
+<link href="Memory-Blocks.html" rel="prev" title="Memory Blocks">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Weak-References">
+<div class="nav-panel">
+<p>
+Next: <a href="Guardians.html" accesskey="n" rel="next">Guardians</a>, Previous: <a href="Memory-Blocks.html" accesskey="p" rel="prev">Memory Blocks</a>, Up: <a href="Memory-Management.html" accesskey="u" rel="up">Memory Management and Garbage Collection</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Weak-References-1">6.17.3 Weak References</h4>
+
+<p>[FIXME: This chapter is based on Mikael Djurfeldt&rsquo;s answer to a
+question by Michael Livshin. Any mistakes are not theirs, of course. ]
+</p>
+<p>Weak references let you attach bookkeeping information to data so that
+the additional information automatically disappears when the original
+data is no longer in use and gets garbage collected. In a weak key hash,
+the hash entry for that key disappears as soon as the key is no longer
+referenced from anywhere else. For weak value hashes, the same happens
+as soon as the value is no longer in use. Entries in a doubly weak hash
+disappear when either the key or the value are not used anywhere else
+anymore.
+</p>
+<p>Object properties offer the same kind of functionality as weak key
+hashes in many situations. (see <a class="pxref" href="Object-Properties.html">Object Properties</a>)
+</p>
+<p>Here&rsquo;s an example (a little bit strained perhaps, but one of the
+examples is actually used in Guile):
+</p>
+<p>Assume that you&rsquo;re implementing a debugging system where you want to
+associate information about filename and position of source code
+expressions with the expressions themselves.
+</p>
+<p>Hashtables can be used for that, but if you use ordinary hash tables
+it will be impossible for the scheme interpreter to &quot;forget&quot; old
+source when, for example, a file is reloaded.
+</p>
+<p>To implement the mapping from source code expressions to positional
+information it is necessary to use weak-key tables since we don&rsquo;t want
+the expressions to be remembered just because they are in our table.
+</p>
+<p>To implement a mapping from source file line numbers to source code
+expressions you would use a weak-value table.
+</p>
+<p>To implement a mapping from source code expressions to the procedures
+they constitute a doubly-weak table has to be used.
+</p>
+
+
+<ul class="mini-toc">
+<li><a href="Weak-hash-tables.html" accesskey="1">Weak hash tables</a></li>
+<li><a href="Weak-vectors.html" accesskey="2">Weak vectors</a></li>
+</ul>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Guardians.html">Guardians</a>, Previous: <a href="Memory-Blocks.html">Memory Blocks</a>, Up: <a href="Memory-Management.html">Memory Management and Garbage Collection</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

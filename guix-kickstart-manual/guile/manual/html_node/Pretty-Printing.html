@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Pretty Printing (Guile Reference Manual)</title>
+
+<meta name="description" content="Pretty Printing (Guile Reference Manual)">
+<meta name="keywords" content="Pretty Printing (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Guile-Modules.html" rel="up" title="Guile Modules">
+<link href="Formatted-Output.html" rel="next" title="Formatted Output">
+<link href="Readline-Support.html" rel="prev" title="Readline Support">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Pretty-Printing">
+<div class="nav-panel">
+<p>
+Next: <a href="Formatted-Output.html" accesskey="n" rel="next">Formatted Output</a>, Previous: <a href="Readline-Support.html" accesskey="p" rel="prev">Readline Support</a>, Up: <a href="Guile-Modules.html" accesskey="u" rel="up">Guile Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Pretty-Printing-1">7.10 Pretty Printing</h3>
+
+
+<a class="index-entry-id" id="index-pretty-printing"></a>
+<p>The module <code class="code">(ice-9 pretty-print)</code> provides the procedure
+<code class="code">pretty-print</code>, which provides nicely formatted output of Scheme
+objects.  This is especially useful for deeply nested or complex data
+structures, such as lists and vectors.
+</p>
+<p>The module is loaded by entering the following:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(use-modules (ice-9 pretty-print))
+</pre></div>
+
+<p>This makes the procedure <code class="code">pretty-print</code> available.  As an example
+how <code class="code">pretty-print</code> will format the output, see the following:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(pretty-print '(define (foo) (lambda (x)
+(cond ((zero? x) #t) ((negative? x) -x) (else
+(if (= x 1) 2 (* x x x)))))))
+-|
+(define (foo)
+  (lambda (x)
+    (cond ((zero? x) #t)
+          ((negative? x) -x)
+          (else (if (= x 1) 2 (* x x x))))))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-pretty_002dprint-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">pretty-print</strong> <var class="def-var-arguments">obj [port] [keyword-options]</var><a class="copiable-link" href='#index-pretty_002dprint-1'> &para;</a></span></dt>
+<dd><p>Print the textual representation of the Scheme object <var class="var">obj</var> to
+<var class="var">port</var>.  <var class="var">port</var> defaults to the current output port, if not
+given.
+</p>
+<p>The further <var class="var">keyword-options</var> are keywords and parameters as
+follows,
+</p>
+<dl class="table">
+<dt><code class="code">#:display?</code> <var class="var">flag</var></dt>
+<dd><p>If <var class="var">flag</var> is true then print using <code class="code">display</code>.  The default is
+<code class="code">#f</code> which means use <code class="code">write</code> style.  See <a class="xref" href="Scheme-Write.html">Writing Scheme Values</a>.
+</p>
+</dd>
+<dt><code class="code">#:per-line-prefix</code> <var class="var">string</var></dt>
+<dd><p>Print the given <var class="var">string</var> as a prefix on each line.  The default is
+no prefix.
+</p>
+</dd>
+<dt><code class="code">#:width</code> <var class="var">columns</var></dt>
+<dd><p>Print within the given <var class="var">columns</var>.  The default is 79.
+</p>
+</dd>
+<dt><code class="code">#:max-expr-width</code> <var class="var">columns</var></dt>
+<dd><p>The maximum width of an expression.  The default is 50.
+</p></dd>
+</dl>
+</dd></dl>
+
+
+<a class="index-entry-id" id="index-truncated-printing"></a>
+<p>Also exported by the <code class="code">(ice-9 pretty-print)</code> module is
+<code class="code">truncated-print</code>, a procedure to print Scheme datums, truncating
+the output to a certain number of characters. This is useful when you
+need to present an arbitrary datum to the user, but you only have one
+line in which to do so.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define exp '(a b #(c d e) f . g))
+(truncated-print exp #:width 10) (newline)
+-| (a b . #)
+(truncated-print exp #:width 15) (newline)
+-| (a b # f . g)
+(truncated-print exp #:width 18) (newline)
+-| (a b #(c ...) . #)
+(truncated-print exp #:width 20) (newline)
+-| (a b #(c d e) f . g)
+(truncated-print &quot;The quick brown fox&quot; #:width 20) (newline)
+-| &quot;The quick brown...&quot;
+(truncated-print (current-module) #:width 20) (newline)
+-| #&lt;directory (gui...&gt;
+</pre></div>
+
+<p><code class="code">truncated-print</code> will not output a trailing newline. If an expression does
+not fit in the given width, it will be truncated &ndash; possibly
+ellipsized<a class="footnote" id="DOCF26" href="#FOOT26"><sup>26</sup></a>, or in the worst case, displayed as <code class="code">#</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-truncated_002dprint"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">truncated-print</strong> <var class="def-var-arguments">obj [port] [keyword-options]</var><a class="copiable-link" href='#index-truncated_002dprint'> &para;</a></span></dt>
+<dd><p>Print <var class="var">obj</var>, truncating the output, if necessary, to make it fit
+into <var class="var">width</var> characters. By default, <var class="var">obj</var> will be printed using
+<code class="code">write</code>, though that behavior can be overridden via the
+<var class="var">display?</var> keyword argument.
+</p>
+<p>The default behaviour is to print depth-first, meaning that the entire
+remaining width will be available to each sub-expression of <var class="var">obj</var> &ndash;
+e.g., if <var class="var">obj</var> is a vector, each member of <var class="var">obj</var>. One can attempt to
+&ldquo;ration&rdquo; the available width, trying to allocate it equally to each
+sub-expression, via the <var class="var">breadth-first?</var> keyword argument.
+</p>
+<p>The further <var class="var">keyword-options</var> are keywords and parameters as
+follows,
+</p>
+<dl class="table">
+<dt><code class="code">#:display?</code> <var class="var">flag</var></dt>
+<dd><p>If <var class="var">flag</var> is true then print using <code class="code">display</code>.  The default is
+<code class="code">#f</code> which means use <code class="code">write</code> style.  see <a class="pxref" href="Scheme-Write.html">Writing Scheme Values</a>.
+</p>
+</dd>
+<dt><code class="code">#:width</code> <var class="var">columns</var></dt>
+<dd><p>Print within the given <var class="var">columns</var>.  The default is 79.
+</p>
+</dd>
+<dt><code class="code">#:breadth-first?</code> <var class="var">flag</var></dt>
+<dd><p>If <var class="var">flag</var> is true, then allocate the available width breadth-first
+among elements of a compound data structure (list, vector, pair,
+etc.). The default is <code class="code">#f</code> which means that any element is
+allowed to consume all of the available width.
+</p></dd>
+</dl>
+</dd></dl>
+
+
+</div>
+<div class="footnotes-segment">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5 class="footnote-body-heading"><a id="FOOT26" href="#DOCF26">(26)</a></h5>
+<p>On Unicode-capable ports, the ellipsis is represented by
+character &lsquo;HORIZONTAL ELLIPSIS&rsquo; (U+2026), otherwise it is represented by three
+dots.</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Formatted-Output.html">Formatted Output</a>, Previous: <a href="Readline-Support.html">Readline Support</a>, Up: <a href="Guile-Modules.html">Guile Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Evaluation Model (Guile Reference Manual)</title>
+
+<meta name="description" content="Evaluation Model (Guile Reference Manual)">
+<meta name="keywords" content="Evaluation Model (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Debugging.html" rel="up" title="Debugging">
+<link href="Source-Properties.html" rel="next" title="Source Properties">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Evaluation-Model">
+<div class="nav-panel">
+<p>
+Next: <a href="Source-Properties.html" accesskey="n" rel="next">Source Properties</a>, Up: <a href="Debugging.html" accesskey="u" rel="up">Debugging Infrastructure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Evaluation-and-the-Scheme-Stack">6.26.1 Evaluation and the Scheme Stack</h4>
+
+<p>The idea of the Scheme stack is central to a lot of debugging.  The
+Scheme stack is a reified representation of the pending function returns
+in an expression&rsquo;s continuation.  As Guile implements function calls
+using a stack, this reification takes the form of a number of nested
+stack frames, each of which corresponds to the application of a
+procedure to a set of arguments.
+</p>
+<p>A Scheme stack always exists implicitly, and can be summoned into
+concrete existence as a first-class Scheme value by the
+<code class="code">make-stack</code> call, so that an introspective Scheme program &ndash; such
+as a debugger &ndash; can present it in some way and allow the user to query
+its details. The first thing to understand, therefore, is how Guile&rsquo;s
+function call convention creates the stack.
+</p>
+<p>Broadly speaking, Guile represents all control flow on a stack. Calling
+a function involves pushing an empty frame on the stack, then evaluating
+the procedure and its arguments, then fixing up the new frame so that it
+points to the old one. Frames on the stack are thus linked together. A
+tail call is the same, except it reuses the existing frame instead of
+pushing on a new one.
+</p>
+<p>In this way, the only frames that are on the stack are &ldquo;active&rdquo;
+frames, frames which need to do some work before the computation is
+complete. On the other hand, a function that has tail-called another
+function will not be on the stack, as it has no work left to do.
+</p>
+<p>Therefore, when an error occurs in a running program, or the program
+hits a breakpoint, or in fact at any point that the programmer chooses,
+its state at that point can be represented by a <em class="dfn">stack</em> of all the
+procedure applications that are logically in progress at that time, each
+of which is known as a <em class="dfn">frame</em>.  The programmer can learn more about
+the program&rsquo;s state at that point by inspecting the stack and its
+frames.
+</p>
+
+<ul class="mini-toc">
+<li><a href="Stack-Capture.html" accesskey="1">Stack Capture</a></li>
+<li><a href="Stacks.html" accesskey="2">Stacks</a></li>
+<li><a href="Frames.html" accesskey="3">Frames</a></li>
+</ul>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Source-Properties.html">Source Properties</a>, Up: <a href="Debugging.html">Debugging Infrastructure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

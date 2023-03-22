@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>ice-9 optargs (Guile Reference Manual)</title>
+
+<meta name="description" content="ice-9 optargs (Guile Reference Manual)">
+<meta name="keywords" content="ice-9 optargs (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Optional-Arguments.html" rel="up" title="Optional Arguments">
+<link href="lambda_002a-and-define_002a.html" rel="prev" title="lambda* and define*">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="ice_002d9-optargs">
+<div class="nav-panel">
+<p>
+Previous: <a href="lambda_002a-and-define_002a.html" accesskey="p" rel="prev">lambda* and define*.</a>, Up: <a href="Optional-Arguments.html" accesskey="u" rel="up">Optional Arguments</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="g_t_0028ice_002d9-optargs_0029">6.7.4.2 (ice-9 optargs)</h4>
+
+<p>Before Guile 2.0, <code class="code">lambda*</code> and <code class="code">define*</code> were implemented
+using macros that processed rest list arguments. This was not optimal,
+as calling procedures with optional arguments had to allocate rest
+lists at every procedure invocation. Guile 2.0 improved this
+situation by bringing optional and keyword arguments into Guile&rsquo;s
+core.
+</p>
+<p>However there are occasions in which you have a list and want to parse
+it for optional or keyword arguments. Guile&rsquo;s <code class="code">(ice-9 optargs)</code>
+provides some macros to help with that task.
+</p>
+<p>The syntax <code class="code">let-optional</code> and <code class="code">let-optional*</code> are for
+destructuring rest argument lists and giving names to the various list
+elements.  <code class="code">let-optional</code> binds all variables simultaneously, while
+<code class="code">let-optional*</code> binds them sequentially, consistent with <code class="code">let</code>
+and <code class="code">let*</code> (see <a class="pxref" href="Local-Bindings.html">Local Variable Bindings</a>).
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-let_002doptional"><span class="category-def">library syntax: </span><span><strong class="def-name">let-optional</strong> <var class="def-var-arguments">rest-arg (binding &hellip;) body1 body2 &hellip;</var><a class="copiable-link" href='#index-let_002doptional'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-let_002doptional_002a"><span class="category-def">library syntax: </span><span><strong class="def-name">let-optional*</strong> <var class="def-var-arguments">rest-arg (binding &hellip;) body1 body2 &hellip;</var><a class="copiable-link" href='#index-let_002doptional_002a'> &para;</a></span></dt>
+<dd><p>These two macros give you an optional argument interface that is very
+<em class="dfn">Schemey</em> and introduces no fancy syntax. They are compatible with
+the scsh macros of the same name, but are slightly extended. Each of
+<var class="var">binding</var> may be of one of the forms <var class="var">var</var> or <code class="code">(<var class="var">var</var>
+<var class="var">default-value</var>)</code>. <var class="var">rest-arg</var> should be the rest-argument of the
+procedures these are used from.  The items in <var class="var">rest-arg</var> are
+sequentially bound to the variable names are given. When <var class="var">rest-arg</var>
+runs out, the remaining vars are bound either to the default values or
+<code class="code">#f</code> if no default value was specified. <var class="var">rest-arg</var> remains
+bound to whatever may have been left of <var class="var">rest-arg</var>.
+</p>
+<p>After binding the variables, the expressions <var class="var">body1</var> <var class="var">body2</var> &hellip;
+are evaluated in order.
+</p></dd></dl>
+
+<p>Similarly, <code class="code">let-keywords</code> and <code class="code">let-keywords*</code> extract values
+from keyword style argument lists, binding local variables to those
+values or to defaults.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-let_002dkeywords"><span class="category-def">library syntax: </span><span><strong class="def-name">let-keywords</strong> <var class="def-var-arguments">args allow-other-keys? (binding &hellip;) body1 body2 &hellip;</var><a class="copiable-link" href='#index-let_002dkeywords'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-let_002dkeywords_002a"><span class="category-def">library syntax: </span><span><strong class="def-name">let-keywords*</strong> <var class="def-var-arguments">args allow-other-keys? (binding &hellip;) body1 body2 &hellip;</var><a class="copiable-link" href='#index-let_002dkeywords_002a'> &para;</a></span></dt>
+<dd><p><var class="var">args</var> is evaluated and should give a list of the form
+<code class="code">(#:keyword1 value1 #:keyword2 value2 &hellip;)</code>.  The
+<var class="var">binding</var>s are variables and default expressions, with the variables
+to be set (by name) from the keyword values.  The <var class="var">body1</var>
+<var class="var">body2</var> &hellip;  forms are then evaluated and the last is the
+result.  An example will make the syntax clearest,
+</p>
+<div class="example">
+<pre class="example-preformatted">(define args '(#:xyzzy &quot;hello&quot; #:foo &quot;world&quot;))
+
+(let-keywords args #t
+      ((foo  &quot;default for foo&quot;)
+       (bar  (string-append &quot;default&quot; &quot;for&quot; &quot;bar&quot;)))
+  (display foo)
+  (display &quot;, &quot;)
+  (display bar))
+-| world, defaultforbar
+</pre></div>
+
+<p>The binding for <code class="code">foo</code> comes from the <code class="code">#:foo</code> keyword in
+<code class="code">args</code>.  But the binding for <code class="code">bar</code> is the default in the
+<code class="code">let-keywords</code>, since there&rsquo;s no <code class="code">#:bar</code> in the args.
+</p>
+<p><var class="var">allow-other-keys?</var> is evaluated and controls whether unknown
+keywords are allowed in the <var class="var">args</var> list.  When true other keys are
+ignored (such as <code class="code">#:xyzzy</code> in the example), when <code class="code">#f</code> an
+error is thrown for anything unknown.
+</p></dd></dl>
+
+<p><code class="code">(ice-9 optargs)</code> also provides some more <code class="code">define*</code> sugar,
+which is not so useful with modern Guile coding, but still supported:
+<code class="code">define*-public</code> is the <code class="code">lambda*</code> version of
+<code class="code">define-public</code>; <code class="code">defmacro*</code> and <code class="code">defmacro*-public</code>
+exist for defining macros with the improved argument list handling
+possibilities. The <code class="code">-public</code> versions not only define the
+procedures/macros, but also export them from the current module.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-define_002a_002dpublic"><span class="category-def">library syntax: </span><span><strong class="def-name">define*-public</strong> <var class="def-var-arguments">formals body1 body2 &hellip;</var><a class="copiable-link" href='#index-define_002a_002dpublic'> &para;</a></span></dt>
+<dd><p>Like a mix of <code class="code">define*</code> and <code class="code">define-public</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-defmacro_002a"><span class="category-def">library syntax: </span><span><strong class="def-name">defmacro*</strong> <var class="def-var-arguments">name formals body1 body2 &hellip;</var><a class="copiable-link" href='#index-defmacro_002a'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-defmacro_002a_002dpublic"><span class="category-def">library syntax: </span><span><strong class="def-name">defmacro*-public</strong> <var class="def-var-arguments">name formals body1 body2 &hellip;</var><a class="copiable-link" href='#index-defmacro_002a_002dpublic'> &para;</a></span></dt>
+<dd><p>These are just like <code class="code">defmacro</code> and <code class="code">defmacro-public</code> except that they
+take <code class="code">lambda*</code>-style extended parameter lists, where <code class="code">#:optional</code>,
+<code class="code">#:key</code>, <code class="code">#:allow-other-keys</code> and <code class="code">#:rest</code> are allowed with the usual
+semantics. Here is an example of a macro with an optional argument:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(defmacro* transmogrify (a #:optional b)
+  (a 1))
+</pre></div>
+</dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="lambda_002a-and-define_002a.html">lambda* and define*.</a>, Up: <a href="Optional-Arguments.html">Optional Arguments</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

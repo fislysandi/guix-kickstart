@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Eval Special (Guile Reference Manual)</title>
+
+<meta name="description" content="Eval Special (Guile Reference Manual)">
+<meta name="keywords" content="Eval Special (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Evaluating.html" rel="up" title="Evaluating">
+<link href="Eval-Procedure.html" rel="prev" title="Eval Procedure">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Eval-Special">
+<div class="nav-panel">
+<p>
+Previous: <a href="Eval-Procedure.html" accesskey="p" rel="prev">Evaluating a Procedure Invocation Expression</a>, Up: <a href="Evaluating.html" accesskey="u" rel="up">Evaluating Expressions and Executing Programs</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Evaluating-Special-Syntactic-Expressions">3.3.1.4 Evaluating Special Syntactic Expressions</h4>
+
+<p>When a procedure invocation expression is evaluated, the procedure and
+<em class="emph">all</em> the argument expressions must be evaluated before the
+procedure can be invoked.  Special syntactic expressions are special
+because they are able to manipulate their arguments in an unevaluated
+form, and can choose whether to evaluate any or all of the argument
+expressions.
+</p>
+<p>Why is this needed?  Consider a program fragment that asks the user
+whether or not to delete a file, and then deletes the file if the user
+answers yes.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(if (string=? (read-answer &quot;Should I delete this file?&quot;)
+              &quot;yes&quot;)
+    (delete-file file))
+</pre></div>
+
+<p>If the outermost <code class="code">(if &hellip;)</code> expression here was a procedure
+invocation expression, the expression <code class="code">(delete-file file)</code>, whose
+side effect is to actually delete a file, would already have been
+evaluated before the <code class="code">if</code> procedure even got invoked!  Clearly this
+is no use &mdash; the whole point of an <code class="code">if</code> expression is that the
+<em class="dfn">consequent</em> expression is only evaluated if the condition of the
+<code class="code">if</code> expression is &ldquo;true&rdquo;.
+</p>
+<p>Therefore <code class="code">if</code> must be special syntax, not a procedure.  Other
+special syntaxes that we have already met are <code class="code">define</code>, <code class="code">set!</code>
+and <code class="code">lambda</code>.  <code class="code">define</code> and <code class="code">set!</code> are syntax because
+they need to know the variable <em class="emph">name</em> that is given as the first
+argument in a <code class="code">define</code> or <code class="code">set!</code> expression, not that
+variable&rsquo;s value.  <code class="code">lambda</code> is syntax because it does not
+immediately evaluate the expressions that define the procedure body;
+instead it creates a procedure object that incorporates these
+expressions so that they can be evaluated in the future, when that
+procedure is invoked.
+</p>
+<p>The rules for evaluating each special syntactic expression are specified
+individually for each special syntax.  For a summary of standard special
+syntax, see See <a class="xref" href="Syntax-Summary.html">Summary of Common Syntax</a>.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Eval-Procedure.html">Evaluating a Procedure Invocation Expression</a>, Up: <a href="Evaluating.html">Evaluating Expressions and Executing Programs</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

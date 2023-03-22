@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Changing the Class of an Instance (Guile Reference Manual)</title>
+
+<meta name="description" content="Changing the Class of an Instance (Guile Reference Manual)">
+<meta name="keywords" content="Changing the Class of an Instance (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="GOOPS.html" rel="up" title="GOOPS">
+<link href="Redefining-a-Class.html" rel="prev" title="Redefining a Class">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Changing-the-Class-of-an-Instance">
+<div class="nav-panel">
+<p>
+Previous: <a href="Redefining-a-Class.html" accesskey="p" rel="prev">Redefining a Class</a>, Up: <a href="GOOPS.html" accesskey="u" rel="up">GOOPS</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Changing-the-Class-of-an-Instance-1">8.13 Changing the Class of an Instance</h3>
+
+<p>When a redefinable class is redefined, any existing instance of the
+redefined class will be modified for the new class definition before the
+next time that any of the instance&rsquo;s slots is referenced or set.  GOOPS
+modifies each instance by calling the generic function
+<code class="code">change-class</code>.
+</p>
+<p>More generally, you can change the class of an existing instance at any
+time by invoking the generic function <code class="code">change-class</code> with two
+arguments: the instance and the new class.
+</p>
+<p>The default method for <code class="code">change-class</code> decides how to implement the
+change of class by looking at the slot definitions for the instance&rsquo;s
+existing class and for the new class.  If the new class has slots with
+the same name as slots in the existing class, the values for those slots
+are preserved.  Slots that are present only in the existing class are
+discarded.  Slots that are present only in the new class are initialized
+using the corresponding slot definition&rsquo;s init function (see <a class="pxref" href="Classes.html">slot-init-function</a>).
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-change_002dclass"><span class="category-def">generic: </span><span><strong class="def-name">change-class</strong> <var class="def-var-arguments">instance new-class</var><a class="copiable-link" href='#index-change_002dclass'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-change_002dclass-1"><span class="category-def">method: </span><span><strong class="def-name">change-class</strong> <var class="def-var-arguments">(obj &lt;object&gt;) (new &lt;redefinable-class&gt;)</var><a class="copiable-link" href='#index-change_002dclass-1'> &para;</a></span></dt>
+<dd><p>Modify instance <var class="var">obj</var> to make it an instance of class <var class="var">new</var>.
+<var class="var">obj</var> itself must already be an instance of a redefinable class.
+</p>
+<p>The value of each of <var class="var">obj</var>&rsquo;s slots is preserved only if a similarly named
+slot exists in <var class="var">new</var>; any other slot values are discarded.
+</p>
+<p>The slots in <var class="var">new</var> that do not correspond to any of <var class="var">obj</var>&rsquo;s
+pre-existing slots are initialized according to <var class="var">new</var>&rsquo;s slot definitions&rsquo;
+init functions.
+</p></dd></dl>
+
+<p>The default <code class="code">change-class</code> method also invokes another generic
+function, <code class="code">update-instance-for-different-class</code>, as the last thing
+that it does before returning.  The applied
+<code class="code">update-instance-for-different-class</code> method can make any further
+adjustments to <var class="var">new-instance</var> that are required to complete or
+modify the change of class.  The return value from the applied method is
+ignored.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-update_002dinstance_002dfor_002ddifferent_002dclass"><span class="category-def">generic: </span><span><strong class="def-name">update-instance-for-different-class</strong> <var class="def-var-arguments">old-instance new-instance</var><a class="copiable-link" href='#index-update_002dinstance_002dfor_002ddifferent_002dclass'> &para;</a></span></dt>
+<dd><p>A generic function that can be customized to put finishing touches to an
+instance whose class has just been changed.  The default
+<code class="code">update-instance-for-different-class</code> method does nothing.
+</p></dd></dl>
+
+<p>Customized change of class behaviour can be implemented by defining
+<code class="code">change-class</code> methods that are specialized either by the class
+of the instances to be modified or by the metaclass of the new class.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Redefining-a-Class.html">Redefining a Class</a>, Up: <a href="GOOPS.html">GOOPS</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

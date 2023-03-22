@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>PEG Internals (Guile Reference Manual)</title>
+
+<meta name="description" content="PEG Internals (Guile Reference Manual)">
+<meta name="keywords" content="PEG Internals (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="PEG-Parsing.html" rel="up" title="PEG Parsing">
+<link href="PEG-Tutorial.html" rel="prev" title="PEG Tutorial">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="PEG-Internals">
+<div class="nav-panel">
+<p>
+Previous: <a href="PEG-Tutorial.html" accesskey="p" rel="prev">PEG Tutorial</a>, Up: <a href="PEG-Parsing.html" accesskey="u" rel="up">PEG Parsing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="PEG-Internals-1">6.15.4 PEG Internals</h4>
+
+<p>A PEG parser takes a string as input and attempts to parse it as a given
+nonterminal. The key idea of the PEG implementation is that every
+nonterminal is just a function that takes a string as an argument and
+attempts to parse that string as its nonterminal. The functions always
+start from the beginning, but a parse is considered successful if there
+is material left over at the end.
+</p>
+<p>This makes it easy to model different PEG parsing operations. For
+instance, consider the PEG grammar <code class="code">&quot;ab&quot;</code>, which could also be
+written <code class="code">(and &quot;a&quot; &quot;b&quot;)</code>. It matches the string &ldquo;ab&rdquo;. Here&rsquo;s how
+that might be implemented in the PEG style:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define (match-and-a-b str)
+  (match-a str)
+  (match-b str))
+</pre></div>
+
+<p>As you can see, the use of functions provides an easy way to model
+sequencing. In a similar way, one could model <code class="code">(or a b)</code> with
+something like the following:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define (match-or-a-b str)
+  (or (match-a str) (match-b str)))
+</pre></div>
+
+<p>Here the semantics of a PEG <code class="code">or</code> expression map naturally onto
+Scheme&rsquo;s <code class="code">or</code> operator. This function will attempt to run
+<code class="code">(match-a str)</code>, and return its result if it succeeds. Otherwise it
+will run <code class="code">(match-b str)</code>.
+</p>
+<p>Of course, the code above wouldn&rsquo;t quite work. We need some way for the
+parsing functions to communicate. The actual interface used is below.
+</p>
+<h4 class="subsubheading" id="Parsing-Function-Interface">Parsing Function Interface</h4>
+
+<p>A parsing function takes three arguments - a string, the length of that
+string, and the position in that string it should start parsing at. In
+effect, the parsing functions pass around substrings in pieces - the
+first argument is a buffer of characters, and the second two give a
+range within that buffer that the parsing function should look at.
+</p>
+<p>Parsing functions return either #f, if they failed to match their
+nonterminal, or a list whose first element must be an integer
+representing the final position in the string they matched and whose cdr
+can be any other data the function wishes to return, or &rsquo;() if it
+doesn&rsquo;t have any more data.
+</p>
+<p>The one caveat is that if the extra data it returns is a list, any
+adjacent strings in that list will be appended by <code class="code">match-pattern</code>. For
+instance, if a parsing function returns <code class="code">(13 (&quot;a&quot; &quot;b&quot; &quot;c&quot;))</code>,
+<code class="code">match-pattern</code> will take <code class="code">(13 (&quot;abc&quot;))</code> as its value.
+</p>
+<p>For example, here is a function to match &ldquo;ab&rdquo; using the actual
+interface.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define (match-a-b str len pos)
+   (and (&lt;= (+ pos 2) len)
+        (string= str &quot;ab&quot; pos (+ pos 2))
+        (list (+ pos 2) '()))) ; we return no extra information
+</pre></div>
+
+<p>The above function can be used to match a string by running
+<code class="code">(match-pattern match-a-b &quot;ab&quot;)</code>.
+</p>
+<h4 class="subsubheading" id="Code-Generators-and-Extensible-Syntax">Code Generators and Extensible Syntax</h4>
+
+<p>PEG expressions, such as those in a <code class="code">define-peg-pattern</code> form, are
+interpreted internally in two steps.
+</p>
+<p>First, any string PEG is expanded into an s-expression PEG by the code
+in the <code class="code">(ice-9 peg string-peg)</code> module.
+</p>
+<p>Then, the s-expression PEG that results is compiled into a parsing
+function by the <code class="code">(ice-9 peg codegen)</code> module. In particular, the
+function <code class="code">compile-peg-pattern</code> is called on the s-expression. It then
+decides what to do based on the form it is passed.
+</p>
+<p>The PEG syntax can be expanded by providing <code class="code">compile-peg-pattern</code> more
+options for what to do with its forms. The extended syntax will be
+associated with a symbol, for instance <code class="code">my-parsing-form</code>, and will
+be called on all PEG expressions of the form
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(my-parsing-form ...)
+</pre></div>
+
+<p>The parsing function should take two arguments. The first will be a
+syntax object containing a list with all of the arguments to the form
+(but not the form&rsquo;s name), and the second will be the
+<code class="code">capture-type</code> argument that is passed to <code class="code">define-peg-pattern</code>.
+</p>
+<p>New functions can be registered by calling <code class="code">(add-peg-compiler!
+symbol function)</code>, where <code class="code">symbol</code> is the symbol that will indicate
+a form of this type and <code class="code">function</code> is the code generating function
+described above. The function <code class="code">add-peg-compiler!</code> is exported from
+the <code class="code">(ice-9 peg codegen)</code> module.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="PEG-Tutorial.html">PEG Tutorial</a>, Up: <a href="PEG-Parsing.html">PEG Parsing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

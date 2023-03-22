@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Threads (Guile Reference Manual)</title>
+
+<meta name="description" content="Threads (Guile Reference Manual)">
+<meta name="keywords" content="Threads (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Scheduling.html" rel="up" title="Scheduling">
+<link href="Thread-Local-Variables.html" rel="next" title="Thread Local Variables">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Threads">
+<div class="nav-panel">
+<p>
+Next: <a href="Thread-Local-Variables.html" accesskey="n" rel="next">Thread-Local Variables</a>, Up: <a href="Scheduling.html" accesskey="u" rel="up">Threads, Mutexes, Asyncs and Dynamic Roots</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Threads-1">6.22.1 Threads</h4>
+<a class="index-entry-id" id="index-threads"></a>
+<a class="index-entry-id" id="index-Guile-threads"></a>
+<a class="index-entry-id" id="index-POSIX-threads"></a>
+
+<p>Guile supports POSIX threads, unless it was configured with
+<code class="code">--without-threads</code> or the host lacks POSIX thread support.  When
+thread support is available, the <code class="code">threads</code> feature is provided
+(see <a class="pxref" href="Feature-Manipulation.html"><code class="code">provided?</code></a>).
+</p>
+<p>The procedures below manipulate Guile threads, which are wrappers around
+the system&rsquo;s POSIX threads.  For application-level parallelism, using
+higher-level constructs, such as futures, is recommended
+(see <a class="pxref" href="Futures.html">Futures</a>).
+</p>
+<p>To use these facilities, load the <code class="code">(ice-9 threads)</code> module.
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 threads))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-all_002dthreads"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">all-threads</strong><a class="copiable-link" href='#index-all_002dthreads'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fall_005fthreads"><span class="category-def">C Function: </span><span><strong class="def-name">scm_all_threads</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fall_005fthreads'> &para;</a></span></dt>
+<dd><p>Return a list of all threads.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-current_002dthread"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">current-thread</strong><a class="copiable-link" href='#index-current_002dthread'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcurrent_005fthread"><span class="category-def">C Function: </span><span><strong class="def-name">scm_current_thread</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fcurrent_005fthread'> &para;</a></span></dt>
+<dd><p>Return the thread that called this function.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-call_002dwith_002dnew_002dthread"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call-with-new-thread</strong> <var class="def-var-arguments">thunk [handler]</var><a class="copiable-link" href='#index-call_002dwith_002dnew_002dthread'> &para;</a></span></dt>
+<dd><p>Call <code class="code">thunk</code> in a new thread and with a new dynamic state,
+returning the new thread.  The procedure <var class="var">thunk</var> is called via
+<code class="code">with-continuation-barrier</code>.
+</p>
+<p>When <var class="var">handler</var> is specified, then <var class="var">thunk</var> is called from
+within a <code class="code">catch</code> with tag <code class="code">#t</code> that has <var class="var">handler</var> as its
+handler.  This catch is established inside the continuation barrier.
+</p>
+<p>Once <var class="var">thunk</var> or <var class="var">handler</var> returns, the return value is made
+the <em class="emph">exit value</em> of the thread and the thread is terminated.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fspawn_005fthread"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_spawn_thread</strong> <code class="def-code-arguments">(scm_t_catch_body body, void *body_data, scm_t_catch_handler handler, void *handler_data)</code><a class="copiable-link" href='#index-scm_005fspawn_005fthread'> &para;</a></span></dt>
+<dd><p>Call <var class="var">body</var> in a new thread, passing it <var class="var">body_data</var>, returning
+the new thread.  The function <var class="var">body</var> is called via
+<code class="code">scm_c_with_continuation_barrier</code>.
+</p>
+<p>When <var class="var">handler</var> is non-<code class="code">NULL</code>, <var class="var">body</var> is called via
+<code class="code">scm_internal_catch</code> with tag <code class="code">SCM_BOOL_T</code> that has
+<var class="var">handler</var> and <var class="var">handler_data</var> as the handler and its data.  This
+catch is established inside the continuation barrier.
+</p>
+<p>Once <var class="var">body</var> or <var class="var">handler</var> returns, the return value is made the
+<em class="emph">exit value</em> of the thread and the thread is terminated.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-thread_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">thread?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-thread_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fthread_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_thread_p</strong> <var class="def-var-arguments">(obj)</var><a class="copiable-link" href='#index-scm_005fthread_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> ff <var class="var">obj</var> is a thread; otherwise, return
+<code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-join_002dthread"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">join-thread</strong> <var class="def-var-arguments">thread [timeout [timeoutval]]</var><a class="copiable-link" href='#index-join_002dthread'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fjoin_005fthread"><span class="category-def">C Function: </span><span><strong class="def-name">scm_join_thread</strong> <var class="def-var-arguments">(thread)</var><a class="copiable-link" href='#index-scm_005fjoin_005fthread'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fjoin_005fthread_005ftimed"><span class="category-def">C Function: </span><span><strong class="def-name">scm_join_thread_timed</strong> <var class="def-var-arguments">(thread, timeout, timeoutval)</var><a class="copiable-link" href='#index-scm_005fjoin_005fthread_005ftimed'> &para;</a></span></dt>
+<dd><p>Wait for <var class="var">thread</var> to terminate and return its exit value.  Only
+threads that were created with <code class="code">call-with-new-thread</code> or
+<code class="code">scm_spawn_thread</code> can be joinable; attempting to join a foreign
+thread will raise an error.
+</p>
+<p>When <var class="var">timeout</var> is given, it specifies a point in time where the
+waiting should be aborted.  It can be either an integer as returned by
+<code class="code">current-time</code> or a pair as returned by <code class="code">gettimeofday</code>.  When
+the waiting is aborted, <var class="var">timeoutval</var> is returned (if it is
+specified; <code class="code">#f</code> is returned otherwise).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-thread_002dexited_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">thread-exited?</strong> <var class="def-var-arguments">thread</var><a class="copiable-link" href='#index-thread_002dexited_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fthread_005fexited_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_thread_exited_p</strong> <var class="def-var-arguments">(thread)</var><a class="copiable-link" href='#index-scm_005fthread_005fexited_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">thread</var> has exited, or <code class="code">#f</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-yield"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">yield</strong><a class="copiable-link" href='#index-yield'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fyield"><span class="category-def">C Function: </span><span><strong class="def-name">scm_yield</strong> <var class="def-var-arguments">(thread)</var><a class="copiable-link" href='#index-scm_005fyield'> &para;</a></span></dt>
+<dd><p>If one or more threads are waiting to execute, calling yield forces an
+immediate context switch to one of them. Otherwise, yield has no effect.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-cancel_002dthread"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cancel-thread</strong> <var class="def-var-arguments">thread . values</var><a class="copiable-link" href='#index-cancel_002dthread'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcancel_005fthread"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cancel_thread</strong> <var class="def-var-arguments">(thread)</var><a class="copiable-link" href='#index-scm_005fcancel_005fthread'> &para;</a></span></dt>
+<dd><p>Asynchronously interrupt <var class="var">thread</var> and ask it to terminate.
+<code class="code">dynamic-wind</code> post thunks will run, but throw handlers will not.
+If <var class="var">thread</var> has already terminated or been signaled to terminate,
+this function is a no-op.  Calling <code class="code">join-thread</code> on the thread will
+return the given <var class="var">values</var>, if the cancel succeeded.
+</p>
+<p>Under the hood, thread cancellation uses <code class="code">system-async-mark</code> and
+<code class="code">abort-to-prompt</code>.  See <a class="xref" href="Asyncs.html">Asynchronous Interrupts</a> for more on asynchronous
+interrupts.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dthread"><span class="category-def">macro: </span><span><strong class="def-name">make-thread</strong> <var class="def-var-arguments">proc arg &hellip;</var><a class="copiable-link" href='#index-make_002dthread'> &para;</a></span></dt>
+<dd><p>Apply <var class="var">proc</var> to <var class="var">arg</var> &hellip; in a new thread formed by
+<code class="code">call-with-new-thread</code> using a default error handler that displays
+the error to the current error port.  The <var class="var">arg</var> &hellip;
+expressions are evaluated in the new thread.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-begin_002dthread"><span class="category-def">macro: </span><span><strong class="def-name">begin-thread</strong> <var class="def-var-arguments">expr1 expr2 &hellip;</var><a class="copiable-link" href='#index-begin_002dthread'> &para;</a></span></dt>
+<dd><p>Evaluate forms <var class="var">expr1</var> <var class="var">expr2</var> &hellip; in a new thread formed by
+<code class="code">call-with-new-thread</code> using a default error handler that displays
+the error to the current error port.
+</p></dd></dl>
+
+<p>One often wants to limit the number of threads running to be
+proportional to the number of available processors.  These interfaces
+are therefore exported by (ice-9 threads) as well.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-total_002dprocessor_002dcount"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">total-processor-count</strong><a class="copiable-link" href='#index-total_002dprocessor_002dcount'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005ftotal_005fprocessor_005fcount"><span class="category-def">C Function: </span><span><strong class="def-name">scm_total_processor_count</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005ftotal_005fprocessor_005fcount'> &para;</a></span></dt>
+<dd><p>Return the total number of processors of the machine, which
+is guaranteed to be at least 1.  A &ldquo;processor&rdquo; here is a
+thread execution unit, which can be either:
+</p>
+<ul class="itemize mark-bullet">
+<li>an execution core in a (possibly multi-core) chip, in a
+  (possibly multi- chip) module, in a single computer, or
+</li><li>a thread execution unit inside a core in the case of
+  <em class="dfn">hyper-threaded</em> CPUs.
+</li></ul>
+
+<p>Which of the two definitions is used, is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-current_002dprocessor_002dcount"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">current-processor-count</strong><a class="copiable-link" href='#index-current_002dprocessor_002dcount'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcurrent_005fprocessor_005fcount"><span class="category-def">C Function: </span><span><strong class="def-name">scm_current_processor_count</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fcurrent_005fprocessor_005fcount'> &para;</a></span></dt>
+<dd><p>Like <code class="code">total-processor-count</code>, but return the number of
+processors available to the current process.  See
+<code class="code">setaffinity</code> and <code class="code">getaffinity</code> for more
+information.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Thread-Local-Variables.html">Thread-Local Variables</a>, Up: <a href="Scheduling.html">Threads, Mutexes, Asyncs and Dynamic Roots</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

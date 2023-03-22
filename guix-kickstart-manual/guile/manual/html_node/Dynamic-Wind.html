@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Dynamic Wind (Guile Reference Manual)</title>
+
+<meta name="description" content="Dynamic Wind (Guile Reference Manual)">
+<meta name="keywords" content="Dynamic Wind (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Control-Mechanisms.html" rel="up" title="Control Mechanisms">
+<link href="Fluids-and-Dynamic-States.html" rel="next" title="Fluids and Dynamic States">
+<link href="Error-Reporting.html" rel="prev" title="Error Reporting">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Dynamic-Wind">
+<div class="nav-panel">
+<p>
+Next: <a href="Fluids-and-Dynamic-States.html" accesskey="n" rel="next">Fluids and Dynamic States</a>, Previous: <a href="Error-Reporting.html" accesskey="p" rel="prev">Procedures for Signaling Errors</a>, Up: <a href="Control-Mechanisms.html" accesskey="u" rel="up">Controlling the Flow of Program Execution</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Dynamic-Wind-1">6.11.10 Dynamic Wind</h4>
+
+<p>For Scheme code, the fundamental procedure to react to non-local entry
+and exits of dynamic contexts is <code class="code">dynamic-wind</code>.  C code could
+use <code class="code">scm_internal_dynamic_wind</code>, but since C does not allow the
+convenient construction of anonymous procedures that close over
+lexical variables, this will be, well, inconvenient.
+</p>
+<p>Therefore, Guile offers the functions <code class="code">scm_dynwind_begin</code> and
+<code class="code">scm_dynwind_end</code> to delimit a dynamic extent.  Within this
+dynamic extent, which is called a <em class="dfn">dynwind context</em>, you can
+perform various <em class="dfn">dynwind actions</em> that control what happens when
+the dynwind context is entered or left.  For example, you can register
+a cleanup routine with <code class="code">scm_dynwind_unwind_handler</code> that is
+executed when the context is left.  There are several other more
+specialized dynwind actions as well, for example to temporarily block
+the execution of asyncs or to temporarily change the current output
+port.  They are described elsewhere in this manual.
+</p>
+<p>Here is an example that shows how to prevent memory leaks.
+</p>
+<div class="example">
+<pre class="example-preformatted">
+
+/* Suppose there is a function called FOO in some library that you
+   would like to make available to Scheme code (or to C code that
+   follows the Scheme conventions).
+
+   FOO takes two C strings and returns a new string.  When an error has
+   occurred in FOO, it returns NULL.
+*/
+
+char *foo (char *s1, char *s2);
+
+/* SCM_FOO interfaces the C function FOO to the Scheme way of life.
+   It takes care to free up all temporary strings in the case of
+   non-local exits.
+ */
+
+SCM
+scm_foo (SCM s1, SCM s2)
+{
+  char *c_s1, *c_s2, *c_res;
+
+  scm_dynwind_begin (0);
+
+  c_s1 = scm_to_locale_string (s1);
+
+  /* Call 'free (c_s1)' when the dynwind context is left. 
+  */
+  scm_dynwind_unwind_handler (free, c_s1, SCM_F_WIND_EXPLICITLY);
+
+  c_s2 = scm_to_locale_string (s2);
+  
+  /* Same as above, but more concisely.
+  */
+  scm_dynwind_free (c_s2);
+
+  c_res = foo (c_s1, c_s2);
+  if (c_res == NULL)
+    scm_report_out_of_memory ();
+
+  scm_dynwind_end ();
+
+  return scm_take_locale_string (res);
+}
+</pre></div>
+
+<a class="index-entry-id" id="index-dynamic_002dwind-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-dynamic_002dwind"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">dynamic-wind</strong> <var class="def-var-arguments">in_guard thunk out_guard</var><a class="copiable-link" href='#index-dynamic_002dwind'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fdynamic_005fwind"><span class="category-def">C Function: </span><span><strong class="def-name">scm_dynamic_wind</strong> <var class="def-var-arguments">(in_guard, thunk, out_guard)</var><a class="copiable-link" href='#index-scm_005fdynamic_005fwind'> &para;</a></span></dt>
+<dd><p>All three arguments must be 0-argument procedures.
+<var class="var">in_guard</var> is called, then <var class="var">thunk</var>, then
+<var class="var">out_guard</var>.
+</p>
+<p>If, any time during the execution of <var class="var">thunk</var>, the
+dynamic extent of the <code class="code">dynamic-wind</code> expression is escaped
+non-locally, <var class="var">out_guard</var> is called.  If the dynamic extent of
+the dynamic-wind is re-entered, <var class="var">in_guard</var> is called.  Thus
+<var class="var">in_guard</var> and <var class="var">out_guard</var> may be called any number of
+times.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define x 'normal-binding)
+&rArr; x
+(define a-cont
+  (call-with-current-continuation
+   (lambda (escape)
+     (let ((old-x x))
+       (dynamic-wind
+           ;; in-guard:
+           ;;
+           (lambda () (set! x 'special-binding))
+
+           ;; thunk
+           ;;
+           (lambda () (display x) (newline)
+                      (call-with-current-continuation escape)
+                      (display x) (newline)
+                      x)
+
+           ;; out-guard:
+           ;;
+           (lambda () (set! x old-x)))))))
+;; Prints:
+special-binding
+;; Evaluates to:
+&rArr; a-cont
+x
+&rArr; normal-binding
+(a-cont #f)
+;; Prints:
+special-binding
+;; Evaluates to:
+&rArr; a-cont  ;; the value of the (define a-cont...)
+x
+&rArr; normal-binding
+a-cont
+&rArr; special-binding
+</pre></div>
+</dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-scm_005ft_005fdynwind_005fflags"><span class="category-def">C Type: </span><span><strong class="def-name">scm_t_dynwind_flags</strong><a class="copiable-link" href='#index-scm_005ft_005fdynwind_005fflags'> &para;</a></span></dt>
+<dd><p>This is an enumeration of several flags that modify the behavior of
+<code class="code">scm_dynwind_begin</code>.  The flags are listed in the following
+table.
+</p>
+<dl class="table">
+<dt><code class="code">SCM_F_DYNWIND_REWINDABLE</code></dt>
+<dd><p>The dynamic context is <em class="dfn">rewindable</em>.  This means that it can be
+reentered non-locally (via the invocation of a continuation).  The
+default is that a dynwind context can not be reentered non-locally.
+</p></dd>
+</dl>
+
+</dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fdynwind_005fbegin"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_dynwind_begin</strong> <code class="def-code-arguments">(scm_t_dynwind_flags flags)</code><a class="copiable-link" href='#index-scm_005fdynwind_005fbegin'> &para;</a></span></dt>
+<dd><p>The function <code class="code">scm_dynwind_begin</code> starts a new dynamic context and
+makes it the &lsquo;current&rsquo; one.
+</p>
+<p>The <var class="var">flags</var> argument determines the default behavior of the
+context.  Normally, use 0.  This will result in a context that can not
+be reentered with a captured continuation.  When you are prepared to
+handle reentries, include <code class="code">SCM_F_DYNWIND_REWINDABLE</code> in
+<var class="var">flags</var>.
+</p>
+<p>Being prepared for reentry means that the effects of unwind handlers
+can be undone on reentry.  In the example above, we want to prevent a
+memory leak on non-local exit and thus register an unwind handler that
+frees the memory.  But once the memory is freed, we can not get it
+back on reentry.  Thus reentry can not be allowed.
+</p>
+<p>The consequence is that continuations become less useful when
+non-reentrant contexts are captured, but you don&rsquo;t need to worry
+about that too much.
+</p>
+<p>The context is ended either implicitly when a non-local exit happens,
+or explicitly with <code class="code">scm_dynwind_end</code>.  You must make sure that a
+dynwind context is indeed ended properly.  If you fail to call
+<code class="code">scm_dynwind_end</code> for each <code class="code">scm_dynwind_begin</code>, the behavior
+is undefined.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fdynwind_005fend"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_dynwind_end</strong> <code class="def-code-arguments">()</code><a class="copiable-link" href='#index-scm_005fdynwind_005fend'> &para;</a></span></dt>
+<dd><p>End the current dynamic context explicitly and make the previous one
+current.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-scm_005ft_005fwind_005fflags"><span class="category-def">C Type: </span><span><strong class="def-name">scm_t_wind_flags</strong><a class="copiable-link" href='#index-scm_005ft_005fwind_005fflags'> &para;</a></span></dt>
+<dd><p>This is an enumeration of several flags that modify the behavior of
+<code class="code">scm_dynwind_unwind_handler</code> and
+<code class="code">scm_dynwind_rewind_handler</code>.  The flags are listed in the
+following table.
+</p>
+<dl class="table">
+<dt id='index-SCM_005fF_005fWIND_005fEXPLICITLY'><span><code class="code">SCM_F_WIND_EXPLICITLY</code><a class="copiable-link" href='#index-SCM_005fF_005fWIND_005fEXPLICITLY'> &para;</a></span></dt>
+<dd><p>The registered action is also carried out when the dynwind context is
+entered or left locally.
+</p></dd>
+</dl>
+</dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fdynwind_005funwind_005fhandler"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_dynwind_unwind_handler</strong> <code class="def-code-arguments">(void (*func)(void *), void *data, scm_t_wind_flags flags)</code><a class="copiable-link" href='#index-scm_005fdynwind_005funwind_005fhandler'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fdynwind_005funwind_005fhandler_005fwith_005fscm"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_dynwind_unwind_handler_with_scm</strong> <code class="def-code-arguments">(void (*func)(SCM), SCM data, scm_t_wind_flags flags)</code><a class="copiable-link" href='#index-scm_005fdynwind_005funwind_005fhandler_005fwith_005fscm'> &para;</a></span></dt>
+<dd><p>Arranges for <var class="var">func</var> to be called with <var class="var">data</var> as its arguments
+when the current context ends implicitly.  If <var class="var">flags</var> contains
+<code class="code">SCM_F_WIND_EXPLICITLY</code>, <var class="var">func</var> is also called when the
+context ends explicitly with <code class="code">scm_dynwind_end</code>.
+</p>
+<p>The function <code class="code">scm_dynwind_unwind_handler_with_scm</code> takes care that
+<var class="var">data</var> is protected from garbage collection.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fdynwind_005frewind_005fhandler"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_dynwind_rewind_handler</strong> <code class="def-code-arguments">(void (*func)(void *), void *data, scm_t_wind_flags flags)</code><a class="copiable-link" href='#index-scm_005fdynwind_005frewind_005fhandler'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fdynwind_005frewind_005fhandler_005fwith_005fscm"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_dynwind_rewind_handler_with_scm</strong> <code class="def-code-arguments">(void (*func)(SCM), SCM data, scm_t_wind_flags flags)</code><a class="copiable-link" href='#index-scm_005fdynwind_005frewind_005fhandler_005fwith_005fscm'> &para;</a></span></dt>
+<dd><p>Arrange for <var class="var">func</var> to be called with <var class="var">data</var> as its argument when
+the current context is restarted by rewinding the stack.  When <var class="var">flags</var>
+contains <code class="code">SCM_F_WIND_EXPLICITLY</code>, <var class="var">func</var> is called immediately
+as well.
+</p>
+<p>The function <code class="code">scm_dynwind_rewind_handler_with_scm</code> takes care that
+<var class="var">data</var> is protected from garbage collection.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fdynwind_005ffree"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_dynwind_free</strong> <code class="def-code-arguments">(void *mem)</code><a class="copiable-link" href='#index-scm_005fdynwind_005ffree'> &para;</a></span></dt>
+<dd><p>Arrange for <var class="var">mem</var> to be freed automatically whenever the current
+context is exited, whether normally or non-locally.
+<code class="code">scm_dynwind_free (mem)</code> is an equivalent shorthand for
+<code class="code">scm_dynwind_unwind_handler (free, mem, SCM_F_WIND_EXPLICITLY)</code>.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Fluids-and-Dynamic-States.html">Fluids and Dynamic States</a>, Previous: <a href="Error-Reporting.html">Procedures for Signaling Errors</a>, Up: <a href="Control-Mechanisms.html">Controlling the Flow of Program Execution</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

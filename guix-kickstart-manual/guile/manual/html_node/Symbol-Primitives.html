@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Symbol Primitives (Guile Reference Manual)</title>
+
+<meta name="description" content="Symbol Primitives (Guile Reference Manual)">
+<meta name="keywords" content="Symbol Primitives (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Symbols.html" rel="up" title="Symbols">
+<link href="Symbol-Read-Syntax.html" rel="next" title="Symbol Read Syntax">
+<link href="Symbol-Variables.html" rel="prev" title="Symbol Variables">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Symbol-Primitives">
+<div class="nav-panel">
+<p>
+Next: <a href="Symbol-Read-Syntax.html" accesskey="n" rel="next">Extended Read Syntax for Symbols</a>, Previous: <a href="Symbol-Variables.html" accesskey="p" rel="prev">Symbols as Denoting Variables</a>, Up: <a href="Symbols.html" accesskey="u" rel="up">Symbols</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Operations-Related-to-Symbols">6.6.6.4 Operations Related to Symbols</h4>
+
+<p>Given any Scheme value, you can determine whether it is a symbol using
+the <code class="code">symbol?</code> primitive:
+</p>
+<a class="index-entry-id" id="index-symbol_003f-3"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-symbol_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">symbol?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-symbol_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsymbol_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_symbol_p</strong> <var class="def-var-arguments">(obj)</var><a class="copiable-link" href='#index-scm_005fsymbol_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is a symbol, otherwise return
+<code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fis_005fsymbol"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_is_symbol</strong> <code class="def-code-arguments">(SCM val)</code><a class="copiable-link" href='#index-scm_005fis_005fsymbol'> &para;</a></span></dt>
+<dd><p>Equivalent to <code class="code">scm_is_true (scm_symbol_p (val))</code>.
+</p></dd></dl>
+
+<p>Once you know that you have a symbol, you can obtain its name as a
+string by calling <code class="code">symbol-&gt;string</code>.  Note that Guile differs by
+default from R5RS on the details of <code class="code">symbol-&gt;string</code> as regards
+case-sensitivity:
+</p>
+<a class="index-entry-id" id="index-symbol_002d_003estring-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-symbol_002d_003estring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">symbol-&gt;string</strong> <var class="def-var-arguments">s</var><a class="copiable-link" href='#index-symbol_002d_003estring'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsymbol_005fto_005fstring"><span class="category-def">C Function: </span><span><strong class="def-name">scm_symbol_to_string</strong> <var class="def-var-arguments">(s)</var><a class="copiable-link" href='#index-scm_005fsymbol_005fto_005fstring'> &para;</a></span></dt>
+<dd><p>Return the name of symbol <var class="var">s</var> as a string.  By default, Guile reads
+symbols case-sensitively, so the string returned will have the same case
+variation as the sequence of characters that caused <var class="var">s</var> to be
+created.
+</p>
+<p>If Guile is set to read symbols case-insensitively (as specified by
+R5RS), and <var class="var">s</var> comes into being as part of a literal expression
+(see <a data-manual="r5rs" href="../r5rs_html/Literal-expressions.html#Literal-expressions">Literal expressions</a> in <cite class="cite">The Revised^5 Report on Scheme</cite>) or
+by a call to the <code class="code">read</code> or <code class="code">string-ci-&gt;symbol</code> procedures,
+Guile converts any alphabetic characters in the symbol&rsquo;s name to
+lower case before creating the symbol object, so the string returned
+here will be in lower case.
+</p>
+<p>If <var class="var">s</var> was created by <code class="code">string-&gt;symbol</code>, the case of characters
+in the string returned will be the same as that in the string that was
+passed to <code class="code">string-&gt;symbol</code>, regardless of Guile&rsquo;s case-sensitivity
+setting at the time <var class="var">s</var> was created.
+</p>
+<p>It is an error to apply mutation procedures like <code class="code">string-set!</code> to
+strings returned by this procedure.
+</p></dd></dl>
+
+<p>Most symbols are created by writing them literally in code.  However it
+is also possible to create symbols programmatically using the following
+procedures:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-symbol"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">symbol</strong> <var class="def-var-arguments">char&hellip;</var><a class="copiable-link" href='#index-symbol'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-symbol-1"></a>
+<p>Return a newly allocated symbol made from the given character arguments.
+</p>
+<div class="example">
+<pre class="example-preformatted">(symbol #\x #\y #\z) &rArr; xyz
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-list_002d_003esymbol"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list-&gt;symbol</strong> <var class="def-var-arguments">lst</var><a class="copiable-link" href='#index-list_002d_003esymbol'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-list_002d_003esymbol-1"></a>
+<p>Return a newly allocated symbol made from a list of characters.
+</p>
+<div class="example">
+<pre class="example-preformatted">(list-&gt;symbol '(#\a #\b #\c)) &rArr; abc
+</pre></div>
+</dd></dl>
+
+<a class="index-entry-id" id="index-symbol_002dappend-1"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-symbol_002dappend"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">symbol-append</strong> <var class="def-var-arguments">arg &hellip;</var><a class="copiable-link" href='#index-symbol_002dappend'> &para;</a></span></dt>
+<dd><p>Return a newly allocated symbol whose characters form the
+concatenation of the given symbols, <var class="var">arg</var> <small class="enddots">...</small>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(let ((h 'hello))
+  (symbol-append h 'world))
+&rArr; helloworld
+</pre></div>
+</dd></dl>
+
+<a class="index-entry-id" id="index-string_002d_003esymbol-3"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002d_003esymbol"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-&gt;symbol</strong> <var class="def-var-arguments">string</var><a class="copiable-link" href='#index-string_002d_003esymbol'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fto_005fsymbol"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_to_symbol</strong> <var class="def-var-arguments">(string)</var><a class="copiable-link" href='#index-scm_005fstring_005fto_005fsymbol'> &para;</a></span></dt>
+<dd><p>Return the symbol whose name is <var class="var">string</var>.  This procedure can create
+symbols with names containing special characters or letters in the
+non-standard case, but it is usually a bad idea to create such symbols
+because in some implementations of Scheme they cannot be read as
+themselves.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dci_002d_003esymbol"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-ci-&gt;symbol</strong> <var class="def-var-arguments">str</var><a class="copiable-link" href='#index-string_002dci_002d_003esymbol'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fci_005fto_005fsymbol"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_ci_to_symbol</strong> <var class="def-var-arguments">(str)</var><a class="copiable-link" href='#index-scm_005fstring_005fci_005fto_005fsymbol'> &para;</a></span></dt>
+<dd><p>Return the symbol whose name is <var class="var">str</var>.  If Guile is currently
+reading symbols case-insensitively, <var class="var">str</var> is converted to lowercase
+before the returned symbol is looked up or created.
+</p></dd></dl>
+
+<p>The following examples illustrate Guile&rsquo;s detailed behaviour as regards
+the case-sensitivity of symbols:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(read-enable 'case-insensitive)   ; R5RS compliant behaviour
+
+(symbol-&gt;string 'flying-fish)    &rArr; &quot;flying-fish&quot;
+(symbol-&gt;string 'Martin)         &rArr; &quot;martin&quot;
+(symbol-&gt;string
+   (string-&gt;symbol &quot;Malvina&quot;))   &rArr; &quot;Malvina&quot;
+
+(eq? 'mISSISSIppi 'mississippi)  &rArr; #t
+(string-&gt;symbol &quot;mISSISSIppi&quot;)   &rArr; mISSISSIppi
+(eq? 'bitBlt (string-&gt;symbol &quot;bitBlt&quot;)) &rArr; #f
+(eq? 'LolliPop
+  (string-&gt;symbol (symbol-&gt;string 'LolliPop))) &rArr; #t
+(string=? &quot;K. Harper, M.D.&quot;
+  (symbol-&gt;string
+    (string-&gt;symbol &quot;K. Harper, M.D.&quot;))) &rArr; #t
+
+(read-disable 'case-insensitive)   ; Guile default behaviour
+
+(symbol-&gt;string 'flying-fish)    &rArr; &quot;flying-fish&quot;
+(symbol-&gt;string 'Martin)         &rArr; &quot;Martin&quot;
+(symbol-&gt;string
+   (string-&gt;symbol &quot;Malvina&quot;))   &rArr; &quot;Malvina&quot;
+
+(eq? 'mISSISSIppi 'mississippi)  &rArr; #f
+(string-&gt;symbol &quot;mISSISSIppi&quot;)   &rArr; mISSISSIppi
+(eq? 'bitBlt (string-&gt;symbol &quot;bitBlt&quot;)) &rArr; #t
+(eq? 'LolliPop
+  (string-&gt;symbol (symbol-&gt;string 'LolliPop))) &rArr; #t
+(string=? &quot;K. Harper, M.D.&quot;
+  (symbol-&gt;string
+    (string-&gt;symbol &quot;K. Harper, M.D.&quot;))) &rArr; #t
+</pre></div>
+
+<p>From C, there are lower level functions that construct a Scheme symbol
+from a C string in the current locale encoding.
+</p>
+<p>When you want to do more from C, you should convert between symbols
+and strings using <code class="code">scm_symbol_to_string</code> and
+<code class="code">scm_string_to_symbol</code> and work with the strings.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005ffrom_005flatin1_005fsymbol"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_latin1_symbol</strong> <code class="def-code-arguments">(const char *name)</code><a class="copiable-link" href='#index-scm_005ffrom_005flatin1_005fsymbol'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005futf8_005fsymbol"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_utf8_symbol</strong> <code class="def-code-arguments">(const char *name)</code><a class="copiable-link" href='#index-scm_005ffrom_005futf8_005fsymbol'> &para;</a></span></dt>
+<dd><p>Construct and return a Scheme symbol whose name is specified by the
+null-terminated C string <var class="var">name</var>.  These are appropriate when
+the C string is hard-coded in the source code.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005ffrom_005flocale_005fsymbol"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_locale_symbol</strong> <code class="def-code-arguments">(const char *name)</code><a class="copiable-link" href='#index-scm_005ffrom_005flocale_005fsymbol'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005flocale_005fsymboln"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_locale_symboln</strong> <code class="def-code-arguments">(const char *name, size_t len)</code><a class="copiable-link" href='#index-scm_005ffrom_005flocale_005fsymboln'> &para;</a></span></dt>
+<dd><p>Construct and return a Scheme symbol whose name is specified by
+<var class="var">name</var>.  For <code class="code">scm_from_locale_symbol</code>, <var class="var">name</var> must be null
+terminated; for <code class="code">scm_from_locale_symboln</code> the length of <var class="var">name</var> is
+specified explicitly by <var class="var">len</var>.
+</p>
+<p>Note that these functions should <em class="emph">not</em> be used when <var class="var">name</var> is a
+C string constant, because there is no guarantee that the current locale
+will match that of the execution character set, used for string and
+character constants.  Most modern C compilers use UTF-8 by default, so
+in such cases we recommend <code class="code">scm_from_utf8_symbol</code>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005ftake_005flocale_005fsymbol"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_take_locale_symbol</strong> <code class="def-code-arguments">(char *str)</code><a class="copiable-link" href='#index-scm_005ftake_005flocale_005fsymbol'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ftake_005flocale_005fsymboln"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_take_locale_symboln</strong> <code class="def-code-arguments">(char *str, size_t len)</code><a class="copiable-link" href='#index-scm_005ftake_005flocale_005fsymboln'> &para;</a></span></dt>
+<dd><p>Like <code class="code">scm_from_locale_symbol</code> and <code class="code">scm_from_locale_symboln</code>,
+respectively, but also frees <var class="var">str</var> with <code class="code">free</code> eventually.
+Thus, you can use this function when you would free <var class="var">str</var> anyway
+immediately after creating the Scheme string.  In certain cases, Guile
+can then use <var class="var">str</var> directly as its internal representation.
+</p></dd></dl>
+
+<p>The size of a symbol can also be obtained from C:
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fsymbol_005flength"><span class="category-def">C Function: </span><span><code class="def-type">size_t</code> <strong class="def-name">scm_c_symbol_length</strong> <code class="def-code-arguments">(SCM sym)</code><a class="copiable-link" href='#index-scm_005fc_005fsymbol_005flength'> &para;</a></span></dt>
+<dd><p>Return the number of characters in <var class="var">sym</var>.
+</p></dd></dl>
+
+<p>Finally, some applications, especially those that generate new Scheme
+code dynamically, need to generate symbols for use in the generated
+code.  The <code class="code">gensym</code> primitive meets this need:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-gensym"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">gensym</strong> <var class="def-var-arguments">[prefix]</var><a class="copiable-link" href='#index-gensym'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgensym"><span class="category-def">C Function: </span><span><strong class="def-name">scm_gensym</strong> <var class="def-var-arguments">(prefix)</var><a class="copiable-link" href='#index-scm_005fgensym'> &para;</a></span></dt>
+<dd><p>Create a new symbol with a name constructed from a prefix and a counter
+value.  The string <var class="var">prefix</var> can be specified as an optional
+argument.  Default prefix is &lsquo;<samp class="samp">&nbsp;g<!-- /@w --></samp>&rsquo;.  The counter is increased by 1
+at each call.  There is no provision for resetting the counter.
+</p></dd></dl>
+
+<p>The symbols generated by <code class="code">gensym</code> are <em class="emph">likely</em> to be unique,
+since their names begin with a space and it is only otherwise possible
+to generate such symbols if a programmer goes out of their way to do
+so.  Uniqueness can be guaranteed by instead using uninterned symbols
+(see <a class="pxref" href="Symbol-Uninterned.html">Uninterned Symbols</a>), though they can&rsquo;t be usefully written out
+and read back in.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Symbol-Read-Syntax.html">Extended Read Syntax for Symbols</a>, Previous: <a href="Symbol-Variables.html">Symbols as Denoting Variables</a>, Up: <a href="Symbols.html">Symbols</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

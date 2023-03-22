@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Types and the Web (Guile Reference Manual)</title>
+
+<meta name="description" content="Types and the Web (Guile Reference Manual)">
+<meta name="keywords" content="Types and the Web (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Web.html" rel="up" title="Web">
+<link href="URIs.html" rel="next" title="URIs">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Types-and-the-Web">
+<div class="nav-panel">
+<p>
+Next: <a href="URIs.html" accesskey="n" rel="next">Universal Resource Identifiers</a>, Up: <a href="Web.html" accesskey="u" rel="up"><abbr class="acronym">HTTP</abbr>, the Web, and All That</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Types-and-the-Web-1">7.3.1 Types and the Web</h4>
+
+<p>It is a truth universally acknowledged, that a program with good use of
+data types, will be free from many common bugs.  Unfortunately, the
+common practice in web programming seems to ignore this maxim.  This
+subsection makes the case for expressive data types in web programming.
+</p>
+<p>By &ldquo;expressive data types&rdquo;, we mean that the data types <em class="emph">say</em>
+something about how a program solves a problem.  For example, if we
+choose to represent dates using SRFI 19 date records (see <a class="pxref" href="SRFI_002d19.html">SRFI-19 - Time/Date Library</a>),
+this indicates that there is a part of the program that will always have
+valid dates.  Error handling for a number of basic cases, like invalid
+dates, occurs on the boundary in which we produce a SRFI 19 date record
+from other types, like strings.
+</p>
+<p>With regards to the web, data types are helpful in the two broad phases
+of HTTP messages: parsing and generation.
+</p>
+<p>Consider a server, which has to parse a request, and produce a response.
+Guile will parse the request into an HTTP request object
+(see <a class="pxref" href="Requests.html">HTTP Requests</a>), with each header parsed into an appropriate Scheme
+data type.  This transition from an incoming stream of characters to
+typed data is a state change in a program&mdash;the strings might parse, or
+they might not, and something has to happen if they do not.  (Guile
+throws an error in this case.)  But after you have the parsed request,
+&ldquo;client&rdquo; code (code built on top of the Guile web framework) will not
+have to check for syntactic validity.  The types already make this
+information manifest.
+</p>
+<p>This state change on the parsing boundary makes programs more robust,
+as they themselves are freed from the need to do a number of common
+error checks, and they can use normal Scheme procedures to handle a
+request instead of ad-hoc string parsers.
+</p>
+<p>The need for types on the response generation side (in a server) is more
+subtle, though not less important.  Consider the example of a POST
+handler, which prints out the text that a user submits from a form.
+Such a handler might include a procedure like this:
+</p>
+<div class="example">
+<pre class="example-preformatted">;; First, a helper procedure
+(define (para . contents)
+  (string-append &quot;&lt;p&gt;&quot; (string-concatenate contents) &quot;&lt;/p&gt;&quot;))
+
+;; Now the meat of our simple web application
+(define (you-said text)
+  (para &quot;You said: &quot; text))
+
+(display (you-said &quot;Hi!&quot;))
+-| &lt;p&gt;You said: Hi!&lt;/p&gt;
+</pre></div>
+
+<p>This is a perfectly valid implementation, provided that the incoming
+text does not contain the special HTML characters &lsquo;<samp class="samp">&lt;</samp>&rsquo;, &lsquo;<samp class="samp">&gt;</samp>&rsquo;, or
+&lsquo;<samp class="samp">&amp;</samp>&rsquo;.  But this provision of a restricted character set is not
+reflected anywhere in the program itself: we must <em class="emph">assume</em> that the
+programmer understands this, and performs the check elsewhere.
+</p>
+<p>Unfortunately, the short history of the practice of programming does not
+bear out this assumption.  A <em class="dfn">cross-site scripting</em> (<abbr class="acronym">XSS</abbr>)
+vulnerability is just such a common error in which unfiltered user input
+is allowed into the output.  A user could submit a crafted comment to
+your web site which results in visitors running malicious Javascript,
+within the security context of your domain:
+</p>
+<div class="example">
+<pre class="example-preformatted">(display (you-said &quot;&lt;script src=\&quot;http://bad.com/nasty.js\&quot; /&gt;&quot;))
+-| &lt;p&gt;You said: &lt;script src=&quot;http://bad.com/nasty.js&quot; /&gt;&lt;/p&gt;
+</pre></div>
+
+<p>The fundamental problem here is that both user data and the program
+template are represented using strings.  This identity means that types
+can&rsquo;t help the programmer to make a distinction between these two, so
+they get confused.
+</p>
+<p>There are a number of possible solutions, but perhaps the best is to
+treat HTML not as strings, but as native s-expressions: as SXML.  The
+basic idea is that HTML is either text, represented by a string, or an
+element, represented as a tagged list.  So &lsquo;<samp class="samp">foo</samp>&rsquo; becomes
+&lsquo;<samp class="samp">&quot;foo&quot;</samp>&rsquo;, and &lsquo;<samp class="samp">&lt;b&gt;foo&lt;/b&gt;</samp>&rsquo; becomes &lsquo;<samp class="samp">(b &quot;foo&quot;)</samp>&rsquo;.
+Attributes, if present, go in a tagged list headed by &lsquo;<samp class="samp">@</samp>&rsquo;, like
+&lsquo;<samp class="samp">(img (@ (src &quot;http://example.com/foo.png&quot;)))</samp>&rsquo;.  See <a class="xref" href="SXML.html">SXML</a>, for
+more information.
+</p>
+<p>The good thing about SXML is that HTML elements cannot be confused with
+text.  Let&rsquo;s make a new definition of <code class="code">para</code>:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (para . contents)
+  `(p ,@contents))
+
+(use-modules (sxml simple))
+(sxml-&gt;xml (you-said &quot;Hi!&quot;))
+-| &lt;p&gt;You said: Hi!&lt;/p&gt;
+
+(sxml-&gt;xml (you-said &quot;&lt;i&gt;Rats, foiled again!&lt;/i&gt;&quot;))
+-| &lt;p&gt;You said: &amp;lt;i&amp;gt;Rats, foiled again!&amp;lt;/i&amp;gt;&lt;/p&gt;
+</pre></div>
+
+<p>So we see in the second example that HTML elements cannot be unwittingly
+introduced into the output.  However it is now perfectly acceptable to
+pass SXML to <code class="code">you-said</code>; in fact, that is the big advantage of SXML
+over everything-as-a-string.
+</p>
+<div class="example">
+<pre class="example-preformatted">(sxml-&gt;xml (you-said (you-said &quot;&lt;Hi!&gt;&quot;)))
+-| &lt;p&gt;You said: &lt;p&gt;You said: &amp;lt;Hi!&amp;gt;&lt;/p&gt;&lt;/p&gt;
+</pre></div>
+
+<p>The SXML types allow procedures to <em class="emph">compose</em>.  The types make
+manifest which parts are HTML elements, and which are text.  So you
+needn&rsquo;t worry about escaping user input; the type transition back to a
+string handles that for you.  <abbr class="acronym">XSS</abbr> vulnerabilities are a thing
+of the past.
+</p>
+<p>Well.  That&rsquo;s all very nice and opinionated and such, but how do I use
+the thing?  Read on!
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="URIs.html">Universal Resource Identifiers</a>, Up: <a href="Web.html"><abbr class="acronym">HTTP</abbr>, the Web, and All That</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

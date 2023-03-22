@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Reading and Writing XML (Guile Reference Manual)</title>
+
+<meta name="description" content="Reading and Writing XML (Guile Reference Manual)">
+<meta name="keywords" content="Reading and Writing XML (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SXML.html" rel="up" title="SXML">
+<link href="SSAX.html" rel="next" title="SSAX">
+<link href="SXML-Overview.html" rel="prev" title="SXML Overview">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Reading-and-Writing-XML">
+<div class="nav-panel">
+<p>
+Next: <a href="SSAX.html" accesskey="n" rel="next">SSAX: A Functional XML Parsing Toolkit</a>, Previous: <a href="SXML-Overview.html" accesskey="p" rel="prev">SXML Overview</a>, Up: <a href="SXML.html" accesskey="u" rel="up">SXML</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Reading-and-Writing-XML-1">7.21.2 Reading and Writing XML</h4>
+
+<p>The <code class="code">(sxml simple)</code> module presents a basic interface for parsing
+XML from a port into the Scheme SXML format, and for serializing it back
+to text.
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (sxml simple))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-xml_002d_003esxml"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">xml-&gt;sxml</strong> <var class="def-var-arguments">[string-or-port] [#:namespaces=&rsquo;()]        [#:declare-namespaces?=#t] [#:trim-whitespace?=#f]        [#:entities=&rsquo;()] [#:default-entity-handler=#f]        [#:doctype-handler=#f]</var><a class="copiable-link" href='#index-xml_002d_003esxml'> &para;</a></span></dt>
+<dd><p>Use SSAX to parse an XML document into SXML. Takes one optional
+argument, <var class="var">string-or-port</var>, which defaults to the current input
+port.  Returns the resulting SXML document.  If <var class="var">string-or-port</var> is
+a port, it will be left pointing at the next available character in the
+port.
+</p></dd></dl>
+
+<p>As is normal in SXML, XML elements parse as tagged lists.  Attributes,
+if any, are placed after the tag, within an <code class="code">@</code> element.  The root
+of the resulting XML will be contained in a special tag, <code class="code">*TOP*</code>.
+This tag will contain the root element of the XML, but also any prior
+processing instructions.
+</p>
+<div class="example">
+<pre class="example-preformatted">(xml-&gt;sxml &quot;&lt;foo/&gt;&quot;)
+&rArr; (*TOP* (foo))
+(xml-&gt;sxml &quot;&lt;foo&gt;text&lt;/foo&gt;&quot;)
+&rArr; (*TOP* (foo &quot;text&quot;))
+(xml-&gt;sxml &quot;&lt;foo kind=\&quot;bar\&quot;&gt;text&lt;/foo&gt;&quot;)
+&rArr; (*TOP* (foo (@ (kind &quot;bar&quot;)) &quot;text&quot;))
+(xml-&gt;sxml &quot;&lt;?xml version=\&quot;1.0\&quot;?&gt;&lt;foo/&gt;&quot;)
+&rArr; (*TOP* (*PI* xml &quot;version=\&quot;1.0\&quot;&quot;) (foo))
+</pre></div>
+
+<p>All namespaces in the XML document must be declared, via <code class="code">xmlns</code>
+attributes.  SXML elements built from non-default namespaces will have
+their tags prefixed with their URI.  Users can specify custom prefixes
+for certain namespaces with the <code class="code">#:namespaces</code> keyword argument to
+<code class="code">xml-&gt;sxml</code>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(xml-&gt;sxml &quot;&lt;foo xmlns=\&quot;http://example.org/ns1\&quot;&gt;text&lt;/foo&gt;&quot;)
+&rArr; (*TOP* (http://example.org/ns1:foo &quot;text&quot;))
+(xml-&gt;sxml &quot;&lt;foo xmlns=\&quot;http://example.org/ns1\&quot;&gt;text&lt;/foo&gt;&quot;
+           #:namespaces '((ns1 . &quot;http://example.org/ns1&quot;)))
+&rArr; (*TOP* (ns1:foo &quot;text&quot;))
+(xml-&gt;sxml &quot;&lt;foo xmlns:bar=\&quot;http://example.org/ns2\&quot;&gt;&lt;bar:baz/&gt;&lt;/foo&gt;&quot;
+           #:namespaces '((ns2 . &quot;http://example.org/ns2&quot;)))
+&rArr; (*TOP* (foo (ns2:baz)))
+</pre></div>
+
+<p>By default, namespaces passed to <code class="code">xml-&gt;sxml</code> are treated as if they
+were declared on the root element.  Passing a false
+<code class="code">#:declare-namespaces?</code> argument will disable this behavior,
+requiring in-document declarations of namespaces before use..
+</p>
+<div class="example">
+<pre class="example-preformatted">(xml-&gt;sxml &quot;&lt;foo&gt;&lt;ns2:baz/&gt;&lt;/foo&gt;&quot;
+           #:namespaces '((ns2 . &quot;http://example.org/ns2&quot;)))
+&rArr; (*TOP* (foo (ns2:baz)))
+(xml-&gt;sxml &quot;&lt;foo&gt;&lt;ns2:baz/&gt;&lt;/foo&gt;&quot;
+           #:namespaces '((ns2 . &quot;http://example.org/ns2&quot;))
+           #:declare-namespaces? #f)
+&rArr; error: undeclared namespace: `bar'
+</pre></div>
+
+<p>By default, all whitespace in XML is significant.  Passing the
+<code class="code">#:trim-whitespace?</code> keyword argument to <code class="code">xml-&gt;sxml</code> will trim
+whitespace in front, behind and between elements, treating it as
+&ldquo;unsignificant&rdquo;.  Whitespace in text fragments is left alone.
+</p>
+<div class="example">
+<pre class="example-preformatted">(xml-&gt;sxml &quot;&lt;foo&gt;\n&lt;bar&gt; Alfie the parrot! &lt;/bar&gt;\n&lt;/foo&gt;&quot;)
+&rArr; (*TOP* (foo &quot;\n&quot; (bar &quot; Alfie the parrot! &quot;) &quot;\n&quot;))
+(xml-&gt;sxml &quot;&lt;foo&gt;\n&lt;bar&gt; Alfie the parrot! &lt;/bar&gt;\n&lt;/foo&gt;&quot;
+           #:trim-whitespace? #t)
+&rArr; (*TOP* (foo (bar &quot; Alfie the parrot! &quot;)))
+</pre></div>
+
+<p>Parsed entities may be declared with the <code class="code">#:entities</code> keyword
+argument, or handled with the <code class="code">#:default-entity-handler</code>.  By
+default, only the standard <code class="code">&amp;lt;</code>, <code class="code">&amp;gt;</code>, <code class="code">&amp;amp;</code>,
+<code class="code">&amp;apos;</code> and <code class="code">&amp;quot;</code> entities are defined, as well as the
+<code class="code">&amp;#<var class="var">N</var>;</code> and <code class="code">&amp;#x<var class="var">N</var>;</code> (decimal and hexadecimal)
+numeric character entities.
+</p>
+<div class="example">
+<pre class="example-preformatted">(xml-&gt;sxml &quot;&lt;foo&gt;&amp;amp;&lt;/foo&gt;&quot;)
+&rArr; (*TOP* (foo &quot;&amp;&quot;))
+(xml-&gt;sxml &quot;&lt;foo&gt;&amp;nbsp;&lt;/foo&gt;&quot;)
+&rArr; error: undefined entity: nbsp
+(xml-&gt;sxml &quot;&lt;foo&gt;&amp;#xA0;&lt;/foo&gt;&quot;)
+&rArr; (*TOP* (foo &quot;\xa0&quot;))
+(xml-&gt;sxml &quot;&lt;foo&gt;&amp;nbsp;&lt;/foo&gt;&quot;
+           #:entities '((nbsp . &quot;\xa0&quot;)))
+&rArr; (*TOP* (foo &quot;\xa0&quot;))
+(xml-&gt;sxml &quot;&lt;foo&gt;&amp;nbsp; &amp;foo;&lt;/foo&gt;&quot;
+           #:default-entity-handler
+           (lambda (port name)
+             (case name
+               ((nbsp) &quot;\xa0&quot;)
+               (else
+                (format (current-warning-port)
+                        &quot;~a:~a:~a: undefined entitity: ~a\n&quot;
+                        (or (port-filename port) &quot;&lt;unknown file&gt;&quot;)
+                        (port-line port) (port-column port)
+                        name)
+                (symbol-&gt;string name)))))
+-| &lt;unknown file&gt;:0:17: undefined entitity: foo
+&rArr; (*TOP* (foo &quot;\xa0 foo&quot;))
+</pre></div>
+
+<p>By default, <code class="code">xml-&gt;sxml</code> skips over the <code class="code">&lt;!DOCTYPE&gt;</code>
+declaration, if any.  This behavior can be overridden with the
+<code class="code">#:doctype-handler</code> argument, which should be a procedure of three
+arguments: the <em class="dfn">docname</em> (a symbol), <em class="dfn">systemid</em> (a string), and
+the internal doctype subset (as a string or <code class="code">#f</code> if not present).
+</p>
+<p>The handler should return keyword arguments as multiple values, as if it
+were calling its continuation with keyword arguments.  The continuation
+accepts the <code class="code">#:entities</code> and <code class="code">#:namespaces</code> keyword arguments,
+in the same format that <code class="code">xml-&gt;sxml</code> itself takes.  These entities
+and namespaces will be prepended to those given to the <code class="code">xml-&gt;sxml</code>
+invocation.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (handle-foo docname systemid internal-subset)
+  (case docname
+    ((foo)
+     (values #:entities '((greets . &quot;&lt;i&gt;Hello, world!&lt;/i&gt;&quot;))))
+    (else
+     (values))))
+
+(xml-&gt;sxml &quot;&lt;!DOCTYPE foo&gt;&lt;p&gt;&amp;greets;&lt;/p&gt;&quot;
+           #:doctype-handler handle-foo)
+&rArr; (*TOP* (p (i &quot;Hello, world!&quot;)))
+</pre></div>
+
+<p>If the document has no doctype declaration, the <var class="var">doctype-handler</var> is
+invoked with <code class="code">#f</code> for the three arguments.
+</p>
+<p>In the future, the continuation may accept other keyword arguments, for
+example to validate the parsed SXML against the doctype.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-sxml_002d_003exml"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sxml-&gt;xml</strong> <var class="def-var-arguments">tree [port]</var><a class="copiable-link" href='#index-sxml_002d_003exml'> &para;</a></span></dt>
+<dd><p>Serialize the SXML tree <var class="var">tree</var> as XML. The output will be written to
+the current output port, unless the optional argument <var class="var">port</var> is
+present.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-sxml_002d_003estring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sxml-&gt;string</strong> <var class="def-var-arguments">sxml</var><a class="copiable-link" href='#index-sxml_002d_003estring'> &para;</a></span></dt>
+<dd><p>Detag an sxml tree <var class="var">sxml</var> into a string. Does not perform any
+formatting.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SSAX.html">SSAX: A Functional XML Parsing Toolkit</a>, Previous: <a href="SXML-Overview.html">SXML Overview</a>, Up: <a href="SXML.html">SXML</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Using Ports from C (Guile Reference Manual)</title>
+
+<meta name="description" content="Using Ports from C (Guile Reference Manual)">
+<meta name="keywords" content="Using Ports from C (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Input-and-Output.html" rel="up" title="Input and Output">
+<link href="I_002fO-Extensions.html" rel="next" title="I/O Extensions">
+<link href="Venerable-Port-Interfaces.html" rel="prev" title="Venerable Port Interfaces">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Using-Ports-from-C">
+<div class="nav-panel">
+<p>
+Next: <a href="I_002fO-Extensions.html" accesskey="n" rel="next">Implementing New Port Types in C</a>, Previous: <a href="Venerable-Port-Interfaces.html" accesskey="p" rel="prev">Venerable Port Interfaces</a>, Up: <a href="Input-and-Output.html" accesskey="u" rel="up">Input and Output</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Using-Ports-from-C-1">6.12.12 Using Ports from C</h4>
+
+<p>Guile&rsquo;s C interfaces provides some niceties for sending and receiving
+bytes and characters in a way that works better with C.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fread"><span class="category-def">C Function: </span><span><code class="def-type">size_t</code> <strong class="def-name">scm_c_read</strong> <code class="def-code-arguments">(SCM port, void *buffer, size_t size)</code><a class="copiable-link" href='#index-scm_005fc_005fread'> &para;</a></span></dt>
+<dd><p>Read up to <var class="var">size</var> bytes from <var class="var">port</var> and store them in
+<var class="var">buffer</var>.  The return value is the number of bytes actually read,
+which can be less than <var class="var">size</var> if end-of-file has been reached.
+</p>
+<p>Note that as this is a binary input procedure, this function does not
+update <code class="code">port-line</code> and <code class="code">port-column</code> (see <a class="pxref" href="Textual-I_002fO.html">Textual I/O</a>).
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fwrite"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_c_write</strong> <code class="def-code-arguments">(SCM port, const void *buffer, size_t size)</code><a class="copiable-link" href='#index-scm_005fc_005fwrite'> &para;</a></span></dt>
+<dd><p>Write <var class="var">size</var> bytes at <var class="var">buffer</var> to <var class="var">port</var>.
+</p>
+<p>Note that as this is a binary output procedure, this function does not
+update <code class="code">port-line</code> and <code class="code">port-column</code> (see <a class="pxref" href="Textual-I_002fO.html">Textual I/O</a>).
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fread_005fbytes"><span class="category-def">C Function: </span><span><code class="def-type">size_t</code> <strong class="def-name">scm_c_read_bytes</strong> <code class="def-code-arguments">(SCM port, SCM bv, size_t start, size_t count)</code><a class="copiable-link" href='#index-scm_005fc_005fread_005fbytes'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fc_005fwrite_005fbytes"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_c_write_bytes</strong> <code class="def-code-arguments">(SCM port, SCM bv, size_t start, size_t count)</code><a class="copiable-link" href='#index-scm_005fc_005fwrite_005fbytes'> &para;</a></span></dt>
+<dd><p>Like <code class="code">scm_c_read</code> and <code class="code">scm_c_write</code>, but reading into or
+writing from the bytevector <var class="var">bv</var>.  <var class="var">count</var> indicates the byte
+index at which to start in the bytevector, and the read or write will
+continue for <var class="var">count</var> bytes.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005funget_005fbytes"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_unget_bytes</strong> <code class="def-code-arguments">(const unsigned char *buf, size_t len, SCM port)</code><a class="copiable-link" href='#index-scm_005funget_005fbytes'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005funget_005fbyte"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_unget_byte</strong> <code class="def-code-arguments">(int c, SCM port)</code><a class="copiable-link" href='#index-scm_005funget_005fbyte'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fungetc"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_ungetc</strong> <code class="def-code-arguments">(scm_t_wchar c, SCM port)</code><a class="copiable-link" href='#index-scm_005fungetc'> &para;</a></span></dt>
+<dd><p>Like <code class="code">unget-bytevector</code>, <code class="code">unget-byte</code>, and <code class="code">unget-char</code>,
+respectively.  See <a class="xref" href="Textual-I_002fO.html">Textual I/O</a>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fput_005flatin1_005fchars"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_c_put_latin1_chars</strong> <code class="def-code-arguments">(SCM port, const scm_t_uint8 *buf, size_t len)</code><a class="copiable-link" href='#index-scm_005fc_005fput_005flatin1_005fchars'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fc_005fput_005futf32_005fchars"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_c_put_utf32_chars</strong> <code class="def-code-arguments">(SCM port, const scm_t_uint32 *buf, size_t len);</code><a class="copiable-link" href='#index-scm_005fc_005fput_005futf32_005fchars'> &para;</a></span></dt>
+<dd><p>Write a string to <var class="var">port</var>.  In the first case, the
+<code class="code">scm_t_uint8*</code> buffer is a string in the latin-1 encoding.  In the
+second, the <code class="code">scm_t_uint32*</code> buffer is a string in the UTF-32
+encoding.  These routines will update the port&rsquo;s line and column.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="I_002fO-Extensions.html">Implementing New Port Types in C</a>, Previous: <a href="Venerable-Port-Interfaces.html">Venerable Port Interfaces</a>, Up: <a href="Input-and-Output.html">Input and Output</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Accessing Heap Object Fields (Guile Reference Manual)</title>
+
+<meta name="description" content="Accessing Heap Object Fields (Guile Reference Manual)">
+<meta name="keywords" content="Accessing Heap Object Fields (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="The-SCM-Type-in-Guile.html" rel="up" title="The SCM Type in Guile">
+<link href="Heap-Object-Type-Information.html" rel="prev" title="Heap Object Type Information">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Accessing-Heap-Object-Fields">
+<div class="nav-panel">
+<p>
+Previous: <a href="Heap-Object-Type-Information.html" accesskey="p" rel="prev">Heap Object Type Information</a>, Up: <a href="The-SCM-Type-in-Guile.html" accesskey="u" rel="up">The SCM Type in Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Accessing-Heap-Object-Fields-1">9.2.5.6 Accessing Heap Object Fields</h4>
+
+<p>For a non-immediate Scheme object <var class="var">x</var>, the object type can be
+determined by using the <code class="code">SCM_CELL_TYPE</code> macro described in the
+previous section.  For each different type of heap object it is known
+which fields hold tagged Scheme objects and which fields hold untagged
+raw data.  To access the different fields appropriately, the following
+macros are provided.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fCELL_005fWORD"><span class="category-def">Macro: </span><span><code class="def-type">scm_t_bits</code> <strong class="def-name">SCM_CELL_WORD</strong> <code class="def-code-arguments">(SCM <var class="var">x</var>, unsigned int <var class="var">n</var>)</code><a class="copiable-link" href='#index-SCM_005fCELL_005fWORD'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fCELL_005fWORD_005f0"><span class="category-def">Macro: </span><span><code class="def-type">scm_t_bits</code> <strong class="def-name">SCM_CELL_WORD_0</strong> <code class="def-code-arguments">(<var class="var">x</var>)</code><a class="copiable-link" href='#index-SCM_005fCELL_005fWORD_005f0'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fCELL_005fWORD_005f1"><span class="category-def">Macro: </span><span><code class="def-type">scm_t_bits</code> <strong class="def-name">SCM_CELL_WORD_1</strong> <code class="def-code-arguments">(<var class="var">x</var>)</code><a class="copiable-link" href='#index-SCM_005fCELL_005fWORD_005f1'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fCELL_005fWORD_005f2"><span class="category-def">Macro: </span><span><code class="def-type">scm_t_bits</code> <strong class="def-name">SCM_CELL_WORD_2</strong> <code class="def-code-arguments">(<var class="var">x</var>)</code><a class="copiable-link" href='#index-SCM_005fCELL_005fWORD_005f2'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fCELL_005fWORD_005f3"><span class="category-def">Macro: </span><span><code class="def-type">scm_t_bits</code> <strong class="def-name">SCM_CELL_WORD_3</strong> <code class="def-code-arguments">(<var class="var">x</var>)</code><a class="copiable-link" href='#index-SCM_005fCELL_005fWORD_005f3'> &para;</a></span></dt>
+<dd><p>Deliver the field <var class="var">n</var> of the heap object referenced by the
+non-immediate Scheme object <var class="var">x</var> as raw untagged data.  Only use this
+macro for fields containing untagged data; don&rsquo;t use it for fields
+containing tagged <code class="code">SCM</code> objects.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fCELL_005fOBJECT"><span class="category-def">Macro: </span><span><code class="def-type">SCM</code> <strong class="def-name">SCM_CELL_OBJECT</strong> <code class="def-code-arguments">(SCM <var class="var">x</var>, unsigned int <var class="var">n</var>)</code><a class="copiable-link" href='#index-SCM_005fCELL_005fOBJECT'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fCELL_005fOBJECT_005f0"><span class="category-def">Macro: </span><span><code class="def-type">SCM</code> <strong class="def-name">SCM_CELL_OBJECT_0</strong> <code class="def-code-arguments">(SCM <var class="var">x</var>)</code><a class="copiable-link" href='#index-SCM_005fCELL_005fOBJECT_005f0'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fCELL_005fOBJECT_005f1"><span class="category-def">Macro: </span><span><code class="def-type">SCM</code> <strong class="def-name">SCM_CELL_OBJECT_1</strong> <code class="def-code-arguments">(SCM <var class="var">x</var>)</code><a class="copiable-link" href='#index-SCM_005fCELL_005fOBJECT_005f1'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fCELL_005fOBJECT_005f2"><span class="category-def">Macro: </span><span><code class="def-type">SCM</code> <strong class="def-name">SCM_CELL_OBJECT_2</strong> <code class="def-code-arguments">(SCM <var class="var">x</var>)</code><a class="copiable-link" href='#index-SCM_005fCELL_005fOBJECT_005f2'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fCELL_005fOBJECT_005f3"><span class="category-def">Macro: </span><span><code class="def-type">SCM</code> <strong class="def-name">SCM_CELL_OBJECT_3</strong> <code class="def-code-arguments">(SCM <var class="var">x</var>)</code><a class="copiable-link" href='#index-SCM_005fCELL_005fOBJECT_005f3'> &para;</a></span></dt>
+<dd><p>Deliver the field <var class="var">n</var> of the heap object referenced by the
+non-immediate Scheme object <var class="var">x</var> as a Scheme object.  Only use this
+macro for fields containing tagged <code class="code">SCM</code> objects; don&rsquo;t use it for
+fields containing untagged data.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fSET_005fCELL_005fWORD"><span class="category-def">Macro: </span><span><code class="def-type">void</code> <strong class="def-name">SCM_SET_CELL_WORD</strong> <code class="def-code-arguments">(SCM <var class="var">x</var>, unsigned int <var class="var">n</var>, scm_t_bits <var class="var">w</var>)</code><a class="copiable-link" href='#index-SCM_005fSET_005fCELL_005fWORD'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fSET_005fCELL_005fWORD_005f0"><span class="category-def">Macro: </span><span><code class="def-type">void</code> <strong class="def-name">SCM_SET_CELL_WORD_0</strong> <code class="def-code-arguments">(<var class="var">x</var>, <var class="var">w</var>)</code><a class="copiable-link" href='#index-SCM_005fSET_005fCELL_005fWORD_005f0'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fSET_005fCELL_005fWORD_005f1"><span class="category-def">Macro: </span><span><code class="def-type">void</code> <strong class="def-name">SCM_SET_CELL_WORD_1</strong> <code class="def-code-arguments">(<var class="var">x</var>, <var class="var">w</var>)</code><a class="copiable-link" href='#index-SCM_005fSET_005fCELL_005fWORD_005f1'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fSET_005fCELL_005fWORD_005f2"><span class="category-def">Macro: </span><span><code class="def-type">void</code> <strong class="def-name">SCM_SET_CELL_WORD_2</strong> <code class="def-code-arguments">(<var class="var">x</var>, <var class="var">w</var>)</code><a class="copiable-link" href='#index-SCM_005fSET_005fCELL_005fWORD_005f2'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fSET_005fCELL_005fWORD_005f3"><span class="category-def">Macro: </span><span><code class="def-type">void</code> <strong class="def-name">SCM_SET_CELL_WORD_3</strong> <code class="def-code-arguments">(<var class="var">x</var>, <var class="var">w</var>)</code><a class="copiable-link" href='#index-SCM_005fSET_005fCELL_005fWORD_005f3'> &para;</a></span></dt>
+<dd><p>Write the raw value <var class="var">w</var> into field number <var class="var">n</var> of the heap object
+referenced by the non-immediate Scheme value <var class="var">x</var>.  Values that are
+written into heap objects as raw values should only be read later using
+the <code class="code">SCM_CELL_WORD</code> macros.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fSET_005fCELL_005fOBJECT"><span class="category-def">Macro: </span><span><code class="def-type">void</code> <strong class="def-name">SCM_SET_CELL_OBJECT</strong> <code class="def-code-arguments">(SCM <var class="var">x</var>, unsigned int <var class="var">n</var>, SCM <var class="var">o</var>)</code><a class="copiable-link" href='#index-SCM_005fSET_005fCELL_005fOBJECT'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fSET_005fCELL_005fOBJECT_005f0"><span class="category-def">Macro: </span><span><code class="def-type">void</code> <strong class="def-name">SCM_SET_CELL_OBJECT_0</strong> <code class="def-code-arguments">(SCM <var class="var">x</var>, SCM <var class="var">o</var>)</code><a class="copiable-link" href='#index-SCM_005fSET_005fCELL_005fOBJECT_005f0'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fSET_005fCELL_005fOBJECT_005f1"><span class="category-def">Macro: </span><span><code class="def-type">void</code> <strong class="def-name">SCM_SET_CELL_OBJECT_1</strong> <code class="def-code-arguments">(SCM <var class="var">x</var>, SCM <var class="var">o</var>)</code><a class="copiable-link" href='#index-SCM_005fSET_005fCELL_005fOBJECT_005f1'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fSET_005fCELL_005fOBJECT_005f2"><span class="category-def">Macro: </span><span><code class="def-type">void</code> <strong class="def-name">SCM_SET_CELL_OBJECT_2</strong> <code class="def-code-arguments">(SCM <var class="var">x</var>, SCM <var class="var">o</var>)</code><a class="copiable-link" href='#index-SCM_005fSET_005fCELL_005fOBJECT_005f2'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fSET_005fCELL_005fOBJECT_005f3"><span class="category-def">Macro: </span><span><code class="def-type">void</code> <strong class="def-name">SCM_SET_CELL_OBJECT_3</strong> <code class="def-code-arguments">(SCM <var class="var">x</var>, SCM <var class="var">o</var>)</code><a class="copiable-link" href='#index-SCM_005fSET_005fCELL_005fOBJECT_005f3'> &para;</a></span></dt>
+<dd><p>Write the Scheme object <var class="var">o</var> into field number <var class="var">n</var> of the heap
+object referenced by the non-immediate Scheme value <var class="var">x</var>.  Values
+that are written into heap objects as objects should only be read using
+the <code class="code">SCM_CELL_OBJECT</code> macros.
+</p></dd></dl>
+
+<p>Summary:
+</p><ul class="itemize mark-bullet">
+<li>For a non-immediate Scheme object <var class="var">x</var> of unknown type, get the type
+information by using <code class="code">SCM_CELL_TYPE (<var class="var">x</var>)</code>.
+</li><li>As soon as the type information is available, only use the appropriate
+access methods to read and write data to the different heap object
+fields.
+</li><li>Note that field 0 stores the cell type information.  Generally speaking,
+other data associated with a heap object is stored starting from field
+1.
+</li></ul>
+
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Heap-Object-Type-Information.html">Heap Object Type Information</a>, Up: <a href="The-SCM-Type-in-Guile.html">The SCM Type in Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

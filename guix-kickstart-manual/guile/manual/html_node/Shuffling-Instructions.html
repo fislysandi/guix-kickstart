@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Shuffling Instructions (Guile Reference Manual)</title>
+
+<meta name="description" content="Shuffling Instructions (Guile Reference Manual)">
+<meta name="keywords" content="Shuffling Instructions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Instruction-Set.html" rel="up" title="Instruction Set">
+<link href="Trampoline-Instructions.html" rel="next" title="Trampoline Instructions">
+<link href="Function-Prologue-Instructions.html" rel="prev" title="Function Prologue Instructions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Shuffling-Instructions">
+<div class="nav-panel">
+<p>
+Next: <a href="Trampoline-Instructions.html" accesskey="n" rel="next">Trampoline Instructions</a>, Previous: <a href="Function-Prologue-Instructions.html" accesskey="p" rel="prev">Function Prologue Instructions</a>, Up: <a href="Instruction-Set.html" accesskey="u" rel="up">Instruction Set</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Shuffling-Instructions-1">9.3.7.3 Shuffling Instructions</h4>
+
+<p>These instructions are used to move around values on the stack.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-mov"><span class="category-def">Instruction: </span><span><strong class="def-name">mov</strong> <code class="def-code-arguments">s12:<var class="var">dst</var> s12:<var class="var">src</var></code><a class="copiable-link" href='#index-mov'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-long_002dmov"><span class="category-def">Instruction: </span><span><strong class="def-name">long-mov</strong> <code class="def-code-arguments">s24:<var class="var">dst</var> x8:<var class="var">_</var> s24:<var class="var">src</var></code><a class="copiable-link" href='#index-long_002dmov'> &para;</a></span></dt>
+<dd><p>Copy a value from one local slot to another.
+</p>
+<p>As discussed previously, procedure arguments and local variables are
+allocated to local slots.  Guile&rsquo;s compiler tries to avoid shuffling
+variables around to different slots, which often makes <code class="code">mov</code>
+instructions redundant.  However there are some cases in which shuffling
+is necessary, and in those cases, <code class="code">mov</code> is the thing to use.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-long_002dfmov"><span class="category-def">Instruction: </span><span><strong class="def-name">long-fmov</strong> <code class="def-code-arguments">f24:<var class="var">dst</var> x8:<var class="var">_</var> f24:<var class="var">src</var></code><a class="copiable-link" href='#index-long_002dfmov'> &para;</a></span></dt>
+<dd><p>Copy a value from one local slot to another, but addressing slots
+relative to the <code class="code">fp</code> instead of the <code class="code">sp</code>.  This is used when
+shuffling values into place after multiple-value returns.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-push"><span class="category-def">Instruction: </span><span><strong class="def-name">push</strong> <code class="def-code-arguments">s24:<var class="var">src</var></code><a class="copiable-link" href='#index-push'> &para;</a></span></dt>
+<dd><p>Bump the stack pointer by one word, and fill it with the value from slot
+<var class="var">src</var>.  The offset to <var class="var">src</var> is calculated before the stack
+pointer is adjusted.
+</p></dd></dl>
+
+<p>The <code class="code">push</code> instruction is used when another instruction is unable
+to address an operand because the operand is encoded with fewer than 24
+bits.  In that case, Guile&rsquo;s assembler will transparently emit code that
+temporarily pushes any needed operands onto the stack, emits the
+original instruction to address those now-near variables, then shuffles
+the result (if any) back into place.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-pop"><span class="category-def">Instruction: </span><span><strong class="def-name">pop</strong> <code class="def-code-arguments">s24:<var class="var">dst</var></code><a class="copiable-link" href='#index-pop'> &para;</a></span></dt>
+<dd><p>Pop the stack pointer, storing the value that was there in slot
+<var class="var">dst</var>.  The offset to <var class="var">dst</var> is calculated after the stack
+pointer is adjusted.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-drop-1"><span class="category-def">Instruction: </span><span><strong class="def-name">drop</strong> <code class="def-code-arguments">c24:<var class="var">count</var></code><a class="copiable-link" href='#index-drop-1'> &para;</a></span></dt>
+<dd><p>Pop the stack pointer by <var class="var">count</var> words, discarding any values that
+were stored there.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-shuffle_002ddown"><span class="category-def">Instruction: </span><span><strong class="def-name">shuffle-down</strong> <code class="def-code-arguments">f12:<var class="var">from</var> f12:<var class="var">to</var></code><a class="copiable-link" href='#index-shuffle_002ddown'> &para;</a></span></dt>
+<dd><p>Shuffle down values from <var class="var">from</var> to <var class="var">to</var>, reducing the frame size
+by <var class="var">FROM</var>-<var class="var">TO</var> slots.  Part of the internal implementation of
+<code class="code">call-with-values</code>, <code class="code">values</code>, and <code class="code">apply</code>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-expand_002dapply_002dargument"><span class="category-def">Instruction: </span><span><strong class="def-name">expand-apply-argument</strong> <code class="def-code-arguments">x24:<var class="var">_</var></code><a class="copiable-link" href='#index-expand_002dapply_002dargument'> &para;</a></span></dt>
+<dd><p>Take the last local in a frame and expand it out onto the stack, as for
+the last argument to <code class="code">apply</code>.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Trampoline-Instructions.html">Trampoline Instructions</a>, Previous: <a href="Function-Prologue-Instructions.html">Function Prologue Instructions</a>, Up: <a href="Instruction-Set.html">Instruction Set</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

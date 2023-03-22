@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-1 Association Lists (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-1 Association Lists (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-1 Association Lists (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI_002d1.html" rel="up" title="SRFI-1">
+<link href="SRFI_002d1-Set-Operations.html" rel="next" title="SRFI-1 Set Operations">
+<link href="SRFI_002d1-Deleting.html" rel="prev" title="SRFI-1 Deleting">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="SRFI_002d1-Association-Lists">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d1-Set-Operations.html" accesskey="n" rel="next">Set Operations on Lists</a>, Previous: <a href="SRFI_002d1-Deleting.html" accesskey="p" rel="prev">Deleting</a>, Up: <a href="SRFI_002d1.html" accesskey="u" rel="up">SRFI-1 - List library</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Association-Lists-2">7.5.3.9 Association Lists</h4>
+<a class="index-entry-id" id="index-association-list"></a>
+<a class="index-entry-id" id="index-alist-1"></a>
+
+
+<p>Association lists are described in detail in section <a class="ref" href="Association-Lists.html">Association Lists</a>.  The present section only documents the additional procedures
+for dealing with association lists defined by SRFI-1.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-assoc-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">assoc</strong> <var class="def-var-arguments">key alist [=]</var><a class="copiable-link" href='#index-assoc-1'> &para;</a></span></dt>
+<dd><p>Return the pair from <var class="var">alist</var> which matches <var class="var">key</var>.  This
+extends the core <code class="code">assoc</code> (see <a class="pxref" href="Retrieving-Alist-Entries.html">Retrieving Alist Entries</a>) by
+taking an optional <var class="var">=</var> comparison procedure.
+</p>
+<p>The default comparison is <code class="code">equal?</code>.  If an <var class="var">=</var> parameter is
+given it&rsquo;s called <code class="code">(<var class="var">=</var> <var class="var">key</var> <var class="var">alistcar</var>)</code>, i.e. the
+given target <var class="var">key</var> is the first argument, and a <code class="code">car</code> from
+<var class="var">alist</var> is second.
+</p>
+<p>For example a case-insensitive string lookup,
+</p>
+<div class="example">
+<pre class="example-preformatted">(assoc &quot;yy&quot; '((&quot;XX&quot; . 1) (&quot;YY&quot; . 2)) string-ci=?)
+&rArr; (&quot;YY&quot; . 2)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-alist_002dcons"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">alist-cons</strong> <var class="def-var-arguments">key datum alist</var><a class="copiable-link" href='#index-alist_002dcons'> &para;</a></span></dt>
+<dd><p>Cons a new association <var class="var">key</var> and <var class="var">datum</var> onto <var class="var">alist</var> and
+return the result.  This is equivalent to
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(cons (cons <var class="var">key</var> <var class="var">datum</var>) <var class="var">alist</var>)
+</pre></div>
+
+<p><code class="code">acons</code> (see <a class="pxref" href="Adding-or-Setting-Alist-Entries.html">Adding or Setting Alist Entries</a>) in the Guile
+core does the same thing.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-alist_002dcopy"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">alist-copy</strong> <var class="def-var-arguments">alist</var><a class="copiable-link" href='#index-alist_002dcopy'> &para;</a></span></dt>
+<dd><p>Return a newly allocated copy of <var class="var">alist</var>, that means that the
+spine of the list as well as the pairs are copied.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-alist_002ddelete"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">alist-delete</strong> <var class="def-var-arguments">key alist [=]</var><a class="copiable-link" href='#index-alist_002ddelete'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-alist_002ddelete_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">alist-delete!</strong> <var class="def-var-arguments">key alist [=]</var><a class="copiable-link" href='#index-alist_002ddelete_0021'> &para;</a></span></dt>
+<dd><p>Return a list containing the elements of <var class="var">alist</var> but with those
+elements whose keys are equal to <var class="var">key</var> deleted.  The returned
+elements will be in the same order as they were in <var class="var">alist</var>.
+</p>
+<p>Equality is determined by the <var class="var">=</var> predicate, or <code class="code">equal?</code> if
+not given.  The order in which elements are tested is unspecified, but
+each equality call is made <code class="code">(= key alistkey)</code>, i.e. the given
+<var class="var">key</var> parameter is first and the key from <var class="var">alist</var> second.
+This means for instance all associations with a key greater than 5 can
+be removed with <code class="code">(alist-delete 5 alist &lt;)</code>.
+</p>
+<p><code class="code">alist-delete</code> does not modify <var class="var">alist</var>, but the return might
+share a common tail with <var class="var">alist</var>.  <code class="code">alist-delete!</code> may modify
+the list structure of <var class="var">alist</var> to construct its return.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d1-Set-Operations.html">Set Operations on Lists</a>, Previous: <a href="SRFI_002d1-Deleting.html">Deleting</a>, Up: <a href="SRFI_002d1.html">SRFI-1 - List library</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

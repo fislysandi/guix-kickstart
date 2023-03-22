@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Accessing Locale Information (Guile Reference Manual)</title>
+
+<meta name="description" content="Accessing Locale Information (Guile Reference Manual)">
+<meta name="keywords" content="Accessing Locale Information (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Internationalization.html" rel="up" title="Internationalization">
+<link href="Gettext-Support.html" rel="next" title="Gettext Support">
+<link href="Number-Input-and-Output.html" rel="prev" title="Number Input and Output">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Accessing-Locale-Information">
+<div class="nav-panel">
+<p>
+Next: <a href="Gettext-Support.html" accesskey="n" rel="next">Gettext Support</a>, Previous: <a href="Number-Input-and-Output.html" accesskey="p" rel="prev">Number Input and Output</a>, Up: <a href="Internationalization.html" accesskey="u" rel="up">Support for Internationalization</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Accessing-Locale-Information-1">6.25.5 Accessing Locale Information</h4>
+
+<a class="index-entry-id" id="index-nl_005flanginfo"></a>
+<a class="index-entry-id" id="index-low_002dlevel-locale-information"></a>
+<p>It is sometimes useful to obtain very specific information about a
+locale such as the word it uses for days or months, its format for
+representing floating-point figures, etc.  The <code class="code">(ice-9 i18n)</code>
+module provides support for this in a way that is similar to the libc
+functions <code class="code">nl_langinfo ()</code> and <code class="code">localeconv ()</code>
+(see <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/Locale-Information.html#Locale-Information">accessing locale information from C</a> in <cite class="cite">The GNU C Library Reference Manual</cite>).  The available functions
+are listed below.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-locale_002dencoding"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-encoding</strong> <var class="def-var-arguments">[locale]</var><a class="copiable-link" href='#index-locale_002dencoding'> &para;</a></span></dt>
+<dd><p>Return the name of the encoding (a string whose interpretation is
+system-dependent) of either <var class="var">locale</var> or the current locale.
+</p></dd></dl>
+
+<p>The following functions deal with dates and times.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-locale_002dday"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-day</strong> <var class="def-var-arguments">day [locale]</var><a class="copiable-link" href='#index-locale_002dday'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-locale_002dday_002dshort"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-day-short</strong> <var class="def-var-arguments">day [locale]</var><a class="copiable-link" href='#index-locale_002dday_002dshort'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-locale_002dmonth"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-month</strong> <var class="def-var-arguments">month [locale]</var><a class="copiable-link" href='#index-locale_002dmonth'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-locale_002dmonth_002dshort"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-month-short</strong> <var class="def-var-arguments">month [locale]</var><a class="copiable-link" href='#index-locale_002dmonth_002dshort'> &para;</a></span></dt>
+<dd><p>Return the word (a string) used in either <var class="var">locale</var> or the current
+locale to name the day (or month) denoted by <var class="var">day</var> (or
+<var class="var">month</var>), an integer between 1 and 7 (or 1 and 12).  The
+<code class="code">-short</code> variants provide an abbreviation instead of a full name.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-locale_002dam_002dstring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-am-string</strong> <var class="def-var-arguments">[locale]</var><a class="copiable-link" href='#index-locale_002dam_002dstring'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-locale_002dpm_002dstring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-pm-string</strong> <var class="def-var-arguments">[locale]</var><a class="copiable-link" href='#index-locale_002dpm_002dstring'> &para;</a></span></dt>
+<dd><p>Return a (potentially empty) string that is used to denote <i class="i">ante
+meridiem</i> (or <i class="i">post meridiem</i>) hours in 12-hour format.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-locale_002ddate_002btime_002dformat"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-date+time-format</strong> <var class="def-var-arguments">[locale]</var><a class="copiable-link" href='#index-locale_002ddate_002btime_002dformat'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-locale_002ddate_002dformat"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-date-format</strong> <var class="def-var-arguments">[locale]</var><a class="copiable-link" href='#index-locale_002ddate_002dformat'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-locale_002dtime_002dformat"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-time-format</strong> <var class="def-var-arguments">[locale]</var><a class="copiable-link" href='#index-locale_002dtime_002dformat'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-locale_002dtime_002bam_002fpm_002dformat"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-time+am/pm-format</strong> <var class="def-var-arguments">[locale]</var><a class="copiable-link" href='#index-locale_002dtime_002bam_002fpm_002dformat'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-locale_002dera_002ddate_002dformat"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-era-date-format</strong> <var class="def-var-arguments">[locale]</var><a class="copiable-link" href='#index-locale_002dera_002ddate_002dformat'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-locale_002dera_002ddate_002btime_002dformat"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-era-date+time-format</strong> <var class="def-var-arguments">[locale]</var><a class="copiable-link" href='#index-locale_002dera_002ddate_002btime_002dformat'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-locale_002dera_002dtime_002dformat"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-era-time-format</strong> <var class="def-var-arguments">[locale]</var><a class="copiable-link" href='#index-locale_002dera_002dtime_002dformat'> &para;</a></span></dt>
+<dd><p>These procedures return format strings suitable to <code class="code">strftime</code>
+(see <a class="pxref" href="Time.html">Time</a>) that may be used to display (part of) a date/time
+according to certain constraints and to the conventions of either
+<var class="var">locale</var> or the current locale (see <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/The-Elegant-and-Fast-Way.html#The-Elegant-and-Fast-Way">the <code class="code">nl_langinfo ()</code> items</a> in <cite class="cite">The GNU C Library Reference
+Manual</cite>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-locale_002dera"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-era</strong> <var class="def-var-arguments">[locale]</var><a class="copiable-link" href='#index-locale_002dera'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-locale_002dera_002dyear"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-era-year</strong> <var class="def-var-arguments">[locale]</var><a class="copiable-link" href='#index-locale_002dera_002dyear'> &para;</a></span></dt>
+<dd><p>These functions return, respectively, the era and the year of the
+relevant era used in <var class="var">locale</var> or the current locale.  Most locales
+do not define this value.  In this case, the empty string is returned.
+An example of a locale that does define this value is the Japanese
+one.
+</p></dd></dl>
+
+<p>The following procedures give information about number representation.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-locale_002ddecimal_002dpoint"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-decimal-point</strong> <var class="def-var-arguments">[locale]</var><a class="copiable-link" href='#index-locale_002ddecimal_002dpoint'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-locale_002dthousands_002dseparator"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-thousands-separator</strong> <var class="def-var-arguments">[locale]</var><a class="copiable-link" href='#index-locale_002dthousands_002dseparator'> &para;</a></span></dt>
+<dd><p>These functions return a string denoting the representation of the
+decimal point or that of the thousand separator (respectively) for
+either <var class="var">locale</var> or the current locale.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-locale_002ddigit_002dgrouping"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-digit-grouping</strong> <var class="def-var-arguments">[locale]</var><a class="copiable-link" href='#index-locale_002ddigit_002dgrouping'> &para;</a></span></dt>
+<dd><p>Return a (potentially circular) list of integers denoting how digits
+of the integer part of a number are to be grouped, starting at the
+decimal point and going to the left.  The list contains integers
+indicating the size of the successive groups, from right to left.  If
+the list is non-circular, then no grouping occurs for digits beyond
+the last group.
+</p>
+<p>For instance, if the returned list is a circular list that contains
+only <code class="code">3</code> and the thousand separator is <code class="code">&quot;,&quot;</code> (as is the case
+with English locales), then the number <code class="code">12345678</code> should be
+printed <code class="code">12,345,678</code>.
+</p></dd></dl>
+
+<p>The following procedures deal with the representation of monetary
+amounts.  Some of them take an additional <var class="var">intl?</var> argument (a
+boolean) that tells whether the international or local monetary
+conventions for the given locale are to be used.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-locale_002dmonetary_002ddecimal_002dpoint"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-monetary-decimal-point</strong> <var class="def-var-arguments">[locale]</var><a class="copiable-link" href='#index-locale_002dmonetary_002ddecimal_002dpoint'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-locale_002dmonetary_002dthousands_002dseparator"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-monetary-thousands-separator</strong> <var class="def-var-arguments">[locale]</var><a class="copiable-link" href='#index-locale_002dmonetary_002dthousands_002dseparator'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-locale_002dmonetary_002dgrouping"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-monetary-grouping</strong> <var class="def-var-arguments">[locale]</var><a class="copiable-link" href='#index-locale_002dmonetary_002dgrouping'> &para;</a></span></dt>
+<dd><p>These are the monetary counterparts of the above procedures.  These
+procedures apply to monetary amounts.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-locale_002dcurrency_002dsymbol"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-currency-symbol</strong> <var class="def-var-arguments">intl? [locale]</var><a class="copiable-link" href='#index-locale_002dcurrency_002dsymbol'> &para;</a></span></dt>
+<dd><p>Return the currency symbol (a string) of either <var class="var">locale</var> or the
+current locale.
+</p>
+<p>The following example illustrates the difference between the local and
+international monetary formats:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define us (make-locale LC_MONETARY &quot;en_US&quot;))
+(locale-currency-symbol #f us)
+&rArr; &quot;-$&quot;
+(locale-currency-symbol #t us)
+&rArr; &quot;USD &quot;
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-locale_002dmonetary_002dfractional_002ddigits"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-monetary-fractional-digits</strong> <var class="def-var-arguments">intl? [locale]</var><a class="copiable-link" href='#index-locale_002dmonetary_002dfractional_002ddigits'> &para;</a></span></dt>
+<dd><p>Return the number of fractional digits to be used when printing
+monetary amounts according to either <var class="var">locale</var> or the current
+locale.  If the locale does not specify it, then <code class="code">#f</code> is
+returned.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-locale_002dcurrency_002dsymbol_002dprecedes_002dpositive_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-currency-symbol-precedes-positive?</strong> <var class="def-var-arguments">intl? [locale]</var><a class="copiable-link" href='#index-locale_002dcurrency_002dsymbol_002dprecedes_002dpositive_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-locale_002dcurrency_002dsymbol_002dprecedes_002dnegative_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-currency-symbol-precedes-negative?</strong> <var class="def-var-arguments">intl? [locale]</var><a class="copiable-link" href='#index-locale_002dcurrency_002dsymbol_002dprecedes_002dnegative_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-locale_002dpositive_002dseparated_002dby_002dspace_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-positive-separated-by-space?</strong> <var class="def-var-arguments">intl? [locale]</var><a class="copiable-link" href='#index-locale_002dpositive_002dseparated_002dby_002dspace_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-locale_002dnegative_002dseparated_002dby_002dspace_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-negative-separated-by-space?</strong> <var class="def-var-arguments">intl? [locale]</var><a class="copiable-link" href='#index-locale_002dnegative_002dseparated_002dby_002dspace_003f'> &para;</a></span></dt>
+<dd><p>These procedures return a boolean indicating whether the currency
+symbol should precede a positive/negative number, and whether a
+whitespace should be inserted between the currency symbol and a
+positive/negative amount.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-locale_002dmonetary_002dpositive_002dsign"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-monetary-positive-sign</strong> <var class="def-var-arguments">[locale]</var><a class="copiable-link" href='#index-locale_002dmonetary_002dpositive_002dsign'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-locale_002dmonetary_002dnegative_002dsign"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-monetary-negative-sign</strong> <var class="def-var-arguments">[locale]</var><a class="copiable-link" href='#index-locale_002dmonetary_002dnegative_002dsign'> &para;</a></span></dt>
+<dd><p>Return a string denoting the positive (respectively negative) sign
+that should be used when printing a monetary amount.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-locale_002dpositive_002dsign_002dposition"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-positive-sign-position</strong><a class="copiable-link" href='#index-locale_002dpositive_002dsign_002dposition'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-locale_002dnegative_002dsign_002dposition"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-negative-sign-position</strong><a class="copiable-link" href='#index-locale_002dnegative_002dsign_002dposition'> &para;</a></span></dt>
+<dd><p>These functions return a symbol telling where a sign of a
+positive/negative monetary amount is to appear when printing it.  The
+possible values are:
+</p>
+<dl class="table">
+<dt><code class="code">parenthesize</code></dt>
+<dd><p>The currency symbol and quantity should be surrounded by parentheses.
+</p></dd>
+<dt><code class="code">sign-before</code></dt>
+<dd><p>Print the sign string before the quantity and currency symbol.
+</p></dd>
+<dt><code class="code">sign-after</code></dt>
+<dd><p>Print the sign string after the quantity and currency symbol.
+</p></dd>
+<dt><code class="code">sign-before-currency-symbol</code></dt>
+<dd><p>Print the sign string right before the currency symbol.
+</p></dd>
+<dt><code class="code">sign-after-currency-symbol</code></dt>
+<dd><p>Print the sign string right after the currency symbol.
+</p></dd>
+<dt><code class="code">unspecified</code></dt>
+<dd><p>Unspecified.  We recommend you print the sign after the currency
+symbol.
+</p></dd>
+</dl>
+
+</dd></dl>
+
+<p>Finally, the two following procedures may be helpful when programming
+user interfaces:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-locale_002dyes_002dregexp"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-yes-regexp</strong> <var class="def-var-arguments">[locale]</var><a class="copiable-link" href='#index-locale_002dyes_002dregexp'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-locale_002dno_002dregexp"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-no-regexp</strong> <var class="def-var-arguments">[locale]</var><a class="copiable-link" href='#index-locale_002dno_002dregexp'> &para;</a></span></dt>
+<dd><p>Return a string that can be used as a regular expression to recognize
+a positive (respectively, negative) response to a yes/no question.
+For the C locale, the default values are typically <code class="code">&quot;^[yY]&quot;</code> and
+<code class="code">&quot;^[nN]&quot;</code>, respectively.
+</p>
+<p>Here is an example:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 rdelim))
+(format #t &quot;Does Guile rock?~%&quot;)
+(let lp ((answer (read-line)))
+  (cond ((string-match (locale-yes-regexp) answer)
+         (format #t &quot;High fives!~%&quot;))
+        ((string-match (locale-no-regexp) answer)
+         (format #t &quot;How about now? Does it rock yet?~%&quot;)
+         (lp (read-line)))
+        (else
+         (format #t &quot;What do you mean?~%&quot;)
+         (lp (read-line)))))
+</pre></div>
+
+<p>For an internationalized yes/no string output, <code class="code">gettext</code> should
+be used (see <a class="pxref" href="Gettext-Support.html">Gettext Support</a>).
+</p></dd></dl>
+
+<p>Example uses of some of these functions are the implementation of the
+<code class="code">number-&gt;locale-string</code> and <code class="code">monetary-amount-&gt;locale-string</code>
+procedures (see <a class="pxref" href="Number-Input-and-Output.html">Number Input and Output</a>), as well as that the
+SRFI-19 date and time conversion to/from strings (see <a class="pxref" href="SRFI_002d19.html">SRFI-19 - Time/Date Library</a>).
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Gettext-Support.html">Gettext Support</a>, Previous: <a href="Number-Input-and-Output.html">Number Input and Output</a>, Up: <a href="Internationalization.html">Support for Internationalization</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

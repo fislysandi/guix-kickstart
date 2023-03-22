@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-19 Introduction (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-19 Introduction (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-19 Introduction (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI_002d19.html" rel="up" title="SRFI-19">
+<link href="SRFI_002d19-Time.html" rel="next" title="SRFI-19 Time">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="SRFI_002d19-Introduction">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d19-Time.html" accesskey="n" rel="next">SRFI-19 Time</a>, Up: <a href="SRFI_002d19.html" accesskey="u" rel="up">SRFI-19 - Time/Date Library</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="SRFI_002d19-Introduction-1">7.5.16.1 SRFI-19 Introduction</h4>
+
+<a class="index-entry-id" id="index-universal-time"></a>
+<a class="index-entry-id" id="index-atomic-time"></a>
+<a class="index-entry-id" id="index-UTC"></a>
+<a class="index-entry-id" id="index-TAI"></a>
+<p>This module implements time and date representations and calculations,
+in various time systems, including Coordinated Universal Time (UTC)
+and International Atomic Time (TAI).
+</p>
+<p>For those not familiar with these time systems, TAI is based on a
+fixed length second derived from oscillations of certain atoms.  UTC
+differs from TAI by an integral number of seconds, which is increased
+or decreased at announced times to keep UTC aligned to a mean solar
+day (the orbit and rotation of the earth are not quite constant).
+</p>
+<a class="index-entry-id" id="index-leap-second"></a>
+<p>So far, only increases in the TAI
+&lt;-&gt;
+UTC difference have been needed.  Such an increase is a &ldquo;leap
+second&rdquo;, an extra second of TAI introduced at the end of a UTC day.
+When working entirely within UTC this is never seen, every day simply
+has 86400 seconds.  But when converting from TAI to a UTC date, an
+extra 23:59:60 is present, where normally a day would end at 23:59:59.
+Effectively the UTC second from 23:59:59 to 00:00:00 has taken two TAI
+seconds.
+</p>
+<a class="index-entry-id" id="index-system-clock"></a>
+<p>In the current implementation, the system clock is assumed to be UTC,
+and a table of leap seconds in the code converts to TAI.  See comments
+in <samp class="file">srfi-19.scm</samp> for how to update this table.
+</p>
+<a class="index-entry-id" id="index-julian-day"></a>
+<a class="index-entry-id" id="index-modified-julian-day"></a>
+<p>Also, for those not familiar with the terminology, a <em class="dfn">Julian Day</em>
+represents a point in time as a real number of days since
+-4713-11-24T12:00:00Z, i.e. midday UT on 24 November 4714 BC in the
+proleptic Gregorian calendar (1 January 4713 BC in the proleptic Julian
+calendar).
+</p>
+<p>A <em class="dfn">Modified Julian Day</em> represents a point in time as a real number
+of days since 1858-11-17T00:00:00Z, i.e. midnight UT on Wednesday 17
+November AD 1858.  That time is julian day 2400000.5.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d19-Time.html">SRFI-19 Time</a>, Up: <a href="SRFI_002d19.html">SRFI-19 - Time/Date Library</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

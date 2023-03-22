@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Compiled Procedures (Guile Reference Manual)</title>
+
+<meta name="description" content="Compiled Procedures (Guile Reference Manual)">
+<meta name="keywords" content="Compiled Procedures (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Procedures.html" rel="up" title="Procedures">
+<link href="Optional-Arguments.html" rel="next" title="Optional Arguments">
+<link href="Primitive-Procedures.html" rel="prev" title="Primitive Procedures">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Compiled-Procedures">
+<div class="nav-panel">
+<p>
+Next: <a href="Optional-Arguments.html" accesskey="n" rel="next">Optional Arguments</a>, Previous: <a href="Primitive-Procedures.html" accesskey="p" rel="prev">Primitive Procedures</a>, Up: <a href="Procedures.html" accesskey="u" rel="up">Procedures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Compiled-Procedures-1">6.7.3 Compiled Procedures</h4>
+
+<p>The evaluation strategy given in <a class="ref" href="Lambda.html">Lambda: Basic Procedure Creation</a> describes how procedures
+are <em class="dfn">interpreted</em>. Interpretation operates directly on expanded
+Scheme source code, recursively calling the evaluator to obtain the
+value of nested expressions.
+</p>
+<p>Most procedures are compiled, however. This means that Guile has done
+some pre-computation on the procedure, to determine what it will need to
+do each time the procedure runs. Compiled procedures run faster than
+interpreted procedures.
+</p>
+<p>Loading files is the normal way that compiled procedures come to
+being. If Guile sees that a file is uncompiled, or that its compiled
+file is out of date, it will attempt to compile the file when it is
+loaded, and save the result to disk. Procedures can be compiled at
+runtime as well. See <a class="xref" href="Read_002fLoad_002fEval_002fCompile.html">Reading and Evaluating Scheme Code</a>, for more information
+on runtime compilation.
+</p>
+<p>Compiled procedures, also known as <em class="dfn">programs</em>, respond to all
+procedures that operate on procedures: you can pass a program to
+<code class="code">procedure?</code>, <code class="code">procedure-name</code>, and so on (see <a class="pxref" href="Procedure-Properties.html">Procedure Properties and Meta-information</a>).  In addition, there are a few more accessors for low-level
+details on programs.
+</p>
+<p>Most people won&rsquo;t need to use the routines described in this section,
+but it&rsquo;s good to have them documented. You&rsquo;ll have to include the
+appropriate module first, though:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (system vm program))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-program_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">program?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-program_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fprogram_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_program_p</strong> <var class="def-var-arguments">(obj)</var><a class="copiable-link" href='#index-scm_005fprogram_005fp'> &para;</a></span></dt>
+<dd><p>Returns <code class="code">#t</code> if <var class="var">obj</var> is a compiled procedure, or <code class="code">#f</code>
+otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-program_002dcode"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">program-code</strong> <var class="def-var-arguments">program</var><a class="copiable-link" href='#index-program_002dcode'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fprogram_005fcode"><span class="category-def">C Function: </span><span><strong class="def-name">scm_program_code</strong> <var class="def-var-arguments">(program)</var><a class="copiable-link" href='#index-scm_005fprogram_005fcode'> &para;</a></span></dt>
+<dd><p>Returns the address of the program&rsquo;s entry, as an integer.  This address
+is mostly useful to procedures in <code class="code">(system vm debug)</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-program_002dnum_002dfree_002dvariable"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">program-num-free-variable</strong> <var class="def-var-arguments">program</var><a class="copiable-link" href='#index-program_002dnum_002dfree_002dvariable'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fprogram_005fnum_005ffree_005fvariables"><span class="category-def">C Function: </span><span><strong class="def-name">scm_program_num_free_variables</strong> <var class="def-var-arguments">(program)</var><a class="copiable-link" href='#index-scm_005fprogram_005fnum_005ffree_005fvariables'> &para;</a></span></dt>
+<dd><p>Return the number of free variables captured by this program.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-program_002dfree_002dvariable_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">program-free-variable-ref</strong> <var class="def-var-arguments">program n</var><a class="copiable-link" href='#index-program_002dfree_002dvariable_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fprogram_005ffree_005fvariable_002dref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_program_free_variable-ref</strong> <var class="def-var-arguments">(program, n)</var><a class="copiable-link" href='#index-scm_005fprogram_005ffree_005fvariable_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-program_002dfree_002dvariable_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">program-free-variable-set!</strong> <var class="def-var-arguments">program n val</var><a class="copiable-link" href='#index-program_002dfree_002dvariable_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fprogram_005ffree_005fvariable_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_program_free_variable_set_x</strong> <var class="def-var-arguments">(program, n, val)</var><a class="copiable-link" href='#index-scm_005fprogram_005ffree_005fvariable_005fset_005fx'> &para;</a></span></dt>
+<dd><p>Accessors for a program&rsquo;s free variables.  Some of the values captured
+are actually in variable &ldquo;boxes&rdquo;.  See <a class="xref" href="Variables-and-the-VM.html">Variables and the VM</a>, for
+more information.
+</p>
+<p>Users must not modify the returned value unless they think they&rsquo;re
+really clever.
+</p></dd></dl>
+
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-program_002dbindings"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">program-bindings</strong> <var class="def-var-arguments">program</var><a class="copiable-link" href='#index-program_002dbindings'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002dbinding"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-binding</strong> <var class="def-var-arguments">name boxed? index start end</var><a class="copiable-link" href='#index-make_002dbinding'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-binding_003aname"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">binding:name</strong> <var class="def-var-arguments">binding</var><a class="copiable-link" href='#index-binding_003aname'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-binding_003aboxed_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">binding:boxed?</strong> <var class="def-var-arguments">binding</var><a class="copiable-link" href='#index-binding_003aboxed_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-binding_003aindex"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">binding:index</strong> <var class="def-var-arguments">binding</var><a class="copiable-link" href='#index-binding_003aindex'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-binding_003astart"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">binding:start</strong> <var class="def-var-arguments">binding</var><a class="copiable-link" href='#index-binding_003astart'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-binding_003aend"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">binding:end</strong> <var class="def-var-arguments">binding</var><a class="copiable-link" href='#index-binding_003aend'> &para;</a></span></dt>
+<dd><p>Bindings annotations for programs, along with their accessors.
+</p>
+<p>Bindings declare names and liveness extents for block-local variables.
+The best way to see what these are is to play around with them at a
+REPL. See <a class="xref" href="VM-Concepts.html">VM Concepts</a>, for more information.
+</p>
+<p>Note that bindings information is stored in a program as part of its
+metadata thunk, so including it in the generated object code does not
+impose a runtime performance penalty.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-program_002dsources"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">program-sources</strong> <var class="def-var-arguments">program</var><a class="copiable-link" href='#index-program_002dsources'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-source_003aaddr"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">source:addr</strong> <var class="def-var-arguments">source</var><a class="copiable-link" href='#index-source_003aaddr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-source_003aline"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">source:line</strong> <var class="def-var-arguments">source</var><a class="copiable-link" href='#index-source_003aline'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-source_003acolumn"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">source:column</strong> <var class="def-var-arguments">source</var><a class="copiable-link" href='#index-source_003acolumn'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-source_003afile"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">source:file</strong> <var class="def-var-arguments">source</var><a class="copiable-link" href='#index-source_003afile'> &para;</a></span></dt>
+<dd><p>Source location annotations for programs, along with their accessors.
+</p>
+<p>Source location information propagates through the compiler and ends
+up being serialized to the program&rsquo;s metadata. This information is
+keyed by the offset of the instruction pointer within the object code
+of the program. Specifically, it is keyed on the <code class="code">ip</code> <em class="emph">just
+following</em> an instruction, so that backtraces can find the source
+location of a call that is in progress.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-program_002darities"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">program-arities</strong> <var class="def-var-arguments">program</var><a class="copiable-link" href='#index-program_002darities'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fprogram_005farities"><span class="category-def">C Function: </span><span><strong class="def-name">scm_program_arities</strong> <var class="def-var-arguments">(program)</var><a class="copiable-link" href='#index-scm_005fprogram_005farities'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-program_002darity"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">program-arity</strong> <var class="def-var-arguments">program ip</var><a class="copiable-link" href='#index-program_002darity'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-arity_003astart"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">arity:start</strong> <var class="def-var-arguments">arity</var><a class="copiable-link" href='#index-arity_003astart'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-arity_003aend"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">arity:end</strong> <var class="def-var-arguments">arity</var><a class="copiable-link" href='#index-arity_003aend'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-arity_003anreq"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">arity:nreq</strong> <var class="def-var-arguments">arity</var><a class="copiable-link" href='#index-arity_003anreq'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-arity_003anopt"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">arity:nopt</strong> <var class="def-var-arguments">arity</var><a class="copiable-link" href='#index-arity_003anopt'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-arity_003arest_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">arity:rest?</strong> <var class="def-var-arguments">arity</var><a class="copiable-link" href='#index-arity_003arest_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-arity_003akw"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">arity:kw</strong> <var class="def-var-arguments">arity</var><a class="copiable-link" href='#index-arity_003akw'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-arity_003aallow_002dother_002dkeys_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">arity:allow-other-keys?</strong> <var class="def-var-arguments">arity</var><a class="copiable-link" href='#index-arity_003aallow_002dother_002dkeys_003f'> &para;</a></span></dt>
+<dd><p>Accessors for a representation of the &ldquo;arity&rdquo; of a program.
+</p>
+<p>The normal case is that a procedure has one arity. For example,
+<code class="code">(lambda (x) x)</code>, takes one required argument, and that&rsquo;s it. One
+could access that number of required arguments via <code class="code">(arity:nreq
+(program-arities (lambda (x) x)))</code>. Similarly, <code class="code">arity:nopt</code> gets
+the number of optional arguments, and <code class="code">arity:rest?</code> returns a true
+value if the procedure has a rest arg.
+</p>
+<p><code class="code">arity:kw</code> returns a list of <code class="code">(<var class="var">kw</var> . <var class="var">idx</var>)</code> pairs,
+if the procedure has keyword arguments. The <var class="var">idx</var> refers to the
+<var class="var">idx</var>th local variable; See <a class="xref" href="Variables-and-the-VM.html">Variables and the VM</a>, for more
+information. Finally <code class="code">arity:allow-other-keys?</code> returns a true
+value if other keys are allowed. See <a class="xref" href="Optional-Arguments.html">Optional Arguments</a>, for more
+information.
+</p>
+<p>So what about <code class="code">arity:start</code> and <code class="code">arity:end</code>, then? They
+return the range of bytes in the program&rsquo;s bytecode for which a given
+arity is valid. You see, a procedure can actually have more than one
+arity. The question, &ldquo;what is a procedure&rsquo;s arity&rdquo; only really makes
+sense at certain points in the program, delimited by these
+<code class="code">arity:start</code> and <code class="code">arity:end</code> values.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-program_002darguments_002dalist"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">program-arguments-alist</strong> <var class="def-var-arguments">program [ip]</var><a class="copiable-link" href='#index-program_002darguments_002dalist'> &para;</a></span></dt>
+<dd><p>Return an association list describing the arguments that <var class="var">program</var> accepts, or
+<code class="code">#f</code> if the information cannot be obtained.
+</p>
+<p>The alist keys that are currently defined are &lsquo;required&rsquo;, &lsquo;optional&rsquo;,
+&lsquo;keyword&rsquo;, &lsquo;allow-other-keys?&rsquo;, and &lsquo;rest&rsquo;.  For example:
+</p>
+<div class="example">
+<pre class="example-preformatted">(program-arguments-alist
+ (lambda* (a b #:optional c #:key (d 1) #:rest e)
+   #t)) &rArr;
+((required . (a b))
+ (optional . (c))
+ (keyword . ((#:d . 4)))
+ (allow-other-keys? . #f)
+ (rest . d))
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-program_002dlambda_002dlist"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">program-lambda-list</strong> <var class="def-var-arguments">program [ip]</var><a class="copiable-link" href='#index-program_002dlambda_002dlist'> &para;</a></span></dt>
+<dd><p>Return a representation of the arguments of <var class="var">program</var> as a lambda
+list, or <code class="code">#f</code> if this information is not available.
+</p>
+<p>For example:
+</p>
+<div class="example">
+<pre class="example-preformatted">(program-lambda-list
+ (lambda* (a b #:optional c #:key (d 1) #:rest e)
+   #t)) &rArr;
+</pre></div>
+</dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Optional-Arguments.html">Optional Arguments</a>, Previous: <a href="Primitive-Procedures.html">Primitive Procedures</a>, Up: <a href="Procedures.html">Procedures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

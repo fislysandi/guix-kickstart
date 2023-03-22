@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Iterating Over Character Sets (Guile Reference Manual)</title>
+
+<meta name="description" content="Iterating Over Character Sets (Guile Reference Manual)">
+<meta name="keywords" content="Iterating Over Character Sets (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Character-Sets.html" rel="up" title="Character Sets">
+<link href="Creating-Character-Sets.html" rel="next" title="Creating Character Sets">
+<link href="Character-Set-Predicates_002fComparison.html" rel="prev" title="Character Set Predicates/Comparison">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Iterating-Over-Character-Sets">
+<div class="nav-panel">
+<p>
+Next: <a href="Creating-Character-Sets.html" accesskey="n" rel="next">Creating Character Sets</a>, Previous: <a href="Character-Set-Predicates_002fComparison.html" accesskey="p" rel="prev">Character Set Predicates/Comparison</a>, Up: <a href="Character-Sets.html" accesskey="u" rel="up">Character Sets</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Iterating-Over-Character-Sets-1">6.6.4.2 Iterating Over Character Sets</h4>
+
+<p>Character set cursors are a means for iterating over the members of a
+character sets.  After creating a character set cursor with
+<code class="code">char-set-cursor</code>, a cursor can be dereferenced with
+<code class="code">char-set-ref</code>, advanced to the next member with
+<code class="code">char-set-cursor-next</code>.  Whether a cursor has passed past the last
+element of the set can be checked with <code class="code">end-of-char-set?</code>.
+</p>
+<p>Additionally, mapping and (un-)folding procedures for character sets are
+provided.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dcursor"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-cursor</strong> <var class="def-var-arguments">cs</var><a class="copiable-link" href='#index-char_002dset_002dcursor'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fcursor"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_cursor</strong> <var class="def-var-arguments">(cs)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fcursor'> &para;</a></span></dt>
+<dd><p>Return a cursor into the character set <var class="var">cs</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-ref</strong> <var class="def-var-arguments">cs cursor</var><a class="copiable-link" href='#index-char_002dset_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_ref</strong> <var class="def-var-arguments">(cs, cursor)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fref'> &para;</a></span></dt>
+<dd><p>Return the character at the current cursor position
+<var class="var">cursor</var> in the character set <var class="var">cs</var>.  It is an error to
+pass a cursor for which <code class="code">end-of-char-set?</code> returns true.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dcursor_002dnext"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-cursor-next</strong> <var class="def-var-arguments">cs cursor</var><a class="copiable-link" href='#index-char_002dset_002dcursor_002dnext'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fcursor_005fnext"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_cursor_next</strong> <var class="def-var-arguments">(cs, cursor)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fcursor_005fnext'> &para;</a></span></dt>
+<dd><p>Advance the character set cursor <var class="var">cursor</var> to the next
+character in the character set <var class="var">cs</var>.  It is an error if the
+cursor given satisfies <code class="code">end-of-char-set?</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-end_002dof_002dchar_002dset_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">end-of-char-set?</strong> <var class="def-var-arguments">cursor</var><a class="copiable-link" href='#index-end_002dof_002dchar_002dset_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fend_005fof_005fchar_005fset_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_end_of_char_set_p</strong> <var class="def-var-arguments">(cursor)</var><a class="copiable-link" href='#index-scm_005fend_005fof_005fchar_005fset_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">cursor</var> has reached the end of a
+character set, <code class="code">#f</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dfold"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-fold</strong> <var class="def-var-arguments">kons knil cs</var><a class="copiable-link" href='#index-char_002dset_002dfold'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005ffold"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_fold</strong> <var class="def-var-arguments">(kons, knil, cs)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005ffold'> &para;</a></span></dt>
+<dd><p>Fold the procedure <var class="var">kons</var> over the character set <var class="var">cs</var>,
+initializing it with <var class="var">knil</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dunfold"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-unfold</strong> <var class="def-var-arguments">p f g seed [base_cs]</var><a class="copiable-link" href='#index-char_002dset_002dunfold'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005funfold"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_unfold</strong> <var class="def-var-arguments">(p, f, g, seed, base_cs)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005funfold'> &para;</a></span></dt>
+<dd><p>This is a fundamental constructor for character sets.
+</p><ul class="itemize mark-bullet">
+<li><var class="var">g</var> is used to generate a series of &ldquo;seed&rdquo; values
+from the initial seed: <var class="var">seed</var>, (<var class="var">g</var> <var class="var">seed</var>),
+(<var class="var">g</var>^2 <var class="var">seed</var>), (<var class="var">g</var>^3 <var class="var">seed</var>), &hellip;
+</li><li><var class="var">p</var> tells us when to stop &ndash; when it returns true
+when applied to one of the seed values.
+</li><li><var class="var">f</var> maps each seed value to a character. These
+characters are added to the base character set <var class="var">base_cs</var> to
+form the result; <var class="var">base_cs</var> defaults to the empty set.
+</li></ul>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dunfold_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-unfold!</strong> <var class="def-var-arguments">p f g seed base_cs</var><a class="copiable-link" href='#index-char_002dset_002dunfold_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005funfold_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_unfold_x</strong> <var class="def-var-arguments">(p, f, g, seed, base_cs)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005funfold_005fx'> &para;</a></span></dt>
+<dd><p>This is a fundamental constructor for character sets.
+</p><ul class="itemize mark-bullet">
+<li><var class="var">g</var> is used to generate a series of &ldquo;seed&rdquo; values
+from the initial seed: <var class="var">seed</var>, (<var class="var">g</var> <var class="var">seed</var>),
+(<var class="var">g</var>^2 <var class="var">seed</var>), (<var class="var">g</var>^3 <var class="var">seed</var>), &hellip;
+</li><li><var class="var">p</var> tells us when to stop &ndash; when it returns true
+when applied to one of the seed values.
+</li><li><var class="var">f</var> maps each seed value to a character. These
+characters are added to the base character set <var class="var">base_cs</var> to
+form the result; <var class="var">base_cs</var> defaults to the empty set.
+</li></ul>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dfor_002deach"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-for-each</strong> <var class="def-var-arguments">proc cs</var><a class="copiable-link" href='#index-char_002dset_002dfor_002deach'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005ffor_005feach"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_for_each</strong> <var class="def-var-arguments">(proc, cs)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005ffor_005feach'> &para;</a></span></dt>
+<dd><p>Apply <var class="var">proc</var> to every character in the character set
+<var class="var">cs</var>.  The return value is not specified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dmap"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-map</strong> <var class="def-var-arguments">proc cs</var><a class="copiable-link" href='#index-char_002dset_002dmap'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fmap"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_map</strong> <var class="def-var-arguments">(proc, cs)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fmap'> &para;</a></span></dt>
+<dd><p>Map the procedure <var class="var">proc</var> over every character in <var class="var">cs</var>.
+<var class="var">proc</var> must be a character -&gt; character procedure.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Creating-Character-Sets.html">Creating Character Sets</a>, Previous: <a href="Character-Set-Predicates_002fComparison.html">Character Set Predicates/Comparison</a>, Up: <a href="Character-Sets.html">Character Sets</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

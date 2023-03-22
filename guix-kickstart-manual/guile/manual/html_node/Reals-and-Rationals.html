@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Reals and Rationals (Guile Reference Manual)</title>
+
+<meta name="description" content="Reals and Rationals (Guile Reference Manual)">
+<meta name="keywords" content="Reals and Rationals (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Numbers.html" rel="up" title="Numbers">
+<link href="Complex-Numbers.html" rel="next" title="Complex Numbers">
+<link href="Integers.html" rel="prev" title="Integers">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Reals-and-Rationals">
+<div class="nav-panel">
+<p>
+Next: <a href="Complex-Numbers.html" accesskey="n" rel="next">Complex Numbers</a>, Previous: <a href="Integers.html" accesskey="p" rel="prev">Integers</a>, Up: <a href="Numbers.html" accesskey="u" rel="up">Numerical data types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Real-and-Rational-Numbers">6.6.2.3 Real and Rational Numbers</h4>
+<a class="index-entry-id" id="index-Real-numbers"></a>
+<a class="index-entry-id" id="index-Rational-numbers"></a>
+
+<a class="index-entry-id" id="index-real_003f-2"></a>
+<a class="index-entry-id" id="index-rational_003f-2"></a>
+
+<p>Mathematically, the real numbers are the set of numbers that describe
+all possible points along a continuous, infinite, one-dimensional line.
+The rational numbers are the set of all numbers that can be written as
+fractions <var class="var">p</var>/<var class="var">q</var>, where <var class="var">p</var> and <var class="var">q</var> are integers.
+All rational numbers are also real, but there are real numbers that
+are not rational, for example <em class="math">the square root of 2</em>, and
+<em class="math">pi</em>.
+</p>
+<p>Guile can represent both exact and inexact rational numbers, but it
+cannot represent precise finite irrational numbers.  Exact rationals are
+represented by storing the numerator and denominator as two exact
+integers.  Inexact rationals are stored as floating point numbers using
+the C type <code class="code">double</code>.
+</p>
+<p>Exact rationals are written as a fraction of integers.  There must be
+no whitespace around the slash:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">1/2
+-22/7
+</pre></div>
+
+<p>Even though the actual encoding of inexact rationals is in binary, it
+may be helpful to think of it as a decimal number with a limited
+number of significant figures and a decimal point somewhere, since
+this corresponds to the standard notation for non-whole numbers.  For
+example:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">0.34
+-0.00000142857931198
+-5648394822220000000000.0
+4.0
+</pre></div>
+
+<p>The limited precision of Guile&rsquo;s encoding means that any finite &ldquo;real&rdquo;
+number in Guile can be written in a rational form, by multiplying and
+then dividing by sufficient powers of 10 (or in fact, 2).  For example,
+&lsquo;<samp class="samp">-0.00000142857931198</samp>&rsquo; is the same as &minus;142857931198 divided
+by 100000000000000000.  In Guile&rsquo;s current incarnation, therefore, the
+<code class="code">rational?</code> and <code class="code">real?</code> predicates are equivalent for finite
+numbers.
+</p>
+
+<p>Dividing by an exact zero leads to a error message, as one might expect.
+However, dividing by an inexact zero does not produce an error.
+Instead, the result of the division is either plus or minus infinity,
+depending on the sign of the divided number and the sign of the zero
+divisor (some platforms support signed zeroes &lsquo;<samp class="samp">-0.0</samp>&rsquo; and
+&lsquo;<samp class="samp">+0.0</samp>&rsquo;; &lsquo;<samp class="samp">0.0</samp>&rsquo; is the same as &lsquo;<samp class="samp">+0.0</samp>&rsquo;).
+</p>
+<p>Dividing zero by an inexact zero yields a <abbr class="acronym">NaN</abbr> (&lsquo;not a number&rsquo;)
+value, although they are actually considered numbers by Scheme.
+Attempts to compare a <abbr class="acronym">NaN</abbr> value with any number (including
+itself) using <code class="code">=</code>, <code class="code">&lt;</code>, <code class="code">&gt;</code>, <code class="code">&lt;=</code> or <code class="code">&gt;=</code>
+always returns <code class="code">#f</code>.  Although a <abbr class="acronym">NaN</abbr> value is not
+<code class="code">=</code> to itself, it is both <code class="code">eqv?</code> and <code class="code">equal?</code> to itself
+and other <abbr class="acronym">NaN</abbr> values.  However, the preferred way to test for
+them is by using <code class="code">nan?</code>.
+</p>
+<p>The real <abbr class="acronym">NaN</abbr> values and infinities are written &lsquo;<samp class="samp">+nan.0</samp>&rsquo;,
+&lsquo;<samp class="samp">+inf.0</samp>&rsquo; and &lsquo;<samp class="samp">-inf.0</samp>&rsquo;.  This syntax is also recognized by
+<code class="code">read</code> as an extension to the usual Scheme syntax.  These special
+values are considered by Scheme to be inexact real numbers but not
+rational.  Note that non-real complex numbers may also contain
+infinities or <abbr class="acronym">NaN</abbr> values in their real or imaginary parts.  To
+test a real number to see if it is infinite, a <abbr class="acronym">NaN</abbr> value, or
+neither, use <code class="code">inf?</code>, <code class="code">nan?</code>, or <code class="code">finite?</code>, respectively.
+Every real number in Scheme belongs to precisely one of those three
+classes.
+</p>
+<p>On platforms that follow <abbr class="acronym">IEEE</abbr> 754 for their floating point
+arithmetic, the &lsquo;<samp class="samp">+inf.0</samp>&rsquo;, &lsquo;<samp class="samp">-inf.0</samp>&rsquo;, and &lsquo;<samp class="samp">+nan.0</samp>&rsquo; values
+are implemented using the corresponding <abbr class="acronym">IEEE</abbr> 754 values.
+They behave in arithmetic operations like <abbr class="acronym">IEEE</abbr> 754 describes
+it, i.e., <code class="code">(= +nan.0 +nan.0)</code> &rArr; <code class="code">#f</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-real_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">real?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-real_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005freal_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_real_p</strong> <var class="def-var-arguments">(obj)</var><a class="copiable-link" href='#index-scm_005freal_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is a real number, else <code class="code">#f</code>.  Note
+that the sets of integer and rational values form subsets of the set
+of real numbers, so the predicate will also be fulfilled if <var class="var">obj</var>
+is an integer number or a rational number.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-rational_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">rational?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-rational_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005frational_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_rational_p</strong> <var class="def-var-arguments">(x)</var><a class="copiable-link" href='#index-scm_005frational_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">x</var> is a rational number, <code class="code">#f</code> otherwise.
+Note that the set of integer values forms a subset of the set of
+rational numbers, i.e. the predicate will also be fulfilled if
+<var class="var">x</var> is an integer number.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-rationalize"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">rationalize</strong> <var class="def-var-arguments">x eps</var><a class="copiable-link" href='#index-rationalize'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005frationalize"><span class="category-def">C Function: </span><span><strong class="def-name">scm_rationalize</strong> <var class="def-var-arguments">(x, eps)</var><a class="copiable-link" href='#index-scm_005frationalize'> &para;</a></span></dt>
+<dd><p>Returns the <em class="emph">simplest</em> rational number differing
+from <var class="var">x</var> by no more than <var class="var">eps</var>.  
+</p>
+<p>As required by <abbr class="acronym">R5RS</abbr>, <code class="code">rationalize</code> only returns an
+exact result when both its arguments are exact.  Thus, you might need
+to use <code class="code">inexact-&gt;exact</code> on the arguments.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(rationalize (inexact-&gt;exact 1.2) 1/100)
+&rArr; 6/5
+</pre></div>
+
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-inf_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">inf?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-inf_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005finf_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_inf_p</strong> <var class="def-var-arguments">(x)</var><a class="copiable-link" href='#index-scm_005finf_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if the real number <var class="var">x</var> is &lsquo;<samp class="samp">+inf.0</samp>&rsquo; or
+&lsquo;<samp class="samp">-inf.0</samp>&rsquo;.  Otherwise return <code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-nan_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">nan?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-nan_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fnan_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_nan_p</strong> <var class="def-var-arguments">(x)</var><a class="copiable-link" href='#index-scm_005fnan_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if the real number <var class="var">x</var> is &lsquo;<samp class="samp">+nan.0</samp>&rsquo;, or
+<code class="code">#f</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-finite_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">finite?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-finite_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005ffinite_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_finite_p</strong> <var class="def-var-arguments">(x)</var><a class="copiable-link" href='#index-scm_005ffinite_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if the real number <var class="var">x</var> is neither infinite nor a
+NaN, <code class="code">#f</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-nan"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">nan</strong><a class="copiable-link" href='#index-nan'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fnan"><span class="category-def">C Function: </span><span><strong class="def-name">scm_nan</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fnan'> &para;</a></span></dt>
+<dd><p>Return &lsquo;<samp class="samp">+nan.0</samp>&rsquo;, a <abbr class="acronym">NaN</abbr> value.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-inf"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">inf</strong><a class="copiable-link" href='#index-inf'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005finf"><span class="category-def">C Function: </span><span><strong class="def-name">scm_inf</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005finf'> &para;</a></span></dt>
+<dd><p>Return &lsquo;<samp class="samp">+inf.0</samp>&rsquo;, positive infinity.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-numerator"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">numerator</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-numerator'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fnumerator"><span class="category-def">C Function: </span><span><strong class="def-name">scm_numerator</strong> <var class="def-var-arguments">(x)</var><a class="copiable-link" href='#index-scm_005fnumerator'> &para;</a></span></dt>
+<dd><p>Return the numerator of the rational number <var class="var">x</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-denominator"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">denominator</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-denominator'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fdenominator"><span class="category-def">C Function: </span><span><strong class="def-name">scm_denominator</strong> <var class="def-var-arguments">(x)</var><a class="copiable-link" href='#index-scm_005fdenominator'> &para;</a></span></dt>
+<dd><p>Return the denominator of the rational number <var class="var">x</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fis_005freal"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_is_real</strong> <code class="def-code-arguments">(SCM val)</code><a class="copiable-link" href='#index-scm_005fis_005freal'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fis_005frational"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_is_rational</strong> <code class="def-code-arguments">(SCM val)</code><a class="copiable-link" href='#index-scm_005fis_005frational'> &para;</a></span></dt>
+<dd><p>Equivalent to <code class="code">scm_is_true (scm_real_p (val))</code> and
+<code class="code">scm_is_true (scm_rational_p (val))</code>, respectively.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fto_005fdouble"><span class="category-def">C Function: </span><span><code class="def-type">double</code> <strong class="def-name">scm_to_double</strong> <code class="def-code-arguments">(SCM val)</code><a class="copiable-link" href='#index-scm_005fto_005fdouble'> &para;</a></span></dt>
+<dd><p>Returns the number closest to <var class="var">val</var> that is representable as a
+<code class="code">double</code>.  Returns infinity for a <var class="var">val</var> that is too large in
+magnitude.  The argument <var class="var">val</var> must be a real number.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005ffrom_005fdouble"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_double</strong> <code class="def-code-arguments">(double val)</code><a class="copiable-link" href='#index-scm_005ffrom_005fdouble'> &para;</a></span></dt>
+<dd><p>Return the <code class="code">SCM</code> value that represents <var class="var">val</var>.  The returned
+value is inexact according to the predicate <code class="code">inexact?</code>, but it
+will be exactly equal to <var class="var">val</var>.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Complex-Numbers.html">Complex Numbers</a>, Previous: <a href="Integers.html">Integers</a>, Up: <a href="Numbers.html">Numerical data types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

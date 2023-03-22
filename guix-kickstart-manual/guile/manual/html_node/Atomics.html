@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Atomics (Guile Reference Manual)</title>
+
+<meta name="description" content="Atomics (Guile Reference Manual)">
+<meta name="keywords" content="Atomics (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Scheduling.html" rel="up" title="Scheduling">
+<link href="Mutexes-and-Condition-Variables.html" rel="next" title="Mutexes and Condition Variables">
+<link href="Asyncs.html" rel="prev" title="Asyncs">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Atomics">
+<div class="nav-panel">
+<p>
+Next: <a href="Mutexes-and-Condition-Variables.html" accesskey="n" rel="next">Mutexes and Condition Variables</a>, Previous: <a href="Asyncs.html" accesskey="p" rel="prev">Asynchronous Interrupts</a>, Up: <a href="Scheduling.html" accesskey="u" rel="up">Threads, Mutexes, Asyncs and Dynamic Roots</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Atomics-1">6.22.4 Atomics</h4>
+
+<p>When accessing data in parallel from multiple threads, updates made by
+one thread are not generally guaranteed to be visible by another thread.
+It could be that your hardware requires special instructions to be
+emitted to propagate a change from one CPU core to another.  Or, it
+could be that your hardware updates values with a sequence of
+instructions, and a parallel thread could see a value that is in the
+process of being updated but not fully updated.
+</p>
+<p>Atomic references solve this problem.  Atomics are a standard, primitive
+facility to allow for concurrent access and update of mutable variables
+from multiple threads with guaranteed forward-progress and well-defined
+intermediate states.
+</p>
+<p>Atomic references serve not only as a hardware memory barrier but also
+as a compiler barrier.  Normally a compiler might choose to reorder or
+elide certain memory accesses due to optimizations like common
+subexpression elimination.  Atomic accesses however will not be
+reordered relative to each other, and normal memory accesses will not be
+reordered across atomic accesses.
+</p>
+<p>As an implementation detail, currently all atomic accesses and updates
+use the sequential consistency memory model from C11.  We may relax this
+in the future to the acquire/release semantics, which still issues a
+memory barrier so that non-atomic updates are not reordered across
+atomic accesses or updates.
+</p>
+<p>To use Guile&rsquo;s atomic operations, load the <code class="code">(ice-9 atomic)</code> module:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 atomic))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002datomic_002dbox"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-atomic-box</strong> <var class="def-var-arguments">init</var><a class="copiable-link" href='#index-make_002datomic_002dbox'> &para;</a></span></dt>
+<dd><p>Return an atomic box initialized to value <var class="var">init</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-atomic_002dbox_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">atomic-box?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-atomic_002dbox_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is an atomic-box object, else
+return <code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-atomic_002dbox_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">atomic-box-ref</strong> <var class="def-var-arguments">box</var><a class="copiable-link" href='#index-atomic_002dbox_002dref'> &para;</a></span></dt>
+<dd><p>Fetch the value stored in the atomic box <var class="var">box</var> and return it.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-atomic_002dbox_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">atomic-box-set!</strong> <var class="def-var-arguments">box  val</var><a class="copiable-link" href='#index-atomic_002dbox_002dset_0021'> &para;</a></span></dt>
+<dd><p>Store <var class="var">val</var> into the atomic box <var class="var">box</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-atomic_002dbox_002dswap_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">atomic-box-swap!</strong> <var class="def-var-arguments">box val</var><a class="copiable-link" href='#index-atomic_002dbox_002dswap_0021'> &para;</a></span></dt>
+<dd><p>Store <var class="var">val</var> into the atomic box <var class="var">box</var>, and return the value that
+was previously stored in the box.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-atomic_002dbox_002dcompare_002dand_002dswap_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">atomic-box-compare-and-swap!</strong> <var class="def-var-arguments">box expected desired</var><a class="copiable-link" href='#index-atomic_002dbox_002dcompare_002dand_002dswap_0021'> &para;</a></span></dt>
+<dd><p>If the value of the atomic box <var class="var">box</var> is the same as, <var class="var">expected</var>
+(in the sense of <code class="code">eq?</code>), replace the contents of the box with
+<var class="var">desired</var>.  Otherwise does not update the box.  Returns the previous
+value of the box in either case, so you can know if the swap worked by
+checking if the return value is <code class="code">eq?</code> to <var class="var">expected</var>.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Mutexes-and-Condition-Variables.html">Mutexes and Condition Variables</a>, Previous: <a href="Asyncs.html">Asynchronous Interrupts</a>, Up: <a href="Scheduling.html">Threads, Mutexes, Asyncs and Dynamic Roots</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

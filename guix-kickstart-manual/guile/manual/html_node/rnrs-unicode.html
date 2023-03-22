@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>rnrs unicode (Guile Reference Manual)</title>
+
+<meta name="description" content="rnrs unicode (Guile Reference Manual)">
+<meta name="keywords" content="rnrs unicode (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="R6RS-Standard-Libraries.html" rel="up" title="R6RS Standard Libraries">
+<link href="rnrs-bytevectors.html" rel="next" title="rnrs bytevectors">
+<link href="rnrs-base.html" rel="prev" title="rnrs base">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="rnrs-unicode">
+<div class="nav-panel">
+<p>
+Next: <a href="rnrs-bytevectors.html" accesskey="n" rel="next">rnrs bytevectors</a>, Previous: <a href="rnrs-base.html" accesskey="p" rel="prev">rnrs base</a>, Up: <a href="R6RS-Standard-Libraries.html" accesskey="u" rel="up">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="rnrs-unicode-1">7.6.2.3 rnrs unicode</h4>
+
+<p>The <code class="code">(rnrs unicode (6))</code> library provides procedures for 
+manipulating Unicode characters and strings.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dupcase-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-upcase</strong> <var class="def-var-arguments">char</var><a class="copiable-link" href='#index-char_002dupcase-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-char_002ddowncase-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-downcase</strong> <var class="def-var-arguments">char</var><a class="copiable-link" href='#index-char_002ddowncase-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-char_002dtitlecase-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-titlecase</strong> <var class="def-var-arguments">char</var><a class="copiable-link" href='#index-char_002dtitlecase-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-char_002dfoldcase"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-foldcase</strong> <var class="def-var-arguments">char</var><a class="copiable-link" href='#index-char_002dfoldcase'> &para;</a></span></dt>
+<dd><p>These procedures translate their arguments from one Unicode character
+set to another.  <code class="code">char-upcase</code>, <code class="code">char-downcase</code>, and
+<code class="code">char-titlecase</code> are identical to their counterparts in the
+Guile core library; See <a class="xref" href="Characters.html">Characters</a>, for documentation.
+</p>
+<p><code class="code">char-foldcase</code> returns the result of applying <code class="code">char-upcase</code>
+to its argument, followed by <code class="code">char-downcase</code>&mdash;except in the case
+of the Turkic characters <code class="code">U+0130</code> and <code class="code">U+0131</code>, for which the
+procedure acts as the identity function.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dci_003d_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-ci=?</strong> <var class="def-var-arguments">char1 char2 char3 ...</var><a class="copiable-link" href='#index-char_002dci_003d_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-char_002dci_003c_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-ci&lt;?</strong> <var class="def-var-arguments">char1 char2 char3 ...</var><a class="copiable-link" href='#index-char_002dci_003c_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-char_002dci_003e_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-ci&gt;?</strong> <var class="def-var-arguments">char1 char2 char3 ...</var><a class="copiable-link" href='#index-char_002dci_003e_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-char_002dci_003c_003d_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-ci&lt;=?</strong> <var class="def-var-arguments">char1 char2 char3 ...</var><a class="copiable-link" href='#index-char_002dci_003c_003d_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-char_002dci_003e_003d_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-ci&gt;=?</strong> <var class="def-var-arguments">char1 char2 char3 ...</var><a class="copiable-link" href='#index-char_002dci_003e_003d_003f-1'> &para;</a></span></dt>
+<dd><p>These procedures facilitate case-insensitive comparison of Unicode
+characters.  They are identical to the procedures provided by Guile&rsquo;s
+core library.  See <a class="xref" href="Characters.html">Characters</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dalphabetic_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-alphabetic?</strong> <var class="def-var-arguments">char</var><a class="copiable-link" href='#index-char_002dalphabetic_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-char_002dnumeric_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-numeric?</strong> <var class="def-var-arguments">char</var><a class="copiable-link" href='#index-char_002dnumeric_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-char_002dwhitespace_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-whitespace?</strong> <var class="def-var-arguments">char</var><a class="copiable-link" href='#index-char_002dwhitespace_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-char_002dupper_002dcase_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-upper-case?</strong> <var class="def-var-arguments">char</var><a class="copiable-link" href='#index-char_002dupper_002dcase_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-char_002dlower_002dcase_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-lower-case?</strong> <var class="def-var-arguments">char</var><a class="copiable-link" href='#index-char_002dlower_002dcase_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-char_002dtitle_002dcase_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-title-case?</strong> <var class="def-var-arguments">char</var><a class="copiable-link" href='#index-char_002dtitle_002dcase_003f'> &para;</a></span></dt>
+<dd><p>These procedures implement various Unicode character set predicates.  
+They are identical to the procedures provided by Guile&rsquo;s core library.
+See <a class="xref" href="Characters.html">Characters</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dgeneral_002dcategory-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-general-category</strong> <var class="def-var-arguments">char</var><a class="copiable-link" href='#index-char_002dgeneral_002dcategory-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Characters.html">Characters</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dupcase-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-upcase</strong> <var class="def-var-arguments">string</var><a class="copiable-link" href='#index-string_002dupcase-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_002ddowncase-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-downcase</strong> <var class="def-var-arguments">string</var><a class="copiable-link" href='#index-string_002ddowncase-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_002dtitlecase-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-titlecase</strong> <var class="def-var-arguments">string</var><a class="copiable-link" href='#index-string_002dtitlecase-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_002dfoldcase"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-foldcase</strong> <var class="def-var-arguments">string</var><a class="copiable-link" href='#index-string_002dfoldcase'> &para;</a></span></dt>
+<dd><p>These procedures perform Unicode case folding operations on their input.
+See <a class="xref" href="Alphabetic-Case-Mapping.html">Alphabetic Case Mapping</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dci_003d_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-ci=?</strong> <var class="def-var-arguments">string1 string2 string3 ...</var><a class="copiable-link" href='#index-string_002dci_003d_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_002dci_003c_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-ci&lt;?</strong> <var class="def-var-arguments">string1 string2 string3 ...</var><a class="copiable-link" href='#index-string_002dci_003c_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_002dci_003e_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-ci&gt;?</strong> <var class="def-var-arguments">string1 string2 string3 ...</var><a class="copiable-link" href='#index-string_002dci_003e_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_002dci_003c_003d_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-ci&lt;=?</strong> <var class="def-var-arguments">string1 string2 string3 ...</var><a class="copiable-link" href='#index-string_002dci_003c_003d_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_002dci_003e_003d_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-ci&gt;=?</strong> <var class="def-var-arguments">string1 string2 string3 ...</var><a class="copiable-link" href='#index-string_002dci_003e_003d_003f-1'> &para;</a></span></dt>
+<dd><p>These procedures perform case-insensitive comparison on their input.
+See <a class="xref" href="String-Comparison.html">String Comparison</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dnormalize_002dnfd-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-normalize-nfd</strong> <var class="def-var-arguments">string</var><a class="copiable-link" href='#index-string_002dnormalize_002dnfd-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_002dnormalize_002dnfkd-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-normalize-nfkd</strong> <var class="def-var-arguments">string</var><a class="copiable-link" href='#index-string_002dnormalize_002dnfkd-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_002dnormalize_002dnfc-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-normalize-nfc</strong> <var class="def-var-arguments">string</var><a class="copiable-link" href='#index-string_002dnormalize_002dnfc-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_002dnormalize_002dnfkc-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-normalize-nfkc</strong> <var class="def-var-arguments">string</var><a class="copiable-link" href='#index-string_002dnormalize_002dnfkc-1'> &para;</a></span></dt>
+<dd><p>These procedures perform Unicode string normalization operations on 
+their input.  See <a class="xref" href="String-Comparison.html">String Comparison</a>, for documentation.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="rnrs-bytevectors.html">rnrs bytevectors</a>, Previous: <a href="rnrs-base.html">rnrs base</a>, Up: <a href="R6RS-Standard-Libraries.html">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

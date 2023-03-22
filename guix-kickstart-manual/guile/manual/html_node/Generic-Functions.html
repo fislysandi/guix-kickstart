@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Generic Functions (Guile Reference Manual)</title>
+
+<meta name="description" content="Generic Functions (Guile Reference Manual)">
+<meta name="keywords" content="Generic Functions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Introspection.html" rel="up" title="Introspection">
+<link href="Accessing-Slots.html" rel="next" title="Accessing Slots">
+<link href="Slots.html" rel="prev" title="Slots">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Generic-Functions">
+<div class="nav-panel">
+<p>
+Next: <a href="Accessing-Slots.html" accesskey="n" rel="next">Accessing Slots</a>, Previous: <a href="Slots.html" accesskey="p" rel="prev">Slots</a>, Up: <a href="Introspection.html" accesskey="u" rel="up">Introspection</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Generic-Functions-1">8.8.4 Generic Functions</h4>
+
+<p>A generic function is an instance of the <code class="code">&lt;generic&gt;</code> class, or of a
+subclass of <code class="code">&lt;generic&gt;</code>.  The definition of the <code class="code">&lt;generic&gt;</code>
+class has slots that are used to describe the properties of a generic
+function.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-generic_002dfunction_002dname"><span class="category-def">primitive procedure: </span><span><strong class="def-name">generic-function-name</strong> <var class="def-var-arguments">gf</var><a class="copiable-link" href='#index-generic_002dfunction_002dname'> &para;</a></span></dt>
+<dd><p>Return the name of generic function <var class="var">gf</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-generic_002dfunction_002dmethods"><span class="category-def">primitive procedure: </span><span><strong class="def-name">generic-function-methods</strong> <var class="def-var-arguments">gf</var><a class="copiable-link" href='#index-generic_002dfunction_002dmethods'> &para;</a></span></dt>
+<dd><p>Return a list of the methods of generic function <var class="var">gf</var>.  This is the
+value of <var class="var">gf</var>&rsquo;s <code class="code">methods</code> slot.
+</p></dd></dl>
+
+<p>Similarly, a method is an instance of the <code class="code">&lt;method&gt;</code> class, or of a
+subclass of <code class="code">&lt;method&gt;</code>; and the definition of the <code class="code">&lt;method&gt;</code>
+class has slots that are used to describe the properties of a method.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-method_002dgeneric_002dfunction"><span class="category-def">primitive procedure: </span><span><strong class="def-name">method-generic-function</strong> <var class="def-var-arguments">method</var><a class="copiable-link" href='#index-method_002dgeneric_002dfunction'> &para;</a></span></dt>
+<dd><p>Return the generic function that <var class="var">method</var> belongs to.  This is the
+value of <var class="var">method</var>&rsquo;s <code class="code">generic-function</code> slot.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-method_002dspecializers"><span class="category-def">primitive procedure: </span><span><strong class="def-name">method-specializers</strong> <var class="def-var-arguments">method</var><a class="copiable-link" href='#index-method_002dspecializers'> &para;</a></span></dt>
+<dd><p>Return a list of <var class="var">method</var>&rsquo;s formal parameter specializers .  This is
+the value of <var class="var">method</var>&rsquo;s <code class="code">specializers</code> slot.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-method_002dprocedure"><span class="category-def">primitive procedure: </span><span><strong class="def-name">method-procedure</strong> <var class="def-var-arguments">method</var><a class="copiable-link" href='#index-method_002dprocedure'> &para;</a></span></dt>
+<dd><p>Return the procedure that implements <var class="var">method</var>.  This is the value of
+<var class="var">method</var>&rsquo;s <code class="code">procedure</code> slot.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-method_002dsource"><span class="category-def">generic: </span><span><strong class="def-name">method-source</strong><a class="copiable-link" href='#index-method_002dsource'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-method_002dsource-1"><span class="category-def">method: </span><span><strong class="def-name">method-source</strong> <var class="def-var-arguments">(m &lt;method&gt;)</var><a class="copiable-link" href='#index-method_002dsource-1'> &para;</a></span></dt>
+<dd><p>Return an expression that prints to show the definition of method
+<var class="var">m</var>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-generic cube)
+
+(define-method (cube (n &lt;number&gt;))
+  (* n n n))
+
+(map method-source (generic-function-methods cube))
+&rArr;
+((method ((n &lt;number&gt;)) (* n n n)))
+</pre></div>
+</dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Accessing-Slots.html">Accessing Slots</a>, Previous: <a href="Slots.html">Slots</a>, Up: <a href="Introspection.html">Introspection</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

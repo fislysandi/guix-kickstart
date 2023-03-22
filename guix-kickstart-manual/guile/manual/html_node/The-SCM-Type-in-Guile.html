@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>The SCM Type in Guile (Guile Reference Manual)</title>
+
+<meta name="description" content="The SCM Type in Guile (Guile Reference Manual)">
+<meta name="keywords" content="The SCM Type in Guile (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Data-Representation.html" rel="up" title="Data Representation">
+<link href="Conservative-GC.html" rel="prev" title="Conservative GC">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="The-SCM-Type-in-Guile">
+<div class="nav-panel">
+<p>
+Previous: <a href="Conservative-GC.html" accesskey="p" rel="prev">Conservative Garbage Collection</a>, Up: <a href="Data-Representation.html" accesskey="u" rel="up">Data Representation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="The-SCM-Type-in-Guile-1">9.2.5 The SCM Type in Guile</h4>
+
+<p>Guile classifies Scheme objects into two kinds: those that fit entirely
+within an <code class="code">SCM</code>, and those that require heap storage.
+</p>
+<p>The former class are called <em class="dfn">immediates</em>.  The class of immediates
+includes small integers, characters, boolean values, the empty list, the
+mysterious end-of-file object, and some others.
+</p>
+<p>The remaining types are called, not surprisingly, <em class="dfn">non-immediates</em>.
+They include pairs, procedures, strings, vectors, and all other data
+types in Guile. For non-immediates, the <code class="code">SCM</code> word contains a
+pointer to data on the heap, with further information about the object
+in question is stored in that data.
+</p>
+<p>This section describes how the <code class="code">SCM</code> type is actually represented
+and used at the C level. Interested readers should see
+<code class="code">libguile/scm.h</code> for an exposition of how Guile stores type
+information.
+</p>
+<p>In fact, there are two basic C data types to represent objects in
+Guile: <code class="code">SCM</code> and <code class="code">scm_t_bits</code>.
+</p>
+
+
+<ul class="mini-toc">
+<li><a href="Relationship-Between-SCM-and-scm_005ft_005fbits.html" accesskey="1">Relationship Between <code class="code">SCM</code> and <code class="code">scm_t_bits</code></a></li>
+<li><a href="Immediate-Objects.html" accesskey="2">Immediate Objects</a></li>
+<li><a href="Non_002dImmediate-Objects.html" accesskey="3">Non-Immediate Objects</a></li>
+<li><a href="Allocating-Heap-Objects.html" accesskey="4">Allocating Heap Objects</a></li>
+<li><a href="Heap-Object-Type-Information.html" accesskey="5">Heap Object Type Information</a></li>
+<li><a href="Accessing-Heap-Object-Fields.html" accesskey="6">Accessing Heap Object Fields</a></li>
+</ul>
+</div>
+
+
+
+</body>
+</html>

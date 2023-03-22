@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>getopt-long (Guile Reference Manual)</title>
+
+<meta name="description" content="getopt-long (Guile Reference Manual)">
+<meta name="keywords" content="getopt-long (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Guile-Modules.html" rel="up" title="Guile Modules">
+<link href="SRFI-Support.html" rel="next" title="SRFI Support">
+<link href="Web.html" rel="prev" title="Web">
+<style type="text/css">
+<!--
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="getopt_002dlong">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI-Support.html" accesskey="n" rel="next">SRFI Support Modules</a>, Previous: <a href="Web.html" accesskey="p" rel="prev"><abbr class="acronym">HTTP</abbr>, the Web, and All That</a>, Up: <a href="Guile-Modules.html" accesskey="u" rel="up">Guile Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="The-_0028ice_002d9-getopt_002dlong_0029-Module">7.4 The (ice-9 getopt-long) Module</h3>
+
+<p>The <code class="code">(ice-9 getopt-long)</code> facility is designed to help parse
+arguments that are passed to Guile programs on the command line, and is
+modelled after the C library&rsquo;s facility of the same name
+(see <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/Getopt.html#Getopt">Getopt</a> in <cite class="cite">The GNU C Library Reference Manual</cite>).  For a more
+low-level interface to command-line argument parsing, See <a class="xref" href="SRFI_002d37.html">SRFI-37 - args-fold</a>.
+</p>
+<p>The <code class="code">(ice-9 getopt-long)</code> module exports two procedures:
+<code class="code">getopt-long</code> and <code class="code">option-ref</code>.
+</p>
+<ul class="itemize mark-bullet">
+<li><code class="code">getopt-long</code> takes a list of strings &mdash; the command line
+arguments &mdash; an <em class="dfn">option specification</em>, and some optional keyword
+parameters.  It parses the command line arguments according to the
+option specification and keyword parameters, and returns a data
+structure that encapsulates the results of the parsing.
+
+</li><li><code class="code">option-ref</code> then takes the parsed data structure and a specific
+option&rsquo;s name, and returns information about that option in particular.
+</li></ul>
+
+<p>To make these procedures available to your Guile script, include the
+expression <code class="code">(use-modules (ice-9 getopt-long))</code> somewhere near the
+top, before the first usage of <code class="code">getopt-long</code> or <code class="code">option-ref</code>.
+</p>
+
+
+<ul class="mini-toc">
+<li><a href="getopt_002dlong-Example.html" accesskey="1">A Short getopt-long Example</a></li>
+<li><a href="Option-Specification.html" accesskey="2">How to Write an Option Specification</a></li>
+<li><a href="Command-Line-Format.html" accesskey="3">Expected Command Line Format</a></li>
+<li><a href="getopt_002dlong-Reference.html" accesskey="4">Reference Documentation for <code class="code">getopt-long</code></a></li>
+<li><a href="option_002dref-Reference.html" accesskey="5">Reference Documentation for <code class="code">option-ref</code></a></li>
+</ul>
+</div>
+
+
+
+</body>
+</html>

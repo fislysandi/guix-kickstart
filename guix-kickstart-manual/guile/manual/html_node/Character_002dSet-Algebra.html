@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Character-Set Algebra (Guile Reference Manual)</title>
+
+<meta name="description" content="Character-Set Algebra (Guile Reference Manual)">
+<meta name="keywords" content="Character-Set Algebra (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Character-Sets.html" rel="up" title="Character Sets">
+<link href="Standard-Character-Sets.html" rel="next" title="Standard Character Sets">
+<link href="Querying-Character-Sets.html" rel="prev" title="Querying Character Sets">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Character_002dSet-Algebra">
+<div class="nav-panel">
+<p>
+Next: <a href="Standard-Character-Sets.html" accesskey="n" rel="next">Standard Character Sets</a>, Previous: <a href="Querying-Character-Sets.html" accesskey="p" rel="prev">Querying Character Sets</a>, Up: <a href="Character-Sets.html" accesskey="u" rel="up">Character Sets</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Character_002dSet-Algebra-1">6.6.4.5 Character-Set Algebra</h4>
+
+<p>Character sets can be manipulated with the common set algebra operation,
+such as union, complement, intersection etc.  All of these procedures
+provide side-effecting variants, which modify their character set
+argument(s).
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dadjoin"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-adjoin</strong> <var class="def-var-arguments">cs chr &hellip;</var><a class="copiable-link" href='#index-char_002dset_002dadjoin'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fadjoin"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_adjoin</strong> <var class="def-var-arguments">(cs, chrs)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fadjoin'> &para;</a></span></dt>
+<dd><p>Add all character arguments to the first argument, which must
+be a character set.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002ddelete"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-delete</strong> <var class="def-var-arguments">cs chr &hellip;</var><a class="copiable-link" href='#index-char_002dset_002ddelete'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fdelete"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_delete</strong> <var class="def-var-arguments">(cs, chrs)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fdelete'> &para;</a></span></dt>
+<dd><p>Delete all character arguments from the first argument, which
+must be a character set.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dadjoin_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-adjoin!</strong> <var class="def-var-arguments">cs chr &hellip;</var><a class="copiable-link" href='#index-char_002dset_002dadjoin_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fadjoin_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_adjoin_x</strong> <var class="def-var-arguments">(cs, chrs)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fadjoin_005fx'> &para;</a></span></dt>
+<dd><p>Add all character arguments to the first argument, which must
+be a character set.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002ddelete_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-delete!</strong> <var class="def-var-arguments">cs chr &hellip;</var><a class="copiable-link" href='#index-char_002dset_002ddelete_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fdelete_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_delete_x</strong> <var class="def-var-arguments">(cs, chrs)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fdelete_005fx'> &para;</a></span></dt>
+<dd><p>Delete all character arguments from the first argument, which
+must be a character set.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dcomplement"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-complement</strong> <var class="def-var-arguments">cs</var><a class="copiable-link" href='#index-char_002dset_002dcomplement'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fcomplement"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_complement</strong> <var class="def-var-arguments">(cs)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fcomplement'> &para;</a></span></dt>
+<dd><p>Return the complement of the character set <var class="var">cs</var>.
+</p></dd></dl>
+
+<p>Note that the complement of a character set is likely to contain many
+reserved code points (code points that are not associated with
+characters).  It may be helpful to modify the output of
+<code class="code">char-set-complement</code> by computing its intersection with the set
+of designated code points, <code class="code">char-set:designated</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dunion"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-union</strong> <var class="def-var-arguments">cs &hellip;</var><a class="copiable-link" href='#index-char_002dset_002dunion'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005funion"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_union</strong> <var class="def-var-arguments">(char_sets)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005funion'> &para;</a></span></dt>
+<dd><p>Return the union of all argument character sets.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dintersection"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-intersection</strong> <var class="def-var-arguments">cs &hellip;</var><a class="copiable-link" href='#index-char_002dset_002dintersection'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fintersection"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_intersection</strong> <var class="def-var-arguments">(char_sets)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fintersection'> &para;</a></span></dt>
+<dd><p>Return the intersection of all argument character sets.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002ddifference"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-difference</strong> <var class="def-var-arguments">cs1 cs &hellip;</var><a class="copiable-link" href='#index-char_002dset_002ddifference'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fdifference"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_difference</strong> <var class="def-var-arguments">(cs1, char_sets)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fdifference'> &para;</a></span></dt>
+<dd><p>Return the difference of all argument character sets.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dxor"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-xor</strong> <var class="def-var-arguments">cs &hellip;</var><a class="copiable-link" href='#index-char_002dset_002dxor'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fxor"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_xor</strong> <var class="def-var-arguments">(char_sets)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fxor'> &para;</a></span></dt>
+<dd><p>Return the exclusive-or of all argument character sets.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002ddiff_002bintersection"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-diff+intersection</strong> <var class="def-var-arguments">cs1 cs &hellip;</var><a class="copiable-link" href='#index-char_002dset_002ddiff_002bintersection'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fdiff_005fplus_005fintersection"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_diff_plus_intersection</strong> <var class="def-var-arguments">(cs1, char_sets)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fdiff_005fplus_005fintersection'> &para;</a></span></dt>
+<dd><p>Return the difference and the intersection of all argument
+character sets.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dcomplement_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-complement!</strong> <var class="def-var-arguments">cs</var><a class="copiable-link" href='#index-char_002dset_002dcomplement_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fcomplement_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_complement_x</strong> <var class="def-var-arguments">(cs)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fcomplement_005fx'> &para;</a></span></dt>
+<dd><p>Return the complement of the character set <var class="var">cs</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dunion_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-union!</strong> <var class="def-var-arguments">cs1 cs &hellip;</var><a class="copiable-link" href='#index-char_002dset_002dunion_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005funion_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_union_x</strong> <var class="def-var-arguments">(cs1, char_sets)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005funion_005fx'> &para;</a></span></dt>
+<dd><p>Return the union of all argument character sets.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dintersection_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-intersection!</strong> <var class="def-var-arguments">cs1 cs &hellip;</var><a class="copiable-link" href='#index-char_002dset_002dintersection_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fintersection_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_intersection_x</strong> <var class="def-var-arguments">(cs1, char_sets)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fintersection_005fx'> &para;</a></span></dt>
+<dd><p>Return the intersection of all argument character sets.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002ddifference_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-difference!</strong> <var class="def-var-arguments">cs1 cs &hellip;</var><a class="copiable-link" href='#index-char_002dset_002ddifference_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fdifference_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_difference_x</strong> <var class="def-var-arguments">(cs1, char_sets)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fdifference_005fx'> &para;</a></span></dt>
+<dd><p>Return the difference of all argument character sets.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dxor_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-xor!</strong> <var class="def-var-arguments">cs1 cs &hellip;</var><a class="copiable-link" href='#index-char_002dset_002dxor_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fxor_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_xor_x</strong> <var class="def-var-arguments">(cs1, char_sets)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fxor_005fx'> &para;</a></span></dt>
+<dd><p>Return the exclusive-or of all argument character sets.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002ddiff_002bintersection_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-diff+intersection!</strong> <var class="def-var-arguments">cs1 cs2 cs &hellip;</var><a class="copiable-link" href='#index-char_002dset_002ddiff_002bintersection_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fdiff_005fplus_005fintersection_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_diff_plus_intersection_x</strong> <var class="def-var-arguments">(cs1, cs2, char_sets)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fdiff_005fplus_005fintersection_005fx'> &para;</a></span></dt>
+<dd><p>Return the difference and the intersection of all argument
+character sets.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Standard-Character-Sets.html">Standard Character Sets</a>, Previous: <a href="Querying-Character-Sets.html">Querying Character Sets</a>, Up: <a href="Character-Sets.html">Character Sets</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

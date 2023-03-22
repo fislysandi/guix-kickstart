@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Higher-Order Functions (Guile Reference Manual)</title>
+
+<meta name="description" content="Higher-Order Functions (Guile Reference Manual)">
+<meta name="keywords" content="Higher-Order Functions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Procedures.html" rel="up" title="Procedures">
+<link href="Procedure-Properties.html" rel="next" title="Procedure Properties">
+<link href="Case_002dlambda.html" rel="prev" title="Case-lambda">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Higher_002dOrder-Functions">
+<div class="nav-panel">
+<p>
+Next: <a href="Procedure-Properties.html" accesskey="n" rel="next">Procedure Properties and Meta-information</a>, Previous: <a href="Case_002dlambda.html" accesskey="p" rel="prev">Case-lambda</a>, Up: <a href="Procedures.html" accesskey="u" rel="up">Procedures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Higher_002dOrder-Functions-1">6.7.6 Higher-Order Functions</h4>
+
+<a class="index-entry-id" id="index-higher_002dorder-functions"></a>
+
+<p>As a functional programming language, Scheme allows the definition of
+<em class="dfn">higher-order functions</em>, i.e., functions that take functions as
+arguments and/or return functions.  Utilities to derive procedures from
+other procedures are provided and described below.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-const"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">const</strong> <var class="def-var-arguments">value</var><a class="copiable-link" href='#index-const'> &para;</a></span></dt>
+<dd><p>Return a procedure that accepts any number of arguments and returns
+<var class="var">value</var>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(procedure? (const 3))        &rArr; #t
+((const 'hello))              &rArr; hello
+((const 'hello) 'world)       &rArr; hello
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-negate"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">negate</strong> <var class="def-var-arguments">proc</var><a class="copiable-link" href='#index-negate'> &para;</a></span></dt>
+<dd><p>Return a procedure with the same arity as <var class="var">proc</var> that returns the
+<code class="code">not</code> of <var class="var">proc</var>&rsquo;s result.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(procedure? (negate number?)) &rArr; #t
+((negate odd?) 2)             &rArr; #t
+((negate real?) 'dream)       &rArr; #t
+((negate string-prefix?) &quot;GNU&quot; &quot;GNU Guile&quot;)
+                              &rArr; #f
+(filter (negate number?) '(a 2 &quot;b&quot;))
+                              &rArr; (a &quot;b&quot;)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-compose"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">compose</strong> <var class="def-var-arguments">proc1 proc2 &hellip;</var><a class="copiable-link" href='#index-compose'> &para;</a></span></dt>
+<dd><p>Compose <var class="var">proc1</var> with the procedures <var class="var">proc2</var> &hellip;  such that
+the last <var class="var">proc</var> argument is applied first and <var class="var">proc1</var> last, and
+return the resulting procedure.  The given procedures must have
+compatible arity.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(procedure? (compose 1+ 1-)) &rArr; #t
+((compose sqrt 1+ 1+) 2)     &rArr; 2.0
+((compose 1+ sqrt) 3)        &rArr; 2.73205080756888
+(eq? (compose 1+) 1+)        &rArr; #t
+
+((compose zip unzip2) '((1 2) (a b)))
+                             &rArr; ((1 2) (a b))
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-identity"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">identity</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-identity'> &para;</a></span></dt>
+<dd><p>Return X.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-and_003d_003e"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">and=&gt;</strong> <var class="def-var-arguments">value proc</var><a class="copiable-link" href='#index-and_003d_003e'> &para;</a></span></dt>
+<dd><p>When <var class="var">value</var> is <code class="code">#f</code>, return <code class="code">#f</code>.  Otherwise, return
+<code class="code">(<var class="var">proc</var> <var class="var">value</var>)</code>.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Procedure-Properties.html">Procedure Properties and Meta-information</a>, Previous: <a href="Case_002dlambda.html">Case-lambda</a>, Up: <a href="Procedures.html">Procedures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Data Representation (Guile Reference Manual)</title>
+
+<meta name="description" content="Data Representation (Guile Reference Manual)">
+<meta name="keywords" content="Data Representation (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Guile-Implementation.html" rel="up" title="Guile Implementation">
+<link href="A-Virtual-Machine-for-Guile.html" rel="next" title="A Virtual Machine for Guile">
+<link href="History.html" rel="prev" title="History">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Data-Representation">
+<div class="nav-panel">
+<p>
+Next: <a href="A-Virtual-Machine-for-Guile.html" accesskey="n" rel="next">A Virtual Machine for Guile</a>, Previous: <a href="History.html" accesskey="p" rel="prev">A Brief History of Guile</a>, Up: <a href="Guile-Implementation.html" accesskey="u" rel="up">Guile Implementation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Data-Representation-1">9.2 Data Representation</h3>
+
+<p>Scheme is a latently-typed language; this means that the system cannot,
+in general, determine the type of a given expression at compile time.
+Types only become apparent at run time.  Variables do not have fixed
+types; a variable may hold a pair at one point, an integer at the next,
+and a thousand-element vector later.  Instead, values, not variables,
+have fixed types.
+</p>
+<p>In order to implement standard Scheme functions like <code class="code">pair?</code> and
+<code class="code">string?</code> and provide garbage collection, the representation of
+every value must contain enough information to accurately determine its
+type at run time.  Often, Scheme systems also use this information to
+determine whether a program has attempted to apply an operation to an
+inappropriately typed value (such as taking the <code class="code">car</code> of a string).
+</p>
+<p>Because variables, pairs, and vectors may hold values of any type,
+Scheme implementations use a uniform representation for values &mdash; a
+single type large enough to hold either a complete value or a pointer
+to a complete value, along with the necessary typing information.
+</p>
+<p>The following sections will present a simple typing system, and then
+make some refinements to correct its major weaknesses. We then conclude
+with a discussion of specific choices that Guile has made regarding
+garbage collection and data representation.
+</p>
+
+<ul class="mini-toc">
+<li><a href="A-Simple-Representation.html" accesskey="1">A Simple Representation</a></li>
+<li><a href="Faster-Integers.html" accesskey="2">Faster Integers</a></li>
+<li><a href="Cheaper-Pairs.html" accesskey="3">Cheaper Pairs</a></li>
+<li><a href="Conservative-GC.html" accesskey="4">Conservative Garbage Collection</a></li>
+<li><a href="The-SCM-Type-in-Guile.html" accesskey="5">The SCM Type in Guile</a></li>
+</ul>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Vector Creation (Guile Reference Manual)</title>
+
+<meta name="description" content="Vector Creation (Guile Reference Manual)">
+<meta name="keywords" content="Vector Creation (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Vectors.html" rel="up" title="Vectors">
+<link href="Vector-Accessors.html" rel="next" title="Vector Accessors">
+<link href="Vector-Syntax.html" rel="prev" title="Vector Syntax">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Vector-Creation">
+<div class="nav-panel">
+<p>
+Next: <a href="Vector-Accessors.html" accesskey="n" rel="next">Accessing and Modifying Vector Contents</a>, Previous: <a href="Vector-Syntax.html" accesskey="p" rel="prev">Read Syntax for Vectors</a>, Up: <a href="Vectors.html" accesskey="u" rel="up">Vectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Dynamic-Vector-Creation-and-Validation">6.6.10.2 Dynamic Vector Creation and Validation</h4>
+
+<p>Instead of creating a vector implicitly by using the read syntax just
+described, you can create a vector dynamically by calling one of the
+<code class="code">vector</code> and <code class="code">list-&gt;vector</code> primitives with the list of Scheme
+values that you want to place into a vector.  The size of the vector
+thus created is determined implicitly by the number of arguments given.
+</p>
+<a class="index-entry-id" id="index-vector-3"></a>
+<a class="index-entry-id" id="index-list_002d_003evector-3"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector</strong> <var class="def-var-arguments">arg &hellip;</var><a class="copiable-link" href='#index-vector'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-list_002d_003evector"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list-&gt;vector</strong> <var class="def-var-arguments">l</var><a class="copiable-link" href='#index-list_002d_003evector'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fvector"><span class="category-def">C Function: </span><span><strong class="def-name">scm_vector</strong> <var class="def-var-arguments">(l)</var><a class="copiable-link" href='#index-scm_005fvector'> &para;</a></span></dt>
+<dd><p>Return a newly allocated vector composed of the
+given arguments.  Analogous to <code class="code">list</code>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(vector 'a 'b 'c) &rArr; #(a b c)
+</pre></div>
+</dd></dl>
+
+<p>The inverse operation is <code class="code">vector-&gt;list</code>:
+</p>
+<a class="index-entry-id" id="index-vector_002d_003elist-3"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002d_003elist"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-&gt;list</strong> <var class="def-var-arguments">v</var><a class="copiable-link" href='#index-vector_002d_003elist'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fvector_005fto_005flist"><span class="category-def">C Function: </span><span><strong class="def-name">scm_vector_to_list</strong> <var class="def-var-arguments">(v)</var><a class="copiable-link" href='#index-scm_005fvector_005fto_005flist'> &para;</a></span></dt>
+<dd><p>Return a newly allocated list composed of the elements of <var class="var">v</var>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(vector-&gt;list #(dah dah didah)) &rArr;  (dah dah didah)
+(list-&gt;vector '(dididit dah)) &rArr;  #(dididit dah)
+</pre></div>
+</dd></dl>
+
+<p>To allocate a vector with an explicitly specified size, use
+<code class="code">make-vector</code>.  With this primitive you can also specify an initial
+value for the vector elements (the same value for all elements, that
+is):
+</p>
+<a class="index-entry-id" id="index-make_002dvector-4"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dvector"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-vector</strong> <var class="def-var-arguments">len [fill]</var><a class="copiable-link" href='#index-make_002dvector'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmake_005fvector"><span class="category-def">C Function: </span><span><strong class="def-name">scm_make_vector</strong> <var class="def-var-arguments">(len, fill)</var><a class="copiable-link" href='#index-scm_005fmake_005fvector'> &para;</a></span></dt>
+<dd><p>Return a newly allocated vector of <var class="var">len</var> elements.  If a
+second argument is given, then each position is initialized to
+<var class="var">fill</var>.  Otherwise the initial contents of each position is
+unspecified.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fmake_005fvector"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_c_make_vector</strong> <code class="def-code-arguments">(size_t k, SCM fill)</code><a class="copiable-link" href='#index-scm_005fc_005fmake_005fvector'> &para;</a></span></dt>
+<dd><p>Like <code class="code">scm_make_vector</code>, but the length is given as a <code class="code">size_t</code>.
+</p></dd></dl>
+
+<p>To check whether an arbitrary Scheme value <em class="emph">is</em> a vector, use the
+<code class="code">vector?</code> primitive:
+</p>
+<a class="index-entry-id" id="index-vector_003f-4"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-vector_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fvector_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_vector_p</strong> <var class="def-var-arguments">(obj)</var><a class="copiable-link" href='#index-scm_005fvector_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is a vector, otherwise return
+<code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fis_005fvector"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_is_vector</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-scm_005fis_005fvector'> &para;</a></span></dt>
+<dd><p>Return non-zero when <var class="var">obj</var> is a vector, otherwise return
+<code class="code">zero</code>.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Vector-Accessors.html">Accessing and Modifying Vector Contents</a>, Previous: <a href="Vector-Syntax.html">Read Syntax for Vectors</a>, Up: <a href="Vectors.html">Vectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

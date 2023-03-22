@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Generic Function and Method Examples (Guile Reference Manual)</title>
+
+<meta name="description" content="Generic Function and Method Examples (Guile Reference Manual)">
+<meta name="keywords" content="Generic Function and Method Examples (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Methods-and-Generic-Functions.html" rel="up" title="Methods and Generic Functions">
+<link href="Handling-Invocation-Errors.html" rel="next" title="Handling Invocation Errors">
+<link href="Next_002dmethod.html" rel="prev" title="Next-method">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Generic-Function-and-Method-Examples">
+<div class="nav-panel">
+<p>
+Next: <a href="Handling-Invocation-Errors.html" accesskey="n" rel="next">Handling Invocation Errors</a>, Previous: <a href="Next_002dmethod.html" accesskey="p" rel="prev">Next-method</a>, Up: <a href="Methods-and-Generic-Functions.html" accesskey="u" rel="up">Methods and Generic Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Generic-Function-and-Method-Examples-1">8.6.5 Generic Function and Method Examples</h4>
+
+<p>Consider the following definitions:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-generic G)
+(define-method (G (a &lt;integer&gt;) b) 'integer)
+(define-method (G (a &lt;real&gt;) b) 'real)
+(define-method (G a b) 'top)
+</pre></div>
+
+<p>The <code class="code">define-generic</code> call defines <var class="var">G</var> as a generic function.
+The three next lines define methods for <var class="var">G</var>.  Each method uses a
+sequence of <em class="dfn">parameter specializers</em> that specify when the given
+method is applicable.  A specializer permits to indicate the class a
+parameter must belong to (directly or indirectly) to be applicable.  If
+no specializer is given, the system defaults it to <code class="code">&lt;top&gt;</code>.  Thus,
+the first method definition is equivalent to
+</p>
+<a class="index-entry-id" id="index-parameter-specializers"></a>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-method (G (a &lt;integer&gt;) (b &lt;top&gt;)) 'integer)
+</pre></div>
+
+<p>Now, let&rsquo;s look at some possible calls to the generic function <var class="var">G</var>:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(G 2 3)    &rArr; integer
+(G 2 #t)   &rArr; integer
+(G 1.2 'a) &rArr; real
+(G #t #f)  &rArr; top
+(G 1 2 3)  &rArr; error (since no method exists for 3 parameters)
+</pre></div>
+
+<p>The methods above use only one specializer per parameter list.  But in
+general, any or all of a method&rsquo;s parameters may be specialized.
+Suppose we define now:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-method (G (a &lt;integer&gt;) (b &lt;number&gt;))  'integer-number)
+(define-method (G (a &lt;integer&gt;) (b &lt;real&gt;))    'integer-real)
+(define-method (G (a &lt;integer&gt;) (b &lt;integer&gt;)) 'integer-integer)
+(define-method (G a (b &lt;number&gt;))              'top-number)
+</pre></div>
+
+<p>With these definitions:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(G 1 2)   &rArr; integer-integer
+(G 1 1.0) &rArr; integer-real
+(G 1 #t)  &rArr; integer
+(G 'a 1)  &rArr; top-number
+</pre></div>
+
+<p>As a further example we shall continue to define operations on the
+<code class="code">&lt;my-complex&gt;</code> class.  Suppose that we want to use it to implement
+complex numbers completely.  For instance a definition for the addition
+of two complex numbers could be
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-method (new-+ (a &lt;my-complex&gt;) (b &lt;my-complex&gt;))
+  (make-rectangular (+ (real-part a) (real-part b))
+                    (+ (imag-part a) (imag-part b))))
+</pre></div>
+
+<p>To be sure that the <code class="code">+</code> used in the method <code class="code">new-+</code> is the
+standard addition we can do:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-generic new-+)
+
+(let ((+ +))
+  (define-method (new-+ (a &lt;my-complex&gt;) (b &lt;my-complex&gt;))
+    (make-rectangular (+ (real-part a) (real-part b))
+                      (+ (imag-part a) (imag-part b)))))
+</pre></div>
+
+<p>The <code class="code">define-generic</code> ensures here that <code class="code">new-+</code> will be defined
+in the global environment. Once this is done, we can add methods to the
+generic function <code class="code">new-+</code> which make a closure on the <code class="code">+</code>
+symbol.  A complete writing of the <code class="code">new-+</code> methods is shown in
+<a class="ref" href="#fig_003anewplus">Figure 8.1</a>.
+</p>
+<div class="float" id="fig_003anewplus">
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-generic new-+)
+
+(let ((+ +))
+
+  (define-method (new-+ (a &lt;real&gt;) (b &lt;real&gt;)) (+ a b))
+
+  (define-method (new-+ (a &lt;real&gt;) (b &lt;my-complex&gt;)) 
+    (make-rectangular (+ a (real-part b)) (imag-part b)))
+
+  (define-method (new-+ (a &lt;my-complex&gt;) (b &lt;real&gt;))
+    (make-rectangular (+ (real-part a) b) (imag-part a)))
+
+  (define-method (new-+ (a &lt;my-complex&gt;) (b &lt;my-complex&gt;))
+    (make-rectangular (+ (real-part a) (real-part b))
+                      (+ (imag-part a) (imag-part b))))
+
+  (define-method (new-+ (a &lt;number&gt;))  a)
+  
+  (define-method (new-+) 0)
+
+  (define-method (new-+ . args)
+    (new-+ (car args) 
+      (apply new-+ (cdr args)))))
+
+(set! + new-+)
+</pre></div>
+
+
+<div class="caption"><p><strong class="strong">Figure 8.1: </strong>Extending <code class="code">+</code> to handle complex numbers</p></div></div>
+<p>We take advantage here of the fact that generic function are not obliged
+to have a fixed number of parameters.  The four first methods implement
+dyadic addition.  The fifth method says that the addition of a single
+element is this element itself.  The sixth method says that using the
+addition with no parameter always return 0 (as is also true for the
+primitive <code class="code">+</code>).  The last method takes an arbitrary number of
+parameters<a class="footnote" id="DOCF33" href="#FOOT33"><sup>33</sup></a>.  This method acts as a kind of <code class="code">reduce</code>: it calls the
+dyadic addition on the <em class="emph">car</em> of the list and on the result of
+applying it on its rest.  To finish, the <code class="code">set!</code> permits to redefine
+the <code class="code">+</code> symbol to our extended addition.
+</p>
+<p>To conclude our implementation (integration?) of complex numbers, we
+could redefine standard Scheme predicates in the following manner:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-method (complex? c &lt;my-complex&gt;) #t)
+(define-method (complex? c)           #f)
+
+(define-method (number? n &lt;number&gt;) #t)
+(define-method (number? n)          #f)
+&hellip;
+</pre></div>
+
+<p>Standard primitives in which complex numbers are involved could also be
+redefined in the same manner.
+</p>
+
+</div>
+<div class="footnotes-segment">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5 class="footnote-body-heading"><a id="FOOT33" href="#DOCF33">(33)</a></h5>
+<p>The parameter list for a <code class="code">define-method</code>
+follows the conventions used for Scheme procedures. In particular it can
+use the dot notation or a symbol to denote an arbitrary number of
+parameters</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Handling-Invocation-Errors.html">Handling Invocation Errors</a>, Previous: <a href="Next_002dmethod.html">Next-method</a>, Up: <a href="Methods-and-Generic-Functions.html">Methods and Generic Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

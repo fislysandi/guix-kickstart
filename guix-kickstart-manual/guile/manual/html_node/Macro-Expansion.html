@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Macro Expansion (Guile Reference Manual)</title>
+
+<meta name="description" content="Macro Expansion (Guile Reference Manual)">
+<meta name="keywords" content="Macro Expansion (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Macros.html" rel="up" title="Macros">
+<link href="Hygiene-and-the-Top_002dLevel.html" rel="next" title="Hygiene and the Top-Level">
+<link href="Eval-When.html" rel="prev" title="Eval When">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Macro-Expansion">
+<div class="nav-panel">
+<p>
+Next: <a href="Hygiene-and-the-Top_002dLevel.html" accesskey="n" rel="next">Hygiene and the Top-Level</a>, Previous: <a href="Eval-When.html" accesskey="p" rel="prev">Eval-when</a>, Up: <a href="Macros.html" accesskey="u" rel="up">Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Macro-Expansion-1">6.8.9 Macro Expansion</h4>
+
+<p>Usually, macros are expanded on behalf of the user as needed.  Macro
+expansion is an integral part of <code class="code">eval</code> and <code class="code">compile</code>.  Users
+can also expand macros at the REPL prompt via the <code class="code">expand</code> REPL
+command; See <a class="xref" href="Compile-Commands.html">Compile Commands</a>.
+</p>
+<p>Macros can also be expanded programmatically, via <code class="code">macroexpand</code>,
+but the details get a bit hairy for two reasons.
+</p>
+<p>The first complication is that the result of macro-expansion isn&rsquo;t
+Scheme: it&rsquo;s Tree-IL, Guile&rsquo;s high-level intermediate language.
+See <a class="xref" href="Tree_002dIL.html">Tree-IL</a>.  As &ldquo;hygienic macros&rdquo; can produce identifiers that are
+distinct but have the same name, the output format needs to be able to
+represent distinctions between variable identities and names.  Again,
+See <a class="xref" href="Tree_002dIL.html">Tree-IL</a>, for all the details.  The easiest thing is to just run
+<code class="code">tree-il-&gt;scheme</code> on the result of macro-expansion:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(macroexpand '(+ 1 2))
+&rArr;
+#&lt;tree-il (call (toplevel +) (const 1) (const 2))&gt;
+
+(use-modules (language tree-il))
+(tree-il-&gt;scheme (macroexpand '(+ 1 2)))
+&rArr;
+(+ 1 2)
+</pre></div>
+
+<p>The second complication involves <code class="code">eval-when</code>.  As an example, what
+would it mean to macro-expand the definition of a macro?
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(macroexpand '(define-syntax qux (identifier-syntax 'bar)))
+&rArr;
+?
+</pre></div>
+
+<p>The answer is that it depends who is macro-expanding, and why.  Do you
+define the macro in the current environment?  Residualize a macro
+definition?  Both?  Neither?  The default is to expand in &ldquo;eval&rdquo; mode,
+which means an <code class="code">eval-when</code> clauses will only proceed when
+<code class="code">eval</code> (or <code class="code">expand</code>) is in its condition set.  Top-level
+macros will be <code class="code">eval</code>&rsquo;d in the top-level environment.
+</p>
+<p>In this way <code class="code">(macroexpand <var class="var">foo</var>)</code> is equivalent to
+<code class="code">(macroexpand <var class="var">foo</var> 'e '(eval))</code>.  The second argument is the
+mode (<code class="code">'e</code> for &ldquo;eval&rdquo;) and the third is the
+eval-syntax-expanders-when parameter (only <code class="code">eval</code> in this default
+setting).
+</p>
+<p>But if you are compiling the macro definition, probably you want to
+reify the macro definition itself.  In that case you pass <code class="code">'c</code> as
+the second argument to <code class="code">macroexpand</code>.  But probably you want the
+macro definition to be present at compile time as well, so you pass
+<code class="code">'(compile load eval)</code> as the <var class="var">esew</var> parameter.  In fact
+<code class="code">(compile <var class="var">foo</var> #:to 'tree-il)</code> is entirely equivalent to
+<code class="code">(macroexpand <var class="var">foo</var> 'c '(compile load eval))</code>; See <a class="xref" href="The-Scheme-Compiler.html">The Scheme Compiler</a>.
+</p>
+<p>It&rsquo;s a terrible interface; we know.  The macroexpander is somewhat
+tricksy regarding modes, so unless you are building a macro-expanding
+tool, we suggest to avoid invoking it directly.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Hygiene-and-the-Top_002dLevel.html">Hygiene and the Top-Level</a>, Previous: <a href="Eval-When.html">Eval-when</a>, Up: <a href="Macros.html">Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

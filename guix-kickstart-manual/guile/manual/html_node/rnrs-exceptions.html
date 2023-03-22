@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>rnrs exceptions (Guile Reference Manual)</title>
+
+<meta name="description" content="rnrs exceptions (Guile Reference Manual)">
+<meta name="keywords" content="rnrs exceptions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="R6RS-Standard-Libraries.html" rel="up" title="R6RS Standard Libraries">
+<link href="rnrs-conditions.html" rel="next" title="rnrs conditions">
+<link href="rnrs-records-inspection.html" rel="prev" title="rnrs records inspection">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="rnrs-exceptions">
+<div class="nav-panel">
+<p>
+Next: <a href="rnrs-conditions.html" accesskey="n" rel="next">rnrs conditions</a>, Previous: <a href="rnrs-records-inspection.html" accesskey="p" rel="prev">rnrs records inspection</a>, Up: <a href="R6RS-Standard-Libraries.html" accesskey="u" rel="up">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="rnrs-exceptions-1">7.6.2.12 rnrs exceptions</h4>
+
+<p>The <code class="code">(rnrs exceptions (6))</code> library provides functionality related
+to signaling and handling exceptional situations.  This functionality
+re-exports Guile&rsquo;s core exception-handling primitives.
+See <a class="xref" href="Exceptions.html">Exceptions</a>, for a full discussion.  See <a class="xref" href="SRFI_002d34.html">SRFI-34 - Exception handling for programs</a>, for a similar
+pre-R6RS facility.  In Guile, SRFI-34, SRFI-35, and R6RS exception
+handling are all built on the same core facilities, and so are
+interoperable.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-with_002dexception_002dhandler-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">with-exception-handler</strong> <var class="def-var-arguments">handler thunk</var><a class="copiable-link" href='#index-with_002dexception_002dhandler-2'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Raising-and-Handling-Exceptions.html">Raising and Handling Exceptions</a>, for more information on
+<code class="code">with-exception-handler</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-guard-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">guard</strong> <var class="def-var-arguments">(variable clause1 clause2 ...) body</var><a class="copiable-link" href='#index-guard-1'> &para;</a></span></dt>
+<dd><p>Evaluates the expression given by <var class="var">body</var>, first creating an ad hoc 
+exception handler that binds a raised exception to <var class="var">variable</var> and
+then evaluates the specified <var class="var">clause</var>s as if they were part of a 
+<code class="code">cond</code> expression, with the value of the first matching clause 
+becoming the value of the <code class="code">guard</code> expression 
+(see <a class="pxref" href="Conditionals.html">Simple Conditional Evaluation</a>).  If none of the clause&rsquo;s test expressions 
+evaluates to <code class="code">#t</code>, the exception is re-raised, with the exception
+handler that was current before the evaluation of the <code class="code">guard</code> form.
+</p>
+<p>For example, the expression
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(guard (ex ((eq? ex 'foo) 'bar) ((eq? ex 'bar) 'baz)) 
+  (raise 'bar))
+</pre></div>
+
+<p>evaluates to <code class="code">baz</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-raise-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">raise</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-raise-2'> &para;</a></span></dt>
+<dd><p>Equivalent to core Guile <code class="code">(raise-exception <var class="var">obj</var>)</code>.
+See <a class="xref" href="Raising-and-Handling-Exceptions.html">Raising and Handling Exceptions</a>.  (Unfortunately, <code class="code">raise</code>
+is already bound to a different function in core Guile.
+See <a class="xref" href="Signals.html">Signals</a>.)
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-raise_002dcontinuable"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">raise-continuable</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-raise_002dcontinuable'> &para;</a></span></dt>
+<dd><p>Equivalent to core Guile <code class="code">(raise-exception <var class="var">obj</var> #:continuable?
+#t)</code>.  See <a class="xref" href="Raising-and-Handling-Exceptions.html">Raising and Handling Exceptions</a>.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="rnrs-conditions.html">rnrs conditions</a>, Previous: <a href="rnrs-records-inspection.html">rnrs records inspection</a>, Up: <a href="R6RS-Standard-Libraries.html">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

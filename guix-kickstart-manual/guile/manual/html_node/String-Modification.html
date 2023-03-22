@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>String Modification (Guile Reference Manual)</title>
+
+<meta name="description" content="String Modification (Guile Reference Manual)">
+<meta name="keywords" content="String Modification (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Strings.html" rel="up" title="Strings">
+<link href="String-Comparison.html" rel="next" title="String Comparison">
+<link href="String-Selection.html" rel="prev" title="String Selection">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="String-Modification">
+<div class="nav-panel">
+<p>
+Next: <a href="String-Comparison.html" accesskey="n" rel="next">String Comparison</a>, Previous: <a href="String-Selection.html" accesskey="p" rel="prev">String Selection</a>, Up: <a href="Strings.html" accesskey="u" rel="up">Strings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="String-Modification-1">6.6.5.6 String Modification</h4>
+
+<p>These procedures are for modifying strings in-place.  This means that the
+result of the operation is not a new string; instead, the original string&rsquo;s
+memory representation is modified.
+</p>
+<a class="index-entry-id" id="index-string_002dset_0021-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-set!</strong> <var class="def-var-arguments">str k chr</var><a class="copiable-link" href='#index-string_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_set_x</strong> <var class="def-var-arguments">(str, k, chr)</var><a class="copiable-link" href='#index-scm_005fstring_005fset_005fx'> &para;</a></span></dt>
+<dd><p>Store <var class="var">chr</var> in element <var class="var">k</var> of <var class="var">str</var> and return
+an unspecified value. <var class="var">k</var> must be a valid index of
+<var class="var">str</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fstring_005fset_005fx"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_c_string_set_x</strong> <code class="def-code-arguments">(SCM str, size_t k, SCM chr)</code><a class="copiable-link" href='#index-scm_005fc_005fstring_005fset_005fx'> &para;</a></span></dt>
+<dd><p>Like <code class="code">scm_string_set_x</code>, but the index is given as a <code class="code">size_t</code>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-string_002dfill_0021-1"></a>
+<a class="anchor" id="x_002dstring_002dfill_0021"></a><dl class="first-deffn">
+<dt class="deffn" id="index-string_002dfill_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-fill!</strong> <var class="def-var-arguments">str chr [start [end]]</var><a class="copiable-link" href='#index-string_002dfill_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsubstring_005ffill_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_substring_fill_x</strong> <var class="def-var-arguments">(str, chr, start, end)</var><a class="copiable-link" href='#index-scm_005fsubstring_005ffill_005fx'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005ffill_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_fill_x</strong> <var class="def-var-arguments">(str, chr)</var><a class="copiable-link" href='#index-scm_005fstring_005ffill_005fx'> &para;</a></span></dt>
+<dd><p>Stores <var class="var">chr</var> in every element of the given <var class="var">str</var> and
+returns an unspecified value.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-substring_002dfill_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">substring-fill!</strong> <var class="def-var-arguments">str start end fill</var><a class="copiable-link" href='#index-substring_002dfill_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsubstring_005ffill_005fx-1"><span class="category-def">C Function: </span><span><strong class="def-name">scm_substring_fill_x</strong> <var class="def-var-arguments">(str, start, end, fill)</var><a class="copiable-link" href='#index-scm_005fsubstring_005ffill_005fx-1'> &para;</a></span></dt>
+<dd><p>Change every character in <var class="var">str</var> between <var class="var">start</var> and
+<var class="var">end</var> to <var class="var">fill</var>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define y (string-copy &quot;abcdefg&quot;))
+(substring-fill! y 1 3 #\r)
+y
+&rArr; &quot;arrdefg&quot;
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-substring_002dmove_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">substring-move!</strong> <var class="def-var-arguments">str1 start1 end1 str2 start2</var><a class="copiable-link" href='#index-substring_002dmove_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsubstring_005fmove_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_substring_move_x</strong> <var class="def-var-arguments">(str1, start1, end1, str2, start2)</var><a class="copiable-link" href='#index-scm_005fsubstring_005fmove_005fx'> &para;</a></span></dt>
+<dd><p>Copy the substring of <var class="var">str1</var> bounded by <var class="var">start1</var> and <var class="var">end1</var>
+into <var class="var">str2</var> beginning at position <var class="var">start2</var>.
+<var class="var">str1</var> and <var class="var">str2</var> can be the same string.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dcopy_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-copy!</strong> <var class="def-var-arguments">target tstart s [start [end]]</var><a class="copiable-link" href='#index-string_002dcopy_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fcopy_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_copy_x</strong> <var class="def-var-arguments">(target, tstart, s, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005fcopy_005fx'> &para;</a></span></dt>
+<dd><p>Copy the sequence of characters from index range [<var class="var">start</var>,
+<var class="var">end</var>) in string <var class="var">s</var> to string <var class="var">target</var>, beginning
+at index <var class="var">tstart</var>.  The characters are copied left-to-right
+or right-to-left as needed &ndash; the copy is guaranteed to work,
+even if <var class="var">target</var> and <var class="var">s</var> are the same string.  It is an
+error if the copy operation runs off the end of the target
+string.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="String-Comparison.html">String Comparison</a>, Previous: <a href="String-Selection.html">String Selection</a>, Up: <a href="Strings.html">Strings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

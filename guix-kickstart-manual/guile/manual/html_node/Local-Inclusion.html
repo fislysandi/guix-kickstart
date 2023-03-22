@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Local Inclusion (Guile Reference Manual)</title>
+
+<meta name="description" content="Local Inclusion (Guile Reference Manual)">
+<meta name="keywords" content="Local Inclusion (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Read_002fLoad_002fEval_002fCompile.html" rel="up" title="Read/Load/Eval/Compile">
+<link href="Sandboxed-Evaluation.html" rel="next" title="Sandboxed Evaluation">
+<link href="Local-Evaluation.html" rel="prev" title="Local Evaluation">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Local-Inclusion">
+<div class="nav-panel">
+<p>
+Next: <a href="Sandboxed-Evaluation.html" accesskey="n" rel="next">Sandboxed Evaluation</a>, Previous: <a href="Local-Evaluation.html" accesskey="p" rel="prev">Local Evaluation</a>, Up: <a href="Read_002fLoad_002fEval_002fCompile.html" accesskey="u" rel="up">Reading and Evaluating Scheme Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Local-Inclusion-1">6.16.12 Local Inclusion</h4>
+
+<p>This section has discussed various means of linking Scheme code
+together: fundamentally, loading up files at run-time using <code class="code">load</code>
+and <code class="code">load-compiled</code>.  Guile provides another option to compose
+parts of programs together at expansion-time instead of at run-time.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-include"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">include</strong> <var class="def-var-arguments">file-name</var><a class="copiable-link" href='#index-include'> &para;</a></span></dt>
+<dd><p>Open <var class="var">file-name</var>, at expansion-time, and read the Scheme forms that
+it contains, splicing them into the location of the <code class="code">include</code>,
+within a <code class="code">begin</code>.
+</p>
+<p>If <var class="var">file-name</var> is a relative path, it is searched for relative to
+the path that contains the file that the <code class="code">include</code> form appears in.
+</p></dd></dl>
+
+<p>If you are a C programmer, if <code class="code">load</code> in Scheme is like
+<code class="code">dlopen</code> in C, consider <code class="code">include</code> to be like the C
+preprocessor&rsquo;s <code class="code">#include</code>.  When you use <code class="code">include</code>, it is as
+if the contents of the included file were typed in instead of the
+<code class="code">include</code> form.
+</p>
+<p>Because the code is included at compile-time, it is available to the
+macroexpander.  Syntax definitions in the included file are available to
+later code in the form in which the <code class="code">include</code> appears, without the
+need for <code class="code">eval-when</code>.  (See <a class="xref" href="Eval-When.html">Eval-when</a>.)
+</p>
+<p>For the same reason, compiling a form that uses <code class="code">include</code> results
+in one compilation unit, composed of multiple files.  Loading the
+compiled file is one <code class="code">stat</code> operation for the compilation unit,
+instead of <code class="code">2*<var class="var">n</var></code> in the case of <code class="code">load</code> (once for each
+loaded source file, and once each corresponding compiled file, in the
+best case).
+</p>
+<p>Unlike <code class="code">load</code>, <code class="code">include</code> also works within nested lexical
+contexts.  It so happens that the optimizer works best within a lexical
+context, because all of the uses of bindings in a lexical context are
+visible, so composing files by including them within a <code class="code">(let ()
+...)</code> can sometimes lead to important speed improvements.
+</p>
+<p>On the other hand, <code class="code">include</code> does have all the disadvantages of
+early binding: once the code with the <code class="code">include</code> is compiled, no
+change to the included file is reflected in the future behavior of the
+including form.
+</p>
+<p>Also, the particular form of <code class="code">include</code>, which requires an absolute
+path, or a path relative to the current directory at compile-time, is
+not very amenable to compiling the source in one place, but then
+installing the source to another place.  For this reason, Guile provides
+another form, <code class="code">include-from-path</code>, which looks for the source file
+to include within a load path.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-include_002dfrom_002dpath"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">include-from-path</strong> <var class="def-var-arguments">file-name</var><a class="copiable-link" href='#index-include_002dfrom_002dpath'> &para;</a></span></dt>
+<dd><p>Like <code class="code">include</code>, but instead of expecting <code class="code">file-name</code> to be an
+absolute file name, it is expected to be a relative path to search in
+the <code class="code">%load-path</code>.
+</p></dd></dl>
+
+<p><code class="code">include-from-path</code> is more useful when you want to install all of
+the source files for a package (as you should!).  It makes it possible
+to evaluate an installed file from source, instead of relying on the
+<code class="code">.go</code> file being up to date.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Sandboxed-Evaluation.html">Sandboxed Evaluation</a>, Previous: <a href="Local-Evaluation.html">Local Evaluation</a>, Up: <a href="Read_002fLoad_002fEval_002fCompile.html">Reading and Evaluating Scheme Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Pairs (Guile Reference Manual)</title>
+
+<meta name="description" content="Pairs (Guile Reference Manual)">
+<meta name="keywords" content="Pairs (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Data-Types.html" rel="up" title="Data Types">
+<link href="Lists.html" rel="next" title="Lists">
+<link href="Keywords.html" rel="prev" title="Keywords">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Pairs">
+<div class="nav-panel">
+<p>
+Next: <a href="Lists.html" accesskey="n" rel="next">Lists</a>, Previous: <a href="Keywords.html" accesskey="p" rel="prev">Keywords</a>, Up: <a href="Data-Types.html" accesskey="u" rel="up">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Pairs-1">6.6.8 Pairs</h4>
+<a class="index-entry-id" id="index-Pairs"></a>
+
+<p>Pairs are used to combine two Scheme objects into one compound object.
+Hence the name: A pair stores a pair of objects.
+</p>
+<p>The data type <em class="dfn">pair</em> is extremely important in Scheme, just like in
+any other Lisp dialect.  The reason is that pairs are not only used to
+make two values available as one object, but that pairs are used for
+constructing lists of values.  Because lists are so important in Scheme,
+they are described in a section of their own (see <a class="pxref" href="Lists.html">Lists</a>).
+</p>
+<p>Pairs can literally get entered in source code or at the REPL, in the
+so-called <em class="dfn">dotted list</em> syntax.  This syntax consists of an opening
+parentheses, the first element of the pair, a dot, the second element
+and a closing parentheses.  The following example shows how a pair
+consisting of the two numbers 1 and 2, and a pair containing the symbols
+<code class="code">foo</code> and <code class="code">bar</code> can be entered.  It is very important to write
+the whitespace before and after the dot, because otherwise the Scheme
+parser would not be able to figure out where to split the tokens.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(1 . 2)
+(foo . bar)
+</pre></div>
+
+<p>But beware, if you want to try out these examples, you have to
+<em class="dfn">quote</em> the expressions.  More information about quotation is
+available in the section <a class="ref" href="Expression-Syntax.html">Expression Syntax</a>.  The correct way
+to try these examples is as follows.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">'(1 . 2)
+&rArr;
+(1 . 2)
+'(foo . bar)
+&rArr;
+(foo . bar)
+</pre></div>
+
+<p>A new pair is made by calling the procedure <code class="code">cons</code> with two
+arguments.  Then the argument values are stored into a newly allocated
+pair, and the pair is returned.  The name <code class="code">cons</code> stands for
+&quot;construct&quot;.  Use the procedure <code class="code">pair?</code> to test whether a
+given Scheme object is a pair or not.
+</p>
+<a class="index-entry-id" id="index-cons-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-cons"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cons</strong> <var class="def-var-arguments">x y</var><a class="copiable-link" href='#index-cons'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcons"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cons</strong> <var class="def-var-arguments">(x, y)</var><a class="copiable-link" href='#index-scm_005fcons'> &para;</a></span></dt>
+<dd><p>Return a newly allocated pair whose car is <var class="var">x</var> and whose
+cdr is <var class="var">y</var>.  The pair is guaranteed to be different (in the
+sense of <code class="code">eq?</code>) from every previously existing object.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-pair_003f-3"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-pair_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">pair?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-pair_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fpair_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_pair_p</strong> <var class="def-var-arguments">(x)</var><a class="copiable-link" href='#index-scm_005fpair_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">x</var> is a pair; otherwise return
+<code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fis_005fpair"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_is_pair</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fis_005fpair'> &para;</a></span></dt>
+<dd><p>Return 1 when <var class="var">x</var> is a pair; otherwise return 0.
+</p></dd></dl>
+
+<p>The two parts of a pair are traditionally called <em class="dfn">car</em> and
+<em class="dfn">cdr</em>.  They can be retrieved with procedures of the same name
+(<code class="code">car</code> and <code class="code">cdr</code>), and can be modified with the procedures
+<code class="code">set-car!</code> and <code class="code">set-cdr!</code>.
+</p>
+<p>Since a very common operation in Scheme programs is to access the car of
+a car of a pair, or the car of the cdr of a pair, etc., the procedures
+called <code class="code">caar</code>, <code class="code">cadr</code> and so on are also predefined.  However,
+using these procedures is often detrimental to readability, and
+error-prone.  Thus, accessing the contents of a list is usually better
+achieved using pattern matching techniques (see <a class="pxref" href="Pattern-Matching.html">Pattern Matching</a>).
+</p>
+<a class="index-entry-id" id="index-car-2"></a>
+<a class="index-entry-id" id="index-cdr-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-car"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">car</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-car'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cdr"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cdr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cdr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcar"><span class="category-def">C Function: </span><span><strong class="def-name">scm_car</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcdr"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cdr</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcdr'> &para;</a></span></dt>
+<dd><p>Return the car or the cdr of <var class="var">pair</var>, respectively.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fCAR"><span class="category-def">C Macro: </span><span><code class="def-type">SCM</code> <strong class="def-name">SCM_CAR</strong> <code class="def-code-arguments">(SCM pair)</code><a class="copiable-link" href='#index-SCM_005fCAR'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fCDR"><span class="category-def">C Macro: </span><span><code class="def-type">SCM</code> <strong class="def-name">SCM_CDR</strong> <code class="def-code-arguments">(SCM pair)</code><a class="copiable-link" href='#index-SCM_005fCDR'> &para;</a></span></dt>
+<dd><p>These two macros are the fastest way to access the car or cdr of a
+pair; they can be thought of as compiling into a single memory
+reference.
+</p>
+<p>These macros do no checking at all.  The argument <var class="var">pair</var> must be a
+valid pair.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-cddr"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cddr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cddr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cdar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cdar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cdar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cadr"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cadr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cadr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-caar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">caar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-caar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cdddr"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cdddr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cdddr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cddar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cddar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cddar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cdadr"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cdadr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cdadr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cdaar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cdaar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cdaar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-caddr"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">caddr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-caddr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cadar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cadar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cadar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-caadr"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">caadr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-caadr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-caaar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">caaar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-caaar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cddddr"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cddddr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cddddr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cdddar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cdddar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cdddar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cddadr"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cddadr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cddadr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cddaar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cddaar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cddaar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cdaddr"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cdaddr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cdaddr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cdadar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cdadar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cdadar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cdaadr"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cdaadr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cdaadr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cdaaar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cdaaar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cdaaar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cadddr"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cadddr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cadddr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-caddar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">caddar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-caddar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cadadr"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cadadr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cadadr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cadaar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cadaar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cadaar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-caaddr"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">caaddr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-caaddr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-caadar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">caadar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-caadar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-caaadr"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">caaadr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-caaadr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-caaaar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">caaaar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-caaaar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcddr"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cddr</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcddr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcdar"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cdar</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcdar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcadr"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cadr</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcadr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcaar"><span class="category-def">C Function: </span><span><strong class="def-name">scm_caar</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcaar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcdddr"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cdddr</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcdddr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcddar"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cddar</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcddar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcdadr"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cdadr</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcdadr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcdaar"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cdaar</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcdaar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcaddr"><span class="category-def">C Function: </span><span><strong class="def-name">scm_caddr</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcaddr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcadar"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cadar</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcadar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcaadr"><span class="category-def">C Function: </span><span><strong class="def-name">scm_caadr</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcaadr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcaaar"><span class="category-def">C Function: </span><span><strong class="def-name">scm_caaar</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcaaar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcddddr"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cddddr</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcddddr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcdddar"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cdddar</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcdddar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcddadr"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cddadr</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcddadr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcddaar"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cddaar</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcddaar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcdaddr"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cdaddr</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcdaddr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcdadar"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cdadar</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcdadar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcdaadr"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cdaadr</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcdaadr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcdaaar"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cdaaar</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcdaaar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcadddr"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cadddr</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcadddr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcaddar"><span class="category-def">C Function: </span><span><strong class="def-name">scm_caddar</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcaddar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcadadr"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cadadr</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcadadr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcadaar"><span class="category-def">C Function: </span><span><strong class="def-name">scm_cadaar</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcadaar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcaaddr"><span class="category-def">C Function: </span><span><strong class="def-name">scm_caaddr</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcaaddr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcaadar"><span class="category-def">C Function: </span><span><strong class="def-name">scm_caadar</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcaadar'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcaaadr"><span class="category-def">C Function: </span><span><strong class="def-name">scm_caaadr</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcaaadr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcaaaar"><span class="category-def">C Function: </span><span><strong class="def-name">scm_caaaar</strong> <var class="def-var-arguments">(pair)</var><a class="copiable-link" href='#index-scm_005fcaaaar'> &para;</a></span></dt>
+<dd><p>These procedures are compositions of <code class="code">car</code> and <code class="code">cdr</code>, where
+for example <code class="code">caddr</code> could be defined by
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define caddr (lambda (x) (car (cdr (cdr x)))))
+</pre></div>
+
+<p><code class="code">cadr</code>, <code class="code">caddr</code> and <code class="code">cadddr</code> pick out the second, third
+or fourth elements of a list, respectively.  SRFI-1 provides the same
+under the names <code class="code">second</code>, <code class="code">third</code> and <code class="code">fourth</code>
+(see <a class="pxref" href="SRFI_002d1-Selectors.html">Selectors</a>).
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-set_002dcar_0021-1"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-set_002dcar_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-car!</strong> <var class="def-var-arguments">pair value</var><a class="copiable-link" href='#index-set_002dcar_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fset_005fcar_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_set_car_x</strong> <var class="def-var-arguments">(pair, value)</var><a class="copiable-link" href='#index-scm_005fset_005fcar_005fx'> &para;</a></span></dt>
+<dd><p>Stores <var class="var">value</var> in the car field of <var class="var">pair</var>.  The value returned
+by <code class="code">set-car!</code> is unspecified.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-set_002dcdr_0021-1"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-set_002dcdr_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-cdr!</strong> <var class="def-var-arguments">pair value</var><a class="copiable-link" href='#index-set_002dcdr_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fset_005fcdr_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_set_cdr_x</strong> <var class="def-var-arguments">(pair, value)</var><a class="copiable-link" href='#index-scm_005fset_005fcdr_005fx'> &para;</a></span></dt>
+<dd><p>Stores <var class="var">value</var> in the cdr field of <var class="var">pair</var>.  The value returned
+by <code class="code">set-cdr!</code> is unspecified.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Lists.html">Lists</a>, Previous: <a href="Keywords.html">Keywords</a>, Up: <a href="Data-Types.html">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

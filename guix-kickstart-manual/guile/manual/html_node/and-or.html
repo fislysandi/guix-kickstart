@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>and or (Guile Reference Manual)</title>
+
+<meta name="description" content="and or (Guile Reference Manual)">
+<meta name="keywords" content="and or (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Control-Mechanisms.html" rel="up" title="Control Mechanisms">
+<link href="while-do.html" rel="next" title="while do">
+<link href="Conditionals.html" rel="prev" title="Conditionals">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="and-or">
+<div class="nav-panel">
+<p>
+Next: <a href="while-do.html" accesskey="n" rel="next">Iteration mechanisms</a>, Previous: <a href="Conditionals.html" accesskey="p" rel="prev">Simple Conditional Evaluation</a>, Up: <a href="Control-Mechanisms.html" accesskey="u" rel="up">Controlling the Flow of Program Execution</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Conditional-Evaluation-of-a-Sequence-of-Expressions">6.11.3 Conditional Evaluation of a Sequence of Expressions</h4>
+
+<p><code class="code">and</code> and <code class="code">or</code> evaluate all their arguments in order, similar
+to <code class="code">begin</code>, but evaluation stops as soon as one of the expressions
+evaluates to false or true, respectively.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-and"><span class="category-def">syntax: </span><span><strong class="def-name">and</strong> <var class="def-var-arguments">expr &hellip;</var><a class="copiable-link" href='#index-and'> &para;</a></span></dt>
+<dd><p>Evaluate the <var class="var">expr</var>s from left to right and stop evaluation as soon
+as one expression evaluates to <code class="code">#f</code>; the remaining expressions are
+not evaluated.  The value of the last evaluated expression is returned.
+If no expression evaluates to <code class="code">#f</code>, the value of the last
+expression is returned.
+</p>
+<p>If used without expressions, <code class="code">#t</code> is returned.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-or"><span class="category-def">syntax: </span><span><strong class="def-name">or</strong> <var class="def-var-arguments">expr &hellip;</var><a class="copiable-link" href='#index-or'> &para;</a></span></dt>
+<dd><p>Evaluate the <var class="var">expr</var>s from left to right and stop evaluation as soon
+as one expression evaluates to a true value (that is, a value different
+from <code class="code">#f</code>); the remaining expressions are not evaluated.  The value
+of the last evaluated expression is returned.  If all expressions
+evaluate to <code class="code">#f</code>, <code class="code">#f</code> is returned.
+</p>
+<p>If used without expressions, <code class="code">#f</code> is returned.
+</p></dd></dl>
+
+
+</div>
+
+
+
+</body>
+</html>

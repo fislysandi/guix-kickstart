@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Alphabetic Case Mapping (Guile Reference Manual)</title>
+
+<meta name="description" content="Alphabetic Case Mapping (Guile Reference Manual)">
+<meta name="keywords" content="Alphabetic Case Mapping (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Strings.html" rel="up" title="Strings">
+<link href="Reversing-and-Appending-Strings.html" rel="next" title="Reversing and Appending Strings">
+<link href="String-Searching.html" rel="prev" title="String Searching">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Alphabetic-Case-Mapping">
+<div class="nav-panel">
+<p>
+Next: <a href="Reversing-and-Appending-Strings.html" accesskey="n" rel="next">Reversing and Appending Strings</a>, Previous: <a href="String-Searching.html" accesskey="p" rel="prev">String Searching</a>, Up: <a href="Strings.html" accesskey="u" rel="up">Strings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Alphabetic-Case-Mapping-1">6.6.5.9 Alphabetic Case Mapping</h4>
+
+<p>These are procedures for mapping strings to their upper- or lower-case
+equivalents, respectively, or for capitalizing strings.
+</p>
+<p>They use the basic case mapping rules for Unicode characters.  No
+special language or context rules are considered.  The resulting strings
+are guaranteed to be the same length as the input strings.
+</p>
+<p>See <a class="xref" href="Character-Case-Mapping.html">the <code class="code">(ice-9
+i18n)</code> module</a>, for locale-dependent case conversions.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dupcase"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-upcase</strong> <var class="def-var-arguments">str [start [end]]</var><a class="copiable-link" href='#index-string_002dupcase'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsubstring_005fupcase"><span class="category-def">C Function: </span><span><strong class="def-name">scm_substring_upcase</strong> <var class="def-var-arguments">(str, start, end)</var><a class="copiable-link" href='#index-scm_005fsubstring_005fupcase'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fupcase"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_upcase</strong> <var class="def-var-arguments">(str)</var><a class="copiable-link" href='#index-scm_005fstring_005fupcase'> &para;</a></span></dt>
+<dd><p>Upcase every character in <code class="code">str</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dupcase_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-upcase!</strong> <var class="def-var-arguments">str [start [end]]</var><a class="copiable-link" href='#index-string_002dupcase_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsubstring_005fupcase_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_substring_upcase_x</strong> <var class="def-var-arguments">(str, start, end)</var><a class="copiable-link" href='#index-scm_005fsubstring_005fupcase_005fx'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fupcase_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_upcase_x</strong> <var class="def-var-arguments">(str)</var><a class="copiable-link" href='#index-scm_005fstring_005fupcase_005fx'> &para;</a></span></dt>
+<dd><p>Destructively upcase every character in <code class="code">str</code>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(string-upcase! y)
+&rArr; &quot;ARRDEFG&quot;
+y
+&rArr; &quot;ARRDEFG&quot;
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002ddowncase"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-downcase</strong> <var class="def-var-arguments">str [start [end]]</var><a class="copiable-link" href='#index-string_002ddowncase'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsubstring_005fdowncase"><span class="category-def">C Function: </span><span><strong class="def-name">scm_substring_downcase</strong> <var class="def-var-arguments">(str, start, end)</var><a class="copiable-link" href='#index-scm_005fsubstring_005fdowncase'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fdowncase"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_downcase</strong> <var class="def-var-arguments">(str)</var><a class="copiable-link" href='#index-scm_005fstring_005fdowncase'> &para;</a></span></dt>
+<dd><p>Downcase every character in <var class="var">str</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002ddowncase_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-downcase!</strong> <var class="def-var-arguments">str [start [end]]</var><a class="copiable-link" href='#index-string_002ddowncase_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsubstring_005fdowncase_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_substring_downcase_x</strong> <var class="def-var-arguments">(str, start, end)</var><a class="copiable-link" href='#index-scm_005fsubstring_005fdowncase_005fx'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fdowncase_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_downcase_x</strong> <var class="def-var-arguments">(str)</var><a class="copiable-link" href='#index-scm_005fstring_005fdowncase_005fx'> &para;</a></span></dt>
+<dd><p>Destructively downcase every character in <var class="var">str</var>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">y
+&rArr; &quot;ARRDEFG&quot;
+(string-downcase! y)
+&rArr; &quot;arrdefg&quot;
+y
+&rArr; &quot;arrdefg&quot;
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dcapitalize"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-capitalize</strong> <var class="def-var-arguments">str</var><a class="copiable-link" href='#index-string_002dcapitalize'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fcapitalize"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_capitalize</strong> <var class="def-var-arguments">(str)</var><a class="copiable-link" href='#index-scm_005fstring_005fcapitalize'> &para;</a></span></dt>
+<dd><p>Return a freshly allocated string with the characters in
+<var class="var">str</var>, where the first character of every word is
+capitalized.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dcapitalize_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-capitalize!</strong> <var class="def-var-arguments">str</var><a class="copiable-link" href='#index-string_002dcapitalize_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fcapitalize_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_capitalize_x</strong> <var class="def-var-arguments">(str)</var><a class="copiable-link" href='#index-scm_005fstring_005fcapitalize_005fx'> &para;</a></span></dt>
+<dd><p>Upcase the first character of every word in <var class="var">str</var>
+destructively and return <var class="var">str</var>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">y                      &rArr; &quot;hello world&quot;
+(string-capitalize! y) &rArr; &quot;Hello World&quot;
+y                      &rArr; &quot;Hello World&quot;
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dtitlecase"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-titlecase</strong> <var class="def-var-arguments">str [start [end]]</var><a class="copiable-link" href='#index-string_002dtitlecase'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005ftitlecase"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_titlecase</strong> <var class="def-var-arguments">(str, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005ftitlecase'> &para;</a></span></dt>
+<dd><p>Titlecase every first character in a word in <var class="var">str</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dtitlecase_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-titlecase!</strong> <var class="def-var-arguments">str [start [end]]</var><a class="copiable-link" href='#index-string_002dtitlecase_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005ftitlecase_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_titlecase_x</strong> <var class="def-var-arguments">(str, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005ftitlecase_005fx'> &para;</a></span></dt>
+<dd><p>Destructively titlecase every first character in a word in
+<var class="var">str</var>.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Reversing-and-Appending-Strings.html">Reversing and Appending Strings</a>, Previous: <a href="String-Searching.html">String Searching</a>, Up: <a href="Strings.html">Strings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-31 (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-31 (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-31 (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI-Support.html" rel="up" title="SRFI Support">
+<link href="SRFI_002d34.html" rel="next" title="SRFI-34">
+<link href="SRFI_002d30.html" rel="prev" title="SRFI-30">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="SRFI_002d31">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d34.html" accesskey="n" rel="next">SRFI-34 - Exception handling for programs</a>, Previous: <a href="SRFI_002d30.html" accesskey="p" rel="prev">SRFI-30 - Nested Multi-line Comments</a>, Up: <a href="SRFI-Support.html" accesskey="u" rel="up">SRFI Support Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="SRFI_002d31-_002d-A-special-form-_0060rec_0027-for-recursive-evaluation">7.5.22 SRFI-31 - A special form &lsquo;rec&rsquo; for recursive evaluation</h4>
+<a class="index-entry-id" id="index-SRFI_002d31"></a>
+<a class="index-entry-id" id="index-recursive-expression"></a>
+<a class="index-entry-id" id="index-rec"></a>
+
+<p>SRFI-31 defines a special form that can be used to create
+self-referential expressions more conveniently.  The syntax is as
+follows:
+</p>
+<div class="example">
+<div class="group"><pre class="example-preformatted">&lt;rec expression&gt; --&gt; (rec &lt;variable&gt; &lt;expression&gt;)
+&lt;rec expression&gt; --&gt; (rec (&lt;variable&gt;+) &lt;body&gt;)
+</pre></div></div>
+
+<p>The first syntax can be used to create self-referential expressions,
+for example:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">  guile&gt; (define tmp (rec ones (cons 1 (delay ones))))
+</pre></div>
+
+<p>The second syntax can be used to create anonymous recursive functions:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">  guile&gt; (define tmp (rec (display-n item n)
+                       (if (positive? n)
+                           (begin (display n) (display-n (- n 1))))))
+  guile&gt; (tmp 42 3)
+  424242
+  guile&gt;
+</pre></div>
+
+
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Declarative Modules (Guile Reference Manual)</title>
+
+<meta name="description" content="Declarative Modules (Guile Reference Manual)">
+<meta name="keywords" content="Declarative Modules (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Modules.html" rel="up" title="Modules">
+<link href="Accessing-Modules-from-C.html" rel="next" title="Accessing Modules from C">
+<link href="Module-System-Reflection.html" rel="prev" title="Module System Reflection">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Declarative-Modules">
+<div class="nav-panel">
+<p>
+Next: <a href="Accessing-Modules-from-C.html" accesskey="n" rel="next">Accessing Modules from C</a>, Previous: <a href="Module-System-Reflection.html" accesskey="p" rel="prev">Module System Reflection</a>, Up: <a href="Modules.html" accesskey="u" rel="up">Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Declarative-Modules-1">6.18.9 Declarative Modules</h4>
+
+<p>The first-class access to modules and module variables described in the
+previous subsection is very powerful and allows Guile users to build
+many tools to dynamically learn things about their Guile systems.
+However, as Scheme godparent Mathias Felleisen wrote in &ldquo;On the
+Expressive Power of Programming Languages&rdquo;, a more expressive language
+is necessarily harder to reason about.  There are transformations that
+Guile&rsquo;s compiler would like to make which can&rsquo;t be done if every
+top-level definition is subject to mutation at any time.
+</p>
+<p>Consider this module:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-module (boxes)
+  #:export (make-box box-ref box-set! box-swap!))
+
+(define (make-box x) (list x))
+(define (box-ref box) (car box))
+(define (box-set! box x) (set-car! box x))
+(define (box-swap! box x)
+  (let ((y (box-ref box)))
+    (box-set! box x)
+    y))
+</pre></div>
+
+<p>Ideally you&rsquo;d like for the <code class="code">box-ref</code> in <code class="code">box-swap!</code> to be
+inlined to <code class="code">car</code>.  Guile&rsquo;s compiler can do this, but only if it
+knows that <code class="code">box-ref</code>&rsquo;s definition is what it appears to be in the
+text.  However, in the general case it could be that a programmer could
+reach into the <code class="code">(boxes)</code> module at any time and change the value of
+<code class="code">box-ref</code>.
+</p>
+<a class="index-entry-id" id="index-declarative"></a>
+<a class="index-entry-id" id="index-modules_002c-declarative"></a>
+<a class="index-entry-id" id="index-definitions_002c-declarative"></a>
+<p>To allow Guile to reason about the values of top-levels from a module, a
+module can be marked as <em class="dfn">declarative</em>.  This flag applies only to
+the subset of top-level definitions that are themselves declarative:
+those that are defined within the compilation unit, and not assigned
+(<code class="code">set!</code>) or redefined within the compilation unit.
+</p>
+<p>To explicitly mark a module as being declarative, pass the
+<code class="code">#:declarative?</code> keyword argument when declaring a module:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-module (boxes)
+  #:export (make-box box-ref box-set! box-swap!)
+  #:declarative? #t)
+</pre></div>
+
+<p>By default, modules are compiled declaratively if the
+<code class="code">user-modules-declarative?</code> parameter is true when the
+module is compiled.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-user_002dmodules_002ddeclarative_003f"><span class="category-def">Scheme Parameter: </span><span><strong class="def-name">user-modules-declarative?</strong><a class="copiable-link" href='#index-user_002dmodules_002ddeclarative_003f'> &para;</a></span></dt>
+<dd><p>A boolean indicating whether definitions in modules created by
+<code class="code">define-module</code> or implicitly as part of a compilation unit without
+an explicit module can be treated as declarative.
+</p></dd></dl>
+
+<p>Because it&rsquo;s usually what you want, the default value of
+<code class="code">user-modules-declarative?</code> is <code class="code">#t</code>.
+</p>
+<h4 class="subsubheading" id="Should-I-Mark-My-Module-As-Declarative_003f">Should I Mark My Module As Declarative?</h4>
+
+<p>In the vast majority of use cases, declarative modules are what you
+want.  However, there are exceptions.
+</p>
+<p>Consider the <code class="code">(boxes)</code> module above.  Let&rsquo;s say you want to be able
+to go in and change the definition of <code class="code">box-set!</code> at run-time:
+</p>
+<div class="example">
+<pre class="example-preformatted">scheme@(guile-user)&gt; (use-modules (boxes))
+scheme@(guile-user)&gt; ,module boxes
+scheme@(boxes)&gt; (define (box-set! x y) (set-car! x (pk y)))
+</pre></div>
+
+<p>However, considering that <code class="code">(boxes)</code> is a declarative module, it
+could be that <code class="code">box-swap!</code> inlined the call to <code class="code">box-set!</code> &ndash; so
+it may be that you are surprised if you call <code class="code">(box-swap! x y)</code> and
+you don&rsquo;t see the new definition being used.  (Note, however, that Guile
+has no guarantees about what definitions its compiler will or will not
+inline.)
+</p>
+<p>If you want to allow the definition of <code class="code">box-set!</code> to be changed and
+to have all of its uses updated, then probably the best option is to
+edit the module and reload the whole thing:
+</p>
+<div class="example">
+<pre class="example-preformatted">scheme@(guile-user)&gt; ,reload (boxes)
+</pre></div>
+
+<p>The advantage of the reloading approach is that you maintain the
+optimizations that declarative modules enable, while also being able to
+live-update the code.  If the module keeps precious program state, those
+definitions can be marked as <code class="code">define-once</code> to prevent reloads from
+overwriting them.  See <a class="xref" href="Top-Level.html">Top Level Variable Definitions</a>, for more on <code class="code">define-once</code>.
+Incidentally, <code class="code">define-once</code> also prevents declarative-definition
+optimizations, so if there&rsquo;s a limited subset of redefinable bindings,
+<code class="code">define-once</code> could be an interesting tool to mark those
+definitions as works-in-progress for interactive program development.
+</p>
+<p>To users, whether a module is declarative or not is mostly immaterial:
+besides normal use via <code class="code">use-modules</code>, users can reference and
+redefine public or private bindings programmatically or interactively.
+The only difference is that changing a declarative definition may not
+change all of its uses.  If this use-case is important to you, and if
+reloading whole modules is insufficient, then you can mark all
+definitions in a module as non-declarative by adding
+<code class="code">#:declarative? #f</code> to the module definition.
+</p>
+<p>The default of whether modules are declarative or not can be controlled
+via the <code class="code">(user-modules-declarative?)</code> parameter mentioned above,
+but care should be taken to set this parameter when the modules are
+compiled, e.g. via <code class="code">(eval-when (expand) (user-modules-declarative?
+#f))</code>.  See <a class="xref" href="Eval-When.html">Eval-when</a>.
+</p>
+<p>Alternately you can prevent declarative-definition optimizations by
+compiling at the <code class="code">-O1</code> optimization level instead of the default
+<code class="code">-O2</code>, or via explicitly passing <code class="code">-Ono-letrectify</code> to the
+<code class="code">guild compile</code> invocation.  See <a class="xref" href="Compilation.html">Compiling Scheme Code</a>, for more on
+compiler options.
+</p>
+<a class="index-entry-id" id="index-inlining-1"></a>
+<p>One final note.  Currently, definitions from declarative modules can
+only be inlined within the module they are defined in, and within a
+compilation unit.  This may change in the future to allow Guile to
+inline imported declarative definitions as well (cross-module inlining).
+To Guile, whether a definition is inlinable or not is a property of the
+definition, not its use.  We hope to improve compiler tooling in the
+future to allow the user to identify definitions that are out of date
+when a declarative binding is redefined.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Accessing-Modules-from-C.html">Accessing Modules from C</a>, Previous: <a href="Module-System-Reflection.html">Module System Reflection</a>, Up: <a href="Modules.html">Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

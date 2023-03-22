@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Procedures with Setters (Guile Reference Manual)</title>
+
+<meta name="description" content="Procedures with Setters (Guile Reference Manual)">
+<meta name="keywords" content="Procedures with Setters (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Procedures.html" rel="up" title="Procedures">
+<link href="Inlinable-Procedures.html" rel="next" title="Inlinable Procedures">
+<link href="Procedure-Properties.html" rel="prev" title="Procedure Properties">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Procedures-with-Setters">
+<div class="nav-panel">
+<p>
+Next: <a href="Inlinable-Procedures.html" accesskey="n" rel="next">Inlinable Procedures</a>, Previous: <a href="Procedure-Properties.html" accesskey="p" rel="prev">Procedure Properties and Meta-information</a>, Up: <a href="Procedures.html" accesskey="u" rel="up">Procedures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Procedures-with-Setters-1">6.7.8 Procedures with Setters</h4>
+
+
+
+<a class="index-entry-id" id="index-procedure-with-setter"></a>
+<a class="index-entry-id" id="index-setter"></a>
+<p>A <em class="dfn">procedure with setter</em> is a special kind of procedure which
+normally behaves like any accessor procedure, that is a procedure which
+accesses a data structure.  The difference is that this kind of
+procedure has a so-called <em class="dfn">setter</em> attached, which is a procedure
+for storing something into a data structure.
+</p>
+<p>Procedures with setters are treated specially when the procedure appears
+in the special form <code class="code">set!</code>. How it works is best shown by example.
+</p>
+<p>Suppose we have a procedure called <code class="code">foo-ref</code>, which accepts two
+arguments, a value of type <code class="code">foo</code> and an integer.  The procedure
+returns the value stored at the given index in the <code class="code">foo</code> object.
+Let <code class="code">f</code> be a variable containing such a <code class="code">foo</code> data
+structure.<a class="footnote" id="DOCF12" href="#FOOT12"><sup>12</sup></a>
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(foo-ref f 0)       &rArr; bar
+(foo-ref f 1)       &rArr; braz
+</pre></div>
+
+<p>Also suppose that a corresponding setter procedure called
+<code class="code">foo-set!</code> does exist.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(foo-set! f 0 'bla)
+(foo-ref f 0)       &rArr; bla
+</pre></div>
+
+<p>Now we could create a new procedure called <code class="code">foo</code>, which is a
+procedure with setter, by calling <code class="code">make-procedure-with-setter</code> with
+the accessor and setter procedures <code class="code">foo-ref</code> and <code class="code">foo-set!</code>.
+Let us call this new procedure <code class="code">foo</code>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define foo (make-procedure-with-setter foo-ref foo-set!))
+</pre></div>
+
+<p><code class="code">foo</code> can from now on be used to either read from the data
+structure stored in <code class="code">f</code>, or to write into the structure.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(set! (foo f 0) 'dum)
+(foo f 0)          &rArr; dum
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dprocedure_002dwith_002dsetter"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-procedure-with-setter</strong> <var class="def-var-arguments">procedure setter</var><a class="copiable-link" href='#index-make_002dprocedure_002dwith_002dsetter'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmake_005fprocedure_005fwith_005fsetter"><span class="category-def">C Function: </span><span><strong class="def-name">scm_make_procedure_with_setter</strong> <var class="def-var-arguments">(procedure, setter)</var><a class="copiable-link" href='#index-scm_005fmake_005fprocedure_005fwith_005fsetter'> &para;</a></span></dt>
+<dd><p>Create a new procedure which behaves like <var class="var">procedure</var>, but
+with the associated setter <var class="var">setter</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-procedure_002dwith_002dsetter_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">procedure-with-setter?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-procedure_002dwith_002dsetter_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fprocedure_005fwith_005fsetter_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_procedure_with_setter_p</strong> <var class="def-var-arguments">(obj)</var><a class="copiable-link" href='#index-scm_005fprocedure_005fwith_005fsetter_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is a procedure with an
+associated setter procedure.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-procedure"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">procedure</strong> <var class="def-var-arguments">proc</var><a class="copiable-link" href='#index-procedure'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fprocedure"><span class="category-def">C Function: </span><span><strong class="def-name">scm_procedure</strong> <var class="def-var-arguments">(proc)</var><a class="copiable-link" href='#index-scm_005fprocedure'> &para;</a></span></dt>
+<dd><p>Return the procedure of <var class="var">proc</var>, which must be an
+applicable struct.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-setter-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">setter</strong> <var class="def-var-arguments">proc</var><a class="copiable-link" href='#index-setter-1'> &para;</a></span></dt>
+<dd><p>Return the setter of <var class="var">proc</var>, which must be either a procedure with
+setter or an operator struct.
+</p></dd></dl>
+
+</div>
+<div class="footnotes-segment">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5 class="footnote-body-heading"><a id="FOOT12" href="#DOCF12">(12)</a></h5>
+<p>Working definitions would be:
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(define foo-ref vector-ref)
+(define foo-set! vector-set!)
+(define f (make-vector 2 #f))
+</pre></div>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Inlinable-Procedures.html">Inlinable Procedures</a>, Previous: <a href="Procedure-Properties.html">Procedure Properties and Meta-information</a>, Up: <a href="Procedures.html">Procedures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

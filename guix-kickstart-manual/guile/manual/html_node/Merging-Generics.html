@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Merging Generics (Guile Reference Manual)</title>
+
+<meta name="description" content="Merging Generics (Guile Reference Manual)">
+<meta name="keywords" content="Merging Generics (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Methods-and-Generic-Functions.html" rel="up" title="Methods and Generic Functions">
+<link href="Next_002dmethod.html" rel="next" title="Next-method">
+<link href="Extending-Primitives.html" rel="prev" title="Extending Primitives">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Merging-Generics">
+<div class="nav-panel">
+<p>
+Next: <a href="Next_002dmethod.html" accesskey="n" rel="next">Next-method</a>, Previous: <a href="Extending-Primitives.html" accesskey="p" rel="prev">Extending Primitives</a>, Up: <a href="Methods-and-Generic-Functions.html" accesskey="u" rel="up">Methods and Generic Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Merging-Generics-1">8.6.3 Merging Generics</h4>
+
+<p>GOOPS generic functions and accessors often have short, generic names.
+For example, if a vector package provides an accessor for the X
+coordinate of a vector, that accessor may just be called <code class="code">x</code>.  It
+doesn&rsquo;t need to be called, for example, <code class="code">vector:x</code>, because
+GOOPS will work out, when it sees code like <code class="code">(x <var class="var">obj</var>)</code>, that
+the vector-specific method of <code class="code">x</code> should be called if <var class="var">obj</var> is
+a vector.
+</p>
+<p>That raises the question, though, of what happens when different
+packages define a generic function with the same name.  Suppose we work
+with a graphical package which needs to use two independent vector
+packages for 2D and 3D vectors respectively.  If both packages export
+<code class="code">x</code>, what does the code using those packages end up with?
+</p>
+<p><a class="ref" href="Creating-Guile-Modules.html">duplicate binding handlers</a> explains how
+this is resolved for conflicting bindings in general.  For generics,
+there is a special duplicates handler, <code class="code">merge-generics</code>, which
+tells the module system to merge generic functions with the same name.
+Here is an example:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-module (math 2D-vectors)
+  #:use-module (oop goops)
+  #:export (x y ...))
+		  
+(define-module (math 3D-vectors)
+  #:use-module (oop goops)
+  #:export (x y z ...))
+
+(define-module (my-module)
+  #:use-module (oop goops)
+  #:use-module (math 2D-vectors)
+  #:use-module (math 3D-vectors)
+  #:duplicates (merge-generics))
+</pre></div>
+
+<p>The generic function <code class="code">x</code> in <code class="code">(my-module)</code> will now incorporate
+all of the methods of <code class="code">x</code> from both imported modules.
+</p>
+<p>To be precise, there will now be three distinct generic functions named
+<code class="code">x</code>: <code class="code">x</code> in <code class="code">(math 2D-vectors)</code>, <code class="code">x</code> in <code class="code">(math
+3D-vectors)</code>, and <code class="code">x</code> in <code class="code">(my-module)</code>; and these functions
+share their methods in an interesting and dynamic way.
+</p>
+<p>To explain, let&rsquo;s call the imported generic functions (in <code class="code">(math
+2D-vectors)</code> and <code class="code">(math 3D-vectors)</code>) the <em class="dfn">ancestors</em>, and the
+merged generic function (in <code class="code">(my-module)</code>), the <em class="dfn">descendant</em>.
+The general rule is that for any generic function G, the applicable
+methods are selected from the union of the methods of G&rsquo;s descendant
+functions, the methods of G itself and the methods of G&rsquo;s ancestor
+functions.
+</p>
+<p>Thus ancestor functions effectively share methods with their
+descendants, and vice versa.  In the example above, <code class="code">x</code> in
+<code class="code">(math 2D-vectors)</code> will share the methods of <code class="code">x</code> in
+<code class="code">(my-module)</code> and vice versa.<a class="footnote" id="DOCF32" href="#FOOT32"><sup>32</sup></a>  Sharing is
+dynamic, so adding another new method to a descendant implies adding it
+to that descendant&rsquo;s ancestors too.
+</p>
+</div>
+<div class="footnotes-segment">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5 class="footnote-body-heading"><a id="FOOT32" href="#DOCF32">(32)</a></h5>
+<p>But note that <code class="code">x</code> in
+<code class="code">(math 2D-vectors)</code> doesn&rsquo;t share methods with <code class="code">x</code> in
+<code class="code">(math 3D-vectors)</code>, so modularity is still preserved.</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Next_002dmethod.html">Next-method</a>, Previous: <a href="Extending-Primitives.html">Extending Primitives</a>, Up: <a href="Methods-and-Generic-Functions.html">Methods and Generic Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

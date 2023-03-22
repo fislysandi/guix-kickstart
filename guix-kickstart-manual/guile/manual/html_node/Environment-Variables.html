@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Environment Variables (Guile Reference Manual)</title>
+
+<meta name="description" content="Environment Variables (Guile Reference Manual)">
+<meta name="keywords" content="Environment Variables (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Invoking-Guile.html" rel="up" title="Invoking Guile">
+<link href="Command_002dline-Options.html" rel="prev" title="Command-line Options">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Environment-Variables">
+<div class="nav-panel">
+<p>
+Previous: <a href="Command_002dline-Options.html" accesskey="p" rel="prev">Command-line Options</a>, Up: <a href="Invoking-Guile.html" accesskey="u" rel="up">Invoking Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Environment-Variables-1">4.2.2 Environment Variables</h4>
+<a class="index-entry-id" id="index-environment-variables"></a>
+<a class="index-entry-id" id="index-shell"></a>
+<a class="index-entry-id" id="index-initialization"></a>
+<p>The <em class="dfn">environment</em> is a feature of the operating system; it consists
+of a collection of variables with names and values.  Each variable is
+called an <em class="dfn">environment variable</em> (or, sometimes, a &ldquo;shell
+variable&rdquo;); environment variable names are case-sensitive, and it is
+conventional to use upper-case letters only.  The values are all text
+strings, even those that are written as numerals.  (Note that here we
+are referring to names and values that are defined in the operating
+system shell from which Guile is invoked.  This is not the same as a
+Scheme environment that is defined within a running instance of Guile.
+For a description of Scheme environments, see <a class="pxref" href="About-Environments.html">Names, Locations, Values and Environments</a>.)
+</p>   
+<p>How to set environment variables before starting Guile depends on the
+operating system and, especially, the shell that you are using.  For
+example, here is how to tell Guile to provide detailed warning messages
+about deprecated features by setting <code class="env">GUILE_WARN_DEPRECATED</code> using
+Bash:
+</p>
+<div class="example">
+<pre class="example-preformatted">$ export GUILE_WARN_DEPRECATED=&quot;detailed&quot;
+$ guile
+</pre></div>
+
+<p>Or, detailed warnings can be turned on for a single invocation using:
+</p>
+<div class="example">
+<pre class="example-preformatted">$ env GUILE_WARN_DEPRECATED=&quot;detailed&quot; guile
+</pre></div>
+
+<p>If you wish to retrieve or change the value of the shell environment
+variables that affect the run-time behavior of Guile from within a
+running instance of Guile, see <a class="ref" href="Runtime-Environment.html">Runtime Environment</a>.
+</p>
+<p>Here are the environment variables that affect the run-time behavior of
+Guile:
+</p>
+<dl class="table">
+<dt id='index-GUILE_005fAUTO_005fCOMPILE'><span><code class="env">GUILE_AUTO_COMPILE</code><a class="copiable-link" href='#index-GUILE_005fAUTO_005fCOMPILE'> &para;</a></span></dt>
+<dd><p>This is a flag that can be used to tell Guile whether or not to compile
+Scheme source files automatically.  Starting with Guile 2.0, Scheme
+source files will be compiled automatically, by default.
+</p>
+<p>If a compiled (<samp class="file">.go</samp>) file corresponding to a <samp class="file">.scm</samp> file is
+not found or is not newer than the <samp class="file">.scm</samp> file, the <samp class="file">.scm</samp>
+file will be compiled on the fly, and the resulting <samp class="file">.go</samp> file
+stored away.  An advisory note will be printed on the console.
+</p>
+<p>Compiled files will be stored in the directory
+<samp class="file">$XDG_CACHE_HOME/guile/ccache</samp>, where <code class="env">XDG_CACHE_HOME</code>
+defaults to the directory <samp class="file">$HOME/.cache</samp>.  This directory will be
+created if it does not already exist.
+</p>
+<p>Note that this mechanism depends on the timestamp of the <samp class="file">.go</samp> file
+being newer than that of the <samp class="file">.scm</samp> file; if the <samp class="file">.scm</samp> or
+<samp class="file">.go</samp> files are moved after installation, care should be taken to
+preserve their original timestamps.
+</p>
+<p>Set <code class="env">GUILE_AUTO_COMPILE</code> to zero (0), to prevent Scheme files from
+being compiled automatically.  Set this variable to &ldquo;fresh&rdquo; to tell
+Guile to compile Scheme files whether they are newer than the compiled
+files or not.
+</p>
+<p>See <a class="xref" href="Compilation.html">Compiling Scheme Code</a>.
+</p>
+</dd>
+<dt id='index-GUILE_005fHISTORY-1'><span><code class="env">GUILE_HISTORY</code><a class="copiable-link" href='#index-GUILE_005fHISTORY-1'> &para;</a></span></dt>
+<dd><p>This variable names the file that holds the Guile REPL command history.
+You can specify a different history file by setting this environment
+variable.  By default, the history file is <samp class="file">$HOME/.guile_history</samp>.
+</p>
+</dd>
+<dt id='index-GUILE_005fINSTALL_005fLOCALE'><span><code class="env">GUILE_INSTALL_LOCALE</code><a class="copiable-link" href='#index-GUILE_005fINSTALL_005fLOCALE'> &para;</a></span></dt>
+<dd><p>This is a flag that can be used to tell Guile whether or not to install
+the current locale at startup, via a call to <code class="code">(setlocale LC_ALL
+&quot;&quot;)</code><a class="footnote" id="DOCF2" href="#FOOT2"><sup>2</sup></a>.  See <a class="xref" href="Locales.html">Locales</a>, for more
+information on locales.
+</p>
+<p>You may explicitly indicate that you do not want to install
+the locale by setting <code class="env">GUILE_INSTALL_LOCALE</code> to <code class="code">0</code>, or
+explicitly enable it by setting the variable to <code class="code">1</code>.
+</p>
+<p>Usually, installing the current locale is the right thing to do.  It
+allows Guile to correctly parse and print strings with non-ASCII
+characters.  Therefore, this option is on by default.
+</p>
+</dd>
+<dt id='index-GUILE_005fLOAD_005fCOMPILED_005fPATH'><span><code class="env">GUILE_LOAD_COMPILED_PATH</code><a class="copiable-link" href='#index-GUILE_005fLOAD_005fCOMPILED_005fPATH'> &para;</a></span></dt>
+<dd><p>This variable may be used to augment the path that is searched for
+compiled Scheme files (<samp class="file">.go</samp> files) when loading.  Its value should
+be a colon-separated list of directories.  If it contains the special
+path component <code class="code">...</code> (ellipsis), then the default path is put in
+place of the ellipsis, otherwise the default path is placed at the end.
+The result is stored in <code class="code">%load-compiled-path</code> (see <a class="pxref" href="Load-Paths.html">Load Paths</a>).
+</p>
+<p>Here is an example using the Bash shell that adds the current directory,
+<samp class="file">.</samp>, and the relative directory <samp class="file">../my-library</samp> to
+<code class="code">%load-compiled-path</code>:
+</p>
+<div class="example">
+<pre class="example-preformatted">$ export GUILE_LOAD_COMPILED_PATH=&quot;.:../my-library&quot;
+$ guile -c '(display %load-compiled-path) (newline)'
+(. ../my-library /usr/local/lib/guile/3.0/ccache)
+</pre></div>
+
+</dd>
+<dt id='index-GUILE_005fLOAD_005fPATH'><span><code class="env">GUILE_LOAD_PATH</code><a class="copiable-link" href='#index-GUILE_005fLOAD_005fPATH'> &para;</a></span></dt>
+<dd><p>This variable may be used to augment the path that is searched for
+Scheme files when loading.  Its value should be a colon-separated list
+of directories.  If it contains the special path component <code class="code">...</code>
+(ellipsis), then the default path is put in place of the ellipsis,
+otherwise the default path is placed at the end.  The result is stored
+in <code class="code">%load-path</code> (see <a class="pxref" href="Load-Paths.html">Load Paths</a>).
+</p>
+<p>Here is an example using the Bash shell that prepends the current
+directory to <code class="code">%load-path</code>, and adds the relative directory
+<samp class="file">../srfi</samp> to the end:
+</p>
+<div class="example">
+<pre class="example-preformatted">$ env GUILE_LOAD_PATH=&quot;.:...:../srfi&quot; \
+guile -c '(display %load-path) (newline)'
+(. /usr/local/share/guile/3.0 \
+/usr/local/share/guile/site/3.0 \
+/usr/local/share/guile/site \
+/usr/local/share/guile \
+../srfi)
+</pre></div>
+
+<p>(Note: The line breaks, above, are for documentation purposes only, and
+not required in the actual example.)
+</p>
+</dd>
+<dt id='index-GUILE_005fEXTENSIONS_005fPATH'><span><code class="env">GUILE_EXTENSIONS_PATH</code><a class="copiable-link" href='#index-GUILE_005fEXTENSIONS_005fPATH'> &para;</a></span></dt>
+<dd><p>This variable may be used to augment the path that is searched for
+foreign libraries via <code class="code">load-extension</code>, <code class="code">dynamic-link</code>,
+<code class="code">load-foreign-library</code>, or the like.  Its value should be a
+colon-separated (semicolon on Windows) list of directories.
+See <a class="xref" href="Foreign-Libraries.html">Foreign Libraries</a>.
+</p>
+</dd>
+<dt id='index-GUILE_005fWARN_005fDEPRECATED'><span><code class="env">GUILE_WARN_DEPRECATED</code><a class="copiable-link" href='#index-GUILE_005fWARN_005fDEPRECATED'> &para;</a></span></dt>
+<dd><p>As Guile evolves, some features will be eliminated or replaced by newer
+features.  To help users migrate their code as this evolution occurs,
+Guile will issue warning messages about code that uses features that
+have been marked for eventual elimination.  <code class="env">GUILE_WARN_DEPRECATED</code>
+can be set to &ldquo;no&rdquo; to tell Guile not to display these warning
+messages, or set to &ldquo;detailed&rdquo; to tell Guile to display more lengthy
+messages describing the warning.  See <a class="xref" href="Deprecation.html">Deprecation</a>.
+</p>
+</dd>
+<dt id='index-HOME'><span><code class="env">HOME</code><a class="copiable-link" href='#index-HOME'> &para;</a></span></dt>
+<dd><p>Guile uses the environment variable <code class="env">HOME</code>, the name of your home
+directory, to locate various files, such as <samp class="file">.guile</samp> or
+<samp class="file">.guile_history</samp>.
+</p>
+</dd>
+<dt id='index-GUILE_005fJIT_005fTHRESHOLD'><span><code class="env">GUILE_JIT_THRESHOLD</code><a class="copiable-link" href='#index-GUILE_005fJIT_005fTHRESHOLD'> &para;</a></span></dt>
+<dd><p>Guile has a just-in-time (JIT) code generator that makes running Guile
+code fast.  See <a class="xref" href="Just_002dIn_002dTime-Native-Code.html">Just-In-Time Native Code</a>, for more.  The unit of code
+generation is the function.  Each function has its own counter that gets
+incremented when the function is called and at each loop iteration in
+the function.  When the counter exceeds the <code class="env">GUILE_JIT_THRESHOLD</code>,
+the function will get JIT-compiled.  Set <code class="env">GUILE_JIT_THRESHOLD</code> to
+<code class="code">-1</code> to disable JIT compilation, or <code class="code">0</code> to eagerly JIT-compile
+each function as it&rsquo;s first seen.
+</p>
+</dd>
+<dt id='index-GUILE_005fJIT_005fLOG'><span><code class="env">GUILE_JIT_LOG</code><a class="copiable-link" href='#index-GUILE_005fJIT_005fLOG'> &para;</a></span></dt>
+<dd><p>Set to <code class="code">1</code>, <code class="code">2</code>, or <code class="code">3</code> to give increasing amounts of
+logging for JIT compilation events.  Used for debugging.
+</p>
+</dd>
+<dt id='index-GUILE_005fJIT_005fSTOP_005fAFTER'><span><code class="env">GUILE_JIT_STOP_AFTER</code><a class="copiable-link" href='#index-GUILE_005fJIT_005fSTOP_005fAFTER'> &para;</a></span></dt>
+<dd><p>Though we have tested the JIT compiler as well as we can, it&rsquo;s possible
+that it has bugs.  If you suspect that Guile&rsquo;s JIT compiler is causing
+your program to fail, set <code class="env">GUILE_JIT_STOP_AFTER</code> to a positive
+integer indicating the maximum number of functions to JIT-compile.  By
+bisecting over the value of <code class="env">GUILE_JIT_STOP_AFTER</code>, you can pinpoint
+the precise function that is being miscompiled.
+</p>
+</dd>
+</dl>
+
+
+</div>
+<div class="footnotes-segment">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5 class="footnote-body-heading"><a id="FOOT2" href="#DOCF2">(2)</a></h5>
+<p>The <code class="code">GUILE_INSTALL_LOCALE</code> environment variable was
+ignored in Guile versions prior to 2.0.9.</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Command_002dline-Options.html">Command-line Options</a>, Up: <a href="Invoking-Guile.html">Invoking Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

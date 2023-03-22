@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>List Constructors (Guile Reference Manual)</title>
+
+<meta name="description" content="List Constructors (Guile Reference Manual)">
+<meta name="keywords" content="List Constructors (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Lists.html" rel="up" title="Lists">
+<link href="List-Selection.html" rel="next" title="List Selection">
+<link href="List-Predicates.html" rel="prev" title="List Predicates">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="List-Constructors">
+<div class="nav-panel">
+<p>
+Next: <a href="List-Selection.html" accesskey="n" rel="next">List Selection</a>, Previous: <a href="List-Predicates.html" accesskey="p" rel="prev">List Predicates</a>, Up: <a href="Lists.html" accesskey="u" rel="up">Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="List-Constructors-1">6.6.9.3 List Constructors</h4>
+
+<p>This section describes the procedures for constructing new lists.
+<code class="code">list</code> simply returns a list where the elements are the arguments,
+<code class="code">cons*</code> is similar, but the last argument is stored in the cdr of
+the last pair of the list.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-list-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list</strong> <var class="def-var-arguments">elem &hellip;</var><a class="copiable-link" href='#index-list-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flist_005f1"><span class="category-def">C Function: </span><span><strong class="def-name">scm_list_1</strong> <var class="def-var-arguments">(elem1)</var><a class="copiable-link" href='#index-scm_005flist_005f1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flist_005f2"><span class="category-def">C Function: </span><span><strong class="def-name">scm_list_2</strong> <var class="def-var-arguments">(elem1, elem2)</var><a class="copiable-link" href='#index-scm_005flist_005f2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flist_005f3"><span class="category-def">C Function: </span><span><strong class="def-name">scm_list_3</strong> <var class="def-var-arguments">(elem1, elem2, elem3)</var><a class="copiable-link" href='#index-scm_005flist_005f3'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flist_005f4"><span class="category-def">C Function: </span><span><strong class="def-name">scm_list_4</strong> <var class="def-var-arguments">(elem1, elem2, elem3, elem4)</var><a class="copiable-link" href='#index-scm_005flist_005f4'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flist_005f5"><span class="category-def">C Function: </span><span><strong class="def-name">scm_list_5</strong> <var class="def-var-arguments">(elem1, elem2, elem3, elem4, elem5)</var><a class="copiable-link" href='#index-scm_005flist_005f5'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flist_005fn"><span class="category-def">C Function: </span><span><strong class="def-name">scm_list_n</strong> <var class="def-var-arguments">(elem1, &hellip;, elemN, <code class="code">SCM_UNDEFINED</code>)</var><a class="copiable-link" href='#index-scm_005flist_005fn'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-list-3"></a>
+<p>Return a new list containing elements <var class="var">elem</var> <small class="enddots">...</small>.
+</p>
+<p><code class="code">scm_list_n</code> takes a variable number of arguments, terminated by
+the special <code class="code">SCM_UNDEFINED</code>.  That final <code class="code">SCM_UNDEFINED</code> is
+not included in the list.  None of <var class="var">elem</var> &hellip; can
+themselves be <code class="code">SCM_UNDEFINED</code>, or <code class="code">scm_list_n</code> will
+terminate at that point.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-cons_002a"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cons*</strong> <var class="def-var-arguments">arg1 arg2 &hellip;</var><a class="copiable-link" href='#index-cons_002a'> &para;</a></span></dt>
+<dd><p>Like <code class="code">list</code>, but the last arg provides the tail of the
+constructed list, returning <code class="code">(cons <var class="var">arg1</var> (cons
+<var class="var">arg2</var> (cons &hellip; <var class="var">argn</var>)))</code>.  Requires at least one
+argument.  If given one argument, that argument is returned as
+result.  This function is called <code class="code">list*</code> in some other
+Schemes and in Common LISP.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-list_002dcopy"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list-copy</strong> <var class="def-var-arguments">lst</var><a class="copiable-link" href='#index-list_002dcopy'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flist_005fcopy"><span class="category-def">C Function: </span><span><strong class="def-name">scm_list_copy</strong> <var class="def-var-arguments">(lst)</var><a class="copiable-link" href='#index-scm_005flist_005fcopy'> &para;</a></span></dt>
+<dd><p>Return a (newly-created) copy of <var class="var">lst</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dlist"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-list</strong> <var class="def-var-arguments">n [init]</var><a class="copiable-link" href='#index-make_002dlist'> &para;</a></span></dt>
+<dd><p>Create a list containing of <var class="var">n</var> elements, where each element is
+initialized to <var class="var">init</var>.  <var class="var">init</var> defaults to the empty list
+<code class="code">()</code> if not given.
+</p></dd></dl>
+
+<p>Note that <code class="code">list-copy</code> only makes a copy of the pairs which make up
+the spine of the lists.  The list elements are not copied, which means
+that modifying the elements of the new list also modifies the elements
+of the old list.  On the other hand, applying procedures like
+<code class="code">set-cdr!</code> or <code class="code">delv!</code> to the new list will not alter the old
+list.  If you also need to copy the list elements (making a deep copy),
+use the procedure <code class="code">copy-tree</code> from <code class="code">(ice-9 copy-tree)</code>
+(see <a class="pxref" href="Copying.html">Copying Deep Structures</a>).
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="List-Selection.html">List Selection</a>, Previous: <a href="List-Predicates.html">List Predicates</a>, Up: <a href="Lists.html">Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

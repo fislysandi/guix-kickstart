@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Character Encoding of Source Files (Guile Reference Manual)</title>
+
+<meta name="description" content="Character Encoding of Source Files (Guile Reference Manual)">
+<meta name="keywords" content="Character Encoding of Source Files (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Read_002fLoad_002fEval_002fCompile.html" rel="up" title="Read/Load/Eval/Compile">
+<link href="Delayed-Evaluation.html" rel="next" title="Delayed Evaluation">
+<link href="Load-Paths.html" rel="prev" title="Load Paths">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Character-Encoding-of-Source-Files">
+<div class="nav-panel">
+<p>
+Next: <a href="Delayed-Evaluation.html" accesskey="n" rel="next">Delayed Evaluation</a>, Previous: <a href="Load-Paths.html" accesskey="p" rel="prev">Load Paths</a>, Up: <a href="Read_002fLoad_002fEval_002fCompile.html" accesskey="u" rel="up">Reading and Evaluating Scheme Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Character-Encoding-of-Source-Files-1">6.16.9 Character Encoding of Source Files</h4>
+
+<a class="index-entry-id" id="index-source-file-encoding"></a>
+<a class="index-entry-id" id="index-primitive_002dload"></a>
+<a class="index-entry-id" id="index-load"></a>
+<p>Scheme source code files are usually encoded in ASCII or UTF-8, but the
+built-in reader can interpret other character encodings as well.  When
+Guile loads Scheme source code, it uses the <code class="code">file-encoding</code>
+procedure (described below) to try to guess the encoding of the file.
+In the absence of any hints, UTF-8 is assumed.  One way to provide a
+hint about the encoding of a source file is to place a coding
+declaration in the top 500 characters of the file.
+</p>
+<p>A coding declaration has the form <code class="code">coding: XXXXXX</code>, where
+<code class="code">XXXXXX</code> is the name of a character encoding in which the source
+code file has been encoded.  The coding declaration must appear in a
+scheme comment.  It can either be a semicolon-initiated comment, or the
+first block <code class="code">#!</code> comment in the file.
+</p>
+<p>The name of the character encoding in the coding declaration is
+typically lower case and containing only letters, numbers, and hyphens,
+as recognized by <code class="code">set-port-encoding!</code> (see <a class="pxref" href="Ports.html"><code class="code">set-port-encoding!</code></a>).  Common examples of character encoding
+names are <code class="code">utf-8</code> and <code class="code">iso-8859-1</code>,
+<a class="url" href="http://www.iana.org/assignments/character-sets">as defined by
+IANA</a>.  Thus, the coding declaration is mostly compatible with Emacs.
+</p>
+<p>However, there are some differences in encoding names recognized by
+Emacs and encoding names defined by IANA, the latter being essentially a
+subset of the former.  For instance, <code class="code">latin-1</code> is a valid encoding
+name for Emacs, but it&rsquo;s not according to the IANA standard, which Guile
+follows; instead, you should use <code class="code">iso-8859-1</code>, which is both
+understood by Emacs and dubbed by IANA (IANA writes it uppercase but
+Emacs wants it lowercase and Guile is case insensitive.)
+</p>
+<p>For source code, only a subset of all possible character encodings can
+be interpreted by the built-in source code reader.  Only those
+character encodings in which ASCII text appears unmodified can be
+used.  This includes <code class="code">UTF-8</code> and <code class="code">ISO-8859-1</code> through
+<code class="code">ISO-8859-15</code>.  The multi-byte character encodings <code class="code">UTF-16</code>
+and <code class="code">UTF-32</code> may not be used because they are not compatible with
+ASCII.
+</p>
+<a class="index-entry-id" id="index-read"></a>
+<a class="index-entry-id" id="index-encoding"></a>
+<a class="index-entry-id" id="index-port-encoding"></a>
+<a class="index-entry-id" id="index-set_002dport_002dencoding_0021-1"></a>
+<p>There might be a scenario in which one would want to read non-ASCII
+code from a port, such as with the function <code class="code">read</code>, instead of
+with <code class="code">load</code>.  If the port&rsquo;s character encoding is the same as the
+encoding of the code to be read by the port, not other special
+handling is necessary.  The port will automatically do the character
+encoding conversion.  The functions <code class="code">setlocale</code> or by
+<code class="code">set-port-encoding!</code> are used to set port encodings
+(see <a class="pxref" href="Ports.html">Ports</a>).
+</p>
+<p>If a port is used to read code of unknown character encoding, it can
+accomplish this in three steps.  First, the character encoding of the
+port should be set to ISO-8859-1 using <code class="code">set-port-encoding!</code>.
+Then, the procedure <code class="code">file-encoding</code>, described below, is used to
+scan for a coding declaration when reading from the port.  As a side
+effect, it rewinds the port after its scan is complete. After that,
+the port&rsquo;s character encoding should be set to the encoding returned
+by <code class="code">file-encoding</code>, if any, again by using
+<code class="code">set-port-encoding!</code>.  Then the code can be read as normal.
+</p>
+<p>Alternatively, one can use the <code class="code">#:guess-encoding</code> keyword argument
+of <code class="code">open-file</code> and related procedures.  See <a class="xref" href="File-Ports.html">File Ports</a>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-file_002dencoding"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">file-encoding</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-file_002dencoding'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005ffile_005fencoding"><span class="category-def">C Function: </span><span><strong class="def-name">scm_file_encoding</strong> <var class="def-var-arguments">(port)</var><a class="copiable-link" href='#index-scm_005ffile_005fencoding'> &para;</a></span></dt>
+<dd><p>Attempt to scan the first few hundred bytes from the <var class="var">port</var> for
+hints about its character encoding.  Return a string containing the
+encoding name or <code class="code">#f</code> if the encoding cannot be determined.  The
+port is rewound.
+</p>
+<p>Currently, the only supported method is to look for an Emacs-like
+character coding declaration (see <a data-manual="emacs" href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Recognize-Coding.html#Recognize-Coding">how Emacs
+recognizes file encoding</a> in <cite class="cite">The GNU Emacs Reference Manual</cite>).  The
+coding declaration is of the form <code class="code">coding: XXXXX</code> and must appear
+in a Scheme comment.  Additional heuristics may be added in the future.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Delayed-Evaluation.html">Delayed Evaluation</a>, Previous: <a href="Load-Paths.html">Load Paths</a>, Up: <a href="Read_002fLoad_002fEval_002fCompile.html">Reading and Evaluating Scheme Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

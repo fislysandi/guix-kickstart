@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Macros (Guile Reference Manual)</title>
+
+<meta name="description" content="Macros (Guile Reference Manual)">
+<meta name="keywords" content="Macros (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="API-Reference.html" rel="up" title="API Reference">
+<link href="Utility-Functions.html" rel="next" title="Utility Functions">
+<link href="Procedures.html" rel="prev" title="Procedures">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Macros">
+<div class="nav-panel">
+<p>
+Next: <a href="Utility-Functions.html" accesskey="n" rel="next">General Utility Functions</a>, Previous: <a href="Procedures.html" accesskey="p" rel="prev">Procedures</a>, Up: <a href="API-Reference.html" accesskey="u" rel="up">API Reference</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Macros-1">6.8 Macros</h3>
+
+<p>At its best, programming in Lisp is an iterative process of building up a
+language appropriate to the problem at hand, and then solving the problem in
+that language. Defining new procedures is part of that, but Lisp also allows
+the user to extend its syntax, with its famous <em class="dfn">macros</em>.
+</p>
+<a class="index-entry-id" id="index-macros"></a>
+<a class="index-entry-id" id="index-transformation"></a>
+<p>Macros are syntactic extensions which cause the expression that they appear in
+to be transformed in some way <em class="emph">before</em> being evaluated. In expressions that
+are intended for macro transformation, the identifier that names the relevant
+macro must appear as the first element, like this:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(<var class="var">macro-name</var> <var class="var">macro-args</var> &hellip;)
+</pre></div>
+
+<a class="index-entry-id" id="index-macro-expansion"></a>
+<a class="index-entry-id" id="index-domain_002dspecific-language"></a>
+<a class="index-entry-id" id="index-embedded-domain_002dspecific-language"></a>
+<a class="index-entry-id" id="index-DSL"></a>
+<a class="index-entry-id" id="index-EDSL"></a>
+<p>Macro expansion is a separate phase of evaluation, run before code is
+interpreted or compiled. A macro is a program that runs on programs, translating
+an embedded language into core Scheme<a class="footnote" id="DOCF13" href="#FOOT13"><sup>13</sup></a>.
+</p>
+
+<ul class="mini-toc">
+<li><a href="Defining-Macros.html" accesskey="1">Defining Macros</a></li>
+<li><a href="Syntax-Rules.html" accesskey="2">Syntax-rules Macros</a></li>
+<li><a href="Syntax-Case.html" accesskey="3">Support for the <code class="code">syntax-case</code> System</a></li>
+<li><a href="Syntax-Transformer-Helpers.html" accesskey="4">Syntax Transformer Helpers</a></li>
+<li><a href="Defmacros.html" accesskey="5">Lisp-style Macro Definitions</a></li>
+<li><a href="Identifier-Macros.html" accesskey="6">Identifier Macros</a></li>
+<li><a href="Syntax-Parameters.html" accesskey="7">Syntax Parameters</a></li>
+<li><a href="Eval-When.html" accesskey="8">Eval-when</a></li>
+<li><a href="Macro-Expansion.html" accesskey="9">Macro Expansion</a></li>
+<li><a href="Hygiene-and-the-Top_002dLevel.html">Hygiene and the Top-Level</a></li>
+<li><a href="Internal-Macros.html">Internal Macros</a></li>
+</ul>
+</div>
+<div class="footnotes-segment">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5 class="footnote-body-heading"><a id="FOOT13" href="#DOCF13">(13)</a></h5>
+<p>These days such embedded
+languages are often referred to as <em class="dfn">embedded domain-specific
+languages</em>, or EDSLs.</p>
+</div>
+
+
+
+</body>
+</html>

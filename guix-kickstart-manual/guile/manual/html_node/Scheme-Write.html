@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Scheme Write (Guile Reference Manual)</title>
+
+<meta name="description" content="Scheme Write (Guile Reference Manual)">
+<meta name="keywords" content="Scheme Write (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Read_002fLoad_002fEval_002fCompile.html" rel="up" title="Read/Load/Eval/Compile">
+<link href="Fly-Evaluation.html" rel="next" title="Fly Evaluation">
+<link href="Annotated-Scheme-Read.html" rel="prev" title="Annotated Scheme Read">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Scheme-Write">
+<div class="nav-panel">
+<p>
+Next: <a href="Fly-Evaluation.html" accesskey="n" rel="next">Procedures for On the Fly Evaluation</a>, Previous: <a href="Annotated-Scheme-Read.html" accesskey="p" rel="prev">Reading Scheme Code, For the Compiler</a>, Up: <a href="Read_002fLoad_002fEval_002fCompile.html" accesskey="u" rel="up">Reading and Evaluating Scheme Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Writing-Scheme-Values">6.16.4 Writing Scheme Values</h4>
+
+<p>Any scheme value may be written to a port. Not all values may be read
+back in (see <a class="pxref" href="Scheme-Read.html">Reading Scheme Code</a>), however.
+</p>
+<a class="index-entry-id" id="index-write-4"></a>
+<a class="index-entry-id" id="index-print"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-write"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">write</strong> <var class="def-var-arguments">obj [port]</var><a class="copiable-link" href='#index-write'> &para;</a></span></dt>
+<dd><p>Send a representation of <var class="var">obj</var> to <var class="var">port</var> or to the current
+output port if not given.
+</p>
+<p>The output is designed to be machine readable, and can be read back
+with <code class="code">read</code> (see <a class="pxref" href="Scheme-Read.html">Reading Scheme Code</a>).  Strings are printed in
+double quotes, with escapes if necessary, and characters are printed in
+&lsquo;<samp class="samp">#\</samp>&rsquo; notation.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-display-4"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-display"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">display</strong> <var class="def-var-arguments">obj [port]</var><a class="copiable-link" href='#index-display'> &para;</a></span></dt>
+<dd><p>Send a representation of <var class="var">obj</var> to <var class="var">port</var> or to the current
+output port if not given.
+</p>
+<p>The output is designed for human readability, it differs from
+<code class="code">write</code> in that strings are printed without double quotes and
+escapes, and characters are printed as per <code class="code">write-char</code>, not in
+&lsquo;<samp class="samp">#\</samp>&rsquo; form.
+</p></dd></dl>
+
+<p>As was the case with the Scheme reader, there are a few options that
+affect the behavior of the Scheme printer.
+</p>
+<a class="index-entry-id" id="index-options-_002d-print"></a>
+<a class="index-entry-id" id="index-print-options"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-print_002doptions"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">print-options</strong> <var class="def-var-arguments">[setting]</var><a class="copiable-link" href='#index-print_002doptions'> &para;</a></span></dt>
+<dd><p>Display the current settings of the read options.  If <var class="var">setting</var> is
+omitted, only a short form of the current read options is
+printed. Otherwise if <var class="var">setting</var> is the symbol <code class="code">help</code>, a
+complete options description is displayed.
+</p></dd></dl>
+
+<p>The set of available options, and their default values, may be had by
+invoking <code class="code">print-options</code> at the prompt.
+</p>
+<div class="example smalllisp lisp">
+<pre class="lisp-preformatted">scheme@(guile-user)&gt; (print-options)
+(quote-keywordish-symbols reader highlight-suffix &quot;}&quot; highlight-prefix &quot;{&quot;)
+scheme@(guile-user)&gt; (print-options 'help)
+highlight-prefix          {       The string to print before highlighted values.
+highlight-suffix          }       The string to print after highlighted values.
+quote-keywordish-symbols  reader  How to print symbols that have a colon
+                                  as their first or last character. The
+                                  value '#f' does not quote the colons;
+                                  '#t' quotes them; 'reader' quotes them
+                                  when the reader option 'keywords' is
+                                  not '#f'.
+escape-newlines           yes     Render newlines as \n when printing
+                                  using `write'. 
+r7rs-symbols              no      Escape symbols using R7RS |...| symbol
+                                  notation.
+</pre></div>
+
+<p>These options may be modified with the print-set! syntax.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-print_002dset_0021"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">print-set!</strong> <var class="def-var-arguments">option-name value</var><a class="copiable-link" href='#index-print_002dset_0021'> &para;</a></span></dt>
+<dd><p>Modify the print options.  Due to historical oddities, <code class="code">print-set!</code>
+is a macro that expects an unquoted option name.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Fly-Evaluation.html">Procedures for On the Fly Evaluation</a>, Previous: <a href="Annotated-Scheme-Read.html">Reading Scheme Code, For the Compiler</a>, Up: <a href="Read_002fLoad_002fEval_002fCompile.html">Reading and Evaluating Scheme Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

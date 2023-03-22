@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>R6RS I/O Conditions (Guile Reference Manual)</title>
+
+<meta name="description" content="R6RS I/O Conditions (Guile Reference Manual)">
+<meta name="keywords" content="R6RS I/O Conditions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="R6RS-Standard-Libraries.html" rel="up" title="R6RS Standard Libraries">
+<link href="R6RS-Transcoders.html" rel="next" title="R6RS Transcoders">
+<link href="rnrs-conditions.html" rel="prev" title="rnrs conditions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="R6RS-I_002fO-Conditions">
+<div class="nav-panel">
+<p>
+Next: <a href="R6RS-Transcoders.html" accesskey="n" rel="next">Transcoders</a>, Previous: <a href="rnrs-conditions.html" accesskey="p" rel="prev">rnrs conditions</a>, Up: <a href="R6RS-Standard-Libraries.html" accesskey="u" rel="up">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="I_002fO-Conditions">7.6.2.14 I/O Conditions</h4>
+
+<p>These condition types are exported by both the 
+<code class="code">(rnrs io ports (6))</code> and <code class="code">(rnrs io simple (6))</code> libraries.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026i_002fo"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;i/o</strong><a class="copiable-link" href='#index-_0026i_002fo'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002di_002fo_002derror"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-i/o-error</strong><a class="copiable-link" href='#index-make_002di_002fo_002derror'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-i_002fo_002derror_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">i/o-error?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-i_002fo_002derror_003f'> &para;</a></span></dt>
+<dd><p>A condition supertype for more specific I/O errors.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026i_002fo_002dread"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;i/o-read</strong><a class="copiable-link" href='#index-_0026i_002fo_002dread'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002di_002fo_002dread_002derror"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-i/o-read-error</strong><a class="copiable-link" href='#index-make_002di_002fo_002dread_002derror'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-i_002fo_002dread_002derror_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">i/o-read-error?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-i_002fo_002dread_002derror_003f'> &para;</a></span></dt>
+<dd><p>A subtype of <code class="code">&amp;i/o</code>; represents read-related I/O errors.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026i_002fo_002dwrite"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;i/o-write</strong><a class="copiable-link" href='#index-_0026i_002fo_002dwrite'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002di_002fo_002dwrite_002derror"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-i/o-write-error</strong><a class="copiable-link" href='#index-make_002di_002fo_002dwrite_002derror'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-i_002fo_002dwrite_002derror_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">i/o-write-error?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-i_002fo_002dwrite_002derror_003f'> &para;</a></span></dt>
+<dd><p>A subtype of <code class="code">&amp;i/o</code>; represents write-related I/O errors.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026i_002fo_002dinvalid_002dposition"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;i/o-invalid-position</strong><a class="copiable-link" href='#index-_0026i_002fo_002dinvalid_002dposition'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002di_002fo_002dinvalid_002dposition_002derror"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-i/o-invalid-position-error</strong> <var class="def-var-arguments">position</var><a class="copiable-link" href='#index-make_002di_002fo_002dinvalid_002dposition_002derror'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-i_002fo_002dinvalid_002dposition_002derror_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">i/o-invalid-position-error?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-i_002fo_002dinvalid_002dposition_002derror_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-i_002fo_002derror_002dposition"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">i/o-error-position</strong> <var class="def-var-arguments">condition</var><a class="copiable-link" href='#index-i_002fo_002derror_002dposition'> &para;</a></span></dt>
+<dd><p>A subtype of <code class="code">&amp;i/o</code>; represents an error related to an attempt to
+set the file position to an invalid position.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026i_002fo_002dfilename"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;i/o-filename</strong><a class="copiable-link" href='#index-_0026i_002fo_002dfilename'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002dio_002dfilename_002derror"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-io-filename-error</strong> <var class="def-var-arguments">filename</var><a class="copiable-link" href='#index-make_002dio_002dfilename_002derror'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-i_002fo_002dfilename_002derror_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">i/o-filename-error?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-i_002fo_002dfilename_002derror_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-i_002fo_002derror_002dfilename"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">i/o-error-filename</strong> <var class="def-var-arguments">condition</var><a class="copiable-link" href='#index-i_002fo_002derror_002dfilename'> &para;</a></span></dt>
+<dd><p>A subtype of <code class="code">&amp;i/o</code>; represents an error related to an operation on
+a named file.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026i_002fo_002dfile_002dprotection"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;i/o-file-protection</strong><a class="copiable-link" href='#index-_0026i_002fo_002dfile_002dprotection'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002di_002fo_002dfile_002dprotection_002derror"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-i/o-file-protection-error</strong> <var class="def-var-arguments">filename</var><a class="copiable-link" href='#index-make_002di_002fo_002dfile_002dprotection_002derror'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-i_002fo_002dfile_002dprotection_002derror_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">i/o-file-protection-error?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-i_002fo_002dfile_002dprotection_002derror_003f'> &para;</a></span></dt>
+<dd><p>A subtype of <code class="code">&amp;i/o-filename</code>; represents an error resulting from an
+attempt to access a named file for which the caller had insufficient 
+permissions.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026i_002fo_002dfile_002dis_002dread_002donly"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;i/o-file-is-read-only</strong><a class="copiable-link" href='#index-_0026i_002fo_002dfile_002dis_002dread_002donly'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002di_002fo_002dfile_002dis_002dread_002donly_002derror"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-i/o-file-is-read-only-error</strong> <var class="def-var-arguments">filename</var><a class="copiable-link" href='#index-make_002di_002fo_002dfile_002dis_002dread_002donly_002derror'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-i_002fo_002dfile_002dis_002dread_002donly_002derror_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">i/o-file-is-read-only-error?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-i_002fo_002dfile_002dis_002dread_002donly_002derror_003f'> &para;</a></span></dt>
+<dd><p>A subtype of <code class="code">&amp;i/o-file-protection</code>; represents an error related to
+an attempt to write to a read-only file.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026i_002fo_002dfile_002dalready_002dexists"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;i/o-file-already-exists</strong><a class="copiable-link" href='#index-_0026i_002fo_002dfile_002dalready_002dexists'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002di_002fo_002dfile_002dalready_002dexists_002derror"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-i/o-file-already-exists-error</strong> <var class="def-var-arguments">filename</var><a class="copiable-link" href='#index-make_002di_002fo_002dfile_002dalready_002dexists_002derror'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-i_002fo_002dfile_002dalready_002dexists_002derror_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">i/o-file-already-exists-error?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-i_002fo_002dfile_002dalready_002dexists_002derror_003f'> &para;</a></span></dt>
+<dd><p>A subtype of <code class="code">&amp;i/o-filename</code>; represents an error related to an
+operation on an existing file that was assumed not to exist.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026i_002fo_002dfile_002ddoes_002dnot_002dexist"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;i/o-file-does-not-exist</strong><a class="copiable-link" href='#index-_0026i_002fo_002dfile_002ddoes_002dnot_002dexist'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002di_002fo_002dfile_002ddoes_002dnot_002dexist_002derror"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-i/o-file-does-not-exist-error</strong><a class="copiable-link" href='#index-make_002di_002fo_002dfile_002ddoes_002dnot_002dexist_002derror'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-i_002fo_002dfile_002ddoes_002dnot_002dexist_002derror_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">i/o-file-does-not-exist-error?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-i_002fo_002dfile_002ddoes_002dnot_002dexist_002derror_003f'> &para;</a></span></dt>
+<dd><p>A subtype of <code class="code">&amp;i/o-filename</code>; represents an error related to an
+operation on a non-existent file that was assumed to exist.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026i_002fo_002dport"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;i/o-port</strong><a class="copiable-link" href='#index-_0026i_002fo_002dport'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002di_002fo_002dport_002derror"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-i/o-port-error</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-make_002di_002fo_002dport_002derror'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-i_002fo_002dport_002derror_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">i/o-port-error?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-i_002fo_002dport_002derror_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-i_002fo_002derror_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">i/o-error-port</strong> <var class="def-var-arguments">condition</var><a class="copiable-link" href='#index-i_002fo_002derror_002dport'> &para;</a></span></dt>
+<dd><p>A subtype of <code class="code">&amp;i/o</code>; represents an error related to an operation on
+the port <var class="var">port</var>.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="R6RS-Transcoders.html">Transcoders</a>, Previous: <a href="rnrs-conditions.html">rnrs conditions</a>, Up: <a href="R6RS-Standard-Libraries.html">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Linking Guile into Programs (Guile Reference Manual)</title>
+
+<meta name="description" content="Linking Guile into Programs (Guile Reference Manual)">
+<meta name="keywords" content="Linking Guile into Programs (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Hello-Guile_0021.html" rel="up" title="Hello Guile!">
+<link href="Writing-Guile-Extensions.html" rel="next" title="Writing Guile Extensions">
+<link href="Running-Guile-Scripts.html" rel="prev" title="Running Guile Scripts">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Linking-Guile-into-Programs">
+<div class="nav-panel">
+<p>
+Next: <a href="Writing-Guile-Extensions.html" accesskey="n" rel="next">Writing Guile Extensions</a>, Previous: <a href="Running-Guile-Scripts.html" accesskey="p" rel="prev">Running Guile Scripts</a>, Up: <a href="Hello-Guile_0021.html" accesskey="u" rel="up">Hello Guile!</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section subsection-level-set-section" id="Linking-Guile-into-Programs-1">2.3 Linking Guile into Programs</h3>
+
+<p>The Guile interpreter is available as an object library, to be linked
+into applications using Scheme as a configuration or extension
+language.
+</p>
+<p>Here is <samp class="file">simple-guile.c</samp>, source code for a program that will
+produce a complete Guile interpreter.  In addition to all usual
+functions provided by Guile, it will also offer the function
+<code class="code">my-hostname</code>.
+</p>
+<div class="example">
+<pre class="example-preformatted">#include &lt;stdlib.h&gt;
+#include &lt;libguile.h&gt;
+
+static SCM
+my_hostname (void)
+{
+  char *s = getenv (&quot;HOSTNAME&quot;);
+  if (s == NULL)
+    return SCM_BOOL_F;
+  else
+    return scm_from_locale_string (s);
+}
+
+static void
+inner_main (void *data, int argc, char **argv)
+{
+  scm_c_define_gsubr (&quot;my-hostname&quot;, 0, 0, 0, my_hostname);
+  scm_shell (argc, argv);
+}
+
+int
+main (int argc, char **argv)
+{
+  scm_boot_guile (argc, argv, inner_main, 0);
+  return 0; /* never reached */
+}
+</pre></div>
+
+<p>When Guile is correctly installed on your system, the above program
+can be compiled and linked like this:
+</p>
+<div class="example">
+<pre class="example-preformatted">$ gcc -o simple-guile simple-guile.c \
+    `pkg-config --cflags --libs guile-3.0`
+</pre></div>
+
+<p>When it is run, it behaves just like the <code class="code">guile</code> program except
+that you can also call the new <code class="code">my-hostname</code> function.
+</p>
+<div class="example">
+<pre class="example-preformatted">$ ./simple-guile
+scheme@(guile-user)&gt; (+ 1 2 3)
+$1 = 6
+scheme@(guile-user)&gt; (my-hostname)
+&quot;burns&quot;
+</pre></div>
+
+</div>
+
+
+
+</body>
+</html>

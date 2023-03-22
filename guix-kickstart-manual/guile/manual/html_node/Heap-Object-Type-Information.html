@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Heap Object Type Information (Guile Reference Manual)</title>
+
+<meta name="description" content="Heap Object Type Information (Guile Reference Manual)">
+<meta name="keywords" content="Heap Object Type Information (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="The-SCM-Type-in-Guile.html" rel="up" title="The SCM Type in Guile">
+<link href="Accessing-Heap-Object-Fields.html" rel="next" title="Accessing Heap Object Fields">
+<link href="Allocating-Heap-Objects.html" rel="prev" title="Allocating Heap Objects">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Heap-Object-Type-Information">
+<div class="nav-panel">
+<p>
+Next: <a href="Accessing-Heap-Object-Fields.html" accesskey="n" rel="next">Accessing Heap Object Fields</a>, Previous: <a href="Allocating-Heap-Objects.html" accesskey="p" rel="prev">Allocating Heap Objects</a>, Up: <a href="The-SCM-Type-in-Guile.html" accesskey="u" rel="up">The SCM Type in Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Heap-Object-Type-Information-1">9.2.5.5 Heap Object Type Information</h4>
+
+<p>Heap objects contain a type tag and are followed by a number of
+word-sized slots.  The interpretation of the object contents depends on
+the type of the object.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fCELL_005fTYPE"><span class="category-def">Macro: </span><span><code class="def-type">scm_t_bits</code> <strong class="def-name">SCM_CELL_TYPE</strong> <code class="def-code-arguments">(SCM <var class="var">x</var>)</code><a class="copiable-link" href='#index-SCM_005fCELL_005fTYPE'> &para;</a></span></dt>
+<dd><p>Extract the first word of the heap object pointed to by <var class="var">x</var>.  This
+value holds the information about the cell type.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fSET_005fCELL_005fTYPE"><span class="category-def">Macro: </span><span><code class="def-type">void</code> <strong class="def-name">SCM_SET_CELL_TYPE</strong> <code class="def-code-arguments">(SCM <var class="var">x</var>, scm_t_bits <var class="var">t</var>)</code><a class="copiable-link" href='#index-SCM_005fSET_005fCELL_005fTYPE'> &para;</a></span></dt>
+<dd><p>For a non-immediate Scheme object <var class="var">x</var>, write the value <var class="var">t</var> into
+the first word of the heap object referenced by <var class="var">x</var>.  The value
+<var class="var">t</var> must hold a valid cell type.
+</p></dd></dl>
+
+
+</div>
+
+
+
+</body>
+</html>

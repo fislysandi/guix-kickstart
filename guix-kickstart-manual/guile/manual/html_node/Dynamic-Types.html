@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Dynamic Types (Guile Reference Manual)</title>
+
+<meta name="description" content="Dynamic Types (Guile Reference Manual)">
+<meta name="keywords" content="Dynamic Types (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="General-Libguile-Concepts.html" rel="up" title="General Libguile Concepts">
+<link href="Garbage-Collection.html" rel="next" title="Garbage Collection">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Dynamic-Types">
+<div class="nav-panel">
+<p>
+Next: <a href="Garbage-Collection.html" accesskey="n" rel="next">Garbage Collection</a>, Up: <a href="General-Libguile-Concepts.html" accesskey="u" rel="up">General concepts for using libguile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Dynamic-Types-1">5.4.1 Dynamic Types</h4>
+
+<p>Scheme is a dynamically-typed language; this means that the system
+cannot, in general, determine the type of a given expression at compile
+time.  Types only become apparent at run time.  Variables do not have
+fixed types; a variable may hold a pair at one point, an integer at the
+next, and a thousand-element vector later.  Instead, values, not
+variables, have fixed types.
+</p>
+<p>In order to implement standard Scheme functions like <code class="code">pair?</code> and
+<code class="code">string?</code> and provide garbage collection, the representation of
+every value must contain enough information to accurately determine its
+type at run time.  Often, Scheme systems also use this information to
+determine whether a program has attempted to apply an operation to an
+inappropriately typed value (such as taking the <code class="code">car</code> of a string).
+</p>
+<p>Because variables, pairs, and vectors may hold values of any type,
+Scheme implementations use a uniform representation for values &mdash; a
+single type large enough to hold either a complete value or a pointer
+to a complete value, along with the necessary typing information.
+</p>
+<p>In Guile, this uniform representation of all Scheme values is the C type
+<code class="code">SCM</code>.  This is an opaque type and its size is typically equivalent
+to that of a pointer to <code class="code">void</code>.  Thus, <code class="code">SCM</code> values can be
+passed around efficiently and they take up reasonably little storage on
+their own.
+</p>
+<p>The most important rule is: You never access a <code class="code">SCM</code> value
+directly; you only pass it to functions or macros defined in libguile.
+</p>
+<p>As an obvious example, although a <code class="code">SCM</code> variable can contain
+integers, you can of course not compute the sum of two <code class="code">SCM</code> values
+by adding them with the C <code class="code">+</code> operator.  You must use the libguile
+function <code class="code">scm_sum</code>.
+</p>
+<p>Less obvious and therefore more important to keep in mind is that you
+also cannot directly test <code class="code">SCM</code> values for trueness.  In Scheme,
+the value <code class="code">#f</code> is considered false and of course a <code class="code">SCM</code>
+variable can represent that value.  But there is no guarantee that the
+<code class="code">SCM</code> representation of <code class="code">#f</code> looks false to C code as well.
+You need to use <code class="code">scm_is_true</code> or <code class="code">scm_is_false</code> to test a
+<code class="code">SCM</code> value for trueness or falseness, respectively.
+</p>
+<p>You also can not directly compare two <code class="code">SCM</code> values to find out
+whether they are identical (that is, whether they are <code class="code">eq?</code> in
+Scheme terms).  You need to use <code class="code">scm_is_eq</code> for this.
+</p>
+<p>The one exception is that you can directly assign a <code class="code">SCM</code> value to
+a <code class="code">SCM</code> variable by using the C <code class="code">=</code> operator.
+</p>
+<p>The following (contrived) example shows how to do it right.  It
+implements a function of two arguments (<var class="var">a</var> and <var class="var">flag</var>) that
+returns <var class="var">a</var>+1 if <var class="var">flag</var> is true, else it returns <var class="var">a</var>
+unchanged.
+</p>
+<div class="example">
+<pre class="example-preformatted">SCM
+my_incrementing_function (SCM a, SCM flag)
+{
+  SCM result;
+
+  if (scm_is_true (flag))
+    result = scm_sum (a, scm_from_int (1));
+  else
+    result = a;
+
+  return result;
+}
+</pre></div>
+
+<p>Often, you need to convert between <code class="code">SCM</code> values and appropriate C
+values.  For example, we needed to convert the integer <code class="code">1</code> to its
+<code class="code">SCM</code> representation in order to add it to <var class="var">a</var>.  Libguile
+provides many function to do these conversions, both from C to
+<code class="code">SCM</code> and from <code class="code">SCM</code> to C.
+</p>
+<p>The conversion functions follow a common naming pattern: those that make
+a <code class="code">SCM</code> value from a C value have names of the form
+<code class="code">scm_from_<var class="var">type</var> (&hellip;)</code> and those that convert a <code class="code">SCM</code>
+value to a C value use the form <code class="code">scm_to_<var class="var">type</var> (&hellip;)</code>.
+</p>
+<p>However, it is best to avoid converting values when you can.  When you
+must combine C values and <code class="code">SCM</code> values in a computation, it is
+often better to convert the C values to <code class="code">SCM</code> values and do the
+computation by using libguile functions than to the other way around
+(converting <code class="code">SCM</code> to C and doing the computation some other way).
+</p>
+<p>As a simple example, consider this version of
+<code class="code">my_incrementing_function</code> from above:
+</p>
+<div class="example">
+<pre class="example-preformatted">SCM
+my_other_incrementing_function (SCM a, SCM flag)
+{
+  int result;
+
+  if (scm_is_true (flag))
+    result = scm_to_int (a) + 1;
+  else
+    result = scm_to_int (a);
+
+  return scm_from_int (result);
+}
+</pre></div>
+
+<p>This version is much less general than the original one: it will only
+work for values <var class="var">A</var> that can fit into a <code class="code">int</code>.  The original
+function will work for all values that Guile can represent and that
+<code class="code">scm_sum</code> can understand, including integers bigger than <code class="code">long
+long</code>, floating point numbers, complex numbers, and new numerical types
+that have been added to Guile by third-party libraries.
+</p>
+<p>Also, computing with <code class="code">SCM</code> is not necessarily inefficient.  Small
+integers will be encoded directly in the <code class="code">SCM</code> value, for example,
+and do not need any additional memory on the heap.  See <a class="ref" href="Data-Representation.html">Data Representation</a> to find out the details.
+</p>
+<p>Some special <code class="code">SCM</code> values are available to C code without needing
+to convert them from C values:
+</p>
+<table class="multitable">
+<tbody><tr><td>Scheme value</td><td>C representation</td></tr>
+<tr><td><code class="code">#f</code></td><td><code class="code">SCM_BOOL_F</code></td></tr>
+<tr><td><code class="code">#t</code></td><td><code class="code">SCM_BOOL_T</code></td></tr>
+<tr><td><code class="code">()</code></td><td><code class="code">SCM_EOL</code></td></tr>
+</tbody>
+</table>
+
+<p>In addition to <code class="code">SCM</code>, Guile also defines the related type
+<code class="code">scm_t_bits</code>.  This is an unsigned integral type of sufficient
+size to hold all information that is directly contained in a
+<code class="code">SCM</code> value.  The <code class="code">scm_t_bits</code> type is used internally by
+Guile to do all the bit twiddling explained in <a class="ref" href="Data-Representation.html">Data Representation</a>, but
+you will encounter it occasionally in low-level user code as well.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Garbage-Collection.html">Garbage Collection</a>, Up: <a href="General-Libguile-Concepts.html">General concepts for using libguile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

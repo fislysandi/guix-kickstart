@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Local Bindings (Guile Reference Manual)</title>
+
+<meta name="description" content="Local Bindings (Guile Reference Manual)">
+<meta name="keywords" content="Local Bindings (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Binding-Constructs.html" rel="up" title="Binding Constructs">
+<link href="Internal-Definitions.html" rel="next" title="Internal Definitions">
+<link href="Top-Level.html" rel="prev" title="Top Level">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Local-Bindings">
+<div class="nav-panel">
+<p>
+Next: <a href="Internal-Definitions.html" accesskey="n" rel="next">Internal definitions</a>, Previous: <a href="Top-Level.html" accesskey="p" rel="prev">Top Level Variable Definitions</a>, Up: <a href="Binding-Constructs.html" accesskey="u" rel="up">Definitions and Variable Bindings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Local-Variable-Bindings">6.10.2 Local Variable Bindings</h4>
+
+<a class="index-entry-id" id="index-local-bindings"></a>
+<a class="index-entry-id" id="index-local-variables"></a>
+
+<p>As opposed to definitions at the top level, which creates bindings that
+are visible to all code in a module, it is also possible to define
+variables which are only visible in a well-defined part of the program.
+Normally, this part of a program will be a procedure or a subexpression
+of a procedure.
+</p>
+<p>With the constructs for local binding (<code class="code">let</code>, <code class="code">let*</code>,
+<code class="code">letrec</code>, and <code class="code">letrec*</code>), the Scheme language has a block
+structure like most other programming languages since the days of
+<small class="sc">ALGOL 60</small>.  Readers familiar to languages like C or Java should
+already be used to this concept, but the family of <code class="code">let</code>
+expressions has a few properties which are well worth knowing.
+</p>
+<p>The most basic local binding construct is <code class="code">let</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-let"><span class="category-def">syntax: </span><span><strong class="def-name">let</strong> <var class="def-var-arguments">bindings body</var><a class="copiable-link" href='#index-let'> &para;</a></span></dt>
+<dd><p><var class="var">bindings</var> has the form
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">((<var class="var">variable1</var> <var class="var">init1</var>) &hellip;)
+</pre></div>
+
+<p>that is zero or more two-element lists of a variable and an arbitrary
+expression each.  All <var class="var">variable</var> names must be distinct.
+</p>
+<p>A <code class="code">let</code> expression is evaluated as follows.
+</p>
+<ul class="itemize mark-bullet">
+<li>All <var class="var">init</var> expressions are evaluated.
+
+</li><li>New storage is allocated for the <var class="var">variables</var>.
+
+</li><li>The values of the <var class="var">init</var> expressions are stored into the variables.
+
+</li><li>The expressions in <var class="var">body</var> are evaluated in order, and the value of
+the last expression is returned as the value of the <code class="code">let</code>
+expression.
+</li></ul>
+
+<p>The <var class="var">init</var> expressions are not allowed to refer to any of the
+<var class="var">variables</var>.
+</p></dd></dl>
+
+<p>The other binding constructs are variations on the same theme: making new
+values, binding them to variables, and executing a body in that new,
+extended lexical context.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-let_002a"><span class="category-def">syntax: </span><span><strong class="def-name">let*</strong> <var class="def-var-arguments">bindings body</var><a class="copiable-link" href='#index-let_002a'> &para;</a></span></dt>
+<dd><p>Similar to <code class="code">let</code>, but the variable bindings are performed
+sequentially, that means that all <var class="var">init</var> expression are allowed to
+use the variables defined on their left in the binding list.
+</p>
+<p>A <code class="code">let*</code> expression can always be expressed with nested <code class="code">let</code>
+expressions.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(let* ((a 1) (b a))
+   b)
+&equiv;
+(let ((a 1))
+  (let ((b a))
+    b))
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-letrec"><span class="category-def">syntax: </span><span><strong class="def-name">letrec</strong> <var class="def-var-arguments">bindings body</var><a class="copiable-link" href='#index-letrec'> &para;</a></span></dt>
+<dd><p>Similar to <code class="code">let</code>, but it is possible to refer to the <var class="var">variable</var>
+from lambda expression created in any of the <var class="var">inits</var>.  That is,
+procedures created in the <var class="var">init</var> expression can recursively refer to
+the defined variables.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(letrec ((even? (lambda (n)
+                  (if (zero? n)
+                      #t
+                      (odd? (- n 1)))))
+         (odd? (lambda (n)
+                  (if (zero? n)
+                      #f
+                      (even? (- n 1))))))
+  (even? 88))
+&rArr;
+#t
+</pre></div>
+
+<p>Note that while the <var class="var">init</var> expressions may refer to the new
+variables, they may not access their values.  For example, making the
+<code class="code">even?</code> function above creates a closure (see <a class="pxref" href="About-Closure.html">The Concept of Closure</a>)
+referencing the <code class="code">odd?</code> variable.  But <code class="code">odd?</code> can&rsquo;t be called
+until after execution has entered the body.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-letrec_002a"><span class="category-def">syntax: </span><span><strong class="def-name">letrec*</strong> <var class="def-var-arguments">bindings body</var><a class="copiable-link" href='#index-letrec_002a'> &para;</a></span></dt>
+<dd><p>Similar to <code class="code">letrec</code>, except the <var class="var">init</var> expressions are bound to
+their variables in order.
+</p>
+<p><code class="code">letrec*</code> thus relaxes the letrec restriction, in that later
+<var class="var">init</var> expressions may refer to the values of previously bound
+variables.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(letrec ((a 42)
+         (b (+ a 10)))  ;; Illegal access
+  (* a b))
+;; The behavior of the expression above is unspecified
+
+(letrec* ((a 42)
+          (b (+ a 10)))
+  (* a b))
+&rArr; 2184
+</pre></div>
+</dd></dl>
+
+<p>There is also an alternative form of the <code class="code">let</code> form, which is used
+for expressing iteration.  Because of the use as a looping construct,
+this form (the <em class="dfn">named let</em>) is documented in the section about
+iteration (see <a class="pxref" href="while-do.html">Iteration</a>)
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Internal-Definitions.html">Internal definitions</a>, Previous: <a href="Top-Level.html">Top Level Variable Definitions</a>, Up: <a href="Binding-Constructs.html">Definitions and Variable Bindings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

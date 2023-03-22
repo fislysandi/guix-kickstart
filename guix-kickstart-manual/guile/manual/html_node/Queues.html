@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Queues (Guile Reference Manual)</title>
+
+<meta name="description" content="Queues (Guile Reference Manual)">
+<meta name="keywords" content="Queues (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Guile-Modules.html" rel="up" title="Guile Modules">
+<link href="Streams.html" rel="next" title="Streams">
+<link href="File-Tree-Walk.html" rel="prev" title="File Tree Walk">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Queues">
+<div class="nav-panel">
+<p>
+Next: <a href="Streams.html" accesskey="n" rel="next">Streams</a>, Previous: <a href="File-Tree-Walk.html" accesskey="p" rel="prev">File Tree Walk</a>, Up: <a href="Guile-Modules.html" accesskey="u" rel="up">Guile Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Queues-1">7.13 Queues</h3>
+<a class="index-entry-id" id="index-queues"></a>
+<a class="index-entry-id" id="index-Queues"></a>
+
+<p>The functions in this section are provided by
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 q))
+</pre></div>
+
+<p>This module implements queues holding arbitrary scheme objects and
+designed for efficient first-in / first-out operations.
+</p>
+<p><code class="code">make-q</code> creates a queue, and objects are entered and removed
+with <code class="code">enq!</code> and <code class="code">deq!</code>.  <code class="code">q-push!</code> and <code class="code">q-pop!</code>
+can be used too, treating the front of the queue like a stack.
+</p>
+<br>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dq"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-q</strong><a class="copiable-link" href='#index-make_002dq'> &para;</a></span></dt>
+<dd><p>Return a new queue.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-q_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">q?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-q_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is a queue, or <code class="code">#f</code> if not.
+</p>
+<p>Note that queues are not a distinct class of objects but are
+implemented with cons cells.  For that reason certain list structures
+can get <code class="code">#t</code> from <code class="code">q?</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-enq_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">enq!</strong> <var class="def-var-arguments">q obj</var><a class="copiable-link" href='#index-enq_0021'> &para;</a></span></dt>
+<dd><p>Add <var class="var">obj</var> to the rear of <var class="var">q</var>, and return <var class="var">q</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-deq_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">deq!</strong> <var class="def-var-arguments">q</var><a class="copiable-link" href='#index-deq_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-q_002dpop_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">q-pop!</strong> <var class="def-var-arguments">q</var><a class="copiable-link" href='#index-q_002dpop_0021'> &para;</a></span></dt>
+<dd><p>Remove and return the front element from <var class="var">q</var>.  If <var class="var">q</var> is
+empty, a <code class="code">q-empty</code> exception is thrown.
+</p>
+<p><code class="code">deq!</code> and <code class="code">q-pop!</code> are the same operation, the two names
+just let an application match <code class="code">enq!</code> with <code class="code">deq!</code>, or
+<code class="code">q-push!</code> with <code class="code">q-pop!</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-q_002dpush_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">q-push!</strong> <var class="def-var-arguments">q obj</var><a class="copiable-link" href='#index-q_002dpush_0021'> &para;</a></span></dt>
+<dd><p>Add <var class="var">obj</var> to the front of <var class="var">q</var>, and return <var class="var">q</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-q_002dlength"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">q-length</strong> <var class="def-var-arguments">q</var><a class="copiable-link" href='#index-q_002dlength'> &para;</a></span></dt>
+<dd><p>Return the number of elements in <var class="var">q</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-q_002dempty_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">q-empty?</strong> <var class="def-var-arguments">q</var><a class="copiable-link" href='#index-q_002dempty_003f'> &para;</a></span></dt>
+<dd><p>Return true if <var class="var">q</var> is empty.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-q_002dempty_002dcheck"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">q-empty-check</strong> <var class="def-var-arguments">q</var><a class="copiable-link" href='#index-q_002dempty_002dcheck'> &para;</a></span></dt>
+<dd><p>Throw a <code class="code">q-empty</code> exception if <var class="var">q</var> is empty.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-q_002dfront"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">q-front</strong> <var class="def-var-arguments">q</var><a class="copiable-link" href='#index-q_002dfront'> &para;</a></span></dt>
+<dd><p>Return the first element of <var class="var">q</var> (without removing it).  If <var class="var">q</var>
+is empty, a <code class="code">q-empty</code> exception is thrown.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-q_002drear"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">q-rear</strong> <var class="def-var-arguments">q</var><a class="copiable-link" href='#index-q_002drear'> &para;</a></span></dt>
+<dd><p>Return the last element of <var class="var">q</var> (without removing it).  If <var class="var">q</var>
+is empty, a <code class="code">q-empty</code> exception is thrown.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-q_002dremove_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">q-remove!</strong> <var class="def-var-arguments">q obj</var><a class="copiable-link" href='#index-q_002dremove_0021'> &para;</a></span></dt>
+<dd><p>Remove all occurrences of <var class="var">obj</var> from <var class="var">q</var>, and return <var class="var">q</var>.
+<var class="var">obj</var> is compared to queue elements using <code class="code">eq?</code>.
+</p></dd></dl>
+
+<br>
+<a class="index-entry-id" id="index-q_002dempty"></a>
+<p>The <code class="code">q-empty</code> exceptions described above are thrown just as
+<code class="code">(throw 'q-empty)</code>, there&rsquo;s no message etc like an error throw.
+</p>
+<p>A queue is implemented as a cons cell, the <code class="code">car</code> containing a
+list of queued elements, and the <code class="code">cdr</code> being the last cell in
+that list (for ease of enqueuing).
+</p>
+<div class="example">
+<pre class="example-preformatted">(<var class="var">list</var> . <var class="var">last-cell</var>)
+</pre></div>
+
+<p>If the queue is empty, <var class="var">list</var> is the empty list and
+<var class="var">last-cell</var> is <code class="code">#f</code>.
+</p>
+<p>An application can directly access the queue list if desired, for
+instance to search the elements or to insert at a specific point.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-sync_002dq_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sync-q!</strong> <var class="def-var-arguments">q</var><a class="copiable-link" href='#index-sync_002dq_0021'> &para;</a></span></dt>
+<dd><p>Recompute the <var class="var">last-cell</var> field in <var class="var">q</var>.
+</p>
+<p>All the operations above maintain <var class="var">last-cell</var> as described, so
+normally there&rsquo;s no need for <code class="code">sync-q!</code>.  But if an application
+modifies the queue <var class="var">list</var> then it must either maintain
+<var class="var">last-cell</var> similarly, or call <code class="code">sync-q!</code> to recompute it.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Streams.html">Streams</a>, Previous: <a href="File-Tree-Walk.html">File Tree Walk</a>, Up: <a href="Guile-Modules.html">Guile Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

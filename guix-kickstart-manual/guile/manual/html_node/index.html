@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Top (Guile Reference Manual)</title>
+
+<meta name="description" content="Top (Guile Reference Manual)">
+<meta name="keywords" content="Top (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="#Top" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="../index.html" rel="up" title="(dir)">
+<link href="Preface.html" rel="next" title="Preface">
+<link href="../index.html" rel="prev" title="(dir)">
+<style type="text/css">
+<!--
+ul.toc-numbered-mark {list-style: none}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="top-level-extent" id="Top">
+<div class="nav-panel">
+<p>
+Next: <a href="Preface.html" accesskey="n" rel="next">Preface</a>, Previous: <a href="../index.html" accesskey="p" rel="prev">(dir)</a>, Up: <a href="../index.html" accesskey="u" rel="up">(dir)</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h1 class="top" id="The-Guile-Reference-Manual">The Guile Reference Manual</h1>
+
+<p>This manual documents Guile version 3.0.9.
+</p>
+<p>Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. <br>
+Copyright (C) 2021 Maxime Devos
+</p>
+<p>Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled &ldquo;GNU Free
+Documentation License.&rdquo;
+</p><br>
+
+
+
+
+<div class="element-contents" id="SEC_Contents">
+<h2 class="contents-heading">Table of Contents</h2>
+
+<div class="contents">
+
+<ul class="toc-numbered-mark">
+  <li><a id="toc-Preface-1" href="Preface.html">Preface</a>
+  <ul class="toc-numbered-mark">
+    <li><a id="toc-Contributors-to-this-Manual" href="Contributors.html">Contributors to this Manual</a></li>
+    <li><a id="toc-The-Guile-License" href="Guile-License.html">The Guile License</a></li>
+  </ul></li>
+  <li><a id="toc-Introduction-1" href="Introduction.html">1 Introduction</a>
+  <ul class="toc-numbered-mark">
+    <li><a id="toc-Guile-and-Scheme-1" href="Guile-and-Scheme.html">1.1 Guile and Scheme</a></li>
+    <li><a id="toc-Combining-with-C-Code" href="Combining-with-C.html">1.2 Combining with C Code</a></li>
+    <li><a id="toc-Guile-and-the-GNU-Project-1" href="Guile-and-the-GNU-Project.html">1.3 Guile and the GNU Project</a></li>
+    <li><a id="toc-Interactive-Programming-1" href="Interactive-Programming.html">1.4 Interactive Programming</a></li>
+    <li><a id="toc-Supporting-Multiple-Languages-1" href="Supporting-Multiple-Languages.html">1.5 Supporting Multiple Languages</a></li>
+    <li><a id="toc-Obtaining-and-Installing-Guile-1" href="Obtaining-and-Installing-Guile.html">1.6 Obtaining and Installing Guile</a></li>
+    <li><a id="toc-Organisation-of-this-Manual-1" href="Organisation-of-this-Manual.html">1.7 Organisation of this Manual</a></li>
+    <li><a id="toc-Typographical-Conventions-1" href="Typographical-Conventions.html">1.8 Typographical Conventions</a></li>
+  </ul></li>
+  <li><a id="toc-Hello-Guile_0021-1" href="Hello-Guile_0021.html">2 Hello Guile!</a>
+  <ul class="toc-numbered-mark">
+    <li><a id="toc-Running-Guile-Interactively-1" href="Running-Guile-Interactively.html">2.1 Running Guile Interactively</a></li>
+    <li><a id="toc-Running-Guile-Scripts-1" href="Running-Guile-Scripts.html">2.2 Running Guile Scripts</a></li>
+    <li><a id="toc-Linking-Guile-into-Programs-1" href="Linking-Guile-into-Programs.html">2.3 Linking Guile into Programs</a></li>
+    <li><a id="toc-Writing-Guile-Extensions-1" href="Writing-Guile-Extensions.html">2.4 Writing Guile Extensions</a></li>
+    <li><a id="toc-Using-the-Guile-Module-System-1" href="Using-the-Guile-Module-System.html">2.5 Using the Guile Module System</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Using-Modules-1" href="Using-Modules.html">2.5.1 Using Modules</a></li>
+      <li><a id="toc-Writing-new-Modules-1" href="Writing-new-Modules.html">2.5.2 Writing new Modules</a></li>
+      <li><a id="toc-Putting-Extensions-into-Modules-1" href="Putting-Extensions-into-Modules.html">2.5.3 Putting Extensions into Modules</a></li>
+    </ul></li>
+    <li><a id="toc-Reporting-Bugs-1" href="Reporting-Bugs.html">2.6 Reporting Bugs</a></li>
+  </ul></li>
+  <li><a id="toc-Hello-Scheme_0021-1" href="Hello-Scheme_0021.html">3 Hello Scheme!</a>
+  <ul class="toc-numbered-mark">
+    <li><a id="toc-Data-Types_002c-Values-and-Variables" href="About-Data.html">3.1 Data Types, Values and Variables</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Latent-Typing-1" href="Latent-Typing.html">3.1.1 Latent Typing</a></li>
+      <li><a id="toc-Values-and-Variables-1" href="Values-and-Variables.html">3.1.2 Values and Variables</a></li>
+      <li><a id="toc-Defining-and-Setting-Variables" href="Definition.html">3.1.3 Defining and Setting Variables</a></li>
+    </ul></li>
+    <li><a id="toc-The-Representation-and-Use-of-Procedures" href="About-Procedures.html">3.2 The Representation and Use of Procedures</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Procedures-as-Values-1" href="Procedures-as-Values.html">3.2.1 Procedures as Values</a></li>
+      <li><a id="toc-Simple-Procedure-Invocation" href="Simple-Invocation.html">3.2.2 Simple Procedure Invocation</a></li>
+      <li><a id="toc-Creating-and-Using-a-New-Procedure" href="Creating-a-Procedure.html">3.2.3 Creating and Using a New Procedure</a></li>
+      <li><a id="toc-Lambda-Alternatives-1" href="Lambda-Alternatives.html">3.2.4 Lambda Alternatives</a></li>
+    </ul></li>
+    <li><a id="toc-Expressions-and-Evaluation" href="About-Expressions.html">3.3 Expressions and Evaluation</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Evaluating-Expressions-and-Executing-Programs" href="Evaluating.html">3.3.1 Evaluating Expressions and Executing Programs</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Evaluating-Literal-Data" href="Eval-Literal.html">3.3.1.1 Evaluating Literal Data</a></li>
+        <li><a id="toc-Evaluating-a-Variable-Reference" href="Eval-Variable.html">3.3.1.2 Evaluating a Variable Reference</a></li>
+        <li><a id="toc-Evaluating-a-Procedure-Invocation-Expression" href="Eval-Procedure.html">3.3.1.3 Evaluating a Procedure Invocation Expression</a></li>
+        <li><a id="toc-Evaluating-Special-Syntactic-Expressions" href="Eval-Special.html">3.3.1.4 Evaluating Special Syntactic Expressions</a></li>
+      </ul></li>
+      <li><a id="toc-Tail-calls" href="Tail-Calls.html">3.3.2 Tail calls</a></li>
+      <li><a id="toc-Using-the-Guile-REPL" href="The-REPL.html">3.3.3 Using the Guile REPL</a></li>
+      <li><a id="toc-Summary-of-Common-Syntax" href="Syntax-Summary.html">3.3.4 Summary of Common Syntax</a></li>
+    </ul></li>
+    <li><a id="toc-The-Concept-of-Closure" href="About-Closure.html">3.4 The Concept of Closure</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Names_002c-Locations_002c-Values-and-Environments" href="About-Environments.html">3.4.1 Names, Locations, Values and Environments</a></li>
+      <li><a id="toc-Local-Variables-and-Environments" href="Local-Variables.html">3.4.2 Local Variables and Environments</a></li>
+      <li><a id="toc-Environment-Chaining" href="Chaining.html">3.4.3 Environment Chaining</a></li>
+      <li><a id="toc-Lexical-Scope-1" href="Lexical-Scope.html">3.4.4 Lexical Scope</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-An-Example-of-Non_002dLexical-Scoping" href="Scoping-Example.html">3.4.4.1 An Example of Non-Lexical Scoping</a></li>
+      </ul></li>
+      <li><a id="toc-Closure-1" href="Closure.html">3.4.5 Closure</a></li>
+      <li><a id="toc-Example-1_003a-A-Serial-Number-Generator" href="Serial-Number.html">3.4.6 Example 1: A Serial Number Generator</a></li>
+      <li><a id="toc-Example-2_003a-A-Shared-Persistent-Variable" href="Shared-Variable.html">3.4.7 Example 2: A Shared Persistent Variable</a></li>
+      <li><a id="toc-Example-3_003a-The-Callback-Closure-Problem" href="Callback-Closure.html">3.4.8 Example 3: The Callback Closure Problem</a></li>
+      <li><a id="toc-Example-4_003a-Object-Orientation" href="OO-Closure.html">3.4.9 Example 4: Object Orientation</a></li>
+    </ul></li>
+    <li><a id="toc-Further-Reading-1" href="Further-Reading.html">3.5 Further Reading</a></li>
+  </ul></li>
+  <li><a id="toc-Programming-in-Scheme-1" href="Programming-in-Scheme.html">4 Programming in Scheme</a>
+  <ul class="toc-numbered-mark">
+    <li><a id="toc-Guile_0027s-Implementation-of-Scheme" href="Guile-Scheme.html">4.1 Guile&rsquo;s Implementation of Scheme</a></li>
+    <li><a id="toc-Invoking-Guile-1" href="Invoking-Guile.html">4.2 Invoking Guile</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Command_002dline-Options-1" href="Command_002dline-Options.html">4.2.1 Command-line Options</a></li>
+      <li><a id="toc-Environment-Variables-1" href="Environment-Variables.html">4.2.2 Environment Variables</a></li>
+    </ul></li>
+    <li><a id="toc-Guile-Scripting-1" href="Guile-Scripting.html">4.3 Guile Scripting</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-The-Top-of-a-Script-File-1" href="The-Top-of-a-Script-File.html">4.3.1 The Top of a Script File</a></li>
+      <li><a id="toc-The-Meta-Switch-1" href="The-Meta-Switch.html">4.3.2 The Meta Switch</a></li>
+      <li><a id="toc-Command-Line-Handling-1" href="Command-Line-Handling.html">4.3.3 Command Line Handling</a></li>
+      <li><a id="toc-Scripting-Examples-1" href="Scripting-Examples.html">4.3.4 Scripting Examples</a></li>
+    </ul></li>
+    <li><a id="toc-Using-Guile-Interactively-1" href="Using-Guile-Interactively.html">4.4 Using Guile Interactively</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-The-Init-File_002c-_007e_002f_002eguile" href="Init-File.html">4.4.1 The Init File, <samp class="file">~/.guile</samp></a></li>
+      <li><a id="toc-Readline-1" href="Readline.html">4.4.2 Readline</a></li>
+      <li><a id="toc-Value-History-1" href="Value-History.html">4.4.3 Value History</a></li>
+      <li><a id="toc-REPL-Commands-1" href="REPL-Commands.html">4.4.4 REPL Commands</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Help-Commands-1" href="Help-Commands.html">4.4.4.1 Help Commands</a></li>
+        <li><a id="toc-Module-Commands-1" href="Module-Commands.html">4.4.4.2 Module Commands</a></li>
+        <li><a id="toc-Language-Commands-1" href="Language-Commands.html">4.4.4.3 Language Commands</a></li>
+        <li><a id="toc-Compile-Commands-1" href="Compile-Commands.html">4.4.4.4 Compile Commands</a></li>
+        <li><a id="toc-Profile-Commands-1" href="Profile-Commands.html">4.4.4.5 Profile Commands</a></li>
+        <li><a id="toc-Debug-Commands-1" href="Debug-Commands.html">4.4.4.6 Debug Commands</a></li>
+        <li><a id="toc-Inspect-Commands-1" href="Inspect-Commands.html">4.4.4.7 Inspect Commands</a></li>
+        <li><a id="toc-System-Commands-1" href="System-Commands.html">4.4.4.8 System Commands</a></li>
+      </ul></li>
+      <li><a id="toc-Error-Handling-1" href="Error-Handling.html">4.4.5 Error Handling</a></li>
+      <li><a id="toc-Interactive-Debugging-1" href="Interactive-Debugging.html">4.4.6 Interactive Debugging</a></li>
+    </ul></li>
+    <li><a id="toc-Using-Guile-in-Emacs-1" href="Using-Guile-in-Emacs.html">4.5 Using Guile in Emacs</a></li>
+    <li><a id="toc-Using-Guile-Tools-1" href="Using-Guile-Tools.html">4.6 Using Guile Tools</a></li>
+    <li><a id="toc-Installing-Site-Packages-1" href="Installing-Site-Packages.html">4.7 Installing Site Packages</a></li>
+    <li><a id="toc-Distributing-Guile-Code-1" href="Distributing-Guile-Code.html">4.8 Distributing Guile Code</a></li>
+  </ul></li>
+  <li><a id="toc-Programming-in-C-1" href="Programming-in-C.html">5 Programming in C</a>
+  <ul class="toc-numbered-mark">
+    <li><a id="toc-Parallel-Installations-1" href="Parallel-Installations.html">5.1 Parallel Installations</a></li>
+    <li><a id="toc-Linking-Programs-With-Guile-1" href="Linking-Programs-With-Guile.html">5.2 Linking Programs With Guile</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Guile-Initialization-Functions-1" href="Guile-Initialization-Functions.html">5.2.1 Guile Initialization Functions</a></li>
+      <li><a id="toc-A-Sample-Guile-Main-Program-1" href="A-Sample-Guile-Main-Program.html">5.2.2 A Sample Guile Main Program</a></li>
+      <li><a id="toc-Building-the-Example-with-Make" href="A-Sample-Guile-Main-Program.html#Building-the-Example-with-Make">5.2.3 Building the Example with Make</a></li>
+      <li><a id="toc-Building-the-Example-with-Autoconf" href="A-Sample-Guile-Main-Program.html#Building-the-Example-with-Autoconf">5.2.4 Building the Example with Autoconf</a></li>
+    </ul></li>
+    <li><a id="toc-Linking-Guile-with-Libraries-1" href="Linking-Guile-with-Libraries.html">5.3 Linking Guile with Libraries</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-A-Sample-Guile-Extension-1" href="A-Sample-Guile-Extension.html">5.3.1 A Sample Guile Extension</a></li>
+    </ul></li>
+    <li><a id="toc-General-concepts-for-using-libguile" href="General-Libguile-Concepts.html">5.4 General concepts for using libguile</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Dynamic-Types-1" href="Dynamic-Types.html">5.4.1 Dynamic Types</a></li>
+      <li><a id="toc-Garbage-Collection-1" href="Garbage-Collection.html">5.4.2 Garbage Collection</a></li>
+      <li><a id="toc-Control-Flow-1" href="Control-Flow.html">5.4.3 Control Flow</a></li>
+      <li><a id="toc-Asynchronous-Signals-1" href="Asynchronous-Signals.html">5.4.4 Asynchronous Signals</a></li>
+      <li><a id="toc-Multi_002dThreading-1" href="Multi_002dThreading.html">5.4.5 Multi-Threading</a></li>
+    </ul></li>
+    <li><a id="toc-Defining-New-Foreign-Object-Types-1" href="Defining-New-Foreign-Object-Types.html">5.5 Defining New Foreign Object Types</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Defining-Foreign-Object-Types-1" href="Defining-Foreign-Object-Types.html">5.5.1 Defining Foreign Object Types</a></li>
+      <li><a id="toc-Creating-Foreign-Objects-1" href="Creating-Foreign-Objects.html">5.5.2 Creating Foreign Objects</a></li>
+      <li><a id="toc-Type-Checking-of-Foreign-Objects-1" href="Type-Checking-of-Foreign-Objects.html">5.5.3 Type Checking of Foreign Objects</a></li>
+      <li><a id="toc-Foreign-Object-Memory-Management-1" href="Foreign-Object-Memory-Management.html">5.5.4 Foreign Object Memory Management</a></li>
+      <li><a id="toc-Foreign-Objects-and-Scheme-1" href="Foreign-Objects-and-Scheme.html">5.5.5 Foreign Objects and Scheme</a></li>
+    </ul></li>
+    <li><a id="toc-Function-Snarfing-1" href="Function-Snarfing.html">5.6 Function Snarfing</a></li>
+    <li><a id="toc-An-Overview-of-Guile-Programming" href="Programming-Overview.html">5.7 An Overview of Guile Programming</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-How-One-Might-Extend-Dia-Using-Guile" href="Extending-Dia.html">5.7.1 How One Might Extend Dia Using Guile</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Deciding-Why-You-Want-to-Add-Guile" href="Dia-Objective.html">5.7.1.1 Deciding Why You Want to Add Guile</a></li>
+        <li><a id="toc-Four-Steps-Required-to-Add-Guile" href="Dia-Steps.html">5.7.1.2 Four Steps Required to Add Guile</a></li>
+        <li><a id="toc-How-to-Represent-Dia-Data-in-Scheme" href="Dia-Objects.html">5.7.1.3 How to Represent Dia Data in Scheme</a></li>
+        <li><a id="toc-Writing-Guile-Primitives-for-Dia" href="Dia-Primitives.html">5.7.1.4 Writing Guile Primitives for Dia</a></li>
+        <li><a id="toc-Providing-a-Hook-for-the-Evaluation-of-Scheme-Code" href="Dia-Hook.html">5.7.1.5 Providing a Hook for the Evaluation of Scheme Code</a></li>
+        <li><a id="toc-Top_002dlevel-Structure-of-Guile_002denabled-Dia" href="Dia-Structure.html">5.7.1.6 Top-level Structure of Guile-enabled Dia</a></li>
+        <li><a id="toc-Going-Further-with-Dia-and-Guile" href="Dia-Advanced.html">5.7.1.7 Going Further with Dia and Guile</a></li>
+      </ul></li>
+      <li><a id="toc-Why-Scheme-is-More-Hackable-Than-C" href="Scheme-vs-C.html">5.7.2 Why Scheme is More Hackable Than C</a></li>
+      <li><a id="toc-Example_003a-Using-Guile-for-an-Application-Testbed" href="Testbed-Example.html">5.7.3 Example: Using Guile for an Application Testbed</a></li>
+      <li><a id="toc-A-Choice-of-Programming-Options" href="Programming-Options.html">5.7.4 A Choice of Programming Options</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-What-Functionality-is-Already-Available_003f" href="Available-Functionality.html">5.7.4.1 What Functionality is Already Available?</a></li>
+        <li><a id="toc-Functional-and-Performance-Constraints" href="Basic-Constraints.html">5.7.4.2 Functional and Performance Constraints</a></li>
+        <li><a id="toc-Your-Preferred-Programming-Style" href="Style-Choices.html">5.7.4.3 Your Preferred Programming Style</a></li>
+        <li><a id="toc-What-Controls-Program-Execution_003f" href="Program-Control.html">5.7.4.4 What Controls Program Execution?</a></li>
+      </ul></li>
+      <li><a id="toc-How-About-Application-Users_003f" href="User-Programming.html">5.7.5 How About Application Users?</a></li>
+    </ul></li>
+    <li><a id="toc-Autoconf-Support-1" href="Autoconf-Support.html">5.8 Autoconf Support</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Autoconf-Background-1" href="Autoconf-Background.html">5.8.1 Autoconf Background</a></li>
+      <li><a id="toc-Autoconf-Macros-1" href="Autoconf-Macros.html">5.8.2 Autoconf Macros</a></li>
+      <li><a id="toc-Using-Autoconf-Macros-1" href="Using-Autoconf-Macros.html">5.8.3 Using Autoconf Macros</a></li>
+    </ul></li>
+  </ul></li>
+  <li><a id="toc-API-Reference-1" href="API-Reference.html">6 API Reference</a>
+  <ul class="toc-numbered-mark">
+    <li><a id="toc-Overview-of-the-Guile-API" href="API-Overview.html">6.1 Overview of the Guile API</a></li>
+    <li><a id="toc-Deprecation-1" href="Deprecation.html">6.2 Deprecation</a></li>
+    <li><a id="toc-The-SCM-Type-1" href="The-SCM-Type.html">6.3 The SCM Type</a></li>
+    <li><a id="toc-Initializing-Guile" href="Initialization.html">6.4 Initializing Guile</a></li>
+    <li><a id="toc-Snarfing-Macros-1" href="Snarfing-Macros.html">6.5 Snarfing Macros</a></li>
+    <li><a id="toc-Data-Types-1" href="Data-Types.html">6.6 Data Types</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Booleans-1" href="Booleans.html">6.6.1 Booleans</a></li>
+      <li><a id="toc-Numerical-data-types" href="Numbers.html">6.6.2 Numerical data types</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Scheme_0027s-Numerical-_0060_0060Tower_0027_0027" href="Numerical-Tower.html">6.6.2.1 Scheme&rsquo;s Numerical &ldquo;Tower&rdquo;</a></li>
+        <li><a id="toc-Integers-1" href="Integers.html">6.6.2.2 Integers</a></li>
+        <li><a id="toc-Real-and-Rational-Numbers" href="Reals-and-Rationals.html">6.6.2.3 Real and Rational Numbers</a></li>
+        <li><a id="toc-Complex-Numbers-1" href="Complex-Numbers.html">6.6.2.4 Complex Numbers</a></li>
+        <li><a id="toc-Exact-and-Inexact-Numbers" href="Exactness.html">6.6.2.5 Exact and Inexact Numbers</a></li>
+        <li><a id="toc-Read-Syntax-for-Numerical-Data" href="Number-Syntax.html">6.6.2.6 Read Syntax for Numerical Data</a></li>
+        <li><a id="toc-Operations-on-Integer-Values" href="Integer-Operations.html">6.6.2.7 Operations on Integer Values</a></li>
+        <li><a id="toc-Comparison-Predicates" href="Comparison.html">6.6.2.8 Comparison Predicates</a></li>
+        <li><a id="toc-Converting-Numbers-To-and-From-Strings" href="Conversion.html">6.6.2.9 Converting Numbers To and From Strings</a></li>
+        <li><a id="toc-Complex-Number-Operations" href="Complex.html">6.6.2.10 Complex Number Operations</a></li>
+        <li><a id="toc-Arithmetic-Functions" href="Arithmetic.html">6.6.2.11 Arithmetic Functions</a></li>
+        <li><a id="toc-Scientific-Functions" href="Scientific.html">6.6.2.12 Scientific Functions</a></li>
+        <li><a id="toc-Bitwise-Operations-1" href="Bitwise-Operations.html">6.6.2.13 Bitwise Operations</a></li>
+        <li><a id="toc-Random-Number-Generation" href="Random.html">6.6.2.14 Random Number Generation</a></li>
+      </ul></li>
+      <li><a id="toc-Characters-1" href="Characters.html">6.6.3 Characters</a></li>
+      <li><a id="toc-Character-Sets-1" href="Character-Sets.html">6.6.4 Character Sets</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Character-Set-Predicates_002fComparison-1" href="Character-Set-Predicates_002fComparison.html">6.6.4.1 Character Set Predicates/Comparison</a></li>
+        <li><a id="toc-Iterating-Over-Character-Sets-1" href="Iterating-Over-Character-Sets.html">6.6.4.2 Iterating Over Character Sets</a></li>
+        <li><a id="toc-Creating-Character-Sets-1" href="Creating-Character-Sets.html">6.6.4.3 Creating Character Sets</a></li>
+        <li><a id="toc-Querying-Character-Sets-1" href="Querying-Character-Sets.html">6.6.4.4 Querying Character Sets</a></li>
+        <li><a id="toc-Character_002dSet-Algebra-1" href="Character_002dSet-Algebra.html">6.6.4.5 Character-Set Algebra</a></li>
+        <li><a id="toc-Standard-Character-Sets-1" href="Standard-Character-Sets.html">6.6.4.6 Standard Character Sets</a></li>
+      </ul></li>
+      <li><a id="toc-Strings-1" href="Strings.html">6.6.5 Strings</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-String-Read-Syntax" href="String-Syntax.html">6.6.5.1 String Read Syntax</a></li>
+        <li><a id="toc-String-Predicates-1" href="String-Predicates.html">6.6.5.2 String Predicates</a></li>
+        <li><a id="toc-String-Constructors-1" href="String-Constructors.html">6.6.5.3 String Constructors</a></li>
+        <li><a id="toc-List_002fString-conversion" href="List_002fString-Conversion.html">6.6.5.4 List/String conversion</a></li>
+        <li><a id="toc-String-Selection-1" href="String-Selection.html">6.6.5.5 String Selection</a></li>
+        <li><a id="toc-String-Modification-1" href="String-Modification.html">6.6.5.6 String Modification</a></li>
+        <li><a id="toc-String-Comparison-1" href="String-Comparison.html">6.6.5.7 String Comparison</a></li>
+        <li><a id="toc-String-Searching-1" href="String-Searching.html">6.6.5.8 String Searching</a></li>
+        <li><a id="toc-Alphabetic-Case-Mapping-1" href="Alphabetic-Case-Mapping.html">6.6.5.9 Alphabetic Case Mapping</a></li>
+        <li><a id="toc-Reversing-and-Appending-Strings-1" href="Reversing-and-Appending-Strings.html">6.6.5.10 Reversing and Appending Strings</a></li>
+        <li><a id="toc-Mapping_002c-Folding_002c-and-Unfolding" href="Mapping-Folding-and-Unfolding.html">6.6.5.11 Mapping, Folding, and Unfolding</a></li>
+        <li><a id="toc-Miscellaneous-String-Operations-1" href="Miscellaneous-String-Operations.html">6.6.5.12 Miscellaneous String Operations</a></li>
+        <li><a id="toc-Representing-Strings-as-Bytes-1" href="Representing-Strings-as-Bytes.html">6.6.5.13 Representing Strings as Bytes</a></li>
+        <li><a id="toc-Conversion-to_002ffrom-C-1" href="Conversion-to_002ffrom-C.html">6.6.5.14 Conversion to/from C</a></li>
+        <li><a id="toc-String-Internals-1" href="String-Internals.html">6.6.5.15 String Internals</a></li>
+      </ul></li>
+      <li><a id="toc-Symbols-1" href="Symbols.html">6.6.6 Symbols</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Symbols-as-Discrete-Data" href="Symbol-Data.html">6.6.6.1 Symbols as Discrete Data</a></li>
+        <li><a id="toc-Symbols-as-Lookup-Keys" href="Symbol-Keys.html">6.6.6.2 Symbols as Lookup Keys</a></li>
+        <li><a id="toc-Symbols-as-Denoting-Variables" href="Symbol-Variables.html">6.6.6.3 Symbols as Denoting Variables</a></li>
+        <li><a id="toc-Operations-Related-to-Symbols" href="Symbol-Primitives.html">6.6.6.4 Operations Related to Symbols</a></li>
+        <li><a id="toc-Extended-Read-Syntax-for-Symbols" href="Symbol-Read-Syntax.html">6.6.6.5 Extended Read Syntax for Symbols</a></li>
+        <li><a id="toc-Uninterned-Symbols" href="Symbol-Uninterned.html">6.6.6.6 Uninterned Symbols</a></li>
+      </ul></li>
+      <li><a id="toc-Keywords-1" href="Keywords.html">6.6.7 Keywords</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Why-Use-Keywords_003f-1" href="Why-Use-Keywords_003f.html">6.6.7.1 Why Use Keywords?</a></li>
+        <li><a id="toc-Coding-With-Keywords-1" href="Coding-With-Keywords.html">6.6.7.2 Coding With Keywords</a></li>
+        <li><a id="toc-Keyword-Read-Syntax-1" href="Keyword-Read-Syntax.html">6.6.7.3 Keyword Read Syntax</a></li>
+        <li><a id="toc-Keyword-Procedures-1" href="Keyword-Procedures.html">6.6.7.4 Keyword Procedures</a></li>
+      </ul></li>
+      <li><a id="toc-Pairs-1" href="Pairs.html">6.6.8 Pairs</a></li>
+      <li><a id="toc-Lists-1" href="Lists.html">6.6.9 Lists</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-List-Read-Syntax" href="List-Syntax.html">6.6.9.1 List Read Syntax</a></li>
+        <li><a id="toc-List-Predicates-1" href="List-Predicates.html">6.6.9.2 List Predicates</a></li>
+        <li><a id="toc-List-Constructors-1" href="List-Constructors.html">6.6.9.3 List Constructors</a></li>
+        <li><a id="toc-List-Selection-1" href="List-Selection.html">6.6.9.4 List Selection</a></li>
+        <li><a id="toc-Append-and-Reverse" href="Append_002fReverse.html">6.6.9.5 Append and Reverse</a></li>
+        <li><a id="toc-List-Modification-1" href="List-Modification.html">6.6.9.6 List Modification</a></li>
+        <li><a id="toc-List-Searching-1" href="List-Searching.html">6.6.9.7 List Searching</a></li>
+        <li><a id="toc-List-Mapping-1" href="List-Mapping.html">6.6.9.8 List Mapping</a></li>
+      </ul></li>
+      <li><a id="toc-Vectors-1" href="Vectors.html">6.6.10 Vectors</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Read-Syntax-for-Vectors" href="Vector-Syntax.html">6.6.10.1 Read Syntax for Vectors</a></li>
+        <li><a id="toc-Dynamic-Vector-Creation-and-Validation" href="Vector-Creation.html">6.6.10.2 Dynamic Vector Creation and Validation</a></li>
+        <li><a id="toc-Accessing-and-Modifying-Vector-Contents" href="Vector-Accessors.html">6.6.10.3 Accessing and Modifying Vector Contents</a></li>
+        <li><a id="toc-Vector-Accessing-from-C-1" href="Vector-Accessing-from-C.html">6.6.10.4 Vector Accessing from C</a></li>
+        <li><a id="toc-Uniform-Numeric-Vectors-1" href="Uniform-Numeric-Vectors.html">6.6.10.5 Uniform Numeric Vectors</a></li>
+      </ul></li>
+      <li><a id="toc-Bit-Vectors-1" href="Bit-Vectors.html">6.6.11 Bit Vectors</a></li>
+      <li><a id="toc-Bytevectors-1" href="Bytevectors.html">6.6.12 Bytevectors</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Endianness" href="Bytevector-Endianness.html">6.6.12.1 Endianness</a></li>
+        <li><a id="toc-Manipulating-Bytevectors" href="Bytevector-Manipulation.html">6.6.12.2 Manipulating Bytevectors</a></li>
+        <li><a id="toc-Interpreting-Bytevector-Contents-as-Integers" href="Bytevectors-as-Integers.html">6.6.12.3 Interpreting Bytevector Contents as Integers</a></li>
+        <li><a id="toc-Converting-Bytevectors-to_002ffrom-Integer-Lists" href="Bytevectors-and-Integer-Lists.html">6.6.12.4 Converting Bytevectors to/from Integer Lists</a></li>
+        <li><a id="toc-Interpreting-Bytevector-Contents-as-Floating-Point-Numbers" href="Bytevectors-as-Floats.html">6.6.12.5 Interpreting Bytevector Contents as Floating Point Numbers</a></li>
+        <li><a id="toc-Interpreting-Bytevector-Contents-as-Unicode-Strings" href="Bytevectors-as-Strings.html">6.6.12.6 Interpreting Bytevector Contents as Unicode Strings</a></li>
+        <li><a id="toc-Accessing-Bytevectors-with-the-Array-API" href="Bytevectors-as-Arrays.html">6.6.12.7 Accessing Bytevectors with the Array API</a></li>
+        <li><a id="toc-Accessing-Bytevectors-with-the-SRFI_002d4-API" href="Bytevectors-as-Uniform-Vectors.html">6.6.12.8 Accessing Bytevectors with the SRFI-4 API</a></li>
+        <li><a id="toc-Bytevector-Procedures-in-R7RS-1" href="Bytevector-Procedures-in-R7RS.html">6.6.12.9 Bytevector Procedures in R7RS</a></li>
+        <li><a id="toc-Bytevector-Slices-1" href="Bytevector-Slices.html">6.6.12.10 Bytevector Slices</a></li>
+      </ul></li>
+      <li><a id="toc-Arrays-1" href="Arrays.html">6.6.13 Arrays</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Array-Syntax-1" href="Array-Syntax.html">6.6.13.1 Array Syntax</a></li>
+        <li><a id="toc-Array-Procedures-1" href="Array-Procedures.html">6.6.13.2 Array Procedures</a></li>
+        <li><a id="toc-Shared-Arrays-1" href="Shared-Arrays.html">6.6.13.3 Shared Arrays</a></li>
+        <li><a id="toc-Arrays-as-arrays-of-arrays-1" href="Arrays-as-arrays-of-arrays.html">6.6.13.4 Arrays as arrays of arrays</a></li>
+        <li><a id="toc-Accessing-Arrays-from-C-1" href="Accessing-Arrays-from-C.html">6.6.13.5 Accessing Arrays from C</a></li>
+      </ul></li>
+      <li><a id="toc-VLists-1" href="VLists.html">6.6.14 VLists</a></li>
+      <li><a id="toc-Record-Overview-1" href="Record-Overview.html">6.6.15 Record Overview</a></li>
+      <li><a id="toc-SRFI_002d9-Records-1" href="SRFI_002d9-Records.html">6.6.16 SRFI-9 Records</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Non_002dtoplevel-Record-Definitions" href="SRFI_002d9-Records.html#Non_002dtoplevel-Record-Definitions">Non-toplevel Record Definitions</a></li>
+        <li><a id="toc-Custom-Printers" href="SRFI_002d9-Records.html#Custom-Printers">Custom Printers</a></li>
+        <li><a id="toc-Functional-_0060_0060Setters_0027_0027" href="SRFI_002d9-Records.html#Functional-_0060_0060Setters_0027_0027">Functional &ldquo;Setters&rdquo;</a></li>
+      </ul></li>
+      <li><a id="toc-Records-1" href="Records.html">6.6.17 Records</a></li>
+      <li><a id="toc-Structures-1" href="Structures.html">6.6.18 Structures</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Vtables-1" href="Vtables.html">6.6.18.1 Vtables</a></li>
+        <li><a id="toc-Structure-Basics-1" href="Structure-Basics.html">6.6.18.2 Structure Basics</a></li>
+        <li><a id="toc-Vtable-Contents-1" href="Vtable-Contents.html">6.6.18.3 Vtable Contents</a></li>
+        <li><a id="toc-Meta_002dVtables-1" href="Meta_002dVtables.html">6.6.18.4 Meta-Vtables</a></li>
+        <li><a id="toc-Vtable-Example-1" href="Vtable-Example.html">6.6.18.5 Vtable Example</a></li>
+      </ul></li>
+      <li><a id="toc-Dictionary-Types-1" href="Dictionary-Types.html">6.6.19 Dictionary Types</a></li>
+      <li><a id="toc-Association-Lists-1" href="Association-Lists.html">6.6.20 Association Lists</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Alist-Key-Equality-1" href="Alist-Key-Equality.html">6.6.20.1 Alist Key Equality</a></li>
+        <li><a id="toc-Adding-or-Setting-Alist-Entries-1" href="Adding-or-Setting-Alist-Entries.html">6.6.20.2 Adding or Setting Alist Entries</a></li>
+        <li><a id="toc-Retrieving-Alist-Entries-1" href="Retrieving-Alist-Entries.html">6.6.20.3 Retrieving Alist Entries</a></li>
+        <li><a id="toc-Removing-Alist-Entries-1" href="Removing-Alist-Entries.html">6.6.20.4 Removing Alist Entries</a></li>
+        <li><a id="toc-Sloppy-Alist-Functions-1" href="Sloppy-Alist-Functions.html">6.6.20.5 Sloppy Alist Functions</a></li>
+        <li><a id="toc-Alist-Example-1" href="Alist-Example.html">6.6.20.6 Alist Example</a></li>
+      </ul></li>
+      <li><a id="toc-VList_002dBased-Hash-Lists-or-_0060_0060VHashes_0027_0027" href="VHashes.html">6.6.21 VList-Based Hash Lists or &ldquo;VHashes&rdquo;</a></li>
+      <li><a id="toc-Hash-Tables-1" href="Hash-Tables.html">6.6.22 Hash Tables</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Hash-Table-Examples-1" href="Hash-Table-Examples.html">6.6.22.1 Hash Table Examples</a></li>
+        <li><a id="toc-Hash-Table-Reference-1" href="Hash-Table-Reference.html">6.6.22.2 Hash Table Reference</a></li>
+      </ul></li>
+      <li><a id="toc-Other-Types-1" href="Other-Types.html">6.6.23 Other Types</a></li>
+    </ul></li>
+    <li><a id="toc-Procedures-1" href="Procedures.html">6.7 Procedures</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Lambda_003a-Basic-Procedure-Creation" href="Lambda.html">6.7.1 Lambda: Basic Procedure Creation</a></li>
+      <li><a id="toc-Primitive-Procedures-1" href="Primitive-Procedures.html">6.7.2 Primitive Procedures</a></li>
+      <li><a id="toc-Compiled-Procedures-1" href="Compiled-Procedures.html">6.7.3 Compiled Procedures</a></li>
+      <li><a id="toc-Optional-Arguments-1" href="Optional-Arguments.html">6.7.4 Optional Arguments</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-lambda_002a-and-define_002a_002e" href="lambda_002a-and-define_002a.html">6.7.4.1 lambda* and define*.</a></li>
+        <li><a id="toc-_0028ice_002d9-optargs_0029" href="ice_002d9-optargs.html">6.7.4.2 (ice-9 optargs)</a></li>
+      </ul></li>
+      <li><a id="toc-Case_002dlambda-1" href="Case_002dlambda.html">6.7.5 Case-lambda</a></li>
+      <li><a id="toc-Higher_002dOrder-Functions-1" href="Higher_002dOrder-Functions.html">6.7.6 Higher-Order Functions</a></li>
+      <li><a id="toc-Procedure-Properties-and-Meta_002dinformation" href="Procedure-Properties.html">6.7.7 Procedure Properties and Meta-information</a></li>
+      <li><a id="toc-Procedures-with-Setters-1" href="Procedures-with-Setters.html">6.7.8 Procedures with Setters</a></li>
+      <li><a id="toc-Inlinable-Procedures-1" href="Inlinable-Procedures.html">6.7.9 Inlinable Procedures</a></li>
+    </ul></li>
+    <li><a id="toc-Macros-1" href="Macros.html">6.8 Macros</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Defining-Macros-1" href="Defining-Macros.html">6.8.1 Defining Macros</a></li>
+      <li><a id="toc-Syntax_002drules-Macros" href="Syntax-Rules.html">6.8.2 Syntax-rules Macros</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Patterns" href="Syntax-Rules.html#Patterns">6.8.2.1 Patterns</a></li>
+        <li><a id="toc-Hygiene" href="Syntax-Rules.html#Hygiene">6.8.2.2 Hygiene</a></li>
+        <li><a id="toc-Shorthands" href="Syntax-Rules.html#Shorthands">6.8.2.3 Shorthands</a></li>
+        <li><a id="toc-Reporting-Syntax-Errors-in-Macros" href="Syntax-Rules.html#Reporting-Syntax-Errors-in-Macros">6.8.2.4 Reporting Syntax Errors in Macros</a></li>
+        <li><a id="toc-Specifying-a-Custom-Ellipsis-Identifier" href="Syntax-Rules.html#Specifying-a-Custom-Ellipsis-Identifier">6.8.2.5 Specifying a Custom Ellipsis Identifier</a></li>
+        <li><a id="toc-Further-Information" href="Syntax-Rules.html#Further-Information">6.8.2.6 Further Information</a></li>
+      </ul></li>
+      <li><a id="toc-Support-for-the-syntax_002dcase-System" href="Syntax-Case.html">6.8.3 Support for the <code class="code">syntax-case</code> System</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Why-syntax_002dcase_003f" href="Syntax-Case.html#Why-syntax_002dcase_003f">6.8.3.1 Why <code class="code">syntax-case</code>?</a></li>
+        <li><a id="toc-Custom-Ellipsis-Identifiers-for-syntax_002dcase-Macros" href="Syntax-Case.html#Custom-Ellipsis-Identifiers-for-syntax_002dcase-Macros">6.8.3.2 Custom Ellipsis Identifiers for syntax-case Macros</a></li>
+        <li><a id="toc-Syntax-objects-can-be-data-too" href="Syntax-Case.html#Syntax-objects-can-be-data-too">6.8.3.3 Syntax objects can be data too</a></li>
+      </ul></li>
+      <li><a id="toc-Syntax-Transformer-Helpers-1" href="Syntax-Transformer-Helpers.html">6.8.4 Syntax Transformer Helpers</a></li>
+      <li><a id="toc-Lisp_002dstyle-Macro-Definitions" href="Defmacros.html">6.8.5 Lisp-style Macro Definitions</a></li>
+      <li><a id="toc-Identifier-Macros-1" href="Identifier-Macros.html">6.8.6 Identifier Macros</a></li>
+      <li><a id="toc-Syntax-Parameters-1" href="Syntax-Parameters.html">6.8.7 Syntax Parameters</a></li>
+      <li><a id="toc-Eval_002dwhen" href="Eval-When.html">6.8.8 Eval-when</a></li>
+      <li><a id="toc-Macro-Expansion-1" href="Macro-Expansion.html">6.8.9 Macro Expansion</a></li>
+      <li><a id="toc-Hygiene-and-the-Top_002dLevel-1" href="Hygiene-and-the-Top_002dLevel.html">6.8.10 Hygiene and the Top-Level</a></li>
+      <li><a id="toc-Internal-Macros-1" href="Internal-Macros.html">6.8.11 Internal Macros</a></li>
+    </ul></li>
+    <li><a id="toc-General-Utility-Functions" href="Utility-Functions.html">6.9 General Utility Functions</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Equality-1" href="Equality.html">6.9.1 Equality</a></li>
+      <li><a id="toc-Object-Properties-1" href="Object-Properties.html">6.9.2 Object Properties</a></li>
+      <li><a id="toc-Sorting-1" href="Sorting.html">6.9.3 Sorting</a></li>
+      <li><a id="toc-Copying-Deep-Structures" href="Copying.html">6.9.4 Copying Deep Structures</a></li>
+      <li><a id="toc-General-String-Conversion" href="General-Conversion.html">6.9.5 General String Conversion</a></li>
+      <li><a id="toc-Hooks-1" href="Hooks.html">6.9.6 Hooks</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Hook-Usage-by-Example" href="Hook-Example.html">6.9.6.1 Hook Usage by Example</a></li>
+        <li><a id="toc-Hook-Reference-1" href="Hook-Reference.html">6.9.6.2 Hook Reference</a></li>
+        <li><a id="toc-Hooks-For-C-Code_002e" href="C-Hooks.html">6.9.6.3 Hooks For C Code.</a></li>
+        <li><a id="toc-Hooks-for-Garbage-Collection" href="GC-Hooks.html">6.9.6.4 Hooks for Garbage Collection</a></li>
+        <li><a id="toc-Hooks-into-the-Guile-REPL" href="REPL-Hooks.html">6.9.6.5 Hooks into the Guile REPL</a></li>
+      </ul></li>
+    </ul></li>
+    <li><a id="toc-Definitions-and-Variable-Bindings" href="Binding-Constructs.html">6.10 Definitions and Variable Bindings</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Top-Level-Variable-Definitions" href="Top-Level.html">6.10.1 Top Level Variable Definitions</a></li>
+      <li><a id="toc-Local-Variable-Bindings" href="Local-Bindings.html">6.10.2 Local Variable Bindings</a></li>
+      <li><a id="toc-Internal-definitions" href="Internal-Definitions.html">6.10.3 Internal definitions</a></li>
+      <li><a id="toc-Querying-variable-bindings" href="Binding-Reflection.html">6.10.4 Querying variable bindings</a></li>
+      <li><a id="toc-Binding-multiple-return-values" href="Binding-Multiple-Values.html">6.10.5 Binding multiple return values</a></li>
+    </ul></li>
+    <li><a id="toc-Controlling-the-Flow-of-Program-Execution" href="Control-Mechanisms.html">6.11 Controlling the Flow of Program Execution</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Sequencing-and-Splicing" href="begin.html">6.11.1 Sequencing and Splicing</a></li>
+      <li><a id="toc-Simple-Conditional-Evaluation" href="Conditionals.html">6.11.2 Simple Conditional Evaluation</a></li>
+      <li><a id="toc-Conditional-Evaluation-of-a-Sequence-of-Expressions" href="and-or.html">6.11.3 Conditional Evaluation of a Sequence of Expressions</a></li>
+      <li><a id="toc-Iteration-mechanisms" href="while-do.html">6.11.4 Iteration mechanisms</a></li>
+      <li><a id="toc-Prompts-1" href="Prompts.html">6.11.5 Prompts</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Prompt-Primitives-1" href="Prompt-Primitives.html">6.11.5.1 Prompt Primitives</a></li>
+        <li><a id="toc-Shift_002c-Reset_002c-and-All-That" href="Shift-and-Reset.html">6.11.5.2 Shift, Reset, and All That</a></li>
+      </ul></li>
+      <li><a id="toc-Continuations-1" href="Continuations.html">6.11.6 Continuations</a></li>
+      <li><a id="toc-Returning-and-Accepting-Multiple-Values" href="Multiple-Values.html">6.11.7 Returning and Accepting Multiple Values</a></li>
+      <li><a id="toc-Exceptions-1" href="Exceptions.html">6.11.8 Exceptions</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Exception-Objects-1" href="Exception-Objects.html">6.11.8.1 Exception Objects</a></li>
+        <li><a id="toc-Raising-and-Handling-Exceptions-1" href="Raising-and-Handling-Exceptions.html">6.11.8.2 Raising and Handling Exceptions</a></li>
+        <li><a id="toc-Throw-and-Catch-1" href="Throw-and-Catch.html">6.11.8.3 Throw and Catch</a></li>
+        <li><a id="toc-Exceptions-and-C-1" href="Exceptions-and-C.html">6.11.8.4 Exceptions and C</a></li>
+      </ul></li>
+      <li><a id="toc-Procedures-for-Signaling-Errors" href="Error-Reporting.html">6.11.9 Procedures for Signaling Errors</a></li>
+      <li><a id="toc-Dynamic-Wind-1" href="Dynamic-Wind.html">6.11.10 Dynamic Wind</a></li>
+      <li><a id="toc-Fluids-and-Dynamic-States-1" href="Fluids-and-Dynamic-States.html">6.11.11 Fluids and Dynamic States</a></li>
+      <li><a id="toc-Parameters-1" href="Parameters.html">6.11.12 Parameters</a></li>
+      <li><a id="toc-How-to-Handle-Errors" href="Handling-Errors.html">6.11.13 How to Handle Errors</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-C-Support" href="Handling-Errors.html#C-Support">6.11.13.1 C Support</a></li>
+        <li><a id="toc-Signalling-Type-Errors" href="Handling-Errors.html#Signalling-Type-Errors">6.11.13.2 Signalling Type Errors</a></li>
+      </ul></li>
+      <li><a id="toc-Continuation-Barriers-1" href="Continuation-Barriers.html">6.11.14 Continuation Barriers</a></li>
+    </ul></li>
+    <li><a id="toc-Input-and-Output-1" href="Input-and-Output.html">6.12 Input and Output</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Ports-1" href="Ports.html">6.12.1 Ports</a></li>
+      <li><a id="toc-Binary-I_002fO-1" href="Binary-I_002fO.html">6.12.2 Binary I/O</a></li>
+      <li><a id="toc-Encoding-1" href="Encoding.html">6.12.3 Encoding</a></li>
+      <li><a id="toc-Textual-I_002fO-1" href="Textual-I_002fO.html">6.12.4 Textual I/O</a></li>
+      <li><a id="toc-Simple-Textual-Output" href="Simple-Output.html">6.12.5 Simple Textual Output</a></li>
+      <li><a id="toc-Buffering-1" href="Buffering.html">6.12.6 Buffering</a></li>
+      <li><a id="toc-Random-Access-1" href="Random-Access.html">6.12.7 Random Access</a></li>
+      <li><a id="toc-Line-Oriented-and-Delimited-Text" href="Line_002fDelimited.html">6.12.8 Line Oriented and Delimited Text</a></li>
+      <li><a id="toc-Default-Ports-for-Input_002c-Output-and-Errors" href="Default-Ports.html">6.12.9 Default Ports for Input, Output and Errors</a></li>
+      <li><a id="toc-Types-of-Port" href="Port-Types.html">6.12.10 Types of Port</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-File-Ports-1" href="File-Ports.html">6.12.10.1 File Ports</a></li>
+        <li><a id="toc-Bytevector-Ports-1" href="Bytevector-Ports.html">6.12.10.2 Bytevector Ports</a></li>
+        <li><a id="toc-String-Ports-1" href="String-Ports.html">6.12.10.3 String Ports</a></li>
+        <li><a id="toc-Custom-Ports-1" href="Custom-Ports.html">6.12.10.4 Custom Ports</a></li>
+        <li><a id="toc-Soft-Ports-1" href="Soft-Ports.html">6.12.10.5 Soft Ports</a></li>
+        <li><a id="toc-Void-Ports-1" href="Void-Ports.html">6.12.10.6 Void Ports</a></li>
+      </ul></li>
+      <li><a id="toc-Venerable-Port-Interfaces-1" href="Venerable-Port-Interfaces.html">6.12.11 Venerable Port Interfaces</a></li>
+      <li><a id="toc-Using-Ports-from-C-1" href="Using-Ports-from-C.html">6.12.12 Using Ports from C</a></li>
+      <li><a id="toc-Implementing-New-Port-Types-in-C" href="I_002fO-Extensions.html">6.12.13 Implementing New Port Types in C</a></li>
+      <li><a id="toc-Non_002dBlocking-I_002fO-1" href="Non_002dBlocking-I_002fO.html">6.12.14 Non-Blocking I/O</a></li>
+      <li><a id="toc-Handling-of-Unicode-Byte-Order-Marks" href="BOM-Handling.html">6.12.15 Handling of Unicode Byte Order Marks</a></li>
+    </ul></li>
+    <li><a id="toc-Regular-Expressions-1" href="Regular-Expressions.html">6.13 Regular Expressions</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Regexp-Functions-1" href="Regexp-Functions.html">6.13.1 Regexp Functions</a></li>
+      <li><a id="toc-Match-Structures-1" href="Match-Structures.html">6.13.2 Match Structures</a></li>
+      <li><a id="toc-Backslash-Escapes-1" href="Backslash-Escapes.html">6.13.3 Backslash Escapes</a></li>
+    </ul></li>
+    <li><a id="toc-LALR_00281_0029-Parsing-1" href="LALR_00281_0029-Parsing.html">6.14 LALR(1) Parsing</a></li>
+    <li><a id="toc-PEG-Parsing-1" href="PEG-Parsing.html">6.15 PEG Parsing</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-PEG-Syntax-Reference-1" href="PEG-Syntax-Reference.html">6.15.1 PEG Syntax Reference</a></li>
+      <li><a id="toc-PEG-API-Reference-1" href="PEG-API-Reference.html">6.15.2 PEG API Reference</a></li>
+      <li><a id="toc-PEG-Tutorial-1" href="PEG-Tutorial.html">6.15.3 PEG Tutorial</a></li>
+      <li><a id="toc-PEG-Internals-1" href="PEG-Internals.html">6.15.4 PEG Internals</a></li>
+    </ul></li>
+    <li><a id="toc-Reading-and-Evaluating-Scheme-Code" href="Read_002fLoad_002fEval_002fCompile.html">6.16 Reading and Evaluating Scheme Code</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Scheme-Syntax_003a-Standard-and-Guile-Extensions" href="Scheme-Syntax.html">6.16.1 Scheme Syntax: Standard and Guile Extensions</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Expression-Syntax-1" href="Expression-Syntax.html">6.16.1.1 Expression Syntax</a></li>
+        <li><a id="toc-Comments-1" href="Comments.html">6.16.1.2 Comments</a></li>
+        <li><a id="toc-Block-Comments-1" href="Block-Comments.html">6.16.1.3 Block Comments</a></li>
+        <li><a id="toc-Case-Sensitivity-1" href="Case-Sensitivity.html">6.16.1.4 Case Sensitivity</a></li>
+        <li><a id="toc-Keyword-Syntax-1" href="Keyword-Syntax.html">6.16.1.5 Keyword Syntax</a></li>
+        <li><a id="toc-Reader-Extensions-1" href="Reader-Extensions.html">6.16.1.6 Reader Extensions</a></li>
+      </ul></li>
+      <li><a id="toc-Reading-Scheme-Code" href="Scheme-Read.html">6.16.2 Reading Scheme Code</a></li>
+      <li><a id="toc-Reading-Scheme-Code_002c-For-the-Compiler" href="Annotated-Scheme-Read.html">6.16.3 Reading Scheme Code, For the Compiler</a></li>
+      <li><a id="toc-Writing-Scheme-Values" href="Scheme-Write.html">6.16.4 Writing Scheme Values</a></li>
+      <li><a id="toc-Procedures-for-On-the-Fly-Evaluation" href="Fly-Evaluation.html">6.16.5 Procedures for On the Fly Evaluation</a></li>
+      <li><a id="toc-Compiling-Scheme-Code" href="Compilation.html">6.16.6 Compiling Scheme Code</a></li>
+      <li><a id="toc-Loading-Scheme-Code-from-File" href="Loading.html">6.16.7 Loading Scheme Code from File</a></li>
+      <li><a id="toc-Load-Paths-1" href="Load-Paths.html">6.16.8 Load Paths</a></li>
+      <li><a id="toc-Character-Encoding-of-Source-Files-1" href="Character-Encoding-of-Source-Files.html">6.16.9 Character Encoding of Source Files</a></li>
+      <li><a id="toc-Delayed-Evaluation-1" href="Delayed-Evaluation.html">6.16.10 Delayed Evaluation</a></li>
+      <li><a id="toc-Local-Evaluation-1" href="Local-Evaluation.html">6.16.11 Local Evaluation</a></li>
+      <li><a id="toc-Local-Inclusion-1" href="Local-Inclusion.html">6.16.12 Local Inclusion</a></li>
+      <li><a id="toc-Sandboxed-Evaluation-1" href="Sandboxed-Evaluation.html">6.16.13 Sandboxed Evaluation</a></li>
+      <li><a id="toc-REPL-Servers-1" href="REPL-Servers.html">6.16.14 REPL Servers</a></li>
+      <li><a id="toc-Cooperative-REPL-Servers-1" href="Cooperative-REPL-Servers.html">6.16.15 Cooperative REPL Servers</a></li>
+    </ul></li>
+    <li><a id="toc-Memory-Management-and-Garbage-Collection" href="Memory-Management.html">6.17 Memory Management and Garbage Collection</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Function-related-to-Garbage-Collection" href="Garbage-Collection-Functions.html">6.17.1 Function related to Garbage Collection</a></li>
+      <li><a id="toc-Memory-Blocks-1" href="Memory-Blocks.html">6.17.2 Memory Blocks</a></li>
+      <li><a id="toc-Weak-References-1" href="Weak-References.html">6.17.3 Weak References</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Weak-hash-tables-1" href="Weak-hash-tables.html">6.17.3.1 Weak hash tables</a></li>
+        <li><a id="toc-Weak-vectors-1" href="Weak-vectors.html">6.17.3.2 Weak vectors</a></li>
+      </ul></li>
+      <li><a id="toc-Guardians-1" href="Guardians.html">6.17.4 Guardians</a></li>
+    </ul></li>
+    <li><a id="toc-Modules-1" href="Modules.html">6.18 Modules</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-General-Information-about-Modules-1" href="General-Information-about-Modules.html">6.18.1 General Information about Modules</a></li>
+      <li><a id="toc-Using-Guile-Modules-1" href="Using-Guile-Modules.html">6.18.2 Using Guile Modules</a></li>
+      <li><a id="toc-Creating-Guile-Modules-1" href="Creating-Guile-Modules.html">6.18.3 Creating Guile Modules</a></li>
+      <li><a id="toc-Modules-and-the-File-System-1" href="Modules-and-the-File-System.html">6.18.4 Modules and the File System</a></li>
+      <li><a id="toc-R6RS-Version-References-1" href="R6RS-Version-References.html">6.18.5 R6RS Version References</a></li>
+      <li><a id="toc-R6RS-Libraries-1" href="R6RS-Libraries.html">6.18.6 R6RS Libraries</a></li>
+      <li><a id="toc-Variables-1" href="Variables.html">6.18.7 Variables</a></li>
+      <li><a id="toc-Module-System-Reflection-1" href="Module-System-Reflection.html">6.18.8 Module System Reflection</a></li>
+      <li><a id="toc-Declarative-Modules-1" href="Declarative-Modules.html">6.18.9 Declarative Modules</a></li>
+      <li><a id="toc-Accessing-Modules-from-C-1" href="Accessing-Modules-from-C.html">6.18.10 Accessing Modules from C</a></li>
+      <li><a id="toc-provide-and-require-1" href="provide-and-require.html">6.18.11 provide and require</a></li>
+      <li><a id="toc-Environments-1" href="Environments.html">6.18.12 Environments</a></li>
+    </ul></li>
+    <li><a id="toc-Foreign-Function-Interface-1" href="Foreign-Function-Interface.html">6.19 Foreign Function Interface</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Foreign-Libraries-1" href="Foreign-Libraries.html">6.19.1 Foreign Libraries</a></li>
+      <li><a id="toc-Foreign-Extensions-1" href="Foreign-Extensions.html">6.19.2 Foreign Extensions</a></li>
+      <li><a id="toc-Foreign-Pointers-1" href="Foreign-Pointers.html">6.19.3 Foreign Pointers</a></li>
+      <li><a id="toc-Foreign-Types-1" href="Foreign-Types.html">6.19.4 Foreign Types</a></li>
+      <li><a id="toc-Foreign-Functions-1" href="Foreign-Functions.html">6.19.5 Foreign Functions</a></li>
+      <li><a id="toc-Void-Pointers-and-Byte-Access-1" href="Void-Pointers-and-Byte-Access.html">6.19.6 Void Pointers and Byte Access</a></li>
+      <li><a id="toc-Foreign-Structs-1" href="Foreign-Structs.html">6.19.7 Foreign Structs</a></li>
+      <li><a id="toc-More-Foreign-Functions-1" href="More-Foreign-Functions.html">6.19.8 More Foreign Functions</a></li>
+    </ul></li>
+    <li><a id="toc-Foreign-Objects-1" href="Foreign-Objects.html">6.20 Foreign Objects</a></li>
+    <li><a id="toc-Smobs-1" href="Smobs.html">6.21 Smobs</a></li>
+    <li><a id="toc-Threads_002c-Mutexes_002c-Asyncs-and-Dynamic-Roots" href="Scheduling.html">6.22 Threads, Mutexes, Asyncs and Dynamic Roots</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Threads-1" href="Threads.html">6.22.1 Threads</a></li>
+      <li><a id="toc-Thread_002dLocal-Variables" href="Thread-Local-Variables.html">6.22.2 Thread-Local Variables</a></li>
+      <li><a id="toc-Asynchronous-Interrupts" href="Asyncs.html">6.22.3 Asynchronous Interrupts</a></li>
+      <li><a id="toc-Atomics-1" href="Atomics.html">6.22.4 Atomics</a></li>
+      <li><a id="toc-Mutexes-and-Condition-Variables-1" href="Mutexes-and-Condition-Variables.html">6.22.5 Mutexes and Condition Variables</a></li>
+      <li><a id="toc-Blocking-in-Guile-Mode" href="Blocking.html">6.22.6 Blocking in Guile Mode</a></li>
+      <li><a id="toc-Futures-1" href="Futures.html">6.22.7 Futures</a></li>
+      <li><a id="toc-Parallel-forms" href="Parallel-Forms.html">6.22.8 Parallel forms</a></li>
+    </ul></li>
+    <li><a id="toc-Configuration_002c-Features-and-Runtime-Options" href="Options-and-Config.html">6.23 Configuration, Features and Runtime Options</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Configuration_002c-Build-and-Installation" href="Build-Config.html">6.23.1 Configuration, Build and Installation</a></li>
+      <li><a id="toc-Feature-Tracking-1" href="Feature-Tracking.html">6.23.2 Feature Tracking</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Feature-Manipulation-1" href="Feature-Manipulation.html">6.23.2.1 Feature Manipulation</a></li>
+        <li><a id="toc-Common-Feature-Symbols-1" href="Common-Feature-Symbols.html">6.23.2.2 Common Feature Symbols</a></li>
+      </ul></li>
+      <li><a id="toc-Runtime-Options-1" href="Runtime-Options.html">6.23.3 Runtime Options</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Examples-of-option-use" href="Runtime-Options.html#Examples-of-option-use">6.23.3.1 Examples of option use</a></li>
+      </ul></li>
+    </ul></li>
+    <li><a id="toc-Support-for-Other-Languages" href="Other-Languages.html">6.24 Support for Other Languages</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Using-Other-Languages-1" href="Using-Other-Languages.html">6.24.1 Using Other Languages</a></li>
+      <li><a id="toc-Emacs-Lisp-1" href="Emacs-Lisp.html">6.24.2 Emacs Lisp</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Nil-1" href="Nil.html">6.24.2.1 Nil</a></li>
+        <li><a id="toc-Dynamic-Binding-1" href="Dynamic-Binding.html">6.24.2.2 Dynamic Binding</a></li>
+        <li><a id="toc-Other-Elisp-Features-1" href="Other-Elisp-Features.html">6.24.2.3 Other Elisp Features</a></li>
+      </ul></li>
+      <li><a id="toc-ECMAScript-1" href="ECMAScript.html">6.24.3 ECMAScript</a></li>
+    </ul></li>
+    <li><a id="toc-Support-for-Internationalization" href="Internationalization.html">6.25 Support for Internationalization</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Internationalization-with-Guile" href="i18n-Introduction.html">6.25.1 Internationalization with Guile</a></li>
+      <li><a id="toc-Text-Collation-1" href="Text-Collation.html">6.25.2 Text Collation</a></li>
+      <li><a id="toc-Character-Case-Mapping-1" href="Character-Case-Mapping.html">6.25.3 Character Case Mapping</a></li>
+      <li><a id="toc-Number-Input-and-Output-1" href="Number-Input-and-Output.html">6.25.4 Number Input and Output</a></li>
+      <li><a id="toc-Accessing-Locale-Information-1" href="Accessing-Locale-Information.html">6.25.5 Accessing Locale Information</a></li>
+      <li><a id="toc-Gettext-Support-1" href="Gettext-Support.html">6.25.6 Gettext Support</a></li>
+    </ul></li>
+    <li><a id="toc-Debugging-Infrastructure" href="Debugging.html">6.26 Debugging Infrastructure</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Evaluation-and-the-Scheme-Stack" href="Evaluation-Model.html">6.26.1 Evaluation and the Scheme Stack</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Stack-Capture-1" href="Stack-Capture.html">6.26.1.1 Stack Capture</a></li>
+        <li><a id="toc-Stacks-1" href="Stacks.html">6.26.1.2 Stacks</a></li>
+        <li><a id="toc-Frames-1" href="Frames.html">6.26.1.3 Frames</a></li>
+      </ul></li>
+      <li><a id="toc-Source-Properties-1" href="Source-Properties.html">6.26.2 Source Properties</a></li>
+      <li><a id="toc-Programmatic-Error-Handling-1" href="Programmatic-Error-Handling.html">6.26.3 Programmatic Error Handling</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Catching-Exceptions-1" href="Catching-Exceptions.html">6.26.3.1 Catching Exceptions</a></li>
+        <li><a id="toc-Pre_002dUnwind-Debugging-1" href="Pre_002dUnwind-Debugging.html">6.26.3.2 Pre-Unwind Debugging</a></li>
+        <li><a id="toc-call_002dwith_002derror_002dhandling" href="Standard-Error-Handling.html">6.26.3.3 call-with-error-handling</a></li>
+        <li><a id="toc-Stack-Overflow-1" href="Stack-Overflow.html">6.26.3.4 Stack Overflow</a></li>
+        <li><a id="toc-Debug-options" href="Debug-Options.html">6.26.3.5 Debug options</a></li>
+      </ul></li>
+      <li><a id="toc-Traps-1" href="Traps.html">6.26.4 Traps</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-VM-Hooks-1" href="VM-Hooks.html">6.26.4.1 VM Hooks</a></li>
+        <li><a id="toc-Trap-Interface-1" href="Trap-Interface.html">6.26.4.2 Trap Interface</a></li>
+        <li><a id="toc-Low_002dLevel-Traps-1" href="Low_002dLevel-Traps.html">6.26.4.3 Low-Level Traps</a></li>
+        <li><a id="toc-Tracing-Traps-1" href="Tracing-Traps.html">6.26.4.4 Tracing Traps</a></li>
+        <li><a id="toc-Trap-States-1" href="Trap-States.html">6.26.4.5 Trap States</a></li>
+        <li><a id="toc-High_002dLevel-Traps-1" href="High_002dLevel-Traps.html">6.26.4.6 High-Level Traps</a></li>
+      </ul></li>
+      <li><a id="toc-GDB-Support-1" href="GDB-Support.html">6.26.5 GDB Support</a></li>
+    </ul></li>
+    <li><a id="toc-Code-Coverage-Reports" href="Code-Coverage.html">6.27 Code Coverage Reports</a></li>
+  </ul></li>
+  <li><a id="toc-Guile-Modules-1" href="Guile-Modules.html">7 Guile Modules</a>
+  <ul class="toc-numbered-mark">
+    <li><a id="toc-SLIB-1" href="SLIB.html">7.1 SLIB</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-SLIB-installation-1" href="SLIB-installation.html">7.1.1 SLIB installation</a></li>
+      <li><a id="toc-JACAL-1" href="JACAL.html">7.1.2 JACAL</a></li>
+    </ul></li>
+    <li><a id="toc-POSIX-System-Calls-and-Networking" href="POSIX.html">7.2 <abbr class="acronym">POSIX</abbr> System Calls and Networking</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-POSIX-Interface-Conventions" href="Conventions.html">7.2.1 <abbr class="acronym">POSIX</abbr> Interface Conventions</a></li>
+      <li><a id="toc-Ports-and-File-Descriptors-1" href="Ports-and-File-Descriptors.html">7.2.2 Ports and File Descriptors</a></li>
+      <li><a id="toc-File-System-1" href="File-System.html">7.2.3 File System</a></li>
+      <li><a id="toc-User-Information-1" href="User-Information.html">7.2.4 User Information</a></li>
+      <li><a id="toc-Time-1" href="Time.html">7.2.5 Time</a></li>
+      <li><a id="toc-Runtime-Environment-1" href="Runtime-Environment.html">7.2.6 Runtime Environment</a></li>
+      <li><a id="toc-Processes-1" href="Processes.html">7.2.7 Processes</a></li>
+      <li><a id="toc-Signals-1" href="Signals.html">7.2.8 Signals</a></li>
+      <li><a id="toc-Terminals-and-Ptys-1" href="Terminals-and-Ptys.html">7.2.9 Terminals and Ptys</a></li>
+      <li><a id="toc-Pipes-1" href="Pipes.html">7.2.10 Pipes</a></li>
+      <li><a id="toc-Networking-1" href="Networking.html">7.2.11 Networking</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Network-Address-Conversion-1" href="Network-Address-Conversion.html">7.2.11.1 Network Address Conversion</a></li>
+        <li><a id="toc-Network-Databases-1" href="Network-Databases.html">7.2.11.2 Network Databases</a></li>
+        <li><a id="toc-Network-Socket-Address-1" href="Network-Socket-Address.html">7.2.11.3 Network Socket Address</a></li>
+        <li><a id="toc-Network-Sockets-and-Communication-1" href="Network-Sockets-and-Communication.html">7.2.11.4 Network Sockets and Communication</a></li>
+        <li><a id="toc-Network-Socket-Examples" href="Internet-Socket-Examples.html">7.2.11.5 Network Socket Examples</a></li>
+      </ul></li>
+      <li><a id="toc-System-Identification-1" href="System-Identification.html">7.2.12 System Identification</a></li>
+      <li><a id="toc-Locales-1" href="Locales.html">7.2.13 Locales</a></li>
+      <li><a id="toc-Encryption-1" href="Encryption.html">7.2.14 Encryption</a></li>
+    </ul></li>
+    <li><a id="toc-HTTP_002c-the-Web_002c-and-All-That" href="Web.html">7.3 <abbr class="acronym">HTTP</abbr>, the Web, and All That</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Types-and-the-Web-1" href="Types-and-the-Web.html">7.3.1 Types and the Web</a></li>
+      <li><a id="toc-Universal-Resource-Identifiers" href="URIs.html">7.3.2 Universal Resource Identifiers</a></li>
+      <li><a id="toc-The-Hyper_002dText-Transfer-Protocol" href="HTTP.html">7.3.3 The Hyper-Text Transfer Protocol</a></li>
+      <li><a id="toc-HTTP-Headers-1" href="HTTP-Headers.html">7.3.4 HTTP Headers</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-HTTP-Header-Types" href="HTTP-Headers.html#HTTP-Header-Types">7.3.4.1 HTTP Header Types</a></li>
+        <li><a id="toc-General-Headers" href="HTTP-Headers.html#General-Headers">7.3.4.2 General Headers</a></li>
+        <li><a id="toc-Entity-Headers" href="HTTP-Headers.html#Entity-Headers">7.3.4.3 Entity Headers</a></li>
+        <li><a id="toc-Request-Headers" href="HTTP-Headers.html#Request-Headers">7.3.4.4 Request Headers</a></li>
+        <li><a id="toc-Response-Headers" href="HTTP-Headers.html#Response-Headers">7.3.4.5 Response Headers</a></li>
+      </ul></li>
+      <li><a id="toc-Transfer-Codings-1" href="Transfer-Codings.html">7.3.5 Transfer Codings</a></li>
+      <li><a id="toc-HTTP-Requests" href="Requests.html">7.3.6 HTTP Requests</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-An-Important-Note-on-Character-Sets" href="Requests.html#An-Important-Note-on-Character-Sets">7.3.6.1 An Important Note on Character Sets</a></li>
+        <li><a id="toc-Request-API" href="Requests.html#Request-API">7.3.6.2 Request API</a></li>
+      </ul></li>
+      <li><a id="toc-HTTP-Responses" href="Responses.html">7.3.7 HTTP Responses</a></li>
+      <li><a id="toc-Web-Client-1" href="Web-Client.html">7.3.8 Web Client</a></li>
+      <li><a id="toc-Web-Server-1" href="Web-Server.html">7.3.9 Web Server</a></li>
+      <li><a id="toc-Web-Examples-1" href="Web-Examples.html">7.3.10 Web Examples</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Hello_002c-World_0021" href="Web-Examples.html#Hello_002c-World_0021">7.3.10.1 Hello, World!</a></li>
+        <li><a id="toc-Inspecting-the-Request" href="Web-Examples.html#Inspecting-the-Request">7.3.10.2 Inspecting the Request</a></li>
+        <li><a id="toc-Higher_002dLevel-Interfaces" href="Web-Examples.html#Higher_002dLevel-Interfaces">7.3.10.3 Higher-Level Interfaces</a></li>
+        <li><a id="toc-Conclusion" href="Web-Examples.html#Conclusion">7.3.10.4 Conclusion</a></li>
+      </ul></li>
+    </ul></li>
+    <li><a id="toc-The-_0028ice_002d9-getopt_002dlong_0029-Module" href="getopt_002dlong.html">7.4 The (ice-9 getopt-long) Module</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-A-Short-getopt_002dlong-Example" href="getopt_002dlong-Example.html">7.4.1 A Short getopt-long Example</a></li>
+      <li><a id="toc-How-to-Write-an-Option-Specification" href="Option-Specification.html">7.4.2 How to Write an Option Specification</a></li>
+      <li><a id="toc-Expected-Command-Line-Format" href="Command-Line-Format.html">7.4.3 Expected Command Line Format</a></li>
+      <li><a id="toc-Reference-Documentation-for-getopt_002dlong" href="getopt_002dlong-Reference.html">7.4.4 Reference Documentation for <code class="code">getopt-long</code></a></li>
+      <li><a id="toc-Reference-Documentation-for-option_002dref" href="option_002dref-Reference.html">7.4.5 Reference Documentation for <code class="code">option-ref</code></a></li>
+    </ul></li>
+    <li><a id="toc-SRFI-Support-Modules" href="SRFI-Support.html">7.5 SRFI Support Modules</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-About-SRFI-Usage-1" href="About-SRFI-Usage.html">7.5.1 About SRFI Usage</a></li>
+      <li><a id="toc-SRFI_002d0-_002d-cond_002dexpand" href="SRFI_002d0.html">7.5.2 SRFI-0 - cond-expand</a></li>
+      <li><a id="toc-SRFI_002d1-_002d-List-library" href="SRFI_002d1.html">7.5.3 SRFI-1 - List library</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Constructors" href="SRFI_002d1-Constructors.html">7.5.3.1 Constructors</a></li>
+        <li><a id="toc-Predicates" href="SRFI_002d1-Predicates.html">7.5.3.2 Predicates</a></li>
+        <li><a id="toc-Selectors" href="SRFI_002d1-Selectors.html">7.5.3.3 Selectors</a></li>
+        <li><a id="toc-Length_002c-Append_002c-Concatenate_002c-etc_002e" href="SRFI_002d1-Length-Append-etc.html">7.5.3.4 Length, Append, Concatenate, etc.</a></li>
+        <li><a id="toc-Fold_002c-Unfold-_0026-Map" href="SRFI_002d1-Fold-and-Map.html">7.5.3.5 Fold, Unfold &amp; Map</a></li>
+        <li><a id="toc-Filtering-and-Partitioning" href="SRFI_002d1-Filtering-and-Partitioning.html">7.5.3.6 Filtering and Partitioning</a></li>
+        <li><a id="toc-Searching" href="SRFI_002d1-Searching.html">7.5.3.7 Searching</a></li>
+        <li><a id="toc-Deleting" href="SRFI_002d1-Deleting.html">7.5.3.8 Deleting</a></li>
+        <li><a id="toc-Association-Lists-2" href="SRFI_002d1-Association-Lists.html">7.5.3.9 Association Lists</a></li>
+        <li><a id="toc-Set-Operations-on-Lists" href="SRFI_002d1-Set-Operations.html">7.5.3.10 Set Operations on Lists</a></li>
+      </ul></li>
+      <li><a id="toc-SRFI_002d2-_002d-and_002dlet_002a" href="SRFI_002d2.html">7.5.4 SRFI-2 - and-let*</a></li>
+      <li><a id="toc-SRFI_002d4-_002d-Homogeneous-numeric-vector-datatypes" href="SRFI_002d4.html">7.5.5 SRFI-4 - Homogeneous numeric vector datatypes</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-SRFI_002d4-_002d-Overview" href="SRFI_002d4-Overview.html">7.5.5.1 SRFI-4 - Overview</a></li>
+        <li><a id="toc-SRFI_002d4-_002d-API" href="SRFI_002d4-API.html">7.5.5.2 SRFI-4 - API</a></li>
+        <li><a id="toc-SRFI_002d4-_002d-Relation-to-bytevectors" href="SRFI_002d4-and-Bytevectors.html">7.5.5.3 SRFI-4 - Relation to bytevectors</a></li>
+        <li><a id="toc-SRFI_002d4-_002d-Guile-extensions" href="SRFI_002d4-Extensions.html">7.5.5.4 SRFI-4 - Guile extensions</a></li>
+      </ul></li>
+      <li><a id="toc-SRFI_002d6-_002d-Basic-String-Ports" href="SRFI_002d6.html">7.5.6 SRFI-6 - Basic String Ports</a></li>
+      <li><a id="toc-SRFI_002d8-_002d-receive" href="SRFI_002d8.html">7.5.7 SRFI-8 - receive</a></li>
+      <li><a id="toc-SRFI_002d9-_002d-define_002drecord_002dtype" href="SRFI_002d9.html">7.5.8 SRFI-9 - define-record-type</a></li>
+      <li><a id="toc-SRFI_002d10-_002d-Hash_002dComma-Reader-Extension" href="SRFI_002d10.html">7.5.9 SRFI-10 - Hash-Comma Reader Extension</a></li>
+      <li><a id="toc-SRFI_002d11-_002d-let_002dvalues" href="SRFI_002d11.html">7.5.10 SRFI-11 - let-values</a></li>
+      <li><a id="toc-SRFI_002d13-_002d-String-Library" href="SRFI_002d13.html">7.5.11 SRFI-13 - String Library</a></li>
+      <li><a id="toc-SRFI_002d14-_002d-Character_002dset-Library" href="SRFI_002d14.html">7.5.12 SRFI-14 - Character-set Library</a></li>
+      <li><a id="toc-SRFI_002d16-_002d-case_002dlambda" href="SRFI_002d16.html">7.5.13 SRFI-16 - case-lambda</a></li>
+      <li><a id="toc-SRFI_002d17-_002d-Generalized-set_0021" href="SRFI_002d17.html">7.5.14 SRFI-17 - Generalized set!</a></li>
+      <li><a id="toc-SRFI_002d18-_002d-Multithreading-support" href="SRFI_002d18.html">7.5.15 SRFI-18 - Multithreading support</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-SRFI_002d18-Threads-1" href="SRFI_002d18-Threads.html">7.5.15.1 SRFI-18 Threads</a></li>
+        <li><a id="toc-SRFI_002d18-Mutexes-1" href="SRFI_002d18-Mutexes.html">7.5.15.2 SRFI-18 Mutexes</a></li>
+        <li><a id="toc-SRFI_002d18-Condition-variables-1" href="SRFI_002d18-Condition-variables.html">7.5.15.3 SRFI-18 Condition variables</a></li>
+        <li><a id="toc-SRFI_002d18-Time-1" href="SRFI_002d18-Time.html">7.5.15.4 SRFI-18 Time</a></li>
+        <li><a id="toc-SRFI_002d18-Exceptions-1" href="SRFI_002d18-Exceptions.html">7.5.15.5 SRFI-18 Exceptions</a></li>
+      </ul></li>
+      <li><a id="toc-SRFI_002d19-_002d-Time_002fDate-Library" href="SRFI_002d19.html">7.5.16 SRFI-19 - Time/Date Library</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-SRFI_002d19-Introduction-1" href="SRFI_002d19-Introduction.html">7.5.16.1 SRFI-19 Introduction</a></li>
+        <li><a id="toc-SRFI_002d19-Time-1" href="SRFI_002d19-Time.html">7.5.16.2 SRFI-19 Time</a></li>
+        <li><a id="toc-SRFI_002d19-Date-1" href="SRFI_002d19-Date.html">7.5.16.3 SRFI-19 Date</a></li>
+        <li><a id="toc-SRFI_002d19-Time_002fDate-conversions-1" href="SRFI_002d19-Time_002fDate-conversions.html">7.5.16.4 SRFI-19 Time/Date conversions</a></li>
+        <li><a id="toc-SRFI_002d19-Date-to-string-1" href="SRFI_002d19-Date-to-string.html">7.5.16.5 SRFI-19 Date to string</a></li>
+        <li><a id="toc-SRFI_002d19-String-to-date-1" href="SRFI_002d19-String-to-date.html">7.5.16.6 SRFI-19 String to date</a></li>
+      </ul></li>
+      <li><a id="toc-SRFI_002d23-_002d-Error-Reporting" href="SRFI_002d23.html">7.5.17 SRFI-23 - Error Reporting</a></li>
+      <li><a id="toc-SRFI_002d26-_002d-specializing-parameters" href="SRFI_002d26.html">7.5.18 SRFI-26 - specializing parameters</a></li>
+      <li><a id="toc-SRFI_002d27-_002d-Sources-of-Random-Bits" href="SRFI_002d27.html">7.5.19 SRFI-27 - Sources of Random Bits</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-The-Default-Random-Source" href="SRFI_002d27-Default-Random-Source.html">7.5.19.1 The Default Random Source</a></li>
+        <li><a id="toc-Random-Sources" href="SRFI_002d27-Random-Sources.html">7.5.19.2 Random Sources</a></li>
+        <li><a id="toc-Obtaining-random-number-generator-procedures" href="SRFI_002d27-Random-Number-Generators.html">7.5.19.3 Obtaining random number generator procedures</a></li>
+      </ul></li>
+      <li><a id="toc-SRFI_002d28-_002d-Basic-Format-Strings" href="SRFI_002d28.html">7.5.20 SRFI-28 - Basic Format Strings</a></li>
+      <li><a id="toc-SRFI_002d30-_002d-Nested-Multi_002dline-Comments" href="SRFI_002d30.html">7.5.21 SRFI-30 - Nested Multi-line Comments</a></li>
+      <li><a id="toc-SRFI_002d31-_002d-A-special-form-_0060rec_0027-for-recursive-evaluation" href="SRFI_002d31.html">7.5.22 SRFI-31 - A special form &lsquo;rec&rsquo; for recursive evaluation</a></li>
+      <li><a id="toc-SRFI_002d34-_002d-Exception-handling-for-programs" href="SRFI_002d34.html">7.5.23 SRFI-34 - Exception handling for programs</a></li>
+      <li><a id="toc-SRFI_002d35-_002d-Conditions" href="SRFI_002d35.html">7.5.24 SRFI-35 - Conditions</a></li>
+      <li><a id="toc-SRFI_002d37-_002d-args_002dfold" href="SRFI_002d37.html">7.5.25 SRFI-37 - args-fold</a></li>
+      <li><a id="toc-SRFI_002d38-_002d-External-Representation-for-Data-With-Shared-Structure" href="SRFI_002d38.html">7.5.26 SRFI-38 - External Representation for Data With Shared Structure</a></li>
+      <li><a id="toc-SRFI_002d39-_002d-Parameters" href="SRFI_002d39.html">7.5.27 SRFI-39 - Parameters</a></li>
+      <li><a id="toc-SRFI_002d41-_002d-Streams" href="SRFI_002d41.html">7.5.28 SRFI-41 - Streams</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-SRFI_002d41-Stream-Fundamentals-1" href="SRFI_002d41-Stream-Fundamentals.html">7.5.28.1 SRFI-41 Stream Fundamentals</a></li>
+        <li><a id="toc-SRFI_002d41-Stream-Primitives-1" href="SRFI_002d41-Stream-Primitives.html">7.5.28.2 SRFI-41 Stream Primitives</a></li>
+        <li><a id="toc-SRFI_002d41-Stream-Library-1" href="SRFI_002d41-Stream-Library.html">7.5.28.3 SRFI-41 Stream Library</a></li>
+      </ul></li>
+      <li><a id="toc-SRFI_002d42-_002d-Eager-Comprehensions" href="SRFI_002d42.html">7.5.29 SRFI-42 - Eager Comprehensions</a></li>
+      <li><a id="toc-SRFI_002d43-_002d-Vector-Library" href="SRFI_002d43.html">7.5.30 SRFI-43 - Vector Library</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-SRFI_002d43-Constructors-1" href="SRFI_002d43-Constructors.html">7.5.30.1 SRFI-43 Constructors</a></li>
+        <li><a id="toc-SRFI_002d43-Predicates-1" href="SRFI_002d43-Predicates.html">7.5.30.2 SRFI-43 Predicates</a></li>
+        <li><a id="toc-SRFI_002d43-Selectors-1" href="SRFI_002d43-Selectors.html">7.5.30.3 SRFI-43 Selectors</a></li>
+        <li><a id="toc-SRFI_002d43-Iteration-1" href="SRFI_002d43-Iteration.html">7.5.30.4 SRFI-43 Iteration</a></li>
+        <li><a id="toc-SRFI_002d43-Searching-1" href="SRFI_002d43-Searching.html">7.5.30.5 SRFI-43 Searching</a></li>
+        <li><a id="toc-SRFI_002d43-Mutators-1" href="SRFI_002d43-Mutators.html">7.5.30.6 SRFI-43 Mutators</a></li>
+        <li><a id="toc-SRFI_002d43-Conversion-1" href="SRFI_002d43-Conversion.html">7.5.30.7 SRFI-43 Conversion</a></li>
+      </ul></li>
+      <li><a id="toc-SRFI_002d45-_002d-Primitives-for-Expressing-Iterative-Lazy-Algorithms" href="SRFI_002d45.html">7.5.31 SRFI-45 - Primitives for Expressing Iterative Lazy Algorithms</a></li>
+      <li><a id="toc-SRFI_002d46-Basic-syntax_002drules-Extensions" href="SRFI_002d46.html">7.5.32 SRFI-46 Basic syntax-rules Extensions</a></li>
+      <li><a id="toc-SRFI_002d55-_002d-Requiring-Features" href="SRFI_002d55.html">7.5.33 SRFI-55 - Requiring Features</a></li>
+      <li><a id="toc-SRFI_002d60-_002d-Integers-as-Bits" href="SRFI_002d60.html">7.5.34 SRFI-60 - Integers as Bits</a></li>
+      <li><a id="toc-SRFI_002d61-_002d-A-more-general-cond-clause" href="SRFI_002d61.html">7.5.35 SRFI-61 - A more general <code class="code">cond</code> clause</a></li>
+      <li><a id="toc-SRFI_002d62-_002d-S_002dexpression-comments_002e" href="SRFI_002d62.html">7.5.36 SRFI-62 - S-expression comments.</a></li>
+      <li><a id="toc-SRFI_002d64-_002d-A-Scheme-API-for-test-suites_002e" href="SRFI_002d64.html">7.5.37 SRFI-64 - A Scheme API for test suites.</a></li>
+      <li><a id="toc-SRFI_002d67-_002d-Compare-procedures" href="SRFI_002d67.html">7.5.38 SRFI-67 - Compare procedures</a></li>
+      <li><a id="toc-SRFI_002d69-_002d-Basic-hash-tables" href="SRFI_002d69.html">7.5.39 SRFI-69 - Basic hash tables</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Creating-hash-tables" href="SRFI_002d69-Creating-hash-tables.html">7.5.39.1 Creating hash tables</a></li>
+        <li><a id="toc-Accessing-table-items" href="SRFI_002d69-Accessing-table-items.html">7.5.39.2 Accessing table items</a></li>
+        <li><a id="toc-Table-properties" href="SRFI_002d69-Table-properties.html">7.5.39.3 Table properties</a></li>
+        <li><a id="toc-Hash-table-algorithms" href="SRFI_002d69-Hash-table-algorithms.html">7.5.39.4 Hash table algorithms</a></li>
+      </ul></li>
+      <li><a id="toc-SRFI_002d71-_002d-Extended-let_002dsyntax-for-multiple-values" href="SRFI_002d71.html">7.5.40 SRFI-71 - Extended let-syntax for multiple values</a></li>
+      <li><a id="toc-SRFI_002d87-_003d_003e-in-case-clauses" href="SRFI_002d87.html">7.5.41 SRFI-87 =&gt; in case clauses</a></li>
+      <li><a id="toc-SRFI_002d88-Keyword-Objects" href="SRFI_002d88.html">7.5.42 SRFI-88 Keyword Objects</a></li>
+      <li><a id="toc-SRFI_002d98-Accessing-environment-variables_002e" href="SRFI_002d98.html">7.5.43 SRFI-98 Accessing environment variables.</a></li>
+      <li><a id="toc-SRFI_002d105-Curly_002dinfix-expressions_002e" href="SRFI_002d105.html">7.5.44 SRFI-105 Curly-infix expressions.</a></li>
+      <li><a id="toc-SRFI_002d111-Boxes_002e" href="SRFI_002d111.html">7.5.45 SRFI-111 Boxes.</a></li>
+      <li><a id="toc-Transducers" href="SRFI_002d171.html">7.5.46 Transducers</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-SRFI_002d171-General-Discussion-1" href="SRFI_002d171-General-Discussion.html">7.5.46.1 SRFI-171 General Discussion</a></li>
+        <li><a id="toc-Applying-Transducers" href="SRFI_002d171-Applying-Transducers.html">7.5.46.2 Applying Transducers</a></li>
+        <li><a id="toc-Reducers" href="SRFI_002d171-Reducers.html">7.5.46.3 Reducers</a></li>
+        <li><a id="toc-Transducers-1" href="SRFI_002d171-Transducers.html">7.5.46.4 Transducers</a></li>
+        <li><a id="toc-Helper-functions-for-writing-transducers" href="SRFI_002d171-Helpers.html">7.5.46.5 Helper functions for writing transducers</a></li>
+      </ul></li>
+    </ul></li>
+    <li><a id="toc-R6RS-Support-1" href="R6RS-Support.html">7.6 R6RS Support</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Incompatibilities-with-the-R6RS" href="R6RS-Incompatibilities.html">7.6.1 Incompatibilities with the R6RS</a></li>
+      <li><a id="toc-R6RS-Standard-Libraries-1" href="R6RS-Standard-Libraries.html">7.6.2 R6RS Standard Libraries</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Library-Usage-1" href="Library-Usage.html">7.6.2.1 Library Usage</a></li>
+        <li><a id="toc-rnrs-base-1" href="rnrs-base.html">7.6.2.2 rnrs base</a></li>
+        <li><a id="toc-rnrs-unicode-1" href="rnrs-unicode.html">7.6.2.3 rnrs unicode</a></li>
+        <li><a id="toc-rnrs-bytevectors-1" href="rnrs-bytevectors.html">7.6.2.4 rnrs bytevectors</a></li>
+        <li><a id="toc-rnrs-lists-1" href="rnrs-lists.html">7.6.2.5 rnrs lists</a></li>
+        <li><a id="toc-rnrs-sorting-1" href="rnrs-sorting.html">7.6.2.6 rnrs sorting</a></li>
+        <li><a id="toc-rnrs-control-1" href="rnrs-control.html">7.6.2.7 rnrs control</a></li>
+        <li><a id="toc-R6RS-Records-1" href="R6RS-Records.html">7.6.2.8 R6RS Records</a></li>
+        <li><a id="toc-rnrs-records-syntactic-1" href="rnrs-records-syntactic.html">7.6.2.9 rnrs records syntactic</a></li>
+        <li><a id="toc-rnrs-records-procedural-1" href="rnrs-records-procedural.html">7.6.2.10 rnrs records procedural</a></li>
+        <li><a id="toc-rnrs-records-inspection-1" href="rnrs-records-inspection.html">7.6.2.11 rnrs records inspection</a></li>
+        <li><a id="toc-rnrs-exceptions-1" href="rnrs-exceptions.html">7.6.2.12 rnrs exceptions</a></li>
+        <li><a id="toc-rnrs-conditions-1" href="rnrs-conditions.html">7.6.2.13 rnrs conditions</a></li>
+        <li><a id="toc-I_002fO-Conditions" href="R6RS-I_002fO-Conditions.html">7.6.2.14 I/O Conditions</a></li>
+        <li><a id="toc-Transcoders" href="R6RS-Transcoders.html">7.6.2.15 Transcoders</a></li>
+        <li><a id="toc-rnrs-io-ports-1" href="rnrs-io-ports.html">7.6.2.16 rnrs io ports</a></li>
+        <li><a id="toc-R6RS-File-Ports-1" href="R6RS-File-Ports.html">7.6.2.17 R6RS File Ports</a></li>
+        <li><a id="toc-rnrs-io-simple-1" href="rnrs-io-simple.html">7.6.2.18 rnrs io simple</a></li>
+        <li><a id="toc-rnrs-files-1" href="rnrs-files.html">7.6.2.19 rnrs files</a></li>
+        <li><a id="toc-rnrs-programs-1" href="rnrs-programs.html">7.6.2.20 rnrs programs</a></li>
+        <li><a id="toc-rnrs-arithmetic-fixnums-1" href="rnrs-arithmetic-fixnums.html">7.6.2.21 rnrs arithmetic fixnums</a></li>
+        <li><a id="toc-rnrs-arithmetic-flonums-1" href="rnrs-arithmetic-flonums.html">7.6.2.22 rnrs arithmetic flonums</a></li>
+        <li><a id="toc-rnrs-arithmetic-bitwise-1" href="rnrs-arithmetic-bitwise.html">7.6.2.23 rnrs arithmetic bitwise</a></li>
+        <li><a id="toc-rnrs-syntax_002dcase-1" href="rnrs-syntax_002dcase.html">7.6.2.24 rnrs syntax-case</a></li>
+        <li><a id="toc-rnrs-hashtables-1" href="rnrs-hashtables.html">7.6.2.25 rnrs hashtables</a></li>
+        <li><a id="toc-rnrs-enums-1" href="rnrs-enums.html">7.6.2.26 rnrs enums</a></li>
+        <li><a id="toc-rnrs-1" href="rnrs.html">7.6.2.27 rnrs</a></li>
+        <li><a id="toc-rnrs-eval-1" href="rnrs-eval.html">7.6.2.28 rnrs eval</a></li>
+        <li><a id="toc-rnrs-mutable_002dpairs-1" href="rnrs-mutable_002dpairs.html">7.6.2.29 rnrs mutable-pairs</a></li>
+        <li><a id="toc-rnrs-mutable_002dstrings-1" href="rnrs-mutable_002dstrings.html">7.6.2.30 rnrs mutable-strings</a></li>
+        <li><a id="toc-rnrs-r5rs-1" href="rnrs-r5rs.html">7.6.2.31 rnrs r5rs</a></li>
+      </ul></li>
+    </ul></li>
+    <li><a id="toc-R7RS-Support-1" href="R7RS-Support.html">7.7 R7RS Support</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Incompatibilities-with-the-R7RS" href="R7RS-Incompatibilities.html">7.7.1 Incompatibilities with the R7RS</a></li>
+      <li><a id="toc-R7RS-Standard-Libraries-1" href="R7RS-Standard-Libraries.html">7.7.2 R7RS Standard Libraries</a></li>
+    </ul></li>
+    <li><a id="toc-Pattern-Matching-1" href="Pattern-Matching.html">7.8 Pattern Matching</a></li>
+    <li><a id="toc-Readline-Support-1" href="Readline-Support.html">7.9 Readline Support</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Loading-Readline-Support-1" href="Loading-Readline-Support.html">7.9.1 Loading Readline Support</a></li>
+      <li><a id="toc-Readline-Options-1" href="Readline-Options.html">7.9.2 Readline Options</a></li>
+      <li><a id="toc-Readline-Functions-1" href="Readline-Functions.html">7.9.3 Readline Functions</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Readline-Port" href="Readline-Functions.html#Readline-Port">7.9.3.1 Readline Port</a></li>
+        <li><a id="toc-Completion" href="Readline-Functions.html#Completion">7.9.3.2 Completion</a></li>
+      </ul></li>
+    </ul></li>
+    <li><a id="toc-Pretty-Printing-1" href="Pretty-Printing.html">7.10 Pretty Printing</a></li>
+    <li><a id="toc-Formatted-Output-1" href="Formatted-Output.html">7.11 Formatted Output</a></li>
+    <li><a id="toc-File-Tree-Walk-1" href="File-Tree-Walk.html">7.12 File Tree Walk</a></li>
+    <li><a id="toc-Queues-1" href="Queues.html">7.13 Queues</a></li>
+    <li><a id="toc-Streams-1" href="Streams.html">7.14 Streams</a></li>
+    <li><a id="toc-Buffered-Input-1" href="Buffered-Input.html">7.15 Buffered Input</a></li>
+    <li><a id="toc-Expect-1" href="Expect.html">7.16 Expect</a></li>
+    <li><a id="toc-sxml_002dmatch_003a-Pattern-Matching-of-SXML" href="sxml_002dmatch.html">7.17 <code class="code">sxml-match</code>: Pattern Matching of SXML</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Syntax" href="sxml_002dmatch.html#Syntax">Syntax</a></li>
+      <li><a id="toc-Matching-XML-Elements" href="sxml_002dmatch.html#Matching-XML-Elements">Matching XML Elements</a></li>
+      <li><a id="toc-Ellipses-in-Patterns" href="sxml_002dmatch.html#Ellipses-in-Patterns">Ellipses in Patterns</a></li>
+      <li><a id="toc-Ellipses-in-Quasiquote_0027d-Output" href="sxml_002dmatch.html#Ellipses-in-Quasiquote_0027d-Output">Ellipses in Quasiquote&rsquo;d Output</a></li>
+      <li><a id="toc-Matching-Nodesets" href="sxml_002dmatch.html#Matching-Nodesets">Matching Nodesets</a></li>
+      <li><a id="toc-Matching-the-_0060_0060Rest_0027_0027-of-a-Nodeset" href="sxml_002dmatch.html#Matching-the-_0060_0060Rest_0027_0027-of-a-Nodeset">Matching the &ldquo;Rest&rdquo; of a Nodeset</a></li>
+      <li><a id="toc-Matching-the-Unmatched-Attributes" href="sxml_002dmatch.html#Matching-the-Unmatched-Attributes">Matching the Unmatched Attributes</a></li>
+      <li><a id="toc-Default-Values-in-Attribute-Patterns" href="sxml_002dmatch.html#Default-Values-in-Attribute-Patterns">Default Values in Attribute Patterns</a></li>
+      <li><a id="toc-Guards-in-Patterns" href="sxml_002dmatch.html#Guards-in-Patterns">Guards in Patterns</a></li>
+      <li><a id="toc-Catamorphisms" href="sxml_002dmatch.html#Catamorphisms">Catamorphisms</a></li>
+      <li><a id="toc-Named_002dCatamorphisms" href="sxml_002dmatch.html#Named_002dCatamorphisms">Named-Catamorphisms</a></li>
+      <li><a id="toc-sxml_002dmatch_002dlet-and-sxml_002dmatch_002dlet_002a" href="sxml_002dmatch.html#sxml_002dmatch_002dlet-and-sxml_002dmatch_002dlet_002a"><code class="code">sxml-match-let</code> and <code class="code">sxml-match-let*</code></a></li>
+    </ul></li>
+    <li><a id="toc-The-Scheme-shell-_0028scsh_0029-1" href="The-Scheme-shell-_0028scsh_0029.html">7.18 The Scheme shell (scsh)</a></li>
+    <li><a id="toc-Curried-Definitions-1" href="Curried-Definitions.html">7.19 Curried Definitions</a></li>
+    <li><a id="toc-Statprof-1" href="Statprof.html">7.20 Statprof</a></li>
+    <li><a id="toc-SXML-1" href="SXML.html">7.21 SXML</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-SXML-Overview-1" href="SXML-Overview.html">7.21.1 SXML Overview</a></li>
+      <li><a id="toc-Reading-and-Writing-XML-1" href="Reading-and-Writing-XML.html">7.21.2 Reading and Writing XML</a></li>
+      <li><a id="toc-SSAX_003a-A-Functional-XML-Parsing-Toolkit" href="SSAX.html">7.21.3 SSAX: A Functional XML Parsing Toolkit</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-History-1" href="SSAX.html#History-1">7.21.3.1 History</a></li>
+        <li><a id="toc-Implementation" href="SSAX.html#Implementation">7.21.3.2 Implementation</a></li>
+        <li><a id="toc-Usage" href="SSAX.html#Usage">7.21.3.3 Usage</a></li>
+      </ul></li>
+      <li><a id="toc-Transforming-SXML-1" href="Transforming-SXML.html">7.21.4 Transforming SXML</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Overview" href="Transforming-SXML.html#Overview">7.21.4.1 Overview</a></li>
+        <li><a id="toc-Usage-1" href="Transforming-SXML.html#Usage-1">7.21.4.2 Usage</a></li>
+      </ul></li>
+      <li><a id="toc-SXML-Tree-Fold-1" href="SXML-Tree-Fold.html">7.21.5 SXML Tree Fold</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Overview-1" href="SXML-Tree-Fold.html#Overview-1">7.21.5.1 Overview</a></li>
+        <li><a id="toc-Usage-2" href="SXML-Tree-Fold.html#Usage-2">7.21.5.2 Usage</a></li>
+      </ul></li>
+      <li><a id="toc-SXPath-1" href="SXPath.html">7.21.6 SXPath</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Overview-2" href="SXPath.html#Overview-2">7.21.6.1 Overview</a></li>
+        <li><a id="toc-Basic-Converters-and-Applicators" href="SXPath.html#Basic-Converters-and-Applicators">7.21.6.2 Basic Converters and Applicators</a></li>
+        <li><a id="toc-Converter-Combinators" href="SXPath.html#Converter-Combinators">7.21.6.3 Converter Combinators</a></li>
+      </ul></li>
+      <li><a id="toc-_0028sxml-ssax-input_002dparse_0029" href="sxml-ssax-input_002dparse.html">7.21.7 (sxml ssax input-parse)</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Overview-3" href="sxml-ssax-input_002dparse.html#Overview-3">7.21.7.1 Overview</a></li>
+        <li><a id="toc-Usage-3" href="sxml-ssax-input_002dparse.html#Usage-3">7.21.7.2 Usage</a></li>
+      </ul></li>
+      <li><a id="toc-_0028sxml-apply_002dtemplates_0029" href="sxml-apply_002dtemplates.html">7.21.8 (sxml apply-templates)</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Overview-4" href="sxml-apply_002dtemplates.html#Overview-4">7.21.8.1 Overview</a></li>
+        <li><a id="toc-Usage-4" href="sxml-apply_002dtemplates.html#Usage-4">7.21.8.2 Usage</a></li>
+      </ul></li>
+    </ul></li>
+    <li><a id="toc-Texinfo-Processing-1" href="Texinfo-Processing.html">7.22 Texinfo Processing</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-_0028texinfo_0029" href="texinfo.html">7.22.1 (texinfo)</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Overview-5" href="texinfo.html#Overview-5">7.22.1.1 Overview</a></li>
+        <li><a id="toc-Usage-5" href="texinfo.html#Usage-5">7.22.1.2 Usage</a></li>
+      </ul></li>
+      <li><a id="toc-_0028texinfo-docbook_0029" href="texinfo-docbook.html">7.22.2 (texinfo docbook)</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Overview-6" href="texinfo-docbook.html#Overview-6">7.22.2.1 Overview</a></li>
+        <li><a id="toc-Usage-6" href="texinfo-docbook.html#Usage-6">7.22.2.2 Usage</a></li>
+      </ul></li>
+      <li><a id="toc-_0028texinfo-html_0029" href="texinfo-html.html">7.22.3 (texinfo html)</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Overview-7" href="texinfo-html.html#Overview-7">7.22.3.1 Overview</a></li>
+        <li><a id="toc-Usage-7" href="texinfo-html.html#Usage-7">7.22.3.2 Usage</a></li>
+      </ul></li>
+      <li><a id="toc-_0028texinfo-indexing_0029" href="texinfo-indexing.html">7.22.4 (texinfo indexing)</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Overview-8" href="texinfo-indexing.html#Overview-8">7.22.4.1 Overview</a></li>
+        <li><a id="toc-Usage-8" href="texinfo-indexing.html#Usage-8">7.22.4.2 Usage</a></li>
+      </ul></li>
+      <li><a id="toc-_0028texinfo-string_002dutils_0029" href="texinfo-string_002dutils.html">7.22.5 (texinfo string-utils)</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Overview-9" href="texinfo-string_002dutils.html#Overview-9">7.22.5.1 Overview</a></li>
+        <li><a id="toc-Usage-9" href="texinfo-string_002dutils.html#Usage-9">7.22.5.2 Usage</a></li>
+      </ul></li>
+      <li><a id="toc-_0028texinfo-plain_002dtext_0029" href="texinfo-plain_002dtext.html">7.22.6 (texinfo plain-text)</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Overview-10" href="texinfo-plain_002dtext.html#Overview-10">7.22.6.1 Overview</a></li>
+        <li><a id="toc-Usage-10" href="texinfo-plain_002dtext.html#Usage-10">7.22.6.2 Usage</a></li>
+      </ul></li>
+      <li><a id="toc-_0028texinfo-serialize_0029" href="texinfo-serialize.html">7.22.7 (texinfo serialize)</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Overview-11" href="texinfo-serialize.html#Overview-11">7.22.7.1 Overview</a></li>
+        <li><a id="toc-Usage-11" href="texinfo-serialize.html#Usage-11">7.22.7.2 Usage</a></li>
+      </ul></li>
+      <li><a id="toc-_0028texinfo-reflection_0029" href="texinfo-reflection.html">7.22.8 (texinfo reflection)</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Overview-12" href="texinfo-reflection.html#Overview-12">7.22.8.1 Overview</a></li>
+        <li><a id="toc-Usage-12" href="texinfo-reflection.html#Usage-12">7.22.8.2 Usage</a></li>
+      </ul></li>
+    </ul></li>
+  </ul></li>
+  <li><a id="toc-GOOPS-1" href="GOOPS.html">8 GOOPS</a>
+  <ul class="toc-numbered-mark">
+    <li><a id="toc-Copyright-Notice-1" href="Copyright-Notice.html">8.1 Copyright Notice</a></li>
+    <li><a id="toc-Class-Definition-1" href="Class-Definition.html">8.2 Class Definition</a></li>
+    <li><a id="toc-Instance-Creation-and-Slot-Access" href="Instance-Creation.html">8.3 Instance Creation and Slot Access</a></li>
+    <li><a id="toc-Slot-Options-1" href="Slot-Options.html">8.4 Slot Options</a></li>
+    <li><a id="toc-Illustrating-Slot-Description" href="Slot-Description-Example.html">8.5 Illustrating Slot Description</a></li>
+    <li><a id="toc-Methods-and-Generic-Functions-1" href="Methods-and-Generic-Functions.html">8.6 Methods and Generic Functions</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Accessors-1" href="Accessors.html">8.6.1 Accessors</a></li>
+      <li><a id="toc-Extending-Primitives-1" href="Extending-Primitives.html">8.6.2 Extending Primitives</a></li>
+      <li><a id="toc-Merging-Generics-1" href="Merging-Generics.html">8.6.3 Merging Generics</a></li>
+      <li><a id="toc-Next_002dmethod-1" href="Next_002dmethod.html">8.6.4 Next-method</a></li>
+      <li><a id="toc-Generic-Function-and-Method-Examples-1" href="Generic-Function-and-Method-Examples.html">8.6.5 Generic Function and Method Examples</a></li>
+      <li><a id="toc-Handling-Invocation-Errors-1" href="Handling-Invocation-Errors.html">8.6.6 Handling Invocation Errors</a></li>
+    </ul></li>
+    <li><a id="toc-Inheritance-1" href="Inheritance.html">8.7 Inheritance</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Class-Precedence-List-1" href="Class-Precedence-List.html">8.7.1 Class Precedence List</a></li>
+      <li><a id="toc-Sorting-Methods-1" href="Sorting-Methods.html">8.7.2 Sorting Methods</a></li>
+    </ul></li>
+    <li><a id="toc-Introspection-1" href="Introspection.html">8.8 Introspection</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Classes-1" href="Classes.html">8.8.1 Classes</a></li>
+      <li><a id="toc-Instances-1" href="Instances.html">8.8.2 Instances</a></li>
+      <li><a id="toc-Slots-1" href="Slots.html">8.8.3 Slots</a></li>
+      <li><a id="toc-Generic-Functions-1" href="Generic-Functions.html">8.8.4 Generic Functions</a></li>
+      <li><a id="toc-Accessing-Slots-1" href="Accessing-Slots.html">8.8.5 Accessing Slots</a></li>
+    </ul></li>
+    <li><a id="toc-Error-Handling-2" href="GOOPS-Error-Handling.html">8.9 Error Handling</a></li>
+    <li><a id="toc-GOOPS-Object-Miscellany-1" href="GOOPS-Object-Miscellany.html">8.10 GOOPS Object Miscellany</a></li>
+    <li><a id="toc-The-Metaobject-Protocol-1" href="The-Metaobject-Protocol.html">8.11 The Metaobject Protocol</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Metaobjects-and-the-Metaobject-Protocol-1" href="Metaobjects-and-the-Metaobject-Protocol.html">8.11.1 Metaobjects and the Metaobject Protocol</a></li>
+      <li><a id="toc-Metaclasses-1" href="Metaclasses.html">8.11.2 Metaclasses</a></li>
+      <li><a id="toc-MOP-Specification-1" href="MOP-Specification.html">8.11.3 MOP Specification</a></li>
+      <li><a id="toc-Instance-Creation-Protocol-1" href="Instance-Creation-Protocol.html">8.11.4 Instance Creation Protocol</a></li>
+      <li><a id="toc-Class-Definition-Protocol-1" href="Class-Definition-Protocol.html">8.11.5 Class Definition Protocol</a></li>
+      <li><a id="toc-Customizing-Class-Definition-1" href="Customizing-Class-Definition.html">8.11.6 Customizing Class Definition</a></li>
+      <li><a id="toc-Method-Definition-1" href="Method-Definition.html">8.11.7 Method Definition</a></li>
+      <li><a id="toc-Method-Definition-Internals-1" href="Method-Definition-Internals.html">8.11.8 Method Definition Internals</a></li>
+      <li><a id="toc-Generic-Function-Internals-1" href="Generic-Function-Internals.html">8.11.9 Generic Function Internals</a></li>
+      <li><a id="toc-Generic-Function-Invocation-1" href="Generic-Function-Invocation.html">8.11.10 Generic Function Invocation</a></li>
+    </ul></li>
+    <li><a id="toc-Redefining-a-Class-1" href="Redefining-a-Class.html">8.12 Redefining a Class</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Redefinable-Classes-1" href="Redefinable-Classes.html">8.12.1 Redefinable Classes</a></li>
+      <li><a id="toc-Default-Class-Redefinition-Behaviour-1" href="Default-Class-Redefinition-Behaviour.html">8.12.2 Default Class Redefinition Behaviour</a></li>
+      <li><a id="toc-Customizing-Class-Redefinition-1" href="Customizing-Class-Redefinition.html">8.12.3 Customizing Class Redefinition</a></li>
+    </ul></li>
+    <li><a id="toc-Changing-the-Class-of-an-Instance-1" href="Changing-the-Class-of-an-Instance.html">8.13 Changing the Class of an Instance</a></li>
+  </ul></li>
+  <li><a id="toc-Guile-Implementation-1" href="Guile-Implementation.html">9 Guile Implementation</a>
+  <ul class="toc-numbered-mark">
+    <li><a id="toc-A-Brief-History-of-Guile" href="History.html">9.1 A Brief History of Guile</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-The-Emacs-Thesis-1" href="The-Emacs-Thesis.html">9.1.1 The Emacs Thesis</a></li>
+      <li><a id="toc-Early-Days-1" href="Early-Days.html">9.1.2 Early Days</a></li>
+      <li><a id="toc-A-Scheme-of-Many-Maintainers-1" href="A-Scheme-of-Many-Maintainers.html">9.1.3 A Scheme of Many Maintainers</a></li>
+      <li><a id="toc-A-Timeline-of-Selected-Guile-Releases-1" href="A-Timeline-of-Selected-Guile-Releases.html">9.1.4 A Timeline of Selected Guile Releases</a></li>
+      <li><a id="toc-Status_002c-or_003a-Your-Help-Needed" href="Status.html">9.1.5 Status, or: Your Help Needed</a></li>
+    </ul></li>
+    <li><a id="toc-Data-Representation-1" href="Data-Representation.html">9.2 Data Representation</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-A-Simple-Representation-1" href="A-Simple-Representation.html">9.2.1 A Simple Representation</a></li>
+      <li><a id="toc-Faster-Integers-1" href="Faster-Integers.html">9.2.2 Faster Integers</a></li>
+      <li><a id="toc-Cheaper-Pairs-1" href="Cheaper-Pairs.html">9.2.3 Cheaper Pairs</a></li>
+      <li><a id="toc-Conservative-Garbage-Collection" href="Conservative-GC.html">9.2.4 Conservative Garbage Collection</a></li>
+      <li><a id="toc-The-SCM-Type-in-Guile-1" href="The-SCM-Type-in-Guile.html">9.2.5 The SCM Type in Guile</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Relationship-Between-SCM-and-scm_005ft_005fbits-1" href="Relationship-Between-SCM-and-scm_005ft_005fbits.html">9.2.5.1 Relationship Between <code class="code">SCM</code> and <code class="code">scm_t_bits</code></a></li>
+        <li><a id="toc-Immediate-Objects-1" href="Immediate-Objects.html">9.2.5.2 Immediate Objects</a></li>
+        <li><a id="toc-Non_002dImmediate-Objects-1" href="Non_002dImmediate-Objects.html">9.2.5.3 Non-Immediate Objects</a></li>
+        <li><a id="toc-Allocating-Heap-Objects-1" href="Allocating-Heap-Objects.html">9.2.5.4 Allocating Heap Objects</a></li>
+        <li><a id="toc-Heap-Object-Type-Information-1" href="Heap-Object-Type-Information.html">9.2.5.5 Heap Object Type Information</a></li>
+        <li><a id="toc-Accessing-Heap-Object-Fields-1" href="Accessing-Heap-Object-Fields.html">9.2.5.6 Accessing Heap Object Fields</a></li>
+      </ul></li>
+    </ul></li>
+    <li><a id="toc-A-Virtual-Machine-for-Guile-1" href="A-Virtual-Machine-for-Guile.html">9.3 A Virtual Machine for Guile</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Why-a-VM_003f-1" href="Why-a-VM_003f.html">9.3.1 Why a VM?</a></li>
+      <li><a id="toc-VM-Concepts-1" href="VM-Concepts.html">9.3.2 VM Concepts</a></li>
+      <li><a id="toc-Stack-Layout-1" href="Stack-Layout.html">9.3.3 Stack Layout</a></li>
+      <li><a id="toc-Variables-and-the-VM-1" href="Variables-and-the-VM.html">9.3.4 Variables and the VM</a></li>
+      <li><a id="toc-Compiled-Procedures-are-VM-Programs" href="VM-Programs.html">9.3.5 Compiled Procedures are VM Programs</a></li>
+      <li><a id="toc-Object-File-Format-1" href="Object-File-Format.html">9.3.6 Object File Format</a></li>
+      <li><a id="toc-Instruction-Set-1" href="Instruction-Set.html">9.3.7 Instruction Set</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-Call-and-Return-Instructions-1" href="Call-and-Return-Instructions.html">9.3.7.1 Call and Return Instructions</a></li>
+        <li><a id="toc-Function-Prologue-Instructions-1" href="Function-Prologue-Instructions.html">9.3.7.2 Function Prologue Instructions</a></li>
+        <li><a id="toc-Shuffling-Instructions-1" href="Shuffling-Instructions.html">9.3.7.3 Shuffling Instructions</a></li>
+        <li><a id="toc-Trampoline-Instructions-1" href="Trampoline-Instructions.html">9.3.7.4 Trampoline Instructions</a></li>
+        <li><a id="toc-Non_002dLocal-Control-Flow-Instructions-1" href="Non_002dLocal-Control-Flow-Instructions.html">9.3.7.5 Non-Local Control Flow Instructions</a></li>
+        <li><a id="toc-Instrumentation-Instructions-1" href="Instrumentation-Instructions.html">9.3.7.6 Instrumentation Instructions</a></li>
+        <li><a id="toc-Intrinsic-Call-Instructions-1" href="Intrinsic-Call-Instructions.html">9.3.7.7 Intrinsic Call Instructions</a></li>
+        <li><a id="toc-Constant-Instructions-1" href="Constant-Instructions.html">9.3.7.8 Constant Instructions</a></li>
+        <li><a id="toc-Memory-Access-Instructions-1" href="Memory-Access-Instructions.html">9.3.7.9 Memory Access Instructions</a></li>
+        <li><a id="toc-Atomic-Memory-Access-Instructions-1" href="Atomic-Memory-Access-Instructions.html">9.3.7.10 Atomic Memory Access Instructions</a></li>
+        <li><a id="toc-Tagging-and-Untagging-Instructions-1" href="Tagging-and-Untagging-Instructions.html">9.3.7.11 Tagging and Untagging Instructions</a></li>
+        <li><a id="toc-Integer-Arithmetic-Instructions-1" href="Integer-Arithmetic-Instructions.html">9.3.7.12 Integer Arithmetic Instructions</a></li>
+        <li><a id="toc-Floating_002dPoint-Arithmetic-Instructions-1" href="Floating_002dPoint-Arithmetic-Instructions.html">9.3.7.13 Floating-Point Arithmetic Instructions</a></li>
+        <li><a id="toc-Comparison-Instructions-1" href="Comparison-Instructions.html">9.3.7.14 Comparison Instructions</a></li>
+        <li><a id="toc-Branch-Instructions-1" href="Branch-Instructions.html">9.3.7.15 Branch Instructions</a></li>
+        <li><a id="toc-Raw-Memory-Access-Instructions-1" href="Raw-Memory-Access-Instructions.html">9.3.7.16 Raw Memory Access Instructions</a></li>
+      </ul></li>
+      <li><a id="toc-Just_002dIn_002dTime-Native-Code-1" href="Just_002dIn_002dTime-Native-Code.html">9.3.8 Just-In-Time Native Code</a></li>
+    </ul></li>
+    <li><a id="toc-Compiling-to-the-Virtual-Machine-1" href="Compiling-to-the-Virtual-Machine.html">9.4 Compiling to the Virtual Machine</a>
+    <ul class="toc-numbered-mark">
+      <li><a id="toc-Compiler-Tower-1" href="Compiler-Tower.html">9.4.1 Compiler Tower</a></li>
+      <li><a id="toc-The-Scheme-Compiler-1" href="The-Scheme-Compiler.html">9.4.2 The Scheme Compiler</a></li>
+      <li><a id="toc-Tree_002dIL-1" href="Tree_002dIL.html">9.4.3 Tree-IL</a></li>
+      <li><a id="toc-Continuation_002dPassing-Style-1" href="Continuation_002dPassing-Style.html">9.4.4 Continuation-Passing Style</a>
+      <ul class="toc-numbered-mark">
+        <li><a id="toc-An-Introduction-to-CPS-1" href="An-Introduction-to-CPS.html">9.4.4.1 An Introduction to CPS</a></li>
+        <li><a id="toc-CPS-in-Guile-1" href="CPS-in-Guile.html">9.4.4.2 CPS in Guile</a></li>
+        <li><a id="toc-Building-CPS-1" href="Building-CPS.html">9.4.4.3 Building CPS</a></li>
+        <li><a id="toc-CPS-Soup-1" href="CPS-Soup.html">9.4.4.4 CPS Soup</a></li>
+        <li><a id="toc-Compiling-CPS-1" href="Compiling-CPS.html">9.4.4.5 Compiling CPS</a></li>
+      </ul></li>
+      <li><a id="toc-Bytecode-1" href="Bytecode.html">9.4.5 Bytecode</a></li>
+      <li><a id="toc-Writing-New-High_002dLevel-Languages-1" href="Writing-New-High_002dLevel-Languages.html">9.4.6 Writing New High-Level Languages</a></li>
+      <li><a id="toc-Extending-the-Compiler-1" href="Extending-the-Compiler.html">9.4.7 Extending the Compiler</a></li>
+    </ul></li>
+  </ul></li>
+  <li><a id="toc-GNU-Free-Documentation-License-1" href="GNU-Free-Documentation-License.html">Appendix A GNU Free Documentation License</a></li>
+  <li><a id="toc-Concept-Index-1" href="Concept-Index.html" rel="index">Concept Index</a></li>
+  <li><a id="toc-Procedure-Index-1" href="Procedure-Index.html" rel="index">Procedure Index</a></li>
+  <li><a id="toc-Variable-Index-1" href="Variable-Index.html" rel="index">Variable Index</a></li>
+  <li><a id="toc-Type-Index-1" href="Type-Index.html" rel="index">Type Index</a></li>
+  <li><a id="toc-R5RS-Index-1" href="R5RS-Index.html" rel="index">R5RS Index</a></li>
+</ul>
+</div>
+</div>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Preface.html" accesskey="n" rel="next">Preface</a>, Previous: <a href="../index.html" accesskey="p" rel="prev">(dir)</a>, Up: <a href="../index.html" accesskey="u" rel="up">(dir)</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Custom Ports (Guile Reference Manual)</title>
+
+<meta name="description" content="Custom Ports (Guile Reference Manual)">
+<meta name="keywords" content="Custom Ports (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Port-Types.html" rel="up" title="Port Types">
+<link href="Soft-Ports.html" rel="next" title="Soft Ports">
+<link href="String-Ports.html" rel="prev" title="String Ports">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Custom-Ports">
+<div class="nav-panel">
+<p>
+Next: <a href="Soft-Ports.html" accesskey="n" rel="next">Soft Ports</a>, Previous: <a href="String-Ports.html" accesskey="p" rel="prev">String Ports</a>, Up: <a href="Port-Types.html" accesskey="u" rel="up">Types of Port</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Custom-Ports-1">6.12.10.4 Custom Ports</h4>
+
+<p>Custom ports allow the user to provide input and handle output via
+user-supplied procedures.  Guile currently only provides custom binary
+ports, not textual ports; for custom textual ports, See <a class="xref" href="Soft-Ports.html">Soft Ports</a>.
+We should add the R6RS custom textual port interfaces though.
+Contributions are appreciated.
+</p>
+<a class="index-entry-id" id="index-custom-binary-input-ports"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dcustom_002dbinary_002dinput_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-custom-binary-input-port</strong> <var class="def-var-arguments">id read! get-position set-position! close</var><a class="copiable-link" href='#index-make_002dcustom_002dbinary_002dinput_002dport'> &para;</a></span></dt>
+<dd><p>Return a new custom binary input port<a class="footnote" id="DOCF16" href="#FOOT16"><sup>16</sup></a> named <var class="var">id</var> (a
+string) whose input is drained by invoking <var class="var">read!</var> and passing it a
+bytevector, an index where bytes should be written, and the number of
+bytes to read.  The <code class="code">read!</code>  procedure must return an integer
+indicating the number of bytes read, or <code class="code">0</code> to indicate the
+end-of-file.
+</p>
+<p>Optionally, if <var class="var">get-position</var> is not <code class="code">#f</code>, it must be a thunk
+that will be called when <code class="code">port-position</code> is invoked on the custom
+binary port and should return an integer indicating the position within
+the underlying data stream; if <var class="var">get-position</var> was not supplied, the
+returned port does not support <code class="code">port-position</code>.
+</p>
+<p>Likewise, if <var class="var">set-position!</var> is not <code class="code">#f</code>, it should be a
+one-argument procedure.  When <code class="code">set-port-position!</code> is invoked on the
+custom binary input port, <var class="var">set-position!</var> is passed an integer
+indicating the position of the next byte is to read.
+</p>
+<p>Finally, if <var class="var">close</var> is not <code class="code">#f</code>, it must be a thunk.  It is
+invoked when the custom binary input port is closed.
+</p>
+<p>The returned port is fully buffered by default, but its buffering mode
+can be changed using <code class="code">setvbuf</code> (see <a class="pxref" href="Buffering.html">Buffering</a>).
+</p>
+<p>Using a custom binary input port, the <code class="code">open-bytevector-input-port</code>
+procedure (see <a class="pxref" href="Bytevector-Ports.html">Bytevector Ports</a>) could be implemented as follows:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define (open-bytevector-input-port source)
+  (define position 0)
+  (define length (bytevector-length source))
+
+  (define (read! bv start count)
+    (let ((count (min count (- length position))))
+      (bytevector-copy! source position
+                        bv start count)
+      (set! position (+ position count))
+      count))
+
+  (define (get-position) position)
+
+  (define (set-position! new-position)
+    (set! position new-position))
+
+  (make-custom-binary-input-port &quot;the port&quot; read!
+                                  get-position set-position!
+                                  #f))
+
+(read (open-bytevector-input-port (string-&gt;utf8 &quot;hello&quot;)))
+&rArr; hello
+</pre></div>
+</dd></dl>
+
+<a class="index-entry-id" id="index-custom-binary-output-ports"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dcustom_002dbinary_002doutput_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-custom-binary-output-port</strong> <var class="def-var-arguments">id write! get-position set-position! close</var><a class="copiable-link" href='#index-make_002dcustom_002dbinary_002doutput_002dport'> &para;</a></span></dt>
+<dd><p>Return a new custom binary output port named <var class="var">id</var> (a string) whose
+output is sunk by invoking <var class="var">write!</var> and passing it a bytevector, an
+index where bytes should be read from this bytevector, and the number of
+bytes to be &ldquo;written&rdquo;.  The <code class="code">write!</code>  procedure must return an
+integer indicating the number of bytes actually written; when it is
+passed <code class="code">0</code> as the number of bytes to write, it should behave as
+though an end-of-file was sent to the byte sink.
+</p>
+<p>The other arguments are as for <code class="code">make-custom-binary-input-port</code>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-custom-binary-input_002foutput-ports"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dcustom_002dbinary_002dinput_002foutput_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-custom-binary-input/output-port</strong> <var class="def-var-arguments">id read! write! get-position set-position! close</var><a class="copiable-link" href='#index-make_002dcustom_002dbinary_002dinput_002foutput_002dport'> &para;</a></span></dt>
+<dd><p>Return a new custom binary input/output port named <var class="var">id</var> (a string).
+The various arguments are the same as for The other arguments are as for
+<code class="code">make-custom-binary-input-port</code> and
+<code class="code">make-custom-binary-output-port</code>.  If buffering is enabled on the
+port, as is the case by default, input will be buffered in both
+directions; See <a class="xref" href="Buffering.html">Buffering</a>.  If the <var class="var">set-position!</var> function is
+provided and not <code class="code">#f</code>, then the port will also be marked as
+random-access, causing the buffer to be flushed between reads and
+writes.
+</p></dd></dl>
+
+</div>
+<div class="footnotes-segment">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5 class="footnote-body-heading"><a id="FOOT16" href="#DOCF16">(16)</a></h5>
+<p>This is similar in spirit
+to Guile&rsquo;s <em class="dfn">soft ports</em> (see <a class="pxref" href="Soft-Ports.html">Soft Ports</a>).</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Soft-Ports.html">Soft Ports</a>, Previous: <a href="String-Ports.html">String Ports</a>, Up: <a href="Port-Types.html">Types of Port</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

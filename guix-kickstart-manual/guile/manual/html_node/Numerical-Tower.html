@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Numerical Tower (Guile Reference Manual)</title>
+
+<meta name="description" content="Numerical Tower (Guile Reference Manual)">
+<meta name="keywords" content="Numerical Tower (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Numbers.html" rel="up" title="Numbers">
+<link href="Integers.html" rel="next" title="Integers">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Numerical-Tower">
+<div class="nav-panel">
+<p>
+Next: <a href="Integers.html" accesskey="n" rel="next">Integers</a>, Up: <a href="Numbers.html" accesskey="u" rel="up">Numerical data types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Scheme_0027s-Numerical-_0060_0060Tower_0027_0027">6.6.2.1 Scheme&rsquo;s Numerical &ldquo;Tower&rdquo;</h4>
+<a class="index-entry-id" id="index-number_003f-2"></a>
+
+<p>Scheme&rsquo;s numerical &ldquo;tower&rdquo; consists of the following categories of
+numbers:
+</p>
+<dl class="table">
+<dt><em class="dfn">integers</em></dt>
+<dd><p>Whole numbers, positive or negative; e.g. &ndash;5, 0, 18.
+</p>
+</dd>
+<dt><em class="dfn">rationals</em></dt>
+<dd><p>The set of numbers that can be expressed as <em class="math"><var class="var">p</var>/<var class="var">q</var></em>
+where <var class="var">p</var> and <var class="var">q</var> are integers; e.g. <em class="math">9/16</em> works, but
+pi (an irrational number) doesn&rsquo;t. These include integers
+(<em class="math"><var class="var">n</var>/1</em>).
+</p>
+</dd>
+<dt><em class="dfn">real numbers</em></dt>
+<dd><p>The set of numbers that describes all possible positions along a
+one-dimensional line. This includes rationals as well as irrational
+numbers.
+</p>
+</dd>
+<dt><em class="dfn">complex numbers</em></dt>
+<dd><p>The set of numbers that describes all possible positions in a two
+dimensional space. This includes real as well as imaginary numbers
+(<em class="math"><var class="var">a</var>+<var class="var">b</var>i</em>, where <var class="var">a</var> is the <em class="dfn">real part</em>,
+<var class="var">b</var> is the <em class="dfn">imaginary part</em>, and <em class="math">i</em> is the square root of
+&minus;1.)
+</p></dd>
+</dl>
+
+<p>It is called a tower because each category &ldquo;sits on&rdquo; the one that
+follows it, in the sense that every integer is also a rational, every
+rational is also real, and every real number is also a complex number
+(but with zero imaginary part).
+</p>
+<p>In addition to the classification into integers, rationals, reals and
+complex numbers, Scheme also distinguishes between whether a number is
+represented exactly or not.  For example, the result of
+<em class="math">2*sin(pi/4)</em> is exactly <em class="math">2^(1/2)</em>, but Guile
+can represent neither <em class="math">pi/4</em> nor <em class="math">2^(1/2)</em> exactly.
+Instead, it stores an inexact approximation, using the C type
+<code class="code">double</code>.
+</p>
+<p>Guile can represent exact rationals of any magnitude, inexact
+rationals that fit into a C <code class="code">double</code>, and inexact complex numbers
+with <code class="code">double</code> real and imaginary parts.
+</p>
+<p>The <code class="code">number?</code> predicate may be applied to any Scheme value to
+discover whether the value is any of the supported numerical types.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-number_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">number?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-number_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fnumber_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_number_p</strong> <var class="def-var-arguments">(obj)</var><a class="copiable-link" href='#index-scm_005fnumber_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is any kind of number, else <code class="code">#f</code>.
+</p></dd></dl>
+
+<p>For example:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(number? 3)
+&rArr; #t
+
+(number? &quot;hello there!&quot;)
+&rArr; #f
+
+(define pi 3.141592654)
+(number? pi)
+&rArr; #t
+</pre></div>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fis_005fnumber"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_is_number</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-scm_005fis_005fnumber'> &para;</a></span></dt>
+<dd><p>This is equivalent to <code class="code">scm_is_true (scm_number_p (obj))</code>.
+</p></dd></dl>
+
+<p>The next few subsections document each of Guile&rsquo;s numerical data types
+in detail.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Integers.html">Integers</a>, Up: <a href="Numbers.html">Numerical data types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

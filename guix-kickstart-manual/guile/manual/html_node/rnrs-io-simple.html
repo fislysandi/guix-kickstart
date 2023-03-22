@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>rnrs io simple (Guile Reference Manual)</title>
+
+<meta name="description" content="rnrs io simple (Guile Reference Manual)">
+<meta name="keywords" content="rnrs io simple (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="R6RS-Standard-Libraries.html" rel="up" title="R6RS Standard Libraries">
+<link href="rnrs-files.html" rel="next" title="rnrs files">
+<link href="R6RS-File-Ports.html" rel="prev" title="R6RS File Ports">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="rnrs-io-simple">
+<div class="nav-panel">
+<p>
+Next: <a href="rnrs-files.html" accesskey="n" rel="next">rnrs files</a>, Previous: <a href="R6RS-File-Ports.html" accesskey="p" rel="prev">R6RS File Ports</a>, Up: <a href="R6RS-Standard-Libraries.html" accesskey="u" rel="up">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="rnrs-io-simple-1">7.6.2.18 rnrs io simple</h4>
+
+<p>The <code class="code">(rnrs io simple (6))</code> library provides convenience functions
+for performing textual I/O on ports.  This library also exports all of
+the condition types and associated procedures described in (see <a class="pxref" href="R6RS-I_002fO-Conditions.html">I/O Conditions</a>).  In the context of this section, when stating that a
+procedure behaves &ldquo;identically&rdquo; to the corresponding procedure in
+Guile&rsquo;s core library, this is modulo the behavior wrt. conditions: such
+procedures raise the appropriate R6RS conditions in case of error, but
+otherwise behave identically.
+</p>
+
+<blockquote class="quotation">
+<p><b class="b">Note:</b> There are still known issues regarding condition-correctness; some
+errors may still be thrown as native Guile exceptions instead of the
+appropriate R6RS conditions.
+</p></blockquote>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-eof_002dobject-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">eof-object</strong><a class="copiable-link" href='#index-eof_002dobject-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-eof_002dobject_003f-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">eof-object?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-eof_002dobject_003f-2'> &para;</a></span></dt>
+<dd><p>These procedures are identical to the ones provided by the <code class="code">(rnrs
+io ports (6))</code> library.  See <a class="xref" href="rnrs-io-ports.html">rnrs io ports</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-input_002dport_003f-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">input-port?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-input_002dport_003f-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-output_002dport_003f-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">output-port?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-output_002dport_003f-2'> &para;</a></span></dt>
+<dd><p>These procedures are identical to the ones provided by Guile&rsquo;s core
+library.  See <a class="xref" href="Ports.html">Ports</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-call_002dwith_002dinput_002dfile-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call-with-input-file</strong> <var class="def-var-arguments">filename proc</var><a class="copiable-link" href='#index-call_002dwith_002dinput_002dfile-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-call_002dwith_002doutput_002dfile-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call-with-output-file</strong> <var class="def-var-arguments">filename proc</var><a class="copiable-link" href='#index-call_002dwith_002doutput_002dfile-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-open_002dinput_002dfile-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-input-file</strong> <var class="def-var-arguments">filename</var><a class="copiable-link" href='#index-open_002dinput_002dfile-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-open_002doutput_002dfile-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-output-file</strong> <var class="def-var-arguments">filename</var><a class="copiable-link" href='#index-open_002doutput_002dfile-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-with_002dinput_002dfrom_002dfile-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">with-input-from-file</strong> <var class="def-var-arguments">filename thunk</var><a class="copiable-link" href='#index-with_002dinput_002dfrom_002dfile-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-with_002doutput_002dto_002dfile-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">with-output-to-file</strong> <var class="def-var-arguments">filename thunk</var><a class="copiable-link" href='#index-with_002doutput_002dto_002dfile-1'> &para;</a></span></dt>
+<dd><p>These procedures are identical to the ones provided by Guile&rsquo;s core
+library.  See <a class="xref" href="File-Ports.html">File Ports</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-close_002dinput_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">close-input-port</strong> <var class="def-var-arguments">input-port</var><a class="copiable-link" href='#index-close_002dinput_002dport'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-close_002doutput_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">close-output-port</strong> <var class="def-var-arguments">output-port</var><a class="copiable-link" href='#index-close_002doutput_002dport'> &para;</a></span></dt>
+<dd><p>Closes the given <var class="var">input-port</var> or <var class="var">output-port</var>.  These are
+legacy interfaces; just use <code class="code">close-port</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-peek_002dchar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">peek-char</strong><a class="copiable-link" href='#index-peek_002dchar-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-peek_002dchar-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">peek-char</strong> <var class="def-var-arguments">textual-input-port</var><a class="copiable-link" href='#index-peek_002dchar-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-read_002dchar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read-char</strong><a class="copiable-link" href='#index-read_002dchar-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-read_002dchar-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read-char</strong> <var class="def-var-arguments">textual-input-port</var><a class="copiable-link" href='#index-read_002dchar-2'> &para;</a></span></dt>
+<dd><p>These procedures are identical to the ones provided by Guile&rsquo;s core
+library.  See <a class="xref" href="Venerable-Port-Interfaces.html">Venerable Port Interfaces</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-read-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read</strong><a class="copiable-link" href='#index-read-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-read-3"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read</strong> <var class="def-var-arguments">textual-input-port</var><a class="copiable-link" href='#index-read-3'> &para;</a></span></dt>
+<dd><p>This procedure is identical to the one provided by Guile&rsquo;s core library.
+See <a class="xref" href="Scheme-Read.html">Reading Scheme Code</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-display-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">display</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-display-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-display-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">display</strong> <var class="def-var-arguments">obj textual-output-port</var><a class="copiable-link" href='#index-display-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-newline-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">newline</strong><a class="copiable-link" href='#index-newline-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-newline-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">newline</strong> <var class="def-var-arguments">textual-output-port</var><a class="copiable-link" href='#index-newline-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-write-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">write</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-write-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-write-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">write</strong> <var class="def-var-arguments">obj textual-output-port</var><a class="copiable-link" href='#index-write-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-write_002dchar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">write-char</strong> <var class="def-var-arguments">char</var><a class="copiable-link" href='#index-write_002dchar-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-write_002dchar-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">write-char</strong> <var class="def-var-arguments">char textual-output-port</var><a class="copiable-link" href='#index-write_002dchar-2'> &para;</a></span></dt>
+<dd><p>These procedures are identical to the ones provided by Guile&rsquo;s core
+library.  See <a class="xref" href="Venerable-Port-Interfaces.html">Venerable Port Interfaces</a>, and See <a class="xref" href="Scheme-Write.html">Writing Scheme Values</a>, for
+documentation.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="rnrs-files.html">rnrs files</a>, Previous: <a href="R6RS-File-Ports.html">R6RS File Ports</a>, Up: <a href="R6RS-Standard-Libraries.html">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

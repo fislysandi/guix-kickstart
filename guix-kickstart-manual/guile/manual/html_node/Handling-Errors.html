@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Handling Errors (Guile Reference Manual)</title>
+
+<meta name="description" content="Handling Errors (Guile Reference Manual)">
+<meta name="keywords" content="Handling Errors (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Control-Mechanisms.html" rel="up" title="Control Mechanisms">
+<link href="Continuation-Barriers.html" rel="next" title="Continuation Barriers">
+<link href="Parameters.html" rel="prev" title="Parameters">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Handling-Errors">
+<div class="nav-panel">
+<p>
+Next: <a href="Continuation-Barriers.html" accesskey="n" rel="next">Continuation Barriers</a>, Previous: <a href="Parameters.html" accesskey="p" rel="prev">Parameters</a>, Up: <a href="Control-Mechanisms.html" accesskey="u" rel="up">Controlling the Flow of Program Execution</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="How-to-Handle-Errors">6.11.13 How to Handle Errors</h4>
+
+<p>Guile is currently in a transition from its historical <code class="code">catch</code> and
+<code class="code">throw</code> error handling and signaling operators to the new
+structured exception facility; See <a class="xref" href="Exceptions.html">Exceptions</a>.  However in the
+meantime, here is some documentation on errors and the older
+<code class="code">catch</code> and <code class="code">throw</code> interface.
+</p>
+<p>Errors are always thrown with a <var class="var">key</var> and four arguments:
+</p>
+<ul class="itemize mark-bullet">
+<li><var class="var">key</var>: a symbol which indicates the type of error.  The symbols used
+by libguile are listed below.
+
+</li><li><var class="var">subr</var>: the name of the procedure from which the error is thrown, or
+<code class="code">#f</code>.
+
+</li><li><var class="var">message</var>: a string (possibly language and system dependent)
+describing the error.  The tokens <code class="code">~A</code> and <code class="code">~S</code> can be
+embedded within the message: they will be replaced with members of the
+<var class="var">args</var> list when the message is printed.  <code class="code">~A</code> indicates an
+argument printed using <code class="code">display</code>, while <code class="code">~S</code> indicates an
+argument printed using <code class="code">write</code>.  <var class="var">message</var> can also be
+<code class="code">#f</code>, to allow it to be derived from the <var class="var">key</var> by the error
+handler (may be useful if the <var class="var">key</var> is to be thrown from both C and
+Scheme).
+
+</li><li><var class="var">args</var>: a list of arguments to be used to expand <code class="code">~A</code> and
+<code class="code">~S</code> tokens in <var class="var">message</var>.  Can also be <code class="code">#f</code> if no
+arguments are required.
+
+</li><li><var class="var">rest</var>: a list of any additional objects required. e.g., when the
+key is <code class="code">'system-error</code>, this contains the C errno value.  Can also
+be <code class="code">#f</code> if no additional objects are required.
+</li></ul>
+
+<p>In addition to <code class="code">catch</code> and <code class="code">throw</code>, the following Scheme
+facilities are available:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-display_002derror"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">display-error</strong> <var class="def-var-arguments">frame port subr message args rest</var><a class="copiable-link" href='#index-display_002derror'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fdisplay_005ferror"><span class="category-def">C Function: </span><span><strong class="def-name">scm_display_error</strong> <var class="def-var-arguments">(frame, port, subr, message, args, rest)</var><a class="copiable-link" href='#index-scm_005fdisplay_005ferror'> &para;</a></span></dt>
+<dd><p>Display an error message to the output port <var class="var">port</var>.
+<var class="var">frame</var> is the frame in which the error occurred, <var class="var">subr</var> is
+the name of the procedure in which the error occurred and
+<var class="var">message</var> is the actual error message, which may contain
+formatting instructions. These will format the arguments in
+the list <var class="var">args</var> accordingly.  <var class="var">rest</var> is currently
+ignored.
+</p></dd></dl>
+
+<p>The following are the error keys defined by libguile and the situations
+in which they are used:
+</p>
+<ul class="itemize mark-bullet">
+<li><a class="index-entry-id" id="index-error_002dsignal"></a>
+<code class="code">error-signal</code>: thrown after receiving an unhandled fatal signal
+such as SIGSEGV, SIGBUS, SIGFPE etc.  The <var class="var">rest</var> argument in the throw
+contains the coded signal number (at present this is not the same as the
+usual Unix signal number).
+
+</li><li><a class="index-entry-id" id="index-system_002derror"></a>
+<code class="code">system-error</code>: thrown after the operating system indicates an
+error condition.  The <var class="var">rest</var> argument in the throw contains the
+errno value.
+
+</li><li><a class="index-entry-id" id="index-numerical_002doverflow"></a>
+<code class="code">numerical-overflow</code>: numerical overflow.
+
+</li><li><a class="index-entry-id" id="index-out_002dof_002drange"></a>
+<code class="code">out-of-range</code>: the arguments to a procedure do not fall within the
+accepted domain.
+
+</li><li><a class="index-entry-id" id="index-wrong_002dtype_002darg"></a>
+<code class="code">wrong-type-arg</code>: an argument to a procedure has the wrong type.
+
+</li><li><a class="index-entry-id" id="index-wrong_002dnumber_002dof_002dargs"></a>
+<code class="code">wrong-number-of-args</code>: a procedure was called with the wrong number
+of arguments.
+
+</li><li><a class="index-entry-id" id="index-memory_002dallocation_002derror"></a>
+<code class="code">memory-allocation-error</code>: memory allocation error.
+
+</li><li><a class="index-entry-id" id="index-stack_002doverflow"></a>
+<code class="code">stack-overflow</code>: stack overflow error.
+
+</li><li><a class="index-entry-id" id="index-regular_002dexpression_002dsyntax"></a>
+<code class="code">regular-expression-syntax</code>: errors generated by the regular
+expression library.
+
+</li><li><a class="index-entry-id" id="index-misc_002derror"></a>
+<code class="code">misc-error</code>: other errors.
+</li></ul>
+
+
+<ul class="mini-toc">
+<li><a href="#C-Support" accesskey="1">C Support</a></li>
+<li><a href="#Signalling-Type-Errors" accesskey="2">Signalling Type Errors</a></li>
+</ul>
+<div class="subsubsection-level-extent" id="C-Support">
+<h4 class="subsubsection">6.11.13.1 C Support</h4>
+
+<p>In the following C functions, <var class="var">SUBR</var> and <var class="var">MESSAGE</var> parameters
+can be <code class="code">NULL</code> to give the effect of <code class="code">#f</code> described above.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005ferror"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_error</strong> <code class="def-code-arguments">(SCM <var class="var">key</var>, const char *<var class="var">subr</var>, const char *<var class="var">message</var>, SCM <var class="var">args</var>, SCM <var class="var">rest</var>)</code><a class="copiable-link" href='#index-scm_005ferror'> &para;</a></span></dt>
+<dd><p>Throw an error, as per <code class="code">scm-error</code> (see <a class="pxref" href="Error-Reporting.html">Procedures for Signaling Errors</a>).
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fsyserror"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_syserror</strong> <code class="def-code-arguments">(const char *<var class="var">subr</var>)</code><a class="copiable-link" href='#index-scm_005fsyserror'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fsyserror_005fmsg"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_syserror_msg</strong> <code class="def-code-arguments">(const char *<var class="var">subr</var>, const char *<var class="var">message</var>, SCM <var class="var">args</var>)</code><a class="copiable-link" href='#index-scm_005fsyserror_005fmsg'> &para;</a></span></dt>
+<dd><p>Throw an error with key <code class="code">system-error</code> and supply <code class="code">errno</code> in
+the <var class="var">rest</var> argument.  For <code class="code">scm_syserror</code> the message is
+generated using <code class="code">strerror</code>.
+</p>
+<p>Care should be taken that any code in between the failing operation
+and the call to these routines doesn&rsquo;t change <code class="code">errno</code>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fnum_005foverflow"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_num_overflow</strong> <code class="def-code-arguments">(const char *<var class="var">subr</var>)</code><a class="copiable-link" href='#index-scm_005fnum_005foverflow'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fout_005fof_005frange"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_out_of_range</strong> <code class="def-code-arguments">(const char *<var class="var">subr</var>, SCM <var class="var">bad_value</var>)</code><a class="copiable-link" href='#index-scm_005fout_005fof_005frange'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fwrong_005fnum_005fargs"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_wrong_num_args</strong> <code class="def-code-arguments">(SCM <var class="var">proc</var>)</code><a class="copiable-link" href='#index-scm_005fwrong_005fnum_005fargs'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fwrong_005ftype_005farg"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_wrong_type_arg</strong> <code class="def-code-arguments">(const char *<var class="var">subr</var>, int <var class="var">argnum</var>, SCM <var class="var">bad_value</var>)</code><a class="copiable-link" href='#index-scm_005fwrong_005ftype_005farg'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fwrong_005ftype_005farg_005fmsg"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_wrong_type_arg_msg</strong> <code class="def-code-arguments">(const char *<var class="var">subr</var>, int <var class="var">argnum</var>, SCM <var class="var">bad_value</var>, const char *<var class="var">expected</var>)</code><a class="copiable-link" href='#index-scm_005fwrong_005ftype_005farg_005fmsg'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fmisc_005ferror"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_misc_error</strong> <code class="def-code-arguments">(const char *<var class="var">subr</var>, const char *<var class="var">message</var>, SCM <var class="var">args</var>)</code><a class="copiable-link" href='#index-scm_005fmisc_005ferror'> &para;</a></span></dt>
+<dd><p>Throw an error with the various keys described above.
+</p>
+<p>In <code class="code">scm_wrong_num_args</code>, <var class="var">proc</var> should be a Scheme symbol
+which is the name of the procedure incorrectly invoked.  The other
+routines take the name of the invoked procedure as a C string.
+</p>
+<p>In <code class="code">scm_wrong_type_arg_msg</code>, <var class="var">expected</var> is a C string
+describing the type of argument that was expected.
+</p>
+<p>In <code class="code">scm_misc_error</code>, <var class="var">message</var> is the error message string,
+possibly containing <code class="code">simple-format</code> escapes (see <a class="pxref" href="Simple-Output.html">Simple Textual Output</a>), and the corresponding arguments in the <var class="var">args</var> list.
+</p></dd></dl>
+
+
+</div>
+<div class="subsubsection-level-extent" id="Signalling-Type-Errors">
+<h4 class="subsubsection">6.11.13.2 Signalling Type Errors</h4>
+
+<p>Every function visible at the Scheme level should aggressively check the
+types of its arguments, to avoid misinterpreting a value, and perhaps
+causing a segmentation fault.  Guile provides some macros to make this
+easier.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fASSERT"><span class="category-def">Macro: </span><span><code class="def-type">void</code> <strong class="def-name">SCM_ASSERT</strong> <code class="def-code-arguments">(int <var class="var">test</var>, SCM <var class="var">obj</var>, unsigned int <var class="var">position</var>, const char *<var class="var">subr</var>)</code><a class="copiable-link" href='#index-SCM_005fASSERT'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fASSERT_005fTYPE"><span class="category-def">Macro: </span><span><code class="def-type">void</code> <strong class="def-name">SCM_ASSERT_TYPE</strong> <code class="def-code-arguments">(int <var class="var">test</var>, SCM <var class="var">obj</var>, unsigned int <var class="var">position</var>, const char *<var class="var">subr</var>, const char *<var class="var">expected</var>)</code><a class="copiable-link" href='#index-SCM_005fASSERT_005fTYPE'> &para;</a></span></dt>
+<dd><p>If <var class="var">test</var> is zero, signal a &ldquo;wrong type argument&rdquo; error,
+attributed to the subroutine named <var class="var">subr</var>, operating on the value
+<var class="var">obj</var>, which is the <var class="var">position</var>&rsquo;th argument of <var class="var">subr</var>.
+</p>
+<p>In <code class="code">SCM_ASSERT_TYPE</code>, <var class="var">expected</var> is a C string describing the
+type of argument that was expected.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fARG1"><span class="category-def">Macro: </span><span><code class="def-type">int</code> <strong class="def-name">SCM_ARG1</strong><a class="copiable-link" href='#index-SCM_005fARG1'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fARG2"><span class="category-def">Macro: </span><span><code class="def-type">int</code> <strong class="def-name">SCM_ARG2</strong><a class="copiable-link" href='#index-SCM_005fARG2'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fARG3"><span class="category-def">Macro: </span><span><code class="def-type">int</code> <strong class="def-name">SCM_ARG3</strong><a class="copiable-link" href='#index-SCM_005fARG3'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fARG4"><span class="category-def">Macro: </span><span><code class="def-type">int</code> <strong class="def-name">SCM_ARG4</strong><a class="copiable-link" href='#index-SCM_005fARG4'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fARG5"><span class="category-def">Macro: </span><span><code class="def-type">int</code> <strong class="def-name">SCM_ARG5</strong><a class="copiable-link" href='#index-SCM_005fARG5'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fARG6"><span class="category-def">Macro: </span><span><code class="def-type">int</code> <strong class="def-name">SCM_ARG6</strong><a class="copiable-link" href='#index-SCM_005fARG6'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fARG7"><span class="category-def">Macro: </span><span><code class="def-type">int</code> <strong class="def-name">SCM_ARG7</strong><a class="copiable-link" href='#index-SCM_005fARG7'> &para;</a></span></dt>
+<dd><p>One of the above values can be used for <var class="var">position</var> to indicate the
+number of the argument of <var class="var">subr</var> which is being checked.
+Alternatively, a positive integer number can be used, which allows to
+check arguments after the seventh.  However, for parameter numbers up to
+seven it is preferable to use <code class="code">SCM_ARGN</code> instead of the
+corresponding raw number, since it will make the code easier to
+understand.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fARGn"><span class="category-def">Macro: </span><span><code class="def-type">int</code> <strong class="def-name">SCM_ARGn</strong><a class="copiable-link" href='#index-SCM_005fARGn'> &para;</a></span></dt>
+<dd><p>Passing a value of zero or <code class="code">SCM_ARGn</code> for <var class="var">position</var> allows to
+leave it unspecified which argument&rsquo;s type is incorrect.  Again,
+<code class="code">SCM_ARGn</code> should be preferred over a raw zero constant.
+</p></dd></dl>
+
+</div>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Continuation-Barriers.html">Continuation Barriers</a>, Previous: <a href="Parameters.html">Parameters</a>, Up: <a href="Control-Mechanisms.html">Controlling the Flow of Program Execution</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

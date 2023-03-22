@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Initialization (Guile Reference Manual)</title>
+
+<meta name="description" content="Initialization (Guile Reference Manual)">
+<meta name="keywords" content="Initialization (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="API-Reference.html" rel="up" title="API Reference">
+<link href="Snarfing-Macros.html" rel="next" title="Snarfing Macros">
+<link href="The-SCM-Type.html" rel="prev" title="The SCM Type">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Initialization">
+<div class="nav-panel">
+<p>
+Next: <a href="Snarfing-Macros.html" accesskey="n" rel="next">Snarfing Macros</a>, Previous: <a href="The-SCM-Type.html" accesskey="p" rel="prev">The SCM Type</a>, Up: <a href="API-Reference.html" accesskey="u" rel="up">API Reference</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Initializing-Guile">6.4 Initializing Guile</h3>
+<a class="index-entry-id" id="index-Initializing-Guile"></a>
+
+<p>Each thread that wants to use functions from the Guile API needs to
+put itself into guile mode with either <code class="code">scm_with_guile</code> or
+<code class="code">scm_init_guile</code>.  The global state of Guile is initialized
+automatically when the first thread enters guile mode.
+</p>
+<p>When a thread wants to block outside of a Guile API function, it
+should leave guile mode temporarily with <code class="code">scm_without_guile</code>,
+See <a class="xref" href="Blocking.html">Blocking in Guile Mode</a>.
+</p>
+<p>Threads that are created by <code class="code">call-with-new-thread</code> or
+<code class="code">scm_spawn_thread</code> start out in guile mode so you don&rsquo;t need to
+initialize them.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fwith_005fguile"><span class="category-def">C Function: </span><span><code class="def-type">void *</code> <strong class="def-name">scm_with_guile</strong> <code class="def-code-arguments">(void *(*func)(void *), void *data)</code><a class="copiable-link" href='#index-scm_005fwith_005fguile'> &para;</a></span></dt>
+<dd><p>Call <var class="var">func</var>, passing it <var class="var">data</var> and return what <var class="var">func</var>
+returns.  While <var class="var">func</var> is running, the current thread is in guile
+mode and can thus use the Guile API.
+</p>
+<p>When <code class="code">scm_with_guile</code> is called from guile mode, the thread remains
+in guile mode when <code class="code">scm_with_guile</code> returns.
+</p>
+<p>Otherwise, it puts the current thread into guile mode and, if needed,
+gives it a Scheme representation that is contained in the list returned
+by <code class="code">all-threads</code>, for example.  This Scheme representation is not
+removed when <code class="code">scm_with_guile</code> returns so that a given thread is
+always represented by the same Scheme value during its lifetime, if at
+all.
+</p>
+<p>When this is the first thread that enters guile mode, the global state
+of Guile is initialized before calling <code class="code">func</code>.
+</p>
+<p>The function <var class="var">func</var> is called via
+<code class="code">scm_with_continuation_barrier</code>; thus, <code class="code">scm_with_guile</code>
+returns exactly once.
+</p>
+<p>When <code class="code">scm_with_guile</code> returns, the thread is no longer in guile
+mode (except when <code class="code">scm_with_guile</code> was called from guile mode, see
+above).  Thus, only <code class="code">func</code> can store <code class="code">SCM</code> variables on the
+stack and be sure that they are protected from the garbage collector.
+See <code class="code">scm_init_guile</code> for another approach at initializing Guile
+that does not have this restriction.
+</p>
+<p>It is OK to call <code class="code">scm_with_guile</code> while a thread has temporarily
+left guile mode via <code class="code">scm_without_guile</code>.  It will then simply
+temporarily enter guile mode again.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005finit_005fguile"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_init_guile</strong> <code class="def-code-arguments">()</code><a class="copiable-link" href='#index-scm_005finit_005fguile'> &para;</a></span></dt>
+<dd><p>Arrange things so that all of the code in the current thread executes as
+if from within a call to <code class="code">scm_with_guile</code>.  That is, all functions
+called by the current thread can assume that <code class="code">SCM</code> values on their
+stack frames are protected from the garbage collector (except when the
+thread has explicitly left guile mode, of course).
+</p>
+<p>When <code class="code">scm_init_guile</code> is called from a thread that already has been
+in guile mode once, nothing happens.  This behavior matters when you
+call <code class="code">scm_init_guile</code> while the thread has only temporarily left
+guile mode: in that case the thread will not be in guile mode after
+<code class="code">scm_init_guile</code> returns.  Thus, you should not use
+<code class="code">scm_init_guile</code> in such a scenario.
+</p>
+<p>When a uncaught throw happens in a thread that has been put into guile
+mode via <code class="code">scm_init_guile</code>, a short message is printed to the
+current error port and the thread is exited via <code class="code">scm_pthread_exit
+(NULL)</code>.  No restrictions are placed on continuations.
+</p>
+<p>The function <code class="code">scm_init_guile</code> might not be available on all
+platforms since it requires some stack-bounds-finding magic that might
+not have been ported to all platforms that Guile runs on.  Thus, if you
+can, it is better to use <code class="code">scm_with_guile</code> or its variation
+<code class="code">scm_boot_guile</code> instead of this function.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fboot_005fguile"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_boot_guile</strong> <code class="def-code-arguments">(int <var class="var">argc</var>, char **<var class="var">argv</var>, void (*<var class="var">main_func</var>) (void *<var class="var">data</var>, int <var class="var">argc</var>, char **<var class="var">argv</var>), void *<var class="var">data</var>)</code><a class="copiable-link" href='#index-scm_005fboot_005fguile'> &para;</a></span></dt>
+<dd><p>Enter guile mode as with <code class="code">scm_with_guile</code> and call <var class="var">main_func</var>,
+passing it <var class="var">data</var>, <var class="var">argc</var>, and <var class="var">argv</var> as indicated.  When
+<var class="var">main_func</var> returns, <code class="code">scm_boot_guile</code> calls <code class="code">exit (0)</code>;
+<code class="code">scm_boot_guile</code> never returns.  If you want some other exit value,
+have <var class="var">main_func</var> call <code class="code">exit</code> itself.  If you don&rsquo;t want to exit
+at all, use <code class="code">scm_with_guile</code> instead of <code class="code">scm_boot_guile</code>.
+</p>
+<p>The function <code class="code">scm_boot_guile</code> arranges for the Scheme
+<code class="code">command-line</code> function to return the strings given by <var class="var">argc</var>
+and <var class="var">argv</var>.  If <var class="var">main_func</var> modifies <var class="var">argc</var> or <var class="var">argv</var>,
+it should call <code class="code">scm_set_program_arguments</code> with the final list, so
+Scheme code will know which arguments have been processed
+(see <a class="pxref" href="Runtime-Environment.html">Runtime Environment</a>).
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fshell"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_shell</strong> <code class="def-code-arguments">(int <var class="var">argc</var>, char **<var class="var">argv</var>)</code><a class="copiable-link" href='#index-scm_005fshell'> &para;</a></span></dt>
+<dd><p>Process command-line arguments in the manner of the <code class="code">guile</code>
+executable.  This includes loading the normal Guile initialization
+files, interacting with the user or running any scripts or expressions
+specified by <code class="code">-s</code> or <code class="code">-e</code> options, and then exiting.
+See <a class="xref" href="Invoking-Guile.html">Invoking Guile</a>, for more details.
+</p>
+<p>Since this function does not return, you must do all
+application-specific initialization before calling this function.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Snarfing-Macros.html">Snarfing Macros</a>, Previous: <a href="The-SCM-Type.html">The SCM Type</a>, Up: <a href="API-Reference.html">API Reference</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

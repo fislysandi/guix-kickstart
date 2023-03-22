@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Conservative GC (Guile Reference Manual)</title>
+
+<meta name="description" content="Conservative GC (Guile Reference Manual)">
+<meta name="keywords" content="Conservative GC (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Data-Representation.html" rel="up" title="Data Representation">
+<link href="The-SCM-Type-in-Guile.html" rel="next" title="The SCM Type in Guile">
+<link href="Cheaper-Pairs.html" rel="prev" title="Cheaper Pairs">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Conservative-GC">
+<div class="nav-panel">
+<p>
+Next: <a href="The-SCM-Type-in-Guile.html" accesskey="n" rel="next">The SCM Type in Guile</a>, Previous: <a href="Cheaper-Pairs.html" accesskey="p" rel="prev">Cheaper Pairs</a>, Up: <a href="Data-Representation.html" accesskey="u" rel="up">Data Representation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Conservative-Garbage-Collection">9.2.4 Conservative Garbage Collection</h4>
+
+<p>Aside from the latent typing, the major source of constraints on a
+Scheme implementation&rsquo;s data representation is the garbage collector.
+The collector must be able to traverse every live object in the heap, to
+determine which objects are not live, and thus collectable.
+</p>
+<p>There are many ways to implement this. Guile&rsquo;s garbage collection is
+built on a library, the Boehm-Demers-Weiser conservative garbage
+collector (BDW-GC). The BDW-GC &ldquo;just works&rdquo;, for the most part. But
+since it is interesting to know how these things work, we include here a
+high-level description of what the BDW-GC does.
+</p>
+<p>Garbage collection has two logical phases: a <em class="dfn">mark</em> phase, in which
+the set of live objects is enumerated, and a <em class="dfn">sweep</em> phase, in which
+objects not traversed in the mark phase are collected. Correct
+functioning of the collector depends on being able to traverse the
+entire set of live objects.
+</p>
+<p>In the mark phase, the collector scans the system&rsquo;s global variables and
+the local variables on the stack to determine which objects are
+immediately accessible by the C code. It then scans those objects to
+find the objects they point to, and so on. The collector logically sets
+a <em class="dfn">mark bit</em> on each object it finds, so each object is traversed
+only once.
+</p>
+<p>When the collector can find no unmarked objects pointed to by marked
+objects, it assumes that any objects that are still unmarked will never
+be used by the program (since there is no path of dereferences from any
+global or local variable that reaches them) and deallocates them.
+</p>
+<p>In the above paragraphs, we did not specify how the garbage collector
+finds the global and local variables; as usual, there are many different
+approaches.  Frequently, the programmer must maintain a list of pointers
+to all global variables that refer to the heap, and another list
+(adjusted upon entry to and exit from each function) of local variables,
+for the collector&rsquo;s benefit.
+</p>
+<p>The list of global variables is usually not too difficult to maintain,
+since global variables are relatively rare. However, an explicitly
+maintained list of local variables (in the author&rsquo;s personal experience)
+is a nightmare to maintain. Thus, the BDW-GC uses a technique called
+<em class="dfn">conservative garbage collection</em>, to make the local variable list
+unnecessary.
+</p>
+<p>The trick to conservative collection is to treat the C stack as an
+ordinary range of memory, and assume that <em class="emph">every</em> word on the C
+stack is a pointer into the heap.  Thus, the collector marks all objects
+whose addresses appear anywhere in the C stack, without knowing for sure
+how that word is meant to be interpreted.
+</p>
+<p>In addition to the stack, the BDW-GC will also scan static data
+sections. This means that global variables are also scanned when looking
+for live Scheme objects.
+</p>
+<p>Obviously, such a system will occasionally retain objects that are
+actually garbage, and should be freed.  In practice, this is not a
+problem, as the set of conservatively-scanned locations is fixed; the
+Scheme stack is maintained apart from the C stack, and is scanned
+precisely (as opposed to conservatively).  The GC-managed heap is also
+partitioned into parts that can contain pointers (such as vectors) and
+parts that can&rsquo;t (such as bytevectors), limiting the potential for
+confusing a raw integer with a pointer to a live object.
+</p>
+<p>Interested readers should see the BDW-GC web page at
+<a class="uref" href="http://www.hboehm.info/gc/">http://www.hboehm.info/gc/</a>, for more information on conservative
+GC in general and the BDW-GC implementation in particular.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="The-SCM-Type-in-Guile.html">The SCM Type in Guile</a>, Previous: <a href="Cheaper-Pairs.html">Cheaper Pairs</a>, Up: <a href="Data-Representation.html">Data Representation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

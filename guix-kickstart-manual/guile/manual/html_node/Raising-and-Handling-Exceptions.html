@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Raising and Handling Exceptions (Guile Reference Manual)</title>
+
+<meta name="description" content="Raising and Handling Exceptions (Guile Reference Manual)">
+<meta name="keywords" content="Raising and Handling Exceptions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Exceptions.html" rel="up" title="Exceptions">
+<link href="Throw-and-Catch.html" rel="next" title="Throw and Catch">
+<link href="Exception-Objects.html" rel="prev" title="Exception Objects">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Raising-and-Handling-Exceptions">
+<div class="nav-panel">
+<p>
+Next: <a href="Throw-and-Catch.html" accesskey="n" rel="next">Throw and Catch</a>, Previous: <a href="Exception-Objects.html" accesskey="p" rel="prev">Exception Objects</a>, Up: <a href="Exceptions.html" accesskey="u" rel="up">Exceptions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Raising-and-Handling-Exceptions-1">6.11.8.2 Raising and Handling Exceptions</h4>
+
+<p>An exception object describes an exceptional situation.  To bring that
+description to the attention of the user or to handle the situation
+programmatically, the first step is to <em class="dfn">raise</em> the exception.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-raise_002dexception"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">raise-exception</strong> <var class="def-var-arguments">obj [#:continuable=#f]</var><a class="copiable-link" href='#index-raise_002dexception'> &para;</a></span></dt>
+<dd><p>Raise an exception by invoking the current exception handler on
+<var class="var">obj</var>. The handler is called with a continuation whose dynamic
+environment is that of the call to <code class="code">raise</code>, except that the current
+exception handler is the one that was in place when the handler being
+called was installed.
+</p>
+<p>If <var class="var">continuable?</var> is true, the handler is invoked in tail position
+relative to the <code class="code">raise-exception</code> call.  Otherwise if the handler
+returns, a non-continuable exception of type <code class="code">&amp;non-continuable</code> is
+raised in the same dynamic environment as the handler.
+</p></dd></dl>
+
+<p>As the above description notes, Guile has a notion of a <em class="dfn">current
+exception handler</em>.  At the REPL, this exception handler may enter a
+recursive debugger; in a standalone program, it may simply print a
+representation of the error and exit.
+</p>
+<p>To establish an exception handler within the dynamic extent of a call,
+use <code class="code">with-exception-handler</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-with_002dexception_002dhandler"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">with-exception-handler</strong> <var class="def-var-arguments">handler thunk        [#:unwind?=#f] [#:unwind-for-type=#t]</var><a class="copiable-link" href='#index-with_002dexception_002dhandler'> &para;</a></span></dt>
+<dd><p>Establish <var class="var">handler</var>, a procedure of one argument, as the current
+exception handler during the dynamic extent of invoking <var class="var">thunk</var>.
+</p>
+<p>If <code class="code">raise-exception</code> is called during the dynamic extent of
+invoking <var class="var">thunk</var>, <var class="var">handler</var> will be invoked on the argument of
+<code class="code">raise-exception</code>.
+</p></dd></dl>
+
+<p>There are two kinds of exception handlers: unwinding and non-unwinding.
+</p>
+<p>By default, exception handlers are non-unwinding.  Unless
+<code class="code">with-exception-handler</code> was invoked with <code class="code">#:unwind? #t</code>,
+exception handlers are invoked within the continuation of the error,
+without unwinding the stack.  The dynamic environment of the handler
+call will be that of the <code class="code">raise-exception</code> call, with the
+difference that the current exception handler will be &ldquo;unwound&rdquo; to the
+\&quot;outer\&quot; handler (the one that was in place when the corresponding
+<code class="code">with-exception-handler</code> was called).
+</p>
+<p>However, it&rsquo;s often the case that one would like to handle an exception
+by unwinding the computation to an earlier state and running the error
+handler there.  After all, unless the <code class="code">raise-exception</code> call is
+continuable, the exception handler needs to abort the continuation.  To
+support this use case, if <code class="code">with-exception-handler</code> was invoked with
+<code class="code">#:unwind? #t</code> is true, <code class="code">raise-exception</code> will first unwind
+the stack by invoking an <em class="dfn">escape continuation</em> (see <a class="pxref" href="Prompt-Primitives.html"><code class="code">call/ec</code></a>), and then invoke the handler with the
+continuation of the <code class="code">with-exception-handler</code> call.
+</p>
+<p>Finally, one more wrinkle: for unwinding exception handlers, it can be
+useful to Guile if it can determine whether an exception handler would
+indeed handle a particular exception or not.  This is especially the
+case for exceptions raised in resource-exhaustion scenarios like
+<code class="code">stack-overflow</code> or <code class="code">out-of-memory</code>, where you want to
+immediately shrink resource use before recovering.  See <a class="xref" href="Stack-Overflow.html">Stack Overflow</a>.  For this purpose, the <code class="code">#:unwind-for-type</code> keyword
+argument allows users to specify the kind of exception handled by an
+exception handler; if <code class="code">#t</code>, all exceptions will be handled; if an
+exception type object, only exceptions of that type will be handled;
+otherwise if a symbol, only that exceptions with the given
+<code class="code">exception-kind</code> will be handled.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Throw-and-Catch.html">Throw and Catch</a>, Previous: <a href="Exception-Objects.html">Exception Objects</a>, Up: <a href="Exceptions.html">Exceptions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

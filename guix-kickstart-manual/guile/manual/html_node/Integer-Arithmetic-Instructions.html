@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Integer Arithmetic Instructions (Guile Reference Manual)</title>
+
+<meta name="description" content="Integer Arithmetic Instructions (Guile Reference Manual)">
+<meta name="keywords" content="Integer Arithmetic Instructions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Instruction-Set.html" rel="up" title="Instruction Set">
+<link href="Floating_002dPoint-Arithmetic-Instructions.html" rel="next" title="Floating-Point Arithmetic Instructions">
+<link href="Tagging-and-Untagging-Instructions.html" rel="prev" title="Tagging and Untagging Instructions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Integer-Arithmetic-Instructions">
+<div class="nav-panel">
+<p>
+Next: <a href="Floating_002dPoint-Arithmetic-Instructions.html" accesskey="n" rel="next">Floating-Point Arithmetic Instructions</a>, Previous: <a href="Tagging-and-Untagging-Instructions.html" accesskey="p" rel="prev">Tagging and Untagging Instructions</a>, Up: <a href="Instruction-Set.html" accesskey="u" rel="up">Instruction Set</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Integer-Arithmetic-Instructions-1">9.3.7.12 Integer Arithmetic Instructions</h4>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-uadd"><span class="category-def">Instruction: </span><span><strong class="def-name">uadd</strong> <code class="def-code-arguments">s8:<var class="var">dst</var> s8:<var class="var">a</var> s8:<var class="var">b</var></code><a class="copiable-link" href='#index-uadd'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-uadd_002fimmediate"><span class="category-def">Instruction: </span><span><strong class="def-name">uadd/immediate</strong> <code class="def-code-arguments">s8:<var class="var">dst</var> s8:<var class="var">a</var> c8:<var class="var">b</var></code><a class="copiable-link" href='#index-uadd_002fimmediate'> &para;</a></span></dt>
+<dd><p>Add the <code class="code">u64</code> values <var class="var">a</var> and <var class="var">b</var>, and store the <code class="code">u64</code>
+result to <var class="var">dst</var>.  Overflow will wrap.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-usub"><span class="category-def">Instruction: </span><span><strong class="def-name">usub</strong> <code class="def-code-arguments">s8:<var class="var">dst</var> s8:<var class="var">a</var> s8:<var class="var">b</var></code><a class="copiable-link" href='#index-usub'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-usub_002fimmediate"><span class="category-def">Instruction: </span><span><strong class="def-name">usub/immediate</strong> <code class="def-code-arguments">s8:<var class="var">dst</var> s8:<var class="var">a</var> c8:<var class="var">b</var></code><a class="copiable-link" href='#index-usub_002fimmediate'> &para;</a></span></dt>
+<dd><p>Subtract the <code class="code">u64</code> value <var class="var">b</var> from <var class="var">a</var>, and store the
+<code class="code">u64</code> result to <var class="var">dst</var>.  Underflow will wrap.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-umul"><span class="category-def">Instruction: </span><span><strong class="def-name">umul</strong> <code class="def-code-arguments">s8:<var class="var">dst</var> s8:<var class="var">a</var> s8:<var class="var">b</var></code><a class="copiable-link" href='#index-umul'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-umul_002fimmediate"><span class="category-def">Instruction: </span><span><strong class="def-name">umul/immediate</strong> <code class="def-code-arguments">s8:<var class="var">dst</var> s8:<var class="var">a</var> c8:<var class="var">b</var></code><a class="copiable-link" href='#index-umul_002fimmediate'> &para;</a></span></dt>
+<dd><p>Multiply the <code class="code">u64</code> values <var class="var">a</var> and <var class="var">b</var>, and store the
+<code class="code">u64</code> result to <var class="var">dst</var>.  Overflow will wrap.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-ulogand"><span class="category-def">Instruction: </span><span><strong class="def-name">ulogand</strong> <code class="def-code-arguments">s8:<var class="var">dst</var> s8:<var class="var">a</var> s8:<var class="var">b</var></code><a class="copiable-link" href='#index-ulogand'> &para;</a></span></dt>
+<dd><p>Place the bitwise <code class="code">and</code> of the <code class="code">u64</code> values <var class="var">a</var> and
+<var class="var">b</var> into the <code class="code">u64</code> local <var class="var">dst</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-ulogior"><span class="category-def">Instruction: </span><span><strong class="def-name">ulogior</strong> <code class="def-code-arguments">s8:<var class="var">dst</var> s8:<var class="var">a</var> s8:<var class="var">b</var></code><a class="copiable-link" href='#index-ulogior'> &para;</a></span></dt>
+<dd><p>Place the bitwise inclusive <code class="code">or</code> of the <code class="code">u64</code> values <var class="var">a</var>
+and <var class="var">b</var> into the <code class="code">u64</code> local <var class="var">dst</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-ulogxor"><span class="category-def">Instruction: </span><span><strong class="def-name">ulogxor</strong> <code class="def-code-arguments">s8:<var class="var">dst</var> s8:<var class="var">a</var> s8:<var class="var">b</var></code><a class="copiable-link" href='#index-ulogxor'> &para;</a></span></dt>
+<dd><p>Place the bitwise exclusive <code class="code">or</code> of the <code class="code">u64</code> values <var class="var">a</var>
+and <var class="var">b</var> into the <code class="code">u64</code> local <var class="var">dst</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-ulogsub"><span class="category-def">Instruction: </span><span><strong class="def-name">ulogsub</strong> <code class="def-code-arguments">s8:<var class="var">dst</var> s8:<var class="var">a</var> s8:<var class="var">b</var></code><a class="copiable-link" href='#index-ulogsub'> &para;</a></span></dt>
+<dd><p>Place the bitwise <code class="code">and</code> of the <code class="code">u64</code> values <var class="var">a</var> and the
+bitwise <code class="code">not</code> of <var class="var">b</var> into the <code class="code">u64</code> local <var class="var">dst</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-ulsh"><span class="category-def">Instruction: </span><span><strong class="def-name">ulsh</strong> <code class="def-code-arguments">s8:<var class="var">dst</var> s8:<var class="var">a</var> s8:<var class="var">b</var></code><a class="copiable-link" href='#index-ulsh'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-ulsh_002fimmediate"><span class="category-def">Instruction: </span><span><strong class="def-name">ulsh/immediate</strong> <code class="def-code-arguments">s8:<var class="var">dst</var> s8:<var class="var">a</var> c8:<var class="var">b</var></code><a class="copiable-link" href='#index-ulsh_002fimmediate'> &para;</a></span></dt>
+<dd><p>Shift the unboxed unsigned 64-bit integer in <var class="var">a</var> left by <var class="var">b</var>
+bits, also an unboxed unsigned 64-bit integer.  Truncate to 64 bits and
+write to <var class="var">dst</var> as an unboxed value.  Only the lower 6 bits of
+<var class="var">b</var> are used.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-ursh"><span class="category-def">Instruction: </span><span><strong class="def-name">ursh</strong> <code class="def-code-arguments">s8:<var class="var">dst</var> s8:<var class="var">a</var> s8:<var class="var">b</var></code><a class="copiable-link" href='#index-ursh'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-ursh_002fimmediate"><span class="category-def">Instruction: </span><span><strong class="def-name">ursh/immediate</strong> <code class="def-code-arguments">s8:<var class="var">dst</var> s8:<var class="var">a</var> c8:<var class="var">b</var></code><a class="copiable-link" href='#index-ursh_002fimmediate'> &para;</a></span></dt>
+<dd><p>Shift the unboxed unsigned 64-bit integer in <var class="var">a</var> right by <var class="var">b</var>
+bits, also an unboxed unsigned 64-bit integer.  Truncate to 64 bits and
+write to <var class="var">dst</var> as an unboxed value.  Only the lower 6 bits of
+<var class="var">b</var> are used.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-srsh"><span class="category-def">Instruction: </span><span><strong class="def-name">srsh</strong> <code class="def-code-arguments">s8:<var class="var">dst</var> s8:<var class="var">a</var> s8:<var class="var">b</var></code><a class="copiable-link" href='#index-srsh'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-srsh_002fimmediate"><span class="category-def">Instruction: </span><span><strong class="def-name">srsh/immediate</strong> <code class="def-code-arguments">s8:<var class="var">dst</var> s8:<var class="var">a</var> c8:<var class="var">b</var></code><a class="copiable-link" href='#index-srsh_002fimmediate'> &para;</a></span></dt>
+<dd><p>Shift the unboxed signed 64-bit integer in <var class="var">a</var> right by <var class="var">b</var>
+bits, also an unboxed signed 64-bit integer.  Truncate to 64 bits and
+write to <var class="var">dst</var> as an unboxed value.  Only the lower 6 bits of
+<var class="var">b</var> are used.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Floating_002dPoint-Arithmetic-Instructions.html">Floating-Point Arithmetic Instructions</a>, Previous: <a href="Tagging-and-Untagging-Instructions.html">Tagging and Untagging Instructions</a>, Up: <a href="Instruction-Set.html">Instruction Set</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

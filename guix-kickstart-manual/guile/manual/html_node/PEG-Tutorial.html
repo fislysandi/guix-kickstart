@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>PEG Tutorial (Guile Reference Manual)</title>
+
+<meta name="description" content="PEG Tutorial (Guile Reference Manual)">
+<meta name="keywords" content="PEG Tutorial (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="PEG-Parsing.html" rel="up" title="PEG Parsing">
+<link href="PEG-Internals.html" rel="next" title="PEG Internals">
+<link href="PEG-API-Reference.html" rel="prev" title="PEG API Reference">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="PEG-Tutorial">
+<div class="nav-panel">
+<p>
+Next: <a href="PEG-Internals.html" accesskey="n" rel="next">PEG Internals</a>, Previous: <a href="PEG-API-Reference.html" accesskey="p" rel="prev">PEG API Reference</a>, Up: <a href="PEG-Parsing.html" accesskey="u" rel="up">PEG Parsing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="PEG-Tutorial-1">6.15.3 PEG Tutorial</h4>
+
+<h4 class="subsubheading" id="Parsing-_002fetc_002fpasswd">Parsing /etc/passwd</h4>
+<p>This example will show how to parse /etc/passwd using PEGs.
+</p>
+<p>First we define an example /etc/passwd file:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define *etc-passwd*
+  &quot;root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/bin/sh
+bin:x:2:2:bin:/bin:/bin/sh
+sys:x:3:3:sys:/dev:/bin/sh
+nobody:x:65534:65534:nobody:/nonexistent:/bin/sh
+messagebus:x:103:107::/var/run/dbus:/bin/false
+&quot;)
+</pre></div>
+
+<p>As a first pass at this, we might want to have all the entries in
+/etc/passwd in a list.
+</p>
+<p>Doing this with string-based PEG syntax would look like this:
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(define-peg-string-patterns
+  &quot;passwd &lt;- entry* !.
+entry &lt;-- (! NL .)* NL*
+NL &lt; '\n'&quot;)
+</pre></div>
+
+<p>A <code class="code">passwd</code> file is 0 or more entries (<code class="code">entry*</code>) until the end
+of the file (<code class="code">!.</code> (<code class="code">.</code> is any character, so <code class="code">!.</code> means
+&ldquo;not anything&rdquo;)).  We want to capture the data in the nonterminal
+<code class="code">passwd</code>, but not tag it with the name, so we use <code class="code">&lt;-</code>.
+</p>
+<p>An entry is a series of 0 or more characters that aren&rsquo;t newlines
+(<code class="code">(! NL .)*</code>) followed by 0 or more newlines (<code class="code">NL*</code>).  We want
+to tag all the entries with <code class="code">entry</code>, so we use <code class="code">&lt;--</code>.
+</p>
+<p>A newline is just a literal newline (<code class="code">'\n'</code>).  We don&rsquo;t want a
+bunch of newlines cluttering up the output, so we use <code class="code">&lt;</code> to throw
+away the captured data.
+</p>
+<p>Here is the same PEG defined using S-expressions:
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(define-peg-pattern passwd body (and (* entry) (not-followed-by peg-any)))
+(define-peg-pattern entry all (and (* (and (not-followed-by NL) peg-any))
+			       (* NL)))
+(define-peg-pattern NL none &quot;\n&quot;)
+</pre></div>
+
+<p>Obviously this is much more verbose.  On the other hand, it&rsquo;s more
+explicit, and thus easier to build automatically.  However, there are
+some tricks that make S-expressions easier to use in some cases.  One is
+the <code class="code">ignore</code> keyword; the string syntax has no way to say &ldquo;throw
+away this text&rdquo; except breaking it out into a separate nonterminal.
+For instance, to throw away the newlines we had to define <code class="code">NL</code>.  In
+the S-expression syntax, we could have simply written <code class="code">(ignore
+&quot;\n&quot;)</code>.  Also, for the cases where string syntax is really much cleaner,
+the <code class="code">peg</code> keyword can be used to embed string syntax in
+S-expression syntax.  For instance, we could have written:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-peg-pattern passwd body (peg &quot;entry* !.&quot;))
+</pre></div>
+
+<p>However we define it, parsing <code class="code">*etc-passwd*</code> with the <code class="code">passwd</code>
+nonterminal yields the same results:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(peg:tree (match-pattern passwd *etc-passwd*)) &rArr;
+((entry &quot;root:x:0:0:root:/root:/bin/bash&quot;)
+ (entry &quot;daemon:x:1:1:daemon:/usr/sbin:/bin/sh&quot;)
+ (entry &quot;bin:x:2:2:bin:/bin:/bin/sh&quot;)
+ (entry &quot;sys:x:3:3:sys:/dev:/bin/sh&quot;)
+ (entry &quot;nobody:x:65534:65534:nobody:/nonexistent:/bin/sh&quot;)
+ (entry &quot;messagebus:x:103:107::/var/run/dbus:/bin/false&quot;))
+</pre></div>
+
+<p>However, here is something to be wary of:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(peg:tree (match-pattern passwd &quot;one entry&quot;)) &rArr;
+(entry &quot;one entry&quot;)
+</pre></div>
+
+<p>By default, the parse trees generated by PEGs are compressed as much as
+possible without losing information.  It may not look like this is what
+you want at first, but uncompressed parse trees are an enormous headache
+(there&rsquo;s no easy way to predict how deep particular lists will nest,
+there are empty lists littered everywhere, etc. etc.).  One side-effect
+of this, however, is that sometimes the compressor is too aggressive.
+No information is discarded when <code class="code">((entry &quot;one entry&quot;))</code> is
+compressed to <code class="code">(entry &quot;one entry&quot;)</code>, but in this particular case it
+probably isn&rsquo;t what we want.
+</p>
+<p>There are two functions for easily dealing with this:
+<code class="code">keyword-flatten</code> and <code class="code">context-flatten</code>.  The
+<code class="code">keyword-flatten</code> function takes a list of keywords and a list to
+flatten, then tries to coerce the list such that the first element of
+all sublists is one of the keywords.  The <code class="code">context-flatten</code>
+function is similar, but instead of a list of keywords it takes a
+predicate that should indicate whether a given sublist is good enough
+(refer to the API reference for more details).
+</p>
+<p>What we want here is <code class="code">keyword-flatten</code>.
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(keyword-flatten '(entry) (peg:tree (match-pattern passwd *etc-passwd*))) &rArr;
+((entry &quot;root:x:0:0:root:/root:/bin/bash&quot;)
+ (entry &quot;daemon:x:1:1:daemon:/usr/sbin:/bin/sh&quot;)
+ (entry &quot;bin:x:2:2:bin:/bin:/bin/sh&quot;)
+ (entry &quot;sys:x:3:3:sys:/dev:/bin/sh&quot;)
+ (entry &quot;nobody:x:65534:65534:nobody:/nonexistent:/bin/sh&quot;)
+ (entry &quot;messagebus:x:103:107::/var/run/dbus:/bin/false&quot;))
+(keyword-flatten '(entry) (peg:tree (match-pattern passwd &quot;one entry&quot;))) &rArr;
+((entry &quot;one entry&quot;))
+</pre></div>
+
+<p>Of course, this is a somewhat contrived example.  In practice we would
+probably just tag the <code class="code">passwd</code> nonterminal to remove the ambiguity
+(using either the <code class="code">all</code> keyword for S-expressions or the <code class="code">&lt;--</code>
+symbol for strings)..
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-peg-pattern tag-passwd all (peg &quot;entry* !.&quot;))
+(peg:tree (match-pattern tag-passwd *etc-passwd*)) &rArr;
+(tag-passwd
+  (entry &quot;root:x:0:0:root:/root:/bin/bash&quot;)
+  (entry &quot;daemon:x:1:1:daemon:/usr/sbin:/bin/sh&quot;)
+  (entry &quot;bin:x:2:2:bin:/bin:/bin/sh&quot;)
+  (entry &quot;sys:x:3:3:sys:/dev:/bin/sh&quot;)
+  (entry &quot;nobody:x:65534:65534:nobody:/nonexistent:/bin/sh&quot;)
+  (entry &quot;messagebus:x:103:107::/var/run/dbus:/bin/false&quot;))
+(peg:tree (match-pattern tag-passwd &quot;one entry&quot;))
+(tag-passwd 
+  (entry &quot;one entry&quot;))
+</pre></div>
+
+<p>If you&rsquo;re ever uncertain about the potential results of parsing
+something, remember the two absolute rules:
+</p><ol class="enumerate">
+<li> No parsing information will ever be discarded.
+</li><li> There will never be any lists with fewer than 2 elements.
+</li></ol>
+
+<p>For the purposes of (1), &quot;parsing information&quot; means things tagged with
+the <code class="code">any</code> keyword or the <code class="code">&lt;--</code> symbol.  Plain strings will be
+concatenated.
+</p>
+<p>Let&rsquo;s extend this example a bit more and actually pull some useful
+information out of the passwd file:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-peg-string-patterns
+  &quot;passwd &lt;-- entry* !.
+entry &lt;-- login C pass C uid C gid C nameORcomment C homedir C shell NL*
+login &lt;-- text
+pass &lt;-- text
+uid &lt;-- [0-9]*
+gid &lt;-- [0-9]*
+nameORcomment &lt;-- text
+homedir &lt;-- path
+shell &lt;-- path
+path &lt;-- (SLASH pathELEMENT)*
+pathELEMENT &lt;-- (!NL !C  !'/' .)*
+text &lt;- (!NL !C  .)*
+C &lt; ':'
+NL &lt; '\n'
+SLASH &lt; '/'&quot;)
+</pre></div>
+
+<p>This produces rather pretty parse trees:
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(passwd
+  (entry (login &quot;root&quot;)
+         (pass &quot;x&quot;)
+         (uid &quot;0&quot;)
+         (gid &quot;0&quot;)
+         (nameORcomment &quot;root&quot;)
+         (homedir (path (pathELEMENT &quot;root&quot;)))
+         (shell (path (pathELEMENT &quot;bin&quot;) (pathELEMENT &quot;bash&quot;))))
+  (entry (login &quot;daemon&quot;)
+         (pass &quot;x&quot;)
+         (uid &quot;1&quot;)
+         (gid &quot;1&quot;)
+         (nameORcomment &quot;daemon&quot;)
+         (homedir
+           (path (pathELEMENT &quot;usr&quot;) (pathELEMENT &quot;sbin&quot;)))
+         (shell (path (pathELEMENT &quot;bin&quot;) (pathELEMENT &quot;sh&quot;))))
+  (entry (login &quot;bin&quot;)
+         (pass &quot;x&quot;)
+         (uid &quot;2&quot;)
+         (gid &quot;2&quot;)
+         (nameORcomment &quot;bin&quot;)
+         (homedir (path (pathELEMENT &quot;bin&quot;)))
+         (shell (path (pathELEMENT &quot;bin&quot;) (pathELEMENT &quot;sh&quot;))))
+  (entry (login &quot;sys&quot;)
+         (pass &quot;x&quot;)
+         (uid &quot;3&quot;)
+         (gid &quot;3&quot;)
+         (nameORcomment &quot;sys&quot;)
+         (homedir (path (pathELEMENT &quot;dev&quot;)))
+         (shell (path (pathELEMENT &quot;bin&quot;) (pathELEMENT &quot;sh&quot;))))
+  (entry (login &quot;nobody&quot;)
+         (pass &quot;x&quot;)
+         (uid &quot;65534&quot;)
+         (gid &quot;65534&quot;)
+         (nameORcomment &quot;nobody&quot;)
+         (homedir (path (pathELEMENT &quot;nonexistent&quot;)))
+         (shell (path (pathELEMENT &quot;bin&quot;) (pathELEMENT &quot;sh&quot;))))
+  (entry (login &quot;messagebus&quot;)
+         (pass &quot;x&quot;)
+         (uid &quot;103&quot;)
+         (gid &quot;107&quot;)
+         nameORcomment
+         (homedir
+           (path (pathELEMENT &quot;var&quot;)
+                 (pathELEMENT &quot;run&quot;)
+                 (pathELEMENT &quot;dbus&quot;)))
+         (shell (path (pathELEMENT &quot;bin&quot;) (pathELEMENT &quot;false&quot;)))))
+</pre></div>
+
+<p>Notice that when there&rsquo;s no entry in a field (e.g. <code class="code">nameORcomment</code>
+for messagebus) the symbol is inserted.  This is the &ldquo;don&rsquo;t throw away
+any information&rdquo; rule&mdash;we succesfully matched a <code class="code">nameORcomment</code>
+of 0 characters (since we used <code class="code">*</code> when defining it).  This is
+usually what you want, because it allows you to e.g. use <code class="code">list-ref</code>
+to pull out elements (since they all have known offsets).
+</p>
+<p>If you&rsquo;d prefer not to have symbols for empty matches, you can replace
+the <code class="code">*</code> with a <code class="code">+</code> and add a <code class="code">?</code> after the
+<code class="code">nameORcomment</code> in <code class="code">entry</code>.  Then it will try to parse 1 or
+more characters, fail (inserting nothing into the parse tree), but
+continue because it didn&rsquo;t have to match the nameORcomment to continue.
+</p>
+
+<h4 class="subsubheading" id="Embedding-Arithmetic-Expressions">Embedding Arithmetic Expressions</h4>
+
+<p>We can parse simple mathematical expressions with the following PEG:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-peg-string-patterns
+  &quot;expr &lt;- sum
+sum &lt;-- (product ('+' / '-') sum) / product
+product &lt;-- (value ('*' / '/') product) / value
+value &lt;-- number / '(' expr ')'
+number &lt;-- [0-9]+&quot;)
+</pre></div>
+
+<p>Then:
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(peg:tree (match-pattern expr &quot;1+1/2*3+(1+1)/2&quot;)) &rArr;
+(sum (product (value (number &quot;1&quot;)))
+     &quot;+&quot;
+     (sum (product
+            (value (number &quot;1&quot;))
+            &quot;/&quot;
+            (product
+              (value (number &quot;2&quot;))
+              &quot;*&quot;
+              (product (value (number &quot;3&quot;)))))
+          &quot;+&quot;
+          (sum (product
+                 (value &quot;(&quot;
+                        (sum (product (value (number &quot;1&quot;)))
+                             &quot;+&quot;
+                             (sum (product (value (number &quot;1&quot;)))))
+                        &quot;)&quot;)
+                 &quot;/&quot;
+                 (product (value (number &quot;2&quot;)))))))
+</pre></div>
+
+<p>There is very little wasted effort in this PEG.  The <code class="code">number</code>
+nonterminal has to be tagged because otherwise the numbers might run
+together with the arithmetic expressions during the string concatenation
+stage of parse-tree compression (the parser will see &ldquo;1&rdquo; followed by
+&ldquo;/&rdquo; and decide to call it &ldquo;1/&rdquo;).  When in doubt, tag.
+</p>
+<p>It is very easy to turn these parse trees into lisp expressions:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define (parse-sum sum left . rest)
+  (if (null? rest)
+      (apply parse-product left)
+      (list (string-&gt;symbol (car rest))
+	    (apply parse-product left)
+	    (apply parse-sum (cadr rest)))))
+
+(define (parse-product product left . rest)
+  (if (null? rest)
+      (apply parse-value left)
+      (list (string-&gt;symbol (car rest))
+	    (apply parse-value left)
+	    (apply parse-product (cadr rest)))))
+
+(define (parse-value value first . rest)
+  (if (null? rest)
+      (string-&gt;number (cadr first))
+      (apply parse-sum (car rest))))
+
+(define parse-expr parse-sum)
+</pre></div>
+
+<p>(Notice all these functions look very similar; for a more complicated
+PEG, it would be worth abstracting.)
+</p>
+<p>Then:
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(apply parse-expr (peg:tree (match-pattern expr &quot;1+1/2*3+(1+1)/2&quot;))) &rArr;
+(+ 1 (+ (/ 1 (* 2 3)) (/ (+ 1 1) 2)))
+</pre></div>
+
+<p>But wait!  The associativity is wrong!  Where it says <code class="code">(/ 1 (* 2
+3))</code>, it should say <code class="code">(* (/ 1 2) 3)</code>.
+</p>
+<p>It&rsquo;s tempting to try replacing e.g. <code class="code">&quot;sum &lt;-- (product ('+' / '-')
+sum) / product&quot;</code> with <code class="code">&quot;sum &lt;-- (sum ('+' / '-') product) /
+product&quot;</code>, but this is a Bad Idea.  PEGs don&rsquo;t support left recursion.
+To see why, imagine what the parser will do here.  When it tries to
+parse <code class="code">sum</code>, it first has to try and parse <code class="code">sum</code>.  But to do
+that, it first has to try and parse <code class="code">sum</code>.  This will continue
+until the stack gets blown off.
+</p>
+<p>So how does one parse left-associative binary operators with PEGs?
+Honestly, this is one of their major shortcomings.  There&rsquo;s no
+general-purpose way of doing this, but here the repetition operators are
+a good choice:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(use-modules (srfi srfi-1))
+
+(define-peg-string-patterns
+  &quot;expr &lt;- sum
+sum &lt;-- (product ('+' / '-'))* product
+product &lt;-- (value ('*' / '/'))* value
+value &lt;-- number / '(' expr ')'
+number &lt;-- [0-9]+&quot;)
+
+;; take a deep breath...
+(define (make-left-parser next-func)
+  (lambda (sum first . rest) ;; general form, comments below assume
+    ;; that we're dealing with a sum expression
+    (if (null? rest) ;; form (sum (product ...))
+      (apply next-func first)
+      (if (string? (cadr first));; form (sum ((product ...) &quot;+&quot;) (product ...))
+	  (list (string-&gt;symbol (cadr first))
+		(apply next-func (car first))
+		(apply next-func (car rest)))
+          ;; form (sum (((product ...) &quot;+&quot;) ((product ...) &quot;+&quot;)) (product ...))
+	  (car 
+	   (reduce ;; walk through the list and build a left-associative tree
+	    (lambda (l r)
+	      (list (list (cadr r) (car r) (apply next-func (car l)))
+		    (string-&gt;symbol (cadr l))))
+	    'ignore
+	    (append ;; make a list of all the products
+             ;; the first one should be pre-parsed
+	     (list (list (apply next-func (caar first))
+			 (string-&gt;symbol (cadar first))))
+	     (cdr first)
+             ;; the last one has to be added in
+	     (list (append rest '(&quot;done&quot;))))))))))
+
+(define (parse-value value first . rest)
+  (if (null? rest)
+      (string-&gt;number (cadr first))
+      (apply parse-sum (car rest))))
+(define parse-product (make-left-parser parse-value))
+(define parse-sum (make-left-parser parse-product))
+(define parse-expr parse-sum)
+</pre></div>
+
+<p>Then:
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(apply parse-expr (peg:tree (match-pattern expr &quot;1+1/2*3+(1+1)/2&quot;))) &rArr;
+(+ (+ 1 (* (/ 1 2) 3)) (/ (+ 1 1) 2))
+</pre></div>
+
+<p>As you can see, this is much uglier (it could be made prettier by using
+<code class="code">context-flatten</code>, but the way it&rsquo;s written above makes it clear
+how we deal with the three ways the zero-or-more <code class="code">*</code> expression can
+parse).  Fortunately, most of the time we can get away with only using
+right-associativity.
+</p>
+<h4 class="subsubheading" id="Simplified-Functions">Simplified Functions</h4>
+
+<p>For a more tantalizing example, consider the following grammar that
+parses (highly) simplified C functions:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-peg-string-patterns
+  &quot;cfunc &lt;-- cSP ctype cSP cname cSP cargs cLB cSP cbody cRB
+ctype &lt;-- cidentifier
+cname &lt;-- cidentifier
+cargs &lt;-- cLP (! (cSP cRP) carg cSP (cCOMMA / cRP) cSP)* cSP
+carg &lt;-- cSP ctype cSP cname
+cbody &lt;-- cstatement *
+cidentifier &lt;- [a-zA-z][a-zA-Z0-9_]*
+cstatement &lt;-- (!';'.)*cSC cSP
+cSC &lt; ';'
+cCOMMA &lt; ','
+cLP &lt; '('
+cRP &lt; ')'
+cLB &lt; '{'
+cRB &lt; '}'
+cSP &lt; [ \t\n]*&quot;)
+</pre></div>
+
+<p>Then:
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(match-pattern cfunc &quot;int square(int a) { return a*a;}&quot;) &rArr;
+(32
+ (cfunc (ctype &quot;int&quot;)
+        (cname &quot;square&quot;)
+        (cargs (carg (ctype &quot;int&quot;) (cname &quot;a&quot;)))
+        (cbody (cstatement &quot;return a*a&quot;))))
+</pre></div>
+
+<p>And:
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(match-pattern cfunc &quot;int mod(int a, int b) { int c = a/b;return a-b*c; }&quot;) &rArr;
+(52
+ (cfunc (ctype &quot;int&quot;)
+        (cname &quot;mod&quot;)
+        (cargs (carg (ctype &quot;int&quot;) (cname &quot;a&quot;))
+               (carg (ctype &quot;int&quot;) (cname &quot;b&quot;)))
+        (cbody (cstatement &quot;int c = a/b&quot;)
+               (cstatement &quot;return a- b*c&quot;))))
+</pre></div>
+
+<p>By wrapping all the <code class="code">carg</code> nonterminals in a <code class="code">cargs</code>
+nonterminal, we were able to remove any ambiguity in the parsing
+structure and avoid having to call <code class="code">context-flatten</code> on the output
+of <code class="code">match-pattern</code>.  We used the same trick with the <code class="code">cstatement</code>
+nonterminals, wrapping them in a <code class="code">cbody</code> nonterminal.
+</p>
+<p>The whitespace nonterminal <code class="code">cSP</code> used here is a (very) useful
+instantiation of a common pattern for matching syntactically irrelevant
+information.  Since it&rsquo;s tagged with <code class="code">&lt;</code> and ends with <code class="code">*</code> it
+won&rsquo;t clutter up the parse trees (all the empty lists will be discarded
+during the compression step) and it will never cause parsing to fail.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="PEG-Internals.html">PEG Internals</a>, Previous: <a href="PEG-API-Reference.html">PEG API Reference</a>, Up: <a href="PEG-Parsing.html">PEG Parsing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

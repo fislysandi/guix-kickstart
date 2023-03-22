@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>A Simple Representation (Guile Reference Manual)</title>
+
+<meta name="description" content="A Simple Representation (Guile Reference Manual)">
+<meta name="keywords" content="A Simple Representation (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Data-Representation.html" rel="up" title="Data Representation">
+<link href="Faster-Integers.html" rel="next" title="Faster Integers">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="A-Simple-Representation">
+<div class="nav-panel">
+<p>
+Next: <a href="Faster-Integers.html" accesskey="n" rel="next">Faster Integers</a>, Up: <a href="Data-Representation.html" accesskey="u" rel="up">Data Representation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="A-Simple-Representation-1">9.2.1 A Simple Representation</h4>
+
+<p>The simplest way to represent Scheme values in C would be to represent
+each value as a pointer to a structure containing a type indicator,
+followed by a union carrying the real value. Assuming that <code class="code">SCM</code> is
+the name of our universal type, we can write:
+</p>
+<div class="example">
+<pre class="example-preformatted">enum type { integer, pair, string, vector, ... };
+
+typedef struct value *SCM;
+
+struct value {
+  enum type type;
+  union {
+    int integer;
+    struct { SCM car, cdr; } pair;
+    struct { int length; char *elts; } string;
+    struct { int length; SCM  *elts; } vector;
+    ...
+  } value;
+};
+</pre></div>
+<p>with the ellipses replaced with code for the remaining Scheme types.
+</p>
+<p>This representation is sufficient to implement all of Scheme&rsquo;s
+semantics.  If <var class="var">x</var> is an <code class="code">SCM</code> value:
+</p><ul class="itemize mark-bullet">
+<li>To test if <var class="var">x</var> is an integer, we can write <code class="code"><var class="var">x</var>-&gt;type == integer</code>.
+</li><li>To find its value, we can write <code class="code"><var class="var">x</var>-&gt;value.integer</code>.
+</li><li>To test if <var class="var">x</var> is a vector, we can write <code class="code"><var class="var">x</var>-&gt;type == vector</code>.
+</li><li>If we know <var class="var">x</var> is a vector, we can write
+  <code class="code"><var class="var">x</var>-&gt;value.vector.elts[0]</code> to refer to its first element.
+</li><li>If we know <var class="var">x</var> is a pair, we can write
+  <code class="code"><var class="var">x</var>-&gt;value.pair.car</code> to extract its car.
+</li></ul>
+
+
+</div>
+
+
+
+</body>
+</html>

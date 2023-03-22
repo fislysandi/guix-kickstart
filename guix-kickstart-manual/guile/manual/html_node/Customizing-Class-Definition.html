@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Customizing Class Definition (Guile Reference Manual)</title>
+
+<meta name="description" content="Customizing Class Definition (Guile Reference Manual)">
+<meta name="keywords" content="Customizing Class Definition (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="The-Metaobject-Protocol.html" rel="up" title="The Metaobject Protocol">
+<link href="Method-Definition.html" rel="next" title="Method Definition">
+<link href="Class-Definition-Protocol.html" rel="prev" title="Class Definition Protocol">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Customizing-Class-Definition">
+<div class="nav-panel">
+<p>
+Next: <a href="Method-Definition.html" accesskey="n" rel="next">Method Definition</a>, Previous: <a href="Class-Definition-Protocol.html" accesskey="p" rel="prev">Class Definition Protocol</a>, Up: <a href="The-Metaobject-Protocol.html" accesskey="u" rel="up">The Metaobject Protocol</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Customizing-Class-Definition-1">8.11.6 Customizing Class Definition</h4>
+
+<p>If the metaclass of the new class is something more specialized than the
+default <code class="code">&lt;class&gt;</code>, then the type of <var class="var">class</var> in the calls above
+is more specialized than <code class="code">&lt;class&gt;</code>, and hence it becomes possible
+to define generic function methods, specialized for the new class&rsquo;s
+metaclass, that can modify or override the default behaviour of
+<code class="code">initialize</code>, <code class="code">compute-cpl</code> or <code class="code">compute-get-n-set</code>.
+</p>
+<p><code class="code">compute-cpl</code> computes the class precedence list (&ldquo;CPL&rdquo;) for the
+new class (see <a class="pxref" href="Class-Precedence-List.html">Class Precedence List</a>), and returns it as a list of
+class objects.  The CPL is important because it defines a superclass
+ordering that is used, when a generic function is invoked upon an
+instance of the class, to decide which of the available generic function
+methods is the most specific.  Hence <code class="code">compute-cpl</code> could be
+customized in order to modify the CPL ordering algorithm for all classes
+with a special metaclass.
+</p>
+<p>The default CPL algorithm is encapsulated by the <code class="code">compute-std-cpl</code>
+procedure, which is called by the default <code class="code">compute-cpl</code> method.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-compute_002dstd_002dcpl"><span class="category-def">procedure: </span><span><strong class="def-name">compute-std-cpl</strong> <var class="def-var-arguments">class</var><a class="copiable-link" href='#index-compute_002dstd_002dcpl'> &para;</a></span></dt>
+<dd><p>Compute and return the class precedence list for <var class="var">class</var> according
+to the algorithm described in <a class="ref" href="Class-Precedence-List.html">Class Precedence List</a>.
+</p></dd></dl>
+
+<p><code class="code">compute-slots</code> computes and returns a list of all slot definitions
+for the new class.  By default, this list includes the direct slot
+definitions from the <code class="code">define-class</code> form, plus the slot definitions
+that are inherited from the new class&rsquo;s superclasses.  The default
+<code class="code">compute-slots</code> method uses the CPL computed by <code class="code">compute-cpl</code>
+to calculate this union of slot definitions, with the rule that slots
+inherited from superclasses are shadowed by direct slots with the same
+name.  One possible reason for customizing <code class="code">compute-slots</code> would be
+to implement an alternative resolution strategy for slot name conflicts.
+</p>
+<p><code class="code">compute-get-n-set</code> computes the low-level closures that will be
+used to get and set the value of a particular slot, and returns them in
+a list with two elements.
+</p>
+<p>The closures returned depend on how storage for that slot is allocated.
+The standard <code class="code">compute-get-n-set</code> method, specialized for classes of
+type <code class="code">&lt;class&gt;</code>, handles the standard GOOPS values for the
+<code class="code">#:allocation</code> slot option (see <a class="pxref" href="Slot-Options.html">allocation</a>).  By
+defining a new <code class="code">compute-get-n-set</code> method for a more specialized
+metaclass, it is possible to support new types of slot allocation.
+</p>
+<p>Suppose you wanted to create a large number of instances of some class
+with a slot that should be shared between some but not all instances of
+that class - say every 10 instances should share the same slot storage.
+The following example shows how to implement and use a new type of slot
+allocation to do this.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-class &lt;batched-allocation-metaclass&gt; (&lt;class&gt;))
+
+(let ((batch-allocation-count 0)
+      (batch-get-n-set #f))
+  (define-method (compute-get-n-set
+                     (class &lt;batched-allocation-metaclass&gt;) s)
+    (case (slot-definition-allocation s)
+      ((#:batched)
+       ;; If we've already used the same slot storage for 10 instances,
+       ;; reset variables.
+       (if (= batch-allocation-count 10)
+           (begin
+             (set! batch-allocation-count 0)
+             (set! batch-get-n-set #f)))
+       ;; If we don't have a current pair of get and set closures,
+       ;; create one.  make-closure-variable returns a pair of closures
+       ;; around a single Scheme variable - see goops.scm for details.
+       (or batch-get-n-set
+           (set! batch-get-n-set (make-closure-variable)))
+       ;; Increment the batch allocation count.
+       (set! batch-allocation-count (+ batch-allocation-count 1))
+       batch-get-n-set)
+
+      ;; Call next-method to handle standard allocation types.
+      (else (next-method)))))
+
+(define-class &lt;class-using-batched-slot&gt; ()
+  ...
+  (c #:allocation #:batched)
+  ...
+  #:metaclass &lt;batched-allocation-metaclass&gt;)
+</pre></div>
+
+<p>The usage of <code class="code">compute-getter-method</code> and <code class="code">compute-setter-method</code>
+is described in <a class="ref" href="Class-Definition-Protocol.html">Class Definition Protocol</a>.
+</p>
+<p><code class="code">compute-cpl</code> and <code class="code">compute-get-n-set</code> are called by the
+standard <code class="code">initialize</code> method for classes whose metaclass is
+<code class="code">&lt;class&gt;</code>.  But <code class="code">initialize</code> itself can also be modified, by
+defining an <code class="code">initialize</code> method specialized to the new class&rsquo;s
+metaclass.  Such a method could complete override the standard
+behaviour, by not calling <code class="code">(next-method)</code> at all, but more
+typically it would perform additional class initialization steps before
+and/or after calling <code class="code">(next-method)</code> for the standard behaviour.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Method-Definition.html">Method Definition</a>, Previous: <a href="Class-Definition-Protocol.html">Class Definition Protocol</a>, Up: <a href="The-Metaobject-Protocol.html">The Metaobject Protocol</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

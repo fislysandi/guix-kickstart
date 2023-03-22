@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Garbage Collection (Guile Reference Manual)</title>
+
+<meta name="description" content="Garbage Collection (Guile Reference Manual)">
+<meta name="keywords" content="Garbage Collection (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="General-Libguile-Concepts.html" rel="up" title="General Libguile Concepts">
+<link href="Control-Flow.html" rel="next" title="Control Flow">
+<link href="Dynamic-Types.html" rel="prev" title="Dynamic Types">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Garbage-Collection">
+<div class="nav-panel">
+<p>
+Next: <a href="Control-Flow.html" accesskey="n" rel="next">Control Flow</a>, Previous: <a href="Dynamic-Types.html" accesskey="p" rel="prev">Dynamic Types</a>, Up: <a href="General-Libguile-Concepts.html" accesskey="u" rel="up">General concepts for using libguile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Garbage-Collection-1">5.4.2 Garbage Collection</h4>
+
+<p>As explained above, the <code class="code">SCM</code> type can represent all Scheme values.
+Some values fit entirely into a <code class="code">SCM</code> value (such as small
+integers), but other values require additional storage in the heap (such
+as strings and vectors).  This additional storage is managed
+automatically by Guile.  You don&rsquo;t need to explicitly deallocate it
+when a <code class="code">SCM</code> value is no longer used.
+</p>
+<p>Two things must be guaranteed so that Guile is able to manage the
+storage automatically: it must know about all blocks of memory that have
+ever been allocated for Scheme values, and it must know about all Scheme
+values that are still being used.  Given this knowledge, Guile can
+periodically free all blocks that have been allocated but are not used
+by any active Scheme values.  This activity is called <em class="dfn">garbage
+collection</em>.
+</p>
+<p>Guile&rsquo;s garbage collector will automatically discover references to
+<code class="code">SCM</code> objects that originate in global variables, static data
+sections, function arguments or local variables on the C and Scheme
+stacks, and values in machine registers.  Other references to <code class="code">SCM</code>
+objects, such as those in other random data structures in the C heap
+that contain fields of type <code class="code">SCM</code>, can be made visible to the
+garbage collector by calling the functions <code class="code">scm_gc_protect_object</code> or
+<code class="code">scm_permanent_object</code>.  Collectively, these values form the &ldquo;root
+set&rdquo; of garbage collection; any value on the heap that is referenced
+directly or indirectly by a member of the root set is preserved, and all
+other objects are eligible for reclamation.
+</p>
+<p>In Guile, garbage collection has two logical phases: the <em class="dfn">mark
+phase</em>, in which the collector discovers the set of all live objects,
+and the <em class="dfn">sweep phase</em>, in which the collector reclaims the resources
+associated with dead objects.  The mark phase pauses the program and
+traces all <code class="code">SCM</code> object references, starting with the root set.
+The sweep phase actually runs concurrently with the main program,
+incrementally reclaiming memory as needed by allocation.
+</p>
+<p>In the mark phase, the garbage collector traces the Scheme stack and
+heap <em class="dfn">precisely</em>.  Because the Scheme stack and heap are managed by
+Guile, Guile can know precisely where in those data structures it might
+find references to other heap objects.  This is not the case,
+unfortunately, for pointers on the C stack and static data segment.
+Instead of requiring the user to inform Guile about all variables in C
+that might point to heap objects, Guile traces the C stack and static
+data segment <em class="dfn">conservatively</em>.  That is to say, Guile just treats
+every word on the C stack and every C global variable as a potential
+reference in to the Scheme heap<a class="footnote" id="DOCF4" href="#FOOT4"><sup>4</sup></a>.  Any value that looks like a pointer to a GC-managed
+object is treated as such, whether it actually is a reference or not.
+Thus, scanning the C stack and static data segment is guaranteed to find
+all actual references, but it might also find words that only
+accidentally look like references.  These &ldquo;false positives&rdquo; might keep
+<code class="code">SCM</code> objects alive that would otherwise be considered dead.  While
+this might waste memory, keeping an object around longer than it
+strictly needs to is harmless.  This is why this technique is called
+&ldquo;conservative garbage collection&rdquo;.  In practice, the wasted memory
+seems to be no problem, as the static C root set is almost always finite
+and small, given that the Scheme stack is separate from the C stack.
+</p>
+<p>The stack of every thread is scanned in this way and the registers of
+the CPU and all other memory locations where local variables or function
+parameters might show up are included in this scan as well.
+</p>
+<p>The consequence of the conservative scanning is that you can just
+declare local variables and function parameters of type <code class="code">SCM</code> and
+be sure that the garbage collector will not free the corresponding
+objects.
+</p>
+<p>However, a local variable or function parameter is only protected as
+long as it is really on the stack (or in some register).  As an
+optimization, the C compiler might reuse its location for some other
+value and the <code class="code">SCM</code> object would no longer be protected.  Normally,
+this leads to exactly the right behavior: the compiler will only
+overwrite a reference when it is no longer needed and thus the object
+becomes unprotected precisely when the reference disappears, just as
+wanted.
+</p>
+<p>There are situations, however, where a <code class="code">SCM</code> object needs to be
+around longer than its reference from a local variable or function
+parameter.  This happens, for example, when you retrieve some pointer
+from a foreign object and work with that pointer directly.  The
+reference to the <code class="code">SCM</code> foreign object might be dead after the
+pointer has been retrieved, but the pointer itself (and the memory
+pointed to) is still in use and thus the foreign object must be
+protected.  The compiler does not know about this connection and might
+overwrite the <code class="code">SCM</code> reference too early.
+</p>
+<p>To get around this problem, you can use <code class="code">scm_remember_upto_here_1</code>
+and its cousins.  It will keep the compiler from overwriting the
+reference.  See <a class="xref" href="Foreign-Object-Memory-Management.html">Foreign Object Memory Management</a>.
+</p>
+
+</div>
+<div class="footnotes-segment">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5 class="footnote-body-heading"><a id="FOOT4" href="#DOCF4">(4)</a></h5>
+<p>Note that Guile does not scan
+the C heap for references, so a reference to a <code class="code">SCM</code> object from a
+memory segment allocated with <code class="code">malloc</code> will have to use some other
+means to keep the <code class="code">SCM</code> object alive.  See <a class="xref" href="Garbage-Collection-Functions.html">Function related to Garbage Collection</a>.</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Control-Flow.html">Control Flow</a>, Previous: <a href="Dynamic-Types.html">Dynamic Types</a>, Up: <a href="General-Libguile-Concepts.html">General concepts for using libguile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

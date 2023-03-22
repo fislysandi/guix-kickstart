@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>CPS Soup (Guile Reference Manual)</title>
+
+<meta name="description" content="CPS Soup (Guile Reference Manual)">
+<meta name="keywords" content="CPS Soup (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Continuation_002dPassing-Style.html" rel="up" title="Continuation-Passing Style">
+<link href="Compiling-CPS.html" rel="next" title="Compiling CPS">
+<link href="Building-CPS.html" rel="prev" title="Building CPS">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="CPS-Soup">
+<div class="nav-panel">
+<p>
+Next: <a href="Compiling-CPS.html" accesskey="n" rel="next">Compiling CPS</a>, Previous: <a href="Building-CPS.html" accesskey="p" rel="prev">Building CPS</a>, Up: <a href="Continuation_002dPassing-Style.html" accesskey="u" rel="up">Continuation-Passing Style</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="CPS-Soup-1">9.4.4.4 CPS Soup</h4>
+
+<p>We describe programs in Guile&rsquo;s CPS language as being a kind of &ldquo;soup&rdquo;
+because all continuations in the program are mixed into the same
+&ldquo;pot&rdquo;, so to speak, without explicit markers as to what function or
+scope a continuation is in.  A program in CPS is a map from continuation
+labels to continuation values.  As discussed in the introduction, a
+continuation label is an integer.  No label may be negative.
+</p>
+<p>As a matter of convention, label 0 should map to the <code class="code">$kfun</code>
+continuation of the entry to the program, which should be a function of
+no arguments.  The body of a function consists of the labelled
+continuations that are reachable from the function entry.  A program can
+refer to other functions, either via <code class="code">$fun</code> and <code class="code">$rec</code> in
+higher-order CPS, or via <code class="code">$const-fun</code>, <code class="code">$callk</code>, and allocated
+closures in first-order CPS.  The program logically contains all
+continuations of all functions reachable from the entry function.  A
+compiler pass may leave unreachable continuations in a program;
+subsequent compiler passes should ensure that their transformations and
+analyses only take reachable continuations into account.  It&rsquo;s OK though
+if transformation runs over all continuations if including the
+unreachable continuations has no effect on the transformations on the
+live continuations.
+</p>
+<a class="index-entry-id" id="index-intmap"></a>
+<p>The &ldquo;soup&rdquo; itself is implemented as an <em class="dfn">intmap</em>, a functional
+array-mapped trie specialized for integer keys.  Intmaps associate
+integers with values of any kind.  Currently intmaps are a private data
+structure only used by the CPS phase of the compiler.  To work with
+intmaps, load the <code class="code">(language cps intmap)</code> module:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (language cps intmap))
+</pre></div>
+
+<p>Intmaps are functional data structures, so there is no constructor as
+such: one can simply start with the empty intmap and add entries to it.
+</p>
+<div class="example">
+<pre class="example-preformatted">(intmap? empty-intmap) &rArr; #t
+(define x (intmap-add empty-intmap 42 &quot;hi&quot;))
+(intmap? x) &rArr; #t
+(intmap-ref x 42) &rArr; &quot;hi&quot;
+(intmap-ref x 43) &rArr; <i class="i">error: 43 not present</i>
+(intmap-ref x 43 (lambda (k) &quot;yo!&quot;)) &rArr; &quot;yo&quot;
+(intmap-add x 42 &quot;hej&quot;) &rArr; <i class="i">error: 42 already present</i>
+</pre></div>
+
+<p><code class="code">intmap-ref</code> and <code class="code">intmap-add</code> are the core of the intmap
+interface.  There is also <code class="code">intmap-replace</code>, which replaces the
+value associated with a given key, requiring that the key was present
+already, and <code class="code">intmap-remove</code>, which removes a key from an intmap.
+</p>
+<p>Intmaps have a tree-like structure that is well-suited to set operations
+such as union and intersection, so there are also the binary
+<code class="code">intmap-union</code> and <code class="code">intmap-intersect</code> procedures.  If the
+result is equivalent to either argument, that argument is returned
+as-is; in that way, one can detect whether the set operation produced a
+new result simply by checking with <code class="code">eq?</code>.  This makes intmaps
+useful when computing fixed points.
+</p>
+<p>If a key is present in both intmaps and the associated values are not
+the same in the sense of <code class="code">eq?</code>, the resulting value is determined
+by a &ldquo;meet&rdquo; procedure, which is the optional last argument to
+<code class="code">intmap-union</code>, <code class="code">intmap-intersect</code>, and also to
+<code class="code">intmap-add</code>, <code class="code">intmap-replace</code>, and similar functions.  The
+meet procedure will be called with the two values and should return the
+intersected or unioned value in some domain-specific way.  If no meet
+procedure is given, the default meet procedure will raise an error.
+</p>
+<p>To traverse over the set of values in an intmap, there are the
+<code class="code">intmap-next</code> and <code class="code">intmap-prev</code> procedures.  For example, if
+intmap <var class="var">x</var> has one entry mapping 42 to some value, we would have:
+</p>
+<div class="example">
+<pre class="example-preformatted">(intmap-next x) &rArr; 42
+(intmap-next x 0) &rArr; 42
+(intmap-next x 42) &rArr; 42
+(intmap-next x 43) &rArr; #f
+(intmap-prev x) &rArr; 42
+(intmap-prev x 42) &rArr; 42
+(intmap-prev x 41) &rArr; #f
+</pre></div>
+
+<p>There is also the <code class="code">intmap-fold</code> procedure, which folds over keys
+and values in the intmap from lowest to highest value, and
+<code class="code">intmap-fold-right</code> which does so in the opposite direction.  These
+procedures may take up to 3 seed values.  The number of values that the
+fold procedure returns is the number of seed values.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define q (intmap-add (intmap-add empty-intmap 1 2) 3 4))
+(intmap-fold acons q '()) &rArr; ((3 . 4) (1 . 2))
+(intmap-fold-right acons q '()) &rArr; ((1 . 2) (3 . 4))
+</pre></div>
+
+<p>When an entry in an intmap is updated (removed, added, or changed), a
+new intmap is created that shares structure with the original intmap.
+This operation ensures that the result of existing computations is not
+affected by future computations: no mutation is ever visible to user
+code.  This is a great property in a compiler data structure, as it lets
+us hold a copy of a program before a transformation and use it while we
+build a post-transformation program.  Updating an intmap is O(log
+<var class="var">n</var>) in the size of the intmap.
+</p>
+<p>However, the O(log <var class="var">n</var>) allocation costs are sometimes too much,
+especially in cases when we know that we can just update the intmap in
+place.  As an example, say we have an intmap mapping the integers 1 to
+100 to the integers 42 to 141.  Let&rsquo;s say that we want to transform this
+map by adding 1 to each value.  There is already an efficient
+<code class="code">intmap-map</code> procedure in the <code class="code">(language cps utils)</code> module,
+but if we didn&rsquo;t know about that we might do:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (intmap-increment map)
+  (let lp ((k 0) (map map))
+    (let ((k (intmap-next map k)))
+      (if k
+          (let ((v (intmap-ref map k)))
+            (lp (1+ k) (intmap-replace map k (1+ v))))
+          map))))
+</pre></div>
+
+<a class="index-entry-id" id="index-intmap_002c-transient"></a>
+<a class="index-entry-id" id="index-transient-intmaps"></a>
+<p>Observe that the intermediate values created by <code class="code">intmap-replace</code>
+are completely invisible to the program &ndash; only the last result of
+<code class="code">intmap-replace</code> value is needed.  The rest might as well share
+state with the last one, and we could update in place.  Guile allows
+this kind of interface via <em class="dfn">transient intmaps</em>, inspired by
+Clojure&rsquo;s transient interface (<a class="uref" href="http://clojure.org/transients">http://clojure.org/transients</a>).
+</p>
+<p>The in-place <code class="code">intmap-add!</code> and <code class="code">intmap-replace!</code> procedures
+return transient intmaps.  If one of these in-place procedures is called
+on a normal persistent intmap, a new transient intmap is created.  This
+is an O(1) operation.  In all other respects the interface is like their
+persistent counterparts, <code class="code">intmap-add</code> and <code class="code">intmap-replace</code>.
+If an in-place procedure is called on a transient intmap, the intmap is
+mutated in-place and the same value is returned.
+</p>
+<p>If a persistent operation like <code class="code">intmap-add</code> is called on a
+transient intmap, the transient&rsquo;s mutable substructure is then marked as
+persistent, and <code class="code">intmap-add</code> then runs on a new persistent intmap
+sharing structure but not state with the original transient.  Mutating a
+transient will cause enough copying to ensure that it can make its
+change, but if part of its substructure is already &ldquo;owned&rdquo; by it, no
+more copying is needed.
+</p>
+<p>We can use transients to make <code class="code">intmap-increment</code> more efficient.
+The two changed elements have been marked <strong class="strong">like this</strong>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (intmap-increment map)
+  (let lp ((k 0) (map map))
+    (let ((k (intmap-next map k)))
+      (if k
+          (let ((v (intmap-ref map k)))
+            (lp (1+ k) (<strong class="strong">intmap-replace!</strong> map k (1+ v))))
+          (<strong class="strong">persistent-intmap</strong> map)))))
+</pre></div>
+
+<p>Be sure to tag the result as persistent using the
+<code class="code">persistent-intmap</code> procedure to prevent the mutability from
+leaking to other parts of the program.  For added paranoia, you could
+call <code class="code">persistent-intmap</code> on the incoming map, to ensure that if it
+were already transient, that the mutations in the body of
+<code class="code">intmap-increment</code> wouldn&rsquo;t affect the incoming value.
+</p>
+<p>In summary, programs in CPS are intmaps whose values are continuations.
+See the source code of <code class="code">(language cps utils)</code> for a number of
+useful facilities for working with CPS values.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Compiling-CPS.html">Compiling CPS</a>, Previous: <a href="Building-CPS.html">Building CPS</a>, Up: <a href="Continuation_002dPassing-Style.html">Continuation-Passing Style</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>User Information (Guile Reference Manual)</title>
+
+<meta name="description" content="User Information (Guile Reference Manual)">
+<meta name="keywords" content="User Information (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="POSIX.html" rel="up" title="POSIX">
+<link href="Time.html" rel="next" title="Time">
+<link href="File-System.html" rel="prev" title="File System">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="User-Information">
+<div class="nav-panel">
+<p>
+Next: <a href="Time.html" accesskey="n" rel="next">Time</a>, Previous: <a href="File-System.html" accesskey="p" rel="prev">File System</a>, Up: <a href="POSIX.html" accesskey="u" rel="up"><abbr class="acronym">POSIX</abbr> System Calls and Networking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="User-Information-1">7.2.4 User Information</h4>
+<a class="index-entry-id" id="index-user-information"></a>
+<a class="index-entry-id" id="index-password-file"></a>
+<a class="index-entry-id" id="index-group-file"></a>
+
+<p>The facilities in this section provide an interface to the user and
+group database.
+They should be used with care since they are not reentrant.
+</p>
+<p>The following functions accept an object representing user information
+and return a selected component:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-passwd_003aname"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">passwd:name</strong> <var class="def-var-arguments">pw</var><a class="copiable-link" href='#index-passwd_003aname'> &para;</a></span></dt>
+<dd><p>The name of the userid.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-passwd_003apasswd"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">passwd:passwd</strong> <var class="def-var-arguments">pw</var><a class="copiable-link" href='#index-passwd_003apasswd'> &para;</a></span></dt>
+<dd><p>The encrypted passwd.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-passwd_003auid"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">passwd:uid</strong> <var class="def-var-arguments">pw</var><a class="copiable-link" href='#index-passwd_003auid'> &para;</a></span></dt>
+<dd><p>The user id number.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-passwd_003agid"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">passwd:gid</strong> <var class="def-var-arguments">pw</var><a class="copiable-link" href='#index-passwd_003agid'> &para;</a></span></dt>
+<dd><p>The group id number.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-passwd_003agecos"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">passwd:gecos</strong> <var class="def-var-arguments">pw</var><a class="copiable-link" href='#index-passwd_003agecos'> &para;</a></span></dt>
+<dd><p>The full name.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-passwd_003adir"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">passwd:dir</strong> <var class="def-var-arguments">pw</var><a class="copiable-link" href='#index-passwd_003adir'> &para;</a></span></dt>
+<dd><p>The home directory.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-passwd_003ashell"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">passwd:shell</strong> <var class="def-var-arguments">pw</var><a class="copiable-link" href='#index-passwd_003ashell'> &para;</a></span></dt>
+<dd><p>The login shell.
+</p></dd></dl>
+<br>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getpwuid"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getpwuid</strong> <var class="def-var-arguments">uid</var><a class="copiable-link" href='#index-getpwuid'> &para;</a></span></dt>
+<dd><p>Look up an integer userid in the user database.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getpwnam"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getpwnam</strong> <var class="def-var-arguments">name</var><a class="copiable-link" href='#index-getpwnam'> &para;</a></span></dt>
+<dd><p>Look up a user name string in the user database.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-setpwent"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">setpwent</strong><a class="copiable-link" href='#index-setpwent'> &para;</a></span></dt>
+<dd><p>Initializes a stream used by <code class="code">getpwent</code> to read from the user database.
+The next use of <code class="code">getpwent</code> will return the first entry.  The
+return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getpwent"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getpwent</strong><a class="copiable-link" href='#index-getpwent'> &para;</a></span></dt>
+<dd><p>Read the next entry in the user database stream.  The return is a
+passwd user object as above, or <code class="code">#f</code> when no more entries.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-endpwent"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">endpwent</strong><a class="copiable-link" href='#index-endpwent'> &para;</a></span></dt>
+<dd><p>Closes the stream used by <code class="code">getpwent</code>.  The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-setpw"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">setpw</strong> <var class="def-var-arguments">[arg]</var><a class="copiable-link" href='#index-setpw'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsetpwent"><span class="category-def">C Function: </span><span><strong class="def-name">scm_setpwent</strong> <var class="def-var-arguments">(arg)</var><a class="copiable-link" href='#index-scm_005fsetpwent'> &para;</a></span></dt>
+<dd><p>If called with a true argument, initialize or reset the password data
+stream.  Otherwise, close the stream.  The <code class="code">setpwent</code> and
+<code class="code">endpwent</code> procedures are implemented on top of this.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getpw"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getpw</strong> <var class="def-var-arguments">[user]</var><a class="copiable-link" href='#index-getpw'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgetpwuid"><span class="category-def">C Function: </span><span><strong class="def-name">scm_getpwuid</strong> <var class="def-var-arguments">(user)</var><a class="copiable-link" href='#index-scm_005fgetpwuid'> &para;</a></span></dt>
+<dd><p>Look up an entry in the user database.  <var class="var">user</var> can be an integer,
+a string, or omitted, giving the behaviour of getpwuid, getpwnam
+or getpwent respectively.
+</p></dd></dl>
+
+<p>The following functions accept an object representing group information
+and return a selected component:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-group_003aname"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">group:name</strong> <var class="def-var-arguments">gr</var><a class="copiable-link" href='#index-group_003aname'> &para;</a></span></dt>
+<dd><p>The group name.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-group_003apasswd"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">group:passwd</strong> <var class="def-var-arguments">gr</var><a class="copiable-link" href='#index-group_003apasswd'> &para;</a></span></dt>
+<dd><p>The encrypted group password.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-group_003agid"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">group:gid</strong> <var class="def-var-arguments">gr</var><a class="copiable-link" href='#index-group_003agid'> &para;</a></span></dt>
+<dd><p>The group id number.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-group_003amem"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">group:mem</strong> <var class="def-var-arguments">gr</var><a class="copiable-link" href='#index-group_003amem'> &para;</a></span></dt>
+<dd><p>A list of userids which have this group as a supplementary group.
+</p></dd></dl>
+<br>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getgrgid"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getgrgid</strong> <var class="def-var-arguments">gid</var><a class="copiable-link" href='#index-getgrgid'> &para;</a></span></dt>
+<dd><p>Look up an integer group id in the group database.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getgrnam"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getgrnam</strong> <var class="def-var-arguments">name</var><a class="copiable-link" href='#index-getgrnam'> &para;</a></span></dt>
+<dd><p>Look up a group name in the group database.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-setgrent"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">setgrent</strong><a class="copiable-link" href='#index-setgrent'> &para;</a></span></dt>
+<dd><p>Initializes a stream used by <code class="code">getgrent</code> to read from the group database.
+The next use of <code class="code">getgrent</code> will return the first entry.
+The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getgrent"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getgrent</strong><a class="copiable-link" href='#index-getgrent'> &para;</a></span></dt>
+<dd><p>Return the next entry in the group database, using the stream set by
+<code class="code">setgrent</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-endgrent"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">endgrent</strong><a class="copiable-link" href='#index-endgrent'> &para;</a></span></dt>
+<dd><p>Closes the stream used by <code class="code">getgrent</code>.
+The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-setgr"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">setgr</strong> <var class="def-var-arguments">[arg]</var><a class="copiable-link" href='#index-setgr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsetgrent"><span class="category-def">C Function: </span><span><strong class="def-name">scm_setgrent</strong> <var class="def-var-arguments">(arg)</var><a class="copiable-link" href='#index-scm_005fsetgrent'> &para;</a></span></dt>
+<dd><p>If called with a true argument, initialize or reset the group data
+stream.  Otherwise, close the stream.  The <code class="code">setgrent</code> and
+<code class="code">endgrent</code> procedures are implemented on top of this.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getgr"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getgr</strong> <var class="def-var-arguments">[group]</var><a class="copiable-link" href='#index-getgr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgetgrgid"><span class="category-def">C Function: </span><span><strong class="def-name">scm_getgrgid</strong> <var class="def-var-arguments">(group)</var><a class="copiable-link" href='#index-scm_005fgetgrgid'> &para;</a></span></dt>
+<dd><p>Look up an entry in the group database.  <var class="var">group</var> can be an integer,
+a string, or omitted, giving the behaviour of getgrgid, getgrnam
+or getgrent respectively.
+</p></dd></dl>
+
+<p>In addition to the accessor procedures for the user database, the
+following shortcut procedure is also available.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-getlogin"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getlogin</strong><a class="copiable-link" href='#index-getlogin'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgetlogin"><span class="category-def">C Function: </span><span><strong class="def-name">scm_getlogin</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fgetlogin'> &para;</a></span></dt>
+<dd><p>Return a string containing the name of the user logged in on
+the controlling terminal of the process, or <code class="code">#f</code> if this
+information cannot be obtained.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Time.html">Time</a>, Previous: <a href="File-System.html">File System</a>, Up: <a href="POSIX.html"><abbr class="acronym">POSIX</abbr> System Calls and Networking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Nil (Guile Reference Manual)</title>
+
+<meta name="description" content="Nil (Guile Reference Manual)">
+<meta name="keywords" content="Nil (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Emacs-Lisp.html" rel="up" title="Emacs Lisp">
+<link href="Dynamic-Binding.html" rel="next" title="Dynamic Binding">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Nil">
+<div class="nav-panel">
+<p>
+Next: <a href="Dynamic-Binding.html" accesskey="n" rel="next">Dynamic Binding</a>, Up: <a href="Emacs-Lisp.html" accesskey="u" rel="up">Emacs Lisp</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Nil-1">6.24.2.1 Nil</h4>
+
+<p><code class="code">nil</code> in ELisp is an amalgam of Scheme&rsquo;s <code class="code">#f</code> and <code class="code">'()</code>.
+It is false, and it is the end-of-list; thus it is a boolean, and a list
+as well.
+</p>
+<p>Guile has chosen to support <code class="code">nil</code> as a separate value, distinct
+from <code class="code">#f</code> and <code class="code">'()</code>. This allows existing Scheme and Elisp
+code to maintain their current semantics. <code class="code">nil</code>, which in Elisp
+would just be written and read as <code class="code">nil</code>, in Scheme has the external
+representation <code class="code">#nil</code>.
+</p>
+<p>In Elisp code, <code class="code">#nil</code>, <code class="code">#f</code>, and <code class="code">'()</code> behave like
+<code class="code">nil</code>, in the sense that they are all interpreted as <code class="code">nil</code> by
+Elisp <code class="code">if</code>, <code class="code">cond</code>, <code class="code">when</code>, <code class="code">not</code>, <code class="code">null</code>, etc.
+To test whether Elisp would interpret an object as <code class="code">nil</code> from
+within Scheme code, use <code class="code">nil?</code>:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-nil_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">nil?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-nil_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> would be interpreted as <code class="code">nil</code> by
+Emacs Lisp code, else return <code class="code">#f</code>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(nil? #nil) &rArr; #t
+(nil? #f)   &rArr; #t
+(nil? '())  &rArr; #t
+(nil? 3)    &rArr; #f
+</pre></div>
+</dd></dl>
+
+<p>This decision to have <code class="code">nil</code> as a low-level distinct value
+facilitates interoperability between the two languages. Guile has chosen
+to have Scheme deal with <code class="code">nil</code> as follows:
+</p>
+<div class="example">
+<pre class="example-preformatted">(boolean? #nil) &rArr; #t
+(not #nil) &rArr; #t
+(null? #nil) &rArr; #t
+</pre></div>
+
+<p>And in C, one has:
+</p>
+<div class="example">
+<pre class="example-preformatted">scm_is_bool (SCM_ELISP_NIL) &rArr; 1
+scm_is_false (SCM_ELISP_NIL) &rArr; 1
+scm_is_null (SCM_ELISP_NIL) &rArr; 1
+</pre></div>
+
+<p>In this way, a version of <code class="code">fold</code> written in Scheme can correctly
+fold a function written in Elisp (or in fact any other language) over a
+nil-terminated list, as Elisp makes. The converse holds as well; a
+version of <code class="code">fold</code> written in Elisp can fold over a
+<code class="code">'()</code>-terminated list, as made by Scheme.
+</p>
+<p>On a low level, the bit representations for <code class="code">#f</code>, <code class="code">#t</code>,
+<code class="code">nil</code>, and <code class="code">'()</code> are made in such a way that they differ by
+only one bit, and so a test for, for example, <code class="code">#f</code>-or-<code class="code">nil</code>
+may be made very efficiently. See <code class="code">libguile/boolean.h</code>, for more
+information.
+</p>
+<h4 class="subsubheading" id="Equality-2">Equality</h4>
+
+<p>Since Scheme&rsquo;s <code class="code">equal?</code> must be transitive, and <code class="code">'()</code>
+is not <code class="code">equal?</code> to <code class="code">#f</code>, to Scheme <code class="code">nil</code> is not
+<code class="code">equal?</code> to <code class="code">#f</code> or <code class="code">'()</code>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(eq? #f '()) &rArr; #f
+(eq? #nil '()) &rArr; #f
+(eq? #nil #f) &rArr; #f
+(eqv? #f '()) &rArr; #f
+(eqv? #nil '()) &rArr; #f
+(eqv? #nil #f) &rArr; #f
+(equal? #f '()) &rArr; #f
+(equal? #nil '()) &rArr; #f
+(equal? #nil #f) &rArr; #f
+</pre></div>
+
+<p>However, in Elisp, <code class="code">'()</code>, <code class="code">#f</code>, and <code class="code">nil</code> are all
+<code class="code">equal</code> (though not <code class="code">eq</code>).
+</p>
+<div class="example">
+<pre class="example-preformatted">(defvar f (make-scheme-false))
+(defvar eol (make-scheme-null))
+(eq f eol) &rArr; nil
+(eq nil eol) &rArr; nil
+(eq nil f) &rArr; nil
+(equal f eol) &rArr; t
+(equal nil eol) &rArr; t
+(equal nil f) &rArr; t
+</pre></div>
+
+<p>These choices facilitate interoperability between Elisp and Scheme code,
+but they are not perfect. Some code that is correct standard Scheme is
+not correct in the presence of a second false and null value. For
+example:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (truthiness x)
+  (if (eq? x #f)
+      #f
+      #t))
+</pre></div>
+
+<p>This code seems to be meant to test a value for truth, but now that
+there are two false values, <code class="code">#f</code> and <code class="code">nil</code>, it is no longer
+correct.
+</p>
+<p>Similarly, there is the loop:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (my-length l)
+  (let lp ((l l) (len 0))
+    (if (eq? l '())
+        len
+        (lp (cdr l) (1+ len)))))
+</pre></div>
+
+<p>Here, <code class="code">my-length</code> will raise an error if <var class="var">l</var> is a
+<code class="code">nil</code>-terminated list.
+</p>
+<p>Both of these examples are correct standard Scheme, but, depending on
+what they really want to do, they are not correct Guile Scheme.
+Correctly written, they would test the <em class="emph">properties</em> of falsehood or
+nullity, not the individual members of that set. That is to say, they
+should use <code class="code">not</code> or <code class="code">null?</code> to test for falsehood or nullity,
+not <code class="code">eq?</code> or <code class="code">memv</code> or the like.
+</p>
+<p>Fortunately, using <code class="code">not</code> and <code class="code">null?</code> is in good style, so all
+well-written standard Scheme programs are correct, in Guile Scheme.
+</p>
+<p>Here are correct versions of the above examples:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (truthiness* x)
+  (if (not x)
+      #f
+      #t))
+;; or: (define (t* x) (not (not x)))
+;; or: (define (t** x) x)
+
+(define (my-length* l)
+  (let lp ((l l) (len 0))
+    (if (null? l)
+        len
+        (lp (cdr l) (1+ len)))))
+</pre></div>
+
+<p>This problem has a mirror-image case in Elisp:
+</p>
+<div class="example">
+<pre class="example-preformatted">(defun my-falsep (x)
+  (if (eq x nil)
+      t
+      nil))
+</pre></div>
+
+<p>Guile can warn when compiling code that has equality comparisons with
+<code class="code">#f</code>, <code class="code">'()</code>, or <code class="code">nil</code>. See <a class="xref" href="Compilation.html">Compiling Scheme Code</a>, for details.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Dynamic-Binding.html">Dynamic Binding</a>, Up: <a href="Emacs-Lisp.html">Emacs Lisp</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

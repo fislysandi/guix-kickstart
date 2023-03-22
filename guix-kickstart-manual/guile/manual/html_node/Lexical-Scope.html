@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Lexical Scope (Guile Reference Manual)</title>
+
+<meta name="description" content="Lexical Scope (Guile Reference Manual)">
+<meta name="keywords" content="Lexical Scope (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="About-Closure.html" rel="up" title="About Closure">
+<link href="Closure.html" rel="next" title="Closure">
+<link href="Chaining.html" rel="prev" title="Chaining">
+<style type="text/css">
+<!--
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Lexical-Scope">
+<div class="nav-panel">
+<p>
+Next: <a href="Closure.html" accesskey="n" rel="next">Closure</a>, Previous: <a href="Chaining.html" accesskey="p" rel="prev">Environment Chaining</a>, Up: <a href="About-Closure.html" accesskey="u" rel="up">The Concept of Closure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Lexical-Scope-1">3.4.4 Lexical Scope</h4>
+
+<p>The rules that we have just been describing are the details of how
+Scheme implements &ldquo;lexical scoping&rdquo;.  This subsection takes a brief
+diversion to explain what lexical scope means in general and to present
+an example of non-lexical scoping.
+</p>
+<p>&ldquo;Lexical scope&rdquo; in general is the idea that
+</p>
+<ul class="itemize mark-bullet">
+<li>an identifier at a particular place in a program always refers to the
+same variable location &mdash; where &ldquo;always&rdquo; means &ldquo;every time that the
+containing expression is executed&rdquo;, and that
+
+</li><li>the variable location to which it refers can be determined by static
+examination of the source code context in which that identifier appears,
+without having to consider the flow of execution through the program as
+a whole.
+</li></ul>
+
+<p>In practice, lexical scoping is the norm for most programming languages,
+and probably corresponds to what you would intuitively consider to be
+&ldquo;normal&rdquo;.  You may even be wondering how the situation could possibly
+&mdash; and usefully &mdash; be otherwise.  To demonstrate that another kind of
+scoping is possible, therefore, and to compare it against lexical
+scoping, the following subsection presents an example of non-lexical
+scoping and examines in detail how its behavior differs from the
+corresponding lexically scoped code.
+</p>
+                                   
+
+<ul class="mini-toc">
+<li><a href="Scoping-Example.html" accesskey="1">An Example of Non-Lexical Scoping</a></li>
+</ul>
+</div>
+
+
+
+</body>
+</html>

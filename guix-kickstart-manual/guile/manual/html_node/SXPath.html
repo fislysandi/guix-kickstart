@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SXPath (Guile Reference Manual)</title>
+
+<meta name="description" content="SXPath (Guile Reference Manual)">
+<meta name="keywords" content="SXPath (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SXML.html" rel="up" title="SXML">
+<link href="sxml-ssax-input_002dparse.html" rel="next" title="sxml ssax input-parse">
+<link href="SXML-Tree-Fold.html" rel="prev" title="SXML Tree Fold">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="SXPath">
+<div class="nav-panel">
+<p>
+Next: <a href="sxml-ssax-input_002dparse.html" accesskey="n" rel="next">(sxml ssax input-parse)</a>, Previous: <a href="SXML-Tree-Fold.html" accesskey="p" rel="prev">SXML Tree Fold</a>, Up: <a href="SXML.html" accesskey="u" rel="up">SXML</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="SXPath-1">7.21.6 SXPath</h4>
+<ul class="mini-toc">
+<li><a href="#Overview-2" accesskey="1">Overview</a></li>
+<li><a href="#Basic-Converters-and-Applicators" accesskey="2">Basic Converters and Applicators</a></li>
+<li><a href="#Converter-Combinators" accesskey="3">Converter Combinators</a></li>
+</ul>
+<div class="subsubsection-level-extent" id="Overview-2">
+<h4 class="subsubsection">7.21.6.1 Overview</h4>
+<h3 class="heading" id="SXPath_003a-SXML-Query-Language">SXPath: SXML Query Language</h3>
+<p>SXPath is a query language for SXML, an instance of XML Information set
+(Infoset) in the form of s-expressions.  See <code class="code">(sxml ssax)</code> for the
+definition of SXML and more details.  SXPath is also a translation into
+Scheme of an XML Path Language, <a class="uref" href="http://www.w3.org/TR/xpath">XPath</a>.
+XPath and SXPath describe means of selecting a set of Infoset&rsquo;s items or
+their properties.
+</p>
+<p>To facilitate queries, XPath maps the XML Infoset into an explicit tree,
+and introduces important notions of a location path and a current,
+context node.  A location path denotes a selection of a set of nodes
+relative to a context node.  Any XPath tree has a distinguished, root
+node &ndash; which serves as the context node for absolute location paths.
+Location path is recursively defined as a location step joined with a
+location path.  A location step is a simple query of the database
+relative to a context node.  A step may include expressions that further
+filter the selected set.  Each node in the resulting set is used as a
+context node for the adjoining location path.  The result of the step is
+a union of the sets returned by the latter location paths.
+</p>
+<p>The SXML representation of the XML Infoset (see SSAX.scm) is rather
+suitable for querying as it is.  Bowing to the XPath specification, we
+will refer to SXML information items as &rsquo;Nodes&rsquo;:
+</p>
+<div class="example">
+<pre class="example-preformatted"> 	&lt;Node&gt; ::= &lt;Element&gt; | &lt;attributes-coll&gt; | &lt;attrib&gt;
+ 		   | &quot;text string&quot; | &lt;PI&gt;
+</pre></div>
+
+<p>This production can also be described as
+</p>
+<div class="example">
+<pre class="example-preformatted">	&lt;Node&gt; ::= (name . &lt;Nodeset&gt;) | &quot;text string&quot;
+</pre></div>
+
+<p>An (ordered) set of nodes is just a list of the constituent nodes:
+</p>
+<div class="example">
+<pre class="example-preformatted"> 	&lt;Nodeset&gt; ::= (&lt;Node&gt; ...)
+</pre></div>
+
+<p>Nodesets, and Nodes other than text strings are both lists.  A &lt;Nodeset&gt;
+however is either an empty list, or a list whose head is not a symbol.  A
+symbol at the head of a node is either an XML name (in which case it&rsquo;s a
+tag of an XML element), or an administrative name such as &rsquo;@&rsquo;.  This
+uniform list representation makes processing rather simple and elegant,
+while avoiding confusion.  The multi-branch tree structure formed by the
+mutually-recursive datatypes &lt;Node&gt; and &lt;Nodeset&gt; lends itself well to
+processing by functional languages.
+</p>
+<p>A location path is in fact a composite query over an XPath tree or its
+branch.  A singe step is a combination of a projection, selection or a
+transitive closure.  Multiple steps are combined via join and union
+operations.  This insight allows us to <em class="emph">elegantly</em> implement XPath
+as a sequence of projection and filtering primitives &ndash; converters &ndash;
+joined by <em class="dfn">combinators</em>.  Each converter takes a node and returns a
+nodeset which is the result of the corresponding query relative to that
+node.  A converter can also be called on a set of nodes.  In that case it
+returns a union of the corresponding queries over each node in the set.
+The union is easily implemented as a list append operation as all nodes
+in a SXML tree are considered distinct, by XPath conventions.  We also
+preserve the order of the members in the union.  Query combinators are
+high-order functions: they take converter(s) (which is a Node|Nodeset -&gt;
+Nodeset function) and compose or otherwise combine them.  We will be
+concerned with only relative location paths [XPath]: an absolute
+location path is a relative path applied to the root node.
+</p>
+<p>Similarly to XPath, SXPath defines full and abbreviated notations for
+location paths.  In both cases, the abbreviated notation can be
+mechanically expanded into the full form by simple rewriting rules.  In
+the case of SXPath the corresponding rules are given in the
+documentation of the <code class="code">sxpath</code> procedure.
+See <a class="xref" href="#sxpath_002dprocedure_002ddocs">SXPath procedure documentation</a>.
+</p>
+<p>The regression test suite at the end of the file <samp class="file">SXPATH-old.scm</samp>
+shows a representative sample of SXPaths in both notations, juxtaposed
+with the corresponding XPath expressions.  Most of the samples are
+borrowed literally from the XPath specification.
+</p>
+<p>Much of the following material is taken from the SXPath sources by Oleg
+Kiselyov et al.
+</p>
+</div>
+<div class="subsubsection-level-extent" id="Basic-Converters-and-Applicators">
+<h4 class="subsubsection">7.21.6.2 Basic Converters and Applicators</h4>
+
+<p>A converter is a function mapping a nodeset (or a single node) to another
+nodeset.  Its type can be represented like this:
+</p>
+<div class="example">
+<pre class="example-preformatted">type Converter = Node|Nodeset -&gt; Nodeset
+</pre></div>
+
+<p>A converter can also play the role of a predicate: in that case, if a
+converter, applied to a node or a nodeset, yields a non-empty nodeset,
+the converter-predicate is deemed satisfied.  Likewise, an empty nodeset
+is equivalent to <code class="code">#f</code> in denoting failure.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-nodeset_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">nodeset?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-nodeset_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">x</var> is a nodeset.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-node_002dtypeof_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">node-typeof?</strong> <var class="def-var-arguments">crit</var><a class="copiable-link" href='#index-node_002dtypeof_003f'> &para;</a></span></dt>
+<dd><p>This function implements a &rsquo;Node test&rsquo; as defined in Sec. 2.3 of the
+XPath document.  A node test is one of the components of a location
+step.  It is also a converter-predicate in SXPath.
+</p>
+<p>The function <code class="code">node-typeof?</code> takes a type criterion and returns a
+function, which, when applied to a node, will tell if the node satisfies
+the test.
+</p>
+<p>The criterion <var class="var">crit</var> is a symbol, one of the following:
+</p>
+<dl class="table">
+<dt><code class="code">id</code></dt>
+<dd><p>tests if the node has the right name (id)
+</p>
+</dd>
+<dt><code class="code">@</code></dt>
+<dd><p>tests if the node is an &lt;attributes-coll&gt;
+</p>
+</dd>
+<dt><code class="code">*</code></dt>
+<dd><p>tests if the node is an &lt;Element&gt;
+</p>
+</dd>
+<dt><code class="code">*text*</code></dt>
+<dd><p>tests if the node is a text node
+</p>
+</dd>
+<dt><code class="code">*PI*</code></dt>
+<dd><p>tests if the node is a PI (processing instruction) node
+</p>
+</dd>
+<dt><code class="code">*any*</code></dt>
+<dd><p><code class="code">#t</code> for any type of node
+</p></dd>
+</dl>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-node_002deq_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">node-eq?</strong> <var class="def-var-arguments">other</var><a class="copiable-link" href='#index-node_002deq_003f'> &para;</a></span></dt>
+<dd><p>A curried equivalence converter predicate that takes a node <var class="var">other</var>
+and returns a function that takes another node.  The two nodes are
+compared using <code class="code">eq?</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-node_002dequal_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">node-equal?</strong> <var class="def-var-arguments">other</var><a class="copiable-link" href='#index-node_002dequal_003f'> &para;</a></span></dt>
+<dd><p>A curried equivalence converter predicate that takes a node <var class="var">other</var>
+and returns a function that takes another node.  The two nodes are
+compared using <code class="code">equal?</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-node_002dpos"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">node-pos</strong> <var class="def-var-arguments">n</var><a class="copiable-link" href='#index-node_002dpos'> &para;</a></span></dt>
+<dd><p>Select the <var class="var">n</var>&rsquo;th element of a nodeset and return as a singular
+nodeset.  If the <var class="var">n</var>&rsquo;th element does not exist, return an empty
+nodeset.  If <var class="var">n</var> is a negative number the node is picked from the
+tail of the list.
+</p>
+<div class="example">
+<pre class="example-preformatted">((node-pos 1) nodeset)  ; return the the head of the nodeset (if exists)
+((node-pos 2) nodeset)  ; return the node after that (if exists)
+((node-pos -1) nodeset) ; selects the last node of a non-empty nodeset
+((node-pos -2) nodeset) ; selects the last but one node, if exists.
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-filter-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">filter</strong> <var class="def-var-arguments">pred?</var><a class="copiable-link" href='#index-filter-2'> &para;</a></span></dt>
+<dd><p>A filter applicator, which introduces a filtering context.  The argument
+converter <var class="var">pred?</var> is considered a predicate, with either <code class="code">#f</code>
+or <code class="code">nil</code> meaning failure.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-take_002duntil"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">take-until</strong> <var class="def-var-arguments">pred?</var><a class="copiable-link" href='#index-take_002duntil'> &para;</a></span></dt>
+<dd><div class="example">
+<pre class="example-preformatted">take-until:: Converter -&gt; Converter, or
+take-until:: Pred -&gt; Node|Nodeset -&gt; Nodeset
+</pre></div>
+
+<p>Given a converter-predicate <var class="var">pred?</var> and a nodeset, apply the
+predicate to each element of the nodeset, until the predicate yields
+anything but <code class="code">#f</code> or <code class="code">nil</code>.  Return the elements of the input
+nodeset that have been processed until that moment (that is, which fail
+the predicate).
+</p>
+<p><code class="code">take-until</code> is a variation of the <code class="code">filter</code> above:
+<code class="code">take-until</code> passes elements of an ordered input set up to (but not
+including) the first element that satisfies the predicate.  The nodeset
+returned by <code class="code">((take-until (not pred)) nset)</code> is a subset &ndash; to be
+more precise, a prefix &ndash; of the nodeset returned by <code class="code">((filter
+pred) nset)</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-take_002dafter"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">take-after</strong> <var class="def-var-arguments">pred?</var><a class="copiable-link" href='#index-take_002dafter'> &para;</a></span></dt>
+<dd><div class="example">
+<pre class="example-preformatted">take-after:: Converter -&gt; Converter, or
+take-after:: Pred -&gt; Node|Nodeset -&gt; Nodeset
+</pre></div>
+
+<p>Given a converter-predicate <var class="var">pred?</var> and a nodeset, apply the
+predicate to each element of the nodeset, until the predicate yields
+anything but <code class="code">#f</code> or <code class="code">nil</code>.  Return the elements of the input
+nodeset that have not been processed: that is, return the elements of
+the input nodeset that follow the first element that satisfied the
+predicate.
+</p>
+<p><code class="code">take-after</code> along with <code class="code">take-until</code> partition an input
+nodeset into three parts: the first element that satisfies a predicate,
+all preceding elements and all following elements.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-map_002dunion"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">map-union</strong> <var class="def-var-arguments">proc lst</var><a class="copiable-link" href='#index-map_002dunion'> &para;</a></span></dt>
+<dd><p>Apply <var class="var">proc</var> to each element of <var class="var">lst</var> and return the list of results.
+If <var class="var">proc</var> returns a nodeset, splice it into the result
+</p>
+<p>From another point of view, <code class="code">map-union</code> is a function
+<code class="code">Converter-&gt;Converter</code>, which places an argument-converter in a joining
+context.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-node_002dreverse"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">node-reverse</strong> <var class="def-var-arguments">node-or-nodeset</var><a class="copiable-link" href='#index-node_002dreverse'> &para;</a></span></dt>
+<dd><div class="example">
+<pre class="example-preformatted">node-reverse :: Converter, or
+node-reverse:: Node|Nodeset -&gt; Nodeset
+</pre></div>
+
+<p>Reverses the order of nodes in the nodeset.  This basic converter is
+needed to implement a reverse document order (see the XPath
+Recommendation).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-node_002dtrace"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">node-trace</strong> <var class="def-var-arguments">title</var><a class="copiable-link" href='#index-node_002dtrace'> &para;</a></span></dt>
+<dd><div class="example">
+<pre class="example-preformatted">node-trace:: String -&gt; Converter
+</pre></div>
+
+<p><code class="code">(node-trace title)</code> is an identity converter.  In addition it
+prints out the node or nodeset it is applied to, prefixed with the
+<var class="var">title</var>.  This converter is very useful for debugging.
+</p></dd></dl>
+
+</div>
+<div class="subsubsection-level-extent" id="Converter-Combinators">
+<h4 class="subsubsection">7.21.6.3 Converter Combinators</h4>
+
+<p>Combinators are higher-order functions that transmogrify a converter or
+glue a sequence of converters into a single, non-trivial converter.  The
+goal is to arrive at converters that correspond to XPath location paths.
+</p>
+<p>From a different point of view, a combinator is a fixed, named
+<em class="dfn">pattern</em> of applying converters.  Given below is a complete set of
+such patterns that together implement XPath location path specification.
+As it turns out, all these combinators can be built from a small number
+of basic blocks: regular functional composition, <code class="code">map-union</code> and
+<code class="code">filter</code> applicators, and the nodeset union.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-select_002dkids"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">select-kids</strong> <var class="def-var-arguments">test-pred?</var><a class="copiable-link" href='#index-select_002dkids'> &para;</a></span></dt>
+<dd><p><code class="code">select-kids</code> takes a converter (or a predicate) as an argument and
+returns another converter.  The resulting converter applied to a nodeset
+returns an ordered subset of its children that satisfy the predicate
+<var class="var">test-pred?</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-node_002dself"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">node-self</strong> <var class="def-var-arguments">pred?</var><a class="copiable-link" href='#index-node_002dself'> &para;</a></span></dt>
+<dd><p>Similar to <code class="code">select-kids</code> except that the predicate <var class="var">pred?</var> is
+applied to the node itself rather than to its children.  The resulting
+nodeset will contain either one component, or will be empty if the node
+failed the predicate.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-node_002djoin"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">node-join</strong> <var class="def-var-arguments">. selectors</var><a class="copiable-link" href='#index-node_002djoin'> &para;</a></span></dt>
+<dd><div class="example">
+<pre class="example-preformatted">node-join:: [LocPath] -&gt; Node|Nodeset -&gt; Nodeset, or
+node-join:: [Converter] -&gt; Converter
+</pre></div>
+
+<p>Join the sequence of location steps or paths as described above.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-node_002dreduce"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">node-reduce</strong> <var class="def-var-arguments">. converters</var><a class="copiable-link" href='#index-node_002dreduce'> &para;</a></span></dt>
+<dd><div class="example">
+<pre class="example-preformatted">node-reduce:: [LocPath] -&gt; Node|Nodeset -&gt; Nodeset, or
+node-reduce:: [Converter] -&gt; Converter
+</pre></div>
+
+<p>A regular functional composition of converters.  From a different point
+of view, <code class="code">((apply node-reduce converters) nodeset)</code> is equivalent
+to <code class="code">(foldl apply nodeset converters)</code>, i.e., folding, or reducing,
+a list of converters with the nodeset as a seed.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-node_002dor"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">node-or</strong> <var class="def-var-arguments">. converters</var><a class="copiable-link" href='#index-node_002dor'> &para;</a></span></dt>
+<dd><div class="example">
+<pre class="example-preformatted">node-or:: [Converter] -&gt; Converter
+</pre></div>
+
+<p>This combinator applies all converters to a given node and produces the
+union of their results.  This combinator corresponds to a union
+(<code class="code">|</code> operation) for XPath location paths.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-node_002dclosure"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">node-closure</strong> <var class="def-var-arguments">test-pred?</var><a class="copiable-link" href='#index-node_002dclosure'> &para;</a></span></dt>
+<dd><div class="example">
+<pre class="example-preformatted">node-closure:: Converter -&gt; Converter
+</pre></div>
+
+<p>Select all <em class="emph">descendants</em> of a node that satisfy a
+converter-predicate <var class="var">test-pred?</var>.  This combinator is similar to
+<code class="code">select-kids</code> but applies to grand... children as well.  This
+combinator implements the <code class="code">descendant::</code> XPath axis.  Conceptually,
+this combinator can be expressed as
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (node-closure f)
+  (node-or
+    (select-kids f)
+    (node-reduce (select-kids (node-typeof? '*)) (node-closure f))))
+</pre></div>
+
+<p>This definition, as written, looks somewhat like a fixpoint, and it will
+run forever.  It is obvious however that sooner or later
+<code class="code">(select-kids (node-typeof? '*))</code> will return an empty nodeset.  At
+this point further iterations will no longer affect the result and can
+be stopped.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-node_002dparent"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">node-parent</strong> <var class="def-var-arguments">rootnode</var><a class="copiable-link" href='#index-node_002dparent'> &para;</a></span></dt>
+<dd><div class="example">
+<pre class="example-preformatted">node-parent:: RootNode -&gt; Converter
+</pre></div>
+
+<p><code class="code">(node-parent rootnode)</code> yields a converter that returns a parent
+of a node it is applied to.  If applied to a nodeset, it returns the
+list of parents of nodes in the nodeset.  The <var class="var">rootnode</var> does not
+have to be the root node of the whole SXML tree &ndash; it may be a root node
+of a branch of interest.
+</p>
+<p>Given the notation of Philip Wadler&rsquo;s paper on semantics of XSLT,
+</p>
+<pre class="verbatim">  parent(x) = { y | y=subnode*(root), x=subnode(y) }
+</pre>
+<p>Therefore, <code class="code">node-parent</code> is not the fundamental converter: it can
+be expressed through the existing ones.  Yet <code class="code">node-parent</code> is a
+rather convenient converter.  It corresponds to a <code class="code">parent::</code> axis
+of SXPath.  Note that the <code class="code">parent::</code> axis can be used with an
+attribute node as well.
+</p></dd></dl>
+
+<a class="anchor" id="sxpath_002dprocedure_002ddocs"></a><dl class="first-deffn">
+<dt class="deffn" id="index-sxpath"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sxpath</strong> <var class="def-var-arguments">path</var><a class="copiable-link" href='#index-sxpath'> &para;</a></span></dt>
+<dd><p>Evaluate an abbreviated SXPath.
+</p>
+<div class="example">
+<pre class="example-preformatted">sxpath:: AbbrPath -&gt; Converter, or
+sxpath:: AbbrPath -&gt; Node|Nodeset -&gt; Nodeset
+</pre></div>
+
+<p><var class="var">path</var> is a list.  It is translated to the full SXPath according to
+the following rewriting rules:
+</p>
+<div class="example">
+<pre class="example-preformatted">(sxpath '())
+&rArr; (node-join)
+
+(sxpath '(path-component ...))
+&rArr; (node-join (sxpath1 path-component) (sxpath '(...)))
+
+(sxpath1 '//)
+&rArr; (node-or
+   (node-self (node-typeof? '*any*))
+   (node-closure (node-typeof? '*any*)))
+
+(sxpath1 '(equal? x))
+&rArr; (select-kids (node-equal? x))
+
+(sxpath1 '(eq? x))
+&rArr; (select-kids (node-eq? x))
+
+(sxpath1 ?symbol)
+&rArr; (select-kids (node-typeof? ?symbol)
+
+(sxpath1 procedure)
+&rArr; procedure
+
+(sxpath1 '(?symbol ...))
+&rArr; (sxpath1 '((?symbol) ...))
+
+(sxpath1 '(path reducer ...))
+&rArr; (node-reduce (sxpath path) (sxpathr reducer) ...)
+
+(sxpathr number)
+&rArr; (node-pos number)
+
+(sxpathr path-filter)
+&rArr; (filter (sxpath path-filter))
+</pre></div>
+</dd></dl>
+
+</div>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="sxml-ssax-input_002dparse.html">(sxml ssax input-parse)</a>, Previous: <a href="SXML-Tree-Fold.html">SXML Tree Fold</a>, Up: <a href="SXML.html">SXML</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

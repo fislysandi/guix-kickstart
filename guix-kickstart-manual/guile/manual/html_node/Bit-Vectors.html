@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Bit Vectors (Guile Reference Manual)</title>
+
+<meta name="description" content="Bit Vectors (Guile Reference Manual)">
+<meta name="keywords" content="Bit Vectors (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Data-Types.html" rel="up" title="Data Types">
+<link href="Bytevectors.html" rel="next" title="Bytevectors">
+<link href="Vectors.html" rel="prev" title="Vectors">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Bit-Vectors">
+<div class="nav-panel">
+<p>
+Next: <a href="Bytevectors.html" accesskey="n" rel="next">Bytevectors</a>, Previous: <a href="Vectors.html" accesskey="p" rel="prev">Vectors</a>, Up: <a href="Data-Types.html" accesskey="u" rel="up">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Bit-Vectors-1">6.6.11 Bit Vectors</h4>
+
+<p>Bit vectors are zero-origin, one-dimensional arrays of booleans.  They
+are displayed as a sequence of <code class="code">0</code>s and <code class="code">1</code>s prefixed by
+<code class="code">#*</code>, e.g.,
+</p>
+<div class="example">
+<pre class="example-preformatted">(make-bitvector 8 #f) &rArr;
+#*00000000
+</pre></div>
+
+<p>Bit vectors are the special case of one dimensional bit arrays, and can
+thus be used with the array procedures, See <a class="xref" href="Arrays.html">Arrays</a>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-bitvector_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bitvector?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-bitvector_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> when <var class="var">obj</var> is a bitvector, else
+return <code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dbitvector"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-bitvector</strong> <var class="def-var-arguments">len [fill]</var><a class="copiable-link" href='#index-make_002dbitvector'> &para;</a></span></dt>
+<dd><p>Create a new bitvector of length <var class="var">len</var> and
+optionally initialize all elements to <var class="var">fill</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bitvector"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bitvector</strong> <var class="def-var-arguments">bit &hellip;</var><a class="copiable-link" href='#index-bitvector'> &para;</a></span></dt>
+<dd><p>Create a new bitvector with the arguments as elements.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bitvector_002dlength"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bitvector-length</strong> <var class="def-var-arguments">vec</var><a class="copiable-link" href='#index-bitvector_002dlength'> &para;</a></span></dt>
+<dd><p>Return the length of the bitvector <var class="var">vec</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bitvector_002dbit_002dset_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bitvector-bit-set?</strong> <var class="def-var-arguments">vec idx</var><a class="copiable-link" href='#index-bitvector_002dbit_002dset_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bitvector_002dbit_002dclear_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bitvector-bit-clear?</strong> <var class="def-var-arguments">vec idx</var><a class="copiable-link" href='#index-bitvector_002dbit_002dclear_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if the bit at index <var class="var">idx</var> of the bitvector
+<var class="var">vec</var> is set (for <code class="code">bitvector-bit-set?</code>) or clear (for
+<code class="code">bitvector-bit-clear?</code>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bitvector_002dset_002dbit_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bitvector-set-bit!</strong> <var class="def-var-arguments">vec idx</var><a class="copiable-link" href='#index-bitvector_002dset_002dbit_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bitvector_002dclear_002dbit_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bitvector-clear-bit!</strong> <var class="def-var-arguments">vec idx</var><a class="copiable-link" href='#index-bitvector_002dclear_002dbit_0021'> &para;</a></span></dt>
+<dd><p>Set (for <code class="code">bitvector-set-bit!</code>) or clear (for
+<code class="code">bitvector-clear-bit!</code>) the bit at index <var class="var">idx</var> of the bitvector
+<var class="var">vec</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bitvector_002dset_002dall_002dbits_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bitvector-set-all-bits!</strong> <var class="def-var-arguments">vec</var><a class="copiable-link" href='#index-bitvector_002dset_002dall_002dbits_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bitvector_002dclear_002dall_002dbits_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bitvector-clear-all-bits!</strong> <var class="def-var-arguments">vec</var><a class="copiable-link" href='#index-bitvector_002dclear_002dall_002dbits_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bitvector_002dflip_002dall_002dbits_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bitvector-flip-all-bits!</strong> <var class="def-var-arguments">vec</var><a class="copiable-link" href='#index-bitvector_002dflip_002dall_002dbits_0021'> &para;</a></span></dt>
+<dd><p>Set, clear, or flip all bits of <var class="var">vec</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-list_002d_003ebitvector"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list-&gt;bitvector</strong> <var class="def-var-arguments">list</var><a class="copiable-link" href='#index-list_002d_003ebitvector'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flist_005fto_005fbitvector"><span class="category-def">C Function: </span><span><strong class="def-name">scm_list_to_bitvector</strong> <var class="def-var-arguments">(list)</var><a class="copiable-link" href='#index-scm_005flist_005fto_005fbitvector'> &para;</a></span></dt>
+<dd><p>Return a new bitvector initialized with the elements
+of <var class="var">list</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bitvector_002d_003elist"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bitvector-&gt;list</strong> <var class="def-var-arguments">vec</var><a class="copiable-link" href='#index-bitvector_002d_003elist'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbitvector_005fto_005flist"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bitvector_to_list</strong> <var class="def-var-arguments">(vec)</var><a class="copiable-link" href='#index-scm_005fbitvector_005fto_005flist'> &para;</a></span></dt>
+<dd><p>Return a new list initialized with the elements
+of the bitvector <var class="var">vec</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bitvector_002dcopy"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bitvector-copy</strong> <var class="def-var-arguments">bitvector [start [end]]</var><a class="copiable-link" href='#index-bitvector_002dcopy'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbitvector_005fcopy"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bitvector_copy</strong> <var class="def-var-arguments">(bitvector, start, end)</var><a class="copiable-link" href='#index-scm_005fbitvector_005fcopy'> &para;</a></span></dt>
+<dd><p>Returns a freshly allocated bitvector containing the elements of <var class="var">bitvector</var>
+in the range [<var class="var">start</var> ... <var class="var">end</var>). <var class="var">start</var> defaults to 0 and
+<var class="var">end</var> defaults to the length of <var class="var">bitvector</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bitvector_002dcount"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bitvector-count</strong> <var class="def-var-arguments">bitvector</var><a class="copiable-link" href='#index-bitvector_002dcount'> &para;</a></span></dt>
+<dd><p>Return a count of how many entries in <var class="var">bitvector</var> are set.
+</p>
+<div class="example">
+<pre class="example-preformatted">(bitvector-count #*000111000)  &rArr; 3
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bitvector_002dcount_002dbits"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bitvector-count-bits</strong> <var class="def-var-arguments">bitvector bits</var><a class="copiable-link" href='#index-bitvector_002dcount_002dbits'> &para;</a></span></dt>
+<dd><p>Return a count of how many entries in <var class="var">bitvector</var> are set, with the
+bitvector <var class="var">bits</var> selecting the entries to consider.  <var class="var">bitvector</var>
+must be at least as long as <var class="var">bits</var>.
+</p>
+<p>For example,
+</p>
+<div class="example">
+<pre class="example-preformatted">(bitvector-count-bits #*01110111 #*11001101) &rArr; 3
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bitvector_002dposition"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bitvector-position</strong> <var class="def-var-arguments">bitvector bool start</var><a class="copiable-link" href='#index-bitvector_002dposition'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbitvector_005fposition"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bitvector_position</strong> <var class="def-var-arguments">(bitvector, bool, start)</var><a class="copiable-link" href='#index-scm_005fbitvector_005fposition'> &para;</a></span></dt>
+<dd><p>Return the index of the first occurrence of <var class="var">bool</var> in
+<var class="var">bitvector</var>, starting from <var class="var">start</var>.  If there is no <var class="var">bool</var>
+entry between <var class="var">start</var> and the end of <var class="var">bitvector</var>, then return
+<code class="code">#f</code>.  For example,
+</p>
+<div class="example">
+<pre class="example-preformatted">(bitvector-position #*000101 #t 0)  &rArr; 3
+(bitvector-position #*0001111 #f 3) &rArr; #f
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bitvector_002dset_002dbits_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bitvector-set-bits!</strong> <var class="def-var-arguments">bitvector bits</var><a class="copiable-link" href='#index-bitvector_002dset_002dbits_0021'> &para;</a></span></dt>
+<dd><p>Set entries of <var class="var">bitvector</var> to <code class="code">#t</code>, with <var class="var">bits</var> selecting
+the bits to set.  The return value is unspecified.  <var class="var">bitvector</var> must
+be at least as long as <var class="var">bits</var>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define bv (bitvector-copy #*11000010))
+(bitvector-set-bits! bv #*10010001)
+bv
+&rArr; #*11010011
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bitvector_002dclear_002dbits_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bitvector-clear-bits!</strong> <var class="def-var-arguments">bitvector bits</var><a class="copiable-link" href='#index-bitvector_002dclear_002dbits_0021'> &para;</a></span></dt>
+<dd><p>Set entries of <var class="var">bitvector</var> to <code class="code">#f</code>, with <var class="var">bits</var> selecting
+the bits to clear.  The return value is unspecified.  <var class="var">bitvector</var>
+must be at least as long as <var class="var">bits</var>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define bv (bitvector-copy #*11000010))
+(bitvector-clear-bits! bv #*10010001)
+bv
+&rArr; #*01000010
+</pre></div>
+</dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fis_005fbitvector"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_is_bitvector</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-scm_005fis_005fbitvector'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fc_005fmake_005fbitvector"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_c_make_bitvector</strong> <code class="def-code-arguments">(size_t len, SCM fill)</code><a class="copiable-link" href='#index-scm_005fc_005fmake_005fbitvector'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fbitvector_005fbit_005fis_005fset"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_bitvector_bit_is_set</strong> <code class="def-code-arguments">(SCM vec, size_t idx)</code><a class="copiable-link" href='#index-scm_005fbitvector_005fbit_005fis_005fset'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fbitvector_005fbit_005fis_005fclear"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_bitvector_bit_is_clear</strong> <code class="def-code-arguments">(SCM vec, size_t idx)</code><a class="copiable-link" href='#index-scm_005fbitvector_005fbit_005fis_005fclear'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fc_005fbitvector_005fset_005fbit_005fx"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_c_bitvector_set_bit_x</strong> <code class="def-code-arguments">(SCM vec, size_t idx)</code><a class="copiable-link" href='#index-scm_005fc_005fbitvector_005fset_005fbit_005fx'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fc_005fbitvector_005fclear_005fbit_005fx"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_c_bitvector_clear_bit_x</strong> <code class="def-code-arguments">(SCM vec, size_t idx)</code><a class="copiable-link" href='#index-scm_005fc_005fbitvector_005fclear_005fbit_005fx'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fc_005fbitvector_005fset_005fbits_005fx"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_c_bitvector_set_bits_x</strong> <code class="def-code-arguments">(SCM vec, SCM bits)</code><a class="copiable-link" href='#index-scm_005fc_005fbitvector_005fset_005fbits_005fx'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fc_005fbitvector_005fclear_005fbits_005fx"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_c_bitvector_clear_bits_x</strong> <code class="def-code-arguments">(SCM vec, SCM bits)</code><a class="copiable-link" href='#index-scm_005fc_005fbitvector_005fclear_005fbits_005fx'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fc_005fbitvector_005fset_005fall_005fbits_005fx"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_c_bitvector_set_all_bits_x</strong> <code class="def-code-arguments">(SCM vec)</code><a class="copiable-link" href='#index-scm_005fc_005fbitvector_005fset_005fall_005fbits_005fx'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fc_005fbitvector_005fclear_005fall_005fbits_005fx"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_c_bitvector_clear_all_bits_x</strong> <code class="def-code-arguments">(SCM vec)</code><a class="copiable-link" href='#index-scm_005fc_005fbitvector_005fclear_005fall_005fbits_005fx'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fc_005fbitvector_005fflip_005fall_005fbits_005fx"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_c_bitvector_flip_all_bits_x</strong> <code class="def-code-arguments">(SCM vec)</code><a class="copiable-link" href='#index-scm_005fc_005fbitvector_005fflip_005fall_005fbits_005fx'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fc_005fbitvector_005flength"><span class="category-def">C Function: </span><span><code class="def-type">size_t</code> <strong class="def-name">scm_c_bitvector_length</strong> <code class="def-code-arguments">(SCM bitvector)</code><a class="copiable-link" href='#index-scm_005fc_005fbitvector_005flength'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fc_005fbitvector_005fcount"><span class="category-def">C Function: </span><span><code class="def-type">size_t</code> <strong class="def-name">scm_c_bitvector_count</strong> <code class="def-code-arguments">(SCM bitvector)</code><a class="copiable-link" href='#index-scm_005fc_005fbitvector_005fcount'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fc_005fbitvector_005fcount_005fbits"><span class="category-def">C Function: </span><span><code class="def-type">size_t</code> <strong class="def-name">scm_c_bitvector_count_bits</strong> <code class="def-code-arguments">(SCM bitvector, SCM bits)</code><a class="copiable-link" href='#index-scm_005fc_005fbitvector_005fcount_005fbits'> &para;</a></span></dt>
+<dd><p>C API for the corresponding Scheme bitvector interfaces.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fbitvector_005felements"><span class="category-def">C Function: </span><span><code class="def-type">const scm_t_uint32 *</code> <strong class="def-name">scm_bitvector_elements</strong> <code class="def-code-arguments">(SCM vec, scm_t_array_handle *handle, size_t *offp, size_t *lenp, ssize_t *incp)</code><a class="copiable-link" href='#index-scm_005fbitvector_005felements'> &para;</a></span></dt>
+<dd><p>Like <code class="code">scm_vector_elements</code> (see <a class="pxref" href="Vector-Accessing-from-C.html">Vector Accessing from C</a>), but
+for bitvectors.  The variable pointed to by <var class="var">offp</var> is set to the
+value returned by <code class="code">scm_array_handle_bit_elements_offset</code>.  See
+<code class="code">scm_array_handle_bit_elements</code> for how to use the returned
+pointer and the offset.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fbitvector_005fwritable_005felements"><span class="category-def">C Function: </span><span><code class="def-type">scm_t_uint32 *</code> <strong class="def-name">scm_bitvector_writable_elements</strong> <code class="def-code-arguments">(SCM vec, scm_t_array_handle *handle, size_t *offp, size_t *lenp, ssize_t *incp)</code><a class="copiable-link" href='#index-scm_005fbitvector_005fwritable_005felements'> &para;</a></span></dt>
+<dd><p>Like <code class="code">scm_bitvector_elements</code>, but the pointer is good for reading
+and writing.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Bytevectors.html">Bytevectors</a>, Previous: <a href="Vectors.html">Vectors</a>, Up: <a href="Data-Types.html">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-18 Exceptions (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-18 Exceptions (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-18 Exceptions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI_002d18.html" rel="up" title="SRFI-18">
+<link href="SRFI_002d18-Time.html" rel="prev" title="SRFI-18 Time">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="SRFI_002d18-Exceptions">
+<div class="nav-panel">
+<p>
+Previous: <a href="SRFI_002d18-Time.html" accesskey="p" rel="prev">SRFI-18 Time</a>, Up: <a href="SRFI_002d18.html" accesskey="u" rel="up">SRFI-18 - Multithreading support</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="SRFI_002d18-Exceptions-1">7.5.15.5 SRFI-18 Exceptions</h4>
+
+<p>SRFI-18 exceptions are identical to the exceptions provided by 
+Guile&rsquo;s implementation of SRFI-34.  The behavior of exception 
+handlers invoked to handle exceptions thrown from SRFI-18 functions,
+however, differs from the conventional behavior of SRFI-34 in that
+the continuation of the handler is the same as that of the call to
+the function.  Handlers are called in a tail-recursive manner; the
+exceptions do not &ldquo;bubble up&rdquo;.
+</p>
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-current_002dexception_002dhandler"><span class="category-def">Function: </span><span><strong class="def-name">current-exception-handler</strong><a class="copiable-link" href='#index-current_002dexception_002dhandler'> &para;</a></span></dt>
+<dd><p>Returns the current exception handler.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-with_002dexception_002dhandler-1"><span class="category-def">Function: </span><span><strong class="def-name">with-exception-handler</strong> <var class="def-var-arguments">handler thunk</var><a class="copiable-link" href='#index-with_002dexception_002dhandler-1'> &para;</a></span></dt>
+<dd><p>Installs <var class="var">handler</var> as the current exception handler and calls the
+procedure <var class="var">thunk</var> with no arguments, returning its value as the 
+value of the exception.  <var class="var">handler</var> must be a procedure that accepts
+a single argument. The current exception handler at the time this 
+procedure is called will be restored after the call returns.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-raise-1"><span class="category-def">Function: </span><span><strong class="def-name">raise</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-raise-1'> &para;</a></span></dt>
+<dd><p>Raise <var class="var">obj</var> as an exception.  This is the same procedure as the
+same-named procedure defined in SRFI 34.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-join_002dtimeout_002dexception_003f"><span class="category-def">Function: </span><span><strong class="def-name">join-timeout-exception?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-join_002dtimeout_002dexception_003f'> &para;</a></span></dt>
+<dd><p>Returns <code class="code">#t</code> if <var class="var">obj</var> is an exception raised as the result of 
+performing a timed join on a thread that does not exit within the
+specified timeout, <code class="code">#f</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-abandoned_002dmutex_002dexception_003f"><span class="category-def">Function: </span><span><strong class="def-name">abandoned-mutex-exception?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-abandoned_002dmutex_002dexception_003f'> &para;</a></span></dt>
+<dd><p>Returns <code class="code">#t</code> if <var class="var">obj</var> is an exception raised as the result of
+attempting to lock a mutex that has been abandoned by its owner thread,
+<code class="code">#f</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-terminated_002dthread_002dexception_003f"><span class="category-def">Function: </span><span><strong class="def-name">terminated-thread-exception?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-terminated_002dthread_002dexception_003f'> &para;</a></span></dt>
+<dd><p>Returns <code class="code">#t</code> if <var class="var">obj</var> is an exception raised as the result of 
+joining on a thread that exited as the result of a call to
+<code class="code">thread-terminate!</code>.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-uncaught_002dexception_003f"><span class="category-def">Function: </span><span><strong class="def-name">uncaught-exception?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-uncaught_002dexception_003f'> &para;</a></span></dt>
+<dt class="deffnx defunx-alias-deffnx def-cmd-deffn" id="index-uncaught_002dexception_002dreason"><span class="category-def">Function: </span><span><strong class="def-name">uncaught-exception-reason</strong> <var class="def-var-arguments">exc</var><a class="copiable-link" href='#index-uncaught_002dexception_002dreason'> &para;</a></span></dt>
+<dd><p><code class="code">uncaught-exception?</code> returns <code class="code">#t</code> if <var class="var">obj</var> is an 
+exception thrown as the result of joining a thread that exited by
+raising an exception that was handled by the top-level exception
+handler installed by <code class="code">make-thread</code>.  When this occurs, the 
+original exception is preserved as part of the exception thrown by
+<code class="code">thread-join!</code> and can be accessed by calling 
+<code class="code">uncaught-exception-reason</code> on that exception.  Note that
+because this exception-preservation mechanism is a side-effect of
+<code class="code">make-thread</code>, joining on threads that exited as described above
+but were created by other means will not raise this 
+<code class="code">uncaught-exception</code> error.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="SRFI_002d18-Time.html">SRFI-18 Time</a>, Up: <a href="SRFI_002d18.html">SRFI-18 - Multithreading support</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

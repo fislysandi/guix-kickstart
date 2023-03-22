@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Match Structures (Guile Reference Manual)</title>
+
+<meta name="description" content="Match Structures (Guile Reference Manual)">
+<meta name="keywords" content="Match Structures (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Regular-Expressions.html" rel="up" title="Regular Expressions">
+<link href="Backslash-Escapes.html" rel="next" title="Backslash Escapes">
+<link href="Regexp-Functions.html" rel="prev" title="Regexp Functions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Match-Structures">
+<div class="nav-panel">
+<p>
+Next: <a href="Backslash-Escapes.html" accesskey="n" rel="next">Backslash Escapes</a>, Previous: <a href="Regexp-Functions.html" accesskey="p" rel="prev">Regexp Functions</a>, Up: <a href="Regular-Expressions.html" accesskey="u" rel="up">Regular Expressions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Match-Structures-1">6.13.2 Match Structures</h4>
+
+<a class="index-entry-id" id="index-match-structures"></a>
+
+<p>A <em class="dfn">match structure</em> is the object returned by <code class="code">string-match</code> and
+<code class="code">regexp-exec</code>.  It describes which portion of a string, if any,
+matched the given regular expression.  Match structures include: a
+reference to the string that was checked for matches; the starting and
+ending positions of the regexp match; and, if the regexp included any
+parenthesized subexpressions, the starting and ending positions of each
+submatch.
+</p>
+<p>In each of the regexp match functions described below, the <code class="code">match</code>
+argument must be a match structure returned by a previous call to
+<code class="code">string-match</code> or <code class="code">regexp-exec</code>.  Most of these functions
+return some information about the original target string that was
+matched against a regular expression; we will call that string
+<var class="var">target</var> for easy reference.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-regexp_002dmatch_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">regexp-match?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-regexp_002dmatch_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is a match structure returned by a
+previous call to <code class="code">regexp-exec</code>, or <code class="code">#f</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-match_003asubstring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">match:substring</strong> <var class="def-var-arguments">match [n]</var><a class="copiable-link" href='#index-match_003asubstring'> &para;</a></span></dt>
+<dd><p>Return the portion of <var class="var">target</var> matched by subexpression number
+<var class="var">n</var>.  Submatch 0 (the default) represents the entire regexp match.
+If the regular expression as a whole matched, but the subexpression
+number <var class="var">n</var> did not match, return <code class="code">#f</code>.
+</p></dd></dl>
+
+<div class="example lisp">
+<pre class="lisp-preformatted">(define s (string-match &quot;[0-9][0-9][0-9][0-9]&quot; &quot;blah2002foo&quot;))
+(match:substring s)
+&rArr; &quot;2002&quot;
+
+;; match starting at offset 6 in the string
+(match:substring
+  (string-match &quot;[0-9][0-9][0-9][0-9]&quot; &quot;blah987654&quot; 6))
+&rArr; &quot;7654&quot;
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-match_003astart"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">match:start</strong> <var class="def-var-arguments">match [n]</var><a class="copiable-link" href='#index-match_003astart'> &para;</a></span></dt>
+<dd><p>Return the starting position of submatch number <var class="var">n</var>.
+</p></dd></dl>
+
+<p>In the following example, the result is 4, since the match starts at
+character index 4:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define s (string-match &quot;[0-9][0-9][0-9][0-9]&quot; &quot;blah2002foo&quot;))
+(match:start s)
+&rArr; 4
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-match_003aend"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">match:end</strong> <var class="def-var-arguments">match [n]</var><a class="copiable-link" href='#index-match_003aend'> &para;</a></span></dt>
+<dd><p>Return the ending position of submatch number <var class="var">n</var>.
+</p></dd></dl>
+
+<p>In the following example, the result is 8, since the match runs between
+characters 4 and 8 (i.e. the &ldquo;2002&rdquo;).
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define s (string-match &quot;[0-9][0-9][0-9][0-9]&quot; &quot;blah2002foo&quot;))
+(match:end s)
+&rArr; 8
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-match_003aprefix"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">match:prefix</strong> <var class="def-var-arguments">match</var><a class="copiable-link" href='#index-match_003aprefix'> &para;</a></span></dt>
+<dd><p>Return the unmatched portion of <var class="var">target</var> preceding the regexp match.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define s (string-match &quot;[0-9][0-9][0-9][0-9]&quot; &quot;blah2002foo&quot;))
+(match:prefix s)
+&rArr; &quot;blah&quot;
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-match_003asuffix"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">match:suffix</strong> <var class="def-var-arguments">match</var><a class="copiable-link" href='#index-match_003asuffix'> &para;</a></span></dt>
+<dd><p>Return the unmatched portion of <var class="var">target</var> following the regexp match.
+</p></dd></dl>
+
+<div class="example lisp">
+<pre class="lisp-preformatted">(define s (string-match &quot;[0-9][0-9][0-9][0-9]&quot; &quot;blah2002foo&quot;))
+(match:suffix s)
+&rArr; &quot;foo&quot;
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-match_003acount"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">match:count</strong> <var class="def-var-arguments">match</var><a class="copiable-link" href='#index-match_003acount'> &para;</a></span></dt>
+<dd><p>Return the number of parenthesized subexpressions from <var class="var">match</var>.
+Note that the entire regular expression match itself counts as a
+subexpression, and failed submatches are included in the count.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-match_003astring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">match:string</strong> <var class="def-var-arguments">match</var><a class="copiable-link" href='#index-match_003astring'> &para;</a></span></dt>
+<dd><p>Return the original <var class="var">target</var> string.
+</p></dd></dl>
+
+<div class="example lisp">
+<pre class="lisp-preformatted">(define s (string-match &quot;[0-9][0-9][0-9][0-9]&quot; &quot;blah2002foo&quot;))
+(match:string s)
+&rArr; &quot;blah2002foo&quot;
+</pre></div>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Backslash-Escapes.html">Backslash Escapes</a>, Previous: <a href="Regexp-Functions.html">Regexp Functions</a>, Up: <a href="Regular-Expressions.html">Regular Expressions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-171 General Discussion (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-171 General Discussion (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-171 General Discussion (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI_002d171.html" rel="up" title="SRFI-171">
+<link href="SRFI_002d171-Applying-Transducers.html" rel="next" title="SRFI-171 Applying Transducers">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="SRFI_002d171-General-Discussion">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d171-Applying-Transducers.html" accesskey="n" rel="next">Applying Transducers</a>, Up: <a href="SRFI_002d171.html" accesskey="u" rel="up">Transducers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="SRFI_002d171-General-Discussion-1">7.5.46.1 SRFI-171 General Discussion</h4>
+<a class="index-entry-id" id="index-transducers-discussion"></a>
+
+<h4 class="subheading" id="The-concept-of-reducers">The concept of reducers</h4>
+<p>The central part of transducers are 3-arity reducing procedures.
+</p>
+<ul class="itemize mark-bullet">
+<li>no arguments: Produces the identity of the reducer.
+
+</li><li>(result-so-far): completion. Returns <code class="code">result-so-far</code> either with or
+without transforming it first.
+
+</li><li>(result-so-far input) combines <code class="code">result-so-far</code> and <code class="code">input</code> to produce
+a new <code class="code">result-so-far</code>.
+</li></ul>
+
+<p>In the case of a summing <code class="code">+</code> reducer, the reducer would produce, in
+arity order: <code class="code">0</code>, <code class="code">result-so-far</code>, <code class="code">(+ result-so-far
+input)</code>. This happens to be exactly what the regular <code class="code">+</code> does.
+</p>
+<h4 class="subheading" id="The-concept-of-transducers">The concept of transducers</h4>
+<p>A transducer is a one-arity procedure that takes a reducer and produces a
+reducing function that behaves as follows:
+</p>
+<ul class="itemize mark-bullet">
+<li>no arguments: calls reducer with no arguments (producing its identity)
+
+</li><li>(result-so-far): Maybe transform the result-so-far and call reducer with it.
+
+</li><li>(result-so-far input) Maybe do something to input and maybe call the
+reducer with result-so-far and the maybe-transformed input.
+</li></ul>
+
+<p>A simple example is as following:
+</p>
+<div class="example">
+<pre class="example-preformatted">(list-transduce (tfilter odd?) + '(1 2 3 4 5)).
+</pre></div>
+
+<p>This first returns a transducer filtering all odd
+elements, then it runs <code class="code">+</code> without arguments to retrieve its
+identity.  It then starts the transduction by passing <code class="code">+</code> to the
+transducer returned by <code class="code">(tfilter odd?)</code> which returns a reducing
+function.  It works not unlike reduce from SRFI 1, but also checks
+whether one of the intermediate transducers returns a &quot;reduced&quot; value
+(implemented as a SRFI 9 record), which means the reduction finished
+early.
+</p>
+<p>Because transducers compose and the final reduction is only executed in
+the last step, composed transducers will not build any intermediate
+result or collections.  Although the normal way of thinking about
+application of composed functions is right to left, due to how the
+transduction is built it is applied left to right.  <code class="code">(compose
+(tfilter odd?) (tmap sqrt))</code> will create a transducer that first filters
+out any odd values and then computes the square root of the rest.
+</p>
+
+<h4 class="subheading" id="State">State</h4>
+<p>Even though transducers appear to be somewhat of a generalisation of
+<code class="code">map</code> and friends, this is not really true.  Since transducers don&rsquo;t
+know in which context they are being used, some transducers must keep
+state where their collection-specific counterparts do not.  The
+transducers that keep state do so using hidden mutable state, and as
+such all the caveats of mutation, parallelism, and multi-shot
+continuations apply.  Each transducer keeping state is clearly described
+as doing so in the documentation.
+</p>
+<h4 class="subheading" id="Naming">Naming</h4>
+
+<p>Reducers exported from the transducers module are named as in their
+SRFI-1 counterpart, but prepended with an r.  Transducers also follow
+that naming, but are prepended with a t.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d171-Applying-Transducers.html">Applying Transducers</a>, Up: <a href="SRFI_002d171.html">Transducers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

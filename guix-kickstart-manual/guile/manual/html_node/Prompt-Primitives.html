@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Prompt Primitives (Guile Reference Manual)</title>
+
+<meta name="description" content="Prompt Primitives (Guile Reference Manual)">
+<meta name="keywords" content="Prompt Primitives (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Prompts.html" rel="up" title="Prompts">
+<link href="Shift-and-Reset.html" rel="next" title="Shift and Reset">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Prompt-Primitives">
+<div class="nav-panel">
+<p>
+Next: <a href="Shift-and-Reset.html" accesskey="n" rel="next">Shift, Reset, and All That</a>, Up: <a href="Prompts.html" accesskey="u" rel="up">Prompts</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Prompt-Primitives-1">6.11.5.1 Prompt Primitives</h4>
+
+<p>Guile&rsquo;s primitive delimited control operators are
+<code class="code">call-with-prompt</code> and <code class="code">abort-to-prompt</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-call_002dwith_002dprompt"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call-with-prompt</strong> <var class="def-var-arguments">tag thunk handler</var><a class="copiable-link" href='#index-call_002dwith_002dprompt'> &para;</a></span></dt>
+<dd><p>Set up a prompt, and call <var class="var">thunk</var> within that prompt.
+</p>
+<p>During the dynamic extent of the call to <var class="var">thunk</var>, a prompt named <var class="var">tag</var>
+will be present in the dynamic context, such that if a user calls
+<code class="code">abort-to-prompt</code> (see below) with that tag, control rewinds back to the
+prompt, and the <var class="var">handler</var> is run.
+</p>
+<p><var class="var">handler</var> must be a procedure. The first argument to <var class="var">handler</var> will be
+the state of the computation begun when <var class="var">thunk</var> was called, and ending with
+the call to <code class="code">abort-to-prompt</code>. The remaining arguments to <var class="var">handler</var> are
+those passed to <code class="code">abort-to-prompt</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dprompt_002dtag"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-prompt-tag</strong> <var class="def-var-arguments">[stem]</var><a class="copiable-link" href='#index-make_002dprompt_002dtag'> &para;</a></span></dt>
+<dd><p>Make a new prompt tag.  A prompt tag is simply a unique object.
+Currently, a prompt tag is a fresh pair.  This may change in some future
+Guile version.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-default_002dprompt_002dtag"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">default-prompt-tag</strong><a class="copiable-link" href='#index-default_002dprompt_002dtag'> &para;</a></span></dt>
+<dd><p>Return the default prompt tag.  Having a distinguished default prompt
+tag allows some useful prompt and abort idioms, discussed in the next
+section.  Note that <code class="code">default-prompt-tag</code> is actually a parameter,
+and so may be dynamically rebound using <code class="code">parameterize</code>.
+See <a class="xref" href="Parameters.html">Parameters</a>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-abort_002dto_002dprompt"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">abort-to-prompt</strong> <var class="def-var-arguments">tag val1 val2 &hellip;</var><a class="copiable-link" href='#index-abort_002dto_002dprompt'> &para;</a></span></dt>
+<dd><p>Unwind the dynamic and control context to the nearest prompt named <var class="var">tag</var>,
+also passing the given values.
+</p></dd></dl>
+
+<p>C programmers may recognize <code class="code">call-with-prompt</code> and
+<code class="code">abort-to-prompt</code> as a fancy kind of <code class="code">setjmp</code> and
+<code class="code">longjmp</code>, respectively. Prompts are indeed quite useful as
+non-local escape mechanisms. Guile&rsquo;s <code class="code">with-exception-handler</code> and
+<code class="code">raise-exception</code> are implemented in terms of prompts. Prompts are
+more convenient than <code class="code">longjmp</code>, in that one has the opportunity to
+pass multiple values to the jump target.
+</p>
+<p>Also unlike <code class="code">longjmp</code>, the prompt handler is given the full state of the
+process that was aborted, as the first argument to the prompt&rsquo;s handler. That
+state is the <em class="dfn">continuation</em> of the computation wrapped by the prompt. It is
+a <em class="dfn">delimited continuation</em>, because it is not the whole continuation of the
+program; rather, just the computation initiated by the call to
+<code class="code">call-with-prompt</code>.
+</p>
+<p>The continuation is a procedure, and may be reinstated simply by invoking it,
+with any number of values. Here&rsquo;s where things get interesting, and complicated
+as well. Besides being described as delimited, continuations reified by prompts
+are also <em class="dfn">composable</em>, because invoking a prompt-saved continuation composes
+that continuation with the current one.
+</p>
+<p>Imagine you have saved a continuation via call-with-prompt:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define cont
+  (call-with-prompt
+   ;; tag
+   'foo
+   ;; thunk
+   (lambda ()
+     (+ 34 (abort-to-prompt 'foo)))
+   ;; handler
+   (lambda (k) k)))
+</pre></div>
+
+<p>The resulting continuation is the addition of 34. It&rsquo;s as if you had written:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define cont
+  (lambda (x)
+    (+ 34 x)))
+</pre></div>
+
+<p>So, if we call <code class="code">cont</code> with one numeric value, we get that number,
+incremented by 34:
+</p>
+<div class="example">
+<pre class="example-preformatted">(cont 8)
+&rArr; 42
+(* 2 (cont 8))
+&rArr; 84
+</pre></div>
+
+<p>The last example illustrates what we mean when we say, &quot;composes with the
+current continuation&quot;. We mean that there is a current continuation &ndash; some
+remaining things to compute, like <code class="code">(lambda (x) (* x 2))</code> &ndash; and that
+calling the saved continuation doesn&rsquo;t wipe out the current continuation, it
+composes the saved continuation with the current one.
+</p>
+<p>We&rsquo;re belaboring the point here because traditional Scheme continuations, as
+discussed in the next section, aren&rsquo;t composable, and are actually less
+expressive than continuations captured by prompts. But there&rsquo;s a place for them
+both.
+</p>
+<p>Before moving on, we should mention that if the handler of a prompt is a
+<code class="code">lambda</code> expression, and the first argument isn&rsquo;t referenced, an abort to
+that prompt will not cause a continuation to be reified.  This can be an
+important efficiency consideration to keep in mind.
+</p>
+<a class="index-entry-id" id="index-continuation_002c-escape"></a>
+<p>One example where this optimization matters is <em class="dfn">escape
+continuations</em>.  Escape continuations are delimited continuations whose
+only use is to make a non-local exit&mdash;i.e., to escape from the current
+continuation.  A common use of escape continuations is when handling an
+exception (see <a class="pxref" href="Exceptions.html">Exceptions</a>).
+</p>
+<p>The constructs below are syntactic sugar atop prompts to simplify the
+use of escape continuations.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-call_002dwith_002descape_002dcontinuation"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call-with-escape-continuation</strong> <var class="def-var-arguments">proc</var><a class="copiable-link" href='#index-call_002dwith_002descape_002dcontinuation'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-call_002fec"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call/ec</strong> <var class="def-var-arguments">proc</var><a class="copiable-link" href='#index-call_002fec'> &para;</a></span></dt>
+<dd><p>Call <var class="var">proc</var> with an escape continuation.
+</p>
+<p>In the example below, the <var class="var">return</var> continuation is used to escape
+the continuation of the call to <code class="code">fold</code>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(use-modules (ice-9 control)
+             (srfi srfi-1))
+
+(define (prefix x lst)
+  ;; Return all the elements before the first occurrence
+  ;; of X in LST.
+  (call/ec
+    (lambda (return)
+      (fold (lambda (element prefix)
+              (if (equal? element x)
+                  (return (reverse prefix))  ; escape `fold'
+                  (cons element prefix)))
+            '()
+            lst))))
+
+(prefix 'a '(0 1 2 a 3 4 5))
+&rArr; (0 1 2)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-let_002descape_002dcontinuation"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">let-escape-continuation</strong> <var class="def-var-arguments">k body &hellip;</var><a class="copiable-link" href='#index-let_002descape_002dcontinuation'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-let_002fec"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">let/ec</strong> <var class="def-var-arguments">k body &hellip;</var><a class="copiable-link" href='#index-let_002fec'> &para;</a></span></dt>
+<dd><p>Bind <var class="var">k</var> within <var class="var">body</var> to an escape continuation.
+</p>
+<p>This is equivalent to
+<code class="code">(call/ec (lambda (<var class="var">k</var>) <var class="var">body</var> &hellip;))</code>.
+</p></dd></dl>
+
+<p>Additionally there is another helper primitive exported by <code class="code">(ice-9
+control)</code>, so load up that module for <code class="code">suspendable-continuation?</code>:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 control))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-suspendable_002dcontinuation_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">suspendable-continuation?</strong> <var class="def-var-arguments">tag</var><a class="copiable-link" href='#index-suspendable_002dcontinuation_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if a call to <code class="code">abort-to-prompt</code> with the prompt tag
+<var class="var">tag</var> would produce a delimited continuation that could be resumed
+later.
+</p>
+<p>Almost all continuations have this property.  The exception is where
+some code between the <code class="code">call-with-prompt</code> and the
+<code class="code">abort-to-prompt</code> recursed through C for some reason, the
+<code class="code">abort-to-prompt</code> will succeed but any attempt to resume the
+continuation (by calling it) would fail.  This is because composing a
+saved continuation with the current continuation involves relocating the
+stack frames that were saved from the old stack onto a (possibly) new
+position on the new stack, and Guile can only do this for stack frames
+that it created for Scheme code, not stack frames created by the C
+compiler.  It&rsquo;s a bit gnarly but if you stick with Scheme, you won&rsquo;t
+have any problem.
+</p>
+<p>If no prompt is found with the given tag, this procedure just returns
+<code class="code">#f</code>.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Shift-and-Reset.html">Shift, Reset, and All That</a>, Up: <a href="Prompts.html">Prompts</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

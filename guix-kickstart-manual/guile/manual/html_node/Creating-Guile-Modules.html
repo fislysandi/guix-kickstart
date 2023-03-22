@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Creating Guile Modules (Guile Reference Manual)</title>
+
+<meta name="description" content="Creating Guile Modules (Guile Reference Manual)">
+<meta name="keywords" content="Creating Guile Modules (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Modules.html" rel="up" title="Modules">
+<link href="Modules-and-the-File-System.html" rel="next" title="Modules and the File System">
+<link href="Using-Guile-Modules.html" rel="prev" title="Using Guile Modules">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Creating-Guile-Modules">
+<div class="nav-panel">
+<p>
+Next: <a href="Modules-and-the-File-System.html" accesskey="n" rel="next">Modules and the File System</a>, Previous: <a href="Using-Guile-Modules.html" accesskey="p" rel="prev">Using Guile Modules</a>, Up: <a href="Modules.html" accesskey="u" rel="up">Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Creating-Guile-Modules-1">6.18.3 Creating Guile Modules</h4>
+
+<p>When you want to create your own modules, you have to take the following
+steps:
+</p>
+<ul class="itemize mark-bullet">
+<li>Create a Scheme source file and add all variables and procedures you wish
+to export, or which are required by the exported procedures.
+
+</li><li>Add a <code class="code">define-module</code> form at the beginning.
+
+</li><li>Export all bindings which should be in the public interface, either
+by using <code class="code">define-public</code> or <code class="code">export</code> (both documented below).
+</li></ul>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-define_002dmodule"><span class="category-def">syntax: </span><span><strong class="def-name">define-module</strong> <var class="def-var-arguments">module-name option &hellip;</var><a class="copiable-link" href='#index-define_002dmodule'> &para;</a></span></dt>
+<dd><p><var class="var">module-name</var> is a list of one or more symbols.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-module (ice-9 popen))
+</pre></div>
+
+<p><code class="code">define-module</code> makes this module available to Guile programs under
+the given <var class="var">module-name</var>.
+</p>
+<p><var class="var">option</var> &hellip; are keyword/value pairs which specify more about the
+defined module.  The recognized options and their meaning are shown in
+the following table.
+</p>
+<dl class="table">
+<dt><code class="code">#:use-module <var class="var">interface-specification</var></code></dt>
+<dd><p>Equivalent to a <code class="code">(use-modules <var class="var">interface-specification</var>)</code>
+(see <a class="pxref" href="Using-Guile-Modules.html">Using Guile Modules</a>).
+</p>
+</dd>
+<dt id='index-autoload'><span><code class="code">#:autoload <var class="var">module</var> <var class="var">symbol-list</var></code><a class="copiable-link" href='#index-autoload'> &para;</a></span></dt>
+<dd><p>Load <var class="var">module</var> when any of <var class="var">symbol-list</var> are accessed.  For
+example,
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-module (my mod)
+  #:autoload (srfi srfi-1) (partition delete-duplicates))
+...
+(when something
+  (set! foo (delete-duplicates ...)))
+</pre></div>
+
+<p>When a module is autoloaded, only the bindings in <var class="var">symbol-list</var>
+become available<a class="footnote" id="DOCF20" href="#FOOT20"><sup>20</sup></a>.
+</p>
+<p>An autoload is a good way to put off loading a big module until it&rsquo;s
+really needed, for instance for faster startup or if it will only be
+needed in certain circumstances.
+</p>
+</dd>
+<dt id='index-export'><span><code class="code">#:export <var class="var">list</var></code><a class="copiable-link" href='#index-export'> &para;</a></span></dt>
+<dd><p>Export all identifiers in <var class="var">list</var> which must be a list of symbols
+or pairs of symbols.  This is equivalent to <code class="code">(export <var class="var">list</var>)</code> 
+in the module body.
+</p>
+</dd>
+<dt id='index-re_002dexport'><span><code class="code">#:re-export <var class="var">list</var></code><a class="copiable-link" href='#index-re_002dexport'> &para;</a></span></dt>
+<dd><p>Re-export all identifiers in <var class="var">list</var> which must be a list of
+symbols or pairs of symbols.  The symbols in <var class="var">list</var> must be 
+imported by the current module from other modules.  This is equivalent
+to <code class="code">re-export</code> below.
+</p>
+</dd>
+<dt id='index-replace'><span><code class="code">#:replace <var class="var">list</var></code><a class="copiable-link" href='#index-replace'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-replacing-binding"></a>
+<a class="index-entry-id" id="index-overriding-binding"></a>
+<a class="index-entry-id" id="index-duplicate-binding"></a>
+<p>Export all identifiers in <var class="var">list</var> (a list of symbols or pairs of
+symbols) and mark them as <em class="dfn">replacing bindings</em>.  In the module 
+user&rsquo;s name space, this will have the effect of replacing any binding 
+with the same name that is not also &ldquo;replacing&rdquo;.  Normally a 
+replacement results in an &ldquo;override&rdquo; warning message, 
+<code class="code">#:replace</code> avoids that.
+</p>
+<p>In general, a module that exports a binding for which the <code class="code">(guile)</code>
+module already has a definition should use <code class="code">#:replace</code> instead of
+<code class="code">#:export</code>.  <code class="code">#:replace</code>, in a sense, lets Guile know that the
+module <em class="emph">purposefully</em> replaces a core binding.  It is important to
+note, however, that this binding replacement is confined to the name
+space of the module user.  In other words, the value of the core binding
+in question remains unchanged for other modules.
+</p>
+<p>Note that although it is often a good idea for the replaced binding to
+remain compatible with a binding in <code class="code">(guile)</code>, to avoid surprising
+the user, sometimes the bindings will be incompatible.  For example,
+SRFI-19 exports its own version of <code class="code">current-time</code> (see <a class="pxref" href="SRFI_002d19-Time.html">SRFI-19 Time</a>) which is not compatible with the core <code class="code">current-time</code>
+function (see <a class="pxref" href="Time.html">Time</a>).  Guile assumes that a user importing a module
+knows what she is doing, and uses <code class="code">#:replace</code> for this binding
+rather than <code class="code">#:export</code>.
+</p>
+<p>A <code class="code">#:replace</code> clause is equivalent to <code class="code">(export! <var class="var">list</var>)</code>
+in the module body.
+</p>
+<p>The <code class="code">#:duplicates</code> (see below) provides fine-grain control about
+duplicate binding handling on the module-user side.
+</p>
+</dd>
+<dt id='index-re_002dexport_002dand_002dreplace'><span><code class="code">#:re-export-and-replace <var class="var">list</var></code><a class="copiable-link" href='#index-re_002dexport_002dand_002dreplace'> &para;</a></span></dt>
+<dd><p>Like <code class="code">#:re-export</code>, but also marking the bindings as replacements
+in the sense of <code class="code">#:replace</code>.
+</p>
+</dd>
+<dt id='index-module-version'><span><code class="code">#:version <var class="var">list</var></code><a class="copiable-link" href='#index-module-version'> &para;</a></span></dt>
+<dd><p>Specify a version for the module in the form of <var class="var">list</var>, a list of
+zero or more exact, nonnegative integers.  The corresponding 
+<code class="code">#:version</code> option in the <code class="code">use-modules</code> form allows callers
+to restrict the value of this option in various ways.
+</p>
+</dd>
+<dt id='index-duplicate-binding-handlers'><span><code class="code">#:duplicates <var class="var">list</var></code><a class="copiable-link" href='#index-duplicate-binding-handlers'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-duplicate-binding-1"></a>
+<a class="index-entry-id" id="index-overriding-binding-1"></a>
+<p>Tell Guile to handle duplicate bindings for the bindings imported by
+the current module according to the policy defined by <var class="var">list</var>, a
+list of symbols.  <var class="var">list</var> must contain symbols representing a
+duplicate binding handling policy chosen among the following:
+</p>
+<dl class="table">
+<dt><code class="code">check</code></dt>
+<dd><p>Raises an error when a binding is imported from more than one place.
+</p></dd>
+<dt><code class="code">warn</code></dt>
+<dd><p>Issue a warning when a binding is imported from more than one place
+and leave the responsibility of actually handling the duplication to
+the next duplicate binding handler.
+</p></dd>
+<dt><code class="code">replace</code></dt>
+<dd><p>When a new binding is imported that has the same name as a previously
+imported binding, then do the following:
+</p>
+<ol class="enumerate">
+<li> <a class="index-entry-id" id="index-replacing-binding-1"></a>
+If the old binding was said to be <em class="dfn">replacing</em> (via the
+<code class="code">#:replace</code> option above) and the new binding is not replacing,
+the keep the old binding.
+</li><li> If the old binding was not said to be replacing and the new binding is
+replacing, then replace the old binding with the new one.
+</li><li> If neither the old nor the new binding is replacing, then keep the old
+one.
+</li></ol>
+
+</dd>
+<dt><code class="code">warn-override-core</code></dt>
+<dd><p>Issue a warning when a core binding is being overwritten and actually
+override the core binding with the new one.
+</p></dd>
+<dt><code class="code">first</code></dt>
+<dd><p>In case of duplicate bindings, the firstly imported binding is always
+the one which is kept.
+</p></dd>
+<dt><code class="code">last</code></dt>
+<dd><p>In case of duplicate bindings, the lastly imported binding is always
+the one which is kept.
+</p></dd>
+<dt><code class="code">noop</code></dt>
+<dd><p>In case of duplicate bindings, leave the responsibility to the next
+duplicate handler.
+</p></dd>
+</dl>
+
+<p>If <var class="var">list</var> contains more than one symbol, then the duplicate
+binding handlers which appear first will be used first when resolving
+a duplicate binding situation.  As mentioned above, some resolution
+policies may explicitly leave the responsibility of handling the
+duplication to the next handler in <var class="var">list</var>.
+</p>
+<p>If GOOPS has been loaded before the <code class="code">#:duplicates</code> clause is
+processed, there are additional strategies available for dealing with
+generic functions.  See <a class="xref" href="Merging-Generics.html">Merging Generics</a>, for more information.
+</p>
+<a class="index-entry-id" id="index-default_002dduplicate_002dbinding_002dhandler"></a>
+<p>The default duplicate binding resolution policy is given by the
+<code class="code">default-duplicate-binding-handler</code> procedure, and is
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(replace warn-override-core warn last)
+</pre></div>
+
+</dd>
+<dt id='index-pure-module'><span><code class="code">#:pure</code><a class="copiable-link" href='#index-pure-module'> &para;</a></span></dt>
+<dd><p>Create a <em class="dfn">pure</em> module, that is a module which does not contain any
+of the standard procedure bindings except for the syntax forms.  This is
+useful if you want to create <em class="dfn">safe</em> modules, that is modules which
+do not know anything about dangerous procedures.
+</p></dd>
+</dl>
+
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-export-1"><span class="category-def">syntax: </span><span><strong class="def-name">export</strong> <var class="def-var-arguments">variable &hellip;</var><a class="copiable-link" href='#index-export-1'> &para;</a></span></dt>
+<dd><p>Add all <var class="var">variable</var>s (which must be symbols or pairs of symbols) to 
+the list of exported bindings of the current module.  If <var class="var">variable</var>
+is a pair, its <code class="code">car</code> gives the name of the variable as seen by the
+current module and its <code class="code">cdr</code> specifies a name for the binding in
+the current module&rsquo;s public interface.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-define_002dpublic"><span class="category-def">syntax: </span><span><strong class="def-name">define-public</strong> <var class="def-var-arguments">&hellip;</var><a class="copiable-link" href='#index-define_002dpublic'> &para;</a></span></dt>
+<dd><p>Equivalent to <code class="code">(begin (define foo ...) (export foo))</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-re_002dexport-1"><span class="category-def">syntax: </span><span><strong class="def-name">re-export</strong> <var class="def-var-arguments">variable &hellip;</var><a class="copiable-link" href='#index-re_002dexport-1'> &para;</a></span></dt>
+<dd><p>Add all <var class="var">variable</var>s (which must be symbols or pairs of symbols) to 
+the list of re-exported bindings of the current module.  Pairs of 
+symbols are handled as in <code class="code">export</code>.  Re-exported bindings must be
+imported by the current module from some other module.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-export_0021"><span class="category-def">syntax: </span><span><strong class="def-name">export!</strong> <var class="def-var-arguments">variable &hellip;</var><a class="copiable-link" href='#index-export_0021'> &para;</a></span></dt>
+<dd><p>Like <code class="code">export</code>, but marking the exported variables as replacing.
+Using a module with replacing bindings will cause any existing bindings
+to be replaced without issuing any warnings.  See the discussion of
+<code class="code">#:replace</code> above.
+</p></dd></dl>
+
+</div>
+<div class="footnotes-segment">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5 class="footnote-body-heading"><a id="FOOT20" href="#DOCF20">(20)</a></h5>
+<p>In Guile 2.2 and earlier, <em class="emph">all</em> the
+module bindings would become available; <var class="var">symbol-list</var> was just the
+list of bindings that will first trigger the load.</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Modules-and-the-File-System.html">Modules and the File System</a>, Previous: <a href="Using-Guile-Modules.html">Using Guile Modules</a>, Up: <a href="Modules.html">Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

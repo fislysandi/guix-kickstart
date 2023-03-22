@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Using Autoconf Macros (Guile Reference Manual)</title>
+
+<meta name="description" content="Using Autoconf Macros (Guile Reference Manual)">
+<meta name="keywords" content="Using Autoconf Macros (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Autoconf-Support.html" rel="up" title="Autoconf Support">
+<link href="Autoconf-Macros.html" rel="prev" title="Autoconf Macros">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Using-Autoconf-Macros">
+<div class="nav-panel">
+<p>
+Previous: <a href="Autoconf-Macros.html" accesskey="p" rel="prev">Autoconf Macros</a>, Up: <a href="Autoconf-Support.html" accesskey="u" rel="up">Autoconf Support</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Using-Autoconf-Macros-1">5.8.3 Using Autoconf Macros</h4>
+
+<p>Using the autoconf macros is straightforward: Add the macro &quot;calls&quot; (actually
+instantiations) to <samp class="file">configure.ac</samp>, run <code class="code">aclocal</code>, and finally,
+run <code class="code">autoconf</code>.  If your system doesn&rsquo;t have guile.m4 installed, place
+the desired macro definitions (<code class="code">AC_DEFUN</code> forms) in <samp class="file">acinclude.m4</samp>,
+and <code class="code">aclocal</code> will do the right thing.
+</p>
+<p>Some of the macros can be used inside normal shell constructs: <code class="code">if foo ;
+then GUILE_BAZ ; fi</code>, but this is not guaranteed.  It&rsquo;s probably a good idea
+to instantiate macros at top-level.
+</p>
+<p>We now include two examples, one simple and one complicated.
+</p>
+<p>The first example is for a package that uses libguile, and thus needs to
+know how to compile and link against it.  So we use
+<code class="code">PKG_CHECK_MODULES</code> to set the vars <code class="code">GUILE_CFLAGS</code> and
+<code class="code">GUILE_LIBS</code>, which are automatically substituted in the Makefile.
+</p>
+<div class="example">
+<pre class="example-preformatted">In configure.ac:
+
+  PKG_CHECK_MODULES([GUILE], [guile-3.0])
+
+In Makefile.in:
+
+  GUILE_CFLAGS  = @GUILE_CFLAGS@
+  GUILE_LIBS = @GUILE_LIBS@
+
+  myprog.o: myprog.c
+          $(CC) -o $&nbsp;$(GUILE_CFLAGS) $&lt;
+  myprog: myprog.o
+          $(CC) -o $&nbsp;$&lt; $(GUILE_LIBS)
+</pre></div>
+
+<p>The second example is for a package of Guile Scheme modules that uses an
+external program and other Guile Scheme modules (some might call this a &quot;pure
+scheme&quot; package).  So we use the <code class="code">GUILE_SITE_DIR</code> macro, a regular
+<code class="code">AC_PATH_PROG</code> macro, and the <code class="code">GUILE_MODULE_AVAILABLE</code> macro.
+</p>
+<div class="example">
+<pre class="example-preformatted">In configure.ac:
+
+  GUILE_SITE_DIR
+
+  probably_wont_work=&quot;&quot;
+
+  # pgtype pgtable
+  GUILE_MODULE_AVAILABLE(have_guile_pg, (database postgres))
+  test $have_guile_pg = no &amp;&amp;
+      probably_wont_work=&quot;(my pgtype) (my pgtable) $probably_wont_work&quot;
+
+  # gpgutils
+  AC_PATH_PROG(GNUPG,gpg)
+  test x&quot;$GNUPG&quot; = x &amp;&amp;
+      probably_wont_work=&quot;(my gpgutils) $probably_wont_work&quot;
+
+  if test ! &quot;$probably_wont_work&quot; = &quot;&quot; ; then
+      p=&quot;         ***&quot;
+      echo
+      echo &quot;$p&quot;
+      echo &quot;$p NOTE:&quot;
+      echo &quot;$p The following modules probably won't work:&quot;
+      echo &quot;$p   $probably_wont_work&quot;
+      echo &quot;$p They can be installed anyway, and will work if their&quot;
+      echo &quot;$p dependencies are installed later.  Please see README.&quot;
+      echo &quot;$p&quot;
+      echo
+  fi
+
+In Makefile.in:
+
+  instdir = @GUILE_SITE@/my
+
+  install:
+        $(INSTALL) my/*.scm $(instdir)
+</pre></div>
+
+
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Autoconf-Macros.html">Autoconf Macros</a>, Up: <a href="Autoconf-Support.html">Autoconf Support</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

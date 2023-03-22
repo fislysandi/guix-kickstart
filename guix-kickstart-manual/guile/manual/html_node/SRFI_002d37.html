@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-37 (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-37 (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-37 (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI-Support.html" rel="up" title="SRFI Support">
+<link href="SRFI_002d38.html" rel="next" title="SRFI-38">
+<link href="SRFI_002d35.html" rel="prev" title="SRFI-35">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="SRFI_002d37">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d38.html" accesskey="n" rel="next">SRFI-38 - External Representation for Data With Shared Structure</a>, Previous: <a href="SRFI_002d35.html" accesskey="p" rel="prev">SRFI-35 - Conditions</a>, Up: <a href="SRFI-Support.html" accesskey="u" rel="up">SRFI Support Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="SRFI_002d37-_002d-args_002dfold">7.5.25 SRFI-37 - args-fold</h4>
+<a class="index-entry-id" id="index-SRFI_002d37"></a>
+
+<p>This is a processor for GNU <code class="code">getopt_long</code>-style program
+arguments.  It provides an alternative, less declarative interface
+than <code class="code">getopt-long</code> in <code class="code">(ice-9 getopt-long)</code>
+(see <a class="pxref" href="getopt_002dlong.html">The (ice-9 getopt-long) Module</a>).  Unlike
+<code class="code">getopt-long</code>, it supports repeated options and any number of
+short and long names per option.  Access it with:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(use-modules (srfi srfi-37))
+</pre></div>
+
+<p><abbr class="acronym">SRFI</abbr>-37 principally provides an <code class="code">option</code> type and the
+<code class="code">args-fold</code> function.  To use the library, create a set of
+options with <code class="code">option</code> and use it as a specification for invoking
+<code class="code">args-fold</code>.
+</p>
+<p>Here is an example of a simple argument processor for the typical
+&lsquo;<samp class="samp">--version</samp>&rsquo; and &lsquo;<samp class="samp">--help</samp>&rsquo; options, which returns a backwards
+list of files given on the command line:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(args-fold (cdr (program-arguments))
+           (let ((display-and-exit-proc
+                  (lambda (msg)
+                    (lambda (opt name arg loads)
+                      (display msg) (quit)))))
+             (list (option '(#\v &quot;version&quot;) #f #f
+                           (display-and-exit-proc &quot;Foo version 42.0\n&quot;))
+                   (option '(#\h &quot;help&quot;) #f #f
+                           (display-and-exit-proc
+                            &quot;Usage: foo scheme-file ...&quot;))))
+           (lambda (opt name arg loads)
+             (error &quot;Unrecognized option `~A'&quot; name))
+           (lambda (op loads) (cons op loads))
+           '())
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-option-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">option</strong> <var class="def-var-arguments">names required-arg? optional-arg? processor</var><a class="copiable-link" href='#index-option-1'> &para;</a></span></dt>
+<dd><p>Return an object that specifies a single kind of program option.
+</p>
+<p><var class="var">names</var> is a list of command-line option names, and should consist of
+characters for traditional <code class="code">getopt</code> short options and strings for
+<code class="code">getopt_long</code>-style long options.
+</p>
+<p><var class="var">required-arg?</var> and <var class="var">optional-arg?</var> are mutually exclusive;
+one or both must be <code class="code">#f</code>.  If <var class="var">required-arg?</var>, the option
+must be followed by an argument on the command line, such as
+&lsquo;<samp class="samp">--opt=value</samp>&rsquo; for long options, or an error will be signalled.
+If <var class="var">optional-arg?</var>, an argument will be taken if available.
+</p>
+<p><var class="var">processor</var> is a procedure that takes at least 3 arguments, called
+when <code class="code">args-fold</code> encounters the option: the containing option
+object, the name used on the command line, and the argument given for
+the option (or <code class="code">#f</code> if none).  The rest of the arguments are
+<code class="code">args-fold</code> &ldquo;seeds&rdquo;, and the <var class="var">processor</var> should return
+seeds as well.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-option_002dnames"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">option-names</strong> <var class="def-var-arguments">opt</var><a class="copiable-link" href='#index-option_002dnames'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-option_002drequired_002darg_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">option-required-arg?</strong> <var class="def-var-arguments">opt</var><a class="copiable-link" href='#index-option_002drequired_002darg_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-option_002doptional_002darg_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">option-optional-arg?</strong> <var class="def-var-arguments">opt</var><a class="copiable-link" href='#index-option_002doptional_002darg_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-option_002dprocessor"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">option-processor</strong> <var class="def-var-arguments">opt</var><a class="copiable-link" href='#index-option_002dprocessor'> &para;</a></span></dt>
+<dd><p>Return the specified field of <var class="var">opt</var>, an option object, as
+described above for <code class="code">option</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-args_002dfold"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">args-fold</strong> <var class="def-var-arguments">args options unrecognized-option-proc operand-proc seed &hellip;</var><a class="copiable-link" href='#index-args_002dfold'> &para;</a></span></dt>
+<dd><p>Process <var class="var">args</var>, a list of program arguments such as that returned by
+<code class="code">(cdr (program-arguments))</code>, in order against <var class="var">options</var>, a list
+of option objects as described above.  All functions called take the
+&ldquo;seeds&rdquo;, or the last multiple-values as multiple arguments, starting
+with <var class="var">seed</var> &hellip;, and must return the new seeds.  Return the
+final seeds.
+</p>
+<p>Call <code class="code">unrecognized-option-proc</code>, which is like an option object&rsquo;s
+processor, for any options not found in <var class="var">options</var>.
+</p>
+<p>Call <code class="code">operand-proc</code> with any items on the command line that are
+not named options.  This includes arguments after &lsquo;<samp class="samp">--</samp>&rsquo;.  It is
+called with the argument in question, as well as the seeds.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d38.html">SRFI-38 - External Representation for Data With Shared Structure</a>, Previous: <a href="SRFI_002d35.html">SRFI-35 - Conditions</a>, Up: <a href="SRFI-Support.html">SRFI Support Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

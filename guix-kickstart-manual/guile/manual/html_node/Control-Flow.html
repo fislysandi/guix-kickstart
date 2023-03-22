@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Control Flow (Guile Reference Manual)</title>
+
+<meta name="description" content="Control Flow (Guile Reference Manual)">
+<meta name="keywords" content="Control Flow (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="General-Libguile-Concepts.html" rel="up" title="General Libguile Concepts">
+<link href="Asynchronous-Signals.html" rel="next" title="Asynchronous Signals">
+<link href="Garbage-Collection.html" rel="prev" title="Garbage Collection">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Control-Flow">
+<div class="nav-panel">
+<p>
+Next: <a href="Asynchronous-Signals.html" accesskey="n" rel="next">Asynchronous Signals</a>, Previous: <a href="Garbage-Collection.html" accesskey="p" rel="prev">Garbage Collection</a>, Up: <a href="General-Libguile-Concepts.html" accesskey="u" rel="up">General concepts for using libguile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Control-Flow-1">5.4.3 Control Flow</h4>
+
+<p>Scheme has a more general view of program flow than C, both locally and
+non-locally.
+</p>
+<p>Controlling the local flow of control involves things like gotos, loops,
+calling functions and returning from them.  Non-local control flow
+refers to situations where the program jumps across one or more levels
+of function activations without using the normal call or return
+operations.
+</p>
+<p>The primitive means of C for local control flow is the <code class="code">goto</code>
+statement, together with <code class="code">if</code>.  Loops done with <code class="code">for</code>,
+<code class="code">while</code> or <code class="code">do</code> could in principle be rewritten with just
+<code class="code">goto</code> and <code class="code">if</code>.  In Scheme, the primitive means for local
+control flow is the <em class="emph">function call</em> (together with <code class="code">if</code>).
+Thus, the repetition of some computation in a loop is ultimately
+implemented by a function that calls itself, that is, by recursion.
+</p>
+<p>This approach is theoretically very powerful since it is easier to
+reason formally about recursion than about gotos.  In C, using
+recursion exclusively would not be practical, though, since it would eat
+up the stack very quickly.  In Scheme, however, it is practical:
+function calls that appear in a <em class="dfn">tail position</em> do not use any
+additional stack space (see <a class="pxref" href="Tail-Calls.html">Tail calls</a>).
+</p>
+<p>A function call is in a tail position when it is the last thing the
+calling function does.  The value returned by the called function is
+immediately returned from the calling function.  In the following
+example, the call to <code class="code">bar-1</code> is in a tail position, while the
+call to <code class="code">bar-2</code> is not.  (The call to <code class="code">1-</code> in <code class="code">foo-2</code>
+is in a tail position, though.)
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define (foo-1 x)
+  (bar-1 (1- x)))
+
+(define (foo-2 x)
+  (1- (bar-2 x)))
+</pre></div>
+
+<p>Thus, when you take care to recurse only in tail positions, the
+recursion will only use constant stack space and will be as good as a
+loop constructed from gotos.
+</p>
+<p>Scheme offers a few syntactic abstractions (<code class="code">do</code> and <em class="dfn">named</em>
+<code class="code">let</code>) that make writing loops slightly easier.
+</p>
+<p>But only Scheme functions can call other functions in a tail position:
+C functions can not.  This matters when you have, say, two functions
+that call each other recursively to form a common loop.  The following
+(unrealistic) example shows how one might go about determining whether a
+non-negative integer <var class="var">n</var> is even or odd.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define (my-even? n)
+  (cond ((zero? n) #t)
+        (else (my-odd? (1- n)))))
+
+(define (my-odd? n)
+  (cond ((zero? n) #f)
+        (else (my-even? (1- n)))))
+</pre></div>
+
+<p>Because the calls to <code class="code">my-even?</code> and <code class="code">my-odd?</code> are in tail
+positions, these two procedures can be applied to arbitrary large
+integers without overflowing the stack.  (They will still take a lot
+of time, of course.)
+</p>
+<p>However, when one or both of the two procedures would be rewritten in
+C, it could no longer call its companion in a tail position (since C
+does not have this concept).  You might need to take this
+consideration into account when deciding which parts of your program
+to write in Scheme and which in C.
+</p>
+<p>In addition to calling functions and returning from them, a Scheme
+program can also exit non-locally from a function so that the control
+flow returns directly to an outer level.  This means that some functions
+might not return at all.
+</p>
+<p>Even more, it is not only possible to jump to some outer level of
+control, a Scheme program can also jump back into the middle of a
+function that has already exited.  This might cause some functions to
+return more than once.
+</p>
+<p>In general, these non-local jumps are done by invoking
+<em class="dfn">continuations</em> that have previously been captured using
+<code class="code">call-with-current-continuation</code>.  Guile also offers a slightly
+restricted set of functions, <code class="code">catch</code> and <code class="code">throw</code>, that can
+only be used for non-local exits.  This restriction makes them more
+efficient.  Error reporting (with the function <code class="code">error</code>) is
+implemented by invoking <code class="code">throw</code>, for example.  The functions
+<code class="code">catch</code> and <code class="code">throw</code> belong to the topic of <em class="dfn">exceptions</em>.
+</p>
+<p>Since Scheme functions can call C functions and vice versa, C code can
+experience the more general control flow of Scheme as well.  It is
+possible that a C function will not return at all, or will return more
+than once.  While C does offer <code class="code">setjmp</code> and <code class="code">longjmp</code> for
+non-local exits, it is still an unusual thing for C code.  In
+contrast, non-local exits are very common in Scheme, mostly to report
+errors.
+</p>
+<p>You need to be prepared for the non-local jumps in the control flow
+whenever you use a function from <code class="code">libguile</code>: it is best to assume
+that any <code class="code">libguile</code> function might signal an error or run a pending
+signal handler (which in turn can do arbitrary things).
+</p>
+<p>It is often necessary to take cleanup actions when the control leaves a
+function non-locally.  Also, when the control returns non-locally, some
+setup actions might be called for.  For example, the Scheme function
+<code class="code">with-output-to-port</code> needs to modify the global state so that
+<code class="code">current-output-port</code> returns the port passed to
+<code class="code">with-output-to-port</code>.  The global output port needs to be reset to
+its previous value when <code class="code">with-output-to-port</code> returns normally or
+when it is exited non-locally.  Likewise, the port needs to be set again
+when control enters non-locally.
+</p>
+<p>Scheme code can use the <code class="code">dynamic-wind</code> function to arrange for
+the setting and resetting of the global state.  C code can use the
+corresponding <code class="code">scm_internal_dynamic_wind</code> function, or a
+<code class="code">scm_dynwind_begin</code>/<code class="code">scm_dynwind_end</code> pair together with
+suitable &rsquo;dynwind actions&rsquo; (see <a class="pxref" href="Dynamic-Wind.html">Dynamic Wind</a>).
+</p>
+<p>Instead of coping with non-local control flow, you can also prevent it
+by erecting a <em class="emph">continuation barrier</em>, See <a class="xref" href="Continuation-Barriers.html">Continuation Barriers</a>.  The function <code class="code">scm_c_with_continuation_barrier</code>, for
+example, is guaranteed to return exactly once.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Asynchronous-Signals.html">Asynchronous Signals</a>, Previous: <a href="Garbage-Collection.html">Garbage Collection</a>, Up: <a href="General-Libguile-Concepts.html">General concepts for using libguile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

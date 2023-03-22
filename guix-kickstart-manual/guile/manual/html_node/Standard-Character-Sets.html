@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Standard Character Sets (Guile Reference Manual)</title>
+
+<meta name="description" content="Standard Character Sets (Guile Reference Manual)">
+<meta name="keywords" content="Standard Character Sets (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Character-Sets.html" rel="up" title="Character Sets">
+<link href="Character_002dSet-Algebra.html" rel="prev" title="Character-Set Algebra">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Standard-Character-Sets">
+<div class="nav-panel">
+<p>
+Previous: <a href="Character_002dSet-Algebra.html" accesskey="p" rel="prev">Character-Set Algebra</a>, Up: <a href="Character-Sets.html" accesskey="u" rel="up">Character Sets</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Standard-Character-Sets-1">6.6.4.6 Standard Character Sets</h4>
+
+<p>In order to make the use of the character set data type and procedures
+useful, several predefined character set variables exist.
+</p>
+<a class="index-entry-id" id="index-codeset"></a>
+<a class="index-entry-id" id="index-charset"></a>
+<a class="index-entry-id" id="index-locale"></a>
+
+<p>These character sets are locale independent and are not recomputed
+upon a <code class="code">setlocale</code> call.  They contain characters from the whole
+range of Unicode code points. For instance, <code class="code">char-set:letter</code>
+contains about 100,000 characters.
+</p>
+<dl class="first-defvr">
+<dt class="defvr" id="index-char_002dset_003alower_002dcase"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">char-set:lower-case</strong><a class="copiable-link" href='#index-char_002dset_003alower_002dcase'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005fchar_005fset_005flower_005fcase"><span class="category-def">C Variable: </span><span><strong class="def-name">scm_char_set_lower_case</strong><a class="copiable-link" href='#index-scm_005fchar_005fset_005flower_005fcase'> &para;</a></span></dt>
+<dd><p>All lower-case characters.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-char_002dset_003aupper_002dcase"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">char-set:upper-case</strong><a class="copiable-link" href='#index-char_002dset_003aupper_002dcase'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005fchar_005fset_005fupper_005fcase"><span class="category-def">C Variable: </span><span><strong class="def-name">scm_char_set_upper_case</strong><a class="copiable-link" href='#index-scm_005fchar_005fset_005fupper_005fcase'> &para;</a></span></dt>
+<dd><p>All upper-case characters.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-char_002dset_003atitle_002dcase"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">char-set:title-case</strong><a class="copiable-link" href='#index-char_002dset_003atitle_002dcase'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005fchar_005fset_005ftitle_005fcase"><span class="category-def">C Variable: </span><span><strong class="def-name">scm_char_set_title_case</strong><a class="copiable-link" href='#index-scm_005fchar_005fset_005ftitle_005fcase'> &para;</a></span></dt>
+<dd><p>All single characters that function as if they were an upper-case
+letter followed by a lower-case letter.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-char_002dset_003aletter"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">char-set:letter</strong><a class="copiable-link" href='#index-char_002dset_003aletter'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005fchar_005fset_005fletter"><span class="category-def">C Variable: </span><span><strong class="def-name">scm_char_set_letter</strong><a class="copiable-link" href='#index-scm_005fchar_005fset_005fletter'> &para;</a></span></dt>
+<dd><p>All letters.  This includes <code class="code">char-set:lower-case</code>,
+<code class="code">char-set:upper-case</code>, <code class="code">char-set:title-case</code>, and many
+letters that have no case at all.  For example, Chinese and Japanese
+characters typically have no concept of case.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-char_002dset_003adigit"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">char-set:digit</strong><a class="copiable-link" href='#index-char_002dset_003adigit'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005fchar_005fset_005fdigit"><span class="category-def">C Variable: </span><span><strong class="def-name">scm_char_set_digit</strong><a class="copiable-link" href='#index-scm_005fchar_005fset_005fdigit'> &para;</a></span></dt>
+<dd><p>All digits.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-char_002dset_003aletter_002bdigit"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">char-set:letter+digit</strong><a class="copiable-link" href='#index-char_002dset_003aletter_002bdigit'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005fchar_005fset_005fletter_005fand_005fdigit"><span class="category-def">C Variable: </span><span><strong class="def-name">scm_char_set_letter_and_digit</strong><a class="copiable-link" href='#index-scm_005fchar_005fset_005fletter_005fand_005fdigit'> &para;</a></span></dt>
+<dd><p>The union of <code class="code">char-set:letter</code> and <code class="code">char-set:digit</code>.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-char_002dset_003agraphic"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">char-set:graphic</strong><a class="copiable-link" href='#index-char_002dset_003agraphic'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005fchar_005fset_005fgraphic"><span class="category-def">C Variable: </span><span><strong class="def-name">scm_char_set_graphic</strong><a class="copiable-link" href='#index-scm_005fchar_005fset_005fgraphic'> &para;</a></span></dt>
+<dd><p>All characters which would put ink on the paper.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-char_002dset_003aprinting"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">char-set:printing</strong><a class="copiable-link" href='#index-char_002dset_003aprinting'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005fchar_005fset_005fprinting"><span class="category-def">C Variable: </span><span><strong class="def-name">scm_char_set_printing</strong><a class="copiable-link" href='#index-scm_005fchar_005fset_005fprinting'> &para;</a></span></dt>
+<dd><p>The union of <code class="code">char-set:graphic</code> and <code class="code">char-set:whitespace</code>.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-char_002dset_003awhitespace"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">char-set:whitespace</strong><a class="copiable-link" href='#index-char_002dset_003awhitespace'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005fchar_005fset_005fwhitespace"><span class="category-def">C Variable: </span><span><strong class="def-name">scm_char_set_whitespace</strong><a class="copiable-link" href='#index-scm_005fchar_005fset_005fwhitespace'> &para;</a></span></dt>
+<dd><p>All whitespace characters.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-char_002dset_003ablank"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">char-set:blank</strong><a class="copiable-link" href='#index-char_002dset_003ablank'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005fchar_005fset_005fblank"><span class="category-def">C Variable: </span><span><strong class="def-name">scm_char_set_blank</strong><a class="copiable-link" href='#index-scm_005fchar_005fset_005fblank'> &para;</a></span></dt>
+<dd><p>All horizontal whitespace characters, which notably includes
+<code class="code">#\space</code> and <code class="code">#\tab</code>.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-char_002dset_003aiso_002dcontrol"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">char-set:iso-control</strong><a class="copiable-link" href='#index-char_002dset_003aiso_002dcontrol'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005fchar_005fset_005fiso_005fcontrol"><span class="category-def">C Variable: </span><span><strong class="def-name">scm_char_set_iso_control</strong><a class="copiable-link" href='#index-scm_005fchar_005fset_005fiso_005fcontrol'> &para;</a></span></dt>
+<dd><p>The ISO control characters are the C0 control characters (U+0000 to
+U+001F), delete (U+007F), and the C1 control characters (U+0080 to
+U+009F).
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-char_002dset_003apunctuation"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">char-set:punctuation</strong><a class="copiable-link" href='#index-char_002dset_003apunctuation'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005fchar_005fset_005fpunctuation"><span class="category-def">C Variable: </span><span><strong class="def-name">scm_char_set_punctuation</strong><a class="copiable-link" href='#index-scm_005fchar_005fset_005fpunctuation'> &para;</a></span></dt>
+<dd><p>All punctuation characters, such as the characters
+<code class="code">!&quot;#%&amp;'()*,-./:;?@[\\]_{}</code>
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-char_002dset_003asymbol"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">char-set:symbol</strong><a class="copiable-link" href='#index-char_002dset_003asymbol'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005fchar_005fset_005fsymbol"><span class="category-def">C Variable: </span><span><strong class="def-name">scm_char_set_symbol</strong><a class="copiable-link" href='#index-scm_005fchar_005fset_005fsymbol'> &para;</a></span></dt>
+<dd><p>All symbol characters, such as the characters <code class="code">$+&lt;=&gt;^`|~</code>.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-char_002dset_003ahex_002ddigit"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">char-set:hex-digit</strong><a class="copiable-link" href='#index-char_002dset_003ahex_002ddigit'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005fchar_005fset_005fhex_005fdigit"><span class="category-def">C Variable: </span><span><strong class="def-name">scm_char_set_hex_digit</strong><a class="copiable-link" href='#index-scm_005fchar_005fset_005fhex_005fdigit'> &para;</a></span></dt>
+<dd><p>The hexadecimal digits <code class="code">0123456789abcdefABCDEF</code>.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-char_002dset_003aascii"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">char-set:ascii</strong><a class="copiable-link" href='#index-char_002dset_003aascii'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005fchar_005fset_005fascii"><span class="category-def">C Variable: </span><span><strong class="def-name">scm_char_set_ascii</strong><a class="copiable-link" href='#index-scm_005fchar_005fset_005fascii'> &para;</a></span></dt>
+<dd><p>All ASCII characters.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-char_002dset_003aempty"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">char-set:empty</strong><a class="copiable-link" href='#index-char_002dset_003aempty'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005fchar_005fset_005fempty"><span class="category-def">C Variable: </span><span><strong class="def-name">scm_char_set_empty</strong><a class="copiable-link" href='#index-scm_005fchar_005fset_005fempty'> &para;</a></span></dt>
+<dd><p>The empty character set.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-char_002dset_003adesignated"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">char-set:designated</strong><a class="copiable-link" href='#index-char_002dset_003adesignated'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005fchar_005fset_005fdesignated"><span class="category-def">C Variable: </span><span><strong class="def-name">scm_char_set_designated</strong><a class="copiable-link" href='#index-scm_005fchar_005fset_005fdesignated'> &para;</a></span></dt>
+<dd><p>This character set contains all designated code points.  This includes
+all the code points to which Unicode has assigned a character or other
+meaning.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-char_002dset_003afull"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">char-set:full</strong><a class="copiable-link" href='#index-char_002dset_003afull'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005fchar_005fset_005ffull"><span class="category-def">C Variable: </span><span><strong class="def-name">scm_char_set_full</strong><a class="copiable-link" href='#index-scm_005fchar_005fset_005ffull'> &para;</a></span></dt>
+<dd><p>This character set contains all possible code points.  This includes
+both designated and reserved code points.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Character_002dSet-Algebra.html">Character-Set Algebra</a>, Up: <a href="Character-Sets.html">Character Sets</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

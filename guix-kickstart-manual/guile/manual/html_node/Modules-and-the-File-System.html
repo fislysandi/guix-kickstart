@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Modules and the File System (Guile Reference Manual)</title>
+
+<meta name="description" content="Modules and the File System (Guile Reference Manual)">
+<meta name="keywords" content="Modules and the File System (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Modules.html" rel="up" title="Modules">
+<link href="R6RS-Version-References.html" rel="next" title="R6RS Version References">
+<link href="Creating-Guile-Modules.html" rel="prev" title="Creating Guile Modules">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Modules-and-the-File-System">
+<div class="nav-panel">
+<p>
+Next: <a href="R6RS-Version-References.html" accesskey="n" rel="next">R6RS Version References</a>, Previous: <a href="Creating-Guile-Modules.html" accesskey="p" rel="prev">Creating Guile Modules</a>, Up: <a href="Modules.html" accesskey="u" rel="up">Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Modules-and-the-File-System-1">6.18.4 Modules and the File System</h4>
+
+<p>Typical programs only use a small subset of modules installed on a Guile
+system.  In order to keep startup time down, Guile only loads modules
+when a program uses them, on demand.
+</p>
+<p>When a program evaluates <code class="code">(use-modules (ice-9 popen))</code>, and the
+module is not loaded, Guile searches for a conventionally-named file
+from in the <em class="dfn">load path</em>.
+</p>
+<p>In this case, loading <code class="code">(ice-9 popen)</code> will eventually cause Guile
+to run <code class="code">(primitive-load-path &quot;ice-9/popen&quot;)</code>.
+<code class="code">primitive-load-path</code> will search for a file <samp class="file">ice-9/popen</samp> in
+the <code class="code">%load-path</code> (see <a class="pxref" href="Load-Paths.html">Load Paths</a>).  For each directory in
+<code class="code">%load-path</code>, Guile will try to find the file name, concatenated
+with the extensions from <code class="code">%load-extensions</code>.  By default, this will
+cause Guile to <code class="code">stat</code> <samp class="file">ice-9/popen.scm</samp>, and then
+<samp class="file">ice-9/popen</samp>.  See <a class="xref" href="Load-Paths.html">Load Paths</a>, for more on
+<code class="code">primitive-load-path</code>.
+</p>
+<p>If a corresponding compiled <samp class="file">.go</samp> file is found in the
+<code class="code">%load-compiled-path</code> or in the fallback path, and is as fresh as
+the source file, it will be loaded instead of the source file.  If no
+compiled file is found, Guile may try to compile the source file and
+cache away the resulting <samp class="file">.go</samp> file.  See <a class="xref" href="Compilation.html">Compiling Scheme Code</a>, for more
+on compilation.
+</p>
+<p>Once Guile finds a suitable source or compiled file is found, the file
+will be loaded.  If, after loading the file, the module under
+consideration is still not defined, Guile will signal an error.
+</p>
+<p>For more information on where and how to install Scheme modules,
+See <a class="xref" href="Installing-Site-Packages.html">Installing Site Packages</a>.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="R6RS-Version-References.html">R6RS Version References</a>, Previous: <a href="Creating-Guile-Modules.html">Creating Guile Modules</a>, Up: <a href="Modules.html">Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

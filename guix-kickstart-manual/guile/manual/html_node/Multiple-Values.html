@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Multiple Values (Guile Reference Manual)</title>
+
+<meta name="description" content="Multiple Values (Guile Reference Manual)">
+<meta name="keywords" content="Multiple Values (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Control-Mechanisms.html" rel="up" title="Control Mechanisms">
+<link href="Exceptions.html" rel="next" title="Exceptions">
+<link href="Continuations.html" rel="prev" title="Continuations">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Multiple-Values">
+<div class="nav-panel">
+<p>
+Next: <a href="Exceptions.html" accesskey="n" rel="next">Exceptions</a>, Previous: <a href="Continuations.html" accesskey="p" rel="prev">Continuations</a>, Up: <a href="Control-Mechanisms.html" accesskey="u" rel="up">Controlling the Flow of Program Execution</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Returning-and-Accepting-Multiple-Values">6.11.7 Returning and Accepting Multiple Values</h4>
+
+<a class="index-entry-id" id="index-multiple-values"></a>
+<a class="index-entry-id" id="index-receive"></a>
+
+<p>Scheme allows a procedure to return more than one value to its caller.
+This is quite different to other languages which only allow
+single-value returns.  Returning multiple values is different from
+returning a list (or pair or vector) of values to the caller, because
+conceptually not <em class="emph">one</em> compound object is returned, but several
+distinct values.
+</p>
+<p>The primitive procedures for handling multiple values are <code class="code">values</code>
+and <code class="code">call-with-values</code>.  <code class="code">values</code> is used for returning
+multiple values from a procedure.  This is done by placing a call to
+<code class="code">values</code> with zero or more arguments in tail position in a
+procedure body.  <code class="code">call-with-values</code> combines a procedure returning
+multiple values with a procedure which accepts these values as
+parameters.
+</p>
+<a class="index-entry-id" id="index-values-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-values"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">values</strong> <var class="def-var-arguments">arg &hellip;</var><a class="copiable-link" href='#index-values'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fvalues"><span class="category-def">C Function: </span><span><strong class="def-name">scm_values</strong> <var class="def-var-arguments">(args)</var><a class="copiable-link" href='#index-scm_005fvalues'> &para;</a></span></dt>
+<dd><p>Delivers all of its arguments to its continuation.  Except for
+continuations created by the <code class="code">call-with-values</code> procedure,
+all continuations take exactly one value.  The effect of
+passing no value or more than one value to continuations that
+were not created by <code class="code">call-with-values</code> is unspecified.
+</p>
+<p>For <code class="code">scm_values</code>, <var class="var">args</var> is a list of arguments and the
+return is a multiple-values object which the caller can return.  In
+the current implementation that object shares structure with
+<var class="var">args</var>, so <var class="var">args</var> should not be modified subsequently.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fvalues"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_c_values</strong> <code class="def-code-arguments">(SCM *base, size_t n)</code><a class="copiable-link" href='#index-scm_005fc_005fvalues'> &para;</a></span></dt>
+<dd><p><code class="code">scm_c_values</code> is an alternative to <code class="code">scm_values</code>.  It creates
+a new values object, and copies into it the <var class="var">n</var> values starting from
+<var class="var">base</var>.
+</p>
+<p>Currently this creates a list and passes it to <code class="code">scm_values</code>, but we
+expect that in the future we will be able to use a more efficient
+representation.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fnvalues"><span class="category-def">C Function: </span><span><code class="def-type">size_t</code> <strong class="def-name">scm_c_nvalues</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-scm_005fc_005fnvalues'> &para;</a></span></dt>
+<dd><p>If <var class="var">obj</var> is a multiple-values object, returns the number of values
+it contains.  Otherwise returns 1.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fvalue_005fref"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_c_value_ref</strong> <code class="def-code-arguments">(SCM obj, size_t idx)</code><a class="copiable-link" href='#index-scm_005fc_005fvalue_005fref'> &para;</a></span></dt>
+<dd><p>Returns the value at the position specified by <var class="var">idx</var> in
+<var class="var">obj</var>.  Note that <var class="var">obj</var> will ordinarily be a
+multiple-values object, but it need not be.  Any other object
+represents a single value (itself), and is handled appropriately.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-call_002dwith_002dvalues-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-call_002dwith_002dvalues"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call-with-values</strong> <var class="def-var-arguments">producer consumer</var><a class="copiable-link" href='#index-call_002dwith_002dvalues'> &para;</a></span></dt>
+<dd><p>Calls its <var class="var">producer</var> argument with no values and a
+continuation that, when passed some values, calls the
+<var class="var">consumer</var> procedure with those values as arguments.  The
+continuation for the call to <var class="var">consumer</var> is the continuation
+of the call to <code class="code">call-with-values</code>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(call-with-values (lambda () (values 4 5))
+                  (lambda (a b) b))
+&rArr; 5
+
+</pre></div>
+<div class="example">
+<pre class="example-preformatted">(call-with-values * -)
+&rArr; -1
+</pre></div>
+</dd></dl>
+
+<p>In addition to the fundamental procedures described above, Guile has a
+module which exports a syntax called <code class="code">receive</code>, which is much
+more convenient.  This is in the <code class="code">(ice-9 receive)</code> and is the
+same as specified by SRFI-8 (see <a class="pxref" href="SRFI_002d8.html">SRFI-8 - receive</a>).
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(use-modules (ice-9 receive))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-receive-1"><span class="category-def">library syntax: </span><span><strong class="def-name">receive</strong> <var class="def-var-arguments">formals expr body &hellip;</var><a class="copiable-link" href='#index-receive-1'> &para;</a></span></dt>
+<dd><p>Evaluate the expression <var class="var">expr</var>, and bind the result values (zero
+or more) to the formal arguments in <var class="var">formals</var>.  <var class="var">formals</var> is a
+list of symbols, like the argument list in a <code class="code">lambda</code>
+(see <a class="pxref" href="Lambda.html">Lambda: Basic Procedure Creation</a>).  After binding the variables, the expressions in
+<var class="var">body</var> &hellip; are evaluated in order, the return value is the
+result from the last expression.
+</p>
+<p>For example getting results from <code class="code">partition</code> in SRFI-1
+(see <a class="pxref" href="SRFI_002d1.html">SRFI-1 - List library</a>),
+</p>
+<div class="example">
+<pre class="example-preformatted">(receive (odds evens)
+    (partition odd? '(7 4 2 8 3))
+  (display odds)
+  (display &quot; and &quot;)
+  (display evens))
+-| (7 3) and (4 2 8)
+</pre></div>
+
+</dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Exceptions.html">Exceptions</a>, Previous: <a href="Continuations.html">Continuations</a>, Up: <a href="Control-Mechanisms.html">Controlling the Flow of Program Execution</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

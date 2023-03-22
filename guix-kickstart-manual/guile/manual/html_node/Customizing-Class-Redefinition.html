@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Customizing Class Redefinition (Guile Reference Manual)</title>
+
+<meta name="description" content="Customizing Class Redefinition (Guile Reference Manual)">
+<meta name="keywords" content="Customizing Class Redefinition (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Redefining-a-Class.html" rel="up" title="Redefining a Class">
+<link href="Default-Class-Redefinition-Behaviour.html" rel="prev" title="Default Class Redefinition Behaviour">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Customizing-Class-Redefinition">
+<div class="nav-panel">
+<p>
+Previous: <a href="Default-Class-Redefinition-Behaviour.html" accesskey="p" rel="prev">Default Class Redefinition Behaviour</a>, Up: <a href="Redefining-a-Class.html" accesskey="u" rel="up">Redefining a Class</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Customizing-Class-Redefinition-1">8.12.3 Customizing Class Redefinition</h4>
+
+<p>When <code class="code">define-class</code> notices that a class is being redefined, it
+constructs the new class metaobject as usual, then invokes the
+<code class="code">class-redefinition</code> generic function with the old and new classes
+as arguments.  Therefore, if the old or new classes have metaclasses
+other than the default <code class="code">&lt;redefinable-class&gt;</code>, class redefinition
+behaviour can be customized by defining a <code class="code">class-redefinition</code>
+method that is specialized for the relevant metaclasses.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-class_002dredefinition"><span class="category-def">generic: </span><span><strong class="def-name">class-redefinition</strong><a class="copiable-link" href='#index-class_002dredefinition'> &para;</a></span></dt>
+<dd><p>Handle the class redefinition from <var class="var">old</var> to <var class="var">new</var>, and return
+the new class metaobject that should be bound to the variable specified
+by <code class="code">define-class</code>&rsquo;s first argument.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-class_002dredefinition-1"><span class="category-def">method: </span><span><strong class="def-name">class-redefinition</strong> <var class="def-var-arguments">(old &lt;top&gt;) (new &lt;class&gt;)</var><a class="copiable-link" href='#index-class_002dredefinition-1'> &para;</a></span></dt>
+<dd><p>Not all classes are redefinable, and not all previous bindings are
+classes.  See <a class="xref" href="Redefinable-Classes.html">Redefinable Classes</a>.  This default method just returns
+<var class="var">new</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-class_002dredefinition-2"><span class="category-def">method: </span><span><strong class="def-name">class-redefinition</strong> <var class="def-var-arguments">(old &lt;redefinable-class&gt;) (new &lt;redefinable-class&gt;)</var><a class="copiable-link" href='#index-class_002dredefinition-2'> &para;</a></span></dt>
+<dd><p>This method implements GOOPS&rsquo; default class redefinition behaviour, as
+described in <a class="ref" href="Default-Class-Redefinition-Behaviour.html">Default Class Redefinition Behaviour</a>.  Returns the
+metaobject for the new class definition.
+</p></dd></dl>
+
+<p>The <code class="code">class-redefinition</code> method for classes with metaclass
+<code class="code">&lt;redefinable-class&gt;</code> calls the following generic functions, which
+could of course be individually customized.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-remove_002dclass_002daccessors_0021"><span class="category-def">generic: </span><span><strong class="def-name">remove-class-accessors!</strong> <var class="def-var-arguments">old</var><a class="copiable-link" href='#index-remove_002dclass_002daccessors_0021'> &para;</a></span></dt>
+<dd><p>The default <code class="code">remove-class-accessors!</code> method removes the accessor
+methods of the old class from all classes which they specialize.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-update_002ddirect_002dmethod_0021"><span class="category-def">generic: </span><span><strong class="def-name">update-direct-method!</strong> <var class="def-var-arguments">method old new</var><a class="copiable-link" href='#index-update_002ddirect_002dmethod_0021'> &para;</a></span></dt>
+<dd><p>The default <code class="code">update-direct-method!</code> method substitutes the new
+class for the old in all methods specialized to the old class.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-update_002ddirect_002dsubclass_0021"><span class="category-def">generic: </span><span><strong class="def-name">update-direct-subclass!</strong> <var class="def-var-arguments">subclass old new</var><a class="copiable-link" href='#index-update_002ddirect_002dsubclass_0021'> &para;</a></span></dt>
+<dd><p>The default <code class="code">update-direct-subclass!</code> method invokes
+<code class="code">class-redefinition</code> recursively to handle the redefinition of
+subclasses.
+</p></dd></dl>
+
+<p>An alternative class redefinition strategy could be to leave all
+existing instances as instances of the old class, but accepting that the
+old class is now &ldquo;nameless&rdquo;, since its name has been taken over by the
+new definition.  In this strategy, any existing subclasses could also
+be left as they are, on the understanding that they inherit from a nameless
+superclass.
+</p>
+<p>This strategy is easily implemented in GOOPS, by defining a new metaclass,
+that will be used as the metaclass for all classes to which the strategy
+should apply, and then defining a <code class="code">class-redefinition</code> method that
+is specialized for this metaclass:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-class &lt;can-be-nameless&gt; (&lt;redefinable-class&gt;))
+
+(define-method (class-redefinition (old &lt;can-be-nameless&gt;)
+                                   (new &lt;class&gt;))
+  new)
+</pre></div>
+
+<p>When customization can be as easy as this, aren&rsquo;t you glad that GOOPS
+implements the far more difficult strategy as its default!
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Default-Class-Redefinition-Behaviour.html">Default Class Redefinition Behaviour</a>, Up: <a href="Redefining-a-Class.html">Redefining a Class</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

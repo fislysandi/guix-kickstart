@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Vector Accessing from C (Guile Reference Manual)</title>
+
+<meta name="description" content="Vector Accessing from C (Guile Reference Manual)">
+<meta name="keywords" content="Vector Accessing from C (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Vectors.html" rel="up" title="Vectors">
+<link href="Uniform-Numeric-Vectors.html" rel="next" title="Uniform Numeric Vectors">
+<link href="Vector-Accessors.html" rel="prev" title="Vector Accessors">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Vector-Accessing-from-C">
+<div class="nav-panel">
+<p>
+Next: <a href="Uniform-Numeric-Vectors.html" accesskey="n" rel="next">Uniform Numeric Vectors</a>, Previous: <a href="Vector-Accessors.html" accesskey="p" rel="prev">Accessing and Modifying Vector Contents</a>, Up: <a href="Vectors.html" accesskey="u" rel="up">Vectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Vector-Accessing-from-C-1">6.6.10.4 Vector Accessing from C</h4>
+
+<p>A vector can be read and modified from C with the functions
+<a class="ref" href="Vector-Accessors.html#x_002dscm_005fc_005fvector_005fref"><code class="code">scm_c_vector_ref</code></a> and
+<a class="ref" href="Vector-Accessors.html#x_002dscm_005fc_005fvector_005fset_005fx"><code class="code">scm_c_vector_set_x</code></a>.  In addition to
+these functions, there are two other ways to access vectors from C that
+might be more efficient in certain situations: you can use the unsafe
+<em class="emph">vector macros</em>; or you can use the general framework for accessing
+all kinds of arrays (see <a class="pxref" href="Accessing-Arrays-from-C.html">Accessing Arrays from C</a>), which is more
+verbose, but can deal efficiently with all kinds of vectors (and
+arrays).  For arrays of rank 1 whose backing store is a vector, you can
+use the <code class="code">scm_vector_elements</code> and
+<code class="code">scm_vector_writable_elements</code> functions as shortcuts.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fSIMPLE_005fVECTOR_005fLENGTH"><span class="category-def">C Macro: </span><span><code class="def-type">size_t</code> <strong class="def-name">SCM_SIMPLE_VECTOR_LENGTH</strong> <code class="def-code-arguments">(SCM vec)</code><a class="copiable-link" href='#index-SCM_005fSIMPLE_005fVECTOR_005fLENGTH'> &para;</a></span></dt>
+<dd><p>Evaluates to the length of the vector <var class="var">vec</var>.  No type
+checking is done.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fSIMPLE_005fVECTOR_005fREF"><span class="category-def">C Macro: </span><span><code class="def-type">SCM</code> <strong class="def-name">SCM_SIMPLE_VECTOR_REF</strong> <code class="def-code-arguments">(SCM vec, size_t idx)</code><a class="copiable-link" href='#index-SCM_005fSIMPLE_005fVECTOR_005fREF'> &para;</a></span></dt>
+<dd><p>Evaluates to the element at position <var class="var">idx</var> in the vector <var class="var">vec</var>.
+No type or range checking is done.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fSIMPLE_005fVECTOR_005fSET"><span class="category-def">C Macro: </span><span><code class="def-type">void</code> <strong class="def-name">SCM_SIMPLE_VECTOR_SET</strong> <code class="def-code-arguments">(SCM vec, size_t idx, SCM val)</code><a class="copiable-link" href='#index-SCM_005fSIMPLE_005fVECTOR_005fSET'> &para;</a></span></dt>
+<dd><p>Sets the element at position <var class="var">idx</var> in the vector <var class="var">vec</var> to
+<var class="var">val</var>.  No type or range checking is done.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fvector_005felements"><span class="category-def">C Function: </span><span><code class="def-type">const SCM *</code> <strong class="def-name">scm_vector_elements</strong> <code class="def-code-arguments">(SCM array, scm_t_array_handle *handle, size_t *lenp, ssize_t *incp)</code><a class="copiable-link" href='#index-scm_005fvector_005felements'> &para;</a></span></dt>
+<dd><p>Acquire a <a class="ref" href="Accessing-Arrays-from-C.html">handle</a> for <var class="var">array</var> and
+return a read-only pointer to its elements.  <var class="var">array</var> must be either
+a vector, or an array of rank 1 whose backing store is a vector;
+otherwise an error is signaled.  The handle must eventually be released
+with <a class="ref" href="Accessing-Arrays-from-C.html#x_002dscm_005farray_005fhandle_005frelease"><code class="code">scm_array_handle_release</code></a>.
+</p>
+<p>The variables pointed to by <var class="var">lenp</var> and <var class="var">incp</var> are filled with
+the number of elements of the array and the increment (number of
+elements) between successive elements, respectively.  Successive
+elements of <var class="var">array</var> need not be contiguous in their underlying
+&ldquo;root vector&rdquo; returned here; hence the increment is not necessarily
+equal to 1 and may well be negative too (see <a class="pxref" href="Shared-Arrays.html">Shared Arrays</a>).
+</p>
+<p>The following example shows the typical way to use this function.  It
+creates a list of all elements of <var class="var">array</var> (in reverse order).
+</p>
+<div class="example">
+<pre class="example-preformatted">scm_t_array_handle handle;
+size_t i, len;
+ssize_t inc;
+const SCM *elt;
+SCM list;
+
+elt = scm_vector_elements (array, &amp;handle, &amp;len, &amp;inc);
+list = SCM_EOL;
+for (i = 0; i &lt; len; i++, elt += inc)
+  list = scm_cons (*elt, list);
+scm_array_handle_release (&amp;handle);
+</pre></div>
+
+</dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fvector_005fwritable_005felements"><span class="category-def">C Function: </span><span><code class="def-type">SCM *</code> <strong class="def-name">scm_vector_writable_elements</strong> <code class="def-code-arguments">(SCM array, scm_t_array_handle *handle, size_t *lenp, ssize_t *incp)</code><a class="copiable-link" href='#index-scm_005fvector_005fwritable_005felements'> &para;</a></span></dt>
+<dd><p>Like <code class="code">scm_vector_elements</code> but the pointer can be used to modify
+the array.
+</p>
+<p>The following example shows the typical way to use this function.  It
+fills an array with <code class="code">#t</code>.
+</p>
+<div class="example">
+<pre class="example-preformatted">scm_t_array_handle handle;
+size_t i, len;
+ssize_t inc;
+SCM *elt;
+
+elt = scm_vector_writable_elements (array, &amp;handle, &amp;len, &amp;inc);
+for (i = 0; i &lt; len; i++, elt += inc)
+  *elt = SCM_BOOL_T;
+scm_array_handle_release (&amp;handle);
+</pre></div>
+
+</dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Uniform-Numeric-Vectors.html">Uniform Numeric Vectors</a>, Previous: <a href="Vector-Accessors.html">Accessing and Modifying Vector Contents</a>, Up: <a href="Vectors.html">Vectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

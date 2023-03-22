@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Trap States (Guile Reference Manual)</title>
+
+<meta name="description" content="Trap States (Guile Reference Manual)">
+<meta name="keywords" content="Trap States (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Traps.html" rel="up" title="Traps">
+<link href="High_002dLevel-Traps.html" rel="next" title="High-Level Traps">
+<link href="Tracing-Traps.html" rel="prev" title="Tracing Traps">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Trap-States">
+<div class="nav-panel">
+<p>
+Next: <a href="High_002dLevel-Traps.html" accesskey="n" rel="next">High-Level Traps</a>, Previous: <a href="Tracing-Traps.html" accesskey="p" rel="prev">Tracing Traps</a>, Up: <a href="Traps.html" accesskey="u" rel="up">Traps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Trap-States-1">6.26.4.5 Trap States</h4>
+
+<p>When multiple traps are present in a system, we begin to have a
+bookkeeping problem. How are they named? How does one disable, enable,
+or delete them?
+</p>
+<p>Guile&rsquo;s answer to this is to keep an implicit per-thread <em class="dfn">trap
+state</em>. The trap state object is not exposed to the user; rather, API
+that works on trap states fetches the current trap state from the
+dynamic environment.
+</p>
+<p>Traps are identified by integers. A trap can be enabled, disabled, or
+removed, and can have an associated user-visible name.
+</p>
+<p>These procedures have their own module:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(use-modules (system vm trap-state))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-add_002dtrap_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">add-trap!</strong> <var class="def-var-arguments">trap name</var><a class="copiable-link" href='#index-add_002dtrap_0021'> &para;</a></span></dt>
+<dd><p>Add a trap to the current trap state, associating the given <var class="var">name</var>
+with it. Returns a fresh trap identifier (an integer).
+</p>
+<p>Note that usually the more specific functions detailed in
+<a class="ref" href="High_002dLevel-Traps.html">High-Level Traps</a> are used in preference to this one.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-list_002dtraps"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list-traps</strong><a class="copiable-link" href='#index-list_002dtraps'> &para;</a></span></dt>
+<dd><p>List the current set of traps, both enabled and disabled. Returns a list
+of integers.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-trap_002dname"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">trap-name</strong> <var class="def-var-arguments">idx</var><a class="copiable-link" href='#index-trap_002dname'> &para;</a></span></dt>
+<dd><p>Returns the name associated with trap <var class="var">idx</var>, or <code class="code">#f</code> if there
+is no such trap.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-trap_002denabled_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">trap-enabled?</strong> <var class="def-var-arguments">idx</var><a class="copiable-link" href='#index-trap_002denabled_003f'> &para;</a></span></dt>
+<dd><p>Returns <code class="code">#t</code> if trap <var class="var">idx</var> is present and enabled, or <code class="code">#f</code>
+otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-enable_002dtrap_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">enable-trap!</strong> <var class="def-var-arguments">idx</var><a class="copiable-link" href='#index-enable_002dtrap_0021'> &para;</a></span></dt>
+<dd><p>Enables trap <var class="var">idx</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-disable_002dtrap_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">disable-trap!</strong> <var class="def-var-arguments">idx</var><a class="copiable-link" href='#index-disable_002dtrap_0021'> &para;</a></span></dt>
+<dd><p>Disables trap <var class="var">idx</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-delete_002dtrap_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">delete-trap!</strong> <var class="def-var-arguments">idx</var><a class="copiable-link" href='#index-delete_002dtrap_0021'> &para;</a></span></dt>
+<dd><p>Removes trap <var class="var">idx</var>, disabling it first, if necessary.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="High_002dLevel-Traps.html">High-Level Traps</a>, Previous: <a href="Tracing-Traps.html">Tracing Traps</a>, Up: <a href="Traps.html">Traps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

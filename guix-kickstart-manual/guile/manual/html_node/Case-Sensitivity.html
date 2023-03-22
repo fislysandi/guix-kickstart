@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Case Sensitivity (Guile Reference Manual)</title>
+
+<meta name="description" content="Case Sensitivity (Guile Reference Manual)">
+<meta name="keywords" content="Case Sensitivity (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Scheme-Syntax.html" rel="up" title="Scheme Syntax">
+<link href="Keyword-Syntax.html" rel="next" title="Keyword Syntax">
+<link href="Block-Comments.html" rel="prev" title="Block Comments">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Case-Sensitivity">
+<div class="nav-panel">
+<p>
+Next: <a href="Keyword-Syntax.html" accesskey="n" rel="next">Keyword Syntax</a>, Previous: <a href="Block-Comments.html" accesskey="p" rel="prev">Block Comments</a>, Up: <a href="Scheme-Syntax.html" accesskey="u" rel="up">Scheme Syntax: Standard and Guile Extensions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Case-Sensitivity-1">6.16.1.4 Case Sensitivity</h4>
+<a class="index-entry-id" id="index-fold_002dcase"></a>
+<a class="index-entry-id" id="index-no_002dfold_002dcase"></a>
+
+
+<p>Scheme as defined in R5RS is not case sensitive when reading symbols.
+Guile, on the contrary is case sensitive by default, so the identifiers
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">guile-whuzzy
+Guile-Whuzzy
+</pre></div>
+
+<p>are the same in R5RS Scheme, but are different in Guile.
+</p>
+<p>It is possible to turn off case sensitivity in Guile by setting the
+reader option <code class="code">case-insensitive</code>.  For more information on reader
+options, See <a class="xref" href="Scheme-Read.html">Reading Scheme Code</a>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(read-enable 'case-insensitive)
+</pre></div>
+
+<p>It is also possible to disable (or enable) case sensitivity within a
+single file by placing the reader directives <code class="code">#!fold-case</code> (or
+<code class="code">#!no-fold-case</code>) within the file itself.
+</p>
+</div>
+
+
+
+</body>
+</html>

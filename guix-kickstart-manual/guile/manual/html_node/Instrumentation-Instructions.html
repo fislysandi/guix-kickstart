@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Instrumentation Instructions (Guile Reference Manual)</title>
+
+<meta name="description" content="Instrumentation Instructions (Guile Reference Manual)">
+<meta name="keywords" content="Instrumentation Instructions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Instruction-Set.html" rel="up" title="Instruction Set">
+<link href="Intrinsic-Call-Instructions.html" rel="next" title="Intrinsic Call Instructions">
+<link href="Non_002dLocal-Control-Flow-Instructions.html" rel="prev" title="Non-Local Control Flow Instructions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Instrumentation-Instructions">
+<div class="nav-panel">
+<p>
+Next: <a href="Intrinsic-Call-Instructions.html" accesskey="n" rel="next">Intrinsic Call Instructions</a>, Previous: <a href="Non_002dLocal-Control-Flow-Instructions.html" accesskey="p" rel="prev">Non-Local Control Flow Instructions</a>, Up: <a href="Instruction-Set.html" accesskey="u" rel="up">Instruction Set</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Instrumentation-Instructions-1">9.3.7.6 Instrumentation Instructions</h4>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-instrument_002dentry"><span class="category-def">Instruction: </span><span><strong class="def-name">instrument-entry</strong> <code class="def-code-arguments">x24_<var class="var">_</var> n32:<var class="var">data</var></code><a class="copiable-link" href='#index-instrument_002dentry'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-instrument_002dloop"><span class="category-def">Instruction: </span><span><strong class="def-name">instrument-loop</strong> <code class="def-code-arguments">x24_<var class="var">_</var> n32:<var class="var">data</var></code><a class="copiable-link" href='#index-instrument_002dloop'> &para;</a></span></dt>
+<dd><p>Increase execution counter for this function and potentially tier up to
+the next JIT level.  <var class="var">data</var> is an offset to a structure recording
+execution counts and the next-level JIT code corresponding to this
+function.  The increment values are currently 30 for
+<code class="code">instrument-entry</code> and 2 for <code class="code">instrument-loop</code>.
+</p>
+<p><code class="code">instrument-entry</code> will also run the apply hook, if VM hooks are
+enabled.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-handle_002dinterrupts"><span class="category-def">Instruction: </span><span><strong class="def-name">handle-interrupts</strong> <code class="def-code-arguments">x24:<var class="var">_</var></code><a class="copiable-link" href='#index-handle_002dinterrupts'> &para;</a></span></dt>
+<dd><p>Handle pending asynchronous interrupts (asyncs).  See <a class="xref" href="Asyncs.html">Asynchronous Interrupts</a>.  The
+compiler inserts <code class="code">handle-interrupts</code> instructions before any call,
+return, or loop back-edge.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-return_002dfrom_002dinterrupt"><span class="category-def">Instruction: </span><span><strong class="def-name">return-from-interrupt</strong> <code class="def-code-arguments">x24:<var class="var">_</var></code><a class="copiable-link" href='#index-return_002dfrom_002dinterrupt'> &para;</a></span></dt>
+<dd><p>A special instruction to return from a call and also pop off the stack
+frame from the call.  Used when returning from asynchronous interrupts.
+</p></dd></dl>
+
+
+</div>
+
+
+
+</body>
+</html>

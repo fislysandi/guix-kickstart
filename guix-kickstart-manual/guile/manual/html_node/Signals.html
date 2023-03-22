@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Signals (Guile Reference Manual)</title>
+
+<meta name="description" content="Signals (Guile Reference Manual)">
+<meta name="keywords" content="Signals (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="POSIX.html" rel="up" title="POSIX">
+<link href="Terminals-and-Ptys.html" rel="next" title="Terminals and Ptys">
+<link href="Processes.html" rel="prev" title="Processes">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Signals">
+<div class="nav-panel">
+<p>
+Next: <a href="Terminals-and-Ptys.html" accesskey="n" rel="next">Terminals and Ptys</a>, Previous: <a href="Processes.html" accesskey="p" rel="prev">Processes</a>, Up: <a href="POSIX.html" accesskey="u" rel="up"><abbr class="acronym">POSIX</abbr> System Calls and Networking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Signals-1">7.2.8 Signals</h4>
+<a class="index-entry-id" id="index-signal"></a>
+
+<p>The following procedures raise, handle and wait for signals.
+</p>
+<p>Scheme code signal handlers are run via an async (see <a class="pxref" href="Asyncs.html">Asynchronous Interrupts</a>), so
+they&rsquo;re called in the handler&rsquo;s thread at the next safe opportunity.
+Generally this is after any currently executing primitive procedure
+finishes (which could be a long time for primitives that wait for an
+external event).
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-kill"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">kill</strong> <var class="def-var-arguments">pid sig</var><a class="copiable-link" href='#index-kill'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fkill"><span class="category-def">C Function: </span><span><strong class="def-name">scm_kill</strong> <var class="def-var-arguments">(pid, sig)</var><a class="copiable-link" href='#index-scm_005fkill'> &para;</a></span></dt>
+<dd><p>Sends a signal to the specified process or group of processes.
+</p>
+<p><var class="var">pid</var> specifies the processes to which the signal is sent:
+</p>
+<dl class="table">
+<dt><var class="var">pid</var> greater than 0</dt>
+<dd><p>The process whose identifier is <var class="var">pid</var>.
+</p></dd>
+<dt><var class="var">pid</var> equal to 0</dt>
+<dd><p>All processes in the current process group.
+</p></dd>
+<dt><var class="var">pid</var> less than -1</dt>
+<dd><p>The process group whose identifier is -<var class="var">pid</var>
+</p></dd>
+<dt><var class="var">pid</var> equal to -1</dt>
+<dd><p>If the process is privileged, all processes except for some special
+system processes.  Otherwise, all processes with the current effective
+user ID.
+</p></dd>
+</dl>
+
+<p><var class="var">sig</var> should be specified using a variable corresponding to
+the Unix symbolic name, e.g.,
+</p>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-SIGHUP"><span class="category-def">Variable: </span><span><strong class="def-name">SIGHUP</strong><a class="copiable-link" href='#index-SIGHUP'> &para;</a></span></dt>
+<dd><p>Hang-up signal.
+</p></dd></dl>
+
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-SIGINT"><span class="category-def">Variable: </span><span><strong class="def-name">SIGINT</strong><a class="copiable-link" href='#index-SIGINT'> &para;</a></span></dt>
+<dd><p>Interrupt signal.
+</p></dd></dl>
+
+<p>A full list of signals on the GNU system may be found in <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/Standard-Signals.html#Standard-Signals">Standard
+Signals</a> in <cite class="cite">The GNU C Library Reference Manual</cite>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-raise"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">raise</strong> <var class="def-var-arguments">sig</var><a class="copiable-link" href='#index-raise'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fraise"><span class="category-def">C Function: </span><span><strong class="def-name">scm_raise</strong> <var class="def-var-arguments">(sig)</var><a class="copiable-link" href='#index-scm_005fraise'> &para;</a></span></dt>
+<dd><p>Sends a specified signal <var class="var">sig</var> to the current process, where
+<var class="var">sig</var> is as described for the <code class="code">kill</code> procedure.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-sigaction"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sigaction</strong> <var class="def-var-arguments">signum [handler [flags [thread]]]</var><a class="copiable-link" href='#index-sigaction'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsigaction"><span class="category-def">C Function: </span><span><strong class="def-name">scm_sigaction</strong> <var class="def-var-arguments">(signum, handler, flags)</var><a class="copiable-link" href='#index-scm_005fsigaction'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsigaction_005ffor_005fthread"><span class="category-def">C Function: </span><span><strong class="def-name">scm_sigaction_for_thread</strong> <var class="def-var-arguments">(signum, handler, flags, thread)</var><a class="copiable-link" href='#index-scm_005fsigaction_005ffor_005fthread'> &para;</a></span></dt>
+<dd><p>Install or report the signal handler for a specified signal.
+</p>
+<p><var class="var">signum</var> is the signal number, which can be specified using the value
+of variables such as <code class="code">SIGINT</code>.
+</p>
+<p>If <var class="var">handler</var> is omitted, <code class="code">sigaction</code> returns a pair: the
+<abbr class="acronym">CAR</abbr> is the current signal hander, which will be either an
+integer with the value <code class="code">SIG_DFL</code> (default action) or
+<code class="code">SIG_IGN</code> (ignore), or the Scheme procedure which handles the
+signal, or <code class="code">#f</code> if a non-Scheme procedure handles the signal.
+The <abbr class="acronym">CDR</abbr> contains the current <code class="code">sigaction</code> flags for the
+handler.
+</p>
+<p>If <var class="var">handler</var> is provided, it is installed as the new handler for
+<var class="var">signum</var>.  <var class="var">handler</var> can be a Scheme procedure taking one
+argument, or the value of <code class="code">SIG_DFL</code> (default action) or
+<code class="code">SIG_IGN</code> (ignore), or <code class="code">#f</code> to restore whatever signal handler
+was installed before <code class="code">sigaction</code> was first used.  When a scheme
+procedure has been specified, that procedure will run in the given
+<var class="var">thread</var>.  When no thread has been given, the thread that made this
+call to <code class="code">sigaction</code> is used.
+</p>
+<p><var class="var">flags</var> is a <code class="code">logior</code> (see <a class="pxref" href="Bitwise-Operations.html">Bitwise Operations</a>) of the
+following (where provided by the system), or <code class="code">0</code> for none.
+</p>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-SA_005fNOCLDSTOP"><span class="category-def">Variable: </span><span><strong class="def-name">SA_NOCLDSTOP</strong><a class="copiable-link" href='#index-SA_005fNOCLDSTOP'> &para;</a></span></dt>
+<dd><p>By default, <code class="code">SIGCHLD</code> is signalled when a child process stops
+(ie. receives <code class="code">SIGSTOP</code>), and when a child process terminates.
+With the <code class="code">SA_NOCLDSTOP</code> flag, <code class="code">SIGCHLD</code> is only signalled
+for termination, not stopping.
+</p>
+<p><code class="code">SA_NOCLDSTOP</code> has no effect on signals other than
+<code class="code">SIGCHLD</code>.
+</p></dd></dl>
+
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-SA_005fRESTART"><span class="category-def">Variable: </span><span><strong class="def-name">SA_RESTART</strong><a class="copiable-link" href='#index-SA_005fRESTART'> &para;</a></span></dt>
+<dd><p>If a signal occurs while in a system call, deliver the signal then
+restart the system call (as opposed to returning an <code class="code">EINTR</code> error
+from that call).
+</p></dd></dl>
+
+<p>Guile handles signals asynchronously.  When it receives a signal, the
+synchronous signal handler just records the fact that a signal was
+received and sets a flag to tell the relevant Guile thread that it has a
+pending signal.  When the Guile thread checks the pending-interrupt
+flag, it will arrange to run the asynchronous part of the signal
+handler, which is the handler attached by <code class="code">sigaction</code>.
+</p>
+<p>This strategy has some perhaps-unexpected interactions with the
+<code class="code">SA_RESTART</code> flag, though: because the synchronous handler doesn&rsquo;t
+do very much, and notably it doesn&rsquo;t run the Guile handler, it&rsquo;s
+impossible to interrupt a thread stuck in a long-running system call via
+a signal handler that is installed with <code class="code">SA_RESTART</code>: the
+synchronous handler just records the pending interrupt, but then the
+system call resumes and Guile doesn&rsquo;t have a chance to actually check
+the flag and run the asynchronous handler.  That&rsquo;s just how it is.
+</p>
+<p>The return value is a pair with information about the old handler as
+described above.
+</p>
+<p>This interface does not provide access to the &ldquo;signal blocking&rdquo;
+facility.  Maybe this is not needed, since the thread support may
+provide solutions to the problem of consistent access to data
+structures.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-restore_002dsignals"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">restore-signals</strong><a class="copiable-link" href='#index-restore_002dsignals'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005frestore_005fsignals"><span class="category-def">C Function: </span><span><strong class="def-name">scm_restore_signals</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005frestore_005fsignals'> &para;</a></span></dt>
+<dd><p>Return all signal handlers to the values they had before any call to
+<code class="code">sigaction</code> was made.  The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-alarm"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">alarm</strong> <var class="def-var-arguments">i</var><a class="copiable-link" href='#index-alarm'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005falarm"><span class="category-def">C Function: </span><span><strong class="def-name">scm_alarm</strong> <var class="def-var-arguments">(i)</var><a class="copiable-link" href='#index-scm_005falarm'> &para;</a></span></dt>
+<dd><p>Set a timer to raise a <code class="code">SIGALRM</code> signal after the specified
+number of seconds (an integer).  It&rsquo;s advisable to install a signal
+handler for
+<code class="code">SIGALRM</code> beforehand, since the default action is to terminate
+the process.
+</p>
+<p>The return value indicates the time remaining for the previous alarm,
+if any.  The new value replaces the previous alarm.  If there was
+no previous alarm, the return value is zero.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-pause"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">pause</strong><a class="copiable-link" href='#index-pause'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fpause"><span class="category-def">C Function: </span><span><strong class="def-name">scm_pause</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fpause'> &para;</a></span></dt>
+<dd><p>Pause the current process (thread?) until a signal arrives whose
+action is to either terminate the current process or invoke a
+handler procedure.  The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-sleep"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sleep</strong> <var class="def-var-arguments">secs</var><a class="copiable-link" href='#index-sleep'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-usleep"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">usleep</strong> <var class="def-var-arguments">usecs</var><a class="copiable-link" href='#index-usleep'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsleep"><span class="category-def">C Function: </span><span><strong class="def-name">scm_sleep</strong> <var class="def-var-arguments">(secs)</var><a class="copiable-link" href='#index-scm_005fsleep'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fusleep"><span class="category-def">C Function: </span><span><strong class="def-name">scm_usleep</strong> <var class="def-var-arguments">(usecs)</var><a class="copiable-link" href='#index-scm_005fusleep'> &para;</a></span></dt>
+<dd><p>Wait the given period <var class="var">secs</var> seconds or <var class="var">usecs</var> microseconds
+(both integers).  If a signal arrives the wait stops and the return
+value is the time remaining, in seconds or microseconds respectively.
+If the period elapses with no signal the return is zero.
+</p>
+<p>On most systems the process scheduler is not microsecond accurate and
+the actual period slept by <code class="code">usleep</code> might be rounded to a system
+clock tick boundary, which might be 10 milliseconds for instance.
+</p>
+<p>See <code class="code">scm_std_sleep</code> and <code class="code">scm_std_usleep</code> for equivalents at
+the C level (see <a class="pxref" href="Blocking.html">Blocking in Guile Mode</a>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getitimer"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getitimer</strong> <var class="def-var-arguments">which_timer</var><a class="copiable-link" href='#index-getitimer'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-setitimer"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">setitimer</strong> <var class="def-var-arguments">which_timer interval_seconds interval_microseconds value_seconds value_microseconds</var><a class="copiable-link" href='#index-setitimer'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgetitimer"><span class="category-def">C Function: </span><span><strong class="def-name">scm_getitimer</strong> <var class="def-var-arguments">(which_timer)</var><a class="copiable-link" href='#index-scm_005fgetitimer'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsetitimer"><span class="category-def">C Function: </span><span><strong class="def-name">scm_setitimer</strong> <var class="def-var-arguments">(which_timer, interval_seconds, interval_microseconds, value_seconds, value_microseconds)</var><a class="copiable-link" href='#index-scm_005fsetitimer'> &para;</a></span></dt>
+<dd><p>Get or set the periods programmed in certain system timers.
+</p>
+<p>These timers have two settings.  The first setting, the interval, is the
+value at which the timer will be reset when the current timer expires.
+The second is the current value of the timer, indicating when the next
+expiry will be signalled.
+</p>
+<p><var class="var">which_timer</var> is one of the following values:
+</p>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-ITIMER_005fREAL"><span class="category-def">Variable: </span><span><strong class="def-name">ITIMER_REAL</strong><a class="copiable-link" href='#index-ITIMER_005fREAL'> &para;</a></span></dt>
+<dd><p>A real-time timer, counting down elapsed real time.  At zero it raises
+<code class="code">SIGALRM</code>.  This is like <code class="code">alarm</code> above, but with a higher
+resolution period.
+</p></dd></dl>
+
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-ITIMER_005fVIRTUAL"><span class="category-def">Variable: </span><span><strong class="def-name">ITIMER_VIRTUAL</strong><a class="copiable-link" href='#index-ITIMER_005fVIRTUAL'> &para;</a></span></dt>
+<dd><p>A virtual-time timer, counting down while the current process is
+actually using CPU.  At zero it raises <code class="code">SIGVTALRM</code>.
+</p></dd></dl>
+
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-ITIMER_005fPROF"><span class="category-def">Variable: </span><span><strong class="def-name">ITIMER_PROF</strong><a class="copiable-link" href='#index-ITIMER_005fPROF'> &para;</a></span></dt>
+<dd><p>A profiling timer, counting down while the process is running (like
+<code class="code">ITIMER_VIRTUAL</code>) and also while system calls are running on the
+process&rsquo;s behalf.  At zero it raises a <code class="code">SIGPROF</code>.
+</p>
+<p>This timer is intended for profiling where a program is spending its
+time (by looking where it is when the timer goes off).
+</p></dd></dl>
+
+<p><code class="code">getitimer</code> returns the restart timer value and its current value,
+as a list containing two pairs.  Each pair is a time in seconds and
+microseconds: <code class="code">((<var class="var">interval_secs</var> . <var class="var">interval_usecs</var>)
+(<var class="var">value_secs</var> . <var class="var">value_usecs</var>))</code>.
+</p>
+<p><code class="code">setitimer</code> sets the timer values similarly, in seconds and
+microseconds (which must be integers).  The interval value can be zero
+to have the timer run down just once.  The return value is the timer&rsquo;s
+previous setting, in the same form as <code class="code">getitimer</code> returns.
+</p>
+<div class="example">
+<pre class="example-preformatted">(setitimer ITIMER_REAL
+           5 500000     ;; Raise SIGALRM every 5.5 seconds
+           2 0)         ;; with the first SIGALRM in 2 seconds
+</pre></div>
+
+<p>Although the timers are programmed in microseconds, the actual
+accuracy might not be that high.
+</p>
+<p>Note that <code class="code">ITIMER_PROF</code> and <code class="code">ITIMER_VIRTUAL</code> are not
+functional on all platforms and may always error when called.
+<code class="code">(provided? 'ITIMER_PROF)</code> and <code class="code">(provided? 'ITIMER_VIRTUAL)</code>
+can be used to test if the those itimers are supported on the given
+host.  <code class="code">ITIMER_REAL</code> is supported on all platforms that support
+<code class="code">setitimer</code>.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Terminals-and-Ptys.html">Terminals and Ptys</a>, Previous: <a href="Processes.html">Processes</a>, Up: <a href="POSIX.html"><abbr class="acronym">POSIX</abbr> System Calls and Networking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

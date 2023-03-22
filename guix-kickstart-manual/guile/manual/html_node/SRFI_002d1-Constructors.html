@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-1 Constructors (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-1 Constructors (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-1 Constructors (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI_002d1.html" rel="up" title="SRFI-1">
+<link href="SRFI_002d1-Predicates.html" rel="next" title="SRFI-1 Predicates">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="SRFI_002d1-Constructors">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d1-Predicates.html" accesskey="n" rel="next">Predicates</a>, Up: <a href="SRFI_002d1.html" accesskey="u" rel="up">SRFI-1 - List library</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Constructors">7.5.3.1 Constructors</h4>
+<a class="index-entry-id" id="index-list-constructor"></a>
+
+
+<p>New lists can be constructed by calling one of the following
+procedures.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-xcons"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">xcons</strong> <var class="def-var-arguments">d a</var><a class="copiable-link" href='#index-xcons'> &para;</a></span></dt>
+<dd><p>Like <code class="code">cons</code>, but with interchanged arguments.  Useful mostly when
+passed to higher-order procedures.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-list_002dtabulate"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list-tabulate</strong> <var class="def-var-arguments">n init-proc</var><a class="copiable-link" href='#index-list_002dtabulate'> &para;</a></span></dt>
+<dd><p>Return an <var class="var">n</var>-element list, where each list element is produced by
+applying the procedure <var class="var">init-proc</var> to the corresponding list
+index.  The order in which <var class="var">init-proc</var> is applied to the indices
+is not specified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-list_002dcopy-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list-copy</strong> <var class="def-var-arguments">lst</var><a class="copiable-link" href='#index-list_002dcopy-1'> &para;</a></span></dt>
+<dd><p>Return a new list containing the elements of the list <var class="var">lst</var>.
+</p>
+<p>This function differs from the core <code class="code">list-copy</code> (see <a class="pxref" href="List-Constructors.html">List Constructors</a>) in accepting improper lists too.  And if <var class="var">lst</var> is
+not a pair at all then it&rsquo;s treated as the final tail of an improper
+list and simply returned.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-circular_002dlist"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">circular-list</strong> <var class="def-var-arguments">elt1 elt2 &hellip;</var><a class="copiable-link" href='#index-circular_002dlist'> &para;</a></span></dt>
+<dd><p>Return a circular list containing the given arguments <var class="var">elt1</var>
+<var class="var">elt2</var> &hellip;.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-iota"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">iota</strong> <var class="def-var-arguments">count [start step]</var><a class="copiable-link" href='#index-iota'> &para;</a></span></dt>
+<dd><p>Return a list containing <var class="var">count</var> numbers, starting from
+<var class="var">start</var> and adding <var class="var">step</var> each time.  The default <var class="var">start</var>
+is 0, the default <var class="var">step</var> is 1.  For example,
+</p>
+<div class="example">
+<pre class="example-preformatted">(iota 6)        &rArr; (0 1 2 3 4 5)
+(iota 4 2.5 -2) &rArr; (2.5 0.5 -1.5 -3.5)
+</pre></div>
+
+<p>This function takes its name from the corresponding primitive in the
+APL language.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d1-Predicates.html">Predicates</a>, Up: <a href="SRFI_002d1.html">SRFI-1 - List library</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

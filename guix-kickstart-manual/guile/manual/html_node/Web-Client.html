@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Web Client (Guile Reference Manual)</title>
+
+<meta name="description" content="Web Client (Guile Reference Manual)">
+<meta name="keywords" content="Web Client (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Web.html" rel="up" title="Web">
+<link href="Web-Server.html" rel="next" title="Web Server">
+<link href="Responses.html" rel="prev" title="Responses">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Web-Client">
+<div class="nav-panel">
+<p>
+Next: <a href="Web-Server.html" accesskey="n" rel="next">Web Server</a>, Previous: <a href="Responses.html" accesskey="p" rel="prev">HTTP Responses</a>, Up: <a href="Web.html" accesskey="u" rel="up"><abbr class="acronym">HTTP</abbr>, the Web, and All That</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Web-Client-1">7.3.8 Web Client</h4>
+
+<p><code class="code">(web client)</code> provides a simple, synchronous HTTP client, built on
+the lower-level HTTP, request, and response modules.
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (web client))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-open_002dsocket_002dfor_002duri"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-socket-for-uri</strong> <var class="def-var-arguments">uri [#:verify-certificate? #t]</var><a class="copiable-link" href='#index-open_002dsocket_002dfor_002duri'> &para;</a></span></dt>
+<dd><p>Return an open input/output port for a connection to URI.  Guile
+dynamically loads Guile-GnuTLS for HTTPS support.
+</p>
+<p>See the <a class="uref" href="https://gitlab.com/gnutls/guile/">Web site of Guile-GnuTLS</a>, and
+see <a data-manual="gnutls-guile" href="../gnutls-guile_html/Guile-Preparations.html#Guile-Preparations">how to install the GnuTLS bindings for Guile</a> in <cite class="cite">GnuTLS-Guile</cite>, for more information.
+</p>
+<a class="index-entry-id" id="index-certificate-verification_002c-for-HTTPS"></a>
+<p>When <var class="var">verify-certificate?</var> is true, verify the server&rsquo;s X.509
+certificates against those read from <code class="code">x509-certificate-directory</code>.
+When an error occurs&mdash;e.g., the server&rsquo;s certificate has expired, or
+its host name does not match&mdash;raise a <code class="code">tls-certificate-error</code>
+exception.  The arguments to the <code class="code">tls-certificate-error</code> exception
+are:
+</p>
+<ol class="enumerate">
+<li> a symbol indicating the failure cause, <code class="code">host-mismatch</code> if the
+certificate&rsquo;s host name does not match the server&rsquo;s host name, and
+<code class="code">invalid-certificate</code> for other causes;
+
+</li><li> the server&rsquo;s X.509 certificate (see <a data-manual="gnutls-guile" href="../gnutls-guile_html/Guile-Reference.html#Guile-Reference">GnuTLS Guile
+reference</a> in <cite class="cite">GnuTLS-Guile</cite>);
+
+</li><li> the server&rsquo;s host name (a string);
+
+</li><li> in the case of <code class="code">invalid-certificate</code> errors, a list of GnuTLS
+certificate status values&mdash;one of the <code class="code">certificate-status/</code>
+constants, such as <code class="code">certificate-status/signer-not-found</code> or
+<code class="code">certificate-status/revoked</code>.
+</li></ol>
+</dd></dl>
+
+<a class="anchor" id="http_002drequest"></a><dl class="first-deffn">
+<dt class="deffn" id="index-http_002drequest"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">http-request</strong> <var class="def-var-arguments"><var class="var">uri</var> <var class="var">arg</var>&hellip;</var><a class="copiable-link" href='#index-http_002drequest'> &para;</a></span></dt>
+<dd>
+<p>Connect to the server corresponding to <var class="var">uri</var> and make a request over
+HTTP, using <var class="var">method</var> (<code class="code">GET</code>, <code class="code">HEAD</code>, <code class="code">POST</code>, etc.).
+</p>
+<p>The following keyword arguments allow you to modify the requests in
+various ways, for example attaching a body to the request, or setting
+specific headers.  The following table lists the keyword arguments and
+their default values.
+</p>
+<dl class="table">
+<dt><code class="code">#:method 'GET</code></dt>
+<dt><code class="code">#:body #f</code></dt>
+<dt><code class="code">#:verify-certificate? #t</code></dt>
+<dt><code class="code">#:port (open-socket-for-uri <var class="var">uri</var> #:verify-certificate? <var class="var">verify-certificate?</var>)</code></dt>
+<dt><code class="code">#:version '(1 . 1)</code></dt>
+<dt><code class="code">#:keep-alive? #f</code></dt>
+<dt><code class="code">#:headers '()</code></dt>
+<dt><code class="code">#:decode-body? #t</code></dt>
+<dt><code class="code">#:streaming? #f</code></dt>
+</dl>
+
+<p>If you already have a port open, pass it as <var class="var">port</var>.  Otherwise, a
+connection will be opened to the server corresponding to <var class="var">uri</var>.  Any
+extra headers in the alist <var class="var">headers</var> will be added to the request.
+</p>
+<p>If <var class="var">body</var> is not <code class="code">#f</code>, a message body will also be sent with
+the HTTP request.  If <var class="var">body</var> is a string, it is encoded according to
+the content-type in <var class="var">headers</var>, defaulting to UTF-8.  Otherwise
+<var class="var">body</var> should be a bytevector, or <code class="code">#f</code> for no body.  Although a
+message body may be sent with any request, usually only <code class="code">POST</code> and
+<code class="code">PUT</code> requests have bodies.
+</p>
+<p>If <var class="var">decode-body?</var> is true, as is the default, the body of the
+response will be decoded to string, if it is a textual content-type.
+Otherwise it will be returned as a bytevector.
+</p>
+<p>However, if <var class="var">streaming?</var> is true, instead of eagerly reading the
+response body from the server, this function only reads off the headers.
+The response body will be returned as a port on which the data may be
+read.
+</p>
+<p>Unless <var class="var">keep-alive?</var> is true, the port will be closed after the full
+response body has been read.
+</p>
+<p>If <var class="var">port</var> is false, <var class="var">uri</var> denotes an HTTPS URL, and <var class="var">verify-certificate?</var> is
+true, verify X.509 certificates against those available in
+<code class="code">x509-certificate-directory</code>.
+</p>
+<p>Returns two values: the response read from the server, and the response
+body as a string, bytevector, #f value, or as a port (if
+<var class="var">streaming?</var> is true).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-http_002dget"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">http-get</strong> <var class="def-var-arguments"><var class="var">uri</var> <var class="var">arg</var>&hellip;</var><a class="copiable-link" href='#index-http_002dget'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-http_002dhead"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">http-head</strong> <var class="def-var-arguments"><var class="var">uri</var> <var class="var">arg</var>&hellip;</var><a class="copiable-link" href='#index-http_002dhead'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-http_002dpost"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">http-post</strong> <var class="def-var-arguments"><var class="var">uri</var> <var class="var">arg</var>&hellip;</var><a class="copiable-link" href='#index-http_002dpost'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-http_002dput"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">http-put</strong> <var class="def-var-arguments"><var class="var">uri</var> <var class="var">arg</var>&hellip;</var><a class="copiable-link" href='#index-http_002dput'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-http_002ddelete"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">http-delete</strong> <var class="def-var-arguments"><var class="var">uri</var> <var class="var">arg</var>&hellip;</var><a class="copiable-link" href='#index-http_002ddelete'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-http_002dtrace"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">http-trace</strong> <var class="def-var-arguments"><var class="var">uri</var> <var class="var">arg</var>&hellip;</var><a class="copiable-link" href='#index-http_002dtrace'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-http_002doptions"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">http-options</strong> <var class="def-var-arguments"><var class="var">uri</var> <var class="var">arg</var>&hellip;</var><a class="copiable-link" href='#index-http_002doptions'> &para;</a></span></dt>
+<dd><p>Connect to the server corresponding to <var class="var">uri</var> and make a request over
+HTTP, using the appropriate method (<code class="code">GET</code>, <code class="code">HEAD</code>,
+<code class="code">POST</code>, etc.).
+</p>
+<p>These procedures are variants of <code class="code">http-request</code> specialized with a
+specific <var class="var">method</var> argument, and have the same prototype: a URI
+followed by an optional sequence of keyword arguments.
+See <a class="xref" href="#http_002drequest">http-request</a>, for full documentation on the various keyword
+arguments.
+</p>
+</dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-x509_002dcertificate_002ddirectory"><span class="category-def">Scheme Parameter: </span><span><strong class="def-name">x509-certificate-directory</strong><a class="copiable-link" href='#index-x509_002dcertificate_002ddirectory'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-X_002e509-certificate-directory"></a>
+<a class="index-entry-id" id="index-HTTPS_002c-X_002e509-certificates"></a>
+<a class="index-entry-id" id="index-certificates_002c-for-HTTPS"></a>
+<p>This parameter gives the name of the directory where X.509 certificates
+for HTTPS connections should be looked for.
+</p>
+<p>Its default value is one of:
+</p>
+<ul class="itemize mark-bullet">
+<li><a class="index-entry-id" id="index-GUILE_005fTLS_005fCERTIFICATE_005fDIRECTORY"></a>
+the value of the <code class="env">GUILE_TLS_CERTIFICATE_DIRECTORY</code> environment
+variable;
+
+</li><li><a class="index-entry-id" id="index-SSL_005fCERT_005fDIR"></a>
+or the value of the <code class="env">SSL_CERT_DIR</code> environment variable (also
+honored by the OpenSSL library);
+
+</li><li>or, as a last resort, <code class="code">&quot;/etc/ssl/certs&quot;</code>.
+</li></ul>
+
+<p>X.509 certificates are used when authenticating the identity of a remote
+site, when the <code class="code">#:verify-certificate?</code> argument to
+<code class="code">open-socket-for-uri</code>, to <code class="code">http-request</code>, or to related
+procedures is true.
+</p></dd></dl>
+
+<p><code class="code">http-get</code> is useful for making one-off requests to web sites.  If
+you are writing a web spider or some other client that needs to handle a
+number of requests in parallel, it&rsquo;s better to build an event-driven URL
+fetcher, similar in structure to the web server (see <a class="pxref" href="Web-Server.html">Web Server</a>).
+</p>
+<p>Another option, good but not as performant, would be to use threads,
+possibly via par-map or futures.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-current_002dhttp_002dproxy"><span class="category-def">Scheme Parameter: </span><span><strong class="def-name">current-http-proxy</strong><a class="copiable-link" href='#index-current_002dhttp_002dproxy'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-current_002dhttps_002dproxy"><span class="category-def">Scheme Parameter: </span><span><strong class="def-name">current-https-proxy</strong><a class="copiable-link" href='#index-current_002dhttps_002dproxy'> &para;</a></span></dt>
+<dd><p>Either <code class="code">#f</code> or a non-empty string containing the URL of the HTTP
+or HTTPS proxy server to be used by the procedures in the <code class="code">(web client)</code>
+module, including <code class="code">open-socket-for-uri</code>.  Its initial value is
+based on the <code class="env">http_proxy</code> and <code class="env">https_proxy</code> environment variables.
+</p>
+<div class="example">
+<pre class="example-preformatted">(current-http-proxy) &rArr; &quot;http://localhost:8123/&quot;
+(parameterize ((current-http-proxy #f))
+  (http-get &quot;http://example.com/&quot;))  ; temporarily bypass proxy
+(current-http-proxy) &rArr; &quot;http://localhost:8123/&quot;
+</pre></div>
+</dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Web-Server.html">Web Server</a>, Previous: <a href="Responses.html">HTTP Responses</a>, Up: <a href="Web.html"><abbr class="acronym">HTTP</abbr>, the Web, and All That</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

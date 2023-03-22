@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Curried Definitions (Guile Reference Manual)</title>
+
+<meta name="description" content="Curried Definitions (Guile Reference Manual)">
+<meta name="keywords" content="Curried Definitions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Guile-Modules.html" rel="up" title="Guile Modules">
+<link href="Statprof.html" rel="next" title="Statprof">
+<link href="The-Scheme-shell-_0028scsh_0029.html" rel="prev" title="The Scheme shell (scsh)">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Curried-Definitions">
+<div class="nav-panel">
+<p>
+Next: <a href="Statprof.html" accesskey="n" rel="next">Statprof</a>, Previous: <a href="The-Scheme-shell-_0028scsh_0029.html" accesskey="p" rel="prev">The Scheme shell (scsh)</a>, Up: <a href="Guile-Modules.html" accesskey="u" rel="up">Guile Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Curried-Definitions-1">7.19 Curried Definitions</h3>
+
+<p>The macros in this section are provided by
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(use-modules (ice-9 curried-definitions))
+</pre></div>
+<p>and replace those provided by default.
+</p>
+<p>Prior to Guile 2.0, Guile provided a type of definition known colloquially
+as a &ldquo;curried definition&rdquo;. The idea is to extend the syntax of
+<code class="code">define</code> so that you can conveniently define procedures that return
+procedures, up to any desired depth.
+</p>
+<p>For example,
+</p><div class="example">
+<pre class="example-preformatted">(define ((foo x) y)
+  (list x y))
+</pre></div>
+<p>is a convenience form of
+</p><div class="example">
+<pre class="example-preformatted">(define foo
+  (lambda (x)
+    (lambda (y)
+      (list x y))))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-define-2"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">define</strong> <var class="def-var-arguments">(&hellip; (name args &hellip;) &hellip;) body &hellip;</var><a class="copiable-link" href='#index-define-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-define_002a-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">define*</strong> <var class="def-var-arguments">(&hellip; (name args &hellip;) &hellip;) body &hellip;</var><a class="copiable-link" href='#index-define_002a-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-define_002dpublic-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">define-public</strong> <var class="def-var-arguments">(&hellip; (name args &hellip;) &hellip;) body &hellip;</var><a class="copiable-link" href='#index-define_002dpublic-1'> &para;</a></span></dt>
+<dd>
+<p>Create a top level variable <var class="var">name</var> bound to the procedure with
+parameter list <var class="var">args</var>. If <var class="var">name</var> is itself a formal parameter
+list, then a higher order procedure is created using that
+formal-parameter list, and returning a procedure that has parameter list
+<var class="var">args</var>. This nesting may occur to arbitrary depth.
+</p>
+<p><code class="code">define*</code> is similar but the formal parameter lists take additional
+options as described in <a class="ref" href="lambda_002a-and-define_002a.html">lambda* and define*.</a>. For example,
+</p><div class="example">
+<pre class="example-preformatted">(define* ((foo #:keys (bar 'baz) (quux 'zot)) frotz #:rest rest)
+  (list bar quux frotz rest))
+
+((foo #:quux 'foo) 1 2 3 4 5)
+&rArr; (baz foo 1 (2 3 4 5))
+</pre></div>
+
+<p><code class="code">define-public</code> is similar to <code class="code">define</code> but it also adds
+<var class="var">name</var> to the list of exported bindings of the current module.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Statprof.html">Statprof</a>, Previous: <a href="The-Scheme-shell-_0028scsh_0029.html">The Scheme shell (scsh)</a>, Up: <a href="Guile-Modules.html">Guile Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

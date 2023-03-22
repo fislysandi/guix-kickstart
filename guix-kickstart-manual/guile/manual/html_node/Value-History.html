@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Value History (Guile Reference Manual)</title>
+
+<meta name="description" content="Value History (Guile Reference Manual)">
+<meta name="keywords" content="Value History (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Using-Guile-Interactively.html" rel="up" title="Using Guile Interactively">
+<link href="REPL-Commands.html" rel="next" title="REPL Commands">
+<link href="Readline.html" rel="prev" title="Readline">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Value-History">
+<div class="nav-panel">
+<p>
+Next: <a href="REPL-Commands.html" accesskey="n" rel="next">REPL Commands</a>, Previous: <a href="Readline.html" accesskey="p" rel="prev">Readline</a>, Up: <a href="Using-Guile-Interactively.html" accesskey="u" rel="up">Using Guile Interactively</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Value-History-1">4.4.3 Value History</h4>
+
+<p>Just as Readline helps you to reuse a previous input line, <em class="dfn">value
+history</em> allows you to use the <em class="emph">result</em> of a previous evaluation in
+a new expression.  When value history is enabled, each evaluation result
+is automatically assigned to the next in the sequence of variables
+<code class="code">$1</code>, <code class="code">$2</code>, &hellip;.  You can then use these variables in
+subsequent expressions.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">scheme@(guile-user)&gt; (iota 10)
+$1 = (0 1 2 3 4 5 6 7 8 9)
+scheme@(guile-user)&gt; (apply * (cdr $1))
+$2 = 362880
+scheme@(guile-user)&gt; (sqrt $2)
+$3 = 602.3952191045344
+scheme@(guile-user)&gt; (cons $2 $1)
+$4 = (362880 0 1 2 3 4 5 6 7 8 9)
+</pre></div>
+
+<p>Value history is enabled by default, because Guile&rsquo;s REPL imports the
+<code class="code">(ice-9 history)</code> module. Value history may be turned off or on within the
+repl, using the options interface:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">scheme@(guile-user)&gt; ,option value-history #f
+scheme@(guile-user)&gt; 'foo
+foo
+scheme@(guile-user)&gt; ,option value-history #t
+scheme@(guile-user)&gt; 'bar
+$5 = bar
+</pre></div>
+
+<p>Note that previously recorded values are still accessible, even if value history
+is off. In rare cases, these references to past computations can cause Guile to
+use too much memory. One may clear these values, possibly enabling garbage
+collection, via the <code class="code">clear-value-history!</code> procedure, described below.
+</p>
+<p>The programmatic interface to value history is in a module:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(use-modules (ice-9 history))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-value_002dhistory_002denabled_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">value-history-enabled?</strong><a class="copiable-link" href='#index-value_002dhistory_002denabled_003f'> &para;</a></span></dt>
+<dd><p>Return true if value history is enabled, or false otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-enable_002dvalue_002dhistory_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">enable-value-history!</strong><a class="copiable-link" href='#index-enable_002dvalue_002dhistory_0021'> &para;</a></span></dt>
+<dd><p>Turn on value history, if it was off.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-disable_002dvalue_002dhistory_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">disable-value-history!</strong><a class="copiable-link" href='#index-disable_002dvalue_002dhistory_0021'> &para;</a></span></dt>
+<dd><p>Turn off value history, if it was on.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-clear_002dvalue_002dhistory_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">clear-value-history!</strong><a class="copiable-link" href='#index-clear_002dvalue_002dhistory_0021'> &para;</a></span></dt>
+<dd><p>Clear the value history. If the stored values are not captured by some other
+data structure or closure, they may then be reclaimed by the garbage collector.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="REPL-Commands.html">REPL Commands</a>, Previous: <a href="Readline.html">Readline</a>, Up: <a href="Using-Guile-Interactively.html">Using Guile Interactively</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

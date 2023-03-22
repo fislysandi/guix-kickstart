@@ -99,6 +99,11 @@ _G.packer_plugins = {
     path = "/home/fislysandi/.local/share/nvim/site/pack/packer/start/cmp_luasnip",
     url = "https://github.com/saadparwaiz1/cmp_luasnip"
   },
+  conjure = {
+    loaded = true,
+    path = "/home/fislysandi/.local/share/nvim/site/pack/packer/start/conjure",
+    url = "https://github.com/Olical/conjure"
+  },
   ["friendly-snippets"] = {
     loaded = true,
     path = "/home/fislysandi/.local/share/nvim/site/pack/packer/start/friendly-snippets",

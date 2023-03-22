@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>rnrs records procedural (Guile Reference Manual)</title>
+
+<meta name="description" content="rnrs records procedural (Guile Reference Manual)">
+<meta name="keywords" content="rnrs records procedural (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="R6RS-Standard-Libraries.html" rel="up" title="R6RS Standard Libraries">
+<link href="rnrs-records-inspection.html" rel="next" title="rnrs records inspection">
+<link href="rnrs-records-syntactic.html" rel="prev" title="rnrs records syntactic">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="rnrs-records-procedural">
+<div class="nav-panel">
+<p>
+Next: <a href="rnrs-records-inspection.html" accesskey="n" rel="next">rnrs records inspection</a>, Previous: <a href="rnrs-records-syntactic.html" accesskey="p" rel="prev">rnrs records syntactic</a>, Up: <a href="R6RS-Standard-Libraries.html" accesskey="u" rel="up">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="rnrs-records-procedural-1">7.6.2.10 rnrs records procedural</h4>
+
+<p>The <code class="code">(rnrs records procedural (6))</code> library exports the procedural
+API for working with R6RS records.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002drecord_002dtype_002ddescriptor"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-record-type-descriptor</strong> <var class="def-var-arguments">name parent uid sealed? opaque? fields</var><a class="copiable-link" href='#index-make_002drecord_002dtype_002ddescriptor'> &para;</a></span></dt>
+<dd><p>Returns a new record-type descriptor with the specified characteristics:
+<var class="var">name</var> must be a symbol giving the name of the new record type; 
+<var class="var">parent</var> must be either <code class="code">#f</code> or a non-sealed record-type 
+descriptor for the returned record type to extend; <var class="var">uid</var> must be
+either <code class="code">#f</code>, indicating that the record type is generative, or 
+a symbol giving the type&rsquo;s nongenerative uid; <var class="var">sealed?</var> and  
+<var class="var">opaque?</var> must be boolean values that specify the sealedness and
+opaqueness of the record type; <var class="var">fields</var> must be a vector of zero or
+more field specifiers of the form <code class="code">(mutable name)</code> or
+<code class="code">(immutable name)</code>, where name is a symbol giving a name for the
+field.
+</p>
+<p>If <var class="var">uid</var> is not <code class="code">#f</code>, it must be a symbol
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-record_002dtype_002ddescriptor_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">record-type-descriptor?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-record_002dtype_002ddescriptor_003f'> &para;</a></span></dt>
+<dd><p>Returns <code class="code">#t</code> if <var class="var">obj</var> is a record-type descriptor, <code class="code">#f</code>
+otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002drecord_002dconstructor_002ddescriptor"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-record-constructor-descriptor</strong> <var class="def-var-arguments">rtd parent-constructor-descriptor protocol</var><a class="copiable-link" href='#index-make_002drecord_002dconstructor_002ddescriptor'> &para;</a></span></dt>
+<dd><p>Returns a new record constructor descriptor that can be used to produce
+constructors for the record type specified by the record-type descriptor
+<var class="var">rtd</var> and whose delegation and binding behavior are specified by the
+protocol procedure <var class="var">protocol</var>.
+</p>
+<p><var class="var">parent-constructor-descriptor</var> specifies a record constructor 
+descriptor for the parent type of <var class="var">rtd</var>, if one exists.  If 
+<var class="var">rtd</var> represents a base type, then 
+<var class="var">parent-constructor-descriptor</var> must be <code class="code">#f</code>.  If <var class="var">rtd</var>
+is an extension of another type, <var class="var">parent-constructor-descriptor</var> may
+still be <code class="code">#f</code>, but protocol must also be <code class="code">#f</code> in this case.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-record_002dconstructor-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">record-constructor</strong> <var class="def-var-arguments">rcd</var><a class="copiable-link" href='#index-record_002dconstructor-1'> &para;</a></span></dt>
+<dd><p>Returns a record constructor procedure by invoking the protocol
+defined by the record-constructor descriptor <var class="var">rcd</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-record_002dpredicate-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">record-predicate</strong> <var class="def-var-arguments">rtd</var><a class="copiable-link" href='#index-record_002dpredicate-1'> &para;</a></span></dt>
+<dd><p>Returns the record predicate procedure for the record-type descriptor
+<var class="var">rtd</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-record_002daccessor-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">record-accessor</strong> <var class="def-var-arguments">rtd k</var><a class="copiable-link" href='#index-record_002daccessor-1'> &para;</a></span></dt>
+<dd><p>Returns the record field accessor procedure for the <var class="var">k</var>th field of
+the record-type descriptor <var class="var">rtd</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-record_002dmutator"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">record-mutator</strong> <var class="def-var-arguments">rtd k</var><a class="copiable-link" href='#index-record_002dmutator'> &para;</a></span></dt>
+<dd><p>Returns the record field mutator procedure for the <var class="var">k</var>th field of
+the record-type descriptor <var class="var">rtd</var>.  An <code class="code">&amp;assertion</code> condition
+will be raised if this field is not mutable.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="rnrs-records-inspection.html">rnrs records inspection</a>, Previous: <a href="rnrs-records-syntactic.html">rnrs records syntactic</a>, Up: <a href="R6RS-Standard-Libraries.html">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

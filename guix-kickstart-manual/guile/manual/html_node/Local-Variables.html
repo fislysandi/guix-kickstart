@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Local Variables (Guile Reference Manual)</title>
+
+<meta name="description" content="Local Variables (Guile Reference Manual)">
+<meta name="keywords" content="Local Variables (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="About-Closure.html" rel="up" title="About Closure">
+<link href="Chaining.html" rel="next" title="Chaining">
+<link href="About-Environments.html" rel="prev" title="About Environments">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Local-Variables">
+<div class="nav-panel">
+<p>
+Next: <a href="Chaining.html" accesskey="n" rel="next">Environment Chaining</a>, Previous: <a href="About-Environments.html" accesskey="p" rel="prev">Names, Locations, Values and Environments</a>, Up: <a href="About-Closure.html" accesskey="u" rel="up">The Concept of Closure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Local-Variables-and-Environments">3.4.2 Local Variables and Environments</h4>
+
+<a class="index-entry-id" id="index-local-variable"></a>
+<a class="index-entry-id" id="index-variable_002c-local"></a>
+<a class="index-entry-id" id="index-local-environment"></a>
+<a class="index-entry-id" id="index-environment_002c-local"></a>
+
+<p>We have seen how to create top level variables using the <code class="code">define</code>
+syntax (see <a class="pxref" href="Definition.html">Defining and Setting Variables</a>).  It is often useful to create variables
+that are more limited in their scope, typically as part of a procedure
+body.  In Scheme, this is done using the <code class="code">let</code> syntax, or one of
+its modified forms <code class="code">let*</code> and <code class="code">letrec</code>.  These syntaxes are
+described in full later in the manual (see <a class="pxref" href="Local-Bindings.html">Local Variable Bindings</a>).  Here
+our purpose is to illustrate their use just enough that we can see how
+local variables work.
+</p>
+<p>For example, the following code uses a local variable <code class="code">s</code> to
+simplify the computation of the area of a triangle given the lengths of
+its three sides.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define a 5.3)
+(define b 4.7)
+(define c 2.8)
+
+(define area
+  (let ((s (/ (+ a b c) 2)))
+    (sqrt (* s (- s a) (- s b) (- s c)))))
+</pre></div>
+
+<p>The effect of the <code class="code">let</code> expression is to create a new environment
+and, within this environment, an association between the name <code class="code">s</code>
+and a new location whose initial value is obtained by evaluating
+<code class="code">(/ (+ a b c) 2)</code>.  The expressions in the body of the <code class="code">let</code>,
+namely <code class="code">(sqrt (* s (- s a) (- s b) (- s c)))</code>, are then evaluated
+in the context of the new environment, and the value of the last
+expression evaluated becomes the value of the whole <code class="code">let</code>
+expression, and therefore the value of the variable <code class="code">area</code>.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Chaining.html">Environment Chaining</a>, Previous: <a href="About-Environments.html">Names, Locations, Values and Environments</a>, Up: <a href="About-Closure.html">The Concept of Closure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

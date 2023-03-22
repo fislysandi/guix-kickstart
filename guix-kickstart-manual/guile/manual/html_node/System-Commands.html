@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>System Commands (Guile Reference Manual)</title>
+
+<meta name="description" content="System Commands (Guile Reference Manual)">
+<meta name="keywords" content="System Commands (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="REPL-Commands.html" rel="up" title="REPL Commands">
+<link href="Inspect-Commands.html" rel="prev" title="Inspect Commands">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="System-Commands">
+<div class="nav-panel">
+<p>
+Previous: <a href="Inspect-Commands.html" accesskey="p" rel="prev">Inspect Commands</a>, Up: <a href="REPL-Commands.html" accesskey="u" rel="up">REPL Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="System-Commands-1">4.4.4.8 System Commands</h4>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-gc"><span class="category-def">REPL Command: </span><span><strong class="def-name">gc</strong><a class="copiable-link" href='#index-gc'> &para;</a></span></dt>
+<dd><p>Garbage collection.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-statistics"><span class="category-def">REPL Command: </span><span><strong class="def-name">statistics</strong><a class="copiable-link" href='#index-statistics'> &para;</a></span></dt>
+<dd><p>Display statistics.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-option"><span class="category-def">REPL Command: </span><span><strong class="def-name">option</strong> <var class="def-var-arguments">[name] [exp]</var><a class="copiable-link" href='#index-option'> &para;</a></span></dt>
+<dd><p>With no arguments, lists all options.  With one argument, shows the
+current value of the <var class="var">name</var> option.  With two arguments, sets the
+<var class="var">name</var> option to the result of evaluating the Scheme expression
+<var class="var">exp</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-quit"><span class="category-def">REPL Command: </span><span><strong class="def-name">quit</strong><a class="copiable-link" href='#index-quit'> &para;</a></span></dt>
+<dd><p>Quit this session.
+</p></dd></dl>
+
+<p>Current REPL options include:
+</p>
+<dl class="table">
+<dt><code class="code">compile-options</code></dt>
+<dd><p>The options used when compiling expressions entered at the REPL.
+See <a class="xref" href="Compilation.html">Compiling Scheme Code</a>, for more on compilation options.
+</p></dd>
+<dt><code class="code">interp</code></dt>
+<dd><p>Whether to interpret or compile expressions given at the REPL, if such a
+choice is available.  Off by default (indicating compilation).
+</p></dd>
+<dt><code class="code">prompt</code></dt>
+<dd><p>A customized REPL prompt.  <code class="code">#f</code> by default, indicating the default
+prompt.
+</p></dd>
+<dt><code class="code">print</code></dt>
+<dd><p>A procedure of two arguments used to print the result of evaluating each
+expression.  The arguments are the current REPL and the value to print.
+By default, <code class="code">#f</code>, to use the default procedure.
+</p></dd>
+<dt><code class="code">value-history</code></dt>
+<dd><p>Whether value history is on or not.  See <a class="xref" href="Value-History.html">Value History</a>.
+</p></dd>
+<dt><code class="code">on-error</code></dt>
+<dd><p>What to do when an error happens.  By default, <code class="code">debug</code>, meaning to
+enter the debugger.  Other values include <code class="code">backtrace</code>, to show a
+backtrace without entering the debugger, or <code class="code">report</code>, to simply
+show a short error printout.
+</p></dd>
+</dl>
+
+<p>Default values for REPL options may be set using
+<code class="code">repl-default-option-set!</code> from <code class="code">(system repl common)</code>:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-repl_002ddefault_002doption_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">repl-default-option-set!</strong> <var class="def-var-arguments">key value</var><a class="copiable-link" href='#index-repl_002ddefault_002doption_002dset_0021'> &para;</a></span></dt>
+<dd><p>Set the default value of a REPL option.  This function is particularly
+useful in a user&rsquo;s init file.  See <a class="xref" href="Init-File.html">The Init File, <samp class="file">~/.guile</samp></a>.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Inspect-Commands.html">Inspect Commands</a>, Up: <a href="REPL-Commands.html">REPL Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

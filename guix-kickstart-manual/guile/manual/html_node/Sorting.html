@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Sorting (Guile Reference Manual)</title>
+
+<meta name="description" content="Sorting (Guile Reference Manual)">
+<meta name="keywords" content="Sorting (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Utility-Functions.html" rel="up" title="Utility Functions">
+<link href="Copying.html" rel="next" title="Copying">
+<link href="Object-Properties.html" rel="prev" title="Object Properties">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Sorting">
+<div class="nav-panel">
+<p>
+Next: <a href="Copying.html" accesskey="n" rel="next">Copying Deep Structures</a>, Previous: <a href="Object-Properties.html" accesskey="p" rel="prev">Object Properties</a>, Up: <a href="Utility-Functions.html" accesskey="u" rel="up">General Utility Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Sorting-1">6.9.3 Sorting</h4>
+
+
+<a class="index-entry-id" id="index-sorting"></a>
+<a class="index-entry-id" id="index-sorting-lists"></a>
+<a class="index-entry-id" id="index-sorting-vectors"></a>
+
+<p>Sorting is very important in computer programs.  Therefore, Guile comes
+with several sorting procedures built-in.  As always, procedures with
+names ending in <code class="code">!</code> are side-effecting, that means that they may
+modify their parameters in order to produce their results.
+</p>
+<p>The first group of procedures can be used to merge two lists (which must
+be already sorted on their own) and produce sorted lists containing
+all elements of the input lists.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-merge"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">merge</strong> <var class="def-var-arguments">alist blist less</var><a class="copiable-link" href='#index-merge'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmerge"><span class="category-def">C Function: </span><span><strong class="def-name">scm_merge</strong> <var class="def-var-arguments">(alist, blist, less)</var><a class="copiable-link" href='#index-scm_005fmerge'> &para;</a></span></dt>
+<dd><p>Merge two already sorted lists into one.
+Given two lists <var class="var">alist</var> and <var class="var">blist</var>, such that
+<code class="code">(sorted? alist less?)</code> and <code class="code">(sorted? blist less?)</code>,
+return a new list in which the elements of <var class="var">alist</var> and
+<var class="var">blist</var> have been stably interleaved so that
+<code class="code">(sorted? (merge alist blist less?) less?)</code>.
+Note:  this does _not_ accept vectors.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-merge_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">merge!</strong> <var class="def-var-arguments">alist blist less</var><a class="copiable-link" href='#index-merge_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmerge_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_merge_x</strong> <var class="def-var-arguments">(alist, blist, less)</var><a class="copiable-link" href='#index-scm_005fmerge_005fx'> &para;</a></span></dt>
+<dd><p>Takes two lists <var class="var">alist</var> and <var class="var">blist</var> such that
+<code class="code">(sorted? alist less?)</code> and <code class="code">(sorted? blist less?)</code> and
+returns a new list in which the elements of <var class="var">alist</var> and
+<var class="var">blist</var> have been stably interleaved so that
+ <code class="code">(sorted? (merge alist blist less?) less?)</code>.
+This is the destructive variant of <code class="code">merge</code>
+Note:  this does _not_ accept vectors.
+</p></dd></dl>
+
+<p>The following procedures can operate on sequences which are either
+vectors or list.  According to the given arguments, they return sorted
+vectors or lists, respectively.  The first of the following procedures
+determines whether a sequence is already sorted, the other sort a given
+sequence.  The variants with names starting with <code class="code">stable-</code> are
+special in that they maintain a special property of the input sequences:
+If two or more elements are the same according to the comparison
+predicate, they are left in the same order as they appeared in the
+input.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-sorted_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sorted?</strong> <var class="def-var-arguments">items less</var><a class="copiable-link" href='#index-sorted_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsorted_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_sorted_p</strong> <var class="def-var-arguments">(items, less)</var><a class="copiable-link" href='#index-scm_005fsorted_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">items</var> is a list or vector such that,
+for each element <var class="var">x</var> and the next element <var class="var">y</var> of
+<var class="var">items</var>, <code class="code">(<var class="var">less</var> <var class="var">y</var> <var class="var">x</var>)</code> returns
+<code class="code">#f</code>.  Otherwise return <code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-sort"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sort</strong> <var class="def-var-arguments">items less</var><a class="copiable-link" href='#index-sort'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsort"><span class="category-def">C Function: </span><span><strong class="def-name">scm_sort</strong> <var class="def-var-arguments">(items, less)</var><a class="copiable-link" href='#index-scm_005fsort'> &para;</a></span></dt>
+<dd><p>Sort the sequence <var class="var">items</var>, which may be a list or a
+vector.  <var class="var">less</var> is used for comparing the sequence
+elements.  This is not a stable sort.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-sort_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sort!</strong> <var class="def-var-arguments">items less</var><a class="copiable-link" href='#index-sort_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsort_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_sort_x</strong> <var class="def-var-arguments">(items, less)</var><a class="copiable-link" href='#index-scm_005fsort_005fx'> &para;</a></span></dt>
+<dd><p>Sort the sequence <var class="var">items</var>, which may be a list or a
+vector.  <var class="var">less</var> is used for comparing the sequence
+elements.  The sorting is destructive, that means that the
+input sequence is modified to produce the sorted result.
+This is not a stable sort.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stable_002dsort"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stable-sort</strong> <var class="def-var-arguments">items less</var><a class="copiable-link" href='#index-stable_002dsort'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstable_005fsort"><span class="category-def">C Function: </span><span><strong class="def-name">scm_stable_sort</strong> <var class="def-var-arguments">(items, less)</var><a class="copiable-link" href='#index-scm_005fstable_005fsort'> &para;</a></span></dt>
+<dd><p>Sort the sequence <var class="var">items</var>, which may be a list or a
+vector. <var class="var">less</var> is used for comparing the sequence elements.
+This is a stable sort.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stable_002dsort_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stable-sort!</strong> <var class="def-var-arguments">items less</var><a class="copiable-link" href='#index-stable_002dsort_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstable_005fsort_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_stable_sort_x</strong> <var class="def-var-arguments">(items, less)</var><a class="copiable-link" href='#index-scm_005fstable_005fsort_005fx'> &para;</a></span></dt>
+<dd><p>Sort the sequence <var class="var">items</var>, which may be a list or a
+vector. <var class="var">less</var> is used for comparing the sequence elements.
+The sorting is destructive, that means that the input sequence
+is modified to produce the sorted result.
+This is a stable sort.
+</p></dd></dl>
+
+<p>The procedures in the last group only accept lists or vectors as input,
+as their names indicate.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-sort_002dlist"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sort-list</strong> <var class="def-var-arguments">items less</var><a class="copiable-link" href='#index-sort_002dlist'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsort_005flist"><span class="category-def">C Function: </span><span><strong class="def-name">scm_sort_list</strong> <var class="def-var-arguments">(items, less)</var><a class="copiable-link" href='#index-scm_005fsort_005flist'> &para;</a></span></dt>
+<dd><p>Sort the list <var class="var">items</var>, using <var class="var">less</var> for comparing the
+list elements. This is a stable sort.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-sort_002dlist_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sort-list!</strong> <var class="def-var-arguments">items less</var><a class="copiable-link" href='#index-sort_002dlist_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsort_005flist_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_sort_list_x</strong> <var class="def-var-arguments">(items, less)</var><a class="copiable-link" href='#index-scm_005fsort_005flist_005fx'> &para;</a></span></dt>
+<dd><p>Sort the list <var class="var">items</var>, using <var class="var">less</var> for comparing the
+list elements. The sorting is destructive, that means that the
+input list is modified to produce the sorted result.
+This is a stable sort.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-restricted_002dvector_002dsort_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">restricted-vector-sort!</strong> <var class="def-var-arguments">vec less startpos endpos</var><a class="copiable-link" href='#index-restricted_002dvector_002dsort_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005frestricted_005fvector_005fsort_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_restricted_vector_sort_x</strong> <var class="def-var-arguments">(vec, less, startpos, endpos)</var><a class="copiable-link" href='#index-scm_005frestricted_005fvector_005fsort_005fx'> &para;</a></span></dt>
+<dd><p>Sort the vector <var class="var">vec</var>, using <var class="var">less</var> for comparing
+the vector elements.  <var class="var">startpos</var> (inclusively) and
+<var class="var">endpos</var> (exclusively) delimit
+the range of the vector which gets sorted.  The return value
+is not specified.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Copying.html">Copying Deep Structures</a>, Previous: <a href="Object-Properties.html">Object Properties</a>, Up: <a href="Utility-Functions.html">General Utility Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

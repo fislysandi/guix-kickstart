@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Defmacros (Guile Reference Manual)</title>
+
+<meta name="description" content="Defmacros (Guile Reference Manual)">
+<meta name="keywords" content="Defmacros (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Macros.html" rel="up" title="Macros">
+<link href="Identifier-Macros.html" rel="next" title="Identifier Macros">
+<link href="Syntax-Transformer-Helpers.html" rel="prev" title="Syntax Transformer Helpers">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Defmacros">
+<div class="nav-panel">
+<p>
+Next: <a href="Identifier-Macros.html" accesskey="n" rel="next">Identifier Macros</a>, Previous: <a href="Syntax-Transformer-Helpers.html" accesskey="p" rel="prev">Syntax Transformer Helpers</a>, Up: <a href="Macros.html" accesskey="u" rel="up">Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Lisp_002dstyle-Macro-Definitions">6.8.5 Lisp-style Macro Definitions</h4>
+
+<p>The traditional way to define macros in Lisp is very similar to procedure
+definitions. The key differences are that the macro definition body should
+return a list that describes the transformed expression, and that the definition
+is marked as a macro definition (rather than a procedure definition) by the use
+of a different definition keyword: in Lisp, <code class="code">defmacro</code> rather than
+<code class="code">defun</code>, and in Scheme, <code class="code">define-macro</code> rather than <code class="code">define</code>.
+</p>
+<a class="index-entry-id" id="index-defmacro"></a>
+<a class="index-entry-id" id="index-define_002dmacro"></a>
+<p>Guile supports this style of macro definition using both <code class="code">defmacro</code>
+and <code class="code">define-macro</code>.  The only difference between them is how the
+macro name and arguments are grouped together in the definition:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(defmacro <var class="var">name</var> (<var class="var">args</var> &hellip;) <var class="var">body</var> &hellip;)
+</pre></div>
+
+<p>is the same as
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-macro (<var class="var">name</var> <var class="var">args</var> &hellip;) <var class="var">body</var> &hellip;)
+</pre></div>
+
+<p>The difference is analogous to the corresponding difference between
+Lisp&rsquo;s <code class="code">defun</code> and Scheme&rsquo;s <code class="code">define</code>.
+</p>
+<p>Having read the previous section on <code class="code">syntax-case</code>, it&rsquo;s probably clear that
+Guile actually implements defmacros in terms of <code class="code">syntax-case</code>, applying the
+transformer on the expression between invocations of <code class="code">syntax-&gt;datum</code> and
+<code class="code">datum-&gt;syntax</code>. This realization leads us to the problem with defmacros,
+that they do not preserve referential transparency. One can be careful to not
+introduce bindings into expanded code, via liberal use of <code class="code">gensym</code>, but
+there is no getting around the lack of referential transparency for free
+bindings in the macro itself.
+</p>
+<p>Even a macro as simple as our <code class="code">when</code> from before is difficult to get right:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-macro (when cond exp . rest)
+  `(if ,cond
+       (begin ,exp . ,rest)))
+
+(when #f (display &quot;Launching missiles!\n&quot;))
+&rArr; #f
+
+(let ((if list))
+  (when #f (display &quot;Launching missiles!\n&quot;)))
+-| Launching missiles!
+&rArr; (#f #&lt;unspecified&gt;)
+</pre></div>
+
+<p>Guile&rsquo;s perspective is that defmacros have had a good run, but that modern
+macros should be written with <code class="code">syntax-rules</code> or <code class="code">syntax-case</code>. There
+are still many uses of defmacros within Guile itself, but we will be phasing
+them out over time. Of course we won&rsquo;t take away <code class="code">defmacro</code> or
+<code class="code">define-macro</code> themselves, as there is lots of code out there that uses
+them.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Identifier-Macros.html">Identifier Macros</a>, Previous: <a href="Syntax-Transformer-Helpers.html">Syntax Transformer Helpers</a>, Up: <a href="Macros.html">Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

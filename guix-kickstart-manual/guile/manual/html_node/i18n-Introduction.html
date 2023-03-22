@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>i18n Introduction (Guile Reference Manual)</title>
+
+<meta name="description" content="i18n Introduction (Guile Reference Manual)">
+<meta name="keywords" content="i18n Introduction (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Internationalization.html" rel="up" title="Internationalization">
+<link href="Text-Collation.html" rel="next" title="Text Collation">
+<link href="Internationalization.html" rel="prev" title="Internationalization">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="i18n-Introduction">
+<div class="nav-panel">
+<p>
+Next: <a href="Text-Collation.html" accesskey="n" rel="next">Text Collation</a>, Previous: <a href="Internationalization.html" accesskey="p" rel="prev">Support for Internationalization</a>, Up: <a href="Internationalization.html" accesskey="u" rel="up">Support for Internationalization</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Internationalization-with-Guile">6.25.1 Internationalization with Guile</h4>
+
+<p>In order to make use of the functions described thereafter, the
+<code class="code">(ice-9 i18n)</code> module must be imported in the usual way:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 i18n))
+</pre></div>
+
+<a class="index-entry-id" id="index-cultural-conventions"></a>
+
+<p>The <code class="code">(ice-9 i18n)</code> module provides procedures to manipulate text
+and other data in a way that conforms to the cultural conventions
+chosen by the user.  Each region of the world or language has its own
+customs to, for instance, represent real numbers, classify characters,
+collate text, etc.  All these aspects comprise the so-called
+&ldquo;cultural conventions&rdquo; of that region or language.
+</p>
+<a class="index-entry-id" id="index-locale-1"></a>
+<a class="index-entry-id" id="index-locale-category"></a>
+
+<p>Computer systems typically refer to a set of cultural conventions as a
+<em class="dfn">locale</em>.  For each particular aspect that comprise those cultural
+conventions, a <em class="dfn">locale category</em> is defined.  For instance, the
+way characters are classified is defined by the <code class="code">LC_CTYPE</code>
+category, while the language in which program messages are issued to
+the user is defined by the <code class="code">LC_MESSAGES</code> category
+(see <a class="pxref" href="Locales.html">General Locale Information</a> for details).
+</p>
+<a class="index-entry-id" id="index-locale-object"></a>
+
+<p>The procedures provided by this module allow the development of
+programs that adapt automatically to any locale setting.  As we will
+see later, many of these procedures can optionally take a <em class="dfn">locale
+object</em> argument.  This additional argument defines the locale
+settings that must be followed by the invoked procedure.  When it is
+omitted, then the current locale settings of the process are followed
+(see <a class="pxref" href="Locales.html"><code class="code">setlocale</code></a>).
+</p>
+<p>The following procedures allow the manipulation of such locale
+objects.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dlocale"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-locale</strong> <var class="def-var-arguments">category-list locale-name [base-locale]</var><a class="copiable-link" href='#index-make_002dlocale'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmake_005flocale"><span class="category-def">C Function: </span><span><strong class="def-name">scm_make_locale</strong> <var class="def-var-arguments">(category_list, locale_name, base_locale)</var><a class="copiable-link" href='#index-scm_005fmake_005flocale'> &para;</a></span></dt>
+<dd><p>Return a reference to a data structure representing a set of locale
+datasets.  <var class="var">locale-name</var> should be a string denoting a particular
+locale (e.g., <code class="code">&quot;aa_DJ&quot;</code>) and <var class="var">category-list</var> should be either
+a list of locale categories or a single category as used with
+<code class="code">setlocale</code> (see <a class="pxref" href="Locales.html"><code class="code">setlocale</code></a>).  Optionally, if
+<code class="code">base-locale</code> is passed, it should be a locale object denoting
+settings for categories not listed in <var class="var">category-list</var>.
+</p>
+<p>The following invocation creates a locale object that combines the use
+of Swedish for messages and character classification with the
+default settings for the other categories (i.e., the settings of the
+default <code class="code">C</code> locale which usually represents conventions in use in
+the USA):
+</p>
+<div class="example">
+<pre class="example-preformatted">(make-locale (list LC_MESSAGES LC_CTYPE) &quot;sv_SE&quot;)
+</pre></div>
+
+<p>The following example combines the use of Esperanto messages and
+conventions with monetary conventions from Croatia:
+</p>
+<div class="example">
+<pre class="example-preformatted">(make-locale LC_MONETARY &quot;hr_HR&quot;
+             (make-locale LC_ALL &quot;eo_EO&quot;))
+</pre></div>
+
+<p>A <code class="code">system-error</code> exception (see <a class="pxref" href="Handling-Errors.html">How to Handle Errors</a>) is raised by
+<code class="code">make-locale</code> when <var class="var">locale-name</var> does not match any of the
+locales compiled on the system.  Note that on non-GNU systems, this
+error may be raised later, when the locale object is actually used.
+</p>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-locale_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-locale_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flocale_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_locale_p</strong> <var class="def-var-arguments">(obj)</var><a class="copiable-link" href='#index-scm_005flocale_005fp'> &para;</a></span></dt>
+<dd><p>Return true if <var class="var">obj</var> is a locale object.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-_0025global_002dlocale"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">%global-locale</strong><a class="copiable-link" href='#index-_0025global_002dlocale'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005fglobal_005flocale"><span class="category-def">C Variable: </span><span><strong class="def-name">scm_global_locale</strong><a class="copiable-link" href='#index-scm_005fglobal_005flocale'> &para;</a></span></dt>
+<dd><p>This variable is bound to a locale object denoting the current process
+locale as installed using <code class="code">setlocale ()</code> (see <a class="pxref" href="Locales.html">Locales</a>).  It
+may be used like any other locale object, including as a third
+argument to <code class="code">make-locale</code>, for instance.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Text-Collation.html">Text Collation</a>, Previous: <a href="Internationalization.html">Support for Internationalization</a>, Up: <a href="Internationalization.html">Support for Internationalization</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

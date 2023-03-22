@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Status (Guile Reference Manual)</title>
+
+<meta name="description" content="Status (Guile Reference Manual)">
+<meta name="keywords" content="Status (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="History.html" rel="up" title="History">
+<link href="A-Timeline-of-Selected-Guile-Releases.html" rel="prev" title="A Timeline of Selected Guile Releases">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Status">
+<div class="nav-panel">
+<p>
+Previous: <a href="A-Timeline-of-Selected-Guile-Releases.html" accesskey="p" rel="prev">A Timeline of Selected Guile Releases</a>, Up: <a href="History.html" accesskey="u" rel="up">A Brief History of Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Status_002c-or_003a-Your-Help-Needed">9.1.5 Status, or: Your Help Needed</h4>
+
+<p>Guile has achieved much of what it set out to achieve, but there is
+much remaining to do.
+</p>
+<p>There is still the old problem of bringing existing applications into
+a more Emacs-like experience. Guile has had some successes in this
+respect, but still most applications in the GNU system are without
+Guile integration.
+</p>
+<p>Getting Guile to those applications takes an investment, the
+&ldquo;hacktivation energy&rdquo; needed to wire Guile into a program that only
+pays off once it is good enough to enable new kinds of behavior. This
+would be a great way for new hackers to contribute: take an
+application that you use and that you know well, think of something
+that it can&rsquo;t yet do, and figure out a way to integrate Guile and
+implement that task in Guile.
+</p>
+<p>With time, perhaps this exposure can reverse itself, whereby programs
+can run under Guile instead of vice versa, eventually resulting in the
+Emacsification of the entire GNU system. Indeed, this is the reason
+for the naming of the many Guile modules that live in the <code class="code">ice-9</code>
+namespace, a nod to the fictional substance in Kurt Vonnegut&rsquo;s
+novel, Cat&rsquo;s Cradle, capable of acting as a seed crystal to
+crystallize the mass of software.
+</p>
+<p>Implicit to this whole discussion is the idea that dynamic languages
+are somehow better than languages like C. While languages like C have
+their place, Guile&rsquo;s take on this question is that yes, Scheme is more
+expressive than C, and more fun to write. This realization carries an
+imperative with it to write as much code in Scheme as possible rather
+than in other languages.
+</p>
+<p>These days it is possible to write extensible applications almost
+entirely from high-level languages, through byte-code and native
+compilation, speed gains in the underlying hardware, and foreign call
+interfaces in the high-level language.  Smalltalk systems are like this,
+as are Common Lisp-based systems.  While there already are a number of
+pure-Guile applications out there, in the past users have still needed
+to drop down to C for some tasks: interfacing to system libraries that
+don&rsquo;t have prebuilt Guile interfaces, and for some tasks requiring high
+performance.  With the arrival of native code generation via a JIT
+compiler in Guile 3.0, most of these older applications can now be
+updated to move more C code to Scheme.
+</p>
+<p>Still, even with an all-Guile application, sometimes you want to
+provide an opportunity for users to extend your program from a
+language with a syntax that is closer to C, or to Python. Another
+interesting idea to consider is compiling e.g. Python to Guile. It&rsquo;s
+not that far-fetched of an idea: see for example IronPython or JRuby.
+</p>
+<p>Also, there&rsquo;s Emacs itself.  Guile&rsquo;s Emacs Lisp support has reached an
+excellent level of correctness, robustness, and speed.  However there is
+still work to do to finish its integration into Emacs itself.  This will
+give lots of exciting things to Emacs: native threads, a real object
+system, more sophisticated types, cleaner syntax, and access to all of
+the Guile extensions.
+</p>
+<p>Finally, so much of the world&rsquo;s computation is performed in web browsers
+that it makes sense to ask ourselves what the Guile-on-the-web-client
+story is.  With the advent of WebAssembly, there may finally be a
+reasonable compilation target that&rsquo;s present on almost all user-exposed
+devices.  Especially with the upcoming proposals to allow for tail
+calls, delimited continuations, and GC-managed objects, Scheme might
+once again have a place in the web browser.  Get to it!
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="A-Timeline-of-Selected-Guile-Releases.html">A Timeline of Selected Guile Releases</a>, Up: <a href="History.html">A Brief History of Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

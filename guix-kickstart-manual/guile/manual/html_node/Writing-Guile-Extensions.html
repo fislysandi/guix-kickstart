@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Writing Guile Extensions (Guile Reference Manual)</title>
+
+<meta name="description" content="Writing Guile Extensions (Guile Reference Manual)">
+<meta name="keywords" content="Writing Guile Extensions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Hello-Guile_0021.html" rel="up" title="Hello Guile!">
+<link href="Using-the-Guile-Module-System.html" rel="next" title="Using the Guile Module System">
+<link href="Linking-Guile-into-Programs.html" rel="prev" title="Linking Guile into Programs">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Writing-Guile-Extensions">
+<div class="nav-panel">
+<p>
+Next: <a href="Using-the-Guile-Module-System.html" accesskey="n" rel="next">Using the Guile Module System</a>, Previous: <a href="Linking-Guile-into-Programs.html" accesskey="p" rel="prev">Linking Guile into Programs</a>, Up: <a href="Hello-Guile_0021.html" accesskey="u" rel="up">Hello Guile!</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section subsection-level-set-section" id="Writing-Guile-Extensions-1">2.4 Writing Guile Extensions</h3>
+
+<p>You can link Guile into your program and make Scheme available to the
+users of your program.  You can also link your library into Guile and
+make its functionality available to all users of Guile.
+</p>
+<p>A library that is linked into Guile is called an <em class="dfn">extension</em>, but it
+really just is an ordinary object library.
+</p>
+<p>The following example shows how to write a simple extension for Guile
+that makes the <code class="code">j0</code> function available to Scheme code.
+</p>
+<div class="example smallexample">
+<pre class="example-preformatted">#include &lt;math.h&gt;
+#include &lt;libguile.h&gt;
+
+SCM
+j0_wrapper (SCM x)
+{
+  return scm_from_double (j0 (scm_to_double (x)));
+}
+
+void
+init_bessel ()
+{
+  scm_c_define_gsubr (&quot;j0&quot;, 1, 0, 0, j0_wrapper);
+}
+</pre></div>
+
+<p>This C source file needs to be compiled into a shared library.  Here is
+how to do it on GNU/Linux:
+</p>
+<div class="example smallexample">
+<pre class="example-preformatted">gcc `pkg-config --cflags guile-3.0` \
+  -shared -o libguile-bessel.so -fPIC bessel.c
+</pre></div>
+
+<p>For creating shared libraries portably, we recommend the use of GNU
+Libtool (see <a data-manual="libtool" href="http://www.gnu.org/software/libtool/manual/html_node/index.html#Top">Introduction</a> in <cite class="cite">GNU Libtool</cite>).
+</p>
+<p>A shared library can be loaded into a running Guile process with the
+function <code class="code">load-extension</code>.  The <code class="code">j0</code> is then immediately
+available:
+</p>
+<div class="example smallexample">
+<pre class="example-preformatted">$ guile
+scheme@(guile-user)&gt; (load-extension &quot;./libguile-bessel&quot; &quot;init_bessel&quot;)
+scheme@(guile-user)&gt; (j0 2)
+$1 = 0.223890779141236
+</pre></div>
+
+<p>For more on how to install your extension, see <a class="pxref" href="Installing-Site-Packages.html">Installing Site Packages</a>.
+</p>
+
+</div>
+
+
+
+</body>
+</html>

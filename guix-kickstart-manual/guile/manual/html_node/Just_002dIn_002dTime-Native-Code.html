@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Just-In-Time Native Code (Guile Reference Manual)</title>
+
+<meta name="description" content="Just-In-Time Native Code (Guile Reference Manual)">
+<meta name="keywords" content="Just-In-Time Native Code (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="A-Virtual-Machine-for-Guile.html" rel="up" title="A Virtual Machine for Guile">
+<link href="Instruction-Set.html" rel="prev" title="Instruction Set">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Just_002dIn_002dTime-Native-Code">
+<div class="nav-panel">
+<p>
+Previous: <a href="Instruction-Set.html" accesskey="p" rel="prev">Instruction Set</a>, Up: <a href="A-Virtual-Machine-for-Guile.html" accesskey="u" rel="up">A Virtual Machine for Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Just_002dIn_002dTime-Native-Code-1">9.3.8 Just-In-Time Native Code</h4>
+
+<a class="index-entry-id" id="index-just_002din_002dtime-compiler"></a>
+<a class="index-entry-id" id="index-jit-compiler"></a>
+<a class="index-entry-id" id="index-template-jit"></a>
+<a class="index-entry-id" id="index-compiler_002c-just_002din_002dtime"></a>
+<p>The final piece of Guile&rsquo;s virtual machine is a just-in-time (JIT)
+compiler from bytecode instructions to native code.  It is faster to run
+a function when its bytecode instructions are compiled to native code,
+compared to having the VM interpret the instructions.
+</p>
+<p>The JIT compiler runs automatically, triggered by counters associated
+with each function.  The counter increments when functions are called
+and during each loop iteration.  Once a function&rsquo;s counter passes a
+certain value, the function gets JIT-compiled.  See <a class="xref" href="Instrumentation-Instructions.html">Instrumentation Instructions</a>, for full details.
+</p>
+<p>Guile&rsquo;s JIT compiler is what is known as a <em class="dfn">template JIT</em>.  This
+kind of JIT is very simple: for each instruction in a function, the JIT
+compiler will emit a generic sequence of machine code corresponding to
+the instruction kind, specializing that generic template to reference
+the specific operands of the instruction being compiled.
+</p>
+<p>The strength of a template JIT is principally that it is very fast at
+emitting code.  It doesn&rsquo;t need to do any time-consuming analysis on the
+bytecode that it is compiling to do its job.
+</p>
+<p>A template JIT is also very predictable: the native code emitted by a
+template JIT has the same performance characteristics of the
+corresponding bytecode, only that it runs faster.  In theory you could
+even generate the template-JIT machine code ahead of time, as it doesn&rsquo;t
+depend on any value seen at run-time.
+</p>
+<p>This predictability makes it possible to reason about the performance of
+a system in terms of bytecode, knowing that the conclusions apply to
+native code emitted by a template JIT.
+</p>
+<p>Because the machine code corresponding to an instruction always performs
+the same tasks that the interpreter would do for that instruction,
+bytecode and a template JIT also allows Guile programmers to debug their
+programs in terms of the bytecode model.  When a Guile programmer sets a
+breakpoint, Guile will disable the JIT for the thread being debugged,
+falling back to the interpreter (which has the corresponding code to run
+the hooks).  See <a class="xref" href="VM-Hooks.html">VM Hooks</a>.
+</p>
+<p>To emit native code, Guile uses a forked version of GNU Lightning.  This
+&quot;Lightening&quot; effort, spun out as a separate project, aims to build on
+the back-end support from GNU Lightning, but adapting the API and
+behavior of the library to match Guile&rsquo;s needs.  This code is included
+in the Guile source distribution.  For more information, see
+<a class="url" href="https://gitlab.com/wingo/lightening">https://gitlab.com/wingo/lightening</a>.  As of mid-2019, Lightening
+supports code generation for the x86-64, ia32, ARMv7, and AArch64
+architectures.
+</p>
+<p>The weaknesses of a template JIT are two-fold.  Firstly, as a simple
+back-end that has to run fast, a template JIT doesn&rsquo;t have time to do
+analysis that could help it generate better code, notably global
+register allocation and instruction selection.
+</p>
+<p>However this is a minor weakness compared to the inability to perform
+significant, speculative program transformations.  For example, Guile
+could see that in an expression <code class="code">(f x)</code>, that in practice <var class="var">f</var>
+always refers to the same function.  An advanced JIT compiler would
+speculatively inline <var class="var">f</var> into the call-site, along with a dynamic
+check to make sure that the assertion still held.  But as a template JIT
+doesn&rsquo;t pay attention to values only known at run-time, it can&rsquo;t make
+this transformation.
+</p>
+<p>This limitation is mitigated in part by Guile&rsquo;s robust ahead-of-time
+compiler which can already perform significant optimizations when it can
+prove they will always be valid, and its low-level bytecode which is
+able to represent the effect of those optimizations (e.g. elided
+type-checks).  See <a class="xref" href="Compiling-to-the-Virtual-Machine.html">Compiling to the Virtual Machine</a>, for more on
+Guile&rsquo;s compiler.
+</p>
+<p>An ahead-of-time Scheme-to-bytecode strategy, complemented by a template
+JIT, also particularly suits the somewhat static nature of Scheme.
+Scheme programmers often write code in a way that makes the identity of
+free variable references lexically apparent.  For example, the <code class="code">(f
+x)</code> expression could appear within a <code class="code">(let ((f (lambda (x) (1+
+x)))) ...)</code> expression, or we could see that <code class="code">f</code> was imported from
+a particular module where we know its binding.  Ahead-of-time
+compilation techniques can work well for a language like Scheme where
+there is little polymorphism and much first-order programming.  They do
+not work so well for a language like JavaScript, which is highly mutable
+at run-time and difficult to analyze due to method calls (which are
+effectively higher-order calls).
+</p>
+<p>All that said, a template JIT works well for Guile at this point.  It&rsquo;s
+only a few thousand lines of maintainable code, it speeds up Scheme
+programs, and it keeps the bulk of the Guile Scheme implementation
+written in Scheme itself.  The next step is probably to add
+ahead-of-time native code emission to the back-end of the compiler
+written in Scheme, to take advantage of the opportunity to do global
+register allocation and instruction selection.  Once this is working, it
+can allow Guile to experiment with speculative optimizations in Scheme
+as well.  See <a class="xref" href="Extending-the-Compiler.html">Extending the Compiler</a>, for more on future directions.
+</p>
+<p>Finally, note that there are a few environment variables that can be
+tweaked to make JIT compilation happen sooner, later, or never.
+See <a class="xref" href="Environment-Variables.html">Environment Variables</a>, for more.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Instruction-Set.html">Instruction Set</a>, Up: <a href="A-Virtual-Machine-for-Guile.html">A Virtual Machine for Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

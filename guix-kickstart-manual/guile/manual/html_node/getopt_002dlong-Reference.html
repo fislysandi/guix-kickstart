@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>getopt-long Reference (Guile Reference Manual)</title>
+
+<meta name="description" content="getopt-long Reference (Guile Reference Manual)">
+<meta name="keywords" content="getopt-long Reference (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="getopt_002dlong.html" rel="up" title="getopt-long">
+<link href="option_002dref-Reference.html" rel="next" title="option-ref Reference">
+<link href="Command-Line-Format.html" rel="prev" title="Command Line Format">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="getopt_002dlong-Reference">
+<div class="nav-panel">
+<p>
+Next: <a href="option_002dref-Reference.html" accesskey="n" rel="next">Reference Documentation for <code class="code">option-ref</code></a>, Previous: <a href="Command-Line-Format.html" accesskey="p" rel="prev">Expected Command Line Format</a>, Up: <a href="getopt_002dlong.html" accesskey="u" rel="up">The (ice-9 getopt-long) Module</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Reference-Documentation-for-getopt_002dlong">7.4.4 Reference Documentation for <code class="code">getopt-long</code></h4>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getopt_002dlong"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getopt-long</strong> <var class="def-var-arguments">args grammar [#:stop-at-first-non-option #f]</var><a class="copiable-link" href='#index-getopt_002dlong'> &para;</a></span></dt>
+<dd><p>Parse the command line given in <var class="var">args</var> (which must be a list of
+strings) according to the option specification <var class="var">grammar</var>.
+</p>
+<p>The <var class="var">grammar</var> argument is expected to be a list of this form:
+</p>
+<p><code class="code">((<var class="var">option</var> (<var class="var">property</var> <var class="var">value</var>) &hellip;) &hellip;)</code>
+</p>
+<p>where each <var class="var">option</var> is a symbol denoting the long option, but
+without the two leading dashes (e.g. <code class="code">version</code> if the option is
+called <code class="code">--version</code>).
+</p>
+<p>For each option, there may be list of arbitrarily many property/value
+pairs.  The order of the pairs is not important, but every property may
+only appear once in the property list.  The following table lists the
+possible properties:
+</p>
+<dl class="table">
+<dt><code class="code">(single-char <var class="var">char</var>)</code></dt>
+<dd><p>Accept <code class="code">-<var class="var">char</var></code> as a single-character equivalent to
+<code class="code">--<var class="var">option</var></code>.  This is how to specify traditional Unix-style
+flags.
+</p></dd>
+<dt><code class="code">(required? <var class="var">bool</var>)</code></dt>
+<dd><p>If <var class="var">bool</var> is true, the option is required.  <code class="code">getopt-long</code> will
+raise an error if it is not found in <var class="var">args</var>.
+</p></dd>
+<dt><code class="code">(value <var class="var">bool</var>)</code></dt>
+<dd><p>If <var class="var">bool</var> is <code class="code">#t</code>, the option accepts a value; if it is
+<code class="code">#f</code>, it does not; and if it is the symbol <code class="code">optional</code>, the
+option may appear in <var class="var">args</var> with or without a value.
+</p></dd>
+<dt><code class="code">(predicate <var class="var">func</var>)</code></dt>
+<dd><p>If the option accepts a value (i.e. you specified <code class="code">(value #t)</code> for
+this option), then <code class="code">getopt-long</code> will apply <var class="var">func</var> to the
+value, and throw an exception if it returns <code class="code">#f</code>.  <var class="var">func</var>
+should be a procedure which accepts a string and returns a boolean
+value; you may need to use quasiquotes to get it into <var class="var">grammar</var>.
+</p></dd>
+</dl>
+
+<p>The <code class="code">#:stop-at-first-non-option</code> keyword, if specified with any
+true value, tells <code class="code">getopt-long</code> to stop when it gets to the first
+non-option in the command line.  That is, at the first word which is
+neither an option itself, nor the value of an option.  Everything in the
+command line from that word onwards will be returned as non-option
+arguments.
+</p></dd></dl>
+
+<p><code class="code">getopt-long</code>&rsquo;s <var class="var">args</var> parameter is expected to be a list of
+strings like the one returned by <code class="code">command-line</code>, with the first
+element being the name of the command.  Therefore <code class="code">getopt-long</code>
+ignores the first element in <var class="var">args</var> and starts argument
+interpretation with the second element.
+</p>
+<p><code class="code">getopt-long</code> signals an error if any of the following conditions
+hold.
+</p>
+<ul class="itemize mark-bullet">
+<li>The option grammar has an invalid syntax.
+
+</li><li>One of the options in the argument list was not specified by the
+grammar.
+
+</li><li>A required option is omitted.
+
+</li><li>An option which requires an argument did not get one.
+
+</li><li>An option that doesn&rsquo;t accept an argument does get one (this can only
+happen using the long option <code class="code">--opt=<var class="var">value</var></code> syntax).
+
+</li><li>An option predicate fails.
+</li></ul>
+
+<p><code class="code">#:stop-at-first-non-option</code> is useful for command line invocations
+like <code class="code">guild [--help | --version] [script [script-options]]</code>
+and <code class="code">cvs [general-options] command [command-options]</code>, where there
+are options at two levels: some generic and understood by the outer
+command, and some that are specific to the particular script or command
+being invoked.  To use <code class="code">getopt-long</code> in such cases, you would call
+it twice: firstly with <code class="code">#:stop-at-first-non-option #t</code>, so as to
+parse any generic options and identify the wanted script or sub-command;
+secondly, and after trimming off the initial generic command words, with
+a script- or sub-command-specific option grammar, so as to process those
+specific options.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="option_002dref-Reference.html">Reference Documentation for <code class="code">option-ref</code></a>, Previous: <a href="Command-Line-Format.html">Expected Command Line Format</a>, Up: <a href="getopt_002dlong.html">The (ice-9 getopt-long) Module</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

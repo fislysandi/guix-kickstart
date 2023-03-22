@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Guile Initialization Functions (Guile Reference Manual)</title>
+
+<meta name="description" content="Guile Initialization Functions (Guile Reference Manual)">
+<meta name="keywords" content="Guile Initialization Functions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Linking-Programs-With-Guile.html" rel="up" title="Linking Programs With Guile">
+<link href="A-Sample-Guile-Main-Program.html" rel="next" title="A Sample Guile Main Program">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Guile-Initialization-Functions">
+<div class="nav-panel">
+<p>
+Next: <a href="A-Sample-Guile-Main-Program.html" accesskey="n" rel="next">A Sample Guile Main Program</a>, Up: <a href="Linking-Programs-With-Guile.html" accesskey="u" rel="up">Linking Programs With Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Guile-Initialization-Functions-1">5.2.1 Guile Initialization Functions</h4>
+
+<p>To initialize Guile, you can use one of several functions.  The first,
+<code class="code">scm_with_guile</code>, is the most portable way to initialize Guile.  It
+will initialize Guile when necessary and then call a function that you
+can specify.  Multiple threads can call <code class="code">scm_with_guile</code>
+concurrently and it can also be called more than once in a given thread.
+The global state of Guile will survive from one call of
+<code class="code">scm_with_guile</code> to the next.  Your function is called from within
+<code class="code">scm_with_guile</code> since the garbage collector of Guile needs to know
+where the stack of each thread is.
+</p>
+<p>A second function, <code class="code">scm_init_guile</code>, initializes Guile for the
+current thread.  When it returns, you can use the Guile API in the
+current thread.  This function employs some non-portable magic to learn
+about stack bounds and might thus not be available on all platforms.
+</p>
+<p>One common way to use Guile is to write a set of C functions which
+perform some useful task, make them callable from Scheme, and then link
+the program with Guile.  This yields a Scheme interpreter just like
+<code class="code">guile</code>, but augmented with extra functions for some specific
+application &mdash; a special-purpose scripting language.
+</p>
+<p>In this situation, the application should probably process its
+command-line arguments in the same manner as the stock Guile
+interpreter.  To make that straightforward, Guile provides the
+<code class="code">scm_boot_guile</code> and <code class="code">scm_shell</code> function.
+</p>
+<p>For more about these functions, see <a class="ref" href="Initialization.html">Initializing Guile</a>.
+</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Dia Steps (Guile Reference Manual)</title>
+
+<meta name="description" content="Dia Steps (Guile Reference Manual)">
+<meta name="keywords" content="Dia Steps (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Extending-Dia.html" rel="up" title="Extending Dia">
+<link href="Dia-Objects.html" rel="next" title="Dia Objects">
+<link href="Dia-Objective.html" rel="prev" title="Dia Objective">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Dia-Steps">
+<div class="nav-panel">
+<p>
+Next: <a href="Dia-Objects.html" accesskey="n" rel="next">How to Represent Dia Data in Scheme</a>, Previous: <a href="Dia-Objective.html" accesskey="p" rel="prev">Deciding Why You Want to Add Guile</a>, Up: <a href="Extending-Dia.html" accesskey="u" rel="up">How One Might Extend Dia Using Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Four-Steps-Required-to-Add-Guile">5.7.1.2 Four Steps Required to Add Guile</h4>
+
+<p>Assuming this objective, four steps are needed to achieve it.
+</p>
+<p>First, you need a way of representing your application-specific objects
+&mdash; such as <code class="code">shape</code> in the previous example &mdash; when they are
+passed into the Scheme world.  Unless your objects are so simple that
+they map naturally into builtin Scheme data types like numbers and
+strings, you will probably want to use Guile&rsquo;s <em class="dfn">foreign object</em>
+interface to create a new Scheme data type for your objects.
+</p>
+<p>Second, you need to write code for the basic operations like
+<code class="code">for-each-shape</code> and <code class="code">square?</code> such that they access and
+manipulate your existing data structures correctly, and then make these
+operations available as <em class="dfn">primitives</em> on the Scheme level.
+</p>
+<p>Third, you need to provide some mechanism within the Dia application
+that a user can hook into to cause arbitrary Scheme code to be
+evaluated.
+</p>
+<p>Finally, you need to restructure your top-level application C code a
+little so that it initializes the Guile interpreter correctly and
+declares your <em class="dfn">foreign objects</em> and <em class="dfn">primitives</em> to the Scheme
+world.
+</p>
+<p>The following subsections expand on these four points in turn.
+</p>
+
+</div>
+
+
+
+</body>
+</html>

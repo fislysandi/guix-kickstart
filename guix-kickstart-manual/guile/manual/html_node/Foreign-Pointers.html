@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Foreign Pointers (Guile Reference Manual)</title>
+
+<meta name="description" content="Foreign Pointers (Guile Reference Manual)">
+<meta name="keywords" content="Foreign Pointers (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Foreign-Function-Interface.html" rel="up" title="Foreign Function Interface">
+<link href="Foreign-Types.html" rel="next" title="Foreign Types">
+<link href="Foreign-Extensions.html" rel="prev" title="Foreign Extensions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Foreign-Pointers">
+<div class="nav-panel">
+<p>
+Next: <a href="Foreign-Types.html" accesskey="n" rel="next">Foreign Types</a>, Previous: <a href="Foreign-Extensions.html" accesskey="p" rel="prev">Foreign Extensions</a>, Up: <a href="Foreign-Function-Interface.html" accesskey="u" rel="up">Foreign Function Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Foreign-Pointers-1">6.19.3 Foreign Pointers</h4>
+
+<p>Foreign libraries are essentially key-value mappings, where the keys are
+names of definitions and the values are the addresses of those
+definitions.  To look up the address of a definition, use
+<code class="code">foreign-library-pointer</code> from the <code class="code">(system foreign-library)</code>
+module.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-foreign_002dlibrary_002dpointer"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">foreign-library-pointer</strong> <var class="def-var-arguments">lib name</var><a class="copiable-link" href='#index-foreign_002dlibrary_002dpointer'> &para;</a></span></dt>
+<dd><p>Return a &ldquo;wrapped pointer&rdquo; for the symbol <var class="var">name</var> in the shared
+object referred to by <var class="var">lib</var>.  The returned pointer points to a C
+object.
+</p>
+<p>As a convenience, if <var class="var">lib</var> is not a foreign library, it will be
+passed to <code class="code">load-foreign-library</code>.
+</p></dd></dl>
+
+<p>If we continue with the <code class="code">bessel.so</code> example from before, we can get
+the address of the <code class="code">init_math_bessel</code> function via:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (system foreign-library))
+(define init (foreign-library-pointer &quot;bessel&quot; &quot;init_math_bessel&quot;))
+init
+&rArr; #&lt;pointer 0x7fb35b1b4688&gt;
+</pre></div>
+
+<p>A value returned by <code class="code">foreign-library-pointer</code> is a Scheme wrapper
+for a C pointer.  Pointers are a data type in Guile that is disjoint
+from all other types.  The next section discusses ways to dereference
+pointers, but before then we describe the usual type predicates and so
+on.
+</p>
+<p>Note that the rest of the interfaces in this section are part of the
+<code class="code">(system foreign)</code> library:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (system foreign))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-pointer_002daddress"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">pointer-address</strong> <var class="def-var-arguments">pointer</var><a class="copiable-link" href='#index-pointer_002daddress'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fpointer_005faddress"><span class="category-def">C Function: </span><span><strong class="def-name">scm_pointer_address</strong> <var class="def-var-arguments">(pointer)</var><a class="copiable-link" href='#index-scm_005fpointer_005faddress'> &para;</a></span></dt>
+<dd><p>Return the numerical value of <var class="var">pointer</var>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(pointer-address init)
+&rArr; 139984413364296 ; YMMV
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dpointer"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-pointer</strong> <var class="def-var-arguments">address [finalizer]</var><a class="copiable-link" href='#index-make_002dpointer'> &para;</a></span></dt>
+<dd><p>Return a foreign pointer object pointing to <var class="var">address</var>.  If
+<var class="var">finalizer</var> is passed, it should be a pointer to a one-argument C
+function that will be called when the pointer object becomes
+unreachable.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-pointer_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">pointer?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-pointer_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is a pointer object, or <code class="code">#f</code>
+otherwise.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-_0025null_002dpointer"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">%null-pointer</strong><a class="copiable-link" href='#index-_0025null_002dpointer'> &para;</a></span></dt>
+<dd><p>A foreign pointer whose value is 0.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-null_002dpointer_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">null-pointer?</strong> <var class="def-var-arguments">pointer</var><a class="copiable-link" href='#index-null_002dpointer_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">pointer</var> is the null pointer, <code class="code">#f</code> otherwise.
+</p></dd></dl>
+
+<p>For the purpose of passing SCM values directly to foreign functions, and
+allowing them to return SCM values, Guile also supports some unsafe
+casting operators.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-scm_002d_003epointer"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">scm-&gt;pointer</strong> <var class="def-var-arguments">scm</var><a class="copiable-link" href='#index-scm_002d_003epointer'> &para;</a></span></dt>
+<dd><p>Return a foreign pointer object with the <code class="code">object-address</code>
+of <var class="var">scm</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-pointer_002d_003escm"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">pointer-&gt;scm</strong> <var class="def-var-arguments">pointer</var><a class="copiable-link" href='#index-pointer_002d_003escm'> &para;</a></span></dt>
+<dd><p>Unsafely cast <var class="var">pointer</var> to a Scheme object.
+Cross your fingers!
+</p></dd></dl>
+
+<p>Sometimes you want to give C extensions access to the dynamic FFI.  At
+that point, the names get confusing, because &ldquo;pointer&rdquo; can refer to a
+<code class="code">SCM</code> object that wraps a pointer, or to a <code class="code">void*</code> value.  We
+will try to use &ldquo;pointer object&rdquo; to refer to Scheme objects, and
+&ldquo;pointer value&rdquo; to refer to <code class="code">void *</code> values.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005ffrom_005fpointer"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_pointer</strong> <code class="def-code-arguments">(void *ptr, void (*finalizer) (void*))</code><a class="copiable-link" href='#index-scm_005ffrom_005fpointer'> &para;</a></span></dt>
+<dd><p>Create a pointer object from a pointer value.
+</p>
+<p>If <var class="var">finalizer</var> is non-null, Guile arranges to call it on the pointer
+value at some point after the pointer object becomes collectable.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fto_005fpointer"><span class="category-def">C Function: </span><span><code class="def-type">void*</code> <strong class="def-name">scm_to_pointer</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-scm_005fto_005fpointer'> &para;</a></span></dt>
+<dd><p>Unpack the pointer value from a pointer object.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Foreign-Types.html">Foreign Types</a>, Previous: <a href="Foreign-Extensions.html">Foreign Extensions</a>, Up: <a href="Foreign-Function-Interface.html">Foreign Function Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Foreign Libraries (Guile Reference Manual)</title>
+
+<meta name="description" content="Foreign Libraries (Guile Reference Manual)">
+<meta name="keywords" content="Foreign Libraries (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Foreign-Function-Interface.html" rel="up" title="Foreign Function Interface">
+<link href="Foreign-Extensions.html" rel="next" title="Foreign Extensions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Foreign-Libraries">
+<div class="nav-panel">
+<p>
+Next: <a href="Foreign-Extensions.html" accesskey="n" rel="next">Foreign Extensions</a>, Up: <a href="Foreign-Function-Interface.html" accesskey="u" rel="up">Foreign Function Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Foreign-Libraries-1">6.19.1 Foreign Libraries</h4>
+
+<p>Just as Guile can load up Scheme libraries at run-time, Guile can also
+load some system libraries written in C or other low-level languages.
+We refer to these as dynamically-loadable modules as <em class="dfn">foreign
+libraries</em>, to distinguish them from native libraries written in Scheme
+or other languages implemented by Guile.
+<a class="index-entry-id" id="index-foreign-libraries"></a>
+<a class="index-entry-id" id="index-libraries_002c-foreign"></a>
+</p>
+<p>Foreign libraries usually come in two forms.  Some foreign libraries are
+part of the operating system, such as the compression library
+<code class="code">libz</code>.  These shared libraries are built in such a way that many
+programs can use their functionality without duplicating their code.
+When a program written in C is built, it can declare that it uses a
+specific set of shared libraries.
+<a class="index-entry-id" id="index-shared-libraries"></a>
+<a class="index-entry-id" id="index-libraries_002c-shared"></a>
+When the program is run, the operating system takes care of locating and
+loading the shared libraries.
+</p>
+<p>The operating system components that can dynamically load and link
+shared libraries when a program is run are also available
+programmatically during a program&rsquo;s execution.  This is the interface
+that&rsquo;s most useful for Guile, and this is what we mean in Guile when we
+refer to <em class="dfn">dynamic linking</em>.  Dynamic linking at run-time is
+sometimes called <em class="dfn">dlopening</em>, to distinguish it from the dynamic
+linking that happens at program start-up.
+<a class="index-entry-id" id="index-dynamic-linking"></a>
+<a class="index-entry-id" id="index-dlopening"></a>
+</p>
+<p>The other kind of foreign library is sometimes known as a module,
+plug-in, bundle, or an extension.  These foreign libraries aren&rsquo;t meant
+to be linked to by C programs, but rather only to be dynamically loaded
+at run-time &ndash; they extend some main program with functionality, but
+don&rsquo;t stand on their own.  Sometimes a Guile library will implement some
+of its functionality in a loadable module.
+</p>
+<p>In either case, the interface on the Guile side is the same.  You load
+the interface using <code class="code">load-foreign-library</code>.  The resulting foreign
+library object implements a simple lookup interface whereby the user can
+get addresses of data or code exported by the library.  There is no
+facility to inspect foreign libraries; you have to know what&rsquo;s in there
+already before you look.
+</p>
+<p>Routines for loading foreign libraries and accessing their contents are
+implemented in the <code class="code">(system foreign-library)</code> module.
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (system foreign-library))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-load_002dforeign_002dlibrary"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">load-foreign-library</strong> <var class="def-var-arguments">[library]        [#:extensions=system-library-extensions]        [#:search-ltdl-library-path?=#t]        [#:search-path=search-path]        [#:search-system-paths?=#t] [#:lazy?=#t] [#:global=#f]</var><a class="copiable-link" href='#index-load_002dforeign_002dlibrary'> &para;</a></span></dt>
+<dd><p>[#:rename-on-cygwin?=#t]
+Find the shared library denoted by <var class="var">library</var> (a string or <code class="code">#f</code>)
+and link it into the running Guile application.  When everything works
+out, return a Scheme object suitable for representing the linked object
+file.  Otherwise an error is thrown.
+</p>
+<p>If <var class="var">library</var> argument is omitted, it defaults to <code class="code">#f</code>.  If
+<code class="code">library</code> is false, the resulting foreign library gives access to
+all symbols available for dynamic linking in the main binary.
+</p>
+<p>It is not necessary to include any extension such as <code class="code">.so</code> in
+<var class="var">library</var>.  For each system, Guile has a default set of extensions
+that it will try.  On GNU systems, the default extension set is just
+<code class="code">.so</code>; on Windows, just <code class="code">.dll</code>; and on Darwin (Mac OS), it is
+<code class="code">.bundle</code>, <code class="code">.so</code>, and <code class="code">.dylib</code>.  Pass <code class="code">#:extensions
+<var class="var">extensions</var></code> to override the default extensions list.  If
+<var class="var">library</var> contains one of the extensions, no extensions are tried,
+so it is possible to specify the extension if you know exactly what file
+to load.
+</p>
+<p>Unless <var class="var">library</var> denotes an absolute file name or otherwise contains
+a directory separator (<code class="code">/</code>, and also <code class="code">\</code> on Windows), Guile
+will search for the library in the directories listed in
+<var class="var">search-paths</var>.  The default search path has three components, which
+can all be overriden by colon-delimited (semicolon on Windows)
+environment variables:
+</p>
+<dl class="table">
+<dt><code class="env">GUILE_EXTENSIONS_PATH</code></dt>
+<dd><p>This is the main environment variable for users to add directories
+containing Guile extensions.  The default value has no entries.  This
+environment variable was added in Guile 3.0.6.
+</p></dd>
+<dt><code class="env">LTDL_LIBRARY_PATH</code></dt>
+<dd><p>Before Guile 3.0.6, Guile loaded foreign libraries using <code class="code">libltdl</code>,
+the dynamic library loader provided by libtool.  This loader used
+<code class="env">LTDL_LIBRARY_PATH</code>, and for backwards compatibility we still
+support that path.
+</p>
+<p>However, <code class="code">libltdl</code> would not only open <code class="code">.so</code> (or <code class="code">.dll</code>
+and so on) files, but also the <code class="code">.la</code> files created by libtool.  In
+installed libraries &ndash; libraries that are in the target directories of
+<code class="code">make install</code> &ndash; <code class="code">.la</code> files are never needed, to the extent
+that most GNU/Linux distributions remove them entirely.  It is
+sufficient to just load the <code class="code">.so</code> (or <code class="code">.dll</code> and so on) files,
+which are always located in the same directory as the <code class="code">.la</code> files.
+</p>
+<p>But for uninstalled dynamic libraries, like those in a build tree, the
+situation is a bit of a mess.  If you have a project that uses libtool
+to build libraries &ndash; which is the case for Guile, and for most projects
+using autotools &ndash; and you build <samp class="file">foo.so</samp> in directory <samp class="file">D</samp>,
+libtool will put <samp class="file">foo.la</samp> in <samp class="file">D</samp>, but <samp class="file">foo.so</samp> gets put
+into <samp class="file">D/.libs</samp>.
+</p>
+<p>Users were mostly oblivious to this situation, as <code class="code">libltdl</code> had
+special logic to be able to read the <code class="code">.la</code> file to know where to
+find the <code class="code">.so</code>, even from an uninstalled build tree, preventing the
+existence of <samp class="file">.libs</samp> from leaking out to the user.
+</p>
+<p>We don&rsquo;t use libltdl now, essentially for flexibility and
+error-reporting reasons.  But, to keep this old use-case working, if
+<var class="var">search-ltdl-library-path?</var> is true, we add each entry of
+<code class="code">LTDL_LIBRARY_PATH</code> to the default extensions load path,
+additionally adding the <samp class="file">.libs</samp> subdirextories for each entry, in
+case there are <samp class="file">.so</samp> files there instead of alongside the
+<samp class="file">.la</samp> files.
+</p></dd>
+<dt><code class="env">GUILE_SYSTEM_EXTENSIONS_PATH</code></dt>
+<dd><p>The last path in Guile&rsquo;s search path belongs to Guile itself, and
+defaults to the libdir and the extensiondir, in that order.  For
+example, if you install to <samp class="file">/opt/guile</samp>, these would probably be
+<samp class="file">/opt/guile/lib</samp> and
+<code class="code">/opt/guile/lib/guile/3.0/extensions</code>,
+respectively.  See <a class="xref" href="Parallel-Installations.html">Parallel Installations</a>, for more details on
+<code class="code">extensionsdir</code>.
+</p></dd>
+</dl>
+
+<p>Finally, if no library is found in the search path, and if <var class="var">library</var>
+is not absolute and does not include directory separators, and if
+<var class="var">search-system-paths?</var> is true, the operating system may have its
+own logic for where to locate <var class="var">library</var>.  For example, on GNU, there
+will be a default set of paths (often <samp class="file">/usr/lib</samp> and <samp class="file">/lib</samp>,
+though it depends on the system), and the <code class="code">LD_LIBRARY_PATH</code>
+environment variable can add additional paths.  Other operating systems
+have other conventions.
+</p>
+<p>Falling back to the operating system for search is usually not a great
+thing; it is a recipe for making programs that work on one machine but
+not on others.  Still, when wrapping system libraries, it can be the
+only way to get things working at all.
+</p>
+<p>If <var class="var">lazy?</var> is true (the default), Guile will request the operating
+system to resolve symbols used by the loaded library as they are first
+used.  If <var class="var">global?</var> is true, symbols defined by the loaded library
+will be available when other modules need to resolve symbols; the
+default is <code class="code">#f</code>, which keeps symbols local.
+</p>
+<p>If <var class="var">rename-on-cygwin?</var> is true (the default) &ndash; on Cygwin hosts only
+&ndash; the search behavior is modified such that a filename that starts with
+&ldquo;lib&rdquo; will be searched for under the name &ldquo;cyg&rdquo;, as is customary for
+Cygwin.
+</p></dd></dl>
+
+<p>The environment variables mentioned above are parsed when the
+foreign-library module is first loaded and bound to parameters.  Null
+path components, for example the three components of
+<code class="env">GUILE_SYSTEM_EXTENSIONS_PATH=&quot;::&quot;</code>, are ignored.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-guile_002dextensions_002dpath"><span class="category-def">Scheme Parameter: </span><span><strong class="def-name">guile-extensions-path</strong><a class="copiable-link" href='#index-guile_002dextensions_002dpath'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-ltdl_002dlibrary_002dpath"><span class="category-def">Scheme Parameter: </span><span><strong class="def-name">ltdl-library-path</strong><a class="copiable-link" href='#index-ltdl_002dlibrary_002dpath'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-guile_002dsystem_002dextensions_002dpath"><span class="category-def">Scheme Parameter: </span><span><strong class="def-name">guile-system-extensions-path</strong><a class="copiable-link" href='#index-guile_002dsystem_002dextensions_002dpath'> &para;</a></span></dt>
+<dd><p>Parameters whose initial values are taken from
+<code class="env">GUILE_EXTENSIONS_PATH</code>, <code class="env">LTDL_LIBRARY_PATH</code>, and
+<code class="env">GUILE_SYSTEM_EXTENSIONS_PATH</code>, respectively.  See <a class="xref" href="Parameters.html">Parameters</a>.
+The current values of these parameters are used when building the search
+path when <code class="code">load-foreign-library</code> is called, unless the caller
+explicitly passes a <code class="code">#:search-path</code> argument.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-foreign_002dlibrary_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">foreign-library?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-foreign_002dlibrary_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is a foreign library, or <code class="code">#f</code>
+otherwise.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Foreign-Extensions.html">Foreign Extensions</a>, Up: <a href="Foreign-Function-Interface.html">Foreign Function Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

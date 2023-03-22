@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Bytecode (Guile Reference Manual)</title>
+
+<meta name="description" content="Bytecode (Guile Reference Manual)">
+<meta name="keywords" content="Bytecode (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Compiling-to-the-Virtual-Machine.html" rel="up" title="Compiling to the Virtual Machine">
+<link href="Writing-New-High_002dLevel-Languages.html" rel="next" title="Writing New High-Level Languages">
+<link href="Continuation_002dPassing-Style.html" rel="prev" title="Continuation-Passing Style">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Bytecode">
+<div class="nav-panel">
+<p>
+Next: <a href="Writing-New-High_002dLevel-Languages.html" accesskey="n" rel="next">Writing New High-Level Languages</a>, Previous: <a href="Continuation_002dPassing-Style.html" accesskey="p" rel="prev">Continuation-Passing Style</a>, Up: <a href="Compiling-to-the-Virtual-Machine.html" accesskey="u" rel="up">Compiling to the Virtual Machine</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Bytecode-1">9.4.5 Bytecode</h4>
+
+<p>As mentioned before, Guile compiles all code to bytecode, and that
+bytecode is contained in ELF images.  See <a class="xref" href="Object-File-Format.html">Object File Format</a>, for
+more on Guile&rsquo;s use of ELF.
+</p>
+<p>To produce a bytecode image, Guile provides an assembler and a linker.
+</p>
+<p>The assembler, defined in the <code class="code">(system vm assembler)</code> module, has a
+relatively straightforward imperative interface.  It provides a
+<code class="code">make-assembler</code> function to instantiate an assembler and a set of
+<code class="code">emit-<var class="var">inst</var></code> procedures to emit instructions of each kind.
+</p>
+<p>The <code class="code">emit-<var class="var">inst</var></code> procedures are actually generated at
+compile-time from a machine-readable description of the VM.  With a few
+exceptions for certain operand types, each operand of an emit procedure
+corresponds to an operand of the corresponding instruction.
+</p>
+<p>Consider <code class="code">allocate-words</code>, from see <a class="pxref" href="Memory-Access-Instructions.html">Memory Access Instructions</a>.
+It is documented as:
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-allocate_002dwords-1"><span class="category-def">Instruction: </span><span><strong class="def-name">allocate-words</strong> <code class="def-code-arguments">s12:<var class="var">dst</var> s12:<var class="var">nwords</var></code><a class="copiable-link" href='#index-allocate_002dwords-1'> &para;</a></span></dt>
+</dl>
+
+<p>Therefore the emit procedure has the form:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-emit_002dallocate_002dwords"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">emit-allocate-words</strong> <var class="def-var-arguments">asm dst nwords</var><a class="copiable-link" href='#index-emit_002dallocate_002dwords'> &para;</a></span></dt>
+</dl>
+
+<p>All emit procedure take the assembler as their first argument, and
+return no useful values.
+</p>
+<p>The argument types depend on the operand types.  See <a class="xref" href="Instruction-Set.html">Instruction Set</a>.
+Most are integers within a restricted range, though labels are generally
+expressed as opaque symbols.  Besides the emitters that correspond to
+instructions, there are a few additional helpers defined in the
+assembler module.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-emit_002dlabel"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">emit-label</strong> <var class="def-var-arguments">asm label</var><a class="copiable-link" href='#index-emit_002dlabel'> &para;</a></span></dt>
+<dd><p>Define a label at the current program point.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-emit_002dsource"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">emit-source</strong> <var class="def-var-arguments">asm source</var><a class="copiable-link" href='#index-emit_002dsource'> &para;</a></span></dt>
+<dd><p>Associate <var class="var">source</var> with the current program point.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-emit_002dcache_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">emit-cache-ref</strong> <var class="def-var-arguments">asm dst key</var><a class="copiable-link" href='#index-emit_002dcache_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-emit_002dcache_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">emit-cache-set!</strong> <var class="def-var-arguments">asm key val</var><a class="copiable-link" href='#index-emit_002dcache_002dset_0021'> &para;</a></span></dt>
+<dd><p>Macro-instructions to implement compilation-unit caches.  A single cache
+cell corresponding to <var class="var">key</var> will be allocated for the compilation
+unit.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-emit_002dload_002dconstant"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">emit-load-constant</strong> <var class="def-var-arguments">asm dst constant</var><a class="copiable-link" href='#index-emit_002dload_002dconstant'> &para;</a></span></dt>
+<dd><p>Load the Scheme datum <var class="var">constant</var> into <var class="var">dst</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-emit_002dbegin_002dprogram"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">emit-begin-program</strong> <var class="def-var-arguments">asm label properties</var><a class="copiable-link" href='#index-emit_002dbegin_002dprogram'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-emit_002dend_002dprogram"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">emit-end-program</strong> <var class="def-var-arguments">asm</var><a class="copiable-link" href='#index-emit_002dend_002dprogram'> &para;</a></span></dt>
+<dd><p>Delimit the bounds of a procedure, with the given <var class="var">label</var> and the
+metadata <var class="var">properties</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-emit_002dload_002dstatic_002dprocedure"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">emit-load-static-procedure</strong> <var class="def-var-arguments">asm dst label</var><a class="copiable-link" href='#index-emit_002dload_002dstatic_002dprocedure'> &para;</a></span></dt>
+<dd><p>Load a procedure with the given <var class="var">label</var> into local <var class="var">dst</var>.  This
+macro-instruction should only be used with procedures without free
+variables &ndash; procedures that are not closures.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-emit_002dbegin_002dstandard_002darity"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">emit-begin-standard-arity</strong> <var class="def-var-arguments">asm req nlocals alternate</var><a class="copiable-link" href='#index-emit_002dbegin_002dstandard_002darity'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-emit_002dbegin_002dopt_002darity"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">emit-begin-opt-arity</strong> <var class="def-var-arguments">asm req opt rest nlocals alternate</var><a class="copiable-link" href='#index-emit_002dbegin_002dopt_002darity'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-emit_002dbegin_002dkw_002darity"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">emit-begin-kw-arity</strong> <var class="def-var-arguments">asm req opt rest kw-indices allow-other-keys? nlocals alternate</var><a class="copiable-link" href='#index-emit_002dbegin_002dkw_002darity'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-emit_002dend_002darity"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">emit-end-arity</strong> <var class="def-var-arguments">asm</var><a class="copiable-link" href='#index-emit_002dend_002darity'> &para;</a></span></dt>
+<dd><p>Delimit a clause of a procedure.
+</p></dd></dl>
+
+<p>The linker is a complicated beast.  Hackers interested in how it works
+would do well do read Ian Lance Taylor&rsquo;s series of articles on linkers.
+Searching the internet should find them easily.  From the user&rsquo;s
+perspective, there is only one knob to control: whether the resulting
+image will be written out to a file or not.  If the user passes
+<code class="code">#:to-file? #t</code> as part of the compiler options (see <a class="pxref" href="The-Scheme-Compiler.html">The Scheme Compiler</a>), the linker will align the resulting segments on page
+boundaries, and otherwise not.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-link_002dassembly"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">link-assembly</strong> <var class="def-var-arguments">asm #:page-aligned?=#t</var><a class="copiable-link" href='#index-link_002dassembly'> &para;</a></span></dt>
+<dd><p>Link an ELF image, and return the bytevector.  If <var class="var">page-aligned?</var> is
+true, Guile will align the segments with different permissions on
+page-sized boundaries, in order to maximize code sharing between
+different processes.  Otherwise, padding is minimized, to minimize
+address space consumption.
+</p></dd></dl>
+
+<p>To write an image to disk, just use <code class="code">put-bytevector</code> from
+<code class="code">(ice-9 binary-ports)</code>.
+</p>
+<p>Compiling object code to the fake language, <code class="code">value</code>, is performed
+via loading objcode into a program, then executing that thunk with
+respect to the compilation environment. Normally the environment
+propagates through the compiler transparently, but users may specify the
+compilation environment manually as well, as a module.  Procedures to
+load images can be found in the <code class="code">(system vm loader)</code> module:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(use-modules (system vm loader))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-load_002dthunk_002dfrom_002dfile"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">load-thunk-from-file</strong> <var class="def-var-arguments">file</var><a class="copiable-link" href='#index-load_002dthunk_002dfrom_002dfile'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fload_005fthunk_005ffrom_005ffile"><span class="category-def">C Function: </span><span><strong class="def-name">scm_load_thunk_from_file</strong> <var class="def-var-arguments">(file)</var><a class="copiable-link" href='#index-scm_005fload_005fthunk_005ffrom_005ffile'> &para;</a></span></dt>
+<dd><p>Load object code from a file named <var class="var">file</var>. The file will be mapped
+into memory via <code class="code">mmap</code>, so this is a very fast operation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-load_002dthunk_002dfrom_002dmemory"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">load-thunk-from-memory</strong> <var class="def-var-arguments">bv</var><a class="copiable-link" href='#index-load_002dthunk_002dfrom_002dmemory'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fload_005fthunk_005ffrom_005fmemory"><span class="category-def">C Function: </span><span><strong class="def-name">scm_load_thunk_from_memory</strong> <var class="def-var-arguments">(bv)</var><a class="copiable-link" href='#index-scm_005fload_005fthunk_005ffrom_005fmemory'> &para;</a></span></dt>
+<dd><p>Load object code from a bytevector.  The data will be copied out of the
+bytevector in order to ensure proper alignment of embedded Scheme
+values.
+</p></dd></dl>
+
+<p>Additionally there are procedures to find the ELF image for a given
+pointer, or to list all mapped ELF images:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-find_002dmapped_002delf_002dimage"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">find-mapped-elf-image</strong> <var class="def-var-arguments">ptr</var><a class="copiable-link" href='#index-find_002dmapped_002delf_002dimage'> &para;</a></span></dt>
+<dd><p>Given the integer value <var class="var">ptr</var>, find and return the ELF image that
+contains that pointer, as a bytevector.  If no image is found, return
+<code class="code">#f</code>.  This routine is mostly used by debuggers and other
+introspective tools.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-all_002dmapped_002delf_002dimages"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">all-mapped-elf-images</strong><a class="copiable-link" href='#index-all_002dmapped_002delf_002dimages'> &para;</a></span></dt>
+<dd><p>Return all mapped ELF images, as a list of bytevectors.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Writing-New-High_002dLevel-Languages.html">Writing New High-Level Languages</a>, Previous: <a href="Continuation_002dPassing-Style.html">Continuation-Passing Style</a>, Up: <a href="Compiling-to-the-Virtual-Machine.html">Compiling to the Virtual Machine</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

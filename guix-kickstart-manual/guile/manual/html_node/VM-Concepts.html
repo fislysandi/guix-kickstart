@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>VM Concepts (Guile Reference Manual)</title>
+
+<meta name="description" content="VM Concepts (Guile Reference Manual)">
+<meta name="keywords" content="VM Concepts (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="A-Virtual-Machine-for-Guile.html" rel="up" title="A Virtual Machine for Guile">
+<link href="Stack-Layout.html" rel="next" title="Stack Layout">
+<link href="Why-a-VM_003f.html" rel="prev" title="Why a VM?">
+<style type="text/css">
+<!--
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="VM-Concepts">
+<div class="nav-panel">
+<p>
+Next: <a href="Stack-Layout.html" accesskey="n" rel="next">Stack Layout</a>, Previous: <a href="Why-a-VM_003f.html" accesskey="p" rel="prev">Why a VM?</a>, Up: <a href="A-Virtual-Machine-for-Guile.html" accesskey="u" rel="up">A Virtual Machine for Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="VM-Concepts-1">9.3.2 VM Concepts</h4>
+
+<p>The bytecode in a Scheme procedure is interpreted by a virtual machine
+(VM).  Each thread has its own instantiation of the VM.  The virtual
+machine executes the sequence of instructions in a procedure.
+</p>
+<p>Each VM instruction starts by indicating which operation it is, and then
+follows by encoding its source and destination operands.  Each procedure
+declares that it has some number of local variables, including the
+function arguments.  These local variables form the available operands
+of the procedure, and are accessed by index.
+</p>
+<p>The local variables for a procedure are stored on a stack.  Calling a
+procedure typically enlarges the stack, and returning from a procedure
+shrinks it.  Stack memory is exclusive to the virtual machine that owns
+it.
+</p>
+<p>In addition to their stacks, virtual machines also have access to the
+global memory (modules, global bindings, etc) that is shared among other
+parts of Guile, including other VMs.
+</p>
+<p>The registers that a VM has are as follows:
+</p>
+<ul class="itemize mark-bullet">
+<li>ip - Instruction pointer
+</li><li>sp - Stack pointer
+</li><li>fp - Frame pointer
+</li></ul>
+
+<p>In other architectures, the instruction pointer is sometimes called the
+&ldquo;program counter&rdquo; (pc). This set of registers is pretty typical for
+virtual machines; their exact meanings in the context of Guile&rsquo;s VM are
+described in the next section.
+</p>
+</div>
+
+
+
+</body>
+</html>

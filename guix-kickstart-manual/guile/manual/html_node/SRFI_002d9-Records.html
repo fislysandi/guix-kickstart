@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-9 Records (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-9 Records (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-9 Records (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Data-Types.html" rel="up" title="Data Types">
+<link href="Records.html" rel="next" title="Records">
+<link href="Record-Overview.html" rel="prev" title="Record Overview">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="SRFI_002d9-Records">
+<div class="nav-panel">
+<p>
+Next: <a href="Records.html" accesskey="n" rel="next">Records</a>, Previous: <a href="Record-Overview.html" accesskey="p" rel="prev">Record Overview</a>, Up: <a href="Data-Types.html" accesskey="u" rel="up">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="SRFI_002d9-Records-1">6.6.16 SRFI-9 Records</h4>
+
+<a class="index-entry-id" id="index-SRFI_002d9"></a>
+<a class="index-entry-id" id="index-record-1"></a>
+
+<p>SRFI-9 standardizes a syntax for defining new record types and creating
+predicate, constructor, and field getter and setter functions.  In Guile
+this is the recommended option to create new record types (see <a class="pxref" href="Record-Overview.html">Record Overview</a>).  It can be used with:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (srfi srfi-9))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-define_002drecord_002dtype"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">define-record-type</strong> <var class="def-var-arguments">type <br> (constructor fieldname &hellip;) <br> predicate <br> (fieldname accessor [modifier]) &hellip;</var><a class="copiable-link" href='#index-define_002drecord_002dtype'> &para;</a></span></dt>
+<dd><br>
+<p>Create a new record type, and make various <code class="code">define</code>s for using
+it.  This syntax can only occur at the top-level, not nested within
+some other form.
+</p>
+<p><var class="var">type</var> is bound to the record type, which is as per the return
+from the core <code class="code">make-record-type</code>.  <var class="var">type</var> also provides the
+name for the record, as per <code class="code">record-type-name</code>.
+</p>
+<p><var class="var">constructor</var> is bound to a function to be called as
+<code class="code">(<var class="var">constructor</var> fieldval &hellip;)</code> to create a new record of
+this type.  The arguments are initial values for the fields, one
+argument for each field, in the order they appear in the
+<code class="code">define-record-type</code> form.
+</p>
+<p>The <var class="var">fieldname</var>s provide the names for the record fields, as per
+the core <code class="code">record-type-fields</code> etc, and are referred to in the
+subsequent accessor/modifier forms.
+</p>
+<p><var class="var">predicate</var> is bound to a function to be called as
+<code class="code">(<var class="var">predicate</var> obj)</code>.  It returns <code class="code">#t</code> or <code class="code">#f</code>
+according to whether <var class="var">obj</var> is a record of this type.
+</p>
+<p>Each <var class="var">accessor</var> is bound to a function to be called
+<code class="code">(<var class="var">accessor</var> record)</code> to retrieve the respective field from a
+<var class="var">record</var>.  Similarly each <var class="var">modifier</var> is bound to a function to
+be called <code class="code">(<var class="var">modifier</var> record val)</code> to set the respective
+field in a <var class="var">record</var>.
+</p></dd></dl>
+
+<p>An example will illustrate typical usage,
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-record-type &lt;employee&gt;
+  (make-employee name age salary)
+  employee?
+  (name    employee-name)
+  (age     employee-age    set-employee-age!)
+  (salary  employee-salary set-employee-salary!))
+</pre></div>
+
+<p>This creates a new employee data type, with name, age and salary
+fields.  Accessor functions are created for each field, but no
+modifier function for the name (the intention in this example being
+that it&rsquo;s established only when an employee object is created).  These
+can all then be used as for example,
+</p>
+<div class="example">
+<pre class="example-preformatted">&lt;employee&gt; &rArr; #&lt;record-type &lt;employee&gt;&gt;
+
+(define fred (make-employee &quot;Fred&quot; 45 20000.00))
+
+(employee? fred)        &rArr; #t
+(employee-age fred)     &rArr; 45
+(set-employee-salary! fred 25000.00)  ;; pay rise
+</pre></div>
+
+<p>The functions created by <code class="code">define-record-type</code> are ordinary
+top-level <code class="code">define</code>s.  They can be redefined or <code class="code">set!</code> as
+desired, exported from a module, etc.
+</p>
+<ul class="mini-toc">
+<li><a href="#Non_002dtoplevel-Record-Definitions" accesskey="1">Non-toplevel Record Definitions</a></li>
+<li><a href="#Custom-Printers" accesskey="2">Custom Printers</a></li>
+<li><a href="#Functional-_0060_0060Setters_0027_0027" accesskey="3">Functional &ldquo;Setters&rdquo;</a></li>
+</ul>
+<div class="unnumberedsubsubsec-level-extent" id="Non_002dtoplevel-Record-Definitions">
+<h4 class="unnumberedsubsubsec">Non-toplevel Record Definitions</h4>
+
+<p>The SRFI-9 specification explicitly disallows record definitions in a
+non-toplevel context, such as inside <code class="code">lambda</code> body or inside a
+<var class="var">let</var> block.  However, Guile&rsquo;s implementation does not enforce that
+restriction.
+</p>
+</div>
+<div class="unnumberedsubsubsec-level-extent" id="Custom-Printers">
+<h4 class="unnumberedsubsubsec">Custom Printers</h4>
+
+<p>You may use <code class="code">set-record-type-printer!</code> to customize the default printing
+behavior of records.  This is a Guile extension and is not part of SRFI-9.  It
+is located in the <code class="code">(srfi srfi-9 gnu)</code> module.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-set_002drecord_002dtype_002dprinter_0021"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">set-record-type-printer!</strong> <var class="def-var-arguments">type proc</var><a class="copiable-link" href='#index-set_002drecord_002dtype_002dprinter_0021'> &para;</a></span></dt>
+<dd><p>Where <var class="var">type</var> corresponds to the first argument of <code class="code">define-record-type</code>,
+and <var class="var">proc</var> is a procedure accepting two arguments, the record to print, and
+an output port.
+</p></dd></dl>
+
+<p>This example prints the employee&rsquo;s name in brackets, for instance <code class="code">[Fred]</code>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(set-record-type-printer! &lt;employee&gt;
+  (lambda (record port)
+    (write-char #\[ port)
+    (display (employee-name record) port)
+    (write-char #\] port)))
+</pre></div>
+
+</div>
+<div class="unnumberedsubsubsec-level-extent" id="Functional-_0060_0060Setters_0027_0027">
+<h4 class="unnumberedsubsubsec">Functional &ldquo;Setters&rdquo;</h4>
+
+<a class="index-entry-id" id="index-functional-setters"></a>
+
+<p>When writing code in a functional style, it is desirable to never alter
+the contents of records.  For such code, a simple way to return new
+record instances based on existing ones is highly desirable.
+</p>
+<p>The <code class="code">(srfi srfi-9 gnu)</code> module extends SRFI-9 with facilities to
+return new record instances based on existing ones, only with one or
+more field values changed&mdash;<em class="dfn">functional setters</em>.  First, the
+<code class="code">define-immutable-record-type</code> works like
+<code class="code">define-record-type</code>, except that fields are immutable and setters
+are defined as functional setters.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-define_002dimmutable_002drecord_002dtype"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">define-immutable-record-type</strong> <var class="def-var-arguments">type <br> (constructor fieldname &hellip;) <br> predicate <br> (fieldname accessor [modifier]) &hellip;</var><a class="copiable-link" href='#index-define_002dimmutable_002drecord_002dtype'> &para;</a></span></dt>
+<dd><p>Define <var class="var">type</var> as a new record type, like <code class="code">define-record-type</code>.
+However, the record type is made <em class="emph">immutable</em> (records may not be
+mutated, even with <code class="code">struct-set!</code>), and any <var class="var">modifier</var> is
+defined to be a functional setter&mdash;a procedure that returns a new
+record instance with the specified field changed, and leaves the
+original unchanged (see example below.)
+</p></dd></dl>
+
+<p>In addition, the generic <code class="code">set-field</code> and <code class="code">set-fields</code> macros
+may be applied to any SRFI-9 record.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-set_002dfield"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">set-field</strong> <var class="def-var-arguments">record (field sub-fields ...) value</var><a class="copiable-link" href='#index-set_002dfield'> &para;</a></span></dt>
+<dd><p>Return a new record of <var class="var">record</var>&rsquo;s type whose fields are equal to
+the corresponding fields of <var class="var">record</var> except for the one specified by
+<var class="var">field</var>.
+</p>
+<p><var class="var">field</var> must be the name of the getter corresponding to the field of
+<var class="var">record</var> being &ldquo;set&rdquo;.  Subsequent <var class="var">sub-fields</var> must be record
+getters designating sub-fields within that field value to be set (see
+example below.)
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-set_002dfields"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">set-fields</strong> <var class="def-var-arguments">record ((field sub-fields ...) value) ...</var><a class="copiable-link" href='#index-set_002dfields'> &para;</a></span></dt>
+<dd><p>Like <code class="code">set-field</code>, but can be used to set more than one field at a
+time.  This expands to code that is more efficient than a series of
+single <code class="code">set-field</code> calls.
+</p></dd></dl>
+
+<p>To illustrate the use of functional setters, let&rsquo;s assume these two
+record type definitions:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-record-type &lt;address&gt;
+  (address street city country)
+  address?
+  (street  address-street)
+  (city    address-city)
+  (country address-country))
+
+(define-immutable-record-type &lt;person&gt;
+  (person age email address)
+  person?
+  (age     person-age set-person-age)
+  (email   person-email set-person-email)
+  (address person-address set-person-address))
+</pre></div>
+
+<p>First, note that the <code class="code">&lt;person&gt;</code> record type definition introduces
+named functional setters.  These may be used like this:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define fsf-address
+  (address &quot;Franklin Street&quot; &quot;Boston&quot; &quot;USA&quot;))
+
+(define rms
+  (person 30 &quot;rms@gnu.org&quot; fsf-address))
+
+(and (equal? (set-person-age rms 60)
+             (person 60 &quot;rms@gnu.org&quot; fsf-address))
+     (= (person-age rms) 30))
+&rArr; #t
+</pre></div>
+
+<p>Here, the original <code class="code">&lt;person&gt;</code> record, to which <var class="var">rms</var> is bound,
+is left unchanged.
+</p>
+<p>Now, suppose we want to change both the street and age of <var class="var">rms</var>.
+This can be achieved using <code class="code">set-fields</code>:
+</p>
+<div class="example">
+<pre class="example-preformatted">(set-fields rms
+  ((person-age) 60)
+  ((person-address address-street) &quot;Temple Place&quot;))
+&rArr; #&lt;&lt;person&gt; age: 60 email: &quot;rms@gnu.org&quot;
+  address: #&lt;&lt;address&gt; street: &quot;Temple Place&quot; city: &quot;Boston&quot; country: &quot;USA&quot;&gt;&gt;
+</pre></div>
+
+<p>Notice how the above changed two fields of <var class="var">rms</var>, including the
+<code class="code">street</code> field of its <code class="code">address</code> field, in a concise way.  Also
+note that <code class="code">set-fields</code> works equally well for types defined with
+just <code class="code">define-record-type</code>.
+</p>
+</div>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Records.html">Records</a>, Previous: <a href="Record-Overview.html">Record Overview</a>, Up: <a href="Data-Types.html">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

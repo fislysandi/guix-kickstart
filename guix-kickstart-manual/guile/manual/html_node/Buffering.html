@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Buffering (Guile Reference Manual)</title>
+
+<meta name="description" content="Buffering (Guile Reference Manual)">
+<meta name="keywords" content="Buffering (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Input-and-Output.html" rel="up" title="Input and Output">
+<link href="Random-Access.html" rel="next" title="Random Access">
+<link href="Simple-Output.html" rel="prev" title="Simple Output">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Buffering">
+<div class="nav-panel">
+<p>
+Next: <a href="Random-Access.html" accesskey="n" rel="next">Random Access</a>, Previous: <a href="Simple-Output.html" accesskey="p" rel="prev">Simple Textual Output</a>, Up: <a href="Input-and-Output.html" accesskey="u" rel="up">Input and Output</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Buffering-1">6.12.6 Buffering</h4>
+<a class="index-entry-id" id="index-Port_002c-buffering"></a>
+
+<p>Every port has associated input and output buffers.  You can think of
+ports as being backed by some mutable store, and that store might be far
+away.  For example, ports backed by file descriptors have to go all the
+way to the kernel to read and write their data.  To avoid this
+round-trip cost, Guile usually reads in data from the mutable store in
+chunks, and then services small requests like <code class="code">get-char</code> out of
+that intermediate buffer.  Similarly, small writes like
+<code class="code">write-char</code> first go to a buffer, and are sent to the store when
+the buffer is full (or when port is flushed).  Buffered ports speed up
+your program by reducing the number of round-trips to the mutable store,
+and they do so in a way that is mostly transparent to the user.
+</p>
+<p>There are two major ways, however, in which buffering affects program
+semantics.  Building correct, performant programs requires understanding
+these situations.
+</p>
+<p>The first case is in random-access read/write ports (see <a class="pxref" href="Random-Access.html">Random Access</a>).  These ports, usually backed by a file, logically operate over
+the same mutable store when both reading and writing.  So, if you read a
+character, causing the buffer to fill, then write a character, the bytes
+you filled in your read buffer are now invalid.  Every time you switch
+between reading and writing, Guile has to flush any pending buffer.  If
+this happens frequently, the cost can be high.  In that case you should
+reduce the amount that you buffer, in both directions.  Similarly, Guile
+has to flush buffers before seeking.  None of these considerations apply
+to sockets, which don&rsquo;t logically read from and write to the same
+mutable store, and are not seekable.  Note also that sockets are
+unbuffered by default.  See <a class="xref" href="Network-Sockets-and-Communication.html">Network Sockets and Communication</a>.
+</p>
+<p>The second case is the more pernicious one.  If you write data to a
+buffered port, it probably doesn&rsquo;t go out to the mutable store directly.
+(This &ldquo;probably&rdquo; introduces some indeterminism in your program: what
+goes to the store, and when, depends on how full the buffer is.  It is
+something that the user needs to explicitly be aware of.)  The data is
+written to the store later &ndash; when the buffer fills up due to another
+write, or when <code class="code">force-output</code> is called, or when <code class="code">close-port</code>
+is called, or when the program exits, or even when the garbage collector
+runs.  The salient point is, <em class="emph">the errors are signalled then too</em>.
+Buffered writes defer error detection (and defer the side effects to the
+mutable store), perhaps indefinitely if the port type does not need to
+be closed at GC.
+</p>
+<p>One common heuristic that works well for textual ports is to flush
+output when a newline (<code class="code">\n</code>) is written.  This <em class="dfn">line buffering</em>
+mode is on by default for TTY ports.  Most other ports are <em class="dfn">block
+buffered</em>, meaning that once the output buffer reaches the block size,
+which depends on the port and its configuration, the output is flushed
+as a block, without regard to what is in the block.  Likewise reads are
+read in at the block size, though if there are fewer bytes available to
+read, the buffer may not be entirely filled.
+</p>
+<p>Note that binary reads or writes that are larger than the buffer size go
+directly to the mutable store without passing through the buffers.  If
+your access pattern involves many big reads or writes, buffering might
+not matter so much to you.
+</p>
+<p>To control the buffering behavior of a port, use <code class="code">setvbuf</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-setvbuf"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">setvbuf</strong> <var class="def-var-arguments">port mode [size]</var><a class="copiable-link" href='#index-setvbuf'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsetvbuf"><span class="category-def">C Function: </span><span><strong class="def-name">scm_setvbuf</strong> <var class="def-var-arguments">(port, mode, size)</var><a class="copiable-link" href='#index-scm_005fsetvbuf'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-port-buffering"></a>
+<p>Set the buffering mode for <var class="var">port</var>.  <var class="var">mode</var> can be one of the
+following symbols:
+</p>
+<dl class="table">
+<dt><code class="code">none</code></dt>
+<dd><p>non-buffered
+</p></dd>
+<dt><code class="code">line</code></dt>
+<dd><p>line buffered
+</p></dd>
+<dt><code class="code">block</code></dt>
+<dd><p>block buffered, using a newly allocated buffer of <var class="var">size</var> bytes.
+If <var class="var">size</var> is omitted, a default size will be used.
+</p></dd>
+</dl>
+</dd></dl>
+
+<p>Another way to set the buffering, for file ports, is to open the file
+with <code class="code">0</code> or <code class="code">l</code> as part of the mode string, for unbuffered or
+line-buffered ports, respectively.  See <a class="xref" href="File-Ports.html">File Ports</a>, for more.
+</p>
+<p>Any buffered output data will be written out when the port is closed.
+To make sure to flush it at specific points in your program, use
+<code class="code">force-otput</code>.
+</p>
+<a class="index-entry-id" id="index-fflush"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-force_002doutput"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">force-output</strong> <var class="def-var-arguments">[port]</var><a class="copiable-link" href='#index-force_002doutput'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fforce_005foutput"><span class="category-def">C Function: </span><span><strong class="def-name">scm_force_output</strong> <var class="def-var-arguments">(port)</var><a class="copiable-link" href='#index-scm_005fforce_005foutput'> &para;</a></span></dt>
+<dd><p>Flush the specified output port, or the current output port if
+<var class="var">port</var> is omitted.  The current output buffer contents, if any, are
+passed to the underlying port implementation.
+</p>
+<p>The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-flush_002dall_002dports"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flush-all-ports</strong><a class="copiable-link" href='#index-flush_002dall_002dports'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fflush_005fall_005fports"><span class="category-def">C Function: </span><span><strong class="def-name">scm_flush_all_ports</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fflush_005fall_005fports'> &para;</a></span></dt>
+<dd><p>Equivalent to calling <code class="code">force-output</code> on all open output ports.  The
+return value is unspecified.
+</p></dd></dl>
+
+<p>Similarly, sometimes you might want to switch from using Guile&rsquo;s ports
+to working directly on file descriptors.  In that case, for input ports
+use <code class="code">drain-input</code> to get any buffered input from that port.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-drain_002dinput"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">drain-input</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-drain_002dinput'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fdrain_005finput"><span class="category-def">C Function: </span><span><strong class="def-name">scm_drain_input</strong> <var class="def-var-arguments">(port)</var><a class="copiable-link" href='#index-scm_005fdrain_005finput'> &para;</a></span></dt>
+<dd><p>This procedure clears a port&rsquo;s input buffers, similar
+to the way that force-output clears the output buffer.  The
+contents of the buffers are returned as a single string, e.g.,
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define p (open-input-file ...))
+(drain-input p) =&gt; empty string, nothing buffered yet.
+(unread-char (read-char p) p)
+(drain-input p) =&gt; initial chars from p, up to the buffer size.
+</pre></div>
+</dd></dl>
+
+<p>All of these considerations are very similar to those of streams in the
+C library, although Guile&rsquo;s ports are not built on top of C streams.
+Still, it is useful to read what other systems do.
+See <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/Streams.html#Streams">Streams</a> in <cite class="cite">The GNU C Library Reference Manual</cite>, for more
+discussion on C streams.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Random-Access.html">Random Access</a>, Previous: <a href="Simple-Output.html">Simple Textual Output</a>, Up: <a href="Input-and-Output.html">Input and Output</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

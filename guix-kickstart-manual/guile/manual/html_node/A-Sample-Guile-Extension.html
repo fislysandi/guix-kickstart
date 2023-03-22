@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>A Sample Guile Extension (Guile Reference Manual)</title>
+
+<meta name="description" content="A Sample Guile Extension (Guile Reference Manual)">
+<meta name="keywords" content="A Sample Guile Extension (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Linking-Guile-with-Libraries.html" rel="up" title="Linking Guile with Libraries">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="A-Sample-Guile-Extension">
+<div class="nav-panel">
+<p>
+Up: <a href="Linking-Guile-with-Libraries.html" accesskey="u" rel="up">Linking Guile with Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="A-Sample-Guile-Extension-1">5.3.1 A Sample Guile Extension</h4>
+
+<p>This section explains how to make the Bessel functions of the C library
+available to Scheme.  First we need to write the appropriate glue code
+to convert the arguments and return values of the functions from Scheme
+to C and back.  Additionally, we need a function that will add them to
+the set of Guile primitives.  Because this is just an example, we will
+only implement this for the <code class="code">j0</code> function.
+</p>
+<p>Consider the following file <samp class="file">bessel.c</samp>.
+</p>
+<div class="example smallexample">
+<pre class="example-preformatted">#include &lt;math.h&gt;
+#include &lt;libguile.h&gt;
+
+SCM
+j0_wrapper (SCM x)
+{
+  return scm_from_double (j0 (scm_to_double (x)));
+}
+
+void
+init_bessel ()
+{
+  scm_c_define_gsubr (&quot;j0&quot;, 1, 0, 0, j0_wrapper);
+}
+</pre></div>
+
+<p>This C source file needs to be compiled into a shared library.  Here is
+how to do it on GNU/Linux:
+</p>
+<div class="example smallexample">
+<pre class="example-preformatted">gcc `pkg-config --cflags guile-3.0` \
+  -shared -o libguile-bessel.so -fPIC bessel.c
+</pre></div>
+
+<p>For creating shared libraries portably, we recommend the use of GNU
+Libtool (see <a data-manual="libtool" href="http://www.gnu.org/software/libtool/manual/html_node/index.html#Top">Introduction</a> in <cite class="cite">GNU Libtool</cite>).
+</p>
+<p>A shared library can be loaded into a running Guile process with the
+function <code class="code">load-extension</code>.  In addition to the name of the
+library to load, this function also expects the name of a function from
+that library that will be called to initialize it.  For our example,
+we are going to call the function <code class="code">init_bessel</code> which will make
+<code class="code">j0_wrapper</code> available to Scheme programs with the name
+<code class="code">j0</code>.  Note that we do not specify a filename extension such as
+<samp class="file">.so</samp> when invoking <code class="code">load-extension</code>.  The right extension for
+the host platform will be provided automatically.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(load-extension &quot;libguile-bessel&quot; &quot;init_bessel&quot;)
+(j0 2)
+&rArr; 0.223890779141236
+</pre></div>
+
+<p>For this to work, <code class="code">load-extension</code> must be able to find
+<samp class="file">libguile-bessel</samp>, of course.  It will look in the places that
+are usual for your operating system, and it will additionally look
+into the directories listed in the <code class="code">LTDL_LIBRARY_PATH</code>
+environment variable.
+</p>
+<p>To see how these Guile extensions via shared libraries relate to the
+module system, See <a class="xref" href="Putting-Extensions-into-Modules.html">Putting Extensions into Modules</a>.
+</p>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Up: <a href="Linking-Guile-with-Libraries.html">Linking Guile with Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

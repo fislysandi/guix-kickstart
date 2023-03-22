@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-41 Stream Library (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-41 Stream Library (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-41 Stream Library (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI_002d41.html" rel="up" title="SRFI-41">
+<link href="SRFI_002d41-Stream-Primitives.html" rel="prev" title="SRFI-41 Stream Primitives">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="SRFI_002d41-Stream-Library">
+<div class="nav-panel">
+<p>
+Previous: <a href="SRFI_002d41-Stream-Primitives.html" accesskey="p" rel="prev">SRFI-41 Stream Primitives</a>, Up: <a href="SRFI_002d41.html" accesskey="u" rel="up">SRFI-41 - Streams</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="SRFI_002d41-Stream-Library-1">7.5.28.3 SRFI-41 Stream Library</h4>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-define_002dstream"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">define-stream</strong> <var class="def-var-arguments">(name args &hellip;) body &hellip;</var><a class="copiable-link" href='#index-define_002dstream'> &para;</a></span></dt>
+<dd><p>Creates a procedure that returns a stream, and may appear anywhere a
+normal <code class="code">define</code> may appear, including as an internal definition.
+It may contain internal definitions of its own.  The defined procedure
+takes arguments in the same way as <code class="code">stream-lambda</code>.
+<code class="code">define-stream</code> is syntactic sugar on <code class="code">stream-lambda</code>; see
+also <code class="code">stream-let</code>, which is also a sugaring of
+<code class="code">stream-lambda</code>.
+</p>
+<p>A simple version of <code class="code">stream-map</code> that takes only a single input
+stream calls itself recursively:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-stream (stream-map proc strm)
+  (if (stream-null? strm)
+      stream-null
+      (stream-cons
+        (proc (stream-car strm))
+        (stream-map proc (stream-cdr strm))))))
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-list_002d_003estream"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list-&gt;stream</strong> <var class="def-var-arguments">list</var><a class="copiable-link" href='#index-list_002d_003estream'> &para;</a></span></dt>
+<dd><p>Returns a newly-allocated stream containing the elements from
+<var class="var">list</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-port_002d_003estream"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">port-&gt;stream</strong> <var class="def-var-arguments">[port]</var><a class="copiable-link" href='#index-port_002d_003estream'> &para;</a></span></dt>
+<dd><p>Returns a newly-allocated stream containing in its elements the
+characters on the port.  If <var class="var">port</var> is not given it defaults to the
+current input port.  The returned stream has finite length and is
+terminated by <code class="code">stream-null</code>.
+</p>
+<p>It looks like one use of <code class="code">port-&gt;stream</code> would be this:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define s ;wrong!
+  (with-input-from-file filename
+    (lambda () (port-&gt;stream))))
+</pre></div>
+
+<p>But that fails, because <code class="code">with-input-from-file</code> is eager, and closes
+the input port prematurely, before the first character is read.  To read
+a file into a stream, say:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-stream (file-&gt;stream filename)
+  (let ((p (open-input-file filename)))
+    (stream-let loop ((c (read-char p)))
+      (if (eof-object? c)
+          (begin (close-input-port p)
+                 stream-null)
+          (stream-cons c
+            (loop (read-char p)))))))
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">stream</strong> <var class="def-var-arguments">object-expr &hellip;</var><a class="copiable-link" href='#index-stream'> &para;</a></span></dt>
+<dd><p>Creates a newly-allocated stream containing in its elements the objects,
+in order.  The <var class="var">object-expr</var>s are evaluated when they are accessed,
+not when the stream is created.  If no objects are given, as in
+(stream), the null stream is returned.  See also <code class="code">list-&gt;stream</code>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define strm123 (stream 1 2 3))
+
+; (/ 1 0) not evaluated when stream is created
+(define s (stream 1 (/ 1 0) -1))
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002d_003elist"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-&gt;list</strong> <var class="def-var-arguments">[n] stream</var><a class="copiable-link" href='#index-stream_002d_003elist'> &para;</a></span></dt>
+<dd><p>Returns a newly-allocated list containing in its elements the first
+<var class="var">n</var> items in <var class="var">stream</var>.  If <var class="var">stream</var> has less than <var class="var">n</var>
+items, all the items in the stream will be included in the returned
+list.  If <var class="var">n</var> is not given it defaults to infinity, which means that
+unless <var class="var">stream</var> is finite <code class="code">stream-&gt;list</code> will never return.
+</p>
+<div class="example">
+<pre class="example-preformatted">(stream-&gt;list 10
+  (stream-map (lambda (x) (* x x))
+    (stream-from 0)))
+  &rArr; (0 1 4 9 16 25 36 49 64 81)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dappend"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-append</strong> <var class="def-var-arguments">stream &hellip;</var><a class="copiable-link" href='#index-stream_002dappend'> &para;</a></span></dt>
+<dd><p>Returns a newly-allocated stream containing in its elements those
+elements contained in its input <var class="var">stream</var>s, in order of input.  If
+any of the input streams is infinite, no elements of any of the
+succeeding input streams will appear in the output stream.  See also
+<code class="code">stream-concat</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dconcat"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-concat</strong> <var class="def-var-arguments">stream</var><a class="copiable-link" href='#index-stream_002dconcat'> &para;</a></span></dt>
+<dd><p>Takes a <var class="var">stream</var> consisting of one or more streams and returns a
+newly-allocated stream containing all the elements of the input streams.
+If any of the streams in the input <var class="var">stream</var> is infinite, any
+remaining streams in the input stream will never appear in the output
+stream.  See also <code class="code">stream-append</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dconstant"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-constant</strong> <var class="def-var-arguments">object &hellip;</var><a class="copiable-link" href='#index-stream_002dconstant'> &para;</a></span></dt>
+<dd><p>Returns a newly-allocated stream containing in its elements the
+<var class="var">object</var>s, repeating in succession forever.
+</p>
+<div class="example">
+<pre class="example-preformatted">(stream-constant 1) &rArr; 1 1 1 &hellip;
+(stream-constant #t #f) &rArr; #t #f #t #f #t #f &hellip;
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002ddrop"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-drop</strong> <var class="def-var-arguments">n stream</var><a class="copiable-link" href='#index-stream_002ddrop'> &para;</a></span></dt>
+<dd><p>Returns the suffix of the input <var class="var">stream</var> that starts at the next
+element after the first <var class="var">n</var> elements.  The output stream shares
+structure with the input <var class="var">stream</var>; thus, promises forced in one
+instance of the stream are also forced in the other instance of the
+stream.  If the input <var class="var">stream</var> has less than <var class="var">n</var> elements,
+<code class="code">stream-drop</code> returns the null stream.  See also
+<code class="code">stream-take</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002ddrop_002dwhile"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-drop-while</strong> <var class="def-var-arguments">pred stream</var><a class="copiable-link" href='#index-stream_002ddrop_002dwhile'> &para;</a></span></dt>
+<dd><p>Returns the suffix of the input <var class="var">stream</var> that starts at the first
+element <var class="var">x</var> for which <code class="code">(pred x)</code> returns false.  The output
+stream shares structure with the input <var class="var">stream</var>.  See also
+<code class="code">stream-take-while</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dfilter"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-filter</strong> <var class="def-var-arguments">pred stream</var><a class="copiable-link" href='#index-stream_002dfilter'> &para;</a></span></dt>
+<dd><p>Returns a newly-allocated stream that contains only those elements
+<var class="var">x</var> of the input <var class="var">stream</var> which satisfy the predicate
+<code class="code">pred</code>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(stream-filter odd? (stream-from 0))
+   &rArr; 1 3 5 7 9 &hellip;
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dfold"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-fold</strong> <var class="def-var-arguments">proc base stream</var><a class="copiable-link" href='#index-stream_002dfold'> &para;</a></span></dt>
+<dd><p>Applies a binary procedure <var class="var">proc</var> to <var class="var">base</var> and the first
+element of <var class="var">stream</var> to compute a new <var class="var">base</var>, then applies the
+procedure to the new <var class="var">base</var> and the next element of <var class="var">stream</var> to
+compute a succeeding <var class="var">base</var>, and so on, accumulating a value that is
+finally returned as the value of <code class="code">stream-fold</code> when the end of the
+stream is reached.  <var class="var">stream</var> must be finite, or <code class="code">stream-fold</code>
+will enter an infinite loop.  See also <code class="code">stream-scan</code>, which is
+similar to <code class="code">stream-fold</code>, but useful for infinite streams.  For
+readers familiar with other functional languages, this is a left-fold;
+there is no corresponding right-fold, since right-fold relies on finite
+streams that are fully-evaluated, in which case they may as well be
+converted to a list.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dfor_002deach"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-for-each</strong> <var class="def-var-arguments">proc stream &hellip;</var><a class="copiable-link" href='#index-stream_002dfor_002deach'> &para;</a></span></dt>
+<dd><p>Applies <var class="var">proc</var> element-wise to corresponding elements of the input
+<var class="var">stream</var>s for side-effects; it returns nothing.
+<code class="code">stream-for-each</code> stops as soon as any of its input streams is
+exhausted.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dfrom"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-from</strong> <var class="def-var-arguments">first [step]</var><a class="copiable-link" href='#index-stream_002dfrom'> &para;</a></span></dt>
+<dd><p>Creates a newly-allocated stream that contains <var class="var">first</var> as its first
+element and increments each succeeding element by <var class="var">step</var>.  If
+<var class="var">step</var> is not given it defaults to 1.  <var class="var">first</var> and <var class="var">step</var>
+may be of any numeric type.  <code class="code">stream-from</code> is frequently useful as
+a generator in <code class="code">stream-of</code> expressions.  See also
+<code class="code">stream-range</code> for a similar procedure that creates finite streams.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002diterate"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-iterate</strong> <var class="def-var-arguments">proc base</var><a class="copiable-link" href='#index-stream_002diterate'> &para;</a></span></dt>
+<dd><p>Creates a newly-allocated stream containing <var class="var">base</var> in its first
+element and applies <var class="var">proc</var> to each element in turn to determine the
+succeeding element.  See also <code class="code">stream-unfold</code> and
+<code class="code">stream-unfolds</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dlength"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-length</strong> <var class="def-var-arguments">stream</var><a class="copiable-link" href='#index-stream_002dlength'> &para;</a></span></dt>
+<dd><p>Returns the number of elements in the <var class="var">stream</var>; it does not evaluate
+its elements.  <code class="code">stream-length</code> may only be used on finite streams;
+it enters an infinite loop with infinite streams.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dlet"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">stream-let</strong> <var class="def-var-arguments">tag ((var expr) &hellip;) body &hellip;</var><a class="copiable-link" href='#index-stream_002dlet'> &para;</a></span></dt>
+<dd><p>Creates a local scope that binds each variable to the value of its
+corresponding expression.  It additionally binds <var class="var">tag</var> to a
+procedure which takes the bound variables as arguments and <var class="var">body</var> as
+its defining expressions, binding the <var class="var">tag</var> with
+<code class="code">stream-lambda</code>.  <var class="var">tag</var> is in scope within body, and may be
+called recursively.  When the expanded expression defined by the
+<code class="code">stream-let</code> is evaluated, <code class="code">stream-let</code> evaluates the
+expressions in its <var class="var">body</var> in an environment containing the
+newly-bound variables, returning the value of the last expression
+evaluated, which must yield a stream.
+</p>
+<p><code class="code">stream-let</code> provides syntactic sugar on <code class="code">stream-lambda</code>, in
+the same manner as normal <code class="code">let</code> provides syntactic sugar on normal
+<code class="code">lambda</code>.  However, unlike normal <code class="code">let</code>, the <var class="var">tag</var> is
+required, not optional, because unnamed <code class="code">stream-let</code> is
+meaningless.
+</p>
+<p>For example, <code class="code">stream-member</code> returns the first <code class="code">stream-pair</code>
+of the input <var class="var">strm</var> with a <code class="code">stream-car</code> <var class="var">x</var> that satisfies
+<code class="code">(eql? obj x)</code>, or the null stream if <var class="var">x</var> is not present in
+<var class="var">strm</var>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-stream (stream-member eql? obj strm)
+  (stream-let loop ((strm strm))
+    (cond ((stream-null? strm) strm)
+          ((eql? obj (stream-car strm)) strm)
+          (else (loop (stream-cdr strm))))))
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dmap"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-map</strong> <var class="def-var-arguments">proc stream &hellip;</var><a class="copiable-link" href='#index-stream_002dmap'> &para;</a></span></dt>
+<dd><p>Applies <var class="var">proc</var> element-wise to corresponding elements of the input
+<var class="var">stream</var>s, returning a newly-allocated stream containing elements
+that are the results of those procedure applications.  The output stream
+has as many elements as the minimum-length input stream, and may be
+infinite.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dmatch"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">stream-match</strong> <var class="def-var-arguments">stream clause &hellip;</var><a class="copiable-link" href='#index-stream_002dmatch'> &para;</a></span></dt>
+<dd><p>Provides pattern-matching for streams.  The input <var class="var">stream</var> is an
+expression that evaluates to a stream.  Clauses are of the form
+<code class="code">(pattern [fender] expression)</code>, consisting of a <var class="var">pattern</var> that
+matches a stream of a particular shape, an optional <var class="var">fender</var> that
+must succeed if the pattern is to match, and an <var class="var">expression</var> that is
+evaluated if the pattern matches.  There are four types of patterns:
+</p>
+<ul class="itemize mark-bullet">
+<li>() matches the null stream.
+
+</li><li>(<var class="var">pat0</var> <var class="var">pat1</var> &hellip;) matches a finite stream with length
+exactly equal to the number of pattern elements.
+
+</li><li>(<var class="var">pat0</var> <var class="var">pat1</var> &hellip; <code class="code">.</code> <var class="var">pat-rest</var>) matches an
+infinite stream, or a finite stream with length at least as great as the
+number of pattern elements before the literal dot.
+
+</li><li><var class="var">pat</var> matches an entire stream.  Should always appear last in the
+list of clauses; it&rsquo;s not an error to appear elsewhere, but subsequent
+clauses could never match.
+</li></ul>
+
+<p>Each pattern element may be either:
+</p>
+<ul class="itemize mark-bullet">
+<li>An identifier, which matches any stream element.  Additionally, the
+value of the stream element is bound to the variable named by the
+identifier, which is in scope in the <var class="var">fender</var> and <var class="var">expression</var>
+of the corresponding <var class="var">clause</var>.  Each identifier in a single pattern
+must be unique.
+
+</li><li>A literal underscore (<code class="code">_</code>), which matches any stream element but
+creates no bindings.
+</li></ul>
+
+<p>The <var class="var">pattern</var>s are tested in order, left-to-right, until a matching
+pattern is found; if <var class="var">fender</var> is present, it must evaluate to a true
+value for the match to be successful.  Pattern variables are bound in
+the corresponding <var class="var">fender</var> and <var class="var">expression</var>.  Once the matching
+<var class="var">pattern</var> is found, the corresponding <var class="var">expression</var> is evaluated
+and returned as the result of the match.  An error is signaled if no
+pattern matches the input <var class="var">stream</var>.
+</p>
+<p><code class="code">stream-match</code> is often used to distinguish null streams from
+non-null streams, binding <var class="var">head</var> and <var class="var">tail</var>:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (len strm)
+  (stream-match strm
+    (() 0)
+    ((head . tail) (+ 1 (len tail)))))
+</pre></div>
+
+<p>Fenders can test the common case where two stream elements must be
+identical; the <code class="code">else</code> pattern is an identifier bound to the entire
+stream, not a keyword as in <code class="code">cond</code>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(stream-match strm
+  ((x y . _) (equal? x y) 'ok)
+  (else 'error))
+</pre></div>
+
+<p>A more complex example uses two nested matchers to match two different
+stream arguments; <code class="code">(stream-merge lt? . strms)</code> stably merges two or
+more streams ordered by the <code class="code">lt?</code> predicate:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-stream (stream-merge lt? . strms)
+  (define-stream (merge xx yy)
+    (stream-match xx (() yy) ((x . xs)
+      (stream-match yy (() xx) ((y . ys)
+        (if (lt? y x)
+            (stream-cons y (merge xx ys))
+            (stream-cons x (merge xs yy))))))))
+  (stream-let loop ((strms strms))
+    (cond ((null? strms) stream-null)
+          ((null? (cdr strms)) (car strms))
+          (else (merge (car strms)
+                       (apply stream-merge lt?
+                         (cdr strms)))))))
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dof"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">stream-of</strong> <var class="def-var-arguments">expr clause &hellip;</var><a class="copiable-link" href='#index-stream_002dof'> &para;</a></span></dt>
+<dd><p>Provides the syntax of stream comprehensions, which generate streams by
+means of looping expressions.  The result is a stream of objects of the
+type returned by <var class="var">expr</var>.  There are four types of clauses:
+</p>
+<ul class="itemize mark-bullet">
+<li>(<var class="var">var</var> <code class="code">in</code> <var class="var">stream-expr</var>) loops over the elements of
+<var class="var">stream-expr</var>, in order from the start of the stream, binding each
+element of the stream in turn to <var class="var">var</var>.  <code class="code">stream-from</code> and
+<code class="code">stream-range</code> are frequently useful as generators for
+<var class="var">stream-expr</var>.
+
+</li><li>(<var class="var">var</var> <code class="code">is</code> <var class="var">expr</var>) binds <var class="var">var</var> to the value obtained
+by evaluating <var class="var">expr</var>.
+
+</li><li>(<var class="var">pred</var> <var class="var">expr</var>) includes in the output stream only those
+elements <var class="var">x</var> which satisfy the predicate <var class="var">pred</var>.
+</li></ul>
+
+<p>The scope of variables bound in the stream comprehension is the clauses
+to the right of the binding clause (but not the binding clause itself)
+plus the result expression.
+</p>
+<p>When two or more generators are present, the loops are processed as if
+they are nested from left to right; that is, the rightmost generator
+varies fastest.  A consequence of this is that only the first generator
+may be infinite and all subsequent generators must be finite.  If no
+generators are present, the result of a stream comprehension is a stream
+containing the result expression; thus, &lsquo;<samp class="samp">(stream-of 1)</samp>&rsquo; produces a
+finite stream containing only the element 1.
+</p>
+<div class="example">
+<pre class="example-preformatted">(stream-of (* x x)
+  (x in (stream-range 0 10))
+  (even? x))
+  &rArr; 0 4 16 36 64
+
+(stream-of (list a b)
+  (a in (stream-range 1 4))
+  (b in (stream-range 1 3)))
+  &rArr; (1 1) (1 2) (2 1) (2 2) (3 1) (3 2)
+
+(stream-of (list i j)
+  (i in (stream-range 1 5))
+  (j in (stream-range (+ i 1) 5)))
+  &rArr; (1 2) (1 3) (1 4) (2 3) (2 4) (3 4)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002drange"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-range</strong> <var class="def-var-arguments">first past [step]</var><a class="copiable-link" href='#index-stream_002drange'> &para;</a></span></dt>
+<dd><p>Creates a newly-allocated stream that contains <var class="var">first</var> as its first
+element and increments each succeeding element by <var class="var">step</var>.  The
+stream is finite and ends before <var class="var">past</var>, which is not an element of
+the stream.  If <var class="var">step</var> is not given it defaults to 1 if <var class="var">first</var>
+is less than past and -1 otherwise.  <var class="var">first</var>, <var class="var">past</var> and
+<var class="var">step</var> may be of any real numeric type.  <code class="code">stream-range</code> is
+frequently useful as a generator in <code class="code">stream-of</code> expressions.  See
+also <code class="code">stream-from</code> for a similar procedure that creates infinite
+streams.
+</p>
+<div class="example">
+<pre class="example-preformatted">(stream-range 0 10) &rArr; 0 1 2 3 4 5 6 7 8 9
+(stream-range 0 10 2) &rArr; 0 2 4 6 8
+</pre></div>
+
+<p>Successive elements of the stream are calculated by adding <var class="var">step</var> to
+<var class="var">first</var>, so if any of <var class="var">first</var>, <var class="var">past</var> or <var class="var">step</var> are
+inexact, the length of the output stream may differ from
+<code class="code">(ceiling (- (/ (- past first) step) 1)</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-ref</strong> <var class="def-var-arguments">stream n</var><a class="copiable-link" href='#index-stream_002dref'> &para;</a></span></dt>
+<dd><p>Returns the <var class="var">n</var>th element of stream, counting from zero.  An error
+is signaled if <var class="var">n</var> is greater than or equal to the length of stream.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (fact n)
+  (stream-ref
+    (stream-scan * 1 (stream-from 1))
+    n))
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dreverse"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-reverse</strong> <var class="def-var-arguments">stream</var><a class="copiable-link" href='#index-stream_002dreverse'> &para;</a></span></dt>
+<dd><p>Returns a newly-allocated stream containing the elements of the input
+<var class="var">stream</var> but in reverse order.  <code class="code">stream-reverse</code> may only be
+used with finite streams; it enters an infinite loop with infinite
+streams.  <code class="code">stream-reverse</code> does not force evaluation of the
+elements of the stream.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dscan"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-scan</strong> <var class="def-var-arguments">proc base stream</var><a class="copiable-link" href='#index-stream_002dscan'> &para;</a></span></dt>
+<dd><p>Accumulates the partial folds of an input <var class="var">stream</var> into a
+newly-allocated output stream.  The output stream is the <var class="var">base</var>
+followed by <code class="code">(stream-fold proc base (stream-take i stream))</code> for
+each of the first <var class="var">i</var> elements of <var class="var">stream</var>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(stream-scan + 0 (stream-from 1))
+  &rArr; (stream 0 1 3 6 10 15 &hellip;)
+
+(stream-scan * 1 (stream-from 1))
+  &rArr; (stream 1 1 2 6 24 120 &hellip;)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dtake"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-take</strong> <var class="def-var-arguments">n stream</var><a class="copiable-link" href='#index-stream_002dtake'> &para;</a></span></dt>
+<dd><p>Returns a newly-allocated stream containing the first <var class="var">n</var> elements
+of the input <var class="var">stream</var>.  If the input <var class="var">stream</var> has less than
+<var class="var">n</var> elements, so does the output stream.  See also
+<code class="code">stream-drop</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dtake_002dwhile"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-take-while</strong> <var class="def-var-arguments">pred stream</var><a class="copiable-link" href='#index-stream_002dtake_002dwhile'> &para;</a></span></dt>
+<dd><p>Takes a predicate and a <code class="code">stream</code> and returns a newly-allocated
+stream containing those elements <code class="code">x</code> that form the maximal prefix
+of the input stream which satisfy <var class="var">pred</var>.  See also
+<code class="code">stream-drop-while</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dunfold"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-unfold</strong> <var class="def-var-arguments">map pred gen base</var><a class="copiable-link" href='#index-stream_002dunfold'> &para;</a></span></dt>
+<dd><p>The fundamental recursive stream constructor.  It constructs a stream by
+repeatedly applying <var class="var">gen</var> to successive values of <var class="var">base</var>, in the
+manner of <code class="code">stream-iterate</code>, then applying <var class="var">map</var> to each of the
+values so generated, appending each of the mapped values to the output
+stream as long as <code class="code">(pred? base)</code> returns a true value.  See also
+<code class="code">stream-iterate</code> and <code class="code">stream-unfolds</code>.
+</p>
+<p>The expression below creates the finite stream &lsquo;<samp class="samp">0 1 4 9 16 25 36 49
+64 81</samp>&rsquo;.  Initially the <var class="var">base</var> is 0, which is less than 10, so
+<var class="var">map</var> squares the <var class="var">base</var> and the mapped value becomes the first
+element of the output stream.  Then <var class="var">gen</var> increments the <var class="var">base</var>
+by 1, so it becomes 1; this is less than 10, so <var class="var">map</var> squares the
+new <var class="var">base</var> and 1 becomes the second element of the output stream.
+And so on, until the base becomes 10, when <var class="var">pred</var> stops the
+recursion and stream-null ends the output stream.
+</p>
+<div class="example">
+<pre class="example-preformatted">(stream-unfold
+  (lambda (x) (expt x 2)) ; map
+  (lambda (x) (&lt; x 10))   ; pred?
+  (lambda (x) (+ x 1))    ; gen
+  0)                      ; base
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dunfolds"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-unfolds</strong> <var class="def-var-arguments">proc seed</var><a class="copiable-link" href='#index-stream_002dunfolds'> &para;</a></span></dt>
+<dd><p>Returns <var class="var">n</var> newly-allocated streams containing those elements
+produced by successive calls to the generator <var class="var">proc</var>, which takes
+the current <var class="var">seed</var> as its argument and returns <var class="var">n</var>+1 values
+</p>
+<p>(<var class="var">proc</var> <var class="var">seed</var>) &rArr; <var class="var">seed</var> <var class="var">result_0</var> &hellip; <var class="var">result_n-1</var>
+</p>
+<p>where the returned <var class="var">seed</var> is the input <var class="var">seed</var> to the next call
+to the generator and <var class="var">result_i</var> indicates how to produce the next
+element of the <var class="var">i</var>th result stream:
+</p>
+<ul class="itemize mark-bullet">
+<li>(<var class="var">value</var>): <var class="var">value</var> is the next car of the result stream.
+
+</li><li><code class="code">#f</code>: no value produced by this iteration of the generator
+<var class="var">proc</var> for the result stream.
+
+</li><li>(): the end of the result stream.
+</li></ul>
+
+<p>It may require multiple calls of <var class="var">proc</var> to produce the next element
+of any particular result stream.  See also <code class="code">stream-iterate</code> and
+<code class="code">stream-unfold</code>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (stream-partition pred? strm)
+  (stream-unfolds
+    (lambda (s)
+      (if (stream-null? s)
+          (values s '() '())
+          (let ((a (stream-car s))
+                (d (stream-cdr s)))
+            (if (pred? a)
+                (values d (list a) #f)
+                (values d #f (list a))))))
+    strm))
+
+(call-with-values
+  (lambda ()
+    (stream-partition odd?
+      (stream-range 1 6)))
+  (lambda (odds evens)
+    (list (stream-&gt;list odds)
+          (stream-&gt;list evens))))
+  &rArr; ((1 3 5) (2 4))
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dzip"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-zip</strong> <var class="def-var-arguments">stream &hellip;</var><a class="copiable-link" href='#index-stream_002dzip'> &para;</a></span></dt>
+<dd><p>Returns a newly-allocated stream in which each element is a list (not a
+stream) of the corresponding elements of the input <var class="var">stream</var>s.  The
+output stream is as long as the shortest input <var class="var">stream</var>, if any of
+the input <var class="var">stream</var>s is finite, or is infinite if all the input
+<var class="var">stream</var>s are infinite.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="SRFI_002d41-Stream-Primitives.html">SRFI-41 Stream Primitives</a>, Up: <a href="SRFI_002d41.html">SRFI-41 - Streams</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

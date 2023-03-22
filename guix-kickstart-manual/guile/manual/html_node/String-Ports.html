@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>String Ports (Guile Reference Manual)</title>
+
+<meta name="description" content="String Ports (Guile Reference Manual)">
+<meta name="keywords" content="String Ports (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Port-Types.html" rel="up" title="Port Types">
+<link href="Custom-Ports.html" rel="next" title="Custom Ports">
+<link href="Bytevector-Ports.html" rel="prev" title="Bytevector Ports">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="String-Ports">
+<div class="nav-panel">
+<p>
+Next: <a href="Custom-Ports.html" accesskey="n" rel="next">Custom Ports</a>, Previous: <a href="Bytevector-Ports.html" accesskey="p" rel="prev">Bytevector Ports</a>, Up: <a href="Port-Types.html" accesskey="u" rel="up">Types of Port</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="String-Ports-1">6.12.10.3 String Ports</h4>
+<a class="index-entry-id" id="index-String-port"></a>
+<a class="index-entry-id" id="index-Port_002c-string"></a>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-call_002dwith_002doutput_002dstring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call-with-output-string</strong> <var class="def-var-arguments">proc</var><a class="copiable-link" href='#index-call_002dwith_002doutput_002dstring'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcall_005fwith_005foutput_005fstring"><span class="category-def">C Function: </span><span><strong class="def-name">scm_call_with_output_string</strong> <var class="def-var-arguments">(proc)</var><a class="copiable-link" href='#index-scm_005fcall_005fwith_005foutput_005fstring'> &para;</a></span></dt>
+<dd><p>Calls the one-argument procedure <var class="var">proc</var> with a newly created output
+port.  When the function returns, the string composed of the characters
+written into the port is returned.  <var class="var">proc</var> should not close the port.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-call_002dwith_002dinput_002dstring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call-with-input-string</strong> <var class="def-var-arguments">string proc</var><a class="copiable-link" href='#index-call_002dwith_002dinput_002dstring'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcall_005fwith_005finput_005fstring"><span class="category-def">C Function: </span><span><strong class="def-name">scm_call_with_input_string</strong> <var class="def-var-arguments">(string, proc)</var><a class="copiable-link" href='#index-scm_005fcall_005fwith_005finput_005fstring'> &para;</a></span></dt>
+<dd><p>Calls the one-argument procedure <var class="var">proc</var> with a newly
+created input port from which <var class="var">string</var>&rsquo;s contents may be
+read.  The value yielded by the <var class="var">proc</var> is returned.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-with_002doutput_002dto_002dstring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">with-output-to-string</strong> <var class="def-var-arguments">thunk</var><a class="copiable-link" href='#index-with_002doutput_002dto_002dstring'> &para;</a></span></dt>
+<dd><p>Calls the zero-argument procedure <var class="var">thunk</var> with the current output
+port set temporarily to a new string port.  It returns a string
+composed of the characters written to the current output.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-with_002dinput_002dfrom_002dstring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">with-input-from-string</strong> <var class="def-var-arguments">string thunk</var><a class="copiable-link" href='#index-with_002dinput_002dfrom_002dstring'> &para;</a></span></dt>
+<dd><p>Calls the zero-argument procedure <var class="var">thunk</var> with the current input
+port set temporarily to a string port opened on the specified
+<var class="var">string</var>.  The value yielded by <var class="var">thunk</var> is returned.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-open_002dinput_002dstring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-input-string</strong> <var class="def-var-arguments">str</var><a class="copiable-link" href='#index-open_002dinput_002dstring'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fopen_005finput_005fstring"><span class="category-def">C Function: </span><span><strong class="def-name">scm_open_input_string</strong> <var class="def-var-arguments">(str)</var><a class="copiable-link" href='#index-scm_005fopen_005finput_005fstring'> &para;</a></span></dt>
+<dd><p>Take a string and return an input port that delivers characters
+from the string. The port can be closed by
+<code class="code">close-input-port</code>, though its storage will be reclaimed
+by the garbage collector if it becomes inaccessible.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-open_002doutput_002dstring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-output-string</strong><a class="copiable-link" href='#index-open_002doutput_002dstring'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fopen_005foutput_005fstring"><span class="category-def">C Function: </span><span><strong class="def-name">scm_open_output_string</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fopen_005foutput_005fstring'> &para;</a></span></dt>
+<dd><p>Return an output port that will accumulate characters for
+retrieval by <code class="code">get-output-string</code>. The port can be closed
+by the procedure <code class="code">close-output-port</code>, though its storage
+will be reclaimed by the garbage collector if it becomes
+inaccessible.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-get_002doutput_002dstring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-output-string</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-get_002doutput_002dstring'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fget_005foutput_005fstring"><span class="category-def">C Function: </span><span><strong class="def-name">scm_get_output_string</strong> <var class="def-var-arguments">(port)</var><a class="copiable-link" href='#index-scm_005fget_005foutput_005fstring'> &para;</a></span></dt>
+<dd><p>Given an output port created by <code class="code">open-output-string</code>,
+return a string consisting of the characters that have been
+output to the port so far.
+</p>
+<p><code class="code">get-output-string</code> must be used before closing <var class="var">port</var>, once
+closed the string cannot be obtained.
+</p></dd></dl>
+
+<p>With string ports, the port-encoding is treated differently than other
+types of ports.  When string ports are created, they do not inherit a
+character encoding from the current locale.  They are given a
+default locale that allows them to handle all valid string characters.
+Typically one should not modify a string port&rsquo;s character encoding
+away from its default.  See <a class="xref" href="Encoding.html">Encoding</a>.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Custom-Ports.html">Custom Ports</a>, Previous: <a href="Bytevector-Ports.html">Bytevector Ports</a>, Up: <a href="Port-Types.html">Types of Port</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

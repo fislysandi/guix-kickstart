@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>A Virtual Machine for Guile (Guile Reference Manual)</title>
+
+<meta name="description" content="A Virtual Machine for Guile (Guile Reference Manual)">
+<meta name="keywords" content="A Virtual Machine for Guile (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Guile-Implementation.html" rel="up" title="Guile Implementation">
+<link href="Compiling-to-the-Virtual-Machine.html" rel="next" title="Compiling to the Virtual Machine">
+<link href="Data-Representation.html" rel="prev" title="Data Representation">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="A-Virtual-Machine-for-Guile">
+<div class="nav-panel">
+<p>
+Next: <a href="Compiling-to-the-Virtual-Machine.html" accesskey="n" rel="next">Compiling to the Virtual Machine</a>, Previous: <a href="Data-Representation.html" accesskey="p" rel="prev">Data Representation</a>, Up: <a href="Guile-Implementation.html" accesskey="u" rel="up">Guile Implementation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="A-Virtual-Machine-for-Guile-1">9.3 A Virtual Machine for Guile</h3>
+
+<p>Enough about data&mdash;how does Guile run code?
+</p>
+<p>Code is a grammatical production of a language.  Sometimes these
+languages are implemented using interpreters: programs that run
+along-side the program being interpreted, dynamically translating the
+high-level code to low-level code.  Sometimes these languages are
+implemented using compilers:  programs that translate high-level
+programs to equivalent low-level code, and pass on that low-level code
+to some other language implementation.  Each of these languages can be
+thought to be virtual machines: they offer programs an abstract machine
+on which to run.
+</p>
+<p>Guile implements a number of interpreters and compilers on different
+language levels.  For example, there is an interpreter for the Scheme
+language that is itself implemented as a Scheme program compiled to a
+bytecode for a low-level virtual machine shipped with Guile.  That
+virtual machine is implemented by both an interpreter&mdash;a C program that
+interprets the bytecodes&mdash;and a compiler&mdash;a C program that dynamically
+translates bytecode programs to native machine code<a class="footnote" id="DOCF36" href="#FOOT36"><sup>36</sup></a>.
+</p>
+<p>This section describes the language implemented by Guile&rsquo;s bytecode
+virtual machine, as well as some examples of translations of Scheme
+programs to Guile&rsquo;s VM.
+</p>
+
+<ul class="mini-toc">
+<li><a href="Why-a-VM_003f.html" accesskey="1">Why a VM?</a></li>
+<li><a href="VM-Concepts.html" accesskey="2">VM Concepts</a></li>
+<li><a href="Stack-Layout.html" accesskey="3">Stack Layout</a></li>
+<li><a href="Variables-and-the-VM.html" accesskey="4">Variables and the VM</a></li>
+<li><a href="VM-Programs.html" accesskey="5">Compiled Procedures are VM Programs</a></li>
+<li><a href="Object-File-Format.html" accesskey="6">Object File Format</a></li>
+<li><a href="Instruction-Set.html" accesskey="7">Instruction Set</a></li>
+<li><a href="Just_002dIn_002dTime-Native-Code.html" accesskey="8">Just-In-Time Native Code</a></li>
+</ul>
+</div>
+<div class="footnotes-segment">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5 class="footnote-body-heading"><a id="FOOT36" href="#DOCF36">(36)</a></h5>
+<p>Even the
+lowest-level machine code can be thought to be interpreted by the CPU,
+and indeed is often implemented by compiling machine instructions to
+&ldquo;micro-operations&rdquo;.</p>
+</div>
+
+
+
+</body>
+</html>

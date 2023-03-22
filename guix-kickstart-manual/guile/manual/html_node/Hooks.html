@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Hooks (Guile Reference Manual)</title>
+
+<meta name="description" content="Hooks (Guile Reference Manual)">
+<meta name="keywords" content="Hooks (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Utility-Functions.html" rel="up" title="Utility Functions">
+<link href="General-Conversion.html" rel="prev" title="General Conversion">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Hooks">
+<div class="nav-panel">
+<p>
+Previous: <a href="General-Conversion.html" accesskey="p" rel="prev">General String Conversion</a>, Up: <a href="Utility-Functions.html" accesskey="u" rel="up">General Utility Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Hooks-1">6.9.6 Hooks</h4>
+<a class="index-entry-id" id="index-Hooks"></a>
+
+<p>A hook is a list of procedures to be called at well defined points in
+time.  Typically, an application provides a hook <var class="var">h</var> and promises
+its users that it will call all of the procedures in <var class="var">h</var> at a
+defined point in the application&rsquo;s processing.  By adding its own
+procedure to <var class="var">h</var>, an application user can tap into or even influence
+the progress of the application.
+</p>
+<p>Guile itself provides several such hooks for debugging and customization
+purposes: these are listed in a subsection below.
+</p>
+<p>When an application first creates a hook, it needs to know how many
+arguments will be passed to the hook&rsquo;s procedures when the hook is run.
+The chosen number of arguments (which may be none) is declared when the
+hook is created, and all the procedures that are added to that hook must
+be capable of accepting that number of arguments.
+</p>
+<p>A hook is created using <code class="code">make-hook</code>.  A procedure can be added to
+or removed from a hook using <code class="code">add-hook!</code> or <code class="code">remove-hook!</code>,
+and all of a hook&rsquo;s procedures can be removed together using
+<code class="code">reset-hook!</code>.  When an application wants to run a hook, it does so
+using <code class="code">run-hook</code>.
+</p>
+
+
+<ul class="mini-toc">
+<li><a href="Hook-Example.html" accesskey="1">Hook Usage by Example</a></li>
+<li><a href="Hook-Reference.html" accesskey="2">Hook Reference</a></li>
+<li><a href="C-Hooks.html" accesskey="3">Hooks For C Code.</a></li>
+<li><a href="GC-Hooks.html" accesskey="4">Hooks for Garbage Collection</a></li>
+<li><a href="REPL-Hooks.html" accesskey="5">Hooks into the Guile REPL</a></li>
+</ul>
+</div>
+
+
+
+</body>
+</html>

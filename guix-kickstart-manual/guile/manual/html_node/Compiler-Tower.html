@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Compiler Tower (Guile Reference Manual)</title>
+
+<meta name="description" content="Compiler Tower (Guile Reference Manual)">
+<meta name="keywords" content="Compiler Tower (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Compiling-to-the-Virtual-Machine.html" rel="up" title="Compiling to the Virtual Machine">
+<link href="The-Scheme-Compiler.html" rel="next" title="The Scheme Compiler">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Compiler-Tower">
+<div class="nav-panel">
+<p>
+Next: <a href="The-Scheme-Compiler.html" accesskey="n" rel="next">The Scheme Compiler</a>, Up: <a href="Compiling-to-the-Virtual-Machine.html" accesskey="u" rel="up">Compiling to the Virtual Machine</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Compiler-Tower-1">9.4.1 Compiler Tower</h4>
+
+<p>Guile&rsquo;s compiler is quite simple &ndash; its <em class="emph">compilers</em>, to put it more
+accurately.  Guile defines a tower of languages, starting at Scheme and
+progressively simplifying down to languages that resemble the VM
+instruction set (see <a class="pxref" href="Instruction-Set.html">Instruction Set</a>).
+</p>
+<p>Each language knows how to compile to the next, so each step is simple
+and understandable.  Furthermore, this set of languages is not hardcoded
+into Guile, so it is possible for the user to add new high-level
+languages, new passes, or even different compilation targets.
+</p>
+<p>Languages are registered in the module, <code class="code">(system base language)</code>:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (system base language))
+</pre></div>
+
+<p>They are registered with the <code class="code">define-language</code> form.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-define_002dlanguage"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">define-language</strong> <var class="def-var-arguments">[#:name] [#:title] [#:reader] [#:printer]                        [#:parser=#f] [#:compilers=&rsquo;()]                        [#:decompilers=&rsquo;()] [#:evaluator=#f]                        [#:joiner=#f] [#:for-humans?=#t]                        [#:make-default-environment=make-fresh-user-module]                        [#:lowerer=#f] [#:analyzer=#f] [#:compiler-chooser=#f]</var><a class="copiable-link" href='#index-define_002dlanguage'> &para;</a></span></dt>
+<dd><p>Define a language.
+</p>
+<p>This syntax defines a <code class="code">&lt;language&gt;</code> object, bound to <var class="var">name</var> in
+the current environment.  In addition, the language will be added to the
+global language set.  For example, this is the language definition for
+Scheme:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-language scheme
+  #:title	&quot;Scheme&quot;
+  #:reader      (lambda (port env) ...)
+  #:compilers   `((tree-il . ,compile-tree-il))
+  #:decompilers `((tree-il . ,decompile-tree-il))
+  #:evaluator	(lambda (x module) (primitive-eval x))
+  #:printer	write
+  #:make-default-environment (lambda () ...))
+</pre></div>
+</dd></dl>
+
+<p>The interesting thing about having languages defined this way is that
+they present a uniform interface to the read-eval-print loop.  This
+allows the user to change the current language of the REPL:
+</p>
+<div class="example">
+<pre class="example-preformatted">scheme@(guile-user)&gt; ,language tree-il
+Happy hacking with Tree Intermediate Language!  To switch back, type `,L scheme'.
+tree-il@(guile-user)&gt; ,L scheme
+Happy hacking with Scheme!  To switch back, type `,L tree-il'.
+scheme@(guile-user)&gt; 
+</pre></div>
+
+<p>Languages can be looked up by name, as they were above.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-lookup_002dlanguage"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">lookup-language</strong> <var class="def-var-arguments">name</var><a class="copiable-link" href='#index-lookup_002dlanguage'> &para;</a></span></dt>
+<dd><p>Looks up a language named <var class="var">name</var>, autoloading it if necessary.
+</p>
+<p>Languages are autoloaded by looking for a variable named <var class="var">name</var> in
+a module named <code class="code">(language <var class="var">name</var> spec)</code>.
+</p>
+<p>The language object will be returned, or <code class="code">#f</code> if there does not
+exist a language with that name.
+</p></dd></dl>
+
+<p>When Guile goes to compile Scheme to bytecode, it will ask the Scheme
+language to choose a compiler from Scheme to the next language on the
+path from Scheme to bytecode.  Performing this computation recursively
+builds transformations from a flexible chain of compilers.  The next
+link will be obtained by invoking the language&rsquo;s compiler chooser, or if
+not present, from the language&rsquo;s compilers field.
+</p>
+<p>A language can specify an analyzer, which is run before a term of that
+language is lowered and compiled.  This is where compiler warnings are
+issued.
+</p>
+<p>If a language specifies a lowerer, that procedure is called on
+expressions before compilation.  This is where optimizations and
+canonicalizations go.
+</p>
+<p>Finally a language&rsquo;s compiler translates a lowered term from one
+language to the next one in the chain.
+</p>
+<p>There is a notion of a &ldquo;current language&rdquo;, which is maintained in the
+<code class="code">current-language</code> parameter, defined in the core <code class="code">(guile)</code>
+module.  This language is normally Scheme, and may be rebound by the
+user.  The run-time compilation interfaces
+(see <a class="pxref" href="Read_002fLoad_002fEval_002fCompile.html">Reading and Evaluating Scheme Code</a>) also allow you to choose other source
+and target languages.
+</p>
+<p>The normal tower of languages when compiling Scheme goes like this:
+</p>
+<ul class="itemize mark-bullet">
+<li>Scheme
+</li><li>Tree Intermediate Language (Tree-IL)
+</li><li>Continuation-Passing Style (CPS)
+</li><li>Bytecode
+</li></ul>
+
+<p>As discussed before (see <a class="pxref" href="Object-File-Format.html">Object File Format</a>), bytecode is in ELF
+format, ready to be serialized to disk.  But when compiling Scheme at
+run time, you want a Scheme value: for example, a compiled procedure.
+For this reason, so as not to break the abstraction, Guile defines a
+fake language at the bottom of the tower:
+</p>
+<ul class="itemize mark-bullet">
+<li>Value
+</li></ul>
+
+<p>Compiling to <code class="code">value</code> loads the bytecode into a procedure, turning
+cold bytes into warm code.
+</p>
+<p>Perhaps this strangeness can be explained by example:
+<code class="code">compile-file</code> defaults to compiling to bytecode, because it
+produces object code that has to live in the barren world outside the
+Guile runtime; but <code class="code">compile</code> defaults to compiling to <code class="code">value</code>,
+as its product re-enters the Guile world.
+</p>
+
+<p>Indeed, the process of compilation can circulate through these
+different worlds indefinitely, as shown by the following quine:
+</p>
+<div class="example">
+<pre class="example-preformatted">((lambda (x) ((compile x) x)) '(lambda (x) ((compile x) x)))
+</pre></div>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="The-Scheme-Compiler.html">The Scheme Compiler</a>, Up: <a href="Compiling-to-the-Virtual-Machine.html">Compiling to the Virtual Machine</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

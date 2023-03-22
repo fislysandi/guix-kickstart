@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Tail Calls (Guile Reference Manual)</title>
+
+<meta name="description" content="Tail Calls (Guile Reference Manual)">
+<meta name="keywords" content="Tail Calls (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="About-Expressions.html" rel="up" title="About Expressions">
+<link href="The-REPL.html" rel="next" title="The REPL">
+<link href="Evaluating.html" rel="prev" title="Evaluating">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Tail-Calls">
+<div class="nav-panel">
+<p>
+Next: <a href="The-REPL.html" accesskey="n" rel="next">Using the Guile REPL</a>, Previous: <a href="Evaluating.html" accesskey="p" rel="prev">Evaluating Expressions and Executing Programs</a>, Up: <a href="About-Expressions.html" accesskey="u" rel="up">Expressions and Evaluation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Tail-calls">3.3.2 Tail calls</h4>
+<a class="index-entry-id" id="index-tail-calls"></a>
+<a class="index-entry-id" id="index-recursion"></a>
+
+<p>Scheme is &ldquo;properly tail recursive&rdquo;, meaning that tail calls or
+recursions from certain contexts do not consume stack space or other
+resources and can therefore be used on arbitrarily large data or for
+an arbitrarily long calculation.  Consider for example,
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (foo n)
+  (display n)
+  (newline)
+  (foo (1+ n)))
+
+(foo 1)
+-|
+1
+2
+3
+&hellip;
+</pre></div>
+
+<p><code class="code">foo</code> prints numbers infinitely, starting from the given <var class="var">n</var>.
+It&rsquo;s implemented by printing <var class="var">n</var> then recursing to itself to print
+<em class="math"><var class="var">n</var>+1</em> and so on.  This recursion is a tail call, it&rsquo;s the
+last thing done, and in Scheme such tail calls can be made without
+limit.
+</p>
+<p>Or consider a case where a value is returned, a version of the SRFI-1
+<code class="code">last</code> function (see <a class="pxref" href="SRFI_002d1-Selectors.html">Selectors</a>) returning the last
+element of a list,
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (my-last lst)
+  (if (null? (cdr lst))
+      (car lst)
+      (my-last (cdr lst))))
+
+(my-last '(1 2 3)) &rArr; 3      
+</pre></div>
+
+<p>If the list has more than one element, <code class="code">my-last</code> applies itself
+to the <code class="code">cdr</code>.  This recursion is a tail call, there&rsquo;s no code
+after it, and the return value is the return value from that call.  In
+Scheme this can be used on an arbitrarily long list argument.
+</p>
+<br>
+<p>A proper tail call is only available from certain contexts, namely the
+following special form positions,
+</p>
+<ul class="itemize mark-bullet">
+<li><code class="code">and</code> &mdash; last expression
+
+</li><li><code class="code">begin</code> &mdash; last expression
+     
+</li><li><code class="code">case</code> &mdash; last expression in each clause
+
+</li><li><code class="code">cond</code> &mdash; last expression in each clause, and the call to a
+<code class="code">=&gt;</code> procedure is a tail call
+
+</li><li><code class="code">do</code> &mdash; last result expression
+
+</li><li><code class="code">if</code> &mdash; &ldquo;true&rdquo; and &ldquo;false&rdquo; leg expressions
+
+</li><li><code class="code">lambda</code> &mdash; last expression in body
+
+</li><li><code class="code">let</code>, <code class="code">let*</code>, <code class="code">letrec</code>, <code class="code">let-syntax</code>,
+<code class="code">letrec-syntax</code> &mdash; last expression in body
+
+</li><li><code class="code">or</code> &mdash; last expression
+</li></ul>
+
+<p>The following core functions make tail calls,
+</p>
+<ul class="itemize mark-bullet">
+<li><code class="code">apply</code> &mdash; tail call to given procedure
+
+</li><li><code class="code">call-with-current-continuation</code> &mdash; tail call to the procedure
+receiving the new continuation
+
+</li><li><code class="code">call-with-values</code> &mdash; tail call to the values-receiving
+procedure
+
+</li><li><code class="code">eval</code> &mdash; tail call to evaluate the form
+
+</li><li><code class="code">string-any</code>, <code class="code">string-every</code> &mdash; tail call to predicate on
+the last character (if that point is reached)
+</li></ul>
+
+<br>
+<p>The above are just core functions and special forms.  Tail calls in
+other modules are described with the relevant documentation, for
+example SRFI-1 <code class="code">any</code> and <code class="code">every</code> (see <a class="pxref" href="SRFI_002d1-Searching.html">Searching</a>).
+</p>
+<p>It will be noted there are a lot of places which could potentially be
+tail calls, for instance the last call in a <code class="code">for-each</code>, but only
+those explicitly described are guaranteed.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="The-REPL.html">Using the Guile REPL</a>, Previous: <a href="Evaluating.html">Evaluating Expressions and Executing Programs</a>, Up: <a href="About-Expressions.html">Expressions and Evaluation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Statprof (Guile Reference Manual)</title>
+
+<meta name="description" content="Statprof (Guile Reference Manual)">
+<meta name="keywords" content="Statprof (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Guile-Modules.html" rel="up" title="Guile Modules">
+<link href="SXML.html" rel="next" title="SXML">
+<link href="Curried-Definitions.html" rel="prev" title="Curried Definitions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Statprof">
+<div class="nav-panel">
+<p>
+Next: <a href="SXML.html" accesskey="n" rel="next">SXML</a>, Previous: <a href="Curried-Definitions.html" accesskey="p" rel="prev">Curried Definitions</a>, Up: <a href="Guile-Modules.html" accesskey="u" rel="up">Guile Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Statprof-1">7.20 Statprof</h3>
+
+<p>Statprof is a statistical profiler for Guile.
+</p>
+<p>A simple use of statprof would look like this:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (statprof))
+(statprof (lambda ()
+            (map 1+ (iota 1000000))
+            #f))
+</pre></div>
+
+<p>This would run the thunk with statistical profiling, finally displaying
+a flat table of statistics which could look something like this:
+</p>
+<div class="example">
+<pre class="example-preformatted">%     cumulative   self
+time   seconds     seconds  procedure
+ 57.14  39769.73      0.07  ice-9/boot-9.scm:249:5:map1
+ 28.57      0.04      0.04  ice-9/boot-9.scm:1165:0:iota
+ 14.29      0.02      0.02  1+
+  0.00      0.12      0.00  &lt;current input&gt;:2:10
+---
+Sample count: 7
+Total time: 0.123490713 seconds (0.201983993 seconds in GC)
+</pre></div>
+
+<p>All of the numerical data with the exception of the calls column is
+statistically approximate. In the following column descriptions, and in
+all of statprof, &ldquo;time&rdquo; refers to execution time (both user and
+system), not wall clock time.
+</p>
+<p>The <code class="code">% time</code> column indicates the percentage of the run-time time
+spent inside the procedure itself (not counting children).  It is
+calculated as <code class="code">self seconds</code>, measuring the amount of time spent in
+the procedure, divided by the total run-time.
+</p>
+<p><code class="code">cumulative seconds</code> also counts time spent in children of a
+function.  For recursive functions, this can exceed the total time, as
+in our example above, because each activation on the stack adds to the
+cumulative time.
+</p>
+<p>Finally, the GC time measures the time spent in the garbage collector.
+On systems with multiple cores, this time can be larger than the run
+time, because it counts time spent in all threads, and will run the
+&ldquo;marking&rdquo; phase of GC in parallel.  If GC time is a significant
+fraction of the run time, that means that most time in your program is
+spent allocating objects and cleaning up after those allocations.  To
+speed up your program, one good place to start would be to look at how
+to reduce the allocation rate.
+</p>
+<p>Statprof&rsquo;s main mode of operation is as a statistical profiler.  However
+statprof can also run in a &ldquo;precise&rdquo; mode as well.  Pass the
+<code class="code">#:count-calls? #t</code> keyword argument to <code class="code">statprof</code> to record
+all calls:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (statprof))
+(statprof (lambda ()
+            (map 1+ (iota 1000000))
+            #f)
+          #:count-calls? #t)
+</pre></div>
+
+<p>The result has an additional <code class="code">calls</code> column:
+</p>
+<div class="example">
+<pre class="example-preformatted">%     cumulative   self             
+time   seconds    seconds   calls   procedure
+ 82.26      0.73      0.73 1000000  1+
+ 11.29 420925.80      0.10 1000001  ice-9/boot-9.scm:249:5:map1
+  4.84      0.06      0.04       1  ice-9/boot-9.scm:1165:0:iota
+[...]
+---
+Sample count: 62
+Total time: 0.893098065 seconds (1.222796536 seconds in GC)
+</pre></div>
+
+<p>As you can see, the profile is perturbed: <code class="code">1+</code> ends up on top,
+whereas it was not marked as hot in the earlier profile.  This is
+because the overhead of call-counting unfairly penalizes calls.  Still,
+this precise mode can be useful at times to do algorithmic optimizations
+based on the precise call counts.
+</p>
+<h3 class="heading" id="Implementation-notes">Implementation notes</h3>
+
+<p>The profiler works by setting the unix profiling signal
+<code class="code">ITIMER_PROF</code> to go off after the interval you define in the call
+to <code class="code">statprof-reset</code>.  When the signal fires, a sampling routine
+runs which crawls up the stack, recording all instruction pointers into
+a buffer.  After the sample is complete, the profiler resets profiling
+timer to fire again after the appropriate interval.
+</p>
+<p>Later, when profiling stops, that log buffer is analyzed to produce the
+&ldquo;self seconds&rdquo; and &ldquo;cumulative seconds&rdquo; statistics.  A procedure at
+the top of the stack counts toward &ldquo;self&rdquo; samples, and everything on
+the stack counts towards &ldquo;cumulative&rdquo; samples.
+</p>
+<p>While the profiler is running it measures how much CPU time (system and
+user &ndash; which is also what <code class="code">ITIMER_PROF</code> tracks) has elapsed while
+code has been executing within the profiler.  Only run time counts
+towards the profile, not wall-clock time.  For example, sleeping and
+waiting for input or output do not cause the timer clock to advance.
+</p>
+<h3 class="heading" id="Usage-13">Usage</h3>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-statprof"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof</strong> <var class="def-var-arguments">thunk        [#:loop loop=1] [#:hz hz=100]        [#:port port=(current-output-port)]        [#:count-calls? count-calls?=#f]        [#:display-style display-style=&rsquo;flat]</var><a class="copiable-link" href='#index-statprof'> &para;</a></span></dt>
+<dd><p>Profile the execution of <var class="var">thunk</var>, and return its return values.
+</p>
+<p>The stack will be sampled <var class="var">hz</var> times per second, and the thunk
+itself will be called <var class="var">loop</var> times.
+</p>
+<p>If <var class="var">count-calls?</var> is true, all procedure calls will be recorded.
+This operation is somewhat expensive.
+</p>
+<p>After the <var class="var">thunk</var> has been profiled, print out a profile to
+<var class="var">port</var>.  If <var class="var">display-style</var> is <code class="code">flat</code>, the results will be
+printed as a flat profile.  Otherwise if <var class="var">display-style</var> is
+<code class="code">tree</code>, print the results as a tree profile.
+</p>
+<p>Note that <code class="code">statprof</code> requires a working profiling timer. Some
+platforms do not support profiling timers.  <code class="code">(provided?
+'ITIMER_PROF)</code> can be used to check for support of profiling timers.
+</p></dd></dl>
+
+<p>Profiling can also be enabled and disabled manually.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-statprof_002dactive_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-active?</strong><a class="copiable-link" href='#index-statprof_002dactive_003f'> &para;</a></span></dt>
+<dd><p>Returns <code class="code">#t</code> if <code class="code">statprof-start</code> has been called more times
+than <code class="code">statprof-stop</code>, <code class="code">#f</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-statprof_002dstart"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-start</strong><a class="copiable-link" href='#index-statprof_002dstart'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-statprof_002dstop"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-stop</strong><a class="copiable-link" href='#index-statprof_002dstop'> &para;</a></span></dt>
+<dd><p>Start or stop the profiler.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-statprof_002dreset"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-reset</strong> <var class="def-var-arguments">sample-seconds sample-microseconds count-calls?</var><a class="copiable-link" href='#index-statprof_002dreset'> &para;</a></span></dt>
+<dd><p>Reset the profiling sample interval to <var class="var">sample-seconds</var> and
+<var class="var">sample-microseconds</var>.  If <var class="var">count-calls?</var> is true, arrange to
+instrument procedure calls as well as collecting statistical profiling
+data.
+</p></dd></dl>
+
+<p>If you use the manual <code class="code">statprof-start</code>/<code class="code">statprof-stop</code>
+interface, an implicit statprof state will persist starting from the
+last call to <code class="code">statprof-reset</code>, or the first call to
+<code class="code">statprof-start</code>.  There are a number of accessors to fetch
+statistics from this implicit state.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-statprof_002daccumulated_002dtime"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-accumulated-time</strong><a class="copiable-link" href='#index-statprof_002daccumulated_002dtime'> &para;</a></span></dt>
+<dd><p>Returns the time accumulated during the last statprof run.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-statprof_002dsample_002dcount"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-sample-count</strong><a class="copiable-link" href='#index-statprof_002dsample_002dcount'> &para;</a></span></dt>
+<dd><p>Returns the number of samples taken during the last statprof run.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-statprof_002dfold_002dcall_002ddata"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-fold-call-data</strong> <var class="def-var-arguments">proc init</var><a class="copiable-link" href='#index-statprof_002dfold_002dcall_002ddata'> &para;</a></span></dt>
+<dd><p>Fold <var class="var">proc</var> over the call-data accumulated by statprof.  This
+procedure cannot be called while statprof is active.
+</p>
+<p><var class="var">proc</var> will be called with arguments, <var class="var">call-data</var> and
+<var class="var">prior-result</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-statprof_002dproc_002dcall_002ddata"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-proc-call-data</strong> <var class="def-var-arguments">proc</var><a class="copiable-link" href='#index-statprof_002dproc_002dcall_002ddata'> &para;</a></span></dt>
+<dd><p>Returns the call-data associated with <var class="var">proc</var>, or <code class="code">#f</code> if none
+is available.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-statprof_002dcall_002ddata_002dname"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-call-data-name</strong> <var class="def-var-arguments">cd</var><a class="copiable-link" href='#index-statprof_002dcall_002ddata_002dname'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-statprof_002dcall_002ddata_002dcalls"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-call-data-calls</strong> <var class="def-var-arguments">cd</var><a class="copiable-link" href='#index-statprof_002dcall_002ddata_002dcalls'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-statprof_002dcall_002ddata_002dcum_002dsamples"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-call-data-cum-samples</strong> <var class="def-var-arguments">cd</var><a class="copiable-link" href='#index-statprof_002dcall_002ddata_002dcum_002dsamples'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-statprof_002dcall_002ddata_002dself_002dsamples"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-call-data-self-samples</strong> <var class="def-var-arguments">cd</var><a class="copiable-link" href='#index-statprof_002dcall_002ddata_002dself_002dsamples'> &para;</a></span></dt>
+<dd><p>Accessors for the fields in a statprof call-data object.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-statprof_002dcall_002ddata_002d_003estats"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-call-data-&gt;stats</strong> <var class="def-var-arguments">call-data</var><a class="copiable-link" href='#index-statprof_002dcall_002ddata_002d_003estats'> &para;</a></span></dt>
+<dd><p>Returns an object of type <code class="code">statprof-stats</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-statprof_002dstats_002dproc_002dname"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-stats-proc-name</strong> <var class="def-var-arguments">stats</var><a class="copiable-link" href='#index-statprof_002dstats_002dproc_002dname'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-statprof_002dstats_002d_0025_002dtime_002din_002dproc"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-stats-%-time-in-proc</strong> <var class="def-var-arguments">stats</var><a class="copiable-link" href='#index-statprof_002dstats_002d_0025_002dtime_002din_002dproc'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-statprof_002dstats_002dcum_002dsecs_002din_002dproc"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-stats-cum-secs-in-proc</strong> <var class="def-var-arguments">stats</var><a class="copiable-link" href='#index-statprof_002dstats_002dcum_002dsecs_002din_002dproc'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-statprof_002dstats_002dself_002dsecs_002din_002dproc"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-stats-self-secs-in-proc</strong> <var class="def-var-arguments">stats</var><a class="copiable-link" href='#index-statprof_002dstats_002dself_002dsecs_002din_002dproc'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-statprof_002dstats_002dcalls"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-stats-calls</strong> <var class="def-var-arguments">stats</var><a class="copiable-link" href='#index-statprof_002dstats_002dcalls'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-statprof_002dstats_002dself_002dsecs_002dper_002dcall"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-stats-self-secs-per-call</strong> <var class="def-var-arguments">stats</var><a class="copiable-link" href='#index-statprof_002dstats_002dself_002dsecs_002dper_002dcall'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-statprof_002dstats_002dcum_002dsecs_002dper_002dcall"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-stats-cum-secs-per-call</strong> <var class="def-var-arguments">stats</var><a class="copiable-link" href='#index-statprof_002dstats_002dcum_002dsecs_002dper_002dcall'> &para;</a></span></dt>
+<dd><p>Accessors for the fields in a <code class="code">statprof-stats</code> object.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-statprof_002ddisplay"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-display</strong> <var class="def-var-arguments">[port=(current-output-port)] [#:style style=flat]</var><a class="copiable-link" href='#index-statprof_002ddisplay'> &para;</a></span></dt>
+<dd><p>Displays a summary of the statistics collected.  Possible values for
+<var class="var">style</var> include:
+</p>
+<dl class="table">
+<dt><code class="code">flat</code></dt>
+<dd><p>Display a traditional gprof-style flat profile.
+</p></dd>
+<dt><code class="code">anomalies</code></dt>
+<dd><p>Find statistical anomalies in the data.
+</p></dd>
+<dt><code class="code">tree</code></dt>
+<dd><p>Display a tree profile.
+</p></dd>
+</dl>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-statprof_002dfetch_002dstacks"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-fetch-stacks</strong><a class="copiable-link" href='#index-statprof_002dfetch_002dstacks'> &para;</a></span></dt>
+<dd><p>Returns a list of stacks, as they were captured since the last call to
+<code class="code">statprof-reset</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-statprof_002dfetch_002dcall_002dtree"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statprof-fetch-call-tree</strong> <var class="def-var-arguments">[#:precise precise?=#f]</var><a class="copiable-link" href='#index-statprof_002dfetch_002dcall_002dtree'> &para;</a></span></dt>
+<dd><pre class="verbatim">Return a call tree for the previous statprof run.
+
+The return value is a list of nodes.  A node is a list of the form:
+@code
+ node ::= (@var{proc} @var{count} . @var{nodes})
+@end code
+
+The @var{proc} is a printable representation of a procedure, as a
+string.  If @var{precise?} is false, which is the default, then a node
+corresponds to a procedure invocation.  If it is true, then a node
+corresponds to a return point in a procedure.  Passing @code{#:precise?
+#t} allows a user to distinguish different source lines in a procedure,
+but usually it is too much detail, so it is off by default.
+</pre>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-gcprof"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">gcprof</strong> <var class="def-var-arguments">thunk [#:loop]</var><a class="copiable-link" href='#index-gcprof'> &para;</a></span></dt>
+<dd><p>Like the <code class="code">statprof</code> procedure, but instead of profiling CPU time,
+we profile garbage collection.
+</p>
+<p>The stack will be sampled soon after every garbage collection during the
+evaluation of <var class="var">thunk</var>, yielding an approximate idea of what is
+causing allocation in your program.
+</p>
+<p>Since GC does not occur very frequently, you may need to use the
+<var class="var">loop</var> parameter, to cause <var class="var">thunk</var> to be called <var class="var">loop</var>
+times.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SXML.html">SXML</a>, Previous: <a href="Curried-Definitions.html">Curried Definitions</a>, Up: <a href="Guile-Modules.html">Guile Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

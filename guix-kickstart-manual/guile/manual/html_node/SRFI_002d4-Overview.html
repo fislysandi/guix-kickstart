@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-4 Overview (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-4 Overview (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-4 Overview (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI_002d4.html" rel="up" title="SRFI-4">
+<link href="SRFI_002d4-API.html" rel="next" title="SRFI-4 API">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="SRFI_002d4-Overview">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d4-API.html" accesskey="n" rel="next">SRFI-4 - API</a>, Up: <a href="SRFI_002d4.html" accesskey="u" rel="up">SRFI-4 - Homogeneous numeric vector datatypes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="SRFI_002d4-_002d-Overview">7.5.5.1 SRFI-4 - Overview</h4>
+
+<p>Uniform numeric vectors can be useful since they consume less memory
+than the non-uniform, general vectors.  Also, since the types they can
+store correspond directly to C types, it is easier to work with them
+efficiently on a low level.  Consider image processing as an example,
+where you want to apply a filter to some image.  While you could store
+the pixels of an image in a general vector and write a general
+convolution function, things are much more efficient with uniform
+vectors: the convolution function knows that all pixels are unsigned
+8-bit values (say), and can use a very tight inner loop.
+</p>
+<p>This is implemented in Scheme by having the compiler notice calls to the SRFI-4
+accessors, and inline them to appropriate compiled code. From C you have access
+to the raw array; functions for efficiently working with uniform numeric vectors
+from C are listed at the end of this section.
+</p>
+<p>Uniform numeric vectors are the special case of one dimensional uniform
+numeric arrays.
+</p>
+<p>There are 12 standard kinds of uniform numeric vectors, and they all have their
+own complement of constructors, accessors, and so on. Procedures that operate on
+a specific kind of uniform numeric vector have a &ldquo;tag&rdquo; in their name,
+indicating the element type.
+</p>
+<dl class="table">
+<dt><code class="code">u8</code></dt>
+<dd><p>unsigned 8-bit integers
+</p>
+</dd>
+<dt><code class="code">s8</code></dt>
+<dd><p>signed 8-bit integers
+</p>
+</dd>
+<dt><code class="code">u16</code></dt>
+<dd><p>unsigned 16-bit integers
+</p>
+</dd>
+<dt><code class="code">s16</code></dt>
+<dd><p>signed 16-bit integers
+</p>
+</dd>
+<dt><code class="code">u32</code></dt>
+<dd><p>unsigned 32-bit integers
+</p>
+</dd>
+<dt><code class="code">s32</code></dt>
+<dd><p>signed 32-bit integers
+</p>
+</dd>
+<dt><code class="code">u64</code></dt>
+<dd><p>unsigned 64-bit integers
+</p>
+</dd>
+<dt><code class="code">s64</code></dt>
+<dd><p>signed 64-bit integers
+</p>
+</dd>
+<dt><code class="code">f32</code></dt>
+<dd><p>the C type <code class="code">float</code>
+</p>
+</dd>
+<dt><code class="code">f64</code></dt>
+<dd><p>the C type <code class="code">double</code>
+</p>
+</dd>
+</dl>
+
+<p>In addition, Guile supports uniform arrays of complex numbers, with the
+nonstandard tags:
+</p>
+<dl class="table">
+<dt><code class="code">c32</code></dt>
+<dd><p>complex numbers in rectangular form with the real and imaginary part
+being a <code class="code">float</code>
+</p>
+</dd>
+<dt><code class="code">c64</code></dt>
+<dd><p>complex numbers in rectangular form with the real and imaginary part
+being a <code class="code">double</code>
+</p>
+</dd>
+</dl>
+
+<p>The external representation (ie. read syntax) for these vectors is
+similar to normal Scheme vectors, but with an additional tag from the
+tables above indicating the vector&rsquo;s type.  For example,
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">#u16(1 2 3)
+#f64(3.1415 2.71)
+</pre></div>
+
+<p>Note that the read syntax for floating-point here conflicts with
+<code class="code">#f</code> for false.  In Standard Scheme one can write <code class="code">(1 #f3)</code>
+for a three element list <code class="code">(1 #f 3)</code>, but for Guile <code class="code">(1 #f3)</code>
+is invalid.  <code class="code">(1 #f 3)</code> is almost certainly what one should write
+anyway to make the intention clear, so this is rarely a problem.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d4-API.html">SRFI-4 - API</a>, Up: <a href="SRFI_002d4.html">SRFI-4 - Homogeneous numeric vector datatypes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

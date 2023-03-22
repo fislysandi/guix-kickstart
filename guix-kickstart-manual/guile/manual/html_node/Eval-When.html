@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Eval When (Guile Reference Manual)</title>
+
+<meta name="description" content="Eval When (Guile Reference Manual)">
+<meta name="keywords" content="Eval When (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Macros.html" rel="up" title="Macros">
+<link href="Macro-Expansion.html" rel="next" title="Macro Expansion">
+<link href="Syntax-Parameters.html" rel="prev" title="Syntax Parameters">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Eval-When">
+<div class="nav-panel">
+<p>
+Next: <a href="Macro-Expansion.html" accesskey="n" rel="next">Macro Expansion</a>, Previous: <a href="Syntax-Parameters.html" accesskey="p" rel="prev">Syntax Parameters</a>, Up: <a href="Macros.html" accesskey="u" rel="up">Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Eval_002dwhen">6.8.8 Eval-when</h4>
+
+<p>As <code class="code">syntax-case</code> macros have the whole power of Scheme available to them,
+they present a problem regarding time: when a macro runs, what parts of the
+program are available for the macro to use?
+</p>
+<p>The default answer to this question is that when you import a module (via
+<code class="code">define-module</code> or <code class="code">use-modules</code>), that module will be loaded up at
+expansion-time, as well as at run-time. Additionally, top-level syntactic
+definitions within one compilation unit made by <code class="code">define-syntax</code> are also
+evaluated at expansion time, in the order that they appear in the compilation
+unit (file).
+</p>
+<p>But if a syntactic definition needs to call out to a normal procedure at
+expansion-time, it might well need need special declarations to indicate that
+the procedure should be made available at expansion-time.
+</p>
+<p>For example, the following code tries to embed a compilation
+timestamp in the compiled bytecode using a macro that expands
+to the date as a string literal.  It will work at a REPL, but
+not in a file, as it cannot be byte-compiled:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (srfi srfi-19))
+(define start-date (date-&gt;string (current-date)))
+(define-syntax *compilation-date*
+ (lambda (sintax)
+    start-date))
+(display *compilation-date*)
+(newline)
+</pre></div>
+
+<p>It works at a REPL because the expressions are evaluated one-by-one, in order,
+but if placed in a file, the expressions are expanded one-by-one, but not
+evaluated until the compiled file is loaded.
+</p>
+<p>The fix is to use <code class="code">eval-when</code>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (srfi srfi-19))
+(eval-when (expand load eval)
+  (define start-date (date-&gt;string (current-date))))
+(define-syntax *compilation-date*
+ (lambda (sintax)
+    start-date))
+(display *compilation-date*)
+(newline)
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-eval_002dwhen"><span class="category-def">Syntax: </span><span><strong class="def-name">eval-when</strong> <var class="def-var-arguments">conditions exp...</var><a class="copiable-link" href='#index-eval_002dwhen'> &para;</a></span></dt>
+<dd><p>Evaluate <var class="var">exp...</var> under the given <var class="var">conditions</var>.  Valid
+conditions include:
+</p>
+<dl class="table">
+<dt><code class="code">expand</code></dt>
+<dd><p>Evaluate during macro expansion, whether compiling or not.
+</p>
+</dd>
+<dt><code class="code">load</code></dt>
+<dd><p>Evaluate during the evaluation phase of compiled code, e.g. when loading
+a compiled module or running compiled code at the REPL.
+</p>
+</dd>
+<dt><code class="code">eval</code></dt>
+<dd><p>Evaluate during the evaluation phase of non-compiled code.
+</p>
+</dd>
+<dt><code class="code">compile</code></dt>
+<dd><p>Evaluate during macro expansion, but only when compiling.
+</p></dd>
+</dl>
+
+<p>In other words, when using the primitive evaluator, <code class="code">eval-when</code>
+expressions with <code class="code">expand</code> are run during macro expansion, and those
+with <code class="code">eval</code> are run during the evaluation phase.
+</p>
+<p>When using the compiler, <code class="code">eval-when</code> expressions with either
+<code class="code">expand</code> or <code class="code">compile</code> are run during macro expansion, and
+those with <code class="code">load</code> are run during the evaluation phase.
+</p>
+<p>When in doubt, use the three conditions <code class="code">(expand load eval)</code>, as in
+the example above.  Other uses of <code class="code">eval-when</code> may void your
+warranty or poison your cat.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Macro-Expansion.html">Macro Expansion</a>, Previous: <a href="Syntax-Parameters.html">Syntax Parameters</a>, Up: <a href="Macros.html">Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

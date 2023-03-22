@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Default Class Redefinition Behaviour (Guile Reference Manual)</title>
+
+<meta name="description" content="Default Class Redefinition Behaviour (Guile Reference Manual)">
+<meta name="keywords" content="Default Class Redefinition Behaviour (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Redefining-a-Class.html" rel="up" title="Redefining a Class">
+<link href="Customizing-Class-Redefinition.html" rel="next" title="Customizing Class Redefinition">
+<link href="Redefinable-Classes.html" rel="prev" title="Redefinable Classes">
+<style type="text/css">
+<!--
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Default-Class-Redefinition-Behaviour">
+<div class="nav-panel">
+<p>
+Next: <a href="Customizing-Class-Redefinition.html" accesskey="n" rel="next">Customizing Class Redefinition</a>, Previous: <a href="Redefinable-Classes.html" accesskey="p" rel="prev">Redefinable Classes</a>, Up: <a href="Redefining-a-Class.html" accesskey="u" rel="up">Redefining a Class</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Default-Class-Redefinition-Behaviour-1">8.12.2 Default Class Redefinition Behaviour</h4>
+
+<p>When a class is defined using <code class="code">define-class</code> and the class name was
+previously defined, by default the new binding just replaces the old
+binding.  This is the normal behavior for <code class="code">define</code>.  However if
+both the old and new bindings are redefinable classes (instances of
+<code class="code">&lt;redefinable-class&gt;</code>), then the class will be updated in place,
+and its instances lazily migrated over.
+</p>
+<p>The way that the class is updated and the way that the instances migrate
+over are of course part of the meta-object protocol.  However the
+default behavior usually suffices, and it goes as follows.
+</p>
+<ul class="itemize mark-bullet">
+<li>All existing direct instances of <code class="code">&lt;my-class&gt;</code> are converted to be
+instances of the new class.  This is achieved by preserving the values
+of slots that exist in both the old and new definitions, and
+initializing the values of new slots in the usual way (see <a class="pxref" href="Instance-Creation.html">make</a>).
+
+</li><li>All existing subclasses of <code class="code">&lt;my-class&gt;</code> are redefined, as though
+the <code class="code">define-class</code> expressions that defined them were re-evaluated
+following the redefinition of <code class="code">&lt;my-class&gt;</code>, and the class
+redefinition process described here is applied recursively to the
+redefined subclasses.
+
+</li><li>Once all of its instances and subclasses have been updated, the class
+metaobject previously bound to the variable <code class="code">&lt;my-class&gt;</code> is no
+longer needed and so can be allowed to be garbage collected.
+</li></ul>
+
+<p>To keep things tidy, GOOPS also needs to do a little housekeeping on
+methods that are associated with the redefined class.
+</p>
+<ul class="itemize mark-bullet">
+<li>Slot accessor methods for slots in the old definition should be removed
+from their generic functions.  They will be replaced by accessor methods
+for the slots of the new class definition.
+
+</li><li>Any generic function method that uses the old <code class="code">&lt;my-class&gt;</code> metaobject
+as one of its formal parameter specializers must be updated to refer to
+the new <code class="code">&lt;my-class&gt;</code> metaobject.  (Whenever a new generic function
+method is defined, <code class="code">define-method</code> adds the method to a list stored
+in the class metaobject for each class used as a formal parameter
+specializer, so it is easy to identify all the methods that must be
+updated when a class is redefined.)
+</li></ul>
+
+<p>If this class redefinition strategy strikes you as rather counter-intuitive,
+bear in mind that it is derived from similar behaviour in other object
+systems such as CLOS, and that experience in those systems has shown it to be
+very useful in practice.
+</p>
+<p>Also bear in mind that, like most of GOOPS&rsquo; default behaviour, it can
+be customized&hellip;
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Customizing-Class-Redefinition.html">Customizing Class Redefinition</a>, Previous: <a href="Redefinable-Classes.html">Redefinable Classes</a>, Up: <a href="Redefining-a-Class.html">Redefining a Class</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

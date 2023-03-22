@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Line/Delimited (Guile Reference Manual)</title>
+
+<meta name="description" content="Line/Delimited (Guile Reference Manual)">
+<meta name="keywords" content="Line/Delimited (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Input-and-Output.html" rel="up" title="Input and Output">
+<link href="Default-Ports.html" rel="next" title="Default Ports">
+<link href="Random-Access.html" rel="prev" title="Random Access">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Line_002fDelimited">
+<div class="nav-panel">
+<p>
+Next: <a href="Default-Ports.html" accesskey="n" rel="next">Default Ports for Input, Output and Errors</a>, Previous: <a href="Random-Access.html" accesskey="p" rel="prev">Random Access</a>, Up: <a href="Input-and-Output.html" accesskey="u" rel="up">Input and Output</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Line-Oriented-and-Delimited-Text">6.12.8 Line Oriented and Delimited Text</h4>
+<a class="index-entry-id" id="index-Line-input_002foutput"></a>
+<a class="index-entry-id" id="index-Port_002c-line-input_002foutput"></a>
+
+<p>The delimited-I/O module can be accessed with:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(use-modules (ice-9 rdelim))
+</pre></div>
+
+<p>It can be used to read or write lines of text, or read text delimited by
+a specified set of characters.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-read_002dline"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read-line</strong> <var class="def-var-arguments">[port] [handle-delim]</var><a class="copiable-link" href='#index-read_002dline'> &para;</a></span></dt>
+<dd><p>Return a line of text from <var class="var">port</var> if specified, otherwise from the
+value returned by <code class="code">(current-input-port)</code>.  Under Unix, a line of text
+is terminated by the first end-of-line character or by end-of-file.
+</p>
+<p>If <var class="var">handle-delim</var> is specified, it should be one of the following
+symbols:
+</p><dl class="table">
+<dt><code class="code">trim</code></dt>
+<dd><p>Discard the terminating delimiter.  This is the default, but it will
+be impossible to tell whether the read terminated with a delimiter or
+end-of-file.
+</p></dd>
+<dt><code class="code">concat</code></dt>
+<dd><p>Append the terminating delimiter (if any) to the returned string.
+</p></dd>
+<dt><code class="code">peek</code></dt>
+<dd><p>Push the terminating delimiter (if any) back on to the port.
+</p></dd>
+<dt><code class="code">split</code></dt>
+<dd><p>Return a pair containing the string read from the port and the
+terminating delimiter or end-of-file object.
+</p></dd>
+</dl>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-read_002dline_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read-line!</strong> <var class="def-var-arguments">buf [port]</var><a class="copiable-link" href='#index-read_002dline_0021'> &para;</a></span></dt>
+<dd><p>Read a line of text into the supplied string <var class="var">buf</var> and return the
+number of characters added to <var class="var">buf</var>.  If <var class="var">buf</var> is filled, then
+<code class="code">#f</code> is returned.  Read from <var class="var">port</var> if specified, otherwise
+from the value returned by <code class="code">(current-input-port)</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-read_002ddelimited"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read-delimited</strong> <var class="def-var-arguments">delims [port] [handle-delim]</var><a class="copiable-link" href='#index-read_002ddelimited'> &para;</a></span></dt>
+<dd><p>Read text until one of the characters in the string <var class="var">delims</var> is
+found or end-of-file is reached.  Read from <var class="var">port</var> if supplied,
+otherwise from the value returned by <code class="code">(current-input-port)</code>.
+<var class="var">handle-delim</var> takes the same values as described for
+<code class="code">read-line</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-read_002ddelimited_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read-delimited!</strong> <var class="def-var-arguments">delims buf [port] [handle-delim] [start] [end]</var><a class="copiable-link" href='#index-read_002ddelimited_0021'> &para;</a></span></dt>
+<dd><p>Read text into the supplied string <var class="var">buf</var>.
+</p>
+<p>If a delimiter was found, return the number of characters written,
+except if <var class="var">handle-delim</var> is <code class="code">split</code>, in which case the return
+value is a pair, as noted above.
+</p>
+<p>As a special case, if <var class="var">port</var> was already at end-of-stream, the EOF
+object is returned. Also, if no characters were written because the
+buffer was full, <code class="code">#f</code> is returned.
+</p>
+<p>It&rsquo;s something of a wacky interface, to be honest.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0025read_002ddelimited_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">%read-delimited!</strong> <var class="def-var-arguments">delims str gobble [port [start [end]]]</var><a class="copiable-link" href='#index-_0025read_002ddelimited_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fread_005fdelimited_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_read_delimited_x</strong> <var class="def-var-arguments">(delims, str, gobble, port, start, end)</var><a class="copiable-link" href='#index-scm_005fread_005fdelimited_005fx'> &para;</a></span></dt>
+<dd><p>Read characters from <var class="var">port</var> into <var class="var">str</var> until one of the
+characters in the <var class="var">delims</var> string is encountered.  If
+<var class="var">gobble</var> is true, discard the delimiter character;
+otherwise, leave it in the input stream for the next read.  If
+<var class="var">port</var> is not specified, use the value of
+<code class="code">(current-input-port)</code>.  If <var class="var">start</var> or <var class="var">end</var> are
+specified, store data only into the substring of <var class="var">str</var>
+bounded by <var class="var">start</var> and <var class="var">end</var> (which default to the
+beginning and end of the string, respectively).
+</p>
+<p>Return a pair consisting of the delimiter that terminated the
+string and the number of characters read.  If reading stopped
+at the end of file, the delimiter returned is the
+<var class="var">eof-object</var>; if the string was filled without encountering
+a delimiter, this value is <code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0025read_002dline"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">%read-line</strong> <var class="def-var-arguments">[port]</var><a class="copiable-link" href='#index-_0025read_002dline'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fread_005fline"><span class="category-def">C Function: </span><span><strong class="def-name">scm_read_line</strong> <var class="def-var-arguments">(port)</var><a class="copiable-link" href='#index-scm_005fread_005fline'> &para;</a></span></dt>
+<dd><p>Read a newline-terminated line from <var class="var">port</var>, allocating storage as
+necessary.  The newline terminator (if any) is removed from the string,
+and a pair consisting of the line and its delimiter is returned.  The
+delimiter may be either a newline or the <var class="var">eof-object</var>; if
+<code class="code">%read-line</code> is called at the end of file, it returns the pair
+<code class="code">(#&lt;eof&gt; . #&lt;eof&gt;)</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-write_002dline"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">write-line</strong> <var class="def-var-arguments">obj [port]</var><a class="copiable-link" href='#index-write_002dline'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fwrite_005fline"><span class="category-def">C Function: </span><span><strong class="def-name">scm_write_line</strong> <var class="def-var-arguments">(obj, port)</var><a class="copiable-link" href='#index-scm_005fwrite_005fline'> &para;</a></span></dt>
+<dd><p>Display <var class="var">obj</var> and a newline character to <var class="var">port</var>.  If
+<var class="var">port</var> is not specified, <code class="code">(current-output-port)</code> is
+used.  This procedure is equivalent to:
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(display obj [port])
+(newline [port])
+</pre></div>
+</dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Default-Ports.html">Default Ports for Input, Output and Errors</a>, Previous: <a href="Random-Access.html">Random Access</a>, Up: <a href="Input-and-Output.html">Input and Output</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

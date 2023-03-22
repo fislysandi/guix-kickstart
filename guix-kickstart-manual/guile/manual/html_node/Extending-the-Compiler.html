@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Extending the Compiler (Guile Reference Manual)</title>
+
+<meta name="description" content="Extending the Compiler (Guile Reference Manual)">
+<meta name="keywords" content="Extending the Compiler (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Compiling-to-the-Virtual-Machine.html" rel="up" title="Compiling to the Virtual Machine">
+<link href="Writing-New-High_002dLevel-Languages.html" rel="prev" title="Writing New High-Level Languages">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Extending-the-Compiler">
+<div class="nav-panel">
+<p>
+Previous: <a href="Writing-New-High_002dLevel-Languages.html" accesskey="p" rel="prev">Writing New High-Level Languages</a>, Up: <a href="Compiling-to-the-Virtual-Machine.html" accesskey="u" rel="up">Compiling to the Virtual Machine</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Extending-the-Compiler-1">9.4.7 Extending the Compiler</h4>
+
+<p>At this point we take a detour from the impersonal tone of the rest of
+the manual.  Admit it: if you&rsquo;ve read this far into the compiler
+internals manual, you are a junkie.  Perhaps a course at your university
+left you unsated, or perhaps you&rsquo;ve always harbored a desire to hack the
+holy of computer science holies: a compiler.  Well you&rsquo;re in good
+company, and in a good position.  Guile&rsquo;s compiler needs your help.
+</p>
+<p>There are many possible avenues for improving Guile&rsquo;s compiler.
+Probably the most important improvement, speed-wise, will be some form
+of optimized ahead-of-time native compilation with global register
+allocation.  A first pass could simply extend the compiler to also emit
+machine code in addition to bytecode, pre-filling the corresponding JIT
+data structures referenced by the <code class="code">instrument-entry</code> bytecodes.
+See <a class="xref" href="Instrumentation-Instructions.html">Instrumentation Instructions</a>.
+</p>
+<p>The compiler also needs help at the top end, adding new high-level
+compilers.  We have JavaScript and Emacs Lisp mostly complete, but they
+could use some love; Lua would be nice as well, but whatever language it
+is that strikes your fancy would be welcome too.
+</p>
+<p>Compilers are for hacking, not for admiring or for complaining about.
+Get to it!
+</p>
+</div>
+
+
+
+</body>
+</html>

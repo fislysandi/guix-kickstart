@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Processes (Guile Reference Manual)</title>
+
+<meta name="description" content="Processes (Guile Reference Manual)">
+<meta name="keywords" content="Processes (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="POSIX.html" rel="up" title="POSIX">
+<link href="Signals.html" rel="next" title="Signals">
+<link href="Runtime-Environment.html" rel="prev" title="Runtime Environment">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Processes">
+<div class="nav-panel">
+<p>
+Next: <a href="Signals.html" accesskey="n" rel="next">Signals</a>, Previous: <a href="Runtime-Environment.html" accesskey="p" rel="prev">Runtime Environment</a>, Up: <a href="POSIX.html" accesskey="u" rel="up"><abbr class="acronym">POSIX</abbr> System Calls and Networking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Processes-1">7.2.7 Processes</h4>
+<a class="index-entry-id" id="index-processes"></a>
+<a class="index-entry-id" id="index-child-processes"></a>
+
+<a class="index-entry-id" id="index-cd"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-chdir"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">chdir</strong> <var class="def-var-arguments">str</var><a class="copiable-link" href='#index-chdir'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchdir"><span class="category-def">C Function: </span><span><strong class="def-name">scm_chdir</strong> <var class="def-var-arguments">(str)</var><a class="copiable-link" href='#index-scm_005fchdir'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-current-directory"></a>
+<p>Change the current working directory to <var class="var">str</var>.  <var class="var">str</var> can be a
+string containing a file name, or a port if supported by the system.
+<code class="code">(provided? 'chdir-port)</code> reports whether ports are supported.
+The return value is unspecified.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-pwd"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-getcwd"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getcwd</strong><a class="copiable-link" href='#index-getcwd'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgetcwd"><span class="category-def">C Function: </span><span><strong class="def-name">scm_getcwd</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fgetcwd'> &para;</a></span></dt>
+<dd><p>Return the name of the current working directory.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-umask"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">umask</strong> <var class="def-var-arguments">[mode]</var><a class="copiable-link" href='#index-umask'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fumask"><span class="category-def">C Function: </span><span><strong class="def-name">scm_umask</strong> <var class="def-var-arguments">(mode)</var><a class="copiable-link" href='#index-scm_005fumask'> &para;</a></span></dt>
+<dd><p>If <var class="var">mode</var> is omitted, returns a decimal number representing the
+current file creation mask.  Otherwise the file creation mask is set
+to <var class="var">mode</var> and the previous value is returned. See <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/Setting-Permissions.html#Setting-Permissions">Assigning File Permissions</a> in <cite class="cite">The GNU C Library
+Reference Manual</cite>, for more on how to use umasks.
+</p>
+<p>E.g., <code class="code">(umask #o022)</code> sets the mask to octal 22/decimal 18.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-chroot"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">chroot</strong> <var class="def-var-arguments">path</var><a class="copiable-link" href='#index-chroot'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchroot"><span class="category-def">C Function: </span><span><strong class="def-name">scm_chroot</strong> <var class="def-var-arguments">(path)</var><a class="copiable-link" href='#index-scm_005fchroot'> &para;</a></span></dt>
+<dd><p>Change the root directory to that specified in <var class="var">path</var>.
+This directory will be used for path names beginning with
+<samp class="file">/</samp>.  The root directory is inherited by all children
+of the current process.  Only the superuser may change the
+root directory.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getpid"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getpid</strong><a class="copiable-link" href='#index-getpid'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgetpid"><span class="category-def">C Function: </span><span><strong class="def-name">scm_getpid</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fgetpid'> &para;</a></span></dt>
+<dd><p>Return an integer representing the current process ID.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getgroups"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getgroups</strong><a class="copiable-link" href='#index-getgroups'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgetgroups"><span class="category-def">C Function: </span><span><strong class="def-name">scm_getgroups</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fgetgroups'> &para;</a></span></dt>
+<dd><p>Return a vector of integers representing the current
+supplementary group IDs.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getppid"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getppid</strong><a class="copiable-link" href='#index-getppid'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgetppid"><span class="category-def">C Function: </span><span><strong class="def-name">scm_getppid</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fgetppid'> &para;</a></span></dt>
+<dd><p>Return an integer representing the process ID of the parent
+process.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getuid"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getuid</strong><a class="copiable-link" href='#index-getuid'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgetuid"><span class="category-def">C Function: </span><span><strong class="def-name">scm_getuid</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fgetuid'> &para;</a></span></dt>
+<dd><p>Return an integer representing the current real user ID.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getgid"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getgid</strong><a class="copiable-link" href='#index-getgid'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgetgid"><span class="category-def">C Function: </span><span><strong class="def-name">scm_getgid</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fgetgid'> &para;</a></span></dt>
+<dd><p>Return an integer representing the current real group ID.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-geteuid"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">geteuid</strong><a class="copiable-link" href='#index-geteuid'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgeteuid"><span class="category-def">C Function: </span><span><strong class="def-name">scm_geteuid</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fgeteuid'> &para;</a></span></dt>
+<dd><p>Return an integer representing the current effective user ID.
+If the system does not support effective IDs, then the real ID
+is returned.  <code class="code">(provided? 'EIDs)</code> reports whether the
+system supports effective IDs.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getegid"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getegid</strong><a class="copiable-link" href='#index-getegid'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgetegid"><span class="category-def">C Function: </span><span><strong class="def-name">scm_getegid</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fgetegid'> &para;</a></span></dt>
+<dd><p>Return an integer representing the current effective group ID.
+If the system does not support effective IDs, then the real ID
+is returned.  <code class="code">(provided? 'EIDs)</code> reports whether the
+system supports effective IDs.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-setgroups"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">setgroups</strong> <var class="def-var-arguments">vec</var><a class="copiable-link" href='#index-setgroups'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsetgroups"><span class="category-def">C Function: </span><span><strong class="def-name">scm_setgroups</strong> <var class="def-var-arguments">(vec)</var><a class="copiable-link" href='#index-scm_005fsetgroups'> &para;</a></span></dt>
+<dd><p>Set the current set of supplementary group IDs to the integers in the
+given vector <var class="var">vec</var>.  The return value is unspecified.
+</p>
+<p>Generally only the superuser can set the process group IDs
+(see <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/Setting-Groups.html#Setting-Groups">Setting the Group IDs</a> in <cite class="cite">The GNU C
+Library Reference Manual</cite>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-setuid"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">setuid</strong> <var class="def-var-arguments">id</var><a class="copiable-link" href='#index-setuid'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsetuid"><span class="category-def">C Function: </span><span><strong class="def-name">scm_setuid</strong> <var class="def-var-arguments">(id)</var><a class="copiable-link" href='#index-scm_005fsetuid'> &para;</a></span></dt>
+<dd><p>Sets both the real and effective user IDs to the integer <var class="var">id</var>, provided
+the process has appropriate privileges.
+The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-setgid"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">setgid</strong> <var class="def-var-arguments">id</var><a class="copiable-link" href='#index-setgid'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsetgid"><span class="category-def">C Function: </span><span><strong class="def-name">scm_setgid</strong> <var class="def-var-arguments">(id)</var><a class="copiable-link" href='#index-scm_005fsetgid'> &para;</a></span></dt>
+<dd><p>Sets both the real and effective group IDs to the integer <var class="var">id</var>, provided
+the process has appropriate privileges.
+The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-seteuid"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">seteuid</strong> <var class="def-var-arguments">id</var><a class="copiable-link" href='#index-seteuid'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fseteuid"><span class="category-def">C Function: </span><span><strong class="def-name">scm_seteuid</strong> <var class="def-var-arguments">(id)</var><a class="copiable-link" href='#index-scm_005fseteuid'> &para;</a></span></dt>
+<dd><p>Sets the effective user ID to the integer <var class="var">id</var>, provided the process
+has appropriate privileges.  If effective IDs are not supported, the
+real ID is set instead&mdash;<code class="code">(provided? 'EIDs)</code> reports whether the
+system supports effective IDs.
+The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-setegid"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">setegid</strong> <var class="def-var-arguments">id</var><a class="copiable-link" href='#index-setegid'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsetegid"><span class="category-def">C Function: </span><span><strong class="def-name">scm_setegid</strong> <var class="def-var-arguments">(id)</var><a class="copiable-link" href='#index-scm_005fsetegid'> &para;</a></span></dt>
+<dd><p>Sets the effective group ID to the integer <var class="var">id</var>, provided the process
+has appropriate privileges.  If effective IDs are not supported, the
+real ID is set instead&mdash;<code class="code">(provided? 'EIDs)</code> reports whether the
+system supports effective IDs.
+The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getpgrp"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getpgrp</strong><a class="copiable-link" href='#index-getpgrp'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgetpgrp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_getpgrp</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fgetpgrp'> &para;</a></span></dt>
+<dd><p>Return an integer representing the current process group ID.
+This is the <abbr class="acronym">POSIX</abbr> definition, not <abbr class="acronym">BSD</abbr>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-setpgid"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">setpgid</strong> <var class="def-var-arguments">pid pgid</var><a class="copiable-link" href='#index-setpgid'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsetpgid"><span class="category-def">C Function: </span><span><strong class="def-name">scm_setpgid</strong> <var class="def-var-arguments">(pid, pgid)</var><a class="copiable-link" href='#index-scm_005fsetpgid'> &para;</a></span></dt>
+<dd><p>Move the process <var class="var">pid</var> into the process group <var class="var">pgid</var>.  <var class="var">pid</var> or
+<var class="var">pgid</var> must be integers: they can be zero to indicate the ID of the
+current process.
+Fails on systems that do not support job control.
+The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-setsid"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">setsid</strong><a class="copiable-link" href='#index-setsid'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsetsid"><span class="category-def">C Function: </span><span><strong class="def-name">scm_setsid</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fsetsid'> &para;</a></span></dt>
+<dd><p>Creates a new session.  The current process becomes the session leader
+and is put in a new process group.  The process will be detached
+from its controlling terminal if it has one.
+The return value is an integer representing the new process group ID.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getsid"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getsid</strong> <var class="def-var-arguments">pid</var><a class="copiable-link" href='#index-getsid'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgetsid"><span class="category-def">C Function: </span><span><strong class="def-name">scm_getsid</strong> <var class="def-var-arguments">(pid)</var><a class="copiable-link" href='#index-scm_005fgetsid'> &para;</a></span></dt>
+<dd><p>Returns the session ID of process <var class="var">pid</var>.  (The session
+ID of a process is the process group ID of its session leader.)
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-waitpid"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">waitpid</strong> <var class="def-var-arguments">pid [options]</var><a class="copiable-link" href='#index-waitpid'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fwaitpid"><span class="category-def">C Function: </span><span><strong class="def-name">scm_waitpid</strong> <var class="def-var-arguments">(pid, options)</var><a class="copiable-link" href='#index-scm_005fwaitpid'> &para;</a></span></dt>
+<dd><p>This procedure collects status information from a child process which
+has terminated or (optionally) stopped.  Normally it will
+suspend the calling process until this can be done.  If more than one
+child process is eligible then one will be chosen by the operating system.
+</p>
+<p>The value of <var class="var">pid</var> determines the behaviour:
+</p>
+<dl class="table">
+<dt><var class="var">pid</var> greater than 0</dt>
+<dd><p>Request status information from the specified child process.
+</p></dd>
+<dt id='index-WAIT_005fANY'><span><var class="var">pid</var> equal to -1 or <code class="code">WAIT_ANY</code><a class="copiable-link" href='#index-WAIT_005fANY'> &para;</a></span></dt>
+<dd><p>Request status information for any child process.
+</p></dd>
+<dt id='index-WAIT_005fMYPGRP'><span><var class="var">pid</var> equal to 0 or <code class="code">WAIT_MYPGRP</code><a class="copiable-link" href='#index-WAIT_005fMYPGRP'> &para;</a></span></dt>
+<dd><p>Request status information for any child process in the current process
+group.
+</p></dd>
+<dt><var class="var">pid</var> less than -1</dt>
+<dd><p>Request status information for any child process whose process group ID
+is &minus;<var class="var">pid</var>.
+</p></dd>
+</dl>
+
+<p>The <var class="var">options</var> argument, if supplied, should be the bitwise OR of the
+values of zero or more of the following variables:
+</p>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-WNOHANG"><span class="category-def">Variable: </span><span><strong class="def-name">WNOHANG</strong><a class="copiable-link" href='#index-WNOHANG'> &para;</a></span></dt>
+<dd><p>Return immediately even if there are no child processes to be collected.
+</p></dd></dl>
+
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-WUNTRACED"><span class="category-def">Variable: </span><span><strong class="def-name">WUNTRACED</strong><a class="copiable-link" href='#index-WUNTRACED'> &para;</a></span></dt>
+<dd><p>Report status information for stopped processes as well as terminated
+processes.
+</p></dd></dl>
+
+<p>The return value is a pair containing:
+</p>
+<ol class="enumerate">
+<li> The process ID of the child process, or 0 if <code class="code">WNOHANG</code> was
+specified and no process was collected.
+</li><li> The integer status value (see <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/Process-Completion-Status.html#Process-Completion-Status">Process Completion Status</a> in <cite class="cite">The
+GNU C Library Reference Manual</cite>).
+</li></ol>
+</dd></dl>
+
+<p>The following three
+functions can be used to decode the integer status value returned by
+<code class="code">waitpid</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-status_003aexit_002dval"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">status:exit-val</strong> <var class="def-var-arguments">status</var><a class="copiable-link" href='#index-status_003aexit_002dval'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstatus_005fexit_005fval"><span class="category-def">C Function: </span><span><strong class="def-name">scm_status_exit_val</strong> <var class="def-var-arguments">(status)</var><a class="copiable-link" href='#index-scm_005fstatus_005fexit_005fval'> &para;</a></span></dt>
+<dd><p>Return the exit status value, as would be set if a process
+ended normally through a call to <code class="code">exit</code> or <code class="code">_exit</code>,
+if any, otherwise <code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-status_003aterm_002dsig"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">status:term-sig</strong> <var class="def-var-arguments">status</var><a class="copiable-link" href='#index-status_003aterm_002dsig'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstatus_005fterm_005fsig"><span class="category-def">C Function: </span><span><strong class="def-name">scm_status_term_sig</strong> <var class="def-var-arguments">(status)</var><a class="copiable-link" href='#index-scm_005fstatus_005fterm_005fsig'> &para;</a></span></dt>
+<dd><p>Return the signal number which terminated the process, if any,
+otherwise <code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-status_003astop_002dsig"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">status:stop-sig</strong> <var class="def-var-arguments">status</var><a class="copiable-link" href='#index-status_003astop_002dsig'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstatus_005fstop_005fsig"><span class="category-def">C Function: </span><span><strong class="def-name">scm_status_stop_sig</strong> <var class="def-var-arguments">(status)</var><a class="copiable-link" href='#index-scm_005fstatus_005fstop_005fsig'> &para;</a></span></dt>
+<dd><p>Return the signal number which stopped the process, if any,
+otherwise <code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-system"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">system</strong> <var class="def-var-arguments">[cmd]</var><a class="copiable-link" href='#index-system'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsystem"><span class="category-def">C Function: </span><span><strong class="def-name">scm_system</strong> <var class="def-var-arguments">(cmd)</var><a class="copiable-link" href='#index-scm_005fsystem'> &para;</a></span></dt>
+<dd><p>Execute <var class="var">cmd</var> using the operating system&rsquo;s &ldquo;command
+processor&rdquo;.  Under Unix this is usually the default shell
+<code class="code">sh</code>.  The value returned is <var class="var">cmd</var>&rsquo;s exit status as
+returned by <code class="code">waitpid</code>, which can be interpreted using the
+functions above.
+</p>
+<p>If <code class="code">system</code> is called without arguments, return a boolean
+indicating whether the command processor is available.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-system_002a"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">system*</strong> <var class="def-var-arguments">arg1 arg2 &hellip;</var><a class="copiable-link" href='#index-system_002a'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsystem_005fstar"><span class="category-def">C Function: </span><span><strong class="def-name">scm_system_star</strong> <var class="def-var-arguments">(args)</var><a class="copiable-link" href='#index-scm_005fsystem_005fstar'> &para;</a></span></dt>
+<dd><p>Execute the command indicated by <var class="var">arg1</var> <var class="var">arg2</var> <small class="enddots">...</small>.  The
+first element must be a string indicating the command to be executed,
+and the remaining items must be strings representing each of the
+arguments to that command.
+</p>
+<p>This function returns the exit status of the command as provided by
+<code class="code">waitpid</code>.  This value can be handled with <code class="code">status:exit-val</code>
+and the related functions.
+</p>
+<p><code class="code">system*</code> is similar to <code class="code">system</code>, but accepts only one
+string per-argument, and performs no shell interpretation.  The
+command is executed using fork and execlp.  Accordingly this function
+may be safer than <code class="code">system</code> in situations where shell
+interpretation is not required.
+</p>
+<p>Example: (system* &quot;echo&quot; &quot;foo&quot; &quot;bar&quot;)
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-quit-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">quit</strong> <var class="def-var-arguments">[status]</var><a class="copiable-link" href='#index-quit-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-exit"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exit</strong> <var class="def-var-arguments">[status]</var><a class="copiable-link" href='#index-exit'> &para;</a></span></dt>
+<dd><p>Terminate the current process with proper unwinding of the Scheme stack.
+The exit status zero if <var class="var">status</var> is not supplied.  If <var class="var">status</var>
+is supplied, and it is an integer, that integer is used as the exit
+status.  If <var class="var">status</var> is <code class="code">#t</code> or <code class="code">#f</code>, the exit status is
+<var class="var">EXIT_SUCCESS</var> or <var class="var">EXIT_FAILURE</var>, respectively.
+</p>
+<p>The procedure <code class="code">exit</code> is an alias of <code class="code">quit</code>.  They have the
+same functionality.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-EXIT_005fSUCCESS"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">EXIT_SUCCESS</strong><a class="copiable-link" href='#index-EXIT_005fSUCCESS'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-EXIT_005fFAILURE"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">EXIT_FAILURE</strong><a class="copiable-link" href='#index-EXIT_005fFAILURE'> &para;</a></span></dt>
+<dd><p>These constants represent the standard exit codes for success (zero) or
+failure (one.)
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-primitive_002dexit"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">primitive-exit</strong> <var class="def-var-arguments">[status]</var><a class="copiable-link" href='#index-primitive_002dexit'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-primitive_002d_005fexit"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">primitive-_exit</strong> <var class="def-var-arguments">[status]</var><a class="copiable-link" href='#index-primitive_002d_005fexit'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fprimitive_005fexit"><span class="category-def">C Function: </span><span><strong class="def-name">scm_primitive_exit</strong> <var class="def-var-arguments">(status)</var><a class="copiable-link" href='#index-scm_005fprimitive_005fexit'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fprimitive_005f_005fexit"><span class="category-def">C Function: </span><span><strong class="def-name">scm_primitive__exit</strong> <var class="def-var-arguments">(status)</var><a class="copiable-link" href='#index-scm_005fprimitive_005f_005fexit'> &para;</a></span></dt>
+<dd><p>Terminate the current process without unwinding the Scheme stack.  The
+exit status is <var class="var">status</var> if supplied, otherwise zero.
+</p>
+<p><code class="code">primitive-exit</code> uses the C <code class="code">exit</code> function and hence runs
+usual C level cleanups (flush output streams, call <code class="code">atexit</code>
+functions, etc, see <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/Normal-Termination.html#Normal-Termination">Normal Termination</a> in <cite class="cite">The GNU C Library
+Reference Manual</cite>)).
+</p>
+<p><code class="code">primitive-_exit</code> is the <code class="code">_exit</code> system call
+(see <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/Termination-Internals.html#Termination-Internals">Termination Internals</a> in <cite class="cite">The GNU C Library Reference
+Manual</cite>).  This terminates the program immediately, with neither
+Scheme-level nor C-level cleanups.
+</p>
+<p>The typical use for <code class="code">primitive-_exit</code> is from a child process
+created with <code class="code">primitive-fork</code>.  For example in a Gdk program the
+child process inherits the X server connection and a C-level
+<code class="code">atexit</code> cleanup which will close that connection.  But closing
+in the child would upset the protocol in the parent, so
+<code class="code">primitive-_exit</code> should be used to exit without that.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-execl"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">execl</strong> <var class="def-var-arguments">filename arg &hellip;</var><a class="copiable-link" href='#index-execl'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fexecl"><span class="category-def">C Function: </span><span><strong class="def-name">scm_execl</strong> <var class="def-var-arguments">(filename, args)</var><a class="copiable-link" href='#index-scm_005fexecl'> &para;</a></span></dt>
+<dd><p>Executes the file named by <var class="var">filename</var> as a new process image.
+The remaining arguments are supplied to the process; from a C program
+they are accessible as the <code class="code">argv</code> argument to <code class="code">main</code>.
+Conventionally the first <var class="var">arg</var> is the same as <var class="var">filename</var>.
+All arguments must be strings.
+</p>
+<p>If <var class="var">arg</var> is missing, <var class="var">filename</var> is executed with a null
+argument list, which may have system-dependent side-effects.
+</p>
+<p>This procedure is currently implemented using the <code class="code">execv</code> system
+call, but we call it <code class="code">execl</code> because of its Scheme calling interface.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-execlp"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">execlp</strong> <var class="def-var-arguments">filename arg &hellip;</var><a class="copiable-link" href='#index-execlp'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fexeclp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_execlp</strong> <var class="def-var-arguments">(filename, args)</var><a class="copiable-link" href='#index-scm_005fexeclp'> &para;</a></span></dt>
+<dd><p>Similar to <code class="code">execl</code>, however if
+<var class="var">filename</var> does not contain a slash
+then the file to execute will be located by searching the
+directories listed in the <code class="code">PATH</code> environment variable.
+</p>
+<p>This procedure is currently implemented using the <code class="code">execvp</code> system
+call, but we call it <code class="code">execlp</code> because of its Scheme calling interface.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-execle"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">execle</strong> <var class="def-var-arguments">filename env arg &hellip;</var><a class="copiable-link" href='#index-execle'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fexecle"><span class="category-def">C Function: </span><span><strong class="def-name">scm_execle</strong> <var class="def-var-arguments">(filename, env, args)</var><a class="copiable-link" href='#index-scm_005fexecle'> &para;</a></span></dt>
+<dd><p>Similar to <code class="code">execl</code>, but the environment of the new process is
+specified by <var class="var">env</var>, which must be a list of strings as returned by the
+<code class="code">environ</code> procedure.
+</p>
+<p>This procedure is currently implemented using the <code class="code">execve</code> system
+call, but we call it <code class="code">execle</code> because of its Scheme calling interface.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-primitive_002dfork"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">primitive-fork</strong><a class="copiable-link" href='#index-primitive_002dfork'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005ffork"><span class="category-def">C Function: </span><span><strong class="def-name">scm_fork</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005ffork'> &para;</a></span></dt>
+<dd><p>Creates a new &ldquo;child&rdquo; process by duplicating the current &ldquo;parent&rdquo; process.
+In the child the return value is 0.  In the parent the return value is
+the integer process ID of the child.
+</p>
+<p>Note that it is unsafe to fork a process that has multiple threads
+running, as only the thread that calls <code class="code">primitive-fork</code> will
+persist in the child.  Any resources that other threads held, such as
+locked mutexes or open file descriptors, are lost.  Indeed,
+<abbr class="acronym">POSIX</abbr> specifies that only async-signal-safe procedures are
+safe to call after a multithreaded fork, which is a very limited set.
+Guile issues a warning if it detects a fork from a multi-threaded
+program.
+</p>
+<blockquote class="quotation">
+<p><b class="b">Note:</b> If you are looking to spawn a process with some pipes set up, using the
+<code class="code">spawn</code> procedure described below will be more robust (in
+particular in multi-threaded contexts), more portable, and usually more
+efficient than the combination of <code class="code">primitive-fork</code> and
+<code class="code">execl</code>.
+</p>
+</blockquote>
+
+<p>This procedure has been renamed from <code class="code">fork</code> to avoid a naming conflict
+with the scsh fork.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-spawn"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">spawn</strong> <var class="def-var-arguments"><var class="var">program</var> <var class="var">arguments</var>        [#:environment=(environ)]        [#:input=(current-input-port)]        [#:output=(current-output-port)]        [#:error=(current-error-port)]        [#:search-path?=#t]</var><a class="copiable-link" href='#index-spawn'> &para;</a></span></dt>
+<dd><p>Spawn a new child process executing <var class="var">program</var> with the
+given <var class="var">arguments</var>, a list of one or more strings (by
+convention, the first argument is typically <var class="var">program</var>),
+and return its PID.  Raise a <code class="code">system-error</code> exception if
+<var class="var">program</var> could not be found or could not be executed.
+</p>
+<p>If the keyword argument <code class="code">#:search-path?</code> is true, it
+selects whether the <code class="env">PATH</code> environment variable should be
+inspected to find <var class="var">program</var>.  It is true by default.
+</p>
+<p>The <code class="code">#:environment</code> keyword parameter specifies the
+list of environment variables of the child process.  It
+defaults to <code class="code">(environ)</code>.
+</p>
+<p>The keyword arguments <code class="code">#:input</code>, <code class="code">#:output</code>, and
+<code class="code">#:error</code> specify the port or file descriptor for the
+child process to use as standard input, standard output, and
+standard error.  No other file descriptors are inherited
+from the parent process.
+</p></dd></dl>
+
+<p>The example below shows how to spawn the <code class="command">uname</code> program with
+the <samp class="option">-o</samp> option (see <a data-manual="coreutils" href="http://www.gnu.org/software/coreutils/manual/html_node/uname-invocation.html#uname-invocation">uname invocation</a> in <cite class="cite">GNU
+Coreutils</cite>), redirect its standard output to a pipe, and read from it:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(use-modules (rnrs io ports))
+
+(let* ((input+output (pipe))
+       (pid (spawn &quot;uname&quot; '(&quot;uname&quot; &quot;-o&quot;)
+                    #:output (cdr input+output))))
+  (close-port (cdr input+output))
+  (format #t &quot;read ~s~%&quot; (get-string-all (car input+output)))
+  (close-port (car input+output))
+  (waitpid pid))
+
+-| read &quot;GNU/Linux\n&quot;
+&rArr; (1234 . 0)
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-nice"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">nice</strong> <var class="def-var-arguments">incr</var><a class="copiable-link" href='#index-nice'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fnice"><span class="category-def">C Function: </span><span><strong class="def-name">scm_nice</strong> <var class="def-var-arguments">(incr)</var><a class="copiable-link" href='#index-scm_005fnice'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-process-priority"></a>
+<p>Increment the priority of the current process by <var class="var">incr</var>.  A higher
+priority value means that the process runs less often.
+The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-setpriority"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">setpriority</strong> <var class="def-var-arguments">which who prio</var><a class="copiable-link" href='#index-setpriority'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsetpriority"><span class="category-def">C Function: </span><span><strong class="def-name">scm_setpriority</strong> <var class="def-var-arguments">(which, who, prio)</var><a class="copiable-link" href='#index-scm_005fsetpriority'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-PRIO_005fPROCESS"></a>
+<a class="index-entry-id" id="index-PRIO_005fPGRP"></a>
+<a class="index-entry-id" id="index-PRIO_005fUSER"></a>
+<p>Set the scheduling priority of the process, process group
+or user, as indicated by <var class="var">which</var> and <var class="var">who</var>. <var class="var">which</var>
+is one of the variables <code class="code">PRIO_PROCESS</code>, <code class="code">PRIO_PGRP</code>
+or <code class="code">PRIO_USER</code>, and <var class="var">who</var> is interpreted relative to
+<var class="var">which</var> (a process identifier for <code class="code">PRIO_PROCESS</code>,
+process group identifier for <code class="code">PRIO_PGRP</code>, and a user
+identifier for <code class="code">PRIO_USER</code>.  A zero value of <var class="var">who</var>
+denotes the current process, process group, or user.
+<var class="var">prio</var> is a value in the range [&minus;20,20].  The default
+priority is 0; lower priorities (in numerical terms) cause more
+favorable scheduling.  Sets the priority of all of the specified
+processes.  Only the super-user may lower priorities.  The return
+value is not specified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getpriority"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getpriority</strong> <var class="def-var-arguments">which who</var><a class="copiable-link" href='#index-getpriority'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgetpriority"><span class="category-def">C Function: </span><span><strong class="def-name">scm_getpriority</strong> <var class="def-var-arguments">(which, who)</var><a class="copiable-link" href='#index-scm_005fgetpriority'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-PRIO_005fPROCESS-1"></a>
+<a class="index-entry-id" id="index-PRIO_005fPGRP-1"></a>
+<a class="index-entry-id" id="index-PRIO_005fUSER-1"></a>
+<p>Return the scheduling priority of the process, process group
+or user, as indicated by <var class="var">which</var> and <var class="var">who</var>. <var class="var">which</var>
+is one of the variables <code class="code">PRIO_PROCESS</code>, <code class="code">PRIO_PGRP</code>
+or <code class="code">PRIO_USER</code>, and <var class="var">who</var> should be interpreted depending on
+<var class="var">which</var> (a process identifier for <code class="code">PRIO_PROCESS</code>,
+process group identifier for <code class="code">PRIO_PGRP</code>, and a user
+identifier for <code class="code">PRIO_USER</code>).  A zero value of <var class="var">who</var>
+denotes the current process, process group, or user.  Return
+the highest priority (lowest numerical value) of any of the
+specified processes.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-affinity_002c-CPU"></a>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getaffinity"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getaffinity</strong> <var class="def-var-arguments">pid</var><a class="copiable-link" href='#index-getaffinity'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgetaffinity"><span class="category-def">C Function: </span><span><strong class="def-name">scm_getaffinity</strong> <var class="def-var-arguments">(pid)</var><a class="copiable-link" href='#index-scm_005fgetaffinity'> &para;</a></span></dt>
+<dd><p>Return a bitvector representing the CPU affinity mask for
+process <var class="var">pid</var>.  Each CPU the process has affinity with
+has its corresponding bit set in the returned bitvector.
+The number of bits set is a good estimate of how many CPUs
+Guile can use without stepping on other processes&rsquo; toes.
+</p>
+<p>Currently this procedure is only defined on GNU variants
+(see <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/CPU-Affinity.html#CPU-Affinity"><code class="code">sched_getaffinity</code></a> in <cite class="cite">The
+GNU C Library Reference Manual</cite>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-setaffinity"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">setaffinity</strong> <var class="def-var-arguments">pid mask</var><a class="copiable-link" href='#index-setaffinity'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsetaffinity"><span class="category-def">C Function: </span><span><strong class="def-name">scm_setaffinity</strong> <var class="def-var-arguments">(pid, mask)</var><a class="copiable-link" href='#index-scm_005fsetaffinity'> &para;</a></span></dt>
+<dd><p>Install the CPU affinity mask <var class="var">mask</var>, a bitvector, for
+the process or thread with ID <var class="var">pid</var>.  The return value
+is unspecified.
+</p>
+<p>Currently this procedure is only defined on GNU variants
+(see <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/CPU-Affinity.html#CPU-Affinity"><code class="code">sched_setaffinity</code></a> in <cite class="cite">The
+GNU C Library Reference Manual</cite>).
+</p></dd></dl>
+
+<p>See <a class="xref" href="Threads.html">Threads</a>, for information on how get the number of processors
+available on a system.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Signals.html">Signals</a>, Previous: <a href="Runtime-Environment.html">Runtime Environment</a>, Up: <a href="POSIX.html"><abbr class="acronym">POSIX</abbr> System Calls and Networking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

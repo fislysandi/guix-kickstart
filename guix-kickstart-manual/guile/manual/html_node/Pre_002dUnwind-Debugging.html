@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Pre-Unwind Debugging (Guile Reference Manual)</title>
+
+<meta name="description" content="Pre-Unwind Debugging (Guile Reference Manual)">
+<meta name="keywords" content="Pre-Unwind Debugging (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Programmatic-Error-Handling.html" rel="up" title="Programmatic Error Handling">
+<link href="Standard-Error-Handling.html" rel="next" title="Standard Error Handling">
+<link href="Catching-Exceptions.html" rel="prev" title="Catching Exceptions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Pre_002dUnwind-Debugging">
+<div class="nav-panel">
+<p>
+Next: <a href="Standard-Error-Handling.html" accesskey="n" rel="next">call-with-error-handling</a>, Previous: <a href="Catching-Exceptions.html" accesskey="p" rel="prev">Catching Exceptions</a>, Up: <a href="Programmatic-Error-Handling.html" accesskey="u" rel="up">Programmatic Error Handling</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Pre_002dUnwind-Debugging-1">6.26.3.2 Pre-Unwind Debugging</h4>
+
+<p>Sometimes when something goes wrong, what you want is not just a
+representation of the exceptional situation, but the context that
+brought about that situation.  The example in the previous section
+passed <code class="code">#:unwind #t</code> to <code class="code">with-exception-handler</code>, indicating
+that <code class="code">raise-exception</code> should unwind the stack before invoking the
+exception handler.  However if you don&rsquo;t take this approach and instead
+let the exception handler be invoked in the context of the
+<code class="code">raise-exception</code>, you can print a backtrace, launch a recursive
+debugger, or take other &ldquo;pre-unwind&rdquo; actions.
+</p>
+<p>The most basic idea would be to simply print a backtrace:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (call-with-backtrace thunk)
+  (with-exception-handler
+    (lambda (exn)
+      (backtrace)
+      (raise-exception exn))
+    thunk))
+</pre></div>
+
+<p>Here we use the built-in <code class="code">backtrace</code> procedure to print the
+backtrace.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-backtrace-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">backtrace</strong> <var class="def-var-arguments">[highlights]</var><a class="copiable-link" href='#index-backtrace-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbacktrace_005fwith_005fhighlights"><span class="category-def">C Function: </span><span><strong class="def-name">scm_backtrace_with_highlights</strong> <var class="def-var-arguments">(highlights)</var><a class="copiable-link" href='#index-scm_005fbacktrace_005fwith_005fhighlights'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbacktrace"><span class="category-def">C Function: </span><span><strong class="def-name">scm_backtrace</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fbacktrace'> &para;</a></span></dt>
+<dd><p>Display a backtrace of the current stack to the current output port.  If
+<var class="var">highlights</var> is given it should be a list; the elements of this list
+will be highlighted wherever they appear in the backtrace.
+</p></dd></dl>
+
+<p>By re-raising the exception, <code class="code">call-with-backtrace</code> doesn&rsquo;t actually
+handle the error.  We could define a version that instead aborts the
+computation:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 control))
+(define (call-with-backtrace thunk)
+  (let/ec cancel
+    (with-exception-handler
+      (lambda (exn)
+        (backtrace)
+        (cancel #f))
+      thunk)))
+</pre></div>
+
+<p>In this second example, we use an escape continuation to abort the
+computation after printing the backtrace, returning <code class="code">#f</code> instead.
+</p>
+<p>It could be that you want to only print a limited backtrace.  In that
+case, use <code class="code">start-stack</code>:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 control))
+(define (call-with-backtrace thunk)
+  (let/ec cancel
+    (start-stack 'stack-with-backtrace
+      (with-exception-handler
+        (lambda (exn)
+          (backtrace)
+          (cancel #f))
+        thunk))))
+</pre></div>
+
+<p>There are also more powerful, programmatic ways to walk the stack using
+<code class="code">make-stack</code> and friends; see the API described in <a class="ref" href="Stacks.html">Stacks</a> and
+<a class="ref" href="Frames.html">Frames</a>.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Standard-Error-Handling.html">call-with-error-handling</a>, Previous: <a href="Catching-Exceptions.html">Catching Exceptions</a>, Up: <a href="Programmatic-Error-Handling.html">Programmatic Error Handling</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

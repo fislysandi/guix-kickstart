@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Random Access (Guile Reference Manual)</title>
+
+<meta name="description" content="Random Access (Guile Reference Manual)">
+<meta name="keywords" content="Random Access (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Input-and-Output.html" rel="up" title="Input and Output">
+<link href="Line_002fDelimited.html" rel="next" title="Line/Delimited">
+<link href="Buffering.html" rel="prev" title="Buffering">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Random-Access">
+<div class="nav-panel">
+<p>
+Next: <a href="Line_002fDelimited.html" accesskey="n" rel="next">Line Oriented and Delimited Text</a>, Previous: <a href="Buffering.html" accesskey="p" rel="prev">Buffering</a>, Up: <a href="Input-and-Output.html" accesskey="u" rel="up">Input and Output</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Random-Access-1">6.12.7 Random Access</h4>
+<a class="index-entry-id" id="index-Random-access_002c-ports"></a>
+<a class="index-entry-id" id="index-Port_002c-random-access"></a>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-seek"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">seek</strong> <var class="def-var-arguments">fd_port offset whence</var><a class="copiable-link" href='#index-seek'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fseek"><span class="category-def">C Function: </span><span><strong class="def-name">scm_seek</strong> <var class="def-var-arguments">(fd_port, offset, whence)</var><a class="copiable-link" href='#index-scm_005fseek'> &para;</a></span></dt>
+<dd><p>Sets the current position of <var class="var">fd_port</var> to the integer
+<var class="var">offset</var>.  For a file port, <var class="var">offset</var> is expressed
+as a number of bytes; for other types of ports, such as string
+ports, <var class="var">offset</var> is an abstract representation of the
+position within the port&rsquo;s data, not necessarily expressed
+as a number of bytes.  <var class="var">offset</var> is interpreted according to
+the value of <var class="var">whence</var>.
+</p>
+<p>One of the following variables should be supplied for
+<var class="var">whence</var>:
+</p><dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-SEEK_005fSET"><span class="category-def">Variable: </span><span><strong class="def-name">SEEK_SET</strong><a class="copiable-link" href='#index-SEEK_005fSET'> &para;</a></span></dt>
+<dd><p>Seek from the beginning of the file.
+</p></dd></dl>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-SEEK_005fCUR"><span class="category-def">Variable: </span><span><strong class="def-name">SEEK_CUR</strong><a class="copiable-link" href='#index-SEEK_005fCUR'> &para;</a></span></dt>
+<dd><p>Seek from the current position.
+</p></dd></dl>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-SEEK_005fEND"><span class="category-def">Variable: </span><span><strong class="def-name">SEEK_END</strong><a class="copiable-link" href='#index-SEEK_005fEND'> &para;</a></span></dt>
+<dd><p>Seek from the end of the file.
+</p></dd></dl>
+<p>If <var class="var">fd_port</var> is a file descriptor, the underlying system
+call is <code class="code">lseek</code>.  <var class="var">port</var> may be a string port.
+</p>
+<p>The value returned is the new position in <var class="var">fd_port</var>.  This means
+that the current position of a port can be obtained using:
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(seek port 0 SEEK_CUR)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ftell"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ftell</strong> <var class="def-var-arguments">fd_port</var><a class="copiable-link" href='#index-ftell'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fftell"><span class="category-def">C Function: </span><span><strong class="def-name">scm_ftell</strong> <var class="def-var-arguments">(fd_port)</var><a class="copiable-link" href='#index-scm_005fftell'> &para;</a></span></dt>
+<dd><p>Return an integer representing the current position of
+<var class="var">fd_port</var>, measured from the beginning.  Equivalent to:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(seek port 0 SEEK_CUR)
+</pre></div>
+</dd></dl>
+
+<a class="index-entry-id" id="index-truncate-1"></a>
+<a class="index-entry-id" id="index-ftruncate"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-truncate_002dfile"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">truncate-file</strong> <var class="def-var-arguments">file [length]</var><a class="copiable-link" href='#index-truncate_002dfile'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005ftruncate_005ffile"><span class="category-def">C Function: </span><span><strong class="def-name">scm_truncate_file</strong> <var class="def-var-arguments">(file, length)</var><a class="copiable-link" href='#index-scm_005ftruncate_005ffile'> &para;</a></span></dt>
+<dd><p>Truncate <var class="var">file</var> to <var class="var">length</var> bytes.  <var class="var">file</var> can be a
+filename string, a port object, or an integer file descriptor.  The
+return value is unspecified.
+</p>
+<p>For a port or file descriptor <var class="var">length</var> can be omitted, in which
+case the file is truncated at the current position (per <code class="code">ftell</code>
+above).
+</p>
+<p>On most systems a file can be extended by giving a length greater than
+the current size, but this is not mandatory in the POSIX standard.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Line_002fDelimited.html">Line Oriented and Delimited Text</a>, Previous: <a href="Buffering.html">Buffering</a>, Up: <a href="Input-and-Output.html">Input and Output</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

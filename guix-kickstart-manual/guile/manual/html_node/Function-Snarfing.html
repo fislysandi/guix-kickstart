@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Function Snarfing (Guile Reference Manual)</title>
+
+<meta name="description" content="Function Snarfing (Guile Reference Manual)">
+<meta name="keywords" content="Function Snarfing (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Programming-in-C.html" rel="up" title="Programming in C">
+<link href="Programming-Overview.html" rel="next" title="Programming Overview">
+<link href="Defining-New-Foreign-Object-Types.html" rel="prev" title="Defining New Foreign Object Types">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Function-Snarfing">
+<div class="nav-panel">
+<p>
+Next: <a href="Programming-Overview.html" accesskey="n" rel="next">An Overview of Guile Programming</a>, Previous: <a href="Defining-New-Foreign-Object-Types.html" accesskey="p" rel="prev">Defining New Foreign Object Types</a>, Up: <a href="Programming-in-C.html" accesskey="u" rel="up">Programming in C</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Function-Snarfing-1">5.6 Function Snarfing</h3>
+
+<p>When writing C code for use with Guile, you typically define a set of
+C functions, and then make some of them visible to the Scheme world by
+calling <code class="code">scm_c_define_gsubr</code> or related functions.  If you have
+many functions to publish, it can sometimes be annoying to keep the
+list of calls to <code class="code">scm_c_define_gsubr</code> in sync with the list of
+function definitions.
+</p>
+<p>Guile provides the <code class="code">guile-snarf</code> program to manage this problem.
+Using this tool, you can keep all the information needed to define the
+function alongside the function definition itself; <code class="code">guile-snarf</code>
+will extract this information from your source code, and automatically
+generate a file of calls to <code class="code">scm_c_define_gsubr</code> which you can
+<code class="code">#include</code> into an initialization function.
+</p>
+<p>The snarfing mechanism works for many kind of initialization actions,
+not just for collecting calls to <code class="code">scm_c_define_gsubr</code>.  For a
+full list of what can be done, See <a class="xref" href="Snarfing-Macros.html">Snarfing Macros</a>.
+</p>
+<a class="index-entry-id" id="index-guile_002dsnarf-invocation"></a>
+<a class="index-entry-id" id="index-guile_002dsnarf-example"></a>
+
+<p>The <code class="code">guile-snarf</code> program is invoked like this:
+</p>
+<div class="example smallexample">
+<pre class="example-preformatted">guile-snarf [-o <var class="var">outfile</var>] [<var class="var">cpp-args</var> ...]
+</pre></div>
+
+<p>This command will extract initialization actions to <var class="var">outfile</var>.
+When no <var class="var">outfile</var> has been specified or when <var class="var">outfile</var> is
+<code class="code">-</code>, standard output will be used.  The C preprocessor is called
+with <var class="var">cpp-args</var> (which usually include an input file) and the
+output is filtered to extract the initialization actions.
+</p>
+<p>If there are errors during processing, <var class="var">outfile</var> is deleted and the
+program exits with non-zero status.
+</p>
+<p>During snarfing, the pre-processor macro <code class="code">SCM_MAGIC_SNARFER</code> is
+defined.  You could use this to avoid including snarfer output files
+that don&rsquo;t yet exist by writing code like this:
+</p>
+<div class="example smallexample">
+<pre class="example-preformatted">#ifndef SCM_MAGIC_SNARFER
+#include &quot;foo.x&quot;
+#endif
+</pre></div>
+
+<p>Here is how you might define the Scheme function <code class="code">clear-image</code>,
+implemented by the C function <code class="code">clear_image</code>:
+</p>
+<div class="example">
+<div class="group"><pre class="example-preformatted">#include &lt;libguile.h&gt;
+
+SCM_DEFINE (clear_image, &quot;clear-image&quot;, 1, 0, 0,
+            (SCM image),
+            &quot;Clear the image.&quot;)
+{
+  /* C code to clear the image in <code class="code">image</code>... */
+}
+
+void
+init_image_type ()
+{
+#include &quot;image-type.x&quot;
+}
+</pre></div></div>
+
+<p>The <code class="code">SCM_DEFINE</code> declaration says that the C function
+<code class="code">clear_image</code> implements a Scheme function called
+<code class="code">clear-image</code>, which takes one required argument (of type
+<code class="code">SCM</code> and named <code class="code">image</code>), no optional arguments, and no rest
+argument.  The string <code class="code">&quot;Clear the image.&quot;</code> provides a short help
+text for the function, it is called a <em class="dfn">docstring</em>.
+</p>
+<p><code class="code">SCM_DEFINE</code> macro also defines a static array of characters
+initialized to the Scheme name of the function.  In this case,
+<code class="code">s_clear_image</code> is set to the C string, &quot;clear-image&quot;.  You might
+want to use this symbol when generating error messages.
+</p>
+<p>Assuming the text above lives in a file named <samp class="file">image-type.c</samp>, you
+will need to execute the following command to prepare this file for
+compilation:
+</p>
+<div class="example">
+<pre class="example-preformatted">guile-snarf -o image-type.x image-type.c
+</pre></div>
+
+<p>This scans <samp class="file">image-type.c</samp> for <code class="code">SCM_DEFINE</code>
+declarations, and writes to <samp class="file">image-type.x</samp> the output:
+</p>
+<div class="example">
+<pre class="example-preformatted">scm_c_define_gsubr (&quot;clear-image&quot;, 1, 0, 0, (SCM (*)() ) clear_image);
+</pre></div>
+
+<p>When compiled normally, <code class="code">SCM_DEFINE</code> is a macro which expands to
+the function header for <code class="code">clear_image</code>.
+</p>
+<p>Note that the output file name matches the <code class="code">#include</code> from the
+input file.  Also, you still need to provide all the same information
+you would if you were using <code class="code">scm_c_define_gsubr</code> yourself, but you
+can place the information near the function definition itself, so it is
+less likely to become incorrect or out-of-date.
+</p>
+<p>If you have many files that <code class="code">guile-snarf</code> must process, you should
+consider using a fragment like the following in your Makefile:
+</p>
+<div class="example">
+<pre class="example-preformatted">snarfcppopts = $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
+.SUFFIXES: .x
+.c.x:
+	guile-snarf -o $@ $&lt; $(snarfcppopts)
+</pre></div>
+
+<p>This tells make to run <code class="code">guile-snarf</code> to produce each needed
+<samp class="file">.x</samp> file from the corresponding <samp class="file">.c</samp> file.
+</p>
+<p>The program <code class="code">guile-snarf</code> passes its command-line arguments
+directly to the C preprocessor, which it uses to extract the
+information it needs from the source code. this means you can pass
+normal compilation flags to <code class="code">guile-snarf</code> to define preprocessor
+symbols, add header file directories, and so on.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Programming-Overview.html">An Overview of Guile Programming</a>, Previous: <a href="Defining-New-Foreign-Object-Types.html">Defining New Foreign Object Types</a>, Up: <a href="Programming-in-C.html">Programming in C</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

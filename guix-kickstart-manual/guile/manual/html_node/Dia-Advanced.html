@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Dia Advanced (Guile Reference Manual)</title>
+
+<meta name="description" content="Dia Advanced (Guile Reference Manual)">
+<meta name="keywords" content="Dia Advanced (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Extending-Dia.html" rel="up" title="Extending Dia">
+<link href="Dia-Structure.html" rel="prev" title="Dia Structure">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Dia-Advanced">
+<div class="nav-panel">
+<p>
+Previous: <a href="Dia-Structure.html" accesskey="p" rel="prev">Top-level Structure of Guile-enabled Dia</a>, Up: <a href="Extending-Dia.html" accesskey="u" rel="up">How One Might Extend Dia Using Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Going-Further-with-Dia-and-Guile">5.7.1.7 Going Further with Dia and Guile</h4>
+
+<p>The steps described so far implement an initial Guile integration that
+already gives a lot of additional power to Dia application users.  But
+there are further steps that you could take, and it&rsquo;s interesting to
+consider a few of these.
+</p>
+<p>In general, you could progressively move more of Dia&rsquo;s source code from
+C into Scheme.  This might make the code more maintainable and
+extensible, and it could open the door to new programming paradigms that
+are tricky to effect in C but straightforward in Scheme.
+</p>
+<p>A specific example of this is that you could use the guile-gtk package,
+which provides Scheme-level procedures for most of the Gtk+ library, to
+move the code that lays out and displays Dia objects from C to Scheme.
+</p>
+<p>As you follow this path, it naturally becomes less useful to maintain a
+distinction between Dia&rsquo;s original non-Guile-related source code, and
+its later code implementing foreign objects and primitives for the
+Scheme world.
+</p>
+<p>For example, suppose that the original source code had a
+<code class="code">dia_change_fill_pattern</code> function:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">void dia_change_fill_pattern (struct dia_shape * shape,
+                              struct dia_pattern * pattern)
+{
+  /* real pattern change work */
+}
+</pre></div>
+
+<p>During initial Guile integration, you add a <code class="code">change_fill_pattern</code>
+primitive for Scheme purposes, which accesses the underlying structures
+from its foreign object values and uses <code class="code">dia_change_fill_pattern</code>
+to do the real work:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">SCM change_fill_pattern (SCM shape, SCM pattern)
+{
+  struct dia_shape * d_shape;
+  struct dia_pattern * d_pattern;
+
+  &hellip;
+
+  dia_change_fill_pattern (d_shape, d_pattern);
+
+  return SCM_UNSPECIFIED;
+}
+</pre></div>
+
+<p>At this point, it makes sense to keep <code class="code">dia_change_fill_pattern</code> and
+<code class="code">change_fill_pattern</code> separate, because
+<code class="code">dia_change_fill_pattern</code> can also be called without going through
+Scheme at all, say because the user clicks a button which causes a
+C-registered Gtk+ callback to be called.
+</p>
+<p>But, if the code for creating buttons and registering their callbacks is
+moved into Scheme (using guile-gtk), it may become true that
+<code class="code">dia_change_fill_pattern</code> can no longer be called other than
+through Scheme.  In which case, it makes sense to abolish it and move
+its contents directly into <code class="code">change_fill_pattern</code>, like this:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">SCM change_fill_pattern (SCM shape, SCM pattern)
+{
+  struct dia_shape * d_shape;
+  struct dia_pattern * d_pattern;
+
+  &hellip;
+
+  /* real pattern change work */
+
+  return SCM_UNSPECIFIED;
+}
+</pre></div>
+
+<p>So further Guile integration progressively <em class="emph">reduces</em> the amount of
+functional C code that you have to maintain over the long term.
+</p>
+<p>A similar argument applies to data representation.  In the discussion of
+foreign objects earlier, issues arose because of the different memory
+management and lifetime models that normally apply to data structures in
+C and in Scheme.  However, with further Guile integration, you can
+resolve this issue in a more radical way by allowing all your data
+structures to be under the control of the garbage collector, and kept
+alive by references from the Scheme world.  Instead of maintaining an
+array or linked list of shapes in C, you would instead maintain a list
+in Scheme.
+</p>
+<p>Rather like the coalescing of <code class="code">dia_change_fill_pattern</code> and
+<code class="code">change_fill_pattern</code>, the practical upshot of such a change is
+that you would no longer have to keep the <code class="code">dia_shape</code> and
+<code class="code">dia_guile_shape</code> structures separate, and so wouldn&rsquo;t need to
+worry about the pointers between them.  Instead, you could change the
+foreign object definition to wrap the <code class="code">dia_shape</code> structure
+directly, and send <code class="code">dia_guile_shape</code> off to the scrap yard.  Cut
+out the middle man!
+</p>
+<p>Finally, we come to the holy grail of Guile&rsquo;s free software / extension
+language approach.  Once you have a Scheme representation for
+interesting Dia data types like shapes, and a handy bunch of primitives
+for manipulating them, it suddenly becomes clear that you have a bundle
+of functionality that could have far-ranging use beyond Dia itself.  In
+other words, the data types and primitives could now become a library,
+and Dia becomes just one of the many possible applications using that
+library &mdash; albeit, at this early stage, a rather important one!
+</p>
+<p>In this model, Guile becomes just the glue that binds everything
+together.  Imagine an application that usefully combined functionality
+from Dia, Gnumeric and GnuCash &mdash; it&rsquo;s tricky right now, because no
+such application yet exists; but it&rsquo;ll happen some day &hellip;
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Dia-Structure.html">Top-level Structure of Guile-enabled Dia</a>, Up: <a href="Extending-Dia.html">How One Might Extend Dia Using Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

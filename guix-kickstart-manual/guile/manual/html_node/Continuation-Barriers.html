@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Continuation Barriers (Guile Reference Manual)</title>
+
+<meta name="description" content="Continuation Barriers (Guile Reference Manual)">
+<meta name="keywords" content="Continuation Barriers (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Control-Mechanisms.html" rel="up" title="Control Mechanisms">
+<link href="Handling-Errors.html" rel="prev" title="Handling Errors">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Continuation-Barriers">
+<div class="nav-panel">
+<p>
+Previous: <a href="Handling-Errors.html" accesskey="p" rel="prev">How to Handle Errors</a>, Up: <a href="Control-Mechanisms.html" accesskey="u" rel="up">Controlling the Flow of Program Execution</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Continuation-Barriers-1">6.11.14 Continuation Barriers</h4>
+
+<p>The non-local flow of control caused by continuations might sometimes
+not be wanted. You can use <code class="code">with-continuation-barrier</code> to erect
+fences that continuations can not pass.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-with_002dcontinuation_002dbarrier"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">with-continuation-barrier</strong> <var class="def-var-arguments">proc</var><a class="copiable-link" href='#index-with_002dcontinuation_002dbarrier'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fwith_005fcontinuation_005fbarrier"><span class="category-def">C Function: </span><span><strong class="def-name">scm_with_continuation_barrier</strong> <var class="def-var-arguments">(proc)</var><a class="copiable-link" href='#index-scm_005fwith_005fcontinuation_005fbarrier'> &para;</a></span></dt>
+<dd><p>Call <var class="var">proc</var> and return its result.  Do not allow the invocation of
+continuations that would leave or enter the dynamic extent of the call
+to <code class="code">with-continuation-barrier</code>.  Such an attempt causes an error
+to be signaled.
+</p>
+<p>Throws (such as errors) that are not caught from within <var class="var">proc</var> are
+caught by <code class="code">with-continuation-barrier</code>.  In that case, a short
+message is printed to the current error port and <code class="code">#f</code> is returned.
+</p>
+<p>Thus, <code class="code">with-continuation-barrier</code> returns exactly once.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fwith_005fcontinuation_005fbarrier"><span class="category-def">C Function: </span><span><code class="def-type">void *</code> <strong class="def-name">scm_c_with_continuation_barrier</strong> <code class="def-code-arguments">(void *(*func) (void *), void *data)</code><a class="copiable-link" href='#index-scm_005fc_005fwith_005fcontinuation_005fbarrier'> &para;</a></span></dt>
+<dd><p>Like <code class="code">scm_with_continuation_barrier</code> but call <var class="var">func</var> on
+<var class="var">data</var>.  When an error is caught, <code class="code">NULL</code> is returned.
+</p></dd></dl>
+
+
+
+</div>
+
+
+
+</body>
+</html>

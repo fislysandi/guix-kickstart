@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Methods and Generic Functions (Guile Reference Manual)</title>
+
+<meta name="description" content="Methods and Generic Functions (Guile Reference Manual)">
+<meta name="keywords" content="Methods and Generic Functions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="GOOPS.html" rel="up" title="GOOPS">
+<link href="Inheritance.html" rel="next" title="Inheritance">
+<link href="Slot-Description-Example.html" rel="prev" title="Slot Description Example">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Methods-and-Generic-Functions">
+<div class="nav-panel">
+<p>
+Next: <a href="Inheritance.html" accesskey="n" rel="next">Inheritance</a>, Previous: <a href="Slot-Description-Example.html" accesskey="p" rel="prev">Illustrating Slot Description</a>, Up: <a href="GOOPS.html" accesskey="u" rel="up">GOOPS</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Methods-and-Generic-Functions-1">8.6 Methods and Generic Functions</h3>
+
+<p>A GOOPS method is like a Scheme procedure except that it is specialized
+for a particular set of argument classes, and will only be used when the
+actual arguments in a call match the classes in the method definition.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-method (+ (x &lt;string&gt;) (y &lt;string&gt;))
+  (string-append x y))
+
+(+ &quot;abc&quot; &quot;de&quot;) &rArr; &quot;abcde&quot;
+</pre></div>
+
+<p>A method is not formally associated with any single class (as it is in
+many other object oriented languages), because a method can be
+specialized for a combination of several classes.  If you&rsquo;ve studied
+object orientation in non-Lispy languages, you may remember discussions
+such as whether a method to stretch a graphical image around a surface
+should be a method of the image class, with a surface as a parameter, or
+a method of the surface class, with an image as a parameter.  In GOOPS
+you&rsquo;d just write
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-method (stretch (im &lt;image&gt;) (sf &lt;surface&gt;))
+  ...)
+</pre></div>
+
+<p>and the question of which class the method is more associated with does
+not need answering.
+</p>
+<p>There can simultaneously be several methods with the same name but
+different sets of specializing argument classes; for example:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-method (+ (x &lt;string&gt;) (y &lt;string)) ...)
+(define-method (+ (x &lt;matrix&gt;) (y &lt;matrix&gt;)) ...)
+(define-method (+ (f &lt;fish&gt;) (b &lt;bicycle&gt;)) ...)
+(define-method (+ (a &lt;foo&gt;) (b &lt;bar&gt;) (c &lt;baz&gt;)) ...)
+</pre></div>
+
+<p>A generic function is a container for the set of such methods that a
+program intends to use.
+</p>
+<p>If you look at a program&rsquo;s source code, and see <code class="code">(+ x y)</code> somewhere
+in it, conceptually what is happening is that the program at that point
+calls a generic function (in this case, the generic function bound to
+the identifier <code class="code">+</code>).  When that happens, Guile works out which of
+the generic function&rsquo;s methods is the most appropriate for the arguments
+that the function is being called with; then it evaluates the method&rsquo;s
+code with the arguments as formal parameters.  This happens every time
+that a generic function call is evaluated &mdash; it isn&rsquo;t assumed that a
+given source code call will end up invoking the same method every time.
+</p>
+<p>Defining an identifier as a generic function is done with the
+<code class="code">define-generic</code> macro.  Definition of a new method is done with
+the <code class="code">define-method</code> macro.  Note that <code class="code">define-method</code>
+automatically does a <code class="code">define-generic</code> if the identifier concerned
+is not already a generic function, so often an explicit
+<code class="code">define-generic</code> call is not needed.
+<a class="index-entry-id" id="index-define_002dgeneric"></a>
+<a class="index-entry-id" id="index-define_002dmethod"></a>
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-define_002dgeneric-1"><span class="category-def">syntax: </span><span><strong class="def-name">define-generic</strong> <var class="def-var-arguments">symbol</var><a class="copiable-link" href='#index-define_002dgeneric-1'> &para;</a></span></dt>
+<dd><p>Create a generic function with name <var class="var">symbol</var> and bind it to the
+variable <var class="var">symbol</var>.  If <var class="var">symbol</var> was previously bound to a Scheme
+procedure (or procedure-with-setter), the old procedure (and setter) is
+incorporated into the new generic function as its default procedure (and
+setter).  Any other previous value, including an existing generic
+function, is discarded and replaced by a new, empty generic function.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-define_002dmethod-1"><span class="category-def">syntax: </span><span><strong class="def-name">define-method</strong> <var class="def-var-arguments">(generic parameter &hellip;) body &hellip;</var><a class="copiable-link" href='#index-define_002dmethod-1'> &para;</a></span></dt>
+<dd><p>Define a method for the generic function or accessor <var class="var">generic</var> with
+parameters <var class="var">parameter</var>s and body <var class="var">body</var> <small class="enddots">...</small>.
+</p>
+<p><var class="var">generic</var> is a generic function.  If <var class="var">generic</var> is a variable
+which is not yet bound to a generic function object, the expansion of
+<code class="code">define-method</code> will include a call to <code class="code">define-generic</code>.  If
+<var class="var">generic</var> is <code class="code">(setter <var class="var">generic-with-setter</var>)</code>, where
+<var class="var">generic-with-setter</var> is a variable which is not yet bound to a
+generic-with-setter object, the expansion will include a call to
+<code class="code">define-accessor</code>.
+</p>
+<p>Each <var class="var">parameter</var> must be either a symbol or a two-element list
+<code class="code">(<var class="var">symbol</var> <var class="var">class</var>)</code>.  The symbols refer to variables in
+the body forms that will be bound to the parameters supplied by the
+caller when calling this method.  The <var class="var">class</var>es, if present,
+specify the possible combinations of parameters to which this method
+can be applied.
+</p>
+<p><var class="var">body</var> &hellip; are the bodies of the method definition.
+</p></dd></dl>
+
+<p><code class="code">define-method</code> expressions look a little like Scheme procedure
+definitions of the form
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (name formals &hellip;) . body)
+</pre></div>
+
+<p>The important difference is that each formal parameter, apart from the
+possible &ldquo;rest&rdquo; argument, can be qualified by a class name:
+<code class="code"><var class="var">formal</var></code> becomes <code class="code">(<var class="var">formal</var> <var class="var">class</var>)</code>.  The
+meaning of this qualification is that the method being defined
+will only be applicable in a particular generic function invocation if
+the corresponding argument is an instance of <code class="code"><var class="var">class</var></code> (or one of
+its subclasses).  If more than one of the formal parameters is qualified
+in this way, then the method will only be applicable if each of the
+corresponding arguments is an instance of its respective qualifying class.
+</p>
+<p>Note that unqualified formal parameters act as though they are qualified
+by the class <code class="code">&lt;top&gt;</code>, which GOOPS uses to mean the superclass of
+all valid Scheme types, including both primitive types and GOOPS classes.
+</p>
+<p>For example, if a generic function method is defined with
+<var class="var">parameter</var>s <code class="code">(s1 &lt;square&gt;)</code> and <code class="code">(n &lt;number&gt;)</code>, that
+method is only applicable to invocations of its generic function that
+have two parameters where the first parameter is an instance of the
+<code class="code">&lt;square&gt;</code> class and the second parameter is a number.
+</p>
+
+
+<ul class="mini-toc">
+<li><a href="Accessors.html" accesskey="1">Accessors</a></li>
+<li><a href="Extending-Primitives.html" accesskey="2">Extending Primitives</a></li>
+<li><a href="Merging-Generics.html" accesskey="3">Merging Generics</a></li>
+<li><a href="Next_002dmethod.html" accesskey="4">Next-method</a></li>
+<li><a href="Generic-Function-and-Method-Examples.html" accesskey="5">Generic Function and Method Examples</a></li>
+<li><a href="Handling-Invocation-Errors.html" accesskey="6">Handling Invocation Errors</a></li>
+</ul>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Inheritance.html">Inheritance</a>, Previous: <a href="Slot-Description-Example.html">Illustrating Slot Description</a>, Up: <a href="GOOPS.html">GOOPS</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

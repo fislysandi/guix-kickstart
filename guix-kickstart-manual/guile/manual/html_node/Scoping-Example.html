@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Scoping Example (Guile Reference Manual)</title>
+
+<meta name="description" content="Scoping Example (Guile Reference Manual)">
+<meta name="keywords" content="Scoping Example (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Lexical-Scope.html" rel="up" title="Lexical Scope">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Scoping-Example">
+<div class="nav-panel">
+<p>
+Up: <a href="Lexical-Scope.html" accesskey="u" rel="up">Lexical Scope</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="An-Example-of-Non_002dLexical-Scoping">3.4.4.1 An Example of Non-Lexical Scoping</h4>
+
+<p>To demonstrate that non-lexical scoping does exist and can be useful, we
+present the following example from Emacs Lisp, which is a &ldquo;dynamically
+scoped&rdquo; language.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(defvar currency-abbreviation &quot;USD&quot;)
+
+(defun currency-string (units hundredths)
+  (concat currency-abbreviation
+          (number-to-string units)
+          &quot;.&quot;
+          (number-to-string hundredths)))
+
+(defun french-currency-string (units hundredths)
+  (let ((currency-abbreviation &quot;FRF&quot;))
+    (currency-string units hundredths)))
+</pre></div>
+
+<p>The question to focus on here is: what does the identifier
+<code class="code">currency-abbreviation</code> refer to in the <code class="code">currency-string</code>
+function?  The answer, in Emacs Lisp, is that all variable bindings go
+onto a single stack, and that <code class="code">currency-abbreviation</code> refers to the
+topmost binding from that stack which has the name
+&ldquo;currency-abbreviation&rdquo;.  The binding that is created by the
+<code class="code">defvar</code> form, to the value <code class="code">&quot;USD&quot;</code>, is only relevant if none
+of the code that calls <code class="code">currency-string</code> rebinds the name
+&ldquo;currency-abbreviation&rdquo; in the meanwhile.
+</p>
+<p>The second function <code class="code">french-currency-string</code> works precisely by
+taking advantage of this behaviour.  It creates a new binding for the
+name &ldquo;currency-abbreviation&rdquo; which overrides the one established by
+the <code class="code">defvar</code> form.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">;; Note!  This is Emacs Lisp evaluation, not Scheme!
+(french-currency-string 33 44)
+&rArr;
+&quot;FRF33.44&quot;
+</pre></div>
+
+<p>Now let&rsquo;s look at the corresponding, <em class="emph">lexically scoped</em> Scheme
+code:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define currency-abbreviation &quot;USD&quot;)
+
+(define (currency-string units hundredths)
+  (string-append currency-abbreviation
+                 (number-&gt;string units)
+                 &quot;.&quot;
+                 (number-&gt;string hundredths)))
+
+(define (french-currency-string units hundredths)
+  (let ((currency-abbreviation &quot;FRF&quot;))
+    (currency-string units hundredths)))
+</pre></div>
+
+<p>According to the rules of lexical scoping, the
+<code class="code">currency-abbreviation</code> in <code class="code">currency-string</code> refers to the
+variable location in the innermost environment at that point in the code
+which has a binding for <code class="code">currency-abbreviation</code>, which is the
+variable location in the top level environment created by the preceding
+<code class="code">(define currency-abbreviation &hellip;)</code> expression.
+</p>
+<p>In Scheme, therefore, the <code class="code">french-currency-string</code> procedure does
+not work as intended.  The variable binding that it creates for
+&ldquo;currency-abbreviation&rdquo; is purely local to the code that forms the
+body of the <code class="code">let</code> expression.  Since this code doesn&rsquo;t directly use
+the name &ldquo;currency-abbreviation&rdquo; at all, the binding is pointless.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(french-currency-string 33 44)
+&rArr;
+&quot;USD33.44&quot;
+</pre></div>
+
+<p>This begs the question of how the Emacs Lisp behaviour can be
+implemented in Scheme.  In general, this is a design question whose
+answer depends upon the problem that is being addressed.  In this case,
+the best answer may be that <code class="code">currency-string</code> should be
+redesigned so that it can take an optional third argument.  This third
+argument, if supplied, is interpreted as a currency abbreviation that
+overrides the default.
+</p>
+<p>It is possible to change <code class="code">french-currency-string</code> so that it mostly
+works without changing <code class="code">currency-string</code>, but the fix is inelegant,
+and susceptible to interrupts that could leave the
+<code class="code">currency-abbreviation</code> variable in the wrong state:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define (french-currency-string units hundredths)
+  (set! currency-abbreviation &quot;FRF&quot;)
+  (let ((result (currency-string units hundredths)))
+    (set! currency-abbreviation &quot;USD&quot;)
+    result))
+</pre></div>
+
+<p>The key point here is that the code does not create any local binding
+for the identifier <code class="code">currency-abbreviation</code>, so all occurrences of
+this identifier refer to the top level variable.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Up: <a href="Lexical-Scope.html">Lexical Scope</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Build Config (Guile Reference Manual)</title>
+
+<meta name="description" content="Build Config (Guile Reference Manual)">
+<meta name="keywords" content="Build Config (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Options-and-Config.html" rel="up" title="Options and Config">
+<link href="Feature-Tracking.html" rel="next" title="Feature Tracking">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Build-Config">
+<div class="nav-panel">
+<p>
+Next: <a href="Feature-Tracking.html" accesskey="n" rel="next">Feature Tracking</a>, Up: <a href="Options-and-Config.html" accesskey="u" rel="up">Configuration, Features and Runtime Options</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Configuration_002c-Build-and-Installation">6.23.1 Configuration, Build and Installation</h4>
+
+<p>The following procedures and variables provide information about how
+Guile was configured, built and installed on your system.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-version"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">version</strong><a class="copiable-link" href='#index-version'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-effective_002dversion"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">effective-version</strong><a class="copiable-link" href='#index-effective_002dversion'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-major_002dversion"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">major-version</strong><a class="copiable-link" href='#index-major_002dversion'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-minor_002dversion"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">minor-version</strong><a class="copiable-link" href='#index-minor_002dversion'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-micro_002dversion"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">micro-version</strong><a class="copiable-link" href='#index-micro_002dversion'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fversion"><span class="category-def">C Function: </span><span><strong class="def-name">scm_version</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fversion'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005feffective_005fversion"><span class="category-def">C Function: </span><span><strong class="def-name">scm_effective_version</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005feffective_005fversion'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmajor_005fversion"><span class="category-def">C Function: </span><span><strong class="def-name">scm_major_version</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fmajor_005fversion'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fminor_005fversion"><span class="category-def">C Function: </span><span><strong class="def-name">scm_minor_version</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fminor_005fversion'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmicro_005fversion"><span class="category-def">C Function: </span><span><strong class="def-name">scm_micro_version</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fmicro_005fversion'> &para;</a></span></dt>
+<dd><p>Return a string describing Guile&rsquo;s full version number, effective
+version number, major, minor or micro version number, respectively.
+The <code class="code">effective-version</code> function returns the version name that
+should remain unchanged during a stable series.  Currently that means
+that it omits the micro version.  The effective version should be used
+for items like the versioned share directory name
+i.e. <samp class="file">/usr/share/guile/3.0/</samp>
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(version) &rArr; &quot;3.0.0&quot;
+(effective-version) &rArr; &quot;3.0&quot;
+(major-version) &rArr; &quot;3&quot;
+(minor-version) &rArr; &quot;0&quot;
+(micro-version) &rArr; &quot;0&quot;
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0025package_002ddata_002ddir"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">%package-data-dir</strong><a class="copiable-link" href='#index-_0025package_002ddata_002ddir'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsys_005fpackage_005fdata_005fdir"><span class="category-def">C Function: </span><span><strong class="def-name">scm_sys_package_data_dir</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fsys_005fpackage_005fdata_005fdir'> &para;</a></span></dt>
+<dd><p>Return the name of the directory under which Guile Scheme files in
+general are stored.  On Unix-like systems, this is usually
+<samp class="file">/usr/local/share/guile</samp> or <samp class="file">/usr/share/guile</samp>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0025library_002ddir"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">%library-dir</strong><a class="copiable-link" href='#index-_0025library_002ddir'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsys_005flibrary_005fdir"><span class="category-def">C Function: </span><span><strong class="def-name">scm_sys_library_dir</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fsys_005flibrary_005fdir'> &para;</a></span></dt>
+<dd><p>Return the name of the directory where the Guile Scheme files that
+belong to the core Guile installation (as opposed to files from a 3rd
+party package) are installed.  On Unix-like systems this is usually
+<samp class="file">/usr/local/share/guile/<var class="var">GUILE_EFFECTIVE_VERSION</var></samp> or
+<samp class="file">/usr/share/guile/<var class="var">GUILE_EFFECTIVE_VERSION</var></samp>;
+</p>
+<p>for example <samp class="file">/usr/local/share/guile/3.0</samp>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0025site_002ddir-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">%site-dir</strong><a class="copiable-link" href='#index-_0025site_002ddir-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsys_005fsite_005fdir"><span class="category-def">C Function: </span><span><strong class="def-name">scm_sys_site_dir</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fsys_005fsite_005fdir'> &para;</a></span></dt>
+<dd><p>Return the name of the directory where Guile Scheme files specific to
+your site should be installed.  On Unix-like systems, this is usually
+<samp class="file">/usr/local/share/guile/site</samp> or <samp class="file">/usr/share/guile/site</samp>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0025site_002dccache_002ddir-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">%site-ccache-dir</strong><a class="copiable-link" href='#index-_0025site_002dccache_002ddir-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsys_005fsite_005fccache_005fdir"><span class="category-def">C Function: </span><span><strong class="def-name">scm_sys_site_ccache_dir</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fsys_005fsite_005fccache_005fdir'> &para;</a></span></dt>
+<dd><p>Return the directory where users should install compiled <code class="code">.go</code>
+files for use with this version of Guile.  Might look something like
+<samp class="file">/usr/lib/guile/3.0/site-ccache</samp>.
+</p></dd></dl>
+
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-_0025guile_002dbuild_002dinfo"><span class="category-def">Variable: </span><span><strong class="def-name">%guile-build-info</strong><a class="copiable-link" href='#index-_0025guile_002dbuild_002dinfo'> &para;</a></span></dt>
+<dd><p>Alist of information collected during the building of a particular
+Guile.  Entries can be grouped into one of several categories:
+directories, env vars, and versioning info.
+</p>
+<p>Briefly, here are the keys in <code class="code">%guile-build-info</code>, by group:
+</p>
+<a class="index-entry-id" id="index-srcdir"></a>
+<a class="index-entry-id" id="index-top_005fsrcdir"></a>
+<a class="index-entry-id" id="index-prefix-1"></a>
+<a class="index-entry-id" id="index-exec_005fprefix"></a>
+<a class="index-entry-id" id="index-bindir"></a>
+<a class="index-entry-id" id="index-sbindir"></a>
+<a class="index-entry-id" id="index-libexecdir"></a>
+<a class="index-entry-id" id="index-datadir"></a>
+<a class="index-entry-id" id="index-sysconfdir"></a>
+<a class="index-entry-id" id="index-sharedstatedir"></a>
+<a class="index-entry-id" id="index-localstatedir"></a>
+<a class="index-entry-id" id="index-libdir"></a>
+<a class="index-entry-id" id="index-infodir"></a>
+<a class="index-entry-id" id="index-mandir"></a>
+<a class="index-entry-id" id="index-includedir"></a>
+<a class="index-entry-id" id="index-pkgdatadir"></a>
+<a class="index-entry-id" id="index-pkglibdir"></a>
+<a class="index-entry-id" id="index-pkgincludedir"></a>
+<dl class="table">
+<dt>directories</dt>
+<dd><p>srcdir, top_srcdir, prefix, exec_prefix, bindir, sbindir, libexecdir,
+datadir, sysconfdir, sharedstatedir, localstatedir, libdir, infodir,
+mandir, includedir, pkgdatadir, pkglibdir, pkgincludedir
+<a class="index-entry-id" id="index-LIBS"></a>
+</p></dd>
+<dt>env vars</dt>
+<dd><p>LIBS
+<a class="index-entry-id" id="index-guileversion"></a>
+<a class="index-entry-id" id="index-libguileinterface"></a>
+<a class="index-entry-id" id="index-buildstamp"></a>
+</p></dd>
+<dt>versioning info</dt>
+<dd><p>guileversion, libguileinterface, buildstamp
+</p></dd>
+</dl>
+
+<p>Values are all strings.  The value for <code class="code">LIBS</code> is typically found
+also as a part of <code class="code">pkg-config --libs
+guile-3.0</code> output.  The value for
+<code class="code">guileversion</code> has form X.Y.Z, and should be the same as returned
+by <code class="code">(version)</code>.  The value for <code class="code">libguileinterface</code> is libtool
+compatible and has form CURRENT:REVISION:AGE (see <a data-manual="libtool" href="http://www.gnu.org/software/libtool/manual/html_node/Versioning.html#Versioning">Library interface versions</a> in <cite class="cite">GNU Libtool</cite>).  The value for
+<code class="code">buildstamp</code> is the output of the command &lsquo;<samp class="samp">date -u +'%Y-%m-%d
+%T'</samp>&rsquo; (UTC).
+</p>
+<p>In the source, <code class="code">%guile-build-info</code> is initialized from
+libguile/libpath.h, which is completely generated, so deleting this file
+before a build guarantees up-to-date values for that build.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-GNU-triplet"></a>
+<a class="index-entry-id" id="index-canonical-host-type"></a>
+
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-_0025host_002dtype"><span class="category-def">Variable: </span><span><strong class="def-name">%host-type</strong><a class="copiable-link" href='#index-_0025host_002dtype'> &para;</a></span></dt>
+<dd><p>The canonical host type (GNU triplet) of the host Guile was configured
+for, e.g., <code class="code">&quot;x86_64-unknown-linux-gnu&quot;</code> (see <a data-manual="autoconf" href="http://www.gnu.org/software/autoconf/manual/html_node/Canonicalizing.html#Canonicalizing">Canonicalizing</a> in <cite class="cite">The GNU Autoconf Manual</cite>).
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Feature-Tracking.html">Feature Tracking</a>, Up: <a href="Options-and-Config.html">Configuration, Features and Runtime Options</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

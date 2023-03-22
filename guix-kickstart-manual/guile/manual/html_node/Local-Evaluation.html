@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Local Evaluation (Guile Reference Manual)</title>
+
+<meta name="description" content="Local Evaluation (Guile Reference Manual)">
+<meta name="keywords" content="Local Evaluation (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Read_002fLoad_002fEval_002fCompile.html" rel="up" title="Read/Load/Eval/Compile">
+<link href="Local-Inclusion.html" rel="next" title="Local Inclusion">
+<link href="Delayed-Evaluation.html" rel="prev" title="Delayed Evaluation">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Local-Evaluation">
+<div class="nav-panel">
+<p>
+Next: <a href="Local-Inclusion.html" accesskey="n" rel="next">Local Inclusion</a>, Previous: <a href="Delayed-Evaluation.html" accesskey="p" rel="prev">Delayed Evaluation</a>, Up: <a href="Read_002fLoad_002fEval_002fCompile.html" accesskey="u" rel="up">Reading and Evaluating Scheme Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Local-Evaluation-1">6.16.11 Local Evaluation</h4>
+
+<p>Guile includes a facility to capture a lexical environment, and later
+evaluate a new expression within that environment.  This code is
+implemented in a module.
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 local-eval))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-the_002denvironment"><span class="category-def">syntax: </span><span><strong class="def-name">the-environment</strong><a class="copiable-link" href='#index-the_002denvironment'> &para;</a></span></dt>
+<dd><p>Captures and returns a lexical environment for use with
+<code class="code">local-eval</code> or <code class="code">local-compile</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-local_002deval"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">local-eval</strong> <var class="def-var-arguments">exp env</var><a class="copiable-link" href='#index-local_002deval'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flocal_005feval"><span class="category-def">C Function: </span><span><strong class="def-name">scm_local_eval</strong> <var class="def-var-arguments">(exp, env)</var><a class="copiable-link" href='#index-scm_005flocal_005feval'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-local_002dcompile"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">local-compile</strong> <var class="def-var-arguments">exp env [opts=()]</var><a class="copiable-link" href='#index-local_002dcompile'> &para;</a></span></dt>
+<dd><p>Evaluate or compile the expression <var class="var">exp</var> in the lexical environment
+<var class="var">env</var>.
+</p></dd></dl>
+
+<p>Here is a simple example, illustrating that it is the variable
+that gets captured, not just its value at one point in time.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define e (let ((x 100)) (the-environment)))
+(define fetch-x (local-eval '(lambda () x) e))
+(fetch-x)
+&rArr; 100
+(local-eval '(set! x 42) e)
+(fetch-x)
+&rArr; 42
+</pre></div>
+
+<p>While <var class="var">exp</var> is evaluated within the lexical environment of
+<code class="code">(the-environment)</code>, it has the dynamic environment of the call to
+<code class="code">local-eval</code>.
+</p>
+<p><code class="code">local-eval</code> and <code class="code">local-compile</code> can only evaluate
+expressions, not definitions.
+</p>
+<div class="example">
+<pre class="example-preformatted">(local-eval '(define foo 42)
+            (let ((x 100)) (the-environment)))
+&rArr; syntax error: definition in expression context
+</pre></div>
+
+<p>Note that the current implementation of <code class="code">(the-environment)</code> only
+captures &ldquo;normal&rdquo; lexical bindings, and pattern variables bound by
+<code class="code">syntax-case</code>.  It does not currently capture local syntax
+transformers bound by <code class="code">let-syntax</code>, <code class="code">letrec-syntax</code> or
+non-top-level <code class="code">define-syntax</code> forms.  Any attempt to reference such
+captured syntactic keywords via <code class="code">local-eval</code> or
+<code class="code">local-compile</code> produces an error.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Local-Inclusion.html">Local Inclusion</a>, Previous: <a href="Delayed-Evaluation.html">Delayed Evaluation</a>, Up: <a href="Read_002fLoad_002fEval_002fCompile.html">Reading and Evaluating Scheme Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

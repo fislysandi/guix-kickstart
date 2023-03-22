@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Procedures as Values (Guile Reference Manual)</title>
+
+<meta name="description" content="Procedures as Values (Guile Reference Manual)">
+<meta name="keywords" content="Procedures as Values (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="About-Procedures.html" rel="up" title="About Procedures">
+<link href="Simple-Invocation.html" rel="next" title="Simple Invocation">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Procedures-as-Values">
+<div class="nav-panel">
+<p>
+Next: <a href="Simple-Invocation.html" accesskey="n" rel="next">Simple Procedure Invocation</a>, Up: <a href="About-Procedures.html" accesskey="u" rel="up">The Representation and Use of Procedures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Procedures-as-Values-1">3.2.1 Procedures as Values</h4>
+
+<p>One of the great simplifications of Scheme is that a procedure is just
+another type of value, and that procedure values can be passed around
+and stored in variables in exactly the same way as, for example, strings
+and lists.  When we talk about a built-in standard Scheme procedure such
+as <code class="code">open-input-file</code>, what we actually mean is that there is a
+pre-defined top level variable called <code class="code">open-input-file</code>, whose
+value is a procedure that implements what R5RS says that
+<code class="code">open-input-file</code> should do.
+</p>
+<p>Note that this is quite different from many dialects of Lisp &mdash;
+including Emacs Lisp &mdash; in which a program can use the same name with
+two quite separate meanings: one meaning identifies a Lisp function,
+while the other meaning identifies a Lisp variable, whose value need
+have nothing to do with the function that is associated with the first
+meaning.  In these dialects, functions and variables are said to live in
+different <em class="dfn">namespaces</em>.
+</p>
+<p>In Scheme, on the other hand, all names belong to a single unified
+namespace, and the variables that these names identify can hold any kind
+of Scheme value, including procedure values.
+</p>
+<p>One consequence of the &ldquo;procedures as values&rdquo; idea is that, if you
+don&rsquo;t happen to like the standard name for a Scheme procedure, you can
+change it.
+</p>
+<p>For example, <code class="code">call-with-current-continuation</code> is a very important
+standard Scheme procedure, but it also has a very long name!  So, many
+programmers use the following definition to assign the same procedure
+value to the more convenient name <code class="code">call/cc</code>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define call/cc call-with-current-continuation)
+</pre></div>
+
+<p>Let&rsquo;s understand exactly how this works.  The definition creates a new
+variable <code class="code">call/cc</code>, and then sets its value to the value of the
+variable <code class="code">call-with-current-continuation</code>; the latter value is a
+procedure that implements the behaviour that R5RS specifies under the
+name &ldquo;call-with-current-continuation&rdquo;.  So <code class="code">call/cc</code> ends up
+holding this value as well.
+</p>
+<p>Now that <code class="code">call/cc</code> holds the required procedure value, you could
+choose to use <code class="code">call-with-current-continuation</code> for a completely
+different purpose, or just change its value so that you will get an
+error if you accidentally use <code class="code">call-with-current-continuation</code> as a
+procedure in your program rather than <code class="code">call/cc</code>.  For example:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(set! call-with-current-continuation &quot;Not a procedure any more!&quot;)
+</pre></div>
+
+<p>Or you could just leave <code class="code">call-with-current-continuation</code> as it was.
+It&rsquo;s perfectly fine for more than one variable to hold the same
+procedure value.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Simple-Invocation.html">Simple Procedure Invocation</a>, Up: <a href="About-Procedures.html">The Representation and Use of Procedures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

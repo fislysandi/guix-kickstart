@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Creating Foreign Objects (Guile Reference Manual)</title>
+
+<meta name="description" content="Creating Foreign Objects (Guile Reference Manual)">
+<meta name="keywords" content="Creating Foreign Objects (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Defining-New-Foreign-Object-Types.html" rel="up" title="Defining New Foreign Object Types">
+<link href="Type-Checking-of-Foreign-Objects.html" rel="next" title="Type Checking of Foreign Objects">
+<link href="Defining-Foreign-Object-Types.html" rel="prev" title="Defining Foreign Object Types">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Creating-Foreign-Objects">
+<div class="nav-panel">
+<p>
+Next: <a href="Type-Checking-of-Foreign-Objects.html" accesskey="n" rel="next">Type Checking of Foreign Objects</a>, Previous: <a href="Defining-Foreign-Object-Types.html" accesskey="p" rel="prev">Defining Foreign Object Types</a>, Up: <a href="Defining-New-Foreign-Object-Types.html" accesskey="u" rel="up">Defining New Foreign Object Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Creating-Foreign-Objects-1">5.5.2 Creating Foreign Objects</h4>
+
+<p>Foreign objects contain zero or more &ldquo;slots&rdquo; of data.  A slot can hold
+a pointer, an integer that fits into a <code class="code">size_t</code> or <code class="code">ssize_t</code>,
+or a <code class="code">SCM</code> value.
+</p>
+<p>All objects of a given foreign type have the same number of slots.  In
+the example from the previous section, the <code class="code">image</code> type has one
+slot, because the slots list passed to
+<code class="code">scm_make_foreign_object_type</code> is of length one.  (The actual names
+given to slots are unimportant for most users of the C interface, but
+can be used on the Scheme side to introspect on the foreign object.)
+</p>
+<p>To construct a foreign object and initialize its first slot, call
+<code class="code">scm_make_foreign_object_1 (<var class="var">type</var>, <var class="var">first_slot_value</var>)</code>.
+There are similarly named constructors for initializing 0, 1, 2, or 3
+slots, or initializing <var class="var">n</var> slots via an array.  See <a class="xref" href="Foreign-Objects.html">Foreign Objects</a>, for full details.  Any fields that are not explicitly
+initialized are set to 0.
+</p>
+<p>To get or set the value of a slot by index, you can use the
+<code class="code">scm_foreign_object_ref</code> and <code class="code">scm_foreign_object_set_x</code>
+functions.  These functions take and return values as <code class="code">void *</code>
+pointers; there are corresponding convenience procedures like
+<code class="code">_signed_ref</code>, <code class="code">_unsigned_set_x</code> and so on for dealing with
+slots as signed or unsigned integers.
+</p>
+<p>Foreign objects fields that are pointers can be tricky to manage.  If
+possible, it is best that all memory that is referenced by a foreign
+object be managed by the garbage collector.  That way, the GC can
+automatically ensure that memory is accessible when it is needed, and
+freed when it becomes inaccessible.  If this is not the case for your
+program &ndash; for example, if you are exposing an object to Scheme that was
+allocated by some other, Guile-unaware part of your program &ndash; then you
+will probably need to implement a finalizer.  See <a class="xref" href="Foreign-Object-Memory-Management.html">Foreign Object Memory Management</a>, for more.
+</p>
+<p>Continuing the example from the previous section, if the global variable
+<code class="code">image_type</code> contains the type returned by
+<code class="code">scm_make_foreign_object_type</code>, here is how we could construct a
+foreign object whose &ldquo;data&rdquo; field contains a pointer to a freshly
+allocated <code class="code">struct image</code>:
+</p>
+<div class="example">
+<pre class="example-preformatted">SCM
+make_image (SCM name, SCM s_width, SCM s_height)
+{
+  struct image *image;
+  int width = scm_to_int (s_width);
+  int height = scm_to_int (s_height);
+
+  /* Allocate the `struct image'.  Because we
+     use scm_gc_malloc, this memory block will
+     be automatically reclaimed when it becomes
+     inaccessible, and its members will be traced
+     by the garbage collector.  */
+  image = (struct image *)
+    scm_gc_malloc (sizeof (struct image), &quot;image&quot;);
+
+  image-&gt;width = width;
+  image-&gt;height = height;
+
+  /* Allocating the pixels with
+     scm_gc_malloc_pointerless means that the
+     pixels data is collectable by GC, but
+     that GC shouldn't spend time tracing its
+     contents for nested pointers because there
+     aren't any.  */
+  image-&gt;pixels =
+    scm_gc_malloc_pointerless (width * height, &quot;image pixels&quot;);
+
+  image-&gt;name = name;
+  image-&gt;update_func = SCM_BOOL_F;
+
+  /* Now wrap the struct image* in a new foreign
+     object, and return that object.  */
+  return scm_make_foreign_object_1 (image_type, image);
+}
+</pre></div>
+
+<p>We use <code class="code">scm_gc_malloc_pointerless</code> for the pixel buffer to tell the
+garbage collector not to scan it for pointers.  Calls to
+<code class="code">scm_gc_malloc</code>, <code class="code">scm_make_foreign_object_1</code>, and
+<code class="code">scm_gc_malloc_pointerless</code> raise an exception in out-of-memory
+conditions; the garbage collector is able to reclaim previously
+allocated memory if that happens.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Type-Checking-of-Foreign-Objects.html">Type Checking of Foreign Objects</a>, Previous: <a href="Defining-Foreign-Object-Types.html">Defining Foreign Object Types</a>, Up: <a href="Defining-New-Foreign-Object-Types.html">Defining New Foreign Object Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

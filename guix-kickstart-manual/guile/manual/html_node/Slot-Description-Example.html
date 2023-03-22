@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Slot Description Example (Guile Reference Manual)</title>
+
+<meta name="description" content="Slot Description Example (Guile Reference Manual)">
+<meta name="keywords" content="Slot Description Example (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="GOOPS.html" rel="up" title="GOOPS">
+<link href="Methods-and-Generic-Functions.html" rel="next" title="Methods and Generic Functions">
+<link href="Slot-Options.html" rel="prev" title="Slot Options">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Slot-Description-Example">
+<div class="nav-panel">
+<p>
+Next: <a href="Methods-and-Generic-Functions.html" accesskey="n" rel="next">Methods and Generic Functions</a>, Previous: <a href="Slot-Options.html" accesskey="p" rel="prev">Slot Options</a>, Up: <a href="GOOPS.html" accesskey="u" rel="up">GOOPS</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Illustrating-Slot-Description">8.5 Illustrating Slot Description</h3>
+
+<p>To illustrate slot description, we can redefine the <code class="code">&lt;my-complex&gt;</code>
+class seen before. A definition could be:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-class &lt;my-complex&gt; (&lt;number&gt;) 
+   (r #:init-value 0 #:getter get-r #:setter set-r! #:init-keyword #:r)
+   (i #:init-value 0 #:getter get-i #:setter set-i! #:init-keyword #:i))
+</pre></div>
+
+<p>With this definition, the <code class="code">r</code> and <code class="code">i</code> slots are set to 0 by
+default, and can be initialised to other values by calling <code class="code">make</code>
+with the <code class="code">#:r</code> and <code class="code">#:i</code> keywords.  Also the generic functions
+<code class="code">get-r</code>, <code class="code">set-r!</code>, <code class="code">get-i</code> and <code class="code">set-i!</code>  are
+automatically defined to read and write the slots.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define c1 (make &lt;my-complex&gt; #:r 1 #:i 2))
+(get-r c1) &rArr; 1
+(set-r! c1 12)
+(get-r c1) &rArr; 12
+(define c2 (make &lt;my-complex&gt; #:r 2))
+(get-r c2) &rArr; 2
+(get-i c2) &rArr; 0
+</pre></div>
+
+<p>Accessors can both read and write a slot.  So, another definition of the
+<code class="code">&lt;my-complex&gt;</code> class, using the <code class="code">#:accessor</code> option, could be:
+</p>
+<a class="index-entry-id" id="index-set_0021-1"></a>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-class &lt;my-complex&gt; (&lt;number&gt;) 
+   (r #:init-value 0 #:accessor real-part #:init-keyword #:r)
+   (i #:init-value 0 #:accessor imag-part #:init-keyword #:i))
+</pre></div>
+
+<p>With this definition, the <code class="code">r</code> slot can be read with:
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(real-part c)
+</pre></div>
+<p>and set with:
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(set! (real-part c) new-value)
+</pre></div>
+
+<p>Suppose now that we want to manipulate complex numbers with both
+rectangular and polar coordinates.  One solution could be to have a
+definition of complex numbers which uses one particular representation
+and some conversion functions to pass from one representation to the
+other.  A better solution is to use virtual slots, like this:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-class &lt;my-complex&gt; (&lt;number&gt;)
+   ;; True slots use rectangular coordinates
+   (r #:init-value 0 #:accessor real-part #:init-keyword #:r)
+   (i #:init-value 0 #:accessor imag-part #:init-keyword #:i)
+   ;; Virtual slots access do the conversion
+   (m #:accessor magnitude #:init-keyword #:magn  
+      #:allocation #:virtual
+      #:slot-ref (lambda (o)
+                  (let ((r (slot-ref o 'r)) (i (slot-ref o 'i)))
+                    (sqrt (+ (* r r) (* i i)))))
+      #:slot-set! (lambda (o m)
+                    (let ((a (slot-ref o 'a)))
+                      (slot-set! o 'r (* m (cos a)))
+                      (slot-set! o 'i (* m (sin a))))))
+   (a #:accessor angle #:init-keyword #:angle
+      #:allocation #:virtual
+      #:slot-ref (lambda (o)
+                  (atan (slot-ref o 'i) (slot-ref o 'r)))
+      #:slot-set! (lambda(o a)
+                   (let ((m (slot-ref o 'm)))
+                      (slot-set! o 'r (* m (cos a)))
+                      (slot-set! o 'i (* m (sin a)))))))
+
+</pre></div>
+
+<p>In this class definition, the magnitude <code class="code">m</code> and angle <code class="code">a</code>
+slots are virtual, and are calculated, when referenced, from the normal
+(i.e. <code class="code">#:allocation #:instance</code>) slots <code class="code">r</code> and <code class="code">i</code>, by
+calling the function defined in the relevant <code class="code">#:slot-ref</code> option.
+Correspondingly, writing <code class="code">m</code> or <code class="code">a</code> leads to calling the
+function defined in the <code class="code">#:slot-set!</code> option.  Thus the
+following expression
+</p>
+<a class="index-entry-id" id="index-_0023_003aslot_002dset_0021-2"></a>
+<a class="index-entry-id" id="index-_0023_003aslot_002dref-2"></a>
+<div class="example lisp">
+<pre class="lisp-preformatted">(slot-set! c 'a 3)
+</pre></div>
+
+<p>permits to set the angle of the <code class="code">c</code> complex number.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define c (make &lt;my-complex&gt; #:r 12 #:i 20))
+(real-part c) &rArr; 12
+(angle c) &rArr; 1.03037682652431
+(slot-set! c 'i 10)
+(set! (real-part c) 1)
+(describe c)
+-|
+#&lt;&lt;my-complex&gt; 401e9b58&gt; is an instance of class &lt;my-complex&gt;
+Slots are: 
+     r = 1
+     i = 10
+     m = 10.0498756211209
+     a = 1.47112767430373
+</pre></div>
+
+<p>Since initialization keywords have been defined for the four slots, we
+can now define the standard Scheme primitives <code class="code">make-rectangular</code>
+and <code class="code">make-polar</code>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define make-rectangular 
+   (lambda (x y) (make &lt;my-complex&gt; #:r x #:i y)))
+
+(define make-polar
+   (lambda (x y) (make &lt;my-complex&gt; #:magn x #:angle y)))
+</pre></div>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Methods-and-Generic-Functions.html">Methods and Generic Functions</a>, Previous: <a href="Slot-Options.html">Slot Options</a>, Up: <a href="GOOPS.html">GOOPS</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

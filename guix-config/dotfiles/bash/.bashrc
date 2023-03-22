@@ -125,18 +125,28 @@ umask 022
 umask 022
 
 
+
+export LANG=C
+
+
 # home manager aliases
 
-alias gbuild="guix home container"
+alias gbuild="proxychains guix home container"
 
-alias gswitch="guix home switch"
+alias gswitch="proxychains guix home reconfigure"
 
 
 # Automatically added by the Guix install script.
 GUIX_PROFILE="$HOME/.guix-profile"
 
+export LANG=C
+
+# Proxies
 
 
+
+
+set -o vi
 
 if [ -n "$GUIX_ENVIRONMENT" ]; then
     if [[ $PS1 =~ (.*)"\\$" ]]; then

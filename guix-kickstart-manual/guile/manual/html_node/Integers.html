@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Integers (Guile Reference Manual)</title>
+
+<meta name="description" content="Integers (Guile Reference Manual)">
+<meta name="keywords" content="Integers (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Numbers.html" rel="up" title="Numbers">
+<link href="Reals-and-Rationals.html" rel="next" title="Reals and Rationals">
+<link href="Numerical-Tower.html" rel="prev" title="Numerical Tower">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Integers">
+<div class="nav-panel">
+<p>
+Next: <a href="Reals-and-Rationals.html" accesskey="n" rel="next">Real and Rational Numbers</a>, Previous: <a href="Numerical-Tower.html" accesskey="p" rel="prev">Scheme&rsquo;s Numerical &ldquo;Tower&rdquo;</a>, Up: <a href="Numbers.html" accesskey="u" rel="up">Numerical data types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Integers-1">6.6.2.2 Integers</h4>
+
+<a class="index-entry-id" id="index-Integer-numbers"></a>
+
+<a class="index-entry-id" id="index-integer_003f-2"></a>
+
+<p>Integers are whole numbers, that is numbers with no fractional part,
+such as 2, 83, and &minus;3789.
+</p>
+<p>Integers in Guile can be arbitrarily big, as shown by the following
+example.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define (factorial n)
+  (let loop ((n n) (product 1))
+    (if (= n 0)
+        product
+        (loop (- n 1) (* product n)))))
+
+(factorial 3)
+&rArr; 6
+
+(factorial 20)
+&rArr; 2432902008176640000
+
+(- (factorial 45))
+&rArr; -119622220865480194561963161495657715064383733760000000000
+</pre></div>
+
+<p>Readers whose background is in programming languages where integers are
+limited by the need to fit into just 4 or 8 bytes of memory may find
+this surprising, or suspect that Guile&rsquo;s representation of integers is
+inefficient.  In fact, Guile achieves a near optimal balance of
+convenience and efficiency by using the host computer&rsquo;s native
+representation of integers where possible, and a more general
+representation where the required number does not fit in the native
+form.  Conversion between these two representations is automatic and
+completely invisible to the Scheme level programmer.
+</p>
+<p>C has a host of different integer types, and Guile offers a host of
+functions to convert between them and the <code class="code">SCM</code> representation.
+For example, a C <code class="code">int</code> can be handled with <code class="code">scm_to_int</code> and
+<code class="code">scm_from_int</code>.  Guile also defines a few C integer types of its
+own, to help with differences between systems.
+</p>
+<p>C integer types that are not covered can be handled with the generic
+<code class="code">scm_to_signed_integer</code> and <code class="code">scm_from_signed_integer</code> for
+signed types, or with <code class="code">scm_to_unsigned_integer</code> and
+<code class="code">scm_from_unsigned_integer</code> for unsigned types.
+</p>
+<p>Scheme integers can be exact and inexact.  For example, a number
+written as <code class="code">3.0</code> with an explicit decimal-point is inexact, but
+it is also an integer.  The functions <code class="code">integer?</code> and
+<code class="code">scm_is_integer</code> report true for such a number, but the functions
+<code class="code">exact-integer?</code>, <code class="code">scm_is_exact_integer</code>,
+<code class="code">scm_is_signed_integer</code>, and <code class="code">scm_is_unsigned_integer</code> only
+allow exact integers and thus report false.  Likewise, the conversion
+functions like <code class="code">scm_to_signed_integer</code> only accept exact
+integers.
+</p>
+<p>The motivation for this behavior is that the inexactness of a number
+should not be lost silently.  If you want to allow inexact integers,
+you can explicitly insert a call to <code class="code">inexact-&gt;exact</code> or to its C
+equivalent <code class="code">scm_inexact_to_exact</code>.  (Only inexact integers will
+be converted by this call into exact integers; inexact non-integers
+will become exact fractions.)
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-integer_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">integer?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-integer_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005finteger_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_integer_p</strong> <var class="def-var-arguments">(x)</var><a class="copiable-link" href='#index-scm_005finteger_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">x</var> is an exact or inexact integer number, else
+return <code class="code">#f</code>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(integer? 487)
+&rArr; #t
+
+(integer? 3.0)
+&rArr; #t
+
+(integer? -3.4)
+&rArr; #f
+
+(integer? +inf.0)
+&rArr; #f
+</pre></div>
+</dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fis_005finteger"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_is_integer</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fis_005finteger'> &para;</a></span></dt>
+<dd><p>This is equivalent to <code class="code">scm_is_true (scm_integer_p (x))</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-exact_002dinteger_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exact-integer?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-exact_002dinteger_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fexact_005finteger_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_exact_integer_p</strong> <var class="def-var-arguments">(x)</var><a class="copiable-link" href='#index-scm_005fexact_005finteger_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">x</var> is an exact integer number, else
+return <code class="code">#f</code>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(exact-integer? 37)
+&rArr; #t
+
+(exact-integer? 3.0)
+&rArr; #f
+</pre></div>
+</dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fis_005fexact_005finteger"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_is_exact_integer</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fis_005fexact_005finteger'> &para;</a></span></dt>
+<dd><p>This is equivalent to <code class="code">scm_is_true (scm_exact_integer_p (x))</code>.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-scm_005ft_005fint8"><span class="category-def">C Type: </span><span><strong class="def-name">scm_t_int8</strong><a class="copiable-link" href='#index-scm_005ft_005fint8'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005ft_005fuint8"><span class="category-def">C Type: </span><span><strong class="def-name">scm_t_uint8</strong><a class="copiable-link" href='#index-scm_005ft_005fuint8'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005ft_005fint16"><span class="category-def">C Type: </span><span><strong class="def-name">scm_t_int16</strong><a class="copiable-link" href='#index-scm_005ft_005fint16'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005ft_005fuint16"><span class="category-def">C Type: </span><span><strong class="def-name">scm_t_uint16</strong><a class="copiable-link" href='#index-scm_005ft_005fuint16'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005ft_005fint32"><span class="category-def">C Type: </span><span><strong class="def-name">scm_t_int32</strong><a class="copiable-link" href='#index-scm_005ft_005fint32'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005ft_005fuint32"><span class="category-def">C Type: </span><span><strong class="def-name">scm_t_uint32</strong><a class="copiable-link" href='#index-scm_005ft_005fuint32'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005ft_005fint64"><span class="category-def">C Type: </span><span><strong class="def-name">scm_t_int64</strong><a class="copiable-link" href='#index-scm_005ft_005fint64'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005ft_005fuint64"><span class="category-def">C Type: </span><span><strong class="def-name">scm_t_uint64</strong><a class="copiable-link" href='#index-scm_005ft_005fuint64'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005ft_005fintmax"><span class="category-def">C Type: </span><span><strong class="def-name">scm_t_intmax</strong><a class="copiable-link" href='#index-scm_005ft_005fintmax'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-scm_005ft_005fuintmax"><span class="category-def">C Type: </span><span><strong class="def-name">scm_t_uintmax</strong><a class="copiable-link" href='#index-scm_005ft_005fuintmax'> &para;</a></span></dt>
+<dd><p>The C types are equivalent to the corresponding ISO C types but are
+defined on all platforms, with the exception of <code class="code">scm_t_int64</code> and
+<code class="code">scm_t_uint64</code>, which are only defined when a 64-bit type is
+available.  For example, <code class="code">scm_t_int8</code> is equivalent to
+<code class="code">int8_t</code>.
+</p>
+<p>You can regard these definitions as a stop-gap measure until all
+platforms provide these types.  If you know that all the platforms
+that you are interested in already provide these types, it is better
+to use them directly instead of the types provided by Guile.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fis_005fsigned_005finteger"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_is_signed_integer</strong> <code class="def-code-arguments">(SCM x, scm_t_intmax min, scm_t_intmax max)</code><a class="copiable-link" href='#index-scm_005fis_005fsigned_005finteger'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fis_005funsigned_005finteger"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_is_unsigned_integer</strong> <code class="def-code-arguments">(SCM x, scm_t_uintmax min, scm_t_uintmax max)</code><a class="copiable-link" href='#index-scm_005fis_005funsigned_005finteger'> &para;</a></span></dt>
+<dd><p>Return <code class="code">1</code> when <var class="var">x</var> represents an exact integer that is
+between <var class="var">min</var> and <var class="var">max</var>, inclusive.
+</p>
+<p>These functions can be used to check whether a <code class="code">SCM</code> value will
+fit into a given range, such as the range of a given C integer type.
+If you just want to convert a <code class="code">SCM</code> value to a given C integer
+type, use one of the conversion functions directly.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fto_005fsigned_005finteger"><span class="category-def">C Function: </span><span><code class="def-type">scm_t_intmax</code> <strong class="def-name">scm_to_signed_integer</strong> <code class="def-code-arguments">(SCM x, scm_t_intmax min, scm_t_intmax max)</code><a class="copiable-link" href='#index-scm_005fto_005fsigned_005finteger'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005funsigned_005finteger"><span class="category-def">C Function: </span><span><code class="def-type">scm_t_uintmax</code> <strong class="def-name">scm_to_unsigned_integer</strong> <code class="def-code-arguments">(SCM x, scm_t_uintmax min, scm_t_uintmax max)</code><a class="copiable-link" href='#index-scm_005fto_005funsigned_005finteger'> &para;</a></span></dt>
+<dd><p>When <var class="var">x</var> represents an exact integer that is between <var class="var">min</var> and
+<var class="var">max</var> inclusive, return that integer.  Else signal an error,
+either a &lsquo;wrong-type&rsquo; error when <var class="var">x</var> is not an exact integer, or
+an &lsquo;out-of-range&rsquo; error when it doesn&rsquo;t fit the given range.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005ffrom_005fsigned_005finteger"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_signed_integer</strong> <code class="def-code-arguments">(scm_t_intmax x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fsigned_005finteger'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005funsigned_005finteger"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_unsigned_integer</strong> <code class="def-code-arguments">(scm_t_uintmax x)</code><a class="copiable-link" href='#index-scm_005ffrom_005funsigned_005finteger'> &para;</a></span></dt>
+<dd><p>Return the <code class="code">SCM</code> value that represents the integer <var class="var">x</var>.  This
+function will always succeed and will always return an exact number.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fto_005fchar"><span class="category-def">C Function: </span><span><code class="def-type">char</code> <strong class="def-name">scm_to_char</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fchar'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fschar"><span class="category-def">C Function: </span><span><code class="def-type">signed char</code> <strong class="def-name">scm_to_schar</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fschar'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fuchar"><span class="category-def">C Function: </span><span><code class="def-type">unsigned char</code> <strong class="def-name">scm_to_uchar</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fuchar'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fshort"><span class="category-def">C Function: </span><span><code class="def-type">short</code> <strong class="def-name">scm_to_short</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fshort'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fushort"><span class="category-def">C Function: </span><span><code class="def-type">unsigned short</code> <strong class="def-name">scm_to_ushort</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fushort'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fint"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_to_int</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fint'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fuint"><span class="category-def">C Function: </span><span><code class="def-type">unsigned int</code> <strong class="def-name">scm_to_uint</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fuint'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005flong"><span class="category-def">C Function: </span><span><code class="def-type">long</code> <strong class="def-name">scm_to_long</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005flong'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fulong"><span class="category-def">C Function: </span><span><code class="def-type">unsigned long</code> <strong class="def-name">scm_to_ulong</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fulong'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005flong_005flong"><span class="category-def">C Function: </span><span><code class="def-type">long long</code> <strong class="def-name">scm_to_long_long</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005flong_005flong'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fulong_005flong"><span class="category-def">C Function: </span><span><code class="def-type">unsigned long long</code> <strong class="def-name">scm_to_ulong_long</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fulong_005flong'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fsize_005ft"><span class="category-def">C Function: </span><span><code class="def-type">size_t</code> <strong class="def-name">scm_to_size_t</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fsize_005ft'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fssize_005ft"><span class="category-def">C Function: </span><span><code class="def-type">ssize_t</code> <strong class="def-name">scm_to_ssize_t</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fssize_005ft'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fuintptr_005ft"><span class="category-def">C Function: </span><span><code class="def-type">scm_t_uintptr</code> <strong class="def-name">scm_to_uintptr_t</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fuintptr_005ft'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fptrdiff_005ft"><span class="category-def">C Function: </span><span><code class="def-type">scm_t_ptrdiff</code> <strong class="def-name">scm_to_ptrdiff_t</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fptrdiff_005ft'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fint8"><span class="category-def">C Function: </span><span><code class="def-type">scm_t_int8</code> <strong class="def-name">scm_to_int8</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fint8'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fuint8"><span class="category-def">C Function: </span><span><code class="def-type">scm_t_uint8</code> <strong class="def-name">scm_to_uint8</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fuint8'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fint16"><span class="category-def">C Function: </span><span><code class="def-type">scm_t_int16</code> <strong class="def-name">scm_to_int16</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fint16'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fuint16"><span class="category-def">C Function: </span><span><code class="def-type">scm_t_uint16</code> <strong class="def-name">scm_to_uint16</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fuint16'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fint32"><span class="category-def">C Function: </span><span><code class="def-type">scm_t_int32</code> <strong class="def-name">scm_to_int32</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fint32'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fuint32"><span class="category-def">C Function: </span><span><code class="def-type">scm_t_uint32</code> <strong class="def-name">scm_to_uint32</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fuint32'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fint64"><span class="category-def">C Function: </span><span><code class="def-type">scm_t_int64</code> <strong class="def-name">scm_to_int64</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fint64'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fuint64"><span class="category-def">C Function: </span><span><code class="def-type">scm_t_uint64</code> <strong class="def-name">scm_to_uint64</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fuint64'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fintmax"><span class="category-def">C Function: </span><span><code class="def-type">scm_t_intmax</code> <strong class="def-name">scm_to_intmax</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fintmax'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fuintmax"><span class="category-def">C Function: </span><span><code class="def-type">scm_t_uintmax</code> <strong class="def-name">scm_to_uintmax</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fuintmax'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fintptr_005ft"><span class="category-def">C Function: </span><span><code class="def-type">scm_t_intptr</code> <strong class="def-name">scm_to_intptr_t</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fintptr_005ft'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fto_005fuintptr_005ft-1"><span class="category-def">C Function: </span><span><code class="def-type">scm_t_uintptr</code> <strong class="def-name">scm_to_uintptr_t</strong> <code class="def-code-arguments">(SCM x)</code><a class="copiable-link" href='#index-scm_005fto_005fuintptr_005ft-1'> &para;</a></span></dt>
+<dd><p>When <var class="var">x</var> represents an exact integer that fits into the indicated
+C type, return that integer.  Else signal an error, either a
+&lsquo;wrong-type&rsquo; error when <var class="var">x</var> is not an exact integer, or an
+&lsquo;out-of-range&rsquo; error when it doesn&rsquo;t fit the given range.
+</p>
+<p>The functions <code class="code">scm_to_long_long</code>, <code class="code">scm_to_ulong_long</code>,
+<code class="code">scm_to_int64</code>, and <code class="code">scm_to_uint64</code> are only available when
+the corresponding types are.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005ffrom_005fchar"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_char</strong> <code class="def-code-arguments">(char x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fchar'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fschar"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_schar</strong> <code class="def-code-arguments">(signed char x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fschar'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fuchar"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_uchar</strong> <code class="def-code-arguments">(unsigned char x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fuchar'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fshort"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_short</strong> <code class="def-code-arguments">(short x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fshort'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fushort"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_ushort</strong> <code class="def-code-arguments">(unsigned short x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fushort'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fint"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_int</strong> <code class="def-code-arguments">(int  x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fint'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fuint"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_uint</strong> <code class="def-code-arguments">(unsigned int x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fuint'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005flong"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_long</strong> <code class="def-code-arguments">(long x)</code><a class="copiable-link" href='#index-scm_005ffrom_005flong'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fulong"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_ulong</strong> <code class="def-code-arguments">(unsigned long x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fulong'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005flong_005flong"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_long_long</strong> <code class="def-code-arguments">(long long x)</code><a class="copiable-link" href='#index-scm_005ffrom_005flong_005flong'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fulong_005flong"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_ulong_long</strong> <code class="def-code-arguments">(unsigned long long x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fulong_005flong'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fsize_005ft"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_size_t</strong> <code class="def-code-arguments">(size_t x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fsize_005ft'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fssize_005ft"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_ssize_t</strong> <code class="def-code-arguments">(ssize_t x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fssize_005ft'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fuintptr_005ft"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_uintptr_t</strong> <code class="def-code-arguments">(uintptr_t x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fuintptr_005ft'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fptrdiff_005ft"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_ptrdiff_t</strong> <code class="def-code-arguments">(scm_t_ptrdiff x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fptrdiff_005ft'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fint8"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_int8</strong> <code class="def-code-arguments">(scm_t_int8 x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fint8'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fuint8"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_uint8</strong> <code class="def-code-arguments">(scm_t_uint8 x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fuint8'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fint16"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_int16</strong> <code class="def-code-arguments">(scm_t_int16 x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fint16'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fuint16"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_uint16</strong> <code class="def-code-arguments">(scm_t_uint16 x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fuint16'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fint32"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_int32</strong> <code class="def-code-arguments">(scm_t_int32 x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fint32'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fuint32"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_uint32</strong> <code class="def-code-arguments">(scm_t_uint32 x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fuint32'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fint64"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_int64</strong> <code class="def-code-arguments">(scm_t_int64 x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fint64'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fuint64"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_uint64</strong> <code class="def-code-arguments">(scm_t_uint64 x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fuint64'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fintmax"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_intmax</strong> <code class="def-code-arguments">(scm_t_intmax x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fintmax'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fuintmax"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_uintmax</strong> <code class="def-code-arguments">(scm_t_uintmax x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fuintmax'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fintptr_005ft"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_intptr_t</strong> <code class="def-code-arguments">(scm_t_intptr x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fintptr_005ft'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005fuintptr_005ft-1"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_uintptr_t</strong> <code class="def-code-arguments">(scm_t_uintptr x)</code><a class="copiable-link" href='#index-scm_005ffrom_005fuintptr_005ft-1'> &para;</a></span></dt>
+<dd><p>Return the <code class="code">SCM</code> value that represents the integer <var class="var">x</var>.
+These functions will always succeed and will always return an exact
+number.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fto_005fmpz"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_to_mpz</strong> <code class="def-code-arguments">(SCM val, mpz_t rop)</code><a class="copiable-link" href='#index-scm_005fto_005fmpz'> &para;</a></span></dt>
+<dd><p>Assign <var class="var">val</var> to the multiple precision integer <var class="var">rop</var>.
+<var class="var">val</var> must be an exact integer, otherwise an error will be
+signalled.  <var class="var">rop</var> must have been initialized with <code class="code">mpz_init</code>
+before this function is called.  When <var class="var">rop</var> is no longer needed
+the occupied space must be freed with <code class="code">mpz_clear</code>.
+See <a data-manual="gmp" href="http://www.gmplib.org/manual/Initializing-Integers.html#Initializing-Integers">Initializing Integers</a> in <cite class="cite">GNU MP Manual</cite>, for details.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005ffrom_005fmpz"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_mpz</strong> <code class="def-code-arguments">(mpz_t val)</code><a class="copiable-link" href='#index-scm_005ffrom_005fmpz'> &para;</a></span></dt>
+<dd><p>Return the <code class="code">SCM</code> value that represents <var class="var">val</var>.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Reals-and-Rationals.html">Real and Rational Numbers</a>, Previous: <a href="Numerical-Tower.html">Scheme&rsquo;s Numerical &ldquo;Tower&rdquo;</a>, Up: <a href="Numbers.html">Numerical data types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

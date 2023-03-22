@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Simple Invocation (Guile Reference Manual)</title>
+
+<meta name="description" content="Simple Invocation (Guile Reference Manual)">
+<meta name="keywords" content="Simple Invocation (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="About-Procedures.html" rel="up" title="About Procedures">
+<link href="Creating-a-Procedure.html" rel="next" title="Creating a Procedure">
+<link href="Procedures-as-Values.html" rel="prev" title="Procedures as Values">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Simple-Invocation">
+<div class="nav-panel">
+<p>
+Next: <a href="Creating-a-Procedure.html" accesskey="n" rel="next">Creating and Using a New Procedure</a>, Previous: <a href="Procedures-as-Values.html" accesskey="p" rel="prev">Procedures as Values</a>, Up: <a href="About-Procedures.html" accesskey="u" rel="up">The Representation and Use of Procedures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Simple-Procedure-Invocation">3.2.2 Simple Procedure Invocation</h4>
+
+<p>A procedure invocation in Scheme is written like this:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(<var class="var">procedure</var> [<var class="var">arg1</var> [<var class="var">arg2</var> &hellip;]])
+</pre></div>
+
+<p>In this expression, <var class="var">procedure</var> can be any Scheme expression whose
+value is a procedure.  Most commonly, however, <var class="var">procedure</var> is simply
+the name of a variable whose value is a procedure.
+</p>
+<p>For example, <code class="code">string-append</code> is a standard Scheme procedure whose
+behaviour is to concatenate together all the arguments, which are
+expected to be strings, that it is given.  So the expression
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(string-append &quot;/home&quot; &quot;/&quot; &quot;andrew&quot;)
+</pre></div>
+
+<p>is a procedure invocation whose result is the string value
+<code class="code">&quot;/home/andrew&quot;</code>.
+</p>
+<p>Similarly, <code class="code">string-length</code> is a standard Scheme procedure that
+returns the length of a single string argument, so
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(string-length &quot;abc&quot;)
+</pre></div>
+
+<p>is a procedure invocation whose result is the numeric value 3.
+</p>
+<p>Each of the parameters in a procedure invocation can itself be any
+Scheme expression.  Since a procedure invocation is itself a type of
+expression, we can put these two examples together to get
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(string-length (string-append &quot;/home&quot; &quot;/&quot; &quot;andrew&quot;))
+</pre></div>
+
+<p>&mdash; a procedure invocation whose result is the numeric value 12.
+</p>
+<p>(You may be wondering what happens if the two examples are combined the
+other way round.  If we do this, we can make a procedure invocation
+expression that is <em class="emph">syntactically</em> correct:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(string-append &quot;/home&quot; (string-length &quot;abc&quot;))
+</pre></div>
+
+<p>but when this expression is executed, it will cause an error, because
+the result of <code class="code">(string-length &quot;abc&quot;)</code> is a numeric value, and
+<code class="code">string-append</code> is not designed to accept a numeric value as one of
+its arguments.)
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Creating-a-Procedure.html">Creating and Using a New Procedure</a>, Previous: <a href="Procedures-as-Values.html">Procedures as Values</a>, Up: <a href="About-Procedures.html">The Representation and Use of Procedures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

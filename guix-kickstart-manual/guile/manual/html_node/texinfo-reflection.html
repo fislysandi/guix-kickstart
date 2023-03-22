@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>texinfo reflection (Guile Reference Manual)</title>
+
+<meta name="description" content="texinfo reflection (Guile Reference Manual)">
+<meta name="keywords" content="texinfo reflection (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Texinfo-Processing.html" rel="up" title="Texinfo Processing">
+<link href="texinfo-serialize.html" rel="prev" title="texinfo serialize">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="texinfo-reflection">
+<div class="nav-panel">
+<p>
+Previous: <a href="texinfo-serialize.html" accesskey="p" rel="prev">(texinfo serialize)</a>, Up: <a href="Texinfo-Processing.html" accesskey="u" rel="up">Texinfo Processing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="g_t_0028texinfo-reflection_0029">7.22.8 (texinfo reflection)</h4>
+<ul class="mini-toc">
+<li><a href="#Overview-12" accesskey="1">Overview</a></li>
+<li><a href="#Usage-12" accesskey="2">Usage</a></li>
+</ul>
+<div class="subsubsection-level-extent" id="Overview-12">
+<h4 class="subsubsection">7.22.8.1 Overview</h4>
+<p>Routines to generare <code class="code">stexi</code> documentation for objects and modules.
+</p>
+<p>Note that in this context, an <em class="dfn">object</em> is just a value associated
+with a location. It has nothing to do with GOOPS.
+</p>
+</div>
+<div class="subsubsection-level-extent" id="Usage-12">
+<h4 class="subsubsection">7.22.8.2 Usage</h4>
+<a class="anchor" id="texinfo-reflection-module_002dstexi_002ddocumentation"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-module_002dstexi_002ddocumentation"><span class="category-def">Function: </span><span><strong class="def-name">module-stexi-documentation</strong> <var class="def-var-arguments">sym-name [%docs-resolver] [#:docs-resolver]</var><a class="copiable-link" href='#index-module_002dstexi_002ddocumentation'> &para;</a></span></dt>
+<dd><p>Return documentation for the module named <var class="var">sym-name</var>. The
+documentation will be formatted as <code class="code">stexi</code>
+(see <a class="pxref" href="texinfo.html">texinfo</a>).
+</p>
+</dd></dl>
+
+<a class="anchor" id="texinfo-reflection-script_002dstexi_002ddocumentation"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-script_002dstexi_002ddocumentation"><span class="category-def">Function: </span><span><strong class="def-name">script-stexi-documentation</strong> <var class="def-var-arguments">scriptpath</var><a class="copiable-link" href='#index-script_002dstexi_002ddocumentation'> &para;</a></span></dt>
+<dd><p>Return documentation for given script. The documentation will be taken
+from the script&rsquo;s commentary, and will be returned in the <code class="code">stexi</code>
+format (see <a class="pxref" href="texinfo.html">texinfo</a>).
+</p>
+</dd></dl>
+
+<a class="anchor" id="texinfo-reflection-object_002dstexi_002ddocumentation"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-object_002dstexi_002ddocumentation"><span class="category-def">Function: </span><span><strong class="def-name">object-stexi-documentation</strong> <var class="def-var-arguments">_ [_] [#:force]</var><a class="copiable-link" href='#index-object_002dstexi_002ddocumentation'> &para;</a></span></dt>
+</dl>
+
+<a class="anchor" id="texinfo-reflection-package_002dstexi_002dstandard_002dcopying"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-package_002dstexi_002dstandard_002dcopying"><span class="category-def">Function: </span><span><strong class="def-name">package-stexi-standard-copying</strong> <var class="def-var-arguments">name version updated years copyright-holder permissions</var><a class="copiable-link" href='#index-package_002dstexi_002dstandard_002dcopying'> &para;</a></span></dt>
+<dd><p>Create a standard texinfo <code class="code">copying</code> section.
+</p>
+<p><var class="var">years</var> is a list of years (as integers) in which the modules being
+documented were released. All other arguments are strings.
+</p>
+</dd></dl>
+
+<a class="anchor" id="texinfo-reflection-package_002dstexi_002dstandard_002dtitlepage"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-package_002dstexi_002dstandard_002dtitlepage"><span class="category-def">Function: </span><span><strong class="def-name">package-stexi-standard-titlepage</strong> <var class="def-var-arguments">name version updated authors</var><a class="copiable-link" href='#index-package_002dstexi_002dstandard_002dtitlepage'> &para;</a></span></dt>
+<dd><p>Create a standard GNU title page.
+</p>
+<p><var class="var">authors</var> is a list of <code class="code">(<var class="var">name</var> . <var class="var">email</var>)</code> pairs. All
+other arguments are strings.
+</p>
+<p>Here is an example of the usage of this procedure:
+</p>
+<div class="example smallexample">
+<pre class="example-preformatted"> (package-stexi-standard-titlepage
+  &quot;Foolib&quot;
+  &quot;3.2&quot;
+  &quot;26 September 2006&quot;
+  '((&quot;Alyssa P Hacker&quot; . &quot;alyssa@example.com&quot;))
+  '(2004 2005 2006)
+  &quot;Free Software Foundation, Inc.&quot;
+  &quot;Standard GPL permissions blurb goes here&quot;)
+</pre></div>
+
+</dd></dl>
+
+<a class="anchor" id="texinfo-reflection-package_002dstexi_002dgeneric_002dmenu"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-package_002dstexi_002dgeneric_002dmenu"><span class="category-def">Function: </span><span><strong class="def-name">package-stexi-generic-menu</strong> <var class="def-var-arguments">name entries</var><a class="copiable-link" href='#index-package_002dstexi_002dgeneric_002dmenu'> &para;</a></span></dt>
+<dd><p>Create a menu from a generic alist of entries, the car of which should
+be the node name, and the cdr the description. As an exception, an entry
+of <code class="code">#f</code> will produce a separator.
+</p>
+</dd></dl>
+
+<a class="anchor" id="texinfo-reflection-package_002dstexi_002dstandard_002dmenu"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-package_002dstexi_002dstandard_002dmenu"><span class="category-def">Function: </span><span><strong class="def-name">package-stexi-standard-menu</strong> <var class="def-var-arguments">name modules module-descriptions extra-entries</var><a class="copiable-link" href='#index-package_002dstexi_002dstandard_002dmenu'> &para;</a></span></dt>
+<dd><p>Create a standard top node and menu, suitable for processing by
+makeinfo.
+</p>
+</dd></dl>
+
+<a class="anchor" id="texinfo-reflection-package_002dstexi_002dextended_002dmenu"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-package_002dstexi_002dextended_002dmenu"><span class="category-def">Function: </span><span><strong class="def-name">package-stexi-extended-menu</strong> <var class="def-var-arguments">name module-pairs script-pairs extra-entries</var><a class="copiable-link" href='#index-package_002dstexi_002dextended_002dmenu'> &para;</a></span></dt>
+<dd><p>Create an &quot;extended&quot; menu, like the standard menu but with a section for
+scripts.
+</p>
+</dd></dl>
+
+<a class="anchor" id="texinfo-reflection-package_002dstexi_002dstandard_002dprologue"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-package_002dstexi_002dstandard_002dprologue"><span class="category-def">Function: </span><span><strong class="def-name">package-stexi-standard-prologue</strong> <var class="def-var-arguments">name filename category description copying titlepage menu</var><a class="copiable-link" href='#index-package_002dstexi_002dstandard_002dprologue'> &para;</a></span></dt>
+<dd><p>Create a standard prologue, suitable for later serialization to texinfo
+and .info creation with makeinfo.
+</p>
+<p>Returns a list of stexinfo forms suitable for passing to
+<code class="code">package-stexi-documentation</code> as the prologue. See <a class="xref" href="#texinfo-reflection-package_002dstexi_002ddocumentation">texinfo reflection package-stexi-documentation</a>, <a class="ref" href="#texinfo-reflection-package_002dstexi_002dstandard_002dtitlepage">package-stexi-standard-titlepage</a>,
+<a class="ref" href="#texinfo-reflection-package_002dstexi_002dstandard_002dcopying">package-stexi-standard-copying</a>, and
+<a class="ref" href="#texinfo-reflection-package_002dstexi_002dstandard_002dmenu">package-stexi-standard-menu</a>.
+</p>
+</dd></dl>
+
+<a class="anchor" id="texinfo-reflection-package_002dstexi_002ddocumentation"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-package_002dstexi_002ddocumentation"><span class="category-def">Function: </span><span><strong class="def-name">package-stexi-documentation</strong> <var class="def-var-arguments">modules name filename prologue epilogue [#:module-stexi-documentation-args] [#:scripts]</var><a class="copiable-link" href='#index-package_002dstexi_002ddocumentation'> &para;</a></span></dt>
+<dd><p>Create stexi documentation for a <em class="dfn">package</em>, where a package is a set
+of modules that is released together.
+</p>
+<p><var class="var">modules</var> is expected to be a list of module names, where a module
+name is a list of symbols. The stexi that is returned will be titled
+<var class="var">name</var> and a texinfo filename of <var class="var">filename</var>.
+</p>
+<p><var class="var">prologue</var> and <var class="var">epilogue</var> are lists of stexi forms that will be
+spliced into the output document before and after the generated modules
+documentation, respectively. See <a class="xref" href="#texinfo-reflection-package_002dstexi_002dstandard_002dprologue">texinfo reflection package-stexi-standard-prologue</a>, to create a conventional GNU texinfo
+prologue.
+</p>
+<p><var class="var">module-stexi-documentation-args</var> is an optional argument that, if
+given, will be added to the argument list when
+<code class="code">module-texi-documentation</code> is called. For example, it might be
+useful to define a <code class="code">#:docs-resolver</code> argument.
+</p>
+</dd></dl>
+
+<a class="anchor" id="texinfo-reflection-package_002dstexi_002ddocumentation_002dfor_002dinclude"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-package_002dstexi_002ddocumentation_002dfor_002dinclude"><span class="category-def">Function: </span><span><strong class="def-name">package-stexi-documentation-for-include</strong> <var class="def-var-arguments">modules module-descriptions [#:module-stexi-documentation-args]</var><a class="copiable-link" href='#index-package_002dstexi_002ddocumentation_002dfor_002dinclude'> &para;</a></span></dt>
+<dd><p>Create stexi documentation for a <em class="dfn">package</em>, where a package is a set
+of modules that is released together.
+</p>
+<p><var class="var">modules</var> is expected to be a list of module names, where a module
+name is a list of symbols. Returns an stexinfo fragment.
+</p>
+<p>Unlike <code class="code">package-stexi-documentation</code>, this function simply produces
+a menu and the module documentations instead of producing a full texinfo
+document. This can be useful if you write part of your manual by hand,
+and just use <code class="code">@include</code> to pull in the automatically generated
+parts.
+</p>
+<p><var class="var">module-stexi-documentation-args</var> is an optional argument that, if
+given, will be added to the argument list when
+<code class="code">module-texi-documentation</code> is called. For example, it might be
+useful to define a <code class="code">#:docs-resolver</code> argument.
+</p>
+</dd></dl>
+
+
+
+
+</div>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="texinfo-serialize.html">(texinfo serialize)</a>, Up: <a href="Texinfo-Processing.html">Texinfo Processing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Append/Reverse (Guile Reference Manual)</title>
+
+<meta name="description" content="Append/Reverse (Guile Reference Manual)">
+<meta name="keywords" content="Append/Reverse (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Lists.html" rel="up" title="Lists">
+<link href="List-Modification.html" rel="next" title="List Modification">
+<link href="List-Selection.html" rel="prev" title="List Selection">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Append_002fReverse">
+<div class="nav-panel">
+<p>
+Next: <a href="List-Modification.html" accesskey="n" rel="next">List Modification</a>, Previous: <a href="List-Selection.html" accesskey="p" rel="prev">List Selection</a>, Up: <a href="Lists.html" accesskey="u" rel="up">Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Append-and-Reverse">6.6.9.5 Append and Reverse</h4>
+
+<p><code class="code">append</code> and <code class="code">append!</code> are used to concatenate two or more
+lists in order to form a new list.  <code class="code">reverse</code> and <code class="code">reverse!</code>
+return lists with the same elements as their arguments, but in reverse
+order.  The procedure variants with an <code class="code">!</code> directly modify the
+pairs which form the list, whereas the other procedures create new
+pairs.  This is why you should be careful when using the side-effecting
+variants.
+</p>
+<a class="index-entry-id" id="index-append-4"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-append"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">append</strong> <var class="def-var-arguments">lst &hellip; obj</var><a class="copiable-link" href='#index-append'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-append-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">append</strong><a class="copiable-link" href='#index-append-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-append_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">append!</strong> <var class="def-var-arguments">lst &hellip; obj</var><a class="copiable-link" href='#index-append_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-append_0021-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">append!</strong><a class="copiable-link" href='#index-append_0021-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fappend"><span class="category-def">C Function: </span><span><strong class="def-name">scm_append</strong> <var class="def-var-arguments">(lstlst)</var><a class="copiable-link" href='#index-scm_005fappend'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fappend_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_append_x</strong> <var class="def-var-arguments">(lstlst)</var><a class="copiable-link" href='#index-scm_005fappend_005fx'> &para;</a></span></dt>
+<dd><p>Return a list comprising all the elements of lists <var class="var">lst</var> &hellip;
+<var class="var">obj</var>.  If called with no arguments, return the empty list.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(append '(x) '(y))          &rArr;  (x y)
+(append '(a) '(b c d))      &rArr;  (a b c d)
+(append '(a (b)) '((c)))    &rArr;  (a (b) (c))
+</pre></div>
+
+<p>The last argument <var class="var">obj</var> may actually be any object; an improper
+list results if the last argument is not a proper list.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(append '(a b) '(c . d))    &rArr;  (a b c . d)
+(append '() 'a)             &rArr;  a
+</pre></div>
+
+<p><code class="code">append</code> doesn&rsquo;t modify the given lists, but the return may share
+structure with the final <var class="var">obj</var>.  <code class="code">append!</code> is permitted, but
+not required, to modify the given lists to form its return.
+</p>
+<p>For <code class="code">scm_append</code> and <code class="code">scm_append_x</code>, <var class="var">lstlst</var> is a list
+of the list operands <var class="var">lst</var> &hellip; <var class="var">obj</var>.  That <var class="var">lstlst</var>
+itself is not modified or used in the return.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-reverse-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-reverse"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">reverse</strong> <var class="def-var-arguments">lst</var><a class="copiable-link" href='#index-reverse'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-reverse_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">reverse!</strong> <var class="def-var-arguments">lst [newtail]</var><a class="copiable-link" href='#index-reverse_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005freverse"><span class="category-def">C Function: </span><span><strong class="def-name">scm_reverse</strong> <var class="def-var-arguments">(lst)</var><a class="copiable-link" href='#index-scm_005freverse'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005freverse_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_reverse_x</strong> <var class="def-var-arguments">(lst, newtail)</var><a class="copiable-link" href='#index-scm_005freverse_005fx'> &para;</a></span></dt>
+<dd><p>Return a list comprising the elements of <var class="var">lst</var>, in reverse order.
+</p>
+<p><code class="code">reverse</code> constructs a new list.  <code class="code">reverse!</code> is permitted, but
+not required, to modify <var class="var">lst</var> in constructing its return.
+</p>
+<p>For <code class="code">reverse!</code>, the optional <var class="var">newtail</var> is appended to the
+result.  <var class="var">newtail</var> isn&rsquo;t reversed, it simply becomes the list
+tail.  For <code class="code">scm_reverse_x</code>, the <var class="var">newtail</var> parameter is
+mandatory, but can be <code class="code">SCM_EOL</code> if no further tail is required.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="List-Modification.html">List Modification</a>, Previous: <a href="List-Selection.html">List Selection</a>, Up: <a href="Lists.html">Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

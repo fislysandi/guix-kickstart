@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>begin (Guile Reference Manual)</title>
+
+<meta name="description" content="begin (Guile Reference Manual)">
+<meta name="keywords" content="begin (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Control-Mechanisms.html" rel="up" title="Control Mechanisms">
+<link href="Conditionals.html" rel="next" title="Conditionals">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="begin">
+<div class="nav-panel">
+<p>
+Next: <a href="Conditionals.html" accesskey="n" rel="next">Simple Conditional Evaluation</a>, Up: <a href="Control-Mechanisms.html" accesskey="u" rel="up">Controlling the Flow of Program Execution</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Sequencing-and-Splicing">6.11.1 Sequencing and Splicing</h4>
+
+<a class="index-entry-id" id="index-begin"></a>
+<a class="index-entry-id" id="index-sequencing"></a>
+<a class="index-entry-id" id="index-expression-sequencing"></a>
+
+<p>As an expression, the <code class="code">begin</code> syntax is used to evaluate a sequence
+of sub-expressions in order.  Consider the conditional expression below:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(if (&gt; x 0)
+    (begin (display &quot;greater&quot;) (newline)))
+</pre></div>
+
+<p>If the test is true, we want to display &ldquo;greater&rdquo; to the current
+output port, then display a newline.  We use <code class="code">begin</code> to form a
+compound expression out of this sequence of sub-expressions.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-begin-1"><span class="category-def">syntax: </span><span><strong class="def-name">begin</strong> <var class="def-var-arguments">expr &hellip;</var><a class="copiable-link" href='#index-begin-1'> &para;</a></span></dt>
+<dd><p>The expression(s) are evaluated in left-to-right order and the value of
+the last expression is returned as the value of the
+<code class="code">begin</code>-expression.  This expression type is used when the
+expressions before the last one are evaluated for their side effects.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-splicing"></a>
+<a class="index-entry-id" id="index-definition-splicing"></a>
+
+<p>The <code class="code">begin</code> syntax has another role in definition context
+(see <a class="pxref" href="Internal-Definitions.html">Internal definitions</a>).  A <code class="code">begin</code> form in a definition
+context <em class="dfn">splices</em> its subforms into its place.  For example,
+consider the following procedure:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define (make-seal)
+  (define-sealant seal open)
+  (values seal open))
+</pre></div>
+
+<p>Let us assume the existence of a <code class="code">define-sealant</code> macro that
+expands out to some definitions wrapped in a <code class="code">begin</code>, like so:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define (make-seal)
+  (begin
+    (define seal-tag
+      (list 'seal))
+    (define (seal x)
+      (cons seal-tag x))
+    (define (sealed? x)
+      (and (pair? x) (eq? (car x) seal-tag)))
+    (define (open x)
+      (if (sealed? x)
+          (cdr x)
+          (error &quot;Expected a sealed value:&quot; x))))
+  (values seal open))
+</pre></div>
+
+<p>Here, because the <code class="code">begin</code> is in definition context, its subforms
+are <em class="dfn">spliced</em> into the place of the <code class="code">begin</code>.  This allows the
+definitions created by the macro to be visible to the following
+expression, the <code class="code">values</code> form.
+</p>
+<p>It is a fine point, but splicing and sequencing are different.  It can
+make sense to splice zero forms, because it can make sense to have zero
+internal definitions before the expressions in a procedure or lexical
+binding form.  However it does not make sense to have a sequence of zero
+expressions, because in that case it would not be clear what the value
+of the sequence would be, because in a sequence of zero expressions,
+there can be no last value.  Sequencing zero expressions is an error.
+</p>
+<p>It would be more elegant in some ways to eliminate splicing from the
+Scheme language, and without macros (see <a class="pxref" href="Macros.html">Macros</a>), that would be a
+good idea.  But it is useful to be able to write macros that expand out
+to multiple definitions, as in <code class="code">define-sealant</code> above, so Scheme
+abuses the <code class="code">begin</code> form for these two tasks.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Conditionals.html">Simple Conditional Evaluation</a>, Up: <a href="Control-Mechanisms.html">Controlling the Flow of Program Execution</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

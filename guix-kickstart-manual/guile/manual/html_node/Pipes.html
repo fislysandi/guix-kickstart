@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Pipes (Guile Reference Manual)</title>
+
+<meta name="description" content="Pipes (Guile Reference Manual)">
+<meta name="keywords" content="Pipes (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="POSIX.html" rel="up" title="POSIX">
+<link href="Networking.html" rel="next" title="Networking">
+<link href="Terminals-and-Ptys.html" rel="prev" title="Terminals and Ptys">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Pipes">
+<div class="nav-panel">
+<p>
+Next: <a href="Networking.html" accesskey="n" rel="next">Networking</a>, Previous: <a href="Terminals-and-Ptys.html" accesskey="p" rel="prev">Terminals and Ptys</a>, Up: <a href="POSIX.html" accesskey="u" rel="up"><abbr class="acronym">POSIX</abbr> System Calls and Networking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Pipes-1">7.2.10 Pipes</h4>
+<a class="index-entry-id" id="index-pipe-1"></a>
+
+<p>The following procedures are similar to the <code class="code">popen</code> and
+<code class="code">pclose</code> system routines.  The code is in a separate &ldquo;popen&rdquo;
+module<a class="footnote" id="DOCF24" href="#FOOT24"><sup>24</sup></a>:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(use-modules (ice-9 popen))
+</pre></div>
+
+<a class="index-entry-id" id="index-popen"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-open_002dpipe"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-pipe</strong> <var class="def-var-arguments">command mode</var><a class="copiable-link" href='#index-open_002dpipe'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-open_002dpipe_002a"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-pipe*</strong> <var class="def-var-arguments">mode prog [args...]</var><a class="copiable-link" href='#index-open_002dpipe_002a'> &para;</a></span></dt>
+<dd><p>Execute a command in a subprocess, with a pipe to it or from it, or
+with pipes in both directions.
+</p>
+<p><code class="code">open-pipe</code> runs the shell <var class="var">command</var> using &lsquo;<samp class="samp">/bin/sh -c</samp>&rsquo;.
+<code class="code">open-pipe*</code> executes <var class="var">prog</var> directly, with the optional
+<var class="var">args</var> arguments (all strings).
+</p>
+<p><var class="var">mode</var> should be one of the following values.  <code class="code">OPEN_READ</code> is
+an input pipe, ie. to read from the subprocess.  <code class="code">OPEN_WRITE</code>
+is an output pipe, ie. to write to it.
+</p>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-OPEN_005fREAD"><span class="category-def">Variable: </span><span><strong class="def-name">OPEN_READ</strong><a class="copiable-link" href='#index-OPEN_005fREAD'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-OPEN_005fWRITE"><span class="category-def">Variable: </span><span><strong class="def-name">OPEN_WRITE</strong><a class="copiable-link" href='#index-OPEN_005fWRITE'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-OPEN_005fBOTH"><span class="category-def">Variable: </span><span><strong class="def-name">OPEN_BOTH</strong><a class="copiable-link" href='#index-OPEN_005fBOTH'> &para;</a></span></dt>
+</dl>
+
+<p>For an input pipe, the child&rsquo;s standard output is the pipe and
+standard input is inherited from <code class="code">current-input-port</code>.  For an
+output pipe, the child&rsquo;s standard input is the pipe and standard
+output is inherited from <code class="code">current-output-port</code>.  In all cases
+the child&rsquo;s standard error is inherited from
+<code class="code">current-error-port</code> (see <a class="pxref" href="Default-Ports.html">Default Ports for Input, Output and Errors</a>).
+</p>
+<p>If those <code class="code">current-X-ports</code> are not files of some kind, and hence
+don&rsquo;t have file descriptors for the child, then <samp class="file">/dev/null</samp> is
+used instead.
+</p>
+<p>Care should be taken with <code class="code">OPEN_BOTH</code>, a deadlock will occur if
+both parent and child are writing, and waiting until the write completes
+before doing any reading.  Each direction has <code class="code">PIPE_BUF</code> bytes of
+buffering (see <a class="pxref" href="Buffering.html">Buffering</a>), which will be enough for small writes,
+but not for say putting a big file through a filter.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-open_002dinput_002dpipe"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-input-pipe</strong> <var class="def-var-arguments">command</var><a class="copiable-link" href='#index-open_002dinput_002dpipe'> &para;</a></span></dt>
+<dd><p>Equivalent to <code class="code">open-pipe</code> with mode <code class="code">OPEN_READ</code>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(let* ((port (open-input-pipe &quot;date --utc&quot;))
+       (str  (read-line port))) ; from (ice-9 rdelim)
+  (close-pipe port)
+  str)
+&rArr; &quot;Mon Mar 11 20:10:44 UTC 2002&quot;
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-open_002doutput_002dpipe"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-output-pipe</strong> <var class="def-var-arguments">command</var><a class="copiable-link" href='#index-open_002doutput_002dpipe'> &para;</a></span></dt>
+<dd><p>Equivalent to <code class="code">open-pipe</code> with mode <code class="code">OPEN_WRITE</code>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(let ((port (open-output-pipe &quot;lpr&quot;)))
+  (display &quot;Something for the line printer.\n&quot; port)
+  (if (not (eqv? 0 (status:exit-val (close-pipe port))))
+      (error &quot;Cannot print&quot;)))
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-open_002dinput_002doutput_002dpipe"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-input-output-pipe</strong> <var class="def-var-arguments">command</var><a class="copiable-link" href='#index-open_002dinput_002doutput_002dpipe'> &para;</a></span></dt>
+<dd><p>Equivalent to <code class="code">open-pipe</code> with mode <code class="code">OPEN_BOTH</code>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-pclose"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-close_002dpipe"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">close-pipe</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-close_002dpipe'> &para;</a></span></dt>
+<dd><p>Close a pipe created by <code class="code">open-pipe</code>, wait for the process to
+terminate, and return the wait status code.  The status is as per
+<code class="code">waitpid</code> and can be decoded with <code class="code">status:exit-val</code> etc
+(see <a class="pxref" href="Processes.html">Processes</a>)
+</p></dd></dl>
+
+<br>
+<p><code class="code">waitpid WAIT_ANY</code> should not be used when pipes are open, since
+it can reap a pipe&rsquo;s child process, causing an error from a subsequent
+<code class="code">close-pipe</code>.
+</p>
+<p><code class="code">close-port</code> (see <a class="pxref" href="Ports.html">Ports</a>) can close a pipe, but it doesn&rsquo;t reap
+the child process.
+</p>
+<p>The garbage collector will close a pipe no longer in use, and reap the
+child process with <code class="code">waitpid</code>.  If the child hasn&rsquo;t yet terminated
+the garbage collector doesn&rsquo;t block, but instead checks again in the
+next GC.
+</p>
+<p>Many systems have per-user and system-wide limits on the number of
+processes, and a system-wide limit on the number of pipes, so pipes
+should be closed explicitly when no longer needed, rather than letting
+the garbage collector pick them up at some later time.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-pipeline"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">pipeline</strong> <var class="def-var-arguments"><var class="var">commands</var></var><a class="copiable-link" href='#index-pipeline'> &para;</a></span></dt>
+<dd><p>Execute a pipeline of <var class="var">commands</var>, where each command is a
+list of a program and its arguments as strings, returning an input
+port to the end of the pipeline, an output port to the beginning of the
+pipeline and a list of PIDs of the processes executing the <var class="var">commands</var>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(let ((commands '((&quot;git&quot; &quot;ls-files&quot;)
+                  (&quot;tar&quot; &quot;-cf-&quot; &quot;-T-&quot;)
+                  (&quot;sha1sum&quot; &quot;-&quot;)))
+      (success? (lambda (pid)
+                  (zero?
+                   (status:exit-val (cdr (waitpid pid)))))))
+  (receive (from to pids) (pipeline commands)
+    (let* ((sha1 (read-delimited &quot; &quot; from))
+           (index (list-index (negate success?) (reverse pids))))
+      (close to)
+      (close from)
+      (if (not index)
+          sha1
+          (string-append &quot;pipeline failed in command: &quot;
+                         (string-join (list-ref commands index)))))))
+&rArr; &quot;52f99d234503fca8c84ef94b1005a3a28d8b3bc1&quot;
+</pre></div>
+</dd></dl>
+
+</div>
+<div class="footnotes-segment">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5 class="footnote-body-heading"><a id="FOOT24" href="#DOCF24">(24)</a></h5>
+<p>This module is only available on systems where the
+<code class="code">popen</code> feature is provided (see <a class="pxref" href="Common-Feature-Symbols.html">Common Feature Symbols</a>).</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Networking.html">Networking</a>, Previous: <a href="Terminals-and-Ptys.html">Terminals and Ptys</a>, Up: <a href="POSIX.html"><abbr class="acronym">POSIX</abbr> System Calls and Networking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

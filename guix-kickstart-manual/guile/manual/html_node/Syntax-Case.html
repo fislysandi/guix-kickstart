@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Syntax Case (Guile Reference Manual)</title>
+
+<meta name="description" content="Syntax Case (Guile Reference Manual)">
+<meta name="keywords" content="Syntax Case (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Macros.html" rel="up" title="Macros">
+<link href="Syntax-Transformer-Helpers.html" rel="next" title="Syntax Transformer Helpers">
+<link href="Syntax-Rules.html" rel="prev" title="Syntax Rules">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Syntax-Case">
+<div class="nav-panel">
+<p>
+Next: <a href="Syntax-Transformer-Helpers.html" accesskey="n" rel="next">Syntax Transformer Helpers</a>, Previous: <a href="Syntax-Rules.html" accesskey="p" rel="prev">Syntax-rules Macros</a>, Up: <a href="Macros.html" accesskey="u" rel="up">Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Support-for-the-syntax_002dcase-System">6.8.3 Support for the <code class="code">syntax-case</code> System</h4>
+
+<p><code class="code">syntax-case</code> macros are procedural syntax transformers, with a power
+worthy of Scheme.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-syntax_002dcase"><span class="category-def">Syntax: </span><span><strong class="def-name">syntax-case</strong> <var class="def-var-arguments">syntax literals (pattern [guard] exp) &hellip;</var><a class="copiable-link" href='#index-syntax_002dcase'> &para;</a></span></dt>
+<dd><p>Match the syntax object <var class="var">syntax</var> against the given patterns, in order. If a
+<var class="var">pattern</var> matches, return the result of evaluating the associated <var class="var">exp</var>.
+</p></dd></dl>
+
+<p>Compare the following definitions of <code class="code">when</code>:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-syntax when
+  (syntax-rules ()
+    ((_ test e e* ...)
+     (if test (begin e e* ...)))))
+
+(define-syntax when
+  (lambda (x)
+    (syntax-case x ()
+      ((_ test e e* ...)
+       #'(if test (begin e e* ...))))))
+</pre></div>
+
+<p>Clearly, the <code class="code">syntax-case</code> definition is similar to its <code class="code">syntax-rules</code>
+counterpart, and equally clearly there are some differences. The
+<code class="code">syntax-case</code> definition is wrapped in a <code class="code">lambda</code>, a function of one
+argument; that argument is passed to the <code class="code">syntax-case</code> invocation; and the
+&ldquo;return value&rdquo; of the macro has a <code class="code">#'</code> prefix.
+</p>
+<p>All of these differences stem from the fact that <code class="code">syntax-case</code> does not
+define a syntax transformer itself &ndash; instead, <code class="code">syntax-case</code> expressions
+provide a way to destructure a <em class="dfn">syntax object</em>, and to rebuild syntax
+objects as output.
+</p>
+<p>So the <code class="code">lambda</code> wrapper is simply a leaky implementation detail, that
+syntax transformers are just functions that transform syntax to syntax. This
+should not be surprising, given that we have already described macros as
+&ldquo;programs that write programs&rdquo;. <code class="code">syntax-case</code> is simply a way to take
+apart and put together program text, and to be a valid syntax transformer it
+needs to be wrapped in a procedure.
+</p>
+<p>Unlike traditional Lisp macros (see <a class="pxref" href="Defmacros.html">Lisp-style Macro Definitions</a>), <code class="code">syntax-case</code> macros
+transform syntax objects, not raw Scheme forms. Recall the naive expansion of
+<code class="code">my-or</code> given in the previous section:
+</p>
+<div class="example">
+<pre class="example-preformatted">(let ((t #t))
+  (my-or #f t))
+;; naive expansion:
+(let ((t #t))
+  (let ((t #f))
+    (if t t t)))
+</pre></div>
+
+<p>Raw Scheme forms simply don&rsquo;t have enough information to distinguish the first
+two <code class="code">t</code> instances in <code class="code">(if t t t)</code> from the third <code class="code">t</code>. So instead
+of representing identifiers as symbols, the syntax expander represents
+identifiers as annotated syntax objects, attaching such information to those
+syntax objects as is needed to maintain referential transparency.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-syntax"><span class="category-def">Syntax: </span><span><strong class="def-name">syntax</strong> <var class="def-var-arguments">form</var><a class="copiable-link" href='#index-syntax'> &para;</a></span></dt>
+<dd><p>Create a syntax object wrapping <var class="var">form</var> within the current lexical context.
+</p></dd></dl>
+
+<p>Syntax objects are typically created internally to the process of expansion, but
+it is possible to create them outside of syntax expansion:
+</p>
+<div class="example">
+<pre class="example-preformatted">(syntax (foo bar baz))
+&rArr; #&lt;some representation of that syntax&gt;
+</pre></div>
+
+<p>However it is more common, and useful, to create syntax objects when building
+output from a <code class="code">syntax-case</code> expression.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-syntax add1
+  (lambda (x)
+    (syntax-case x ()
+      ((_ exp)
+       (syntax (+ exp 1))))))
+</pre></div>
+
+<p>It is not strictly necessary for a <code class="code">syntax-case</code> expression to return a
+syntax object, because <code class="code">syntax-case</code> expressions can be used in helper
+functions, or otherwise used outside of syntax expansion itself. However a
+syntax transformer procedure must return a syntax object, so most uses of
+<code class="code">syntax-case</code> do end up returning syntax objects.
+</p>
+<p>Here in this case, the form that built the return value was <code class="code">(syntax (+ exp
+1))</code>. The interesting thing about this is that within a <code class="code">syntax</code>
+expression, any appearance of a pattern variable is substituted into the
+resulting syntax object, carrying with it all relevant metadata from the source
+expression, such as lexical identity and source location.
+</p>
+<p>Indeed, a pattern variable may only be referenced from inside a <code class="code">syntax</code>
+form. The syntax expander would raise an error when defining <code class="code">add1</code> if it
+found <var class="var">exp</var> referenced outside a <code class="code">syntax</code> form.
+</p>
+<p>Since <code class="code">syntax</code> appears frequently in macro-heavy code, it has a special
+reader macro: <code class="code">#'</code>. <code class="code">#'foo</code> is transformed by the reader into
+<code class="code">(syntax foo)</code>, just as <code class="code">'foo</code> is transformed into <code class="code">(quote foo)</code>.
+</p>
+<p>The pattern language used by <code class="code">syntax-case</code> is conveniently the same
+language used by <code class="code">syntax-rules</code>. Given this, Guile actually defines
+<code class="code">syntax-rules</code> in terms of <code class="code">syntax-case</code>:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-syntax syntax-rules
+  (lambda (x)
+    (syntax-case x ()
+      ((_ (k ...) ((keyword . pattern) template) ...)
+       #'(lambda (x)
+           (syntax-case x (k ...)
+             ((dummy . pattern) #'template)
+             ...))))))
+</pre></div>
+
+<p>And that&rsquo;s that.
+</p>
+<ul class="mini-toc">
+<li><a href="#Why-syntax_002dcase_003f" accesskey="1">Why <code class="code">syntax-case</code>?</a></li>
+<li><a href="#Custom-Ellipsis-Identifiers-for-syntax_002dcase-Macros" accesskey="2">Custom Ellipsis Identifiers for syntax-case Macros</a></li>
+<li><a href="#Syntax-objects-can-be-data-too" accesskey="3">Syntax objects can be data too</a></li>
+</ul>
+<div class="subsubsection-level-extent" id="Why-syntax_002dcase_003f">
+<h4 class="subsubsection">6.8.3.1 Why <code class="code">syntax-case</code>?</h4>
+
+<p>The examples we have shown thus far could just as well have been expressed with
+<code class="code">syntax-rules</code>, and have just shown that <code class="code">syntax-case</code> is more
+verbose, which is true. But there is a difference: <code class="code">syntax-case</code> creates
+<em class="emph">procedural</em> macros, giving the full power of Scheme to the macro expander.
+This has many practical applications.
+</p>
+<p>A common desire is to be able to match a form only if it is an identifier. This
+is impossible with <code class="code">syntax-rules</code>, given the datum matching forms. But with
+<code class="code">syntax-case</code> it is easy:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-identifier_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">identifier?</strong> <var class="def-var-arguments">syntax-object</var><a class="copiable-link" href='#index-identifier_003f'> &para;</a></span></dt>
+<dd><p>Returns <code class="code">#t</code> if <var class="var">syntax-object</var> is an identifier, or <code class="code">#f</code>
+otherwise.
+</p></dd></dl>
+
+<div class="example">
+<pre class="example-preformatted">;; relying on previous add1 definition
+(define-syntax add1!
+  (lambda (x)
+    (syntax-case x ()
+      ((_ var) (identifier? #'var)
+       #'(set! var (add1 var))))))
+
+(define foo 0)
+(add1! foo)
+foo &rArr; 1
+(add1! &quot;not-an-identifier&quot;) &rArr; error
+</pre></div>
+
+<p>With <code class="code">syntax-rules</code>, the error for <code class="code">(add1! &quot;not-an-identifier&quot;)</code> would
+be something like &ldquo;invalid <code class="code">set!</code>&rdquo;. With <code class="code">syntax-case</code>, it will say
+something like &ldquo;invalid <code class="code">add1!</code>&rdquo;, because we attach the <em class="dfn">guard
+clause</em> to the pattern: <code class="code">(identifier? #'var)</code>. This becomes more important
+with more complicated macros. It is necessary to use <code class="code">identifier?</code>, because
+to the expander, an identifier is more than a bare symbol.
+</p>
+<p>Note that even in the guard clause, we reference the <var class="var">var</var> pattern variable
+within a <code class="code">syntax</code> form, via <code class="code">#'var</code>.
+</p>
+<p>Another common desire is to introduce bindings into the lexical context of the
+output expression. One example would be in the so-called &ldquo;anaphoric macros&rdquo;,
+like <code class="code">aif</code>. Anaphoric macros bind some expression to a well-known
+identifier, often <code class="code">it</code>, within their bodies. For example, in <code class="code">(aif
+(foo) (bar it))</code>, <code class="code">it</code> would be bound to the result of <code class="code">(foo)</code>.
+</p>
+<p>To begin with, we should mention a solution that doesn&rsquo;t work:
+</p>
+<div class="example">
+<pre class="example-preformatted">;; doesn't work
+(define-syntax aif
+  (lambda (x)
+    (syntax-case x ()
+      ((_ test then else)
+       #'(let ((it test))
+           (if it then else))))))
+</pre></div>
+
+<p>The reason that this doesn&rsquo;t work is that, by default, the expander will
+preserve referential transparency; the <var class="var">then</var> and <var class="var">else</var> expressions
+won&rsquo;t have access to the binding of <code class="code">it</code>.
+</p>
+<p>But they can, if we explicitly introduce a binding via <code class="code">datum-&gt;syntax</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-datum_002d_003esyntax"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">datum-&gt;syntax</strong> <var class="def-var-arguments">template-id datum [#:source=#f]</var><a class="copiable-link" href='#index-datum_002d_003esyntax'> &para;</a></span></dt>
+<dd><p>Create a syntax object that wraps <var class="var">datum</var>, within the lexical
+context corresponding to the identifier <var class="var">template-id</var>.  If
+<var class="var">template-id</var> is false, the datum will have no lexical context
+information.
+</p>
+<p>Syntax objects have an associated source location.  Internally this is
+represented as a 3-element vector of filename, line, and column.
+Usually this location ultimately is provided by <code class="code">read-syntax</code>;
+See <a class="xref" href="Annotated-Scheme-Read.html">Reading Scheme Code, For the Compiler</a>.
+</p>
+<p>If a syntax object is passed as <var class="var">source</var>, the resulting syntax
+object will have the source location of <var class="var">source</var>.  Otherwise if
+<var class="var">source</var> is a 3-element source location vector, that vector will be
+the source location of the resulting syntax object.  If <var class="var">source</var> is
+a source properties alist, those will be parsed and set as the source
+location of the resulting syntax object.  Otherwise if <var class="var">source</var> is
+false, the source properties are looked up from <code class="code">(source-properties
+<var class="var">datum</var>)</code>.  See <a class="xref" href="Source-Properties.html">Source Properties</a>.
+</p></dd></dl>
+
+<p>For completeness, we should mention that it is possible to strip the metadata
+from a syntax object, returning a raw Scheme datum:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-syntax_002d_003edatum"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">syntax-&gt;datum</strong> <var class="def-var-arguments">syntax-object</var><a class="copiable-link" href='#index-syntax_002d_003edatum'> &para;</a></span></dt>
+<dd><p>Strip the metadata from <var class="var">syntax-object</var>, returning its contents as a raw
+Scheme datum.
+</p></dd></dl>
+
+<p>In this case we want to introduce <code class="code">it</code> in the context of the whole
+expression, so we can create a syntax object as <code class="code">(datum-&gt;syntax x 'it)</code>,
+where <code class="code">x</code> is the whole expression, as passed to the transformer procedure.
+</p>
+<p>Here&rsquo;s another solution that doesn&rsquo;t work:
+</p>
+<div class="example">
+<pre class="example-preformatted">;; doesn't work either
+(define-syntax aif
+  (lambda (x)
+    (syntax-case x ()
+      ((_ test then else)
+       (let ((it (datum-&gt;syntax x 'it)))
+         #'(let ((it test))
+             (if it then else)))))))
+</pre></div>
+
+<p>The reason that this one doesn&rsquo;t work is that there are really two
+environments at work here &ndash; the environment of pattern variables, as
+bound by <code class="code">syntax-case</code>, and the environment of lexical variables,
+as bound by normal Scheme. The outer let form establishes a binding in
+the environment of lexical variables, but the inner let form is inside a
+syntax form, where only pattern variables will be substituted. Here we
+need to introduce a piece of the lexical environment into the pattern
+variable environment, and we can do so using <code class="code">syntax-case</code> itself:
+</p>
+<div class="example">
+<pre class="example-preformatted">;; works, but is obtuse
+(define-syntax aif
+  (lambda (x)
+    (syntax-case x ()
+      ((_ test then else)
+       ;; invoking syntax-case on the generated
+       ;; syntax object to expose it to `syntax'
+       (syntax-case (datum-&gt;syntax x 'it) ()
+         (it
+           #'(let ((it test))
+               (if it then else))))))))
+
+(aif (getuid) (display it) (display &quot;none&quot;)) (newline)
+-| 500
+</pre></div>
+
+<p>However there are easier ways to write this. <code class="code">with-syntax</code> is often
+convenient:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-with_002dsyntax"><span class="category-def">Syntax: </span><span><strong class="def-name">with-syntax</strong> <var class="def-var-arguments">((pat val) &hellip;) exp &hellip;</var><a class="copiable-link" href='#index-with_002dsyntax'> &para;</a></span></dt>
+<dd><p>Bind patterns <var class="var">pat</var> from their corresponding values <var class="var">val</var>, within the
+lexical context of <var class="var">exp</var> <small class="enddots">...</small>.
+</p>
+<div class="example">
+<pre class="example-preformatted">;; better
+(define-syntax aif
+  (lambda (x)
+    (syntax-case x ()
+      ((_ test then else)
+       (with-syntax ((it (datum-&gt;syntax x 'it)))
+         #'(let ((it test))
+             (if it then else)))))))
+</pre></div>
+</dd></dl>
+
+<p>As you might imagine, <code class="code">with-syntax</code> is defined in terms of
+<code class="code">syntax-case</code>. But even that might be off-putting to you if you are an old
+Lisp macro hacker, used to building macro output with <code class="code">quasiquote</code>. The
+issue is that <code class="code">with-syntax</code> creates a separation between the point of
+definition of a value and its point of substitution.
+</p>
+<a class="index-entry-id" id="index-quasisyntax-1"></a>
+<a class="index-entry-id" id="index-unsyntax-1"></a>
+<a class="index-entry-id" id="index-unsyntax_002dsplicing-1"></a>
+<p>So for cases in which a <code class="code">quasiquote</code> style makes more sense,
+<code class="code">syntax-case</code> also defines <code class="code">quasisyntax</code>, and the related
+<code class="code">unsyntax</code> and <code class="code">unsyntax-splicing</code>, abbreviated by the reader as
+<code class="code">#`</code>, <code class="code">#,</code>, and <code class="code">#,@</code>, respectively.
+</p>
+<p>For example, to define a macro that inserts a compile-time timestamp into a
+source file, one may write:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-syntax display-compile-timestamp
+  (lambda (x)
+    (syntax-case x ()
+      ((_)
+       #`(begin
+          (display &quot;The compile timestamp was: &quot;)
+          (display #,(current-time))
+          (newline))))))
+</pre></div>
+
+<p>Readers interested in further information on <code class="code">syntax-case</code> macros should
+see R. Kent Dybvig&rsquo;s excellent <cite class="cite">The Scheme Programming Language</cite>, either
+edition 3 or 4, in the chapter on syntax. Dybvig was the primary author of the
+<code class="code">syntax-case</code> system. The book itself is available online at
+<a class="uref" href="http://scheme.com/tspl4/">http://scheme.com/tspl4/</a>.
+</p>
+</div>
+<div class="subsubsection-level-extent" id="Custom-Ellipsis-Identifiers-for-syntax_002dcase-Macros">
+<h4 class="subsubsection">6.8.3.2 Custom Ellipsis Identifiers for syntax-case Macros</h4>
+
+<p>When writing procedural macros that generate macro definitions, it is
+convenient to use a different ellipsis identifier at each level.  Guile
+supports this for procedural macros using the <code class="code">with-ellipsis</code>
+special form:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-with_002dellipsis"><span class="category-def">Syntax: </span><span><strong class="def-name">with-ellipsis</strong> <var class="def-var-arguments">ellipsis body &hellip;</var><a class="copiable-link" href='#index-with_002dellipsis'> &para;</a></span></dt>
+<dd><p><var class="var">ellipsis</var> must be an identifier.  Evaluate <var class="var">body</var> in a special
+lexical environment such that all macro patterns and templates within
+<var class="var">body</var> will use <var class="var">ellipsis</var> as the ellipsis identifier instead of
+the usual three dots (<code class="code">...</code>).
+</p></dd></dl>
+
+<p>For example:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-syntax define-quotation-macros
+  (lambda (x)
+    (syntax-case x ()
+      ((_ (macro-name head-symbol) ...)
+       #'(begin (define-syntax macro-name
+                  (lambda (x)
+                    (with-ellipsis :::
+                      (syntax-case x ()
+                        ((_ x :::)
+                         #'(quote (head-symbol x :::)))))))
+                ...)))))
+(define-quotation-macros (quote-a a) (quote-b b) (quote-c c))
+(quote-a 1 2 3) &rArr; (a 1 2 3)
+</pre></div>
+
+<p>Note that <code class="code">with-ellipsis</code> does not affect the ellipsis identifier
+of the generated code, unless <code class="code">with-ellipsis</code> is included around
+the generated code.
+</p>
+</div>
+<div class="subsubsection-level-extent" id="Syntax-objects-can-be-data-too">
+<h4 class="subsubsection">6.8.3.3 Syntax objects can be data too</h4>
+
+<p>Generally speaking, you want the macro expander to pick apart all syntax
+objects in a source term.  The source and scope annotations attached to
+the syntax object are of interest to how the macro expander computes the
+result, but no syntax object itself should appear in the expanded
+term&mdash;usually.  Sometimes, though, a macro will want a syntax object to
+appear in the expanded output.  Normally you would just use <code class="code">quote</code>
+to introduce the syntax object as a value, but the expander strips
+syntax objects from subexpression of <code class="code">quote</code>.  For this rare use
+case, Guile has <code class="code">quote-syntax</code>, which does not strip its
+subexpression.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-quote_002dsyntax"><span class="category-def">Syntax: </span><span><strong class="def-name">quote-syntax</strong> <var class="def-var-arguments">form</var><a class="copiable-link" href='#index-quote_002dsyntax'> &para;</a></span></dt>
+<dd><p>Expand to the syntax object <code class="code">form</code>, as a constant literal.  Like
+<code class="code">quote</code>, but without calling <code class="code">syntax-&gt;datum</code>.
+</p></dd></dl>
+
+</div>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Syntax-Transformer-Helpers.html">Syntax Transformer Helpers</a>, Previous: <a href="Syntax-Rules.html">Syntax-rules Macros</a>, Up: <a href="Macros.html">Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Classes (Guile Reference Manual)</title>
+
+<meta name="description" content="Classes (Guile Reference Manual)">
+<meta name="keywords" content="Classes (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Introspection.html" rel="up" title="Introspection">
+<link href="Instances.html" rel="next" title="Instances">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Classes">
+<div class="nav-panel">
+<p>
+Next: <a href="Instances.html" accesskey="n" rel="next">Instances</a>, Up: <a href="Introspection.html" accesskey="u" rel="up">Introspection</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Classes-1">8.8.1 Classes</h4>
+
+<p>A GOOPS class is itself an instance of the <code class="code">&lt;class&gt;</code> class, or of a
+subclass of <code class="code">&lt;class&gt;</code>.  The definition of the <code class="code">&lt;class&gt;</code> class
+has slots that are used to describe the properties of a class, including
+the following.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-class_002dname"><span class="category-def">primitive procedure: </span><span><strong class="def-name">class-name</strong> <var class="def-var-arguments">class</var><a class="copiable-link" href='#index-class_002dname'> &para;</a></span></dt>
+<dd><p>Return the name of class <var class="var">class</var>.  This is the value of
+<var class="var">class</var>&rsquo;s <code class="code">name</code> slot.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-class_002ddirect_002dsupers"><span class="category-def">primitive procedure: </span><span><strong class="def-name">class-direct-supers</strong> <var class="def-var-arguments">class</var><a class="copiable-link" href='#index-class_002ddirect_002dsupers'> &para;</a></span></dt>
+<dd><p>Return a list containing the direct superclasses of <var class="var">class</var>.  This
+is the value of <var class="var">class</var>&rsquo;s <code class="code">direct-supers</code> slot.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-class_002ddirect_002dslots"><span class="category-def">primitive procedure: </span><span><strong class="def-name">class-direct-slots</strong> <var class="def-var-arguments">class</var><a class="copiable-link" href='#index-class_002ddirect_002dslots'> &para;</a></span></dt>
+<dd><p>Return a list containing the slot definitions of the direct slots of
+<var class="var">class</var>.  This is the value of <var class="var">class</var>&rsquo;s <code class="code">direct-slots</code>
+slot.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-class_002ddirect_002dsubclasses"><span class="category-def">primitive procedure: </span><span><strong class="def-name">class-direct-subclasses</strong> <var class="def-var-arguments">class</var><a class="copiable-link" href='#index-class_002ddirect_002dsubclasses'> &para;</a></span></dt>
+<dd><p>Return a list containing the direct subclasses of <var class="var">class</var>.  This is
+the value of <var class="var">class</var>&rsquo;s <code class="code">direct-subclasses</code> slot.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-class_002ddirect_002dmethods"><span class="category-def">primitive procedure: </span><span><strong class="def-name">class-direct-methods</strong> <var class="def-var-arguments">class</var><a class="copiable-link" href='#index-class_002ddirect_002dmethods'> &para;</a></span></dt>
+<dd><p>Return a list of all the generic function methods that use <var class="var">class</var>
+as a formal parameter specializer.  This is the value of <var class="var">class</var>&rsquo;s
+<code class="code">direct-methods</code> slot.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-class_002dprecedence_002dlist"><span class="category-def">primitive procedure: </span><span><strong class="def-name">class-precedence-list</strong> <var class="def-var-arguments">class</var><a class="copiable-link" href='#index-class_002dprecedence_002dlist'> &para;</a></span></dt>
+<dd><p>Return the class precedence list for class <var class="var">class</var> (see <a class="pxref" href="Class-Precedence-List.html">Class Precedence List</a>).  This is the value of <var class="var">class</var>&rsquo;s <code class="code">cpl</code> slot.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-class_002dslots"><span class="category-def">primitive procedure: </span><span><strong class="def-name">class-slots</strong> <var class="def-var-arguments">class</var><a class="copiable-link" href='#index-class_002dslots'> &para;</a></span></dt>
+<dd><p>Return a list containing the slot definitions for all <var class="var">class</var>&rsquo;s
+slots, including any slots that are inherited from superclasses.  This
+is the value of <var class="var">class</var>&rsquo;s <code class="code">slots</code> slot.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-class_002dsubclasses"><span class="category-def">procedure: </span><span><strong class="def-name">class-subclasses</strong> <var class="def-var-arguments">class</var><a class="copiable-link" href='#index-class_002dsubclasses'> &para;</a></span></dt>
+<dd><p>Return a list of all subclasses of <var class="var">class</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-class_002dmethods"><span class="category-def">procedure: </span><span><strong class="def-name">class-methods</strong> <var class="def-var-arguments">class</var><a class="copiable-link" href='#index-class_002dmethods'> &para;</a></span></dt>
+<dd><p>Return a list of all methods that use <var class="var">class</var> or a subclass of
+<var class="var">class</var> as one of its formal parameter specializers.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Instances.html">Instances</a>, Up: <a href="Introspection.html">Introspection</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

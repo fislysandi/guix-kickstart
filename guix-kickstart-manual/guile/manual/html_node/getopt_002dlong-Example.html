@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>getopt-long Example (Guile Reference Manual)</title>
+
+<meta name="description" content="getopt-long Example (Guile Reference Manual)">
+<meta name="keywords" content="getopt-long Example (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="getopt_002dlong.html" rel="up" title="getopt-long">
+<link href="Option-Specification.html" rel="next" title="Option Specification">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="getopt_002dlong-Example">
+<div class="nav-panel">
+<p>
+Next: <a href="Option-Specification.html" accesskey="n" rel="next">How to Write an Option Specification</a>, Up: <a href="getopt_002dlong.html" accesskey="u" rel="up">The (ice-9 getopt-long) Module</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="A-Short-getopt_002dlong-Example">7.4.1 A Short getopt-long Example</h4>
+
+<p>This section illustrates how <code class="code">getopt-long</code> is used by presenting
+and dissecting a simple example.  The first thing that we need is an
+<em class="dfn">option specification</em> that tells <code class="code">getopt-long</code> how to parse
+the command line.  This specification is an association list with the
+long option name as the key.  Here is how such a specification might
+look:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define option-spec
+  '((version (single-char #\v) (value #f))
+    (help    (single-char #\h) (value #f))))
+</pre></div>
+
+<p>This alist tells <code class="code">getopt-long</code> that it should accept two long
+options, called <em class="emph">version</em> and <em class="emph">help</em>, and that these options
+can also be selected by the single-letter abbreviations <em class="emph">v</em> and
+<em class="emph">h</em>, respectively.  The <code class="code">(value #f)</code> clauses indicate that
+neither of the options accepts a value.
+</p>
+<p>With this specification we can use <code class="code">getopt-long</code> to parse a given
+command line:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define options (getopt-long (command-line) option-spec))
+</pre></div>
+
+<p>After this call, <code class="code">options</code> contains the parsed command line and is
+ready to be examined by <code class="code">option-ref</code>.  <code class="code">option-ref</code> is called
+like this:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(option-ref options 'help #f)
+</pre></div>
+
+<p>It expects the parsed command line, a symbol indicating the option to
+examine, and a default value.  The default value is returned if the
+option was not present in the command line, or if the option was present
+but without a value; otherwise the value from the command line is
+returned.  Usually <code class="code">option-ref</code> is called once for each possible
+option that a script supports.
+</p>
+<p>The following example shows a main program which puts all this together
+to parse its command line and figure out what the user wanted.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define (main args)
+  (let* ((option-spec '((version (single-char #\v) (value #f))
+                        (help    (single-char #\h) (value #f))))
+         (options (getopt-long args option-spec))
+         (help-wanted (option-ref options 'help #f))
+         (version-wanted (option-ref options 'version #f)))
+    (if (or version-wanted help-wanted)
+        (begin
+          (if version-wanted
+              (display &quot;getopt-long-example version 0.3\n&quot;))
+          (if help-wanted
+              (display &quot;\
+getopt-long-example [options]
+  -v, --version    Display version
+  -h, --help       Display this help
+&quot;)))
+        (begin
+          (display &quot;Hello, World!&quot;) (newline)))))
+</pre></div>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Option-Specification.html">How to Write an Option Specification</a>, Up: <a href="getopt_002dlong.html">The (ice-9 getopt-long) Module</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

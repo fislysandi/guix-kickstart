@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Sandboxed Evaluation (Guile Reference Manual)</title>
+
+<meta name="description" content="Sandboxed Evaluation (Guile Reference Manual)">
+<meta name="keywords" content="Sandboxed Evaluation (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Read_002fLoad_002fEval_002fCompile.html" rel="up" title="Read/Load/Eval/Compile">
+<link href="REPL-Servers.html" rel="next" title="REPL Servers">
+<link href="Local-Inclusion.html" rel="prev" title="Local Inclusion">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Sandboxed-Evaluation">
+<div class="nav-panel">
+<p>
+Next: <a href="REPL-Servers.html" accesskey="n" rel="next">REPL Servers</a>, Previous: <a href="Local-Inclusion.html" accesskey="p" rel="prev">Local Inclusion</a>, Up: <a href="Read_002fLoad_002fEval_002fCompile.html" accesskey="u" rel="up">Reading and Evaluating Scheme Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Sandboxed-Evaluation-1">6.16.13 Sandboxed Evaluation</h4>
+
+<p>Sometimes you would like to evaluate code that comes from an untrusted
+party.  The safest way to do this is to buy a new computer, evaluate the
+code on that computer, then throw the machine away.  However if you are
+unwilling to take this simple approach, Guile does include a limited
+&ldquo;sandbox&rdquo; facility that can allow untrusted code to be evaluated with
+some confidence.
+</p>
+<p>To use the sandboxed evaluator, load its module:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 sandbox))
+</pre></div>
+
+<p>Guile&rsquo;s sandboxing facility starts with the ability to restrict the time
+and space used by a piece of code.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-call_002dwith_002dtime_002dlimit"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call-with-time-limit</strong> <var class="def-var-arguments">limit thunk limit-reached</var><a class="copiable-link" href='#index-call_002dwith_002dtime_002dlimit'> &para;</a></span></dt>
+<dd><p>Call <var class="var">thunk</var>, but cancel it if <var class="var">limit</var> seconds of wall-clock
+time have elapsed.  If the computation is cancelled, call
+<var class="var">limit-reached</var> in tail position.  <var class="var">thunk</var> must not disable
+interrupts or prevent an abort via a <code class="code">dynamic-wind</code> unwind handler.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-call_002dwith_002dallocation_002dlimit"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call-with-allocation-limit</strong> <var class="def-var-arguments">limit thunk limit-reached</var><a class="copiable-link" href='#index-call_002dwith_002dallocation_002dlimit'> &para;</a></span></dt>
+<dd><p>Call <var class="var">thunk</var>, but cancel it if <var class="var">limit</var> bytes have been
+allocated.  If the computation is cancelled, call <var class="var">limit-reached</var> in
+tail position.  <var class="var">thunk</var> must not disable interrupts or prevent an
+abort via a <code class="code">dynamic-wind</code> unwind handler.
+</p>
+<p>This limit applies to both stack and heap allocation.  The computation
+will not be aborted before <var class="var">limit</var> bytes have been allocated, but
+for the heap allocation limit, the check may be postponed until the next garbage collection.
+</p>
+<p>Note that as a current shortcoming, the heap size limit applies to all
+threads; concurrent allocation by other unrelated threads counts towards
+the allocation limit.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-call_002dwith_002dtime_002dand_002dallocation_002dlimits"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call-with-time-and-allocation-limits</strong> <var class="def-var-arguments">time-limit allocation-limit thunk</var><a class="copiable-link" href='#index-call_002dwith_002dtime_002dand_002dallocation_002dlimits'> &para;</a></span></dt>
+<dd><p>Invoke <var class="var">thunk</var> in a dynamic extent in which its execution is limited
+to <var class="var">time-limit</var> seconds of wall-clock time, and its allocation to
+<var class="var">allocation-limit</var> bytes.  <var class="var">thunk</var> must not disable interrupts
+or prevent an abort via a <code class="code">dynamic-wind</code> unwind handler.
+</p>
+<p>If successful, return all values produced by invoking <var class="var">thunk</var>.  Any
+uncaught exception thrown by the thunk will propagate out.  If the time
+or allocation limit is exceeded, an exception will be thrown to the
+<code class="code">limit-exceeded</code> key.
+</p></dd></dl>
+
+<p>The time limit and stack limit are both very precise, but the heap limit
+only gets checked asynchronously, after a garbage collection.  In
+particular, if the heap is already very large, the number of allocated
+bytes between garbage collections will be large, and therefore the
+precision of the check is reduced.
+</p>
+<p>Additionally, due to the mechanism used by the allocation limit (the
+<code class="code">after-gc-hook</code>), large single allocations like <code class="code">(make-vector
+#e1e7)</code> are only detected after the allocation completes, even if the
+allocation itself causes garbage collection.  It&rsquo;s possible therefore
+for user code to not only exceed the allocation limit set, but also to
+exhaust all available memory, causing out-of-memory conditions at any
+allocation site.  Failure to allocate memory in Guile itself should be
+safe and cause an exception to be thrown, but most systems are not
+designed to handle <code class="code">malloc</code> failures.  An allocation failure may
+therefore exercise unexpected code paths in your system, so it is a
+weakness of the sandbox (and therefore an interesting point of attack).
+</p>
+<p>The main sandbox interface is <code class="code">eval-in-sandbox</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-eval_002din_002dsandbox"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">eval-in-sandbox</strong> <var class="def-var-arguments">exp [#:time-limit 0.1]                           [#:allocation-limit #e10e6]                           [#:bindings all-pure-bindings]                           [#:module (make-sandbox-module bindings)]                           [#:sever-module? #t]</var><a class="copiable-link" href='#index-eval_002din_002dsandbox'> &para;</a></span></dt>
+<dd><p>Evaluate the Scheme expression <var class="var">exp</var> within an isolated
+&quot;sandbox&quot;.  Limit its execution to <var class="var">time-limit</var> seconds of
+wall-clock time, and limit its allocation to <var class="var">allocation-limit</var>
+bytes.
+</p>
+<p>The evaluation will occur in <var class="var">module</var>, which defaults to the result
+of calling <code class="code">make-sandbox-module</code> on <var class="var">bindings</var>, which itself
+defaults to <code class="code">all-pure-bindings</code>.  This is the core of the
+sandbox: creating a scope for the expression that is <em class="dfn">safe</em>.
+</p>
+<p>A safe sandbox module has two characteristics.  Firstly, it will not
+allow the expression being evaluated to avoid being cancelled due to
+time or allocation limits.  This ensures that the expression terminates
+in a timely fashion.
+</p>
+<p>Secondly, a safe sandbox module will prevent the evaluation from
+receiving information from previous evaluations, or from affecting
+future evaluations.  All combinations of binding sets exported by
+<code class="code">(ice-9 sandbox)</code> form safe sandbox modules.
+</p>
+<p>The <var class="var">bindings</var> should be given as a list of import sets.  One import
+set is a list whose car names an interface, like <code class="code">(ice-9 q)</code>, and
+whose cdr is a list of imports.  An import is either a bare symbol or a
+pair of <code class="code">(<var class="var">out</var> . <var class="var">in</var>)</code>, where <var class="var">out</var> and <var class="var">in</var> are
+both symbols and denote the name under which a binding is exported from
+the module, and the name under which to make the binding available,
+respectively.  Note that <var class="var">bindings</var> is only used as an input to the
+default initializer for the <var class="var">module</var> argument; if you pass
+<code class="code">#:module</code>, <var class="var">bindings</var> is unused.  If <var class="var">sever-module?</var> is
+true (the default), the module will be unlinked from the global module
+tree after the evaluation returns, to allow <var class="var">mod</var> to be
+garbage-collected.
+</p>
+<p>If successful, return all values produced by <var class="var">exp</var>.  Any uncaught
+exception thrown by the expression will propagate out.  If the time or
+allocation limit is exceeded, an exception will be thrown to the
+<code class="code">limit-exceeded</code> key.
+</p></dd></dl>
+
+<p>Constructing a safe sandbox module is tricky in general.  Guile defines
+an easy way to construct safe modules from predefined sets of bindings.
+Before getting to that interface, here are some general notes on safety.
+</p>
+<ol class="enumerate">
+<li> The time and allocation limits rely on the ability to interrupt
+and cancel a computation.  For this reason, no binding included in a
+sandbox module should be able to indefinitely postpone interrupt
+handling, nor should a binding be able to prevent an abort.  In practice
+this second consideration means that <code class="code">dynamic-wind</code> should not be
+included in any binding set.
+</li><li> The time and allocation limits apply only to the
+<code class="code">eval-in-sandbox</code> call.  If the call returns a procedure which is
+later called, no limit is &ldquo;automatically&rdquo; in place.  Users of
+<code class="code">eval-in-sandbox</code> have to be very careful to reimpose limits when
+calling procedures that escape from sandboxes.
+</li><li> Similarly, the dynamic environment of the <code class="code">eval-in-sandbox</code>
+call is not necessarily in place when any procedure that escapes from
+the sandbox is later called.
+
+<p>This detail prevents us from exposing <code class="code">primitive-eval</code> to the
+sandbox, for two reasons.  The first is that it&rsquo;s possible for legacy
+code to forge references to any binding, if the
+<code class="code">allow-legacy-syntax-objects?</code> parameter is true.  The default for
+this parameter is true; see <a class="pxref" href="Syntax-Transformer-Helpers.html">Syntax Transformer Helpers</a> for the
+details.  The parameter is bound to <code class="code">#f</code> for the duration of the
+<code class="code">eval-in-sandbox</code> call itself, but that will not be in place during
+calls to escaped procedures.
+</p>
+<p>The second reason we don&rsquo;t expose <code class="code">primitive-eval</code> is that
+<code class="code">primitive-eval</code> implicitly works in the current module, which for
+an escaped procedure will probably be different than the module that is
+current for the <code class="code">eval-in-sandbox</code> call itself.
+</p>
+<p>The common denominator here is that if an interface exposed to the
+sandbox relies on dynamic environments, it is easy to mistakenly grant
+the sandboxed procedure additional capabilities in the form of bindings
+that it should not have access to.  For this reason, the default sets of
+predefined bindings do not depend on any dynamically scoped value.
+</p></li><li> Mutation may allow a sandboxed evaluation to break some invariant
+in users of data supplied to it.  A lot of code culturally doesn&rsquo;t
+expect mutation, but if you hand mutable data to a sandboxed evaluation
+and you also grant mutating capabilities to that evaluation, then the
+sandboxed code may indeed mutate that data.  The default set of bindings
+to the sandbox do not include any mutating primitives.
+
+<p>Relatedly, <code class="code">set!</code> may allow a sandbox to mutate a primitive,
+invalidating many system-wide invariants.  Guile is currently quite
+permissive when it comes to imported bindings and mutability.  Although
+<code class="code">set!</code> to a module-local or lexically bound variable would be fine,
+we don&rsquo;t currently have an easy way to disallow <code class="code">set!</code> to an
+imported binding, so currently no binding set includes <code class="code">set!</code>.
+</p></li><li> Mutation may allow a sandboxed evaluation to keep state, or
+make a communication mechanism with other code.  On the one hand this
+sounds cool, but on the other hand maybe this is part of your threat
+model.  Again, the default set of bindings doesn&rsquo;t include mutating
+primitives, preventing sandboxed evaluations from keeping state.
+</li><li> The sandbox should probably not be able to open a network
+connection, or write to a file, or open a file from disk.  The default
+binding set includes no interaction with the operating system.
+</li></ol>
+
+<p>If you, dear reader, find the above discussion interesting, you will
+enjoy Jonathan Rees&rsquo; dissertation, &ldquo;A Security Kernel Based on the
+Lambda Calculus&rdquo;.
+</p>
+<dl class="first-defvr">
+<dt class="defvr" id="index-all_002dpure_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">all-pure-bindings</strong><a class="copiable-link" href='#index-all_002dpure_002dbindings'> &para;</a></span></dt>
+<dd><p>All &ldquo;pure&rdquo; bindings that together form a safe subset of those bindings
+available by default to Guile user code.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-all_002dpure_002dand_002dimpure_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">all-pure-and-impure-bindings</strong><a class="copiable-link" href='#index-all_002dpure_002dand_002dimpure_002dbindings'> &para;</a></span></dt>
+<dd><p>Like <code class="code">all-pure-bindings</code>, but additionally including mutating
+primitives like <code class="code">vector-set!</code>.  This set is still safe in the sense
+mentioned above, with the caveats about mutation.
+</p></dd></dl>
+
+<p>The components of these composite sets are as follows:
+</p><dl class="first-defvr">
+<dt class="defvr" id="index-alist_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">alist-bindings</strong><a class="copiable-link" href='#index-alist_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-array_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">array-bindings</strong><a class="copiable-link" href='#index-array_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-bit_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">bit-bindings</strong><a class="copiable-link" href='#index-bit_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-bitvector_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">bitvector-bindings</strong><a class="copiable-link" href='#index-bitvector_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-char_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">char-bindings</strong><a class="copiable-link" href='#index-char_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-char_002dset_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">char-set-bindings</strong><a class="copiable-link" href='#index-char_002dset_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-clock_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">clock-bindings</strong><a class="copiable-link" href='#index-clock_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-core_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">core-bindings</strong><a class="copiable-link" href='#index-core_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-error_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">error-bindings</strong><a class="copiable-link" href='#index-error_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-fluid_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">fluid-bindings</strong><a class="copiable-link" href='#index-fluid_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-hash_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">hash-bindings</strong><a class="copiable-link" href='#index-hash_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-iteration_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">iteration-bindings</strong><a class="copiable-link" href='#index-iteration_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-keyword_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">keyword-bindings</strong><a class="copiable-link" href='#index-keyword_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-list_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">list-bindings</strong><a class="copiable-link" href='#index-list_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-macro_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">macro-bindings</strong><a class="copiable-link" href='#index-macro_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-nil_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">nil-bindings</strong><a class="copiable-link" href='#index-nil_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-number_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">number-bindings</strong><a class="copiable-link" href='#index-number_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-pair_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">pair-bindings</strong><a class="copiable-link" href='#index-pair_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-predicate_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">predicate-bindings</strong><a class="copiable-link" href='#index-predicate_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-procedure_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">procedure-bindings</strong><a class="copiable-link" href='#index-procedure_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-promise_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">promise-bindings</strong><a class="copiable-link" href='#index-promise_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-prompt_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">prompt-bindings</strong><a class="copiable-link" href='#index-prompt_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-regexp_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">regexp-bindings</strong><a class="copiable-link" href='#index-regexp_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-sort_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">sort-bindings</strong><a class="copiable-link" href='#index-sort_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-srfi_002d4_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">srfi-4-bindings</strong><a class="copiable-link" href='#index-srfi_002d4_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-string_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">string-bindings</strong><a class="copiable-link" href='#index-string_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-symbol_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">symbol-bindings</strong><a class="copiable-link" href='#index-symbol_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-unspecified_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">unspecified-bindings</strong><a class="copiable-link" href='#index-unspecified_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-variable_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">variable-bindings</strong><a class="copiable-link" href='#index-variable_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-vector_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">vector-bindings</strong><a class="copiable-link" href='#index-vector_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-version_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">version-bindings</strong><a class="copiable-link" href='#index-version_002dbindings'> &para;</a></span></dt>
+<dd><p>The components of <code class="code">all-pure-bindings</code>.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-mutating_002dalist_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">mutating-alist-bindings</strong><a class="copiable-link" href='#index-mutating_002dalist_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-mutating_002darray_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">mutating-array-bindings</strong><a class="copiable-link" href='#index-mutating_002darray_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-mutating_002dbitvector_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">mutating-bitvector-bindings</strong><a class="copiable-link" href='#index-mutating_002dbitvector_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-mutating_002dfluid_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">mutating-fluid-bindings</strong><a class="copiable-link" href='#index-mutating_002dfluid_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-mutating_002dhash_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">mutating-hash-bindings</strong><a class="copiable-link" href='#index-mutating_002dhash_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-mutating_002dlist_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">mutating-list-bindings</strong><a class="copiable-link" href='#index-mutating_002dlist_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-mutating_002dpair_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">mutating-pair-bindings</strong><a class="copiable-link" href='#index-mutating_002dpair_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-mutating_002dsort_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">mutating-sort-bindings</strong><a class="copiable-link" href='#index-mutating_002dsort_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-mutating_002dsrfi_002d4_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">mutating-srfi-4-bindings</strong><a class="copiable-link" href='#index-mutating_002dsrfi_002d4_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-mutating_002dstring_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">mutating-string-bindings</strong><a class="copiable-link" href='#index-mutating_002dstring_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-mutating_002dvariable_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">mutating-variable-bindings</strong><a class="copiable-link" href='#index-mutating_002dvariable_002dbindings'> &para;</a></span></dt>
+<dt class="defvrx def-cmd-defvr" id="index-mutating_002dvector_002dbindings"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">mutating-vector-bindings</strong><a class="copiable-link" href='#index-mutating_002dvector_002dbindings'> &para;</a></span></dt>
+<dd><p>The additional components of <code class="code">all-pure-and-impure-bindings</code>.
+</p></dd></dl>
+
+<p>Finally, what do you do with a binding set?  What is a binding set
+anyway?  <code class="code">make-sandbox-module</code> is here for you.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dsandbox_002dmodule"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-sandbox-module</strong> <var class="def-var-arguments">bindings</var><a class="copiable-link" href='#index-make_002dsandbox_002dmodule'> &para;</a></span></dt>
+<dd><p>Return a fresh module that only contains <var class="var">bindings</var>.
+</p>
+<p>The <var class="var">bindings</var> should be given as a list of import sets.  One import
+set is a list whose car names an interface, like <code class="code">(ice-9 q)</code>, and
+whose cdr is a list of imports.  An import is either a bare symbol or a
+pair of <code class="code">(<var class="var">out</var> . <var class="var">in</var>)</code>, where <var class="var">out</var> and <var class="var">in</var> are
+both symbols and denote the name under which a binding is exported from
+the module, and the name under which to make the binding available,
+respectively.
+</p></dd></dl>
+
+<p>So you see that binding sets are just lists, and
+<code class="code">all-pure-and-impure-bindings</code> is really just the result of
+appending all of the component binding sets.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="REPL-Servers.html">REPL Servers</a>, Previous: <a href="Local-Inclusion.html">Local Inclusion</a>, Up: <a href="Read_002fLoad_002fEval_002fCompile.html">Reading and Evaluating Scheme Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

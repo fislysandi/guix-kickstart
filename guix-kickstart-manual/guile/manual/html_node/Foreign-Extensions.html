@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Foreign Extensions (Guile Reference Manual)</title>
+
+<meta name="description" content="Foreign Extensions (Guile Reference Manual)">
+<meta name="keywords" content="Foreign Extensions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Foreign-Function-Interface.html" rel="up" title="Foreign Function Interface">
+<link href="Foreign-Pointers.html" rel="next" title="Foreign Pointers">
+<link href="Foreign-Libraries.html" rel="prev" title="Foreign Libraries">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Foreign-Extensions">
+<div class="nav-panel">
+<p>
+Next: <a href="Foreign-Pointers.html" accesskey="n" rel="next">Foreign Pointers</a>, Previous: <a href="Foreign-Libraries.html" accesskey="p" rel="prev">Foreign Libraries</a>, Up: <a href="Foreign-Function-Interface.html" accesskey="u" rel="up">Foreign Function Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Foreign-Extensions-1">6.19.2 Foreign Extensions</h4>
+
+<p>One way to use shared libraries is to extend Guile.  Such loadable
+modules generally define one distinguished initialization function that,
+when called, will use the <code class="code">libguile</code> API to define procedures in
+the current module.
+</p>
+<p>Concretely, you might extend Guile with an implementation of the Bessel
+function, <code class="code">j0</code>:
+</p>
+<div class="example smallexample">
+<pre class="example-preformatted">#include &lt;math.h&gt;
+#include &lt;libguile.h&gt;
+
+SCM
+j0_wrapper (SCM x)
+{
+  return scm_from_double (j0 (scm_to_double (x, &quot;j0&quot;)));
+}
+
+void
+init_math_bessel (void)
+{
+  scm_c_define_gsubr (&quot;j0&quot;, 1, 0, 0, j0_wrapper);
+}
+</pre></div>
+
+<p>The C source file would then need to be compiled into a shared library.
+On GNU/Linux, the compiler invocation might look like this:
+</p>
+<div class="example smallexample">
+<pre class="example-preformatted">gcc -shared -o bessel.so -fPIC bessel.c
+</pre></div>
+
+<p>A good default place to put shared libraries that extend Guile is into
+the extensions dir.  From the command line or a build script, invoke
+<code class="code">pkg-config --variable=extensionsdir
+guile-3.0</code> to print the extensions dir.
+See <a class="xref" href="Parallel-Installations.html">Parallel Installations</a>, for more details.
+</p>
+<p>Guile can load up <code class="code">bessel.so</code> via <code class="code">load-extension</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-load_002dextension"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">load-extension</strong> <var class="def-var-arguments">lib init</var><a class="copiable-link" href='#index-load_002dextension'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fload_005fextension"><span class="category-def">C Function: </span><span><strong class="def-name">scm_load_extension</strong> <var class="def-var-arguments">(lib, init)</var><a class="copiable-link" href='#index-scm_005fload_005fextension'> &para;</a></span></dt>
+<dd><p>Load and initialize the extension designated by LIB and INIT.
+</p></dd></dl>
+
+<p>The normal way for a extension to be used is to write a small Scheme
+file that defines a module, and to load the extension into this
+module.  When the module is auto-loaded, the extension is loaded as
+well.  For example:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-module (math bessel)
+  #:export (j0))
+
+(load-extension &quot;bessel&quot; &quot;init_math_bessel&quot;)
+</pre></div>
+
+<p>This <code class="code">load-extension</code> invocation loads the <code class="code">bessel</code> library
+via <code class="code">(load-foreign-library &quot;bessel&quot;)</code>, then looks up the
+<code class="code">init_math_bessel</code> symbol in the library, treating it as a function
+of no arguments, and calls that function.
+</p>
+<p>If you decide to put your extension outside the default search path for
+<code class="code">load-foreign-library</code>, probably you should adapt the Scheme module
+to specify its absolute path.  For example, if you use <code class="code">automake</code>
+to build your extension and place it in <code class="code">$(pkglibdir)</code>, you might
+define a build-parameters module that gets created by the build system:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-module (math config)
+  #:export (extensiondir))
+(define extensiondir &quot;PKGLIBDIR&quot;)
+</pre></div>
+
+<p>This file would be <code class="code">config.scm.in</code>.  You would define a <code class="code">make</code>
+rule to substitute in the absolute installed file name:
+</p>
+<div class="example">
+<pre class="example-preformatted">config.scm: config.scm.in
+        sed 's|PKGLIBDIR|$(pkglibdir)|' &lt;$&lt; &gt;$&nbsp;</pre></div>
+
+<p>Then your <code class="code">(math bessel)</code> would import <code class="code">(math config)</code>, then
+<code class="code">(load-extension (in-vicinity extensiondir &quot;bessel&quot;)
+&quot;init_math_bessel&quot;)</code>.
+</p>
+<p>An alternate approach would be to rebind the
+<code class="code">guile-extensions-path</code> parameter, or its corresponding environment
+variable, but note that changing those parameters applies to other users
+of <code class="code">load-foreign-library</code> as well.
+</p>
+<p>Note that the new primitives that the extension adds to Guile with
+<code class="code">scm_c_define_gsubr</code> (see <a class="pxref" href="Primitive-Procedures.html">Primitive Procedures</a>) or with any of
+the other mechanisms are placed into the module that is current when the
+<code class="code">scm_c_define_gsubr</code> is executed, so to be clear about what goes
+vwhere it&rsquo;s best to include the <code class="code">load-extension</code> in a module, as
+above.  Alternately, the C code can use <code class="code">scm_c_define_module</code> to
+specify which module is being created:
+</p>
+<div class="example smallexample">
+<pre class="example-preformatted">static void
+do_init (void *unused)
+{
+  scm_c_define_gsubr (&quot;j0&quot;, 1, 0, 0, j0_wrapper);
+  scm_c_export (&quot;j0&quot;, NULL);
+}
+
+void
+init_math_bessel ()
+{
+  scm_c_define_module (&quot;math bessel&quot;, do_init, NULL);
+}
+</pre></div>
+
+<p>And yet... if what we want is just the <code class="code">j0</code> function, it seems like
+a lot of ceremony to have to compile a Guile-specific wrapper library
+complete with an initialization function and wraper module to allow
+Guile users to call it.  There is another way, but to get there, we have
+to talk about function pointers and function types first.  See <a class="xref" href="Foreign-Functions.html">Foreign Functions</a>, to skip to the good parts.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Foreign-Pointers.html">Foreign Pointers</a>, Previous: <a href="Foreign-Libraries.html">Foreign Libraries</a>, Up: <a href="Foreign-Function-Interface.html">Foreign Function Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

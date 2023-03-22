@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-1 Deleting (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-1 Deleting (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-1 Deleting (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI_002d1.html" rel="up" title="SRFI-1">
+<link href="SRFI_002d1-Association-Lists.html" rel="next" title="SRFI-1 Association Lists">
+<link href="SRFI_002d1-Searching.html" rel="prev" title="SRFI-1 Searching">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="SRFI_002d1-Deleting">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d1-Association-Lists.html" accesskey="n" rel="next">Association Lists</a>, Previous: <a href="SRFI_002d1-Searching.html" accesskey="p" rel="prev">Searching</a>, Up: <a href="SRFI_002d1.html" accesskey="u" rel="up">SRFI-1 - List library</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Deleting">7.5.3.8 Deleting</h4>
+<a class="index-entry-id" id="index-list-delete"></a>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-delete-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">delete</strong> <var class="def-var-arguments">x lst [=]</var><a class="copiable-link" href='#index-delete-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-delete_0021-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">delete!</strong> <var class="def-var-arguments">x lst [=]</var><a class="copiable-link" href='#index-delete_0021-1'> &para;</a></span></dt>
+<dd><p>Return a list containing the elements of <var class="var">lst</var> but with those
+equal to <var class="var">x</var> deleted.  The returned elements will be in the same
+order as they were in <var class="var">lst</var>.
+</p>
+<p>Equality is determined by the <var class="var">=</var> predicate, or <code class="code">equal?</code> if
+not given.  An equality call is made just once for each element, but
+the order in which the calls are made on the elements is unspecified.
+</p>
+<p>The equality calls are always <code class="code">(= x elem)</code>, ie. the given <var class="var">x</var>
+is first.  This means for instance elements greater than 5 can be
+deleted with <code class="code">(delete 5 lst &lt;)</code>.
+</p>
+<p><code class="code">delete</code> does not modify <var class="var">lst</var>, but the return might share a
+common tail with <var class="var">lst</var>.  <code class="code">delete!</code> may modify the structure
+of <var class="var">lst</var> to construct its return.
+</p>
+<p>These functions extend the core <code class="code">delete</code> and <code class="code">delete!</code>
+(see <a class="pxref" href="List-Modification.html">List Modification</a>) in accepting an equality predicate.  See
+also <code class="code">lset-difference</code> (see <a class="pxref" href="SRFI_002d1-Set-Operations.html">Set Operations on Lists</a>) for
+deleting multiple elements from a list.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-delete_002dduplicates"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">delete-duplicates</strong> <var class="def-var-arguments">lst [=]</var><a class="copiable-link" href='#index-delete_002dduplicates'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-delete_002dduplicates_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">delete-duplicates!</strong> <var class="def-var-arguments">lst [=]</var><a class="copiable-link" href='#index-delete_002dduplicates_0021'> &para;</a></span></dt>
+<dd><p>Return a list containing the elements of <var class="var">lst</var> but without
+duplicates.
+</p>
+<p>When elements are equal, only the first in <var class="var">lst</var> is retained.
+Equal elements can be anywhere in <var class="var">lst</var>, they don&rsquo;t have to be
+adjacent.  The returned list will have the retained elements in the
+same order as they were in <var class="var">lst</var>.
+</p>
+<p>Equality is determined by the <var class="var">=</var> predicate, or <code class="code">equal?</code> if
+not given.  Calls <code class="code">(= x y)</code> are made with element <var class="var">x</var> being
+before <var class="var">y</var> in <var class="var">lst</var>.  A call is made at most once for each
+combination, but the sequence of the calls across the elements is
+unspecified.
+</p>
+<p><code class="code">delete-duplicates</code> does not modify <var class="var">lst</var>, but the return
+might share a common tail with <var class="var">lst</var>.  <code class="code">delete-duplicates!</code>
+may modify the structure of <var class="var">lst</var> to construct its return.
+</p>
+<p>In the worst case, this is an <em class="math">O(N^2)</em> algorithm because it must
+check each element against all those preceding it.  For long lists it
+is more efficient to sort and then compare only adjacent elements.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d1-Association-Lists.html">Association Lists</a>, Previous: <a href="SRFI_002d1-Searching.html">Searching</a>, Up: <a href="SRFI_002d1.html">SRFI-1 - List library</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

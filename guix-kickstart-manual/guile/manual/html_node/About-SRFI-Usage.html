@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>About SRFI Usage (Guile Reference Manual)</title>
+
+<meta name="description" content="About SRFI Usage (Guile Reference Manual)">
+<meta name="keywords" content="About SRFI Usage (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI-Support.html" rel="up" title="SRFI Support">
+<link href="SRFI_002d0.html" rel="next" title="SRFI-0">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="About-SRFI-Usage">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d0.html" accesskey="n" rel="next">SRFI-0 - cond-expand</a>, Up: <a href="SRFI-Support.html" accesskey="u" rel="up">SRFI Support Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="About-SRFI-Usage-1">7.5.1 About SRFI Usage</h4>
+
+
+<p>SRFI support in Guile is currently implemented partly in the core
+library, and partly as add-on modules.  That means that some SRFIs are
+automatically available when the interpreter is started, whereas the
+other SRFIs require you to use the appropriate support module
+explicitly.
+</p>
+<p>There are several reasons for this inconsistency.  First, the feature
+checking syntactic form <code class="code">cond-expand</code> (see <a class="pxref" href="SRFI_002d0.html">SRFI-0 - cond-expand</a>) must be
+available immediately, because it must be there when the user wants to
+check for the Scheme implementation, that is, before she can know that
+it is safe to use <code class="code">use-modules</code> to load SRFI support modules.  The
+second reason is that some features defined in SRFIs had been
+implemented in Guile before the developers started to add SRFI
+implementations as modules (for example SRFI-13 (see <a class="pxref" href="SRFI_002d13.html">SRFI-13 - String Library</a>)).  In
+the future, it is possible that SRFIs in the core library might be
+factored out into separate modules, requiring explicit module loading
+when they are needed.  So you should be prepared to have to use
+<code class="code">use-modules</code> someday in the future to access SRFI-13 bindings.  If
+you want, you can do that already.  We have included the module
+<code class="code">(srfi srfi-13)</code> in the distribution, which currently does nothing,
+but ensures that you can write future-safe code.
+</p>
+<p>Generally, support for a specific SRFI is made available by using
+modules named <code class="code">(srfi srfi-<var class="var">number</var>)</code>, where <var class="var">number</var> is the
+number of the SRFI needed.  Another possibility is to use the command
+line option <code class="code">--use-srfi</code>, which will load the necessary modules
+automatically (see <a class="pxref" href="Invoking-Guile.html">Invoking Guile</a>).
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d0.html">SRFI-0 - cond-expand</a>, Up: <a href="SRFI-Support.html">SRFI Support Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

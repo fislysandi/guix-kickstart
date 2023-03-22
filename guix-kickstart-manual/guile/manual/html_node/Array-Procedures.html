@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Array Procedures (Guile Reference Manual)</title>
+
+<meta name="description" content="Array Procedures (Guile Reference Manual)">
+<meta name="keywords" content="Array Procedures (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Arrays.html" rel="up" title="Arrays">
+<link href="Shared-Arrays.html" rel="next" title="Shared Arrays">
+<link href="Array-Syntax.html" rel="prev" title="Array Syntax">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Array-Procedures">
+<div class="nav-panel">
+<p>
+Next: <a href="Shared-Arrays.html" accesskey="n" rel="next">Shared Arrays</a>, Previous: <a href="Array-Syntax.html" accesskey="p" rel="prev">Array Syntax</a>, Up: <a href="Arrays.html" accesskey="u" rel="up">Arrays</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Array-Procedures-1">6.6.13.2 Array Procedures</h4>
+
+<p>When an array is created, the range of each dimension must be
+specified, e.g., to create a 2x3 array with a zero-based index:
+</p>
+<div class="example">
+<pre class="example-preformatted">(make-array 'ho 2 3) &rArr; #2((ho ho ho) (ho ho ho))
+</pre></div>
+
+<p>The range of each dimension can also be given explicitly, e.g., another
+way to create the same array:
+</p>
+<div class="example">
+<pre class="example-preformatted">(make-array 'ho '(0 1) '(0 2)) &rArr; #2((ho ho ho) (ho ho ho))
+</pre></div>
+
+<p>The following procedures can be used with arrays (or vectors).  An
+argument shown as <var class="var">idx</var>&hellip; means one parameter for each
+dimension in the array.  A <var class="var">idxlist</var> argument means a list of such
+values, one for each dimension.
+</p>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-array_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-array_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005farray_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_array_p</strong> <var class="def-var-arguments">(obj, unused)</var><a class="copiable-link" href='#index-scm_005farray_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if the <var class="var">obj</var> is an array, and <code class="code">#f</code> if
+not.
+</p>
+<p>The second argument to scm_array_p is there for historical reasons,
+but it is not used.  You should always pass <code class="code">SCM_UNDEFINED</code> as
+its value.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-typed_002darray_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">typed-array?</strong> <var class="def-var-arguments">obj type</var><a class="copiable-link" href='#index-typed_002darray_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005ftyped_005farray_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_typed_array_p</strong> <var class="def-var-arguments">(obj, type)</var><a class="copiable-link" href='#index-scm_005ftyped_005farray_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if the <var class="var">obj</var> is an array of type <var class="var">type</var>, and
+<code class="code">#f</code> if not.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fis_005farray"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_is_array</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-scm_005fis_005farray'> &para;</a></span></dt>
+<dd><p>Return <code class="code">1</code> if the <var class="var">obj</var> is an array and <code class="code">0</code> if not.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fis_005ftyped_005farray"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_is_typed_array</strong> <code class="def-code-arguments">(SCM obj, SCM type)</code><a class="copiable-link" href='#index-scm_005fis_005ftyped_005farray'> &para;</a></span></dt>
+<dd><p>Return <code class="code">0</code> if the <var class="var">obj</var> is an array of type <var class="var">type</var>, and
+<code class="code">1</code> if not.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002darray"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-array</strong> <var class="def-var-arguments">fill bound &hellip;</var><a class="copiable-link" href='#index-make_002darray'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmake_005farray"><span class="category-def">C Function: </span><span><strong class="def-name">scm_make_array</strong> <var class="def-var-arguments">(fill, bounds)</var><a class="copiable-link" href='#index-scm_005fmake_005farray'> &para;</a></span></dt>
+<dd><p>Equivalent to <code class="code">(make-typed-array #t <var class="var">fill</var> <var class="var">bound</var> ...)</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dtyped_002darray"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-typed-array</strong> <var class="def-var-arguments">type fill bound &hellip;</var><a class="copiable-link" href='#index-make_002dtyped_002darray'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmake_005ftyped_005farray"><span class="category-def">C Function: </span><span><strong class="def-name">scm_make_typed_array</strong> <var class="def-var-arguments">(type, fill, bounds)</var><a class="copiable-link" href='#index-scm_005fmake_005ftyped_005farray'> &para;</a></span></dt>
+<dd><p>Create and return an array that has as many dimensions as there are
+<var class="var">bound</var>s and (maybe) fill it with <var class="var">fill</var>.
+</p>
+<p>The underlying storage vector is created according to <var class="var">type</var>,
+which must be a symbol whose name is the &lsquo;vectag&rsquo; of the array as
+explained above, or <code class="code">#t</code> for ordinary, non-specialized arrays.
+</p>
+<p>For example, using the symbol <code class="code">f64</code> for <var class="var">type</var> will create an
+array that uses a <code class="code">f64vector</code> for storing its elements, and
+<code class="code">a</code> will use a string.
+</p>
+<p>When <var class="var">fill</var> is not the special <em class="emph">unspecified</em> value, the new
+array is filled with <var class="var">fill</var>.  Otherwise, the initial contents of
+the array is unspecified.  The special <em class="emph">unspecified</em> value is
+stored in the variable <code class="code">*unspecified*</code> so that for example
+<code class="code">(make-typed-array 'u32 *unspecified* 4)</code> creates a uninitialized
+<code class="code">u32</code> vector of length 4.
+</p>
+<p>Each <var class="var">bound</var> may be a positive non-zero integer <var class="var">n</var>, in which
+case the index for that dimension can range from 0 through <var class="var">n</var>-1; or
+an explicit index range specifier in the form <code class="code">(LOWER UPPER)</code>,
+where both <var class="var">lower</var> and <var class="var">upper</var> are integers, possibly less than
+zero, and possibly the same number (however, <var class="var">lower</var> cannot be
+greater than <var class="var">upper</var>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-list_002d_003earray"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list-&gt;array</strong> <var class="def-var-arguments">dimspec list</var><a class="copiable-link" href='#index-list_002d_003earray'> &para;</a></span></dt>
+<dd><p>Equivalent to <code class="code">(list-&gt;typed-array #t <var class="var">dimspec</var>
+<var class="var">list</var>)</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-list_002d_003etyped_002darray"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list-&gt;typed-array</strong> <var class="def-var-arguments">type dimspec list</var><a class="copiable-link" href='#index-list_002d_003etyped_002darray'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flist_005fto_005ftyped_005farray"><span class="category-def">C Function: </span><span><strong class="def-name">scm_list_to_typed_array</strong> <var class="def-var-arguments">(type, dimspec, list)</var><a class="copiable-link" href='#index-scm_005flist_005fto_005ftyped_005farray'> &para;</a></span></dt>
+<dd><p>Return an array of the type indicated by <var class="var">type</var> with elements the
+same as those of <var class="var">list</var>.
+</p>
+<p>The argument <var class="var">dimspec</var> determines the number of dimensions of the
+array and their lower bounds.  When <var class="var">dimspec</var> is an exact integer,
+it gives the number of dimensions directly and all lower bounds are
+zero.  When it is a list of exact integers, then each element is the
+lower index bound of a dimension, and there will be as many dimensions
+as elements in the list.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-array_002dtype"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-type</strong> <var class="def-var-arguments">array</var><a class="copiable-link" href='#index-array_002dtype'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005farray_005ftype"><span class="category-def">C Function: </span><span><strong class="def-name">scm_array_type</strong> <var class="def-var-arguments">(array)</var><a class="copiable-link" href='#index-scm_005farray_005ftype'> &para;</a></span></dt>
+<dd><p>Return the type of <var class="var">array</var>.  This is the &lsquo;vectag&rsquo; used for
+printing <var class="var">array</var> (or <code class="code">#t</code> for ordinary arrays) and can be
+used with <code class="code">make-typed-array</code> to create an array of the same kind
+as <var class="var">array</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-array_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-ref</strong> <var class="def-var-arguments">array idx &hellip;</var><a class="copiable-link" href='#index-array_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005farray_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_array_ref</strong> <var class="def-var-arguments">(array, idxlist)</var><a class="copiable-link" href='#index-scm_005farray_005fref'> &para;</a></span></dt>
+<dd><p>Return the element at <code class="code">(idx &hellip;)</code> in <var class="var">array</var>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define a (make-array 999 '(1 2) '(3 4)))
+(array-ref a 2 4) &rArr; 999
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-array_002din_002dbounds_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-in-bounds?</strong> <var class="def-var-arguments">array idx &hellip;</var><a class="copiable-link" href='#index-array_002din_002dbounds_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005farray_005fin_005fbounds_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_array_in_bounds_p</strong> <var class="def-var-arguments">(array, idxlist)</var><a class="copiable-link" href='#index-scm_005farray_005fin_005fbounds_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if the given indices would be acceptable to
+<code class="code">array-ref</code>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define a (make-array #f '(1 2) '(3 4)))
+(array-in-bounds? a 2 3) &rArr; #t
+(array-in-bounds? a 0 0) &rArr; #f
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-array_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-set!</strong> <var class="def-var-arguments">array obj idx &hellip;</var><a class="copiable-link" href='#index-array_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005farray_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_array_set_x</strong> <var class="def-var-arguments">(array, obj, idxlist)</var><a class="copiable-link" href='#index-scm_005farray_005fset_005fx'> &para;</a></span></dt>
+<dd><p>Set the element at <code class="code">(idx &hellip;)</code> in <var class="var">array</var> to <var class="var">obj</var>.
+The return value is unspecified.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define a (make-array #f '(0 1) '(0 1)))
+(array-set! a #t 1 1)
+a &rArr; #2((#f #f) (#f #t))
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-array_002dshape"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-shape</strong> <var class="def-var-arguments">array</var><a class="copiable-link" href='#index-array_002dshape'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-array_002ddimensions"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-dimensions</strong> <var class="def-var-arguments">array</var><a class="copiable-link" href='#index-array_002ddimensions'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005farray_005fdimensions"><span class="category-def">C Function: </span><span><strong class="def-name">scm_array_dimensions</strong> <var class="def-var-arguments">(array)</var><a class="copiable-link" href='#index-scm_005farray_005fdimensions'> &para;</a></span></dt>
+<dd><p>Return a list of the bounds for each dimension of <var class="var">array</var>.
+</p>
+<p><code class="code">array-shape</code> gives <code class="code">(<var class="var">lower</var> <var class="var">upper</var>)</code> for each
+dimension.  <code class="code">array-dimensions</code> instead returns just
+<em class="math"><var class="var">upper</var>+1</em> for dimensions with a 0 lower bound.  Both are
+suitable as input to <code class="code">make-array</code>.
+</p>
+<p>For example,
+</p>
+<div class="example">
+<pre class="example-preformatted">(define a (make-array 'foo '(-1 3) 5))
+(array-shape a)      &rArr; ((-1 3) (0 4))
+(array-dimensions a) &rArr; ((-1 3) 5)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-array_002dlength"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-length</strong> <var class="def-var-arguments">array</var><a class="copiable-link" href='#index-array_002dlength'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005farray_005flength"><span class="category-def">C Function: </span><span><strong class="def-name">scm_array_length</strong> <var class="def-var-arguments">(array)</var><a class="copiable-link" href='#index-scm_005farray_005flength'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-size_005ft"><span class="category-def">C Function: </span><span><strong class="def-name">size_t</strong> <var class="def-var-arguments">scm_c_array_length (array)</var><a class="copiable-link" href='#index-size_005ft'> &para;</a></span></dt>
+<dd><p>Return the length of an array: its first dimension. It is an error to
+ask for the length of an array of rank 0.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-array_002drank"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-rank</strong> <var class="def-var-arguments">array</var><a class="copiable-link" href='#index-array_002drank'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005farray_005frank"><span class="category-def">C Function: </span><span><strong class="def-name">scm_array_rank</strong> <var class="def-var-arguments">(array)</var><a class="copiable-link" href='#index-scm_005farray_005frank'> &para;</a></span></dt>
+<dd><p>Return the rank of <var class="var">array</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005farray_005frank"><span class="category-def">C Function: </span><span><code class="def-type">size_t</code> <strong class="def-name">scm_c_array_rank</strong> <code class="def-code-arguments">(SCM array)</code><a class="copiable-link" href='#index-scm_005fc_005farray_005frank'> &para;</a></span></dt>
+<dd><p>Return the rank of <var class="var">array</var> as a <code class="code">size_t</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-array_002d_003elist"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-&gt;list</strong> <var class="def-var-arguments">array</var><a class="copiable-link" href='#index-array_002d_003elist'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005farray_005fto_005flist"><span class="category-def">C Function: </span><span><strong class="def-name">scm_array_to_list</strong> <var class="def-var-arguments">(array)</var><a class="copiable-link" href='#index-scm_005farray_005fto_005flist'> &para;</a></span></dt>
+<dd><p>Return a list consisting of all the elements, in order, of
+<var class="var">array</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-array_002dcopy_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-copy!</strong> <var class="def-var-arguments">src dst</var><a class="copiable-link" href='#index-array_002dcopy_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-array_002dcopy_002din_002dorder_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-copy-in-order!</strong> <var class="def-var-arguments">src dst</var><a class="copiable-link" href='#index-array_002dcopy_002din_002dorder_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005farray_005fcopy_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_array_copy_x</strong> <var class="def-var-arguments">(src, dst)</var><a class="copiable-link" href='#index-scm_005farray_005fcopy_005fx'> &para;</a></span></dt>
+<dd><p>Copy every element from vector or array <var class="var">src</var> to the corresponding
+element of <var class="var">dst</var>.  <var class="var">dst</var> must have the same rank as <var class="var">src</var>,
+and be at least as large in each dimension.  The return value is
+unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-array_002dfill_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-fill!</strong> <var class="def-var-arguments">array fill</var><a class="copiable-link" href='#index-array_002dfill_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005farray_005ffill_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_array_fill_x</strong> <var class="def-var-arguments">(array, fill)</var><a class="copiable-link" href='#index-scm_005farray_005ffill_005fx'> &para;</a></span></dt>
+<dd><p>Store <var class="var">fill</var> in every element of <var class="var">array</var>.  The value returned
+is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-array_002dequal_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-equal?</strong> <var class="def-var-arguments">array &hellip;</var><a class="copiable-link" href='#index-array_002dequal_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if all arguments are arrays with the same shape, the
+same type, and have corresponding elements which are either
+<code class="code">equal?</code> or <code class="code">array-equal?</code>.  This function differs from
+<code class="code">equal?</code> (see <a class="pxref" href="Equality.html">Equality</a>) in that all arguments must be arrays.
+</p></dd></dl>
+
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-array_002dmap_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-map!</strong> <var class="def-var-arguments">dst proc src &hellip;</var><a class="copiable-link" href='#index-array_002dmap_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-array_002dmap_002din_002dorder_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-map-in-order!</strong> <var class="def-var-arguments">dst proc src &hellip;</var><a class="copiable-link" href='#index-array_002dmap_002din_002dorder_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005farray_005fmap_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_array_map_x</strong> <var class="def-var-arguments">(dst, proc, srclist)</var><a class="copiable-link" href='#index-scm_005farray_005fmap_005fx'> &para;</a></span></dt>
+<dd><p>Set each element of the <var class="var">dst</var> array to values obtained from calls to
+<var class="var">proc</var>.  The list of <var class="var">src</var> arguments may be empty.  The value
+returned is unspecified.
+</p>
+<p>Each call is <code class="code">(<var class="var">proc</var> <var class="var">elem</var> &hellip;)</code>, where each
+<var class="var">elem</var> is from the corresponding <var class="var">src</var> array, at the
+<var class="var">dst</var> index.  <code class="code">array-map-in-order!</code> makes the calls in
+row-major order, <code class="code">array-map!</code> makes them in an unspecified order.
+</p>
+<p>The <var class="var">src</var> arrays must have the same number of dimensions as
+<var class="var">dst</var>, and must have a range for each dimension which covers the
+range in <var class="var">dst</var>.  This ensures all <var class="var">dst</var> indices are valid in
+each <var class="var">src</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-array_002dfor_002deach"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-for-each</strong> <var class="def-var-arguments">proc src1 src2 &hellip;</var><a class="copiable-link" href='#index-array_002dfor_002deach'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005farray_005ffor_005feach"><span class="category-def">C Function: </span><span><strong class="def-name">scm_array_for_each</strong> <var class="def-var-arguments">(proc, src1, srclist)</var><a class="copiable-link" href='#index-scm_005farray_005ffor_005feach'> &para;</a></span></dt>
+<dd><p>Apply <var class="var">proc</var> to each tuple of elements of <var class="var">src1</var> <var class="var">src2</var>
+&hellip;, in row-major order.  The value returned is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-array_002dindex_002dmap_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-index-map!</strong> <var class="def-var-arguments">dst proc</var><a class="copiable-link" href='#index-array_002dindex_002dmap_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005farray_005findex_005fmap_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_array_index_map_x</strong> <var class="def-var-arguments">(dst, proc)</var><a class="copiable-link" href='#index-scm_005farray_005findex_005fmap_005fx'> &para;</a></span></dt>
+<dd><p>Set each element of the <var class="var">dst</var> array to values returned by calls to
+<var class="var">proc</var>.  The value returned is unspecified.
+</p>
+<p>Each call is <code class="code">(<var class="var">proc</var> <var class="var">i1</var> &hellip; <var class="var">iN</var>)</code>, where
+<var class="var">i1</var>&hellip;<var class="var">iN</var> is the destination index, one parameter for
+each dimension.  The order in which the calls are made is unspecified.
+</p>
+<p>For example, to create a <em class="math">4x4</em> matrix representing a
+cyclic group,
+</p>
+<div class="example">
+<pre class="example-preformatted">    / 0 1 2 3 \
+    | 1 2 3 0 |
+    | 2 3 0 1 |
+    \ 3 0 1 2 /
+</pre></div>
+
+<div class="example">
+<pre class="example-preformatted">(define a (make-array #f 4 4))
+(array-index-map! a (lambda (i j)
+                      (modulo (+ i j) 4)))
+</pre></div>
+</dd></dl>
+
+<p>An additional array function is available in the module
+<code class="code">(ice-9 arrays)</code>. It can be used with:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 arrays))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-array_002dcopy"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-copy</strong> <var class="def-var-arguments">src</var><a class="copiable-link" href='#index-array_002dcopy'> &para;</a></span></dt>
+<dd><p>Return a new array with the same elements, type and shape as
+<var class="var">src</var>. However, the array increments may not be the same as those of
+<var class="var">src</var>. In the current implementation, the returned array will be in
+row-major order, but that might change in the future. Use
+<code class="code">array-copy!</code> on an array of known order if that is a concern.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Shared-Arrays.html">Shared Arrays</a>, Previous: <a href="Array-Syntax.html">Array Syntax</a>, Up: <a href="Arrays.html">Arrays</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Building CPS (Guile Reference Manual)</title>
+
+<meta name="description" content="Building CPS (Guile Reference Manual)">
+<meta name="keywords" content="Building CPS (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Continuation_002dPassing-Style.html" rel="up" title="Continuation-Passing Style">
+<link href="CPS-Soup.html" rel="next" title="CPS Soup">
+<link href="CPS-in-Guile.html" rel="prev" title="CPS in Guile">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Building-CPS">
+<div class="nav-panel">
+<p>
+Next: <a href="CPS-Soup.html" accesskey="n" rel="next">CPS Soup</a>, Previous: <a href="CPS-in-Guile.html" accesskey="p" rel="prev">CPS in Guile</a>, Up: <a href="Continuation_002dPassing-Style.html" accesskey="u" rel="up">Continuation-Passing Style</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Building-CPS-1">9.4.4.3 Building CPS</h4>
+
+<p>Unlike Tree-IL, the CPS language is built to be constructed and
+deconstructed with abstract macros instead of via procedural
+constructors or accessors, or instead of S-expression matching.
+</p>
+<p>Deconstruction and matching is handled adequately by the <code class="code">match</code>
+form from <code class="code">(ice-9 match)</code>.  See <a class="xref" href="Pattern-Matching.html">Pattern Matching</a>.  Construction
+is handled by a set of mutually builder macros:
+<code class="code">build-term</code>, <code class="code">build-cont</code>, and <code class="code">build-exp</code>.
+</p>
+<p>In the following interface definitions, consider <code class="code">term</code> and
+<code class="code">exp</code> to be built by <code class="code">build-term</code> or <code class="code">build-exp</code>,
+respectively.  Consider any other name to be evaluated as a Scheme
+expression.  Many of these forms recognize <code class="code">unquote</code> in some
+contexts, to splice in a previously-built value; see the specifications
+below for full details.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-build_002dterm"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-term</strong> <var class="def-var-arguments">,val</var><a class="copiable-link" href='#index-build_002dterm'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dterm-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-term</strong> <var class="def-var-arguments">($continue k src exp)</var><a class="copiable-link" href='#index-build_002dterm-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dexp"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-exp</strong> <var class="def-var-arguments">,val</var><a class="copiable-link" href='#index-build_002dexp'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dexp-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-exp</strong> <var class="def-var-arguments">($const val)</var><a class="copiable-link" href='#index-build_002dexp-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dexp-2"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-exp</strong> <var class="def-var-arguments">($prim name)</var><a class="copiable-link" href='#index-build_002dexp-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dexp-3"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-exp</strong> <var class="def-var-arguments">($fun kentry)</var><a class="copiable-link" href='#index-build_002dexp-3'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dexp-4"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-exp</strong> <var class="def-var-arguments">($const-fun kentry)</var><a class="copiable-link" href='#index-build_002dexp-4'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dexp-5"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-exp</strong> <var class="def-var-arguments">($code kentry)</var><a class="copiable-link" href='#index-build_002dexp-5'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dexp-6"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-exp</strong> <var class="def-var-arguments">($rec names syms funs)</var><a class="copiable-link" href='#index-build_002dexp-6'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dexp-7"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-exp</strong> <var class="def-var-arguments">($call proc (arg ...))</var><a class="copiable-link" href='#index-build_002dexp-7'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dexp-8"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-exp</strong> <var class="def-var-arguments">($call proc args)</var><a class="copiable-link" href='#index-build_002dexp-8'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dexp-9"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-exp</strong> <var class="def-var-arguments">($callk k proc (arg ...))</var><a class="copiable-link" href='#index-build_002dexp-9'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dexp-10"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-exp</strong> <var class="def-var-arguments">($callk k proc args)</var><a class="copiable-link" href='#index-build_002dexp-10'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dexp-11"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-exp</strong> <var class="def-var-arguments">($primcall name param (arg ...))</var><a class="copiable-link" href='#index-build_002dexp-11'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dexp-12"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-exp</strong> <var class="def-var-arguments">($primcall name param args)</var><a class="copiable-link" href='#index-build_002dexp-12'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dexp-13"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-exp</strong> <var class="def-var-arguments">($values (arg ...))</var><a class="copiable-link" href='#index-build_002dexp-13'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dexp-14"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-exp</strong> <var class="def-var-arguments">($values args)</var><a class="copiable-link" href='#index-build_002dexp-14'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dexp-15"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-exp</strong> <var class="def-var-arguments">($prompt escape? tag handler)</var><a class="copiable-link" href='#index-build_002dexp-15'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dterm-2"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-term</strong> <var class="def-var-arguments">($branch kf kt src op param (arg ...))</var><a class="copiable-link" href='#index-build_002dterm-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dterm-3"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-term</strong> <var class="def-var-arguments">($branch kf kt src op param args)</var><a class="copiable-link" href='#index-build_002dterm-3'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dterm-4"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-term</strong> <var class="def-var-arguments">($switch kf kt* src arg)</var><a class="copiable-link" href='#index-build_002dterm-4'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dterm-5"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-term</strong> <var class="def-var-arguments">($throw src op param (arg ...))</var><a class="copiable-link" href='#index-build_002dterm-5'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dterm-6"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-term</strong> <var class="def-var-arguments">($throw src op param args)</var><a class="copiable-link" href='#index-build_002dterm-6'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dterm-7"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-term</strong> <var class="def-var-arguments">($prompt k kh src escape? tag)</var><a class="copiable-link" href='#index-build_002dterm-7'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dcont"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-cont</strong> <var class="def-var-arguments">,val</var><a class="copiable-link" href='#index-build_002dcont'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dcont-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-cont</strong> <var class="def-var-arguments">($kargs (name ...) (sym ...) term)</var><a class="copiable-link" href='#index-build_002dcont-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dcont-2"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-cont</strong> <var class="def-var-arguments">($kargs names syms term)</var><a class="copiable-link" href='#index-build_002dcont-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dcont-3"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-cont</strong> <var class="def-var-arguments">($kreceive req rest kargs)</var><a class="copiable-link" href='#index-build_002dcont-3'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dcont-4"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-cont</strong> <var class="def-var-arguments">($kfun src meta self ktail kclause)</var><a class="copiable-link" href='#index-build_002dcont-4'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dcont-5"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-cont</strong> <var class="def-var-arguments">($kclause ,arity kbody kalt)</var><a class="copiable-link" href='#index-build_002dcont-5'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-build_002dcont-6"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">build-cont</strong> <var class="def-var-arguments">($kclause (req opt rest kw aok?) kbody)</var><a class="copiable-link" href='#index-build_002dcont-6'> &para;</a></span></dt>
+<dd><p>Construct a CPS term, expression, or continuation.
+</p></dd></dl>
+
+<p>There are a few more miscellaneous interfaces as well.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002darity"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-arity</strong> <var class="def-var-arguments">req opt rest kw allow-other-keywords?</var><a class="copiable-link" href='#index-make_002darity'> &para;</a></span></dt>
+<dd><p>A procedural constructor for <code class="code">$arity</code> objects.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-rewrite_002dterm"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">rewrite-term</strong> <var class="def-var-arguments">val (pat term) ...</var><a class="copiable-link" href='#index-rewrite_002dterm'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-rewrite_002dexp"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">rewrite-exp</strong> <var class="def-var-arguments">val (pat exp) ...</var><a class="copiable-link" href='#index-rewrite_002dexp'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-rewrite_002dcont"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">rewrite-cont</strong> <var class="def-var-arguments">val (pat cont) ...</var><a class="copiable-link" href='#index-rewrite_002dcont'> &para;</a></span></dt>
+<dd><p>Match <var class="var">val</var> against the series of patterns <var class="var">pat...</var>, using
+<code class="code">match</code>.  The body of the matching clause should be a template in
+the syntax of <code class="code">build-term</code>, <code class="code">build-exp</code>, or <code class="code">build-cont</code>,
+respectively.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="CPS-Soup.html">CPS Soup</a>, Previous: <a href="CPS-in-Guile.html">CPS in Guile</a>, Up: <a href="Continuation_002dPassing-Style.html">Continuation-Passing Style</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

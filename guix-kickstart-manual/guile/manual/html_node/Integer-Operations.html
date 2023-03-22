@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Integer Operations (Guile Reference Manual)</title>
+
+<meta name="description" content="Integer Operations (Guile Reference Manual)">
+<meta name="keywords" content="Integer Operations (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Numbers.html" rel="up" title="Numbers">
+<link href="Comparison.html" rel="next" title="Comparison">
+<link href="Number-Syntax.html" rel="prev" title="Number Syntax">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Integer-Operations">
+<div class="nav-panel">
+<p>
+Next: <a href="Comparison.html" accesskey="n" rel="next">Comparison Predicates</a>, Previous: <a href="Number-Syntax.html" accesskey="p" rel="prev">Read Syntax for Numerical Data</a>, Up: <a href="Numbers.html" accesskey="u" rel="up">Numerical data types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Operations-on-Integer-Values">6.6.2.7 Operations on Integer Values</h4>
+<a class="index-entry-id" id="index-odd_003f-2"></a>
+<a class="index-entry-id" id="index-even_003f-2"></a>
+<a class="index-entry-id" id="index-quotient-2"></a>
+<a class="index-entry-id" id="index-remainder-2"></a>
+<a class="index-entry-id" id="index-modulo-2"></a>
+<a class="index-entry-id" id="index-gcd-2"></a>
+<a class="index-entry-id" id="index-lcm-2"></a>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-odd_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">odd?</strong> <var class="def-var-arguments">n</var><a class="copiable-link" href='#index-odd_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fodd_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_odd_p</strong> <var class="def-var-arguments">(n)</var><a class="copiable-link" href='#index-scm_005fodd_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">n</var> is an odd number, <code class="code">#f</code>
+otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-even_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">even?</strong> <var class="def-var-arguments">n</var><a class="copiable-link" href='#index-even_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005feven_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_even_p</strong> <var class="def-var-arguments">(n)</var><a class="copiable-link" href='#index-scm_005feven_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">n</var> is an even number, <code class="code">#f</code>
+otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-quotient"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">quotient</strong> <var class="def-var-arguments">n d</var><a class="copiable-link" href='#index-quotient'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-remainder"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">remainder</strong> <var class="def-var-arguments">n d</var><a class="copiable-link" href='#index-remainder'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fquotient"><span class="category-def">C Function: </span><span><strong class="def-name">scm_quotient</strong> <var class="def-var-arguments">(n, d)</var><a class="copiable-link" href='#index-scm_005fquotient'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fremainder"><span class="category-def">C Function: </span><span><strong class="def-name">scm_remainder</strong> <var class="def-var-arguments">(n, d)</var><a class="copiable-link" href='#index-scm_005fremainder'> &para;</a></span></dt>
+<dd><p>Return the quotient or remainder from <var class="var">n</var> divided by <var class="var">d</var>.  The
+quotient is rounded towards zero, and the remainder will have the same
+sign as <var class="var">n</var>.  In all cases quotient and remainder satisfy
+<em class="math"><var class="var">n</var> = <var class="var">q</var>*<var class="var">d</var> + <var class="var">r</var></em>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(remainder 13 4) &rArr; 1
+(remainder -13 4) &rArr; -1
+</pre></div>
+
+<p>See also <code class="code">truncate-quotient</code>, <code class="code">truncate-remainder</code> and
+related operations in <a class="ref" href="Arithmetic.html">Arithmetic Functions</a>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-modulo"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">modulo</strong> <var class="def-var-arguments">n d</var><a class="copiable-link" href='#index-modulo'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmodulo"><span class="category-def">C Function: </span><span><strong class="def-name">scm_modulo</strong> <var class="def-var-arguments">(n, d)</var><a class="copiable-link" href='#index-scm_005fmodulo'> &para;</a></span></dt>
+<dd><p>Return the remainder from <var class="var">n</var> divided by <var class="var">d</var>, with the same
+sign as <var class="var">d</var>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(modulo 13 4) &rArr; 1
+(modulo -13 4) &rArr; 3
+(modulo 13 -4) &rArr; -3
+(modulo -13 -4) &rArr; -1
+</pre></div>
+
+<p>See also <code class="code">floor-quotient</code>, <code class="code">floor-remainder</code> and
+related operations in <a class="ref" href="Arithmetic.html">Arithmetic Functions</a>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-gcd"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">gcd</strong> <var class="def-var-arguments">x&hellip;</var><a class="copiable-link" href='#index-gcd'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgcd"><span class="category-def">C Function: </span><span><strong class="def-name">scm_gcd</strong> <var class="def-var-arguments">(x, y)</var><a class="copiable-link" href='#index-scm_005fgcd'> &para;</a></span></dt>
+<dd><p>Return the greatest common divisor of all arguments.
+If called without arguments, 0 is returned.
+</p>
+<p>The C function <code class="code">scm_gcd</code> always takes two arguments, while the
+Scheme function can take an arbitrary number.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-lcm"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">lcm</strong> <var class="def-var-arguments">x&hellip;</var><a class="copiable-link" href='#index-lcm'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flcm"><span class="category-def">C Function: </span><span><strong class="def-name">scm_lcm</strong> <var class="def-var-arguments">(x, y)</var><a class="copiable-link" href='#index-scm_005flcm'> &para;</a></span></dt>
+<dd><p>Return the least common multiple of the arguments.
+If called without arguments, 1 is returned.
+</p>
+<p>The C function <code class="code">scm_lcm</code> always takes two arguments, while the
+Scheme function can take an arbitrary number.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-modulo_002dexpt"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">modulo-expt</strong> <var class="def-var-arguments">n k m</var><a class="copiable-link" href='#index-modulo_002dexpt'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmodulo_005fexpt"><span class="category-def">C Function: </span><span><strong class="def-name">scm_modulo_expt</strong> <var class="def-var-arguments">(n, k, m)</var><a class="copiable-link" href='#index-scm_005fmodulo_005fexpt'> &para;</a></span></dt>
+<dd><p>Return <var class="var">n</var> raised to the integer exponent
+<var class="var">k</var>, modulo <var class="var">m</var>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(modulo-expt 2 3 5)
+   &rArr; 3
+</pre></div>
+</dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-exact_002dinteger_002dsqrt"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exact-integer-sqrt</strong> <code class="def-code-arguments"><var class="var">k</var></code><a class="copiable-link" href='#index-exact_002dinteger_002dsqrt'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fexact_005finteger_005fsqrt"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_exact_integer_sqrt</strong> <code class="def-code-arguments">(SCM <var class="var">k</var>, SCM *<var class="var">s</var>, SCM *<var class="var">r</var>)</code><a class="copiable-link" href='#index-scm_005fexact_005finteger_005fsqrt'> &para;</a></span></dt>
+<dd><p>Return two exact non-negative integers <var class="var">s</var> and <var class="var">r</var>
+such that <em class="math"><var class="var">k</var> = <var class="var">s</var>^2 + <var class="var">r</var></em> and
+<em class="math"><var class="var">s</var>^2 &lt;= <var class="var">k</var> &lt; (<var class="var">s</var> + 1)^2</em>.
+An error is raised if <var class="var">k</var> is not an exact non-negative integer.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(exact-integer-sqrt 10) &rArr; 3 and 1
+</pre></div>
+</dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Comparison.html">Comparison Predicates</a>, Previous: <a href="Number-Syntax.html">Read Syntax for Numerical Data</a>, Up: <a href="Numbers.html">Numerical data types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

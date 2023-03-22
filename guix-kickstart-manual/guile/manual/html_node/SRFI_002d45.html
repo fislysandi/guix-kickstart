@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-45 (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-45 (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-45 (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI-Support.html" rel="up" title="SRFI Support">
+<link href="SRFI_002d46.html" rel="next" title="SRFI-46">
+<link href="SRFI_002d43.html" rel="prev" title="SRFI-43">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="SRFI_002d45">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d46.html" accesskey="n" rel="next">SRFI-46 Basic syntax-rules Extensions</a>, Previous: <a href="SRFI_002d43.html" accesskey="p" rel="prev">SRFI-43 - Vector Library</a>, Up: <a href="SRFI-Support.html" accesskey="u" rel="up">SRFI Support Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="SRFI_002d45-_002d-Primitives-for-Expressing-Iterative-Lazy-Algorithms">7.5.31 SRFI-45 - Primitives for Expressing Iterative Lazy Algorithms</h4>
+<a class="index-entry-id" id="index-SRFI_002d45"></a>
+
+<p>This subsection is based on <a class="uref" href="http://srfi.schemers.org/srfi-45/srfi-45.html">the
+specification of SRFI-45</a> written by Andr&eacute; van Tonder.
+</p>
+
+
+
+
+<p>Lazy evaluation is traditionally simulated in Scheme using <code class="code">delay</code>
+and <code class="code">force</code>.  However, these primitives are not powerful enough to
+express a large class of lazy algorithms that are iterative.  Indeed, it
+is folklore in the Scheme community that typical iterative lazy
+algorithms written using delay and force will often require unbounded
+memory.
+</p>
+<p>This SRFI provides set of three operations: {<code class="code">lazy</code>, <code class="code">delay</code>,
+<code class="code">force</code>}, which allow the programmer to succinctly express lazy
+algorithms while retaining bounded space behavior in cases that are
+properly tail-recursive.  A general recipe for using these primitives is
+provided. An additional procedure <code class="code">eager</code> is provided for the
+construction of eager promises in cases where efficiency is a concern.
+</p>
+<p>Although this SRFI redefines <code class="code">delay</code> and <code class="code">force</code>, the
+extension is conservative in the sense that the semantics of the subset
+{<code class="code">delay</code>, <code class="code">force</code>} in isolation (i.e., as long as the
+program does not use <code class="code">lazy</code>) agrees with that in R5RS.  In other
+words, no program that uses the R5RS definitions of delay and force will
+break if those definition are replaced by the SRFI-45 definitions of
+delay and force.
+</p>
+<p>Guile also adds <code class="code">promise?</code> to the list of exports, which is not
+part of the official SRFI-45.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-promise_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">promise?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-promise_003f-1'> &para;</a></span></dt>
+<dd><p>Return true if <var class="var">obj</var> is an SRFI-45 promise, otherwise return false.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-delay-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">delay</strong> <var class="def-var-arguments">expression</var><a class="copiable-link" href='#index-delay-1'> &para;</a></span></dt>
+<dd><p>Takes an expression of arbitrary type <var class="var">a</var> and returns a promise of
+type <code class="code">(Promise <var class="var">a</var>)</code> which at some point in the future may be
+asked (by the <code class="code">force</code> procedure) to evaluate the expression and
+deliver the resulting value.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-lazy"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">lazy</strong> <var class="def-var-arguments">expression</var><a class="copiable-link" href='#index-lazy'> &para;</a></span></dt>
+<dd><p>Takes an expression of type <code class="code">(Promise <var class="var">a</var>)</code> and returns a
+promise of type <code class="code">(Promise <var class="var">a</var>)</code> which at some point in the
+future may be asked (by the <code class="code">force</code> procedure) to evaluate the
+expression and deliver the resulting promise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-force-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">force</strong> <var class="def-var-arguments">expression</var><a class="copiable-link" href='#index-force-1'> &para;</a></span></dt>
+<dd><p>Takes an argument of type <code class="code">(Promise <var class="var">a</var>)</code> and returns a value
+of type <var class="var">a</var> as follows: If a value of type <var class="var">a</var> has been computed
+for the promise, this value is returned.  Otherwise, the promise is
+first evaluated, then overwritten by the obtained promise or value, and
+then force is again applied (iteratively) to the promise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-eager"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">eager</strong> <var class="def-var-arguments">expression</var><a class="copiable-link" href='#index-eager'> &para;</a></span></dt>
+<dd><p>Takes an argument of type <var class="var">a</var> and returns a value of type
+<code class="code">(Promise <var class="var">a</var>)</code>.  As opposed to <code class="code">delay</code>, the argument is
+evaluated eagerly. Semantically, writing <code class="code">(eager expression)</code> is
+equivalent to writing
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(let ((value expression)) (delay value)).
+</pre></div>
+
+<p>However, the former is more efficient since it does not require
+unnecessary creation and evaluation of thunks. We also have the
+equivalence
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(delay expression) = (lazy (eager expression))
+</pre></div>
+</dd></dl>
+
+<p>The following reduction rules may be helpful for reasoning about these
+primitives.  However, they do not express the memoization and memory
+usage semantics specified above:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(force (delay expression)) -&gt; expression
+(force (lazy  expression)) -&gt; (force expression)
+(force (eager value))      -&gt; value
+</pre></div>
+
+<h4 class="subsubheading" id="Correct-usage">Correct usage</h4>
+
+<p>We now provide a general recipe for using the primitives {<code class="code">lazy</code>,
+<code class="code">delay</code>, <code class="code">force</code>} to express lazy algorithms in Scheme.  The
+transformation is best described by way of an example: Consider the
+stream-filter algorithm, expressed in a hypothetical lazy language as
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define (stream-filter p? s)
+  (if (null? s) '()
+      (let ((h (car s))
+            (t (cdr s)))
+        (if (p? h)
+            (cons h (stream-filter p? t))
+            (stream-filter p? t)))))
+</pre></div>
+
+<p>This algorithm can be expressed as follows in Scheme:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define (stream-filter p? s)
+  (lazy
+     (if (null? (force s)) (delay '())
+         (let ((h (car (force s)))
+               (t (cdr (force s))))
+           (if (p? h)
+               (delay (cons h (stream-filter p? t)))
+               (stream-filter p? t))))))
+</pre></div>
+
+<p>In other words, we
+</p>
+<ul class="itemize mark-bullet">
+<li>wrap all constructors (e.g., <code class="code">'()</code>, <code class="code">cons</code>) with <code class="code">delay</code>,
+</li><li>apply <code class="code">force</code> to arguments of deconstructors (e.g., <code class="code">car</code>,
+<code class="code">cdr</code> and <code class="code">null?</code>),
+</li><li>wrap procedure bodies with <code class="code">(lazy ...)</code>.
+</li></ul>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d46.html">SRFI-46 Basic syntax-rules Extensions</a>, Previous: <a href="SRFI_002d43.html">SRFI-43 - Vector Library</a>, Up: <a href="SRFI-Support.html">SRFI Support Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

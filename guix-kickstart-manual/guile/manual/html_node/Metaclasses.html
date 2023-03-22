@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Metaclasses (Guile Reference Manual)</title>
+
+<meta name="description" content="Metaclasses (Guile Reference Manual)">
+<meta name="keywords" content="Metaclasses (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="The-Metaobject-Protocol.html" rel="up" title="The Metaobject Protocol">
+<link href="MOP-Specification.html" rel="next" title="MOP Specification">
+<link href="Metaobjects-and-the-Metaobject-Protocol.html" rel="prev" title="Metaobjects and the Metaobject Protocol">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Metaclasses">
+<div class="nav-panel">
+<p>
+Next: <a href="MOP-Specification.html" accesskey="n" rel="next">MOP Specification</a>, Previous: <a href="Metaobjects-and-the-Metaobject-Protocol.html" accesskey="p" rel="prev">Metaobjects and the Metaobject Protocol</a>, Up: <a href="The-Metaobject-Protocol.html" accesskey="u" rel="up">The Metaobject Protocol</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Metaclasses-1">8.11.2 Metaclasses</h4>
+
+<p>A <em class="dfn">metaclass</em> is the class of an object which represents a GOOPS
+class.  Put more succinctly, a metaclass is a class&rsquo;s class.
+</p>
+<p>Most GOOPS classes have the metaclass <code class="code">&lt;class&gt;</code> and, by default,
+any new class that is created using <code class="code">define-class</code> has the
+metaclass <code class="code">&lt;class&gt;</code>.
+</p>
+<p>But what does this really mean?  To find out, let&rsquo;s look in more detail
+at what happens when a new class is created using <code class="code">define-class</code>:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-class &lt;my-class&gt; (&lt;object&gt;) . slots)
+</pre></div>
+
+<p>Guile expands this to something like:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define &lt;my-class&gt; (class (&lt;object&gt;) . slots))
+</pre></div>
+
+<p>which in turn expands to:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define &lt;my-class&gt;
+  (make &lt;class&gt; #:dsupers (list &lt;object&gt;) #:slots slots))
+</pre></div>
+
+<p>As this expansion makes clear, the resulting value of <code class="code">&lt;my-class&gt;</code>
+is an instance of the class <code class="code">&lt;class&gt;</code> with slot values specifying
+the superclasses and slot definitions for the class <code class="code">&lt;my-class&gt;</code>.
+(<code class="code">#:dsupers</code> and <code class="code">#:slots</code> are initialization keywords for the
+<code class="code">dsupers</code> and <code class="code">dslots</code> slots of the <code class="code">&lt;class&gt;</code> class.)
+</p>
+<p>Now suppose that you want to define a new class with a metaclass other
+than the default <code class="code">&lt;class&gt;</code>.  This is done by writing:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-class &lt;my-class2&gt; (&lt;object&gt;)
+   slot &hellip;
+   #:metaclass &lt;my-metaclass&gt;)
+</pre></div>
+
+<p>and Guile expands <em class="emph">this</em> to something like:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define &lt;my-class2&gt;
+  (make &lt;my-metaclass&gt; #:dsupers (list &lt;object&gt;) #:slots slots))
+</pre></div>
+
+<p>In this case, the value of <code class="code">&lt;my-class2&gt;</code> is an instance of the more
+specialized class <code class="code">&lt;my-metaclass&gt;</code>.  Note that
+<code class="code">&lt;my-metaclass&gt;</code> itself must previously have been defined as a
+subclass of <code class="code">&lt;class&gt;</code>.  For a full discussion of when and how it is
+useful to define new metaclasses, see <a class="ref" href="MOP-Specification.html">MOP Specification</a>.
+</p>
+<p>Now let&rsquo;s make an instance of <code class="code">&lt;my-class2&gt;</code>:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define my-object (make &lt;my-class2&gt; ...))
+</pre></div>
+
+<p>All of the following statements are correct expressions of the
+relationships between <code class="code">my-object</code>, <code class="code">&lt;my-class2&gt;</code>,
+<code class="code">&lt;my-metaclass&gt;</code> and <code class="code">&lt;class&gt;</code>.
+</p>
+<ul class="itemize mark-bullet">
+<li><code class="code">my-object</code> is an instance of the class <code class="code">&lt;my-class2&gt;</code>.
+
+</li><li><code class="code">&lt;my-class2&gt;</code> is an instance of the class <code class="code">&lt;my-metaclass&gt;</code>.
+
+</li><li><code class="code">&lt;my-metaclass&gt;</code> is an instance of the class <code class="code">&lt;class&gt;</code>.
+
+</li><li>The class of <code class="code">my-object</code> is <code class="code">&lt;my-class2&gt;</code>.
+
+</li><li>The class of <code class="code">&lt;my-class2&gt;</code> is <code class="code">&lt;my-metaclass&gt;</code>.
+
+</li><li>The class of <code class="code">&lt;my-metaclass&gt;</code> is <code class="code">&lt;class&gt;</code>.
+</li></ul>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="MOP-Specification.html">MOP Specification</a>, Previous: <a href="Metaobjects-and-the-Metaobject-Protocol.html">Metaobjects and the Metaobject Protocol</a>, Up: <a href="The-Metaobject-Protocol.html">The Metaobject Protocol</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

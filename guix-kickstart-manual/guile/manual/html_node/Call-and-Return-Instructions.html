@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Call and Return Instructions (Guile Reference Manual)</title>
+
+<meta name="description" content="Call and Return Instructions (Guile Reference Manual)">
+<meta name="keywords" content="Call and Return Instructions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Instruction-Set.html" rel="up" title="Instruction Set">
+<link href="Function-Prologue-Instructions.html" rel="next" title="Function Prologue Instructions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Call-and-Return-Instructions">
+<div class="nav-panel">
+<p>
+Next: <a href="Function-Prologue-Instructions.html" accesskey="n" rel="next">Function Prologue Instructions</a>, Up: <a href="Instruction-Set.html" accesskey="u" rel="up">Instruction Set</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Call-and-Return-Instructions-1">9.3.7.1 Call and Return Instructions</h4>
+
+<p>As described earlier (see <a class="pxref" href="Stack-Layout.html">Stack Layout</a>), Guile&rsquo;s calling convention
+is that arguments are passed and values returned on the stack.
+</p>
+<p>For calls, both in tail position and in non-tail position, we require
+that the procedure and the arguments already be shuffled into place
+before the call instruction.  &ldquo;Into place&rdquo; for a tail call means that
+the procedure should be in slot 0, relative to the <code class="code">fp</code>, and the
+arguments should follow.  For a non-tail call, if the procedure is in
+<code class="code">fp</code>-relative slot <var class="var">n</var>, the arguments should follow from slot
+<var class="var">n</var>+1, and there should be three free slots between <var class="var">n</var>-1 and
+<var class="var">n</var>-3 in which to save the mRA, vRA, and <code class="code">fp</code>.
+</p>
+<p>Returning values is similar.  Multiple-value returns should have values
+already shuffled down to start from <code class="code">fp</code>-relative slot 0 before
+emitting <code class="code">return-values</code>.
+</p>
+<p>In both calls and returns, the <code class="code">sp</code> is used to indicate to the
+callee or caller the number of arguments or return values, respectively.
+After receiving return values, it is the caller&rsquo;s responsibility to
+<em class="dfn">restore the frame</em> by resetting the <code class="code">sp</code> to its former value.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-call-1"><span class="category-def">Instruction: </span><span><strong class="def-name">call</strong> <code class="def-code-arguments">f24:<var class="var">proc</var> x8:<var class="var">_</var> c24:<var class="var">nlocals</var></code><a class="copiable-link" href='#index-call-1'> &para;</a></span></dt>
+<dd><p>Call a procedure.  <var class="var">proc</var> is the local corresponding to a procedure.
+The three values below <var class="var">proc</var> will be overwritten by the saved call
+frame data.  The new frame will have space for <var class="var">nlocals</var> locals: one
+for the procedure, and the rest for the arguments which should already
+have been pushed on.
+</p>
+<p>When the call returns, execution proceeds with the next instruction.
+There may be any number of values on the return stack; the precise
+number can be had by subtracting the address of <var class="var">proc</var>-1 from the
+post-call <code class="code">sp</code>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-call_002dlabel"><span class="category-def">Instruction: </span><span><strong class="def-name">call-label</strong> <code class="def-code-arguments">f24:<var class="var">proc</var> x8:<var class="var">_</var> c24:<var class="var">nlocals</var> l32:<var class="var">label</var></code><a class="copiable-link" href='#index-call_002dlabel'> &para;</a></span></dt>
+<dd><p>Call a procedure in the same compilation unit.
+</p>
+<p>This instruction is just like <code class="code">call</code>, except that instead of
+dereferencing <var class="var">proc</var> to find the call target, the call target is
+known to be at <var class="var">label</var>, a signed 32-bit offset in 32-bit units from
+the current <code class="code">ip</code>.  Since <var class="var">proc</var> is not dereferenced, it may be
+some other representation of the closure.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-tail_002dcall"><span class="category-def">Instruction: </span><span><strong class="def-name">tail-call</strong> <code class="def-code-arguments">x24:<var class="var">_</var></code><a class="copiable-link" href='#index-tail_002dcall'> &para;</a></span></dt>
+<dd><p>Tail-call a procedure.  Requires that the procedure and all of the
+arguments have already been shuffled into position, and that the frame
+has already been reset to the number of arguments to the call.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-tail_002dcall_002dlabel"><span class="category-def">Instruction: </span><span><strong class="def-name">tail-call-label</strong> <code class="def-code-arguments">x24:<var class="var">_</var> l32:<var class="var">label</var></code><a class="copiable-link" href='#index-tail_002dcall_002dlabel'> &para;</a></span></dt>
+<dd><p>Tail-call a known procedure.  As <code class="code">call</code> is to <code class="code">call-label</code>,
+<code class="code">tail-call</code> is to <code class="code">tail-call-label</code>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-return_002dvalues"><span class="category-def">Instruction: </span><span><strong class="def-name">return-values</strong> <code class="def-code-arguments">x24:<var class="var">_</var></code><a class="copiable-link" href='#index-return_002dvalues'> &para;</a></span></dt>
+<dd><p>Return a number of values from a call frame.  The return values should
+have already been shuffled down to a contiguous array starting at slot
+0, and the frame already reset.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-receive-2"><span class="category-def">Instruction: </span><span><strong class="def-name">receive</strong> <code class="def-code-arguments">f12:<var class="var">dst</var> f12:<var class="var">proc</var> x8:<var class="var">_</var> c24:<var class="var">nlocals</var></code><a class="copiable-link" href='#index-receive-2'> &para;</a></span></dt>
+<dd><p>Receive a single return value from a call whose procedure was in
+<var class="var">proc</var>, asserting that the call actually returned at least one
+value.  Afterwards, resets the frame to <var class="var">nlocals</var> locals.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-receive_002dvalues"><span class="category-def">Instruction: </span><span><strong class="def-name">receive-values</strong> <code class="def-code-arguments">f24:<var class="var">proc</var> b1:<var class="var">allow-extra?</var> x7:<var class="var">_</var> c24:<var class="var">nvalues</var></code><a class="copiable-link" href='#index-receive_002dvalues'> &para;</a></span></dt>
+<dd><p>Receive a return of multiple values from a call whose procedure was in
+<var class="var">proc</var>.  If fewer than <var class="var">nvalues</var> values were returned, signal an
+error.  Unless <var class="var">allow-extra?</var> is true, require that the number of
+return values equals <var class="var">nvalues</var> exactly.  After <code class="code">receive-values</code>
+has run, the values can be copied down via <code class="code">mov</code>, or used in place.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Function-Prologue-Instructions.html">Function Prologue Instructions</a>, Up: <a href="Instruction-Set.html">Instruction Set</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

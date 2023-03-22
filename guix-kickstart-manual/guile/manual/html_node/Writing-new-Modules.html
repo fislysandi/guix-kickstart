@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Writing new Modules (Guile Reference Manual)</title>
+
+<meta name="description" content="Writing new Modules (Guile Reference Manual)">
+<meta name="keywords" content="Writing new Modules (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Using-the-Guile-Module-System.html" rel="up" title="Using the Guile Module System">
+<link href="Putting-Extensions-into-Modules.html" rel="next" title="Putting Extensions into Modules">
+<link href="Using-Modules.html" rel="prev" title="Using Modules">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Writing-new-Modules">
+<div class="nav-panel">
+<p>
+Next: <a href="Putting-Extensions-into-Modules.html" accesskey="n" rel="next">Putting Extensions into Modules</a>, Previous: <a href="Using-Modules.html" accesskey="p" rel="prev">Using Modules</a>, Up: <a href="Using-the-Guile-Module-System.html" accesskey="u" rel="up">Using the Guile Module System</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection subsubsection-level-set-subsection" id="Writing-new-Modules-1">2.5.2 Writing new Modules</h4>
+
+<p>You can create new modules using the syntactic form
+<code class="code">define-module</code>.  All definitions following this form until the
+next <code class="code">define-module</code> are placed into the new module.
+</p>
+<p>One module is usually placed into one file, and that file is installed
+in a location where Guile can automatically find it.  The following
+session shows a simple example.
+</p>
+<div class="example smallexample">
+<pre class="example-preformatted">$ cat /usr/local/share/guile/site/foo/bar.scm
+
+(define-module (foo bar)
+  #:export (frob))
+
+(define (frob x) (* 2 x))
+
+$ guile
+scheme@(guile-user)&gt; (use-modules (foo bar))
+scheme@(guile-user)&gt; (frob 12)
+$1 = 24
+</pre></div>
+
+<p>For more on how to install your module, see <a class="pxref" href="Installing-Site-Packages.html">Installing Site Packages</a>.
+</p>
+
+</div>
+
+
+
+</body>
+</html>

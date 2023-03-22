@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Generic Function Internals (Guile Reference Manual)</title>
+
+<meta name="description" content="Generic Function Internals (Guile Reference Manual)">
+<meta name="keywords" content="Generic Function Internals (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="The-Metaobject-Protocol.html" rel="up" title="The Metaobject Protocol">
+<link href="Generic-Function-Invocation.html" rel="next" title="Generic Function Invocation">
+<link href="Method-Definition-Internals.html" rel="prev" title="Method Definition Internals">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Generic-Function-Internals">
+<div class="nav-panel">
+<p>
+Next: <a href="Generic-Function-Invocation.html" accesskey="n" rel="next">Generic Function Invocation</a>, Previous: <a href="Method-Definition-Internals.html" accesskey="p" rel="prev">Method Definition Internals</a>, Up: <a href="The-Metaobject-Protocol.html" accesskey="u" rel="up">The Metaobject Protocol</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Generic-Function-Internals-1">8.11.9 Generic Function Internals</h4>
+
+<p><code class="code">define-generic</code> calls <code class="code">ensure-generic</code> to upgrade a
+pre-existing procedure value, or <code class="code">make</code> with metaclass
+<code class="code">&lt;generic&gt;</code> to create a new generic function.
+</p>
+<p><code class="code">define-accessor</code> calls <code class="code">ensure-accessor</code> to upgrade a
+pre-existing procedure value, or <code class="code">make-accessor</code> to create a new
+accessor.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-ensure_002dgeneric"><span class="category-def">procedure: </span><span><strong class="def-name">ensure-generic</strong> <var class="def-var-arguments">old-definition [name]</var><a class="copiable-link" href='#index-ensure_002dgeneric'> &para;</a></span></dt>
+<dd><p>Return a generic function with name <var class="var">name</var>, if possible by using or
+upgrading <var class="var">old-definition</var>.  If unspecified, <var class="var">name</var> defaults to
+<code class="code">#f</code>.
+</p>
+<p>If <var class="var">old-definition</var> is already a generic function, it is returned
+unchanged.
+</p>
+<p>If <var class="var">old-definition</var> is a Scheme procedure or procedure-with-setter,
+<code class="code">ensure-generic</code> returns a new generic function that uses
+<var class="var">old-definition</var> for its default procedure and setter.
+</p>
+<p>Otherwise <code class="code">ensure-generic</code> returns a new generic function with no
+defaults and no methods.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dgeneric"><span class="category-def">procedure: </span><span><strong class="def-name">make-generic</strong> <var class="def-var-arguments">[name]</var><a class="copiable-link" href='#index-make_002dgeneric'> &para;</a></span></dt>
+<dd><p>Return a new generic function with name <code class="code">(car <var class="var">name</var>)</code>.  If
+unspecified, <var class="var">name</var> defaults to <code class="code">#f</code>.
+</p></dd></dl>
+
+<p><code class="code">ensure-generic</code> calls <code class="code">make</code> with metaclasses
+<code class="code">&lt;generic&gt;</code> and <code class="code">&lt;generic-with-setter&gt;</code>, depending on the
+previous value of the variable that it is trying to upgrade.
+</p>
+<p><code class="code">make-generic</code> is a simple wrapper for <code class="code">make</code> with metaclass
+<code class="code">&lt;generic&gt;</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-ensure_002daccessor"><span class="category-def">procedure: </span><span><strong class="def-name">ensure-accessor</strong> <var class="def-var-arguments">proc [name]</var><a class="copiable-link" href='#index-ensure_002daccessor'> &para;</a></span></dt>
+<dd><p>Return an accessor with name <var class="var">name</var>, if possible by using or
+upgrading <var class="var">proc</var>.  If unspecified, <var class="var">name</var> defaults to <code class="code">#f</code>.
+</p>
+<p>If <var class="var">proc</var> is already an accessor, it is returned unchanged.
+</p>
+<p>If <var class="var">proc</var> is a Scheme procedure, procedure-with-setter or generic
+function, <code class="code">ensure-accessor</code> returns an accessor that reuses the
+reusable elements of <var class="var">proc</var>.
+</p>
+<p>Otherwise <code class="code">ensure-accessor</code> returns a new accessor with no defaults
+and no methods.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002daccessor"><span class="category-def">procedure: </span><span><strong class="def-name">make-accessor</strong> <var class="def-var-arguments">[name]</var><a class="copiable-link" href='#index-make_002daccessor'> &para;</a></span></dt>
+<dd><p>Return a new accessor with name <code class="code">(car <var class="var">name</var>)</code>.  If
+unspecified, <var class="var">name</var> defaults to <code class="code">#f</code>.
+</p></dd></dl>
+
+<p><code class="code">ensure-accessor</code> calls <code class="code">make</code> with
+metaclass <code class="code">&lt;generic-with-setter&gt;</code>, as well as calls to
+<code class="code">ensure-generic</code>, <code class="code">make-accessor</code> and (tail recursively)
+<code class="code">ensure-accessor</code>.
+</p>
+<p><code class="code">make-accessor</code> calls <code class="code">make</code> twice, first
+with metaclass <code class="code">&lt;generic&gt;</code> to create a generic function for the
+setter, then with metaclass <code class="code">&lt;generic-with-setter&gt;</code> to create the
+accessor, passing the setter generic function as the value of the
+<code class="code">#:setter</code> keyword.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Generic-Function-Invocation.html">Generic Function Invocation</a>, Previous: <a href="Method-Definition-Internals.html">Method Definition Internals</a>, Up: <a href="The-Metaobject-Protocol.html">The Metaobject Protocol</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Callback Closure (Guile Reference Manual)</title>
+
+<meta name="description" content="Callback Closure (Guile Reference Manual)">
+<meta name="keywords" content="Callback Closure (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="About-Closure.html" rel="up" title="About Closure">
+<link href="OO-Closure.html" rel="next" title="OO Closure">
+<link href="Shared-Variable.html" rel="prev" title="Shared Variable">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Callback-Closure">
+<div class="nav-panel">
+<p>
+Next: <a href="OO-Closure.html" accesskey="n" rel="next">Example 4: Object Orientation</a>, Previous: <a href="Shared-Variable.html" accesskey="p" rel="prev">Example 2: A Shared Persistent Variable</a>, Up: <a href="About-Closure.html" accesskey="u" rel="up">The Concept of Closure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Example-3_003a-The-Callback-Closure-Problem">3.4.8 Example 3: The Callback Closure Problem</h4>
+
+<p>A frequently used programming model for library code is to allow an
+application to register a callback function for the library to call when
+some particular event occurs.  It is often useful for the application to
+make several such registrations using the same callback function, for
+example if several similar library events can be handled using the same
+application code, but the need then arises to distinguish the callback
+function calls that are associated with one callback registration from
+those that are associated with different callback registrations.
+</p>
+<p>In languages without the ability to create functions dynamically, this
+problem is usually solved by passing a <code class="code">user_data</code> parameter on the
+registration call, and including the value of this parameter as one of
+the parameters on the callback function.  Here is an example of
+declarations using this solution in C:
+</p>
+<div class="example">
+<pre class="example-preformatted">typedef void (event_handler_t) (int event_type,
+                                void *user_data);
+
+void register_callback (int event_type,
+                        event_handler_t *handler,
+                        void *user_data);
+</pre></div>
+
+<p>In Scheme, closure can be used to achieve the same functionality without
+requiring the library code to store a <code class="code">user-data</code> for each callback
+registration.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">;; In the library:
+
+(define (register-callback event-type handler-proc)
+  &hellip;)
+
+;; In the application:
+
+(define (make-handler event-type user-data)
+  (lambda ()
+    &hellip;
+    &lt;code referencing event-type and user-data&gt;
+    &hellip;))
+
+(register-callback event-type
+                   (make-handler event-type &hellip;))
+</pre></div>
+
+<p>As far as the library is concerned, <code class="code">handler-proc</code> is a procedure
+with no arguments, and all the library has to do is call it when the
+appropriate event occurs.  From the application&rsquo;s point of view, though,
+the handler procedure has used closure to capture an environment that
+includes all the context that the handler code needs &mdash;
+<code class="code">event-type</code> and <code class="code">user-data</code> &mdash; to handle the event
+correctly.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="OO-Closure.html">Example 4: Object Orientation</a>, Previous: <a href="Shared-Variable.html">Example 2: A Shared Persistent Variable</a>, Up: <a href="About-Closure.html">The Concept of Closure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

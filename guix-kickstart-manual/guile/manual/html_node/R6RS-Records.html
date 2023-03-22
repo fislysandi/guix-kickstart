@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>R6RS Records (Guile Reference Manual)</title>
+
+<meta name="description" content="R6RS Records (Guile Reference Manual)">
+<meta name="keywords" content="R6RS Records (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="R6RS-Standard-Libraries.html" rel="up" title="R6RS Standard Libraries">
+<link href="rnrs-records-syntactic.html" rel="next" title="rnrs records syntactic">
+<link href="rnrs-control.html" rel="prev" title="rnrs control">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="R6RS-Records">
+<div class="nav-panel">
+<p>
+Next: <a href="rnrs-records-syntactic.html" accesskey="n" rel="next">rnrs records syntactic</a>, Previous: <a href="rnrs-control.html" accesskey="p" rel="prev">rnrs control</a>, Up: <a href="R6RS-Standard-Libraries.html" accesskey="u" rel="up">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="R6RS-Records-1">7.6.2.8 R6RS Records</h4>
+
+<p>The manual sections below describe Guile&rsquo;s implementation of R6RS
+records, which provide support for user-defined data types.  The R6RS
+records API provides a superset of the features provided by Guile&rsquo;s
+&ldquo;native&rdquo; records, as well as those of the SRFI-9 records API;
+See <a class="xref" href="Records.html">Records</a>, and <a class="ref" href="SRFI_002d9-Records.html">SRFI-9 Records</a>, for a description of those
+interfaces.
+</p>
+<p>As with SRFI-9 and Guile&rsquo;s native records, R6RS records are constructed
+using a record-type descriptor that specifies attributes like the
+record&rsquo;s name, its fields, and the mutability of those fields.
+</p>
+<p>R6RS records extend this framework to support single inheritance via the
+specification of a &ldquo;parent&rdquo; type for a record type at definition time.
+Accessors and mutator procedures for the fields of a parent type may be 
+applied to records of a subtype of this parent.  A record type may be 
+<em class="dfn">sealed</em>, in which case it cannot be used as the parent of another 
+record type.
+</p>
+<p>The inheritance mechanism for record types also informs the process of
+initializing the fields of a record and its parents.  Constructor
+procedures that generate new instances of a record type are obtained
+from a record constructor descriptor, which encapsulates the record-type
+descriptor of the record to be constructed along with a <em class="dfn">protocol</em>
+procedure that defines how constructors for record subtypes delegate to
+the constructors of their parent types.
+</p>
+<p>A protocol is a procedure used by the record system at construction time
+to bind arguments to the fields of the record being constructed.  The 
+protocol procedure is passed a procedure <var class="var">n</var> that accepts the 
+arguments required to construct the record&rsquo;s parent type; this 
+procedure, when invoked, will return a procedure <var class="var">p</var> that accepts 
+the arguments required to construct a new instance of the record type 
+itself and returns a new instance of the record type.
+</p>
+<p>The protocol should in turn return a procedure that uses <var class="var">n</var> and
+<var class="var">p</var> to initialize the fields of the record type and its parent
+type(s).  This procedure will be the constructor returned by 
+</p>
+<p>As a trivial example, consider the hypothetical record type 
+<code class="code">pixel</code>, which encapsulates an x-y location on a screen, and
+<code class="code">voxel</code>, which has <code class="code">pixel</code> as its parent type and stores an
+additional coordinate.  The following protocol produces a constructor
+procedure that accepts all three coordinates, uses the first two to 
+initialize the fields of <code class="code">pixel</code>, and binds the third to the single
+field of <code class="code">voxel</code>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">  (lambda (n)
+    (lambda (x y z)
+      (let ((p (n x y)))
+        (p z))))
+</pre></div>
+
+<p>It may be helpful to think of protocols as &ldquo;constructor factories&rdquo;
+that produce chains of delegating constructors glued together by the
+helper procedure <var class="var">n</var>.
+</p>
+<p>An R6RS record type may be declared to be <em class="dfn">nongenerative</em> via the
+use of a unique generated or user-supplied symbol&mdash;or 
+<em class="dfn">uid</em>&mdash;such that subsequent record type declarations with the same
+uid and attributes will return the previously-declared record-type 
+descriptor.
+</p>
+<p>R6RS record types may also be declared to be <em class="dfn">opaque</em>, in which case
+the various predicates and introspection procedures defined in
+<code class="code">(rnrs records introspection)</code> will behave as if records of this
+type are not records at all.
+</p>
+<p>Note that while the R6RS records API shares much of its namespace with
+both the SRFI-9 and native Guile records APIs, it is not currently
+compatible with either.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="rnrs-records-syntactic.html">rnrs records syntactic</a>, Previous: <a href="rnrs-control.html">rnrs control</a>, Up: <a href="R6RS-Standard-Libraries.html">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

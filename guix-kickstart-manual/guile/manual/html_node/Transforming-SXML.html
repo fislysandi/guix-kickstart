@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Transforming SXML (Guile Reference Manual)</title>
+
+<meta name="description" content="Transforming SXML (Guile Reference Manual)">
+<meta name="keywords" content="Transforming SXML (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SXML.html" rel="up" title="SXML">
+<link href="SXML-Tree-Fold.html" rel="next" title="SXML Tree Fold">
+<link href="SSAX.html" rel="prev" title="SSAX">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Transforming-SXML">
+<div class="nav-panel">
+<p>
+Next: <a href="SXML-Tree-Fold.html" accesskey="n" rel="next">SXML Tree Fold</a>, Previous: <a href="SSAX.html" accesskey="p" rel="prev">SSAX: A Functional XML Parsing Toolkit</a>, Up: <a href="SXML.html" accesskey="u" rel="up">SXML</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Transforming-SXML-1">7.21.4 Transforming SXML</h4>
+<ul class="mini-toc">
+<li><a href="#Overview" accesskey="1">Overview</a></li>
+<li><a href="#Usage-1" accesskey="2">Usage</a></li>
+</ul>
+<div class="subsubsection-level-extent" id="Overview">
+<h4 class="subsubsection">7.21.4.1 Overview</h4>
+<h3 class="heading" id="SXML-expression-tree-transformers">SXML expression tree transformers</h3>
+<h4 class="subheading" id="Pre_002dPost_002dorder-traversal-of-a-tree-and-creation-of-a-new-tree">Pre-Post-order traversal of a tree and creation of a new tree</h4>
+<div class="example smallexample">
+<pre class="example-preformatted">pre-post-order:: &lt;tree&gt; x &lt;bindings&gt; -&gt; &lt;new-tree&gt;
+</pre></div>
+
+<p>where
+</p>
+<div class="example smallexample">
+<pre class="example-preformatted"> &lt;bindings&gt; ::= (&lt;binding&gt; ...)
+ &lt;binding&gt; ::= (&lt;trigger-symbol&gt; *preorder* . &lt;handler&gt;) |
+               (&lt;trigger-symbol&gt; *macro* . &lt;handler&gt;) |
+		(&lt;trigger-symbol&gt; &lt;new-bindings&gt; . &lt;handler&gt;) |
+		(&lt;trigger-symbol&gt; . &lt;handler&gt;)
+ &lt;trigger-symbol&gt; ::= XMLname | *text* | *default*
+ &lt;handler&gt; :: &lt;trigger-symbol&gt; x [&lt;tree&gt;] -&gt; &lt;new-tree&gt;
+</pre></div>
+
+<p>The <code class="code">pre-post-order</code> function, in the <code class="code">(sxml transform)</code>
+module, visits the nodes and nodelists pre-post-order (depth-first).
+For each <code class="code">&lt;Node&gt;</code> of the form <code class="code">(<var class="var">name</var> &lt;Node&gt; ...)</code>, it
+looks up an association with the given <var class="var">name</var> among its
+<var class="var">&lt;bindings&gt;</var>.  If failed, <code class="code">pre-post-order</code> tries to locate a
+<code class="code">*default*</code> binding.  It&rsquo;s an error if the latter attempt fails as
+well.  Having found a binding, the <code class="code">pre-post-order</code> function first
+checks to see if the binding is of the form
+</p>
+<div class="example smallexample">
+<pre class="example-preformatted">	(&lt;trigger-symbol&gt; *preorder* . &lt;handler&gt;)
+</pre></div>
+
+<p>If it is, the handler is &rsquo;applied&rsquo; to the current node.  Otherwise, the
+pre-post-order function first calls itself recursively for each child of
+the current node, with <var class="var">&lt;new-bindings&gt;</var> prepended to the
+<var class="var">&lt;bindings&gt;</var> in effect.  The result of these calls is passed to the
+<var class="var">&lt;handler&gt;</var> (along with the head of the current <var class="var">&lt;Node&gt;</var>).  To be
+more precise, the handler is _applied_ to the head of the current node
+and its processed children.  The result of the handler, which should also
+be a <code class="code">&lt;tree&gt;</code>, replaces the current <var class="var">&lt;Node&gt;</var>.  If the current
+<var class="var">&lt;Node&gt;</var> is a text string or other atom, a special binding with a
+symbol <code class="code">*text*</code> is looked up.
+</p>
+<p>A binding can also be of a form
+</p>
+<div class="example smallexample">
+<pre class="example-preformatted">	(&lt;trigger-symbol&gt; *macro* . &lt;handler&gt;)
+</pre></div>
+
+<p>This is equivalent to <code class="code">*preorder*</code> described above.  However, the
+result is re-processed again, with the current stylesheet.
+</p>
+</div>
+<div class="subsubsection-level-extent" id="Usage-1">
+<h4 class="subsubsection">7.21.4.2 Usage</h4>
+<dl class="first-deffn">
+<dt class="deffn" id="index-SRV_003asend_002dreply"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">SRV:send-reply</strong> <var class="def-var-arguments">. fragments</var><a class="copiable-link" href='#index-SRV_003asend_002dreply'> &para;</a></span></dt>
+<dd><p>Output the <var class="var">fragments</var> to the current output port.
+</p>
+<p>The fragments are a list of strings, characters, numbers, thunks,
+<code class="code">#f</code>, <code class="code">#t</code> &ndash; and other fragments.  The function traverses the
+tree depth-first, writes out strings and characters, executes thunks,
+and ignores <code class="code">#f</code> and <code class="code">'()</code>.  The function returns <code class="code">#t</code> if
+anything was written at all; otherwise the result is <code class="code">#f</code> If
+<code class="code">#t</code> occurs among the fragments, it is not written out but causes
+the result of <code class="code">SRV:send-reply</code> to be <code class="code">#t</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-foldts"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">foldts</strong> <var class="def-var-arguments">fdown fup fhere seed tree</var><a class="copiable-link" href='#index-foldts'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-post_002dorder"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">post-order</strong> <var class="def-var-arguments">tree bindings</var><a class="copiable-link" href='#index-post_002dorder'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-pre_002dpost_002dorder"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">pre-post-order</strong> <var class="def-var-arguments">tree bindings</var><a class="copiable-link" href='#index-pre_002dpost_002dorder'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-replace_002drange"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">replace-range</strong> <var class="def-var-arguments">beg-pred end-pred forest</var><a class="copiable-link" href='#index-replace_002drange'> &para;</a></span></dt>
+</dl>
+
+</div>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SXML-Tree-Fold.html">SXML Tree Fold</a>, Previous: <a href="SSAX.html">SSAX: A Functional XML Parsing Toolkit</a>, Up: <a href="SXML.html">SXML</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

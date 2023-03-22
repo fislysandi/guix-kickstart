@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Constant Instructions (Guile Reference Manual)</title>
+
+<meta name="description" content="Constant Instructions (Guile Reference Manual)">
+<meta name="keywords" content="Constant Instructions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Instruction-Set.html" rel="up" title="Instruction Set">
+<link href="Memory-Access-Instructions.html" rel="next" title="Memory Access Instructions">
+<link href="Intrinsic-Call-Instructions.html" rel="prev" title="Intrinsic Call Instructions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Constant-Instructions">
+<div class="nav-panel">
+<p>
+Next: <a href="Memory-Access-Instructions.html" accesskey="n" rel="next">Memory Access Instructions</a>, Previous: <a href="Intrinsic-Call-Instructions.html" accesskey="p" rel="prev">Intrinsic Call Instructions</a>, Up: <a href="Instruction-Set.html" accesskey="u" rel="up">Instruction Set</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Constant-Instructions-1">9.3.7.8 Constant Instructions</h4>
+
+<p>The following instructions load literal data into a program.  There are
+two kinds.
+</p>
+<p>The first set of instructions loads immediate values.  These
+instructions encode the immediate directly into the instruction stream.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-make_002dimmediate"><span class="category-def">Instruction: </span><span><strong class="def-name">make-immediate</strong> <code class="def-code-arguments">s8:<var class="var">dst</var> zi16:<var class="var">low-bits</var></code><a class="copiable-link" href='#index-make_002dimmediate'> &para;</a></span></dt>
+<dd><p>Make an immediate whose low bits are <var class="var">low-bits</var>, sign-extended.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-make_002dshort_002dimmediate"><span class="category-def">Instruction: </span><span><strong class="def-name">make-short-immediate</strong> <code class="def-code-arguments">s8:<var class="var">dst</var> i16:<var class="var">low-bits</var></code><a class="copiable-link" href='#index-make_002dshort_002dimmediate'> &para;</a></span></dt>
+<dd><p>Make an immediate whose low bits are <var class="var">low-bits</var>, and whose top bits are
+0.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-make_002dlong_002dimmediate"><span class="category-def">Instruction: </span><span><strong class="def-name">make-long-immediate</strong> <code class="def-code-arguments">s24:<var class="var">dst</var> i32:<var class="var">low-bits</var></code><a class="copiable-link" href='#index-make_002dlong_002dimmediate'> &para;</a></span></dt>
+<dd><p>Make an immediate whose low bits are <var class="var">low-bits</var>, and whose top bits are
+0.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-make_002dlong_002dlong_002dimmediate"><span class="category-def">Instruction: </span><span><strong class="def-name">make-long-long-immediate</strong> <code class="def-code-arguments">s24:<var class="var">dst</var> a32:<var class="var">high-bits</var> b32:<var class="var">low-bits</var></code><a class="copiable-link" href='#index-make_002dlong_002dlong_002dimmediate'> &para;</a></span></dt>
+<dd><p>Make an immediate with <var class="var">high-bits</var> and <var class="var">low-bits</var>.
+</p></dd></dl>
+
+<p>Non-immediate constant literals are referenced either directly or
+indirectly.  For example, Guile knows at compile-time what the layout of
+a string will be like, and arranges to embed that object directly in the
+compiled image.  A reference to a string will use
+<code class="code">make-non-immediate</code> to treat a pointer into the compilation unit
+as a <code class="code">scm</code> value directly.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-make_002dnon_002dimmediate"><span class="category-def">Instruction: </span><span><strong class="def-name">make-non-immediate</strong> <code class="def-code-arguments">s24:<var class="var">dst</var> n32:<var class="var">offset</var></code><a class="copiable-link" href='#index-make_002dnon_002dimmediate'> &para;</a></span></dt>
+<dd><p>Load a pointer to statically allocated memory into <var class="var">dst</var>.  The
+object&rsquo;s memory will be found <var class="var">offset</var> 32-bit words away from the
+current instruction pointer.  Whether the object is mutable or immutable
+depends on where it was allocated by the compiler, and loaded by the
+loader.
+</p></dd></dl>
+
+<p>Sometimes you need to load up a code pointer into a register; for this,
+use <code class="code">load-label</code>.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-load_002dlabel"><span class="category-def">Instruction: </span><span><strong class="def-name">load-label</strong> <code class="def-code-arguments">s24:<var class="var">dst</var> l32:<var class="var">offset</var></code><a class="copiable-link" href='#index-load_002dlabel'> &para;</a></span></dt>
+<dd><p>Load a label <var class="var">offset</var> words away from the current <code class="code">ip</code> and
+write it to <var class="var">dst</var>.  <var class="var">offset</var> is a signed 32-bit integer.
+</p></dd></dl>
+
+<p>Finally, Guile supports a number of unboxed data types, with their
+associate constant loaders.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-load_002df64"><span class="category-def">Instruction: </span><span><strong class="def-name">load-f64</strong> <code class="def-code-arguments">s24:<var class="var">dst</var> au32:<var class="var">high-bits</var> au32:<var class="var">low-bits</var></code><a class="copiable-link" href='#index-load_002df64'> &para;</a></span></dt>
+<dd><p>Load a double-precision floating-point value formed by joining
+<var class="var">high-bits</var> and <var class="var">low-bits</var>, and write it to <var class="var">dst</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-load_002du64"><span class="category-def">Instruction: </span><span><strong class="def-name">load-u64</strong> <code class="def-code-arguments">s24:<var class="var">dst</var> au32:<var class="var">high-bits</var> au32:<var class="var">low-bits</var></code><a class="copiable-link" href='#index-load_002du64'> &para;</a></span></dt>
+<dd><p>Load an unsigned 64-bit integer formed by joining <var class="var">high-bits</var> and
+<var class="var">low-bits</var>, and write it to <var class="var">dst</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-load_002ds64"><span class="category-def">Instruction: </span><span><strong class="def-name">load-s64</strong> <code class="def-code-arguments">s24:<var class="var">dst</var> au32:<var class="var">high-bits</var> au32:<var class="var">low-bits</var></code><a class="copiable-link" href='#index-load_002ds64'> &para;</a></span></dt>
+<dd><p>Load a signed 64-bit integer formed by joining <var class="var">high-bits</var> and
+<var class="var">low-bits</var>, and write it to <var class="var">dst</var>.
+</p></dd></dl>
+
+<p>Some objects must be unique across the whole system.  This is the case
+for symbols and keywords.  For these objects, Guile arranges to
+initialize them when the compilation unit is loaded, storing them into a
+slot in the image.  References go indirectly through that slot.
+<code class="code">static-ref</code> is used in this case.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-static_002dref"><span class="category-def">Instruction: </span><span><strong class="def-name">static-ref</strong> <code class="def-code-arguments">s24:<var class="var">dst</var> r32:<var class="var">offset</var></code><a class="copiable-link" href='#index-static_002dref'> &para;</a></span></dt>
+<dd><p>Load a <var class="var">scm</var> value into <var class="var">dst</var>.  The <var class="var">scm</var> value will be fetched from
+memory, <var class="var">offset</var> 32-bit words away from the current instruction
+pointer.  <var class="var">offset</var> is a signed value.
+</p></dd></dl>
+
+<p>Fields of non-immediates may need to be fixed up at load time, because
+we do not know in advance at what address they will be loaded.  This is
+the case, for example, for a pair containing a non-immediate in one of
+its fields.  <code class="code">static-set!</code> and <code class="code">static-patch!</code> are used in
+these situations.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-static_002dset_0021"><span class="category-def">Instruction: </span><span><strong class="def-name">static-set!</strong> <code class="def-code-arguments">s24:<var class="var">src</var> lo32:<var class="var">offset</var></code><a class="copiable-link" href='#index-static_002dset_0021'> &para;</a></span></dt>
+<dd><p>Store a <var class="var">scm</var> value into memory, <var class="var">offset</var> 32-bit words away from the
+current instruction pointer.  <var class="var">offset</var> is a signed value.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-static_002dpatch_0021"><span class="category-def">Instruction: </span><span><strong class="def-name">static-patch!</strong> <code class="def-code-arguments">x24:<var class="var">_</var> lo32:<var class="var">dst-offset</var> l32:<var class="var">src-offset</var></code><a class="copiable-link" href='#index-static_002dpatch_0021'> &para;</a></span></dt>
+<dd><p>Patch a pointer at <var class="var">dst-offset</var> to point to <var class="var">src-offset</var>.  Both offsets
+are signed 32-bit values, indicating a memory address as a number
+of 32-bit words away from the current instruction pointer.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Memory-Access-Instructions.html">Memory Access Instructions</a>, Previous: <a href="Intrinsic-Call-Instructions.html">Intrinsic Call Instructions</a>, Up: <a href="Instruction-Set.html">Instruction Set</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

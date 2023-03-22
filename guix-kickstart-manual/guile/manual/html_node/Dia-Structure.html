@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Dia Structure (Guile Reference Manual)</title>
+
+<meta name="description" content="Dia Structure (Guile Reference Manual)">
+<meta name="keywords" content="Dia Structure (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Extending-Dia.html" rel="up" title="Extending Dia">
+<link href="Dia-Advanced.html" rel="next" title="Dia Advanced">
+<link href="Dia-Hook.html" rel="prev" title="Dia Hook">
+<style type="text/css">
+<!--
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Dia-Structure">
+<div class="nav-panel">
+<p>
+Next: <a href="Dia-Advanced.html" accesskey="n" rel="next">Going Further with Dia and Guile</a>, Previous: <a href="Dia-Hook.html" accesskey="p" rel="prev">Providing a Hook for the Evaluation of Scheme Code</a>, Up: <a href="Extending-Dia.html" accesskey="u" rel="up">How One Might Extend Dia Using Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Top_002dlevel-Structure-of-Guile_002denabled-Dia">5.7.1.6 Top-level Structure of Guile-enabled Dia</h4>
+
+<p>Let&rsquo;s assume that the pre-Guile Dia code looks structurally like this:
+</p>
+<ul class="itemize mark-bullet">
+<li><code class="code">main ()</code>
+
+<ul class="itemize mark-bullet">
+<li>do lots of initialization and setup stuff
+</li><li>enter Gtk main loop
+</li></ul>
+</li></ul>
+
+<p>When you add Guile to a program, one (rather technical) requirement is
+that Guile&rsquo;s garbage collector needs to know where the bottom of the C
+stack is.  The easiest way to ensure this is to use
+<code class="code">scm_boot_guile</code> like this:
+</p>
+<ul class="itemize mark-bullet">
+<li><code class="code">main ()</code>
+
+<ul class="itemize mark-bullet">
+<li>do lots of initialization and setup stuff
+</li><li><code class="code">scm_boot_guile (argc, argv, inner_main, NULL)</code>
+</li></ul>
+
+</li><li><code class="code">inner_main ()</code>
+
+<ul class="itemize mark-bullet">
+<li>define all foreign object types
+</li><li>export primitives to Scheme using <code class="code">scm_c_define_gsubr</code>
+</li><li>enter Gtk main loop
+</li></ul>
+</li></ul>
+
+<p>In other words, you move the guts of what was previously in your
+<code class="code">main</code> function into a new function called <code class="code">inner_main</code>, and
+then add a <code class="code">scm_boot_guile</code> call, with <code class="code">inner_main</code> as a
+parameter, to the end of <code class="code">main</code>.
+</p>
+<p>Assuming that you are using foreign objects and have written primitive
+code as described in the preceding subsections, you also need to insert
+calls to declare your new foreign objects and export the primitives to
+Scheme.  These declarations must happen <em class="emph">inside</em> the dynamic scope
+of the <code class="code">scm_boot_guile</code> call, but also <em class="emph">before</em> any code is
+run that could possibly use them &mdash; the beginning of <code class="code">inner_main</code>
+is an ideal place for this.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Dia-Advanced.html">Going Further with Dia and Guile</a>, Previous: <a href="Dia-Hook.html">Providing a Hook for the Evaluation of Scheme Code</a>, Up: <a href="Extending-Dia.html">How One Might Extend Dia Using Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

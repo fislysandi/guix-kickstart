@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Default Ports (Guile Reference Manual)</title>
+
+<meta name="description" content="Default Ports (Guile Reference Manual)">
+<meta name="keywords" content="Default Ports (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Input-and-Output.html" rel="up" title="Input and Output">
+<link href="Port-Types.html" rel="next" title="Port Types">
+<link href="Line_002fDelimited.html" rel="prev" title="Line/Delimited">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+kbd.key {font-style: normal}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Default-Ports">
+<div class="nav-panel">
+<p>
+Next: <a href="Port-Types.html" accesskey="n" rel="next">Types of Port</a>, Previous: <a href="Line_002fDelimited.html" accesskey="p" rel="prev">Line Oriented and Delimited Text</a>, Up: <a href="Input-and-Output.html" accesskey="u" rel="up">Input and Output</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Default-Ports-for-Input_002c-Output-and-Errors">6.12.9 Default Ports for Input, Output and Errors</h4>
+<a class="index-entry-id" id="index-Default-ports"></a>
+<a class="index-entry-id" id="index-Port_002c-default"></a>
+
+<a class="index-entry-id" id="index-current_002dinput_002dport-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-current_002dinput_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">current-input-port</strong><a class="copiable-link" href='#index-current_002dinput_002dport'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcurrent_005finput_005fport"><span class="category-def">C Function: </span><span><strong class="def-name">scm_current_input_port</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fcurrent_005finput_005fport'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-standard-input"></a>
+<p>Return the current input port.  This is the default port used
+by many input procedures.
+</p>
+<p>Initially this is the <em class="dfn">standard input</em> in Unix and C terminology.
+When the standard input is a tty the port is unbuffered, otherwise
+it&rsquo;s fully buffered.
+</p>
+<p>Unbuffered input is good if an application runs an interactive
+subprocess, since any type-ahead input won&rsquo;t go into Guile&rsquo;s buffer
+and be unavailable to the subprocess.
+</p>
+<p>Note that Guile buffering is completely separate from the tty &ldquo;line
+discipline&rdquo;.  In the usual cooked mode on a tty Guile only sees a
+line of input once the user presses <kbd class="key">Return</kbd>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-current_002doutput_002dport-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-current_002doutput_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">current-output-port</strong><a class="copiable-link" href='#index-current_002doutput_002dport'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcurrent_005foutput_005fport"><span class="category-def">C Function: </span><span><strong class="def-name">scm_current_output_port</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fcurrent_005foutput_005fport'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-standard-output"></a>
+<p>Return the current output port.  This is the default port used
+by many output procedures.
+</p>
+<p>Initially this is the <em class="dfn">standard output</em> in Unix and C terminology.
+When the standard output is a tty this port is unbuffered, otherwise
+it&rsquo;s fully buffered.
+</p>
+<p>Unbuffered output to a tty is good for ensuring progress output or a
+prompt is seen.  But an application which always prints whole lines
+could change to line buffered, or an application with a lot of output
+could go fully buffered and perhaps make explicit <code class="code">force-output</code>
+calls (see <a class="pxref" href="Buffering.html">Buffering</a>) at selected points.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-current_002derror_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">current-error-port</strong><a class="copiable-link" href='#index-current_002derror_002dport'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcurrent_005ferror_005fport"><span class="category-def">C Function: </span><span><strong class="def-name">scm_current_error_port</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fcurrent_005ferror_005fport'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-standard-error-output"></a>
+<p>Return the port to which errors and warnings should be sent.
+</p>
+<p>Initially this is the <em class="dfn">standard error</em> in Unix and C terminology.
+When the standard error is a tty this port is unbuffered, otherwise
+it&rsquo;s fully buffered.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-set_002dcurrent_002dinput_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-current-input-port</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-set_002dcurrent_002dinput_002dport'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-set_002dcurrent_002doutput_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-current-output-port</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-set_002dcurrent_002doutput_002dport'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-set_002dcurrent_002derror_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-current-error-port</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-set_002dcurrent_002derror_002dport'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fset_005fcurrent_005finput_005fport"><span class="category-def">C Function: </span><span><strong class="def-name">scm_set_current_input_port</strong> <var class="def-var-arguments">(port)</var><a class="copiable-link" href='#index-scm_005fset_005fcurrent_005finput_005fport'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fset_005fcurrent_005foutput_005fport"><span class="category-def">C Function: </span><span><strong class="def-name">scm_set_current_output_port</strong> <var class="def-var-arguments">(port)</var><a class="copiable-link" href='#index-scm_005fset_005fcurrent_005foutput_005fport'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fset_005fcurrent_005ferror_005fport"><span class="category-def">C Function: </span><span><strong class="def-name">scm_set_current_error_port</strong> <var class="def-var-arguments">(port)</var><a class="copiable-link" href='#index-scm_005fset_005fcurrent_005ferror_005fport'> &para;</a></span></dt>
+<dd><p>Change the ports returned by <code class="code">current-input-port</code>,
+<code class="code">current-output-port</code> and <code class="code">current-error-port</code>, respectively,
+so that they use the supplied <var class="var">port</var> for input or output.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-with_002dinput_002dfrom_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">with-input-from-port</strong> <var class="def-var-arguments">port thunk</var><a class="copiable-link" href='#index-with_002dinput_002dfrom_002dport'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-with_002doutput_002dto_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">with-output-to-port</strong> <var class="def-var-arguments">port thunk</var><a class="copiable-link" href='#index-with_002doutput_002dto_002dport'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-with_002derror_002dto_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">with-error-to-port</strong> <var class="def-var-arguments">port thunk</var><a class="copiable-link" href='#index-with_002derror_002dto_002dport'> &para;</a></span></dt>
+<dd><p>Call <var class="var">thunk</var> in a dynamic environment in which
+<code class="code">current-input-port</code>, <code class="code">current-output-port</code> or
+<code class="code">current-error-port</code> is rebound to the given <var class="var">port</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fdynwind_005fcurrent_005finput_005fport"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_dynwind_current_input_port</strong> <code class="def-code-arguments">(SCM port)</code><a class="copiable-link" href='#index-scm_005fdynwind_005fcurrent_005finput_005fport'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fdynwind_005fcurrent_005foutput_005fport"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_dynwind_current_output_port</strong> <code class="def-code-arguments">(SCM port)</code><a class="copiable-link" href='#index-scm_005fdynwind_005fcurrent_005foutput_005fport'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fdynwind_005fcurrent_005ferror_005fport"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_dynwind_current_error_port</strong> <code class="def-code-arguments">(SCM port)</code><a class="copiable-link" href='#index-scm_005fdynwind_005fcurrent_005ferror_005fport'> &para;</a></span></dt>
+<dd><p>These functions must be used inside a pair of calls to
+<code class="code">scm_dynwind_begin</code> and <code class="code">scm_dynwind_end</code> (see <a class="pxref" href="Dynamic-Wind.html">Dynamic Wind</a>).  During the dynwind context, the indicated port is set to
+<var class="var">port</var>.
+</p>
+<p>More precisely, the current port is swapped with a &lsquo;backup&rsquo; value
+whenever the dynwind context is entered or left.  The backup value is
+initialized with the <var class="var">port</var> argument.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Port-Types.html">Types of Port</a>, Previous: <a href="Line_002fDelimited.html">Line Oriented and Delimited Text</a>, Up: <a href="Input-and-Output.html">Input and Output</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

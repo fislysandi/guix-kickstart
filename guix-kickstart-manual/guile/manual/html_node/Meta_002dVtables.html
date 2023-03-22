@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Meta-Vtables (Guile Reference Manual)</title>
+
+<meta name="description" content="Meta-Vtables (Guile Reference Manual)">
+<meta name="keywords" content="Meta-Vtables (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Structures.html" rel="up" title="Structures">
+<link href="Vtable-Example.html" rel="next" title="Vtable Example">
+<link href="Vtable-Contents.html" rel="prev" title="Vtable Contents">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Meta_002dVtables">
+<div class="nav-panel">
+<p>
+Next: <a href="Vtable-Example.html" accesskey="n" rel="next">Vtable Example</a>, Previous: <a href="Vtable-Contents.html" accesskey="p" rel="prev">Vtable Contents</a>, Up: <a href="Structures.html" accesskey="u" rel="up">Structures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Meta_002dVtables-1">6.6.18.4 Meta-Vtables</h4>
+
+<p>As a structure, a vtable also has a vtable, which is also a structure.
+Structures, their vtables, the vtables of the vtables, and so on form a
+tree of structures.  Making a new structure adds a leaf to the tree, and
+if that structure is a vtable, it may be used to create other leaves.
+</p>
+<p>If you traverse up the tree of vtables, via calling
+<code class="code">struct-vtable</code>, eventually you reach a root which is the vtable of
+itself:
+</p>
+<div class="example">
+<pre class="example-preformatted">scheme@(guile-user)&gt; (current-module)
+$1 = #&lt;directory (guile-user) 221b090&gt;
+scheme@(guile-user)&gt; (struct-vtable $1)
+$2 = #&lt;record-type module&gt;
+scheme@(guile-user)&gt; (struct-vtable $2)
+$3 = #&lt;&lt;standard-vtable&gt; 12c30a0&gt;
+scheme@(guile-user)&gt; (struct-vtable $3)
+$4 = #&lt;&lt;standard-vtable&gt; 12c3fa0&gt;
+scheme@(guile-user)&gt; (struct-vtable $4)
+$5 = #&lt;&lt;standard-vtable&gt; 12c3fa0&gt;
+scheme@(guile-user)&gt; &lt;standard-vtable&gt;
+$6 = #&lt;&lt;standard-vtable&gt; 12c3fa0&gt;
+</pre></div>
+
+<p>In this example, we can say that <code class="code">$1</code> is an instance of <code class="code">$2</code>,
+<code class="code">$2</code> is an instance of <code class="code">$3</code>, <code class="code">$3</code> is an instance of
+<code class="code">$4</code>, and <code class="code">$4</code>, strangely enough, is an instance of itself.
+The value bound to <code class="code">$4</code> in this console session also bound to
+<code class="code">&lt;standard-vtable&gt;</code> in the default environment.
+</p>
+<dl class="first-defvr">
+<dt class="defvr" id="index-_003cstandard_002dvtable_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;standard-vtable&gt;</strong><a class="copiable-link" href='#index-_003cstandard_002dvtable_003e'> &para;</a></span></dt>
+<dd><p>A meta-vtable, useful for making new vtables.
+</p></dd></dl>
+
+<p>All of these values are structures.  All but <code class="code">$1</code> are vtables.  As
+<code class="code">$2</code> is an instance of <code class="code">$3</code>, and <code class="code">$3</code> is a vtable, we can
+say that <code class="code">$3</code> is a <em class="dfn">meta-vtable</em>: a vtable that can create
+vtables.
+</p>
+<p>With this definition, we can specify more precisely what a vtable is: a
+vtable is a structure made from a meta-vtable.  Making a structure from
+a meta-vtable runs some special checks to ensure that the first field of
+the structure is a valid layout.  Additionally, if these checks see that
+the layout of the child vtable contains all the required fields of a
+vtable, in the correct order, then the child vtable will also be a
+meta-table, inheriting a magical bit from the parent.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-struct_002dvtable_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">struct-vtable?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-struct_002dvtable_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstruct_005fvtable_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_struct_vtable_p</strong> <var class="def-var-arguments">(obj)</var><a class="copiable-link" href='#index-scm_005fstruct_005fvtable_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is a vtable structure: an instance of a
+meta-vtable.
+</p></dd></dl>
+
+<p><code class="code">&lt;standard-vtable&gt;</code> is a root of the vtable tree.  (Normally there
+is only one root in a given Guile process, but due to some legacy
+interfaces there may be more than one.)
+</p>
+<p>The set of required fields of a vtable is the set of fields in the
+<code class="code">&lt;standard-vtable&gt;</code>, and is bound to <code class="code">standard-vtable-fields</code>
+in the default environment.  It is possible to create a meta-vtable that
+with additional fields in its layout, which can be used to create
+vtables with additional data:
+</p>
+<div class="example">
+<pre class="example-preformatted">scheme@(guile-user)&gt; (struct-ref $3 vtable-index-layout)
+$6 = pwuhuhpwphuhuhpwpwpw
+scheme@(guile-user)&gt; (struct-ref $4 vtable-index-layout)
+$7 = pwuhuhpwphuhuh
+scheme@(guile-user)&gt; standard-vtable-fields 
+$8 = &quot;pwuhuhpwphuhuh&quot;
+scheme@(guile-user)&gt; (struct-ref $2 vtable-offset-user)
+$9 = module
+</pre></div>
+
+<p>In this continuation of our earlier example, <code class="code">$2</code> is a vtable that
+has extra fields, because its vtable, <code class="code">$3</code>, was made from a
+meta-vtable with an extended layout.  <code class="code">vtable-offset-user</code> is a
+convenient definition that indicates the number of fields in
+<code class="code">standard-vtable-fields</code>.
+</p>
+<dl class="first-defvr">
+<dt class="defvr" id="index-standard_002dvtable_002dfields"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">standard-vtable-fields</strong><a class="copiable-link" href='#index-standard_002dvtable_002dfields'> &para;</a></span></dt>
+<dd><p>A string containing the ordered set of fields that a vtable must have.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-vtable_002doffset_002duser"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">vtable-offset-user</strong><a class="copiable-link" href='#index-vtable_002doffset_002duser'> &para;</a></span></dt>
+<dd><p>The first index in a vtable that is available for a user.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dstruct_002dlayout"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-struct-layout</strong> <var class="def-var-arguments">fields</var><a class="copiable-link" href='#index-make_002dstruct_002dlayout'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmake_005fstruct_005flayout"><span class="category-def">C Function: </span><span><strong class="def-name">scm_make_struct_layout</strong> <var class="def-var-arguments">(fields)</var><a class="copiable-link" href='#index-scm_005fmake_005fstruct_005flayout'> &para;</a></span></dt>
+<dd><p>Return a structure layout symbol, from a <var class="var">fields</var> string.
+<var class="var">fields</var> is as described under <code class="code">make-vtable</code>
+(see <a class="pxref" href="Vtables.html">Vtables</a>).  An invalid <var class="var">fields</var> string is an error.
+</p></dd></dl>
+
+<p>With these definitions, one can define <code class="code">make-vtable</code> in this way:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define* (make-vtable fields #:optional printer)
+  (make-struct/no-tail &lt;standard-vtable&gt;
+    (make-struct-layout fields)
+    printer))
+</pre></div>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Vtable-Example.html">Vtable Example</a>, Previous: <a href="Vtable-Contents.html">Vtable Contents</a>, Up: <a href="Structures.html">Structures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

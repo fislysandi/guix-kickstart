@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Pattern Matching (Guile Reference Manual)</title>
+
+<meta name="description" content="Pattern Matching (Guile Reference Manual)">
+<meta name="keywords" content="Pattern Matching (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Guile-Modules.html" rel="up" title="Guile Modules">
+<link href="Readline-Support.html" rel="next" title="Readline Support">
+<link href="R7RS-Support.html" rel="prev" title="R7RS Support">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Pattern-Matching">
+<div class="nav-panel">
+<p>
+Next: <a href="Readline-Support.html" accesskey="n" rel="next">Readline Support</a>, Previous: <a href="R7RS-Support.html" accesskey="p" rel="prev">R7RS Support</a>, Up: <a href="Guile-Modules.html" accesskey="u" rel="up">Guile Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Pattern-Matching-1">7.8 Pattern Matching</h3>
+
+<a class="index-entry-id" id="index-pattern-matching"></a>
+<a class="index-entry-id" id="index-_0028ice_002d9-match_0029"></a>
+
+<p>The <code class="code">(ice-9 match)</code> module provides a <em class="dfn">pattern matcher</em>,
+written by Alex Shinn, and compatible with Andrew K. Wright&rsquo;s pattern
+matcher found in many Scheme implementations.
+</p>
+<a class="index-entry-id" id="index-pattern-variable"></a>
+<p>A pattern matcher can match an object against several patterns and
+extract the elements that make it up.  Patterns can represent any Scheme
+object: lists, strings, symbols, records, etc.  They can optionally contain
+<em class="dfn">pattern variables</em>.  When a matching pattern is found, an
+expression associated with the pattern is evaluated, optionally with all
+pattern variables bound to the corresponding elements of the object:
+</p>
+<div class="example">
+<pre class="example-preformatted">(let ((l '(hello (world))))
+  (match l           ;; &lt;- the input object
+    (('hello (who))  ;; &lt;- the pattern
+     who)))          ;; &lt;- the expression evaluated upon matching
+&rArr; world
+</pre></div>
+
+<p>In this example, list <var class="var">l</var> matches the pattern <code class="code">('hello (who))</code>,
+because it is a two-element list whose first element is the symbol
+<code class="code">hello</code> and whose second element is a one-element list.  Here
+<var class="var">who</var> is a pattern variable.  <code class="code">match</code>, the pattern matcher,
+locally binds <var class="var">who</var> to the value contained in this one-element
+list&mdash;i.e., the symbol <code class="code">world</code>.  An error would be raised if
+<var class="var">l</var> did not match the pattern.
+</p>
+<p>The same object can be matched against a simpler pattern:
+</p>
+<div class="example">
+<pre class="example-preformatted">(let ((l '(hello (world))))
+  (match l
+    ((x y)
+     (values x y))))
+&rArr; hello
+&rArr; (world)
+</pre></div>
+
+<p>Here pattern <code class="code">(x y)</code> matches any two-element list, regardless of
+the types of these elements.  Pattern variables <var class="var">x</var> and <var class="var">y</var> are
+bound to, respectively, the first and second element of <var class="var">l</var>.
+</p>
+<p>Patterns can be composed, and nested.  For instance, <code class="code">...</code>
+(ellipsis) means that the previous pattern may be matched zero or more
+times in a list:
+</p>
+<div class="example">
+<pre class="example-preformatted">(match lst
+  (((heads tails ...) ...)
+   heads))
+</pre></div>
+
+<p>This expression returns the first element of each list within <var class="var">lst</var>.
+For proper lists of proper lists, it is equivalent to <code class="code">(map car
+lst)</code>.  However, it performs additional checks to make sure that
+<var class="var">lst</var> and the lists therein are proper lists, as prescribed by the
+pattern, raising an error if they are not.
+</p>
+<p>Compared to hand-written code, pattern matching noticeably improves
+clarity and conciseness&mdash;no need to resort to series of <code class="code">car</code> and
+<code class="code">cdr</code> calls when matching lists, for instance.  It also improves
+robustness, by making sure the input <em class="emph">completely</em> matches the
+pattern&mdash;conversely, hand-written code often trades robustness for
+conciseness.  And of course, <code class="code">match</code> is a macro, and the code it
+expands to is just as efficient as equivalent hand-written code.
+</p>
+<p>The pattern matcher is defined as follows:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-match"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">match</strong> <var class="def-var-arguments">exp clause1 clause2 &hellip;</var><a class="copiable-link" href='#index-match'> &para;</a></span></dt>
+<dd><p>Match object <var class="var">exp</var> against the patterns in <var class="var">clause1</var>
+<var class="var">clause2</var> &hellip;  in the order in which they appear.  Return the
+value produced by the first matching clause.  If no clause matches,
+throw an exception with key <code class="code">match-error</code>.
+</p>
+<p>Each clause has the form <code class="code">(pattern body1 body2 &hellip;)</code>.  Each
+<var class="var">pattern</var> must follow the syntax described below.  Each body is an
+arbitrary Scheme expression, possibly referring to pattern variables of
+<var class="var">pattern</var>.
+</p></dd></dl>
+
+
+<p>The syntax and interpretation of patterns is as follows:
+</p>
+<pre class="verbatim">        patterns:                       matches:
+
+pat ::= identifier                      anything, and binds identifier
+      | _                               anything
+      | ()                              the empty list
+      | #t                              #t
+      | #f                              #f
+      | string                          a string
+      | number                          a number
+      | character                       a character
+      | 'sexp                           an s-expression
+      | 'symbol                         a symbol (special case of s-expr)
+      | (pat_1 ... pat_n)               list of n elements
+      | (pat_1 ... pat_n . pat_{n+1})   list of n or more
+      | (pat_1 ... pat_n pat_n+1 ooo)   list of n or more, each element
+                                          of remainder must match pat_n+1
+      | #(pat_1 ... pat_n)              vector of n elements
+      | #(pat_1 ... pat_n pat_n+1 ooo)  vector of n or more, each element
+                                          of remainder must match pat_n+1
+      | #&amp;pat                           box
+      | ($ record-name pat_1 ... pat_n) a record
+      | (= field pat)                   a ``field'' of an object
+      | (and pat_1 ... pat_n)           if all of pat_1 thru pat_n match
+      | (or pat_1 ... pat_n)            if any of pat_1 thru pat_n match
+      | (not pat_1 ... pat_n)           if all pat_1 thru pat_n don't match
+      | (? predicate pat_1 ... pat_n)   if predicate true and all of
+                                          pat_1 thru pat_n match
+      | (set! identifier)               anything, and binds setter
+      | (get! identifier)               anything, and binds getter
+      | `qp                             a quasi-pattern
+      | (identifier *** pat)            matches pat in a tree and binds
+                                        identifier to the path leading
+                                        to the object that matches pat
+
+ooo ::= ...                             zero or more
+      | ___                             zero or more
+      | ..1                             1 or more
+
+        quasi-patterns:                 matches:
+
+qp  ::= ()                              the empty list
+      | #t                              #t
+      | #f                              #f
+      | string                          a string
+      | number                          a number
+      | character                       a character
+      | identifier                      a symbol
+      | (qp_1 ... qp_n)                 list of n elements
+      | (qp_1 ... qp_n . qp_{n+1})      list of n or more
+      | (qp_1 ... qp_n qp_n+1 ooo)      list of n or more, each element
+                                          of remainder must match qp_n+1
+      | #(qp_1 ... qp_n)                vector of n elements
+      | #(qp_1 ... qp_n qp_n+1 ooo)     vector of n or more, each element
+                                          of remainder must match qp_n+1
+      | #&amp;qp                            box
+      | ,pat                            a pattern
+      | ,@pat                           a pattern
+</pre>
+<p>The names <code class="code">quote</code>, <code class="code">quasiquote</code>, <code class="code">unquote</code>,
+<code class="code">unquote-splicing</code>, <code class="code">?</code>, <code class="code">_</code>, <code class="code">$</code>, <code class="code">and</code>,
+<code class="code">or</code>, <code class="code">not</code>, <code class="code">set!</code>, <code class="code">get!</code>, <code class="code">...</code>, and
+<code class="code">___</code> cannot be used as pattern variables.
+</p>
+<p>Here is a more complex example:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (srfi srfi-9))
+
+(let ()
+  (define-record-type person
+    (make-person name friends)
+    person?
+    (name    person-name)
+    (friends person-friends))
+
+  (letrec ((alice (make-person &quot;Alice&quot; (delay (list bob))))
+           (bob   (make-person &quot;Bob&quot; (delay (list alice)))))
+    (match alice
+      (($ person name (= force (($ person &quot;Bob&quot;))))
+       (list 'friend-of-bob name))
+      (_ #f))))
+
+&rArr; (friend-of-bob &quot;Alice&quot;)
+</pre></div>
+
+<p>Here the <code class="code">$</code> pattern is used to match a SRFI-9 record of type
+<var class="var">person</var> containing two or more slots.  The value of the first slot
+is bound to <var class="var">name</var>.  The <code class="code">=</code> pattern is used to apply
+<code class="code">force</code> on the second slot, and then checking that the result
+matches the given pattern.  In other words, the complete pattern matches
+any <var class="var">person</var> whose second slot is a promise that evaluates to a
+one-element list containing a <var class="var">person</var> whose first slot is
+<code class="code">&quot;Bob&quot;</code>.
+</p>
+<p>The <code class="code">(ice-9 match)</code> module also provides the following convenient
+syntactic sugar macros wrapping around <code class="code">match</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-match_002dlambda"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">match-lambda</strong> <var class="def-var-arguments">clause1 clause2 &hellip;</var><a class="copiable-link" href='#index-match_002dlambda'> &para;</a></span></dt>
+<dd><p>Create a procedure of one argument that matches its argument against
+each clause, and returns the result of evaluating the corresponding
+expressions.
+</p>
+<div class="example">
+<pre class="example-preformatted">(match-lambda clause1 clause2 &hellip;)
+&equiv;
+(lambda (arg) (match arg clause1 clause2 &hellip;))
+</pre></div>
+</dd></dl>
+
+<div class="example">
+<pre class="example-preformatted">((match-lambda
+   (('hello (who))
+    who))
+ '(hello (world)))
+&rArr; world
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-match_002dlambda_002a"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">match-lambda*</strong> <var class="def-var-arguments">clause1 clause2 &hellip;</var><a class="copiable-link" href='#index-match_002dlambda_002a'> &para;</a></span></dt>
+<dd><p>Create a procedure of any number of arguments that matches its argument
+list against each clause, and returns the result of evaluating the
+corresponding expressions.
+</p>
+<div class="example">
+<pre class="example-preformatted">(match-lambda* clause1 clause2 &hellip;)
+&equiv;
+(lambda args (match args clause1 clause2 &hellip;))
+</pre></div>
+</dd></dl>
+
+<div class="example">
+<pre class="example-preformatted">((match-lambda*
+   (('hello (who))
+    who))
+ 'hello '(world))
+&rArr; world
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-match_002dlet"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">match-let</strong> <var class="def-var-arguments">((pattern expression) &hellip;) body</var><a class="copiable-link" href='#index-match_002dlet'> &para;</a></span></dt>
+<dd><p>Match each pattern to the corresponding expression, and evaluate the
+body with all matched variables in scope.  Raise an error if any of the
+expressions fail to match.  <code class="code">match-let</code> is analogous to named let
+and can also be used for recursive functions which match on their
+arguments as in <code class="code">match-lambda*</code>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(match-let (((x y) (list 1 2))
+            ((a b) (list 3 4)))
+  (list a b x y))
+&rArr;
+(3 4 1 2)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-match_002dlet-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">match-let</strong> <var class="def-var-arguments">variable ((pattern init) &hellip;) body</var><a class="copiable-link" href='#index-match_002dlet-1'> &para;</a></span></dt>
+<dd><p>Similar to <code class="code">match-let</code>, but analogously to <em class="dfn">named let</em>, locally
+bind VARIABLE to a new procedure which accepts as many arguments as
+there are INIT expressions.  The procedure is initially applied to the
+results of evaluating the INIT expressions.  When called, the procedure
+matches each argument against the corresponding PATTERN, and returns the
+result(s) of evaluating the BODY expressions.  See <a class="xref" href="while-do.html">Iteration</a>, for more on <em class="dfn">named let</em>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-match_002dlet_002a"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">match-let*</strong> <var class="def-var-arguments">((variable expression) &hellip;) body</var><a class="copiable-link" href='#index-match_002dlet_002a'> &para;</a></span></dt>
+<dd><p>Similar to <code class="code">match-let</code>, but analogously to <code class="code">let*</code>, match and
+bind the variables in sequence, with preceding match variables in scope.
+</p>
+<div class="example">
+<pre class="example-preformatted">(match-let* (((x y) (list 1 2))
+             ((a b) (list x 4)))
+  (list a b x y))
+&equiv;
+(match-let (((x y) (list 1 2)))
+  (match-let (((a b) (list x 4)))
+    (list a b x y)))
+&rArr;
+(1 4 1 2)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-match_002dletrec"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">match-letrec</strong> <var class="def-var-arguments">((variable expression) &hellip;) body</var><a class="copiable-link" href='#index-match_002dletrec'> &para;</a></span></dt>
+<dd><p>Similar to <code class="code">match-let</code>, but analogously to <code class="code">letrec</code>, match and
+bind the variables with all match variables in scope.
+</p></dd></dl>
+
+<p>Guile also comes with a pattern matcher specifically tailored to SXML
+trees, See <a class="xref" href="sxml_002dmatch.html"><code class="code">sxml-match</code>: Pattern Matching of SXML</a>.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Readline-Support.html">Readline Support</a>, Previous: <a href="R7RS-Support.html">R7RS Support</a>, Up: <a href="Guile-Modules.html">Guile Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

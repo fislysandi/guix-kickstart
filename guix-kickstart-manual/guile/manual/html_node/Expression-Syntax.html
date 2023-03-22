@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Expression Syntax (Guile Reference Manual)</title>
+
+<meta name="description" content="Expression Syntax (Guile Reference Manual)">
+<meta name="keywords" content="Expression Syntax (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Scheme-Syntax.html" rel="up" title="Scheme Syntax">
+<link href="Comments.html" rel="next" title="Comments">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Expression-Syntax">
+<div class="nav-panel">
+<p>
+Next: <a href="Comments.html" accesskey="n" rel="next">Comments</a>, Up: <a href="Scheme-Syntax.html" accesskey="u" rel="up">Scheme Syntax: Standard and Guile Extensions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Expression-Syntax-1">6.16.1.1 Expression Syntax</h4>
+
+<p>An expression to be evaluated takes one of the following forms.
+</p>
+<dl class="table">
+<dt><code class="code"><var class="var">symbol</var></code></dt>
+<dd><p>A symbol is evaluated by dereferencing.  A binding of that symbol is
+sought and the value there used.  For example,
+</p>
+<div class="example">
+<pre class="example-preformatted">(define x 123)
+x &rArr; 123
+</pre></div>
+
+</dd>
+<dt><code class="code">(<var class="var">proc</var> <var class="var">args</var>&hellip;)</code></dt>
+<dd><p>A parenthesised expression is a function call.  <var class="var">proc</var> and each
+argument are evaluated, then the function (which <var class="var">proc</var> evaluated
+to) is called with those arguments.
+</p>
+<p>The order in which <var class="var">proc</var> and the arguments are evaluated is
+unspecified, so be careful when using expressions with side effects.
+</p>
+<div class="example">
+<pre class="example-preformatted">(max 1 2 3) &rArr; 3
+
+(define (get-some-proc)  min)
+((get-some-proc) 1 2 3) &rArr; 1
+</pre></div>
+
+<p>The same sort of parenthesised form is used for a macro invocation,
+but in that case the arguments are not evaluated.  See the
+descriptions of macros for more on this (see <a class="pxref" href="Macros.html">Macros</a>, and
+see <a class="pxref" href="Syntax-Rules.html">Syntax-rules Macros</a>).
+</p>
+</dd>
+<dt><code class="code"><var class="var">constant</var></code></dt>
+<dd><p>Number, string, character and boolean constants evaluate &ldquo;to
+themselves&rdquo;, so can appear as literals.
+</p>
+<div class="example">
+<pre class="example-preformatted">123     &rArr; 123
+99.9    &rArr; 99.9
+&quot;hello&quot; &rArr; &quot;hello&quot;
+#\z     &rArr; #\z
+#t      &rArr; #t
+</pre></div>
+
+<p>Note that an application must not attempt to modify literal strings,
+since they may be in read-only memory.
+</p>
+</dd>
+<dt id='index-quote'><span><code class="code">(quote <var class="var">data</var>)</code><a class="copiable-link" href='#index-quote'> &para;</a></span></dt>
+<dt><code class="code">'<var class="var">data</var></code></dt>
+<dd><a class="index-entry-id" id="index-_0027"></a>
+<p>Quoting is used to obtain a literal symbol (instead of a variable
+reference), a literal list (instead of a function call), or a literal
+vector.  <code class="code">'</code> is simply a shorthand for a <code class="code">quote</code> form.
+For example,
+</p>
+<div class="example">
+<pre class="example-preformatted">'x                   &rArr; x
+'(1 2 3)             &rArr; (1 2 3)
+'#(1 (2 3) 4)        &rArr; #(1 (2 3) 4)
+(quote x)            &rArr; x
+(quote (1 2 3))      &rArr; (1 2 3)
+(quote #(1 (2 3) 4)) &rArr; #(1 (2 3) 4)
+</pre></div>
+
+<p>Note that an application must not attempt to modify literal lists or
+vectors obtained from a <code class="code">quote</code> form, since they may be in
+read-only memory.
+</p>
+</dd>
+<dt id='index-quasiquote'><span><code class="code">(quasiquote <var class="var">data</var>)</code><a class="copiable-link" href='#index-quasiquote'> &para;</a></span></dt>
+<dt><code class="code">`<var class="var">data</var></code></dt>
+<dd><a class="index-entry-id" id="index-_0060"></a>
+<p>Backquote quasi-quotation is like <code class="code">quote</code>, but selected
+sub-expressions are evaluated.  This is a convenient way to construct
+a list or vector structure most of which is constant, but at certain
+points should have expressions substituted.
+</p>
+<p>The same effect can always be had with suitable <code class="code">list</code>,
+<code class="code">cons</code> or <code class="code">vector</code> calls, but quasi-quoting is often easier.
+</p>
+<dl class="table">
+<dt id='index-unquote'><span><code class="code">(unquote <var class="var">expr</var>)</code><a class="copiable-link" href='#index-unquote'> &para;</a></span></dt>
+<dt><code class="code">,<var class="var">expr</var></code></dt>
+<dd><a class="index-entry-id" id="index-_002c"></a>
+<p>Within the quasiquote <var class="var">data</var>, <code class="code">unquote</code> or <code class="code">,</code> indicates
+an expression to be evaluated and inserted.  The comma syntax <code class="code">,</code>
+is simply a shorthand for an <code class="code">unquote</code> form.  For example,
+</p>
+<div class="example">
+<pre class="example-preformatted">`(1 2 (* 9 9) 3 4)       &rArr; (1 2 (* 9 9) 3 4)
+`(1 2 ,(* 9 9) 3 4)      &rArr; (1 2 81 3 4)
+`(1 (unquote (+ 1 1)) 3) &rArr; (1 2 3)
+`#(1 ,(/ 12 2))          &rArr; #(1 6)
+</pre></div>
+
+</dd>
+<dt id='index-unquote_002dsplicing'><span><code class="code">(unquote-splicing <var class="var">expr</var>)</code><a class="copiable-link" href='#index-unquote_002dsplicing'> &para;</a></span></dt>
+<dt><code class="code">,@<var class="var">expr</var></code></dt>
+<dd><a class="index-entry-id" id="index-_002c_0040"></a>
+<p>Within the quasiquote <var class="var">data</var>, <code class="code">unquote-splicing</code> or
+<code class="code">,@</code> indicates an expression to be evaluated and the elements of
+the returned list inserted.  <var class="var">expr</var> must evaluate to a list.  The
+&ldquo;comma-at&rdquo; syntax <code class="code">,@</code> is simply a shorthand for an
+<code class="code">unquote-splicing</code> form.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define x '(2 3))
+`(1 ,x 4)                           &rArr; (1 (2 3) 4)
+`(1 ,@x 4)                         &rArr; (1 2 3 4)
+`(1 (unquote-splicing (map 1+ x)))  &rArr; (1 3 4)
+`#(9 ,@x 9)                        &rArr; #(9 2 3 9)
+</pre></div>
+
+<p>Notice <code class="code">,@</code> differs from plain <code class="code">,</code> in the way one level of
+nesting is stripped.  For <code class="code">,@</code> the elements of a returned list
+are inserted, whereas with <code class="code">,</code> it would be the list itself
+inserted.
+</p></dd>
+</dl>
+
+
+</dd>
+</dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Comments.html">Comments</a>, Up: <a href="Scheme-Syntax.html">Scheme Syntax: Standard and Guile Extensions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Creating a Procedure (Guile Reference Manual)</title>
+
+<meta name="description" content="Creating a Procedure (Guile Reference Manual)">
+<meta name="keywords" content="Creating a Procedure (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="About-Procedures.html" rel="up" title="About Procedures">
+<link href="Lambda-Alternatives.html" rel="next" title="Lambda Alternatives">
+<link href="Simple-Invocation.html" rel="prev" title="Simple Invocation">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Creating-a-Procedure">
+<div class="nav-panel">
+<p>
+Next: <a href="Lambda-Alternatives.html" accesskey="n" rel="next">Lambda Alternatives</a>, Previous: <a href="Simple-Invocation.html" accesskey="p" rel="prev">Simple Procedure Invocation</a>, Up: <a href="About-Procedures.html" accesskey="u" rel="up">The Representation and Use of Procedures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Creating-and-Using-a-New-Procedure">3.2.3 Creating and Using a New Procedure</h4>
+
+<p>Scheme has lots of standard procedures, and Guile provides all of these
+via predefined top level variables.  All of these standard procedures
+are documented in the later chapters of this reference manual.
+</p>
+<p>Before very long, though, you will want to create new procedures that
+encapsulate aspects of your own applications&rsquo; functionality.  To do
+this, you can use the famous <code class="code">lambda</code> syntax.
+</p>
+<p>For example, the value of the following Scheme expression
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(lambda (name address) <var class="var">body</var> &hellip;)
+</pre></div>
+
+<p>is a newly created procedure that takes two arguments:  <code class="code">name</code> and
+<code class="code">address</code>.  The behaviour of the new procedure is determined by the
+sequence of expressions and definitions in the <var class="var">body</var> of the
+procedure definition.  (Typically, <var class="var">body</var> would use the arguments in
+some way, or else there wouldn&rsquo;t be any point in giving them to the
+procedure.)  When invoked, the new procedure returns a value that is the
+value of the last expression in the <var class="var">body</var>.
+</p>
+<p>To make things more concrete, let&rsquo;s suppose that the two arguments are
+both strings, and that the purpose of this procedure is to form a
+combined string that includes these arguments.  Then the full lambda
+expression might look like this:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(lambda (name address)
+  (string-append &quot;Name=&quot; name &quot;:Address=&quot; address))
+</pre></div>
+
+<p>We noted in the previous subsection that the <var class="var">procedure</var> part of a
+procedure invocation expression can be any Scheme expression whose value
+is a procedure.  But that&rsquo;s exactly what a lambda expression is!  So we
+can use a lambda expression directly in a procedure invocation, like
+this:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">((lambda (name address)
+   (string-append &quot;Name=&quot; name &quot;:Address=&quot; address))
+ &quot;FSF&quot;
+ &quot;Cambridge&quot;) 
+</pre></div>
+
+<p>This is a valid procedure invocation expression, and its result is the
+string:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">&quot;Name=FSF:Address=Cambridge&quot;
+</pre></div>
+
+<p>It is more common, though, to store the procedure value in a variable &mdash;
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define make-combined-string
+  (lambda (name address)
+    (string-append &quot;Name=&quot; name &quot;:Address=&quot; address)))
+</pre></div>
+
+<p>&mdash; and then to use the variable name in the procedure invocation:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(make-combined-string &quot;FSF&quot; &quot;Cambridge&quot;) 
+</pre></div>
+
+<p>Which has exactly the same result.
+</p>
+<p>It&rsquo;s important to note that procedures created using <code class="code">lambda</code> have
+exactly the same status as the standard built in Scheme procedures, and
+can be invoked, passed around, and stored in variables in exactly the
+same ways.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Lambda-Alternatives.html">Lambda Alternatives</a>, Previous: <a href="Simple-Invocation.html">Simple Procedure Invocation</a>, Up: <a href="About-Procedures.html">The Representation and Use of Procedures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

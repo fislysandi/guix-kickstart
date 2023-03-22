@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Venerable Port Interfaces (Guile Reference Manual)</title>
+
+<meta name="description" content="Venerable Port Interfaces (Guile Reference Manual)">
+<meta name="keywords" content="Venerable Port Interfaces (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Input-and-Output.html" rel="up" title="Input and Output">
+<link href="Using-Ports-from-C.html" rel="next" title="Using Ports from C">
+<link href="Port-Types.html" rel="prev" title="Port Types">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Venerable-Port-Interfaces">
+<div class="nav-panel">
+<p>
+Next: <a href="Using-Ports-from-C.html" accesskey="n" rel="next">Using Ports from C</a>, Previous: <a href="Port-Types.html" accesskey="p" rel="prev">Types of Port</a>, Up: <a href="Input-and-Output.html" accesskey="u" rel="up">Input and Output</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Venerable-Port-Interfaces-1">6.12.11 Venerable Port Interfaces</h4>
+
+<p>Over the 25 years or so that Guile has been around, its port system has
+evolved, adding many useful features.  At the same time there have been
+four major Scheme standards released in those 25 years, which also
+evolve the common Scheme understanding of what a port interface should
+be.  Alas, it would be too much to ask for all of these evolutionary
+branches to be consistent.  Some of Guile&rsquo;s original interfaces don&rsquo;t
+mesh with the later Scheme standards, and yet Guile can&rsquo;t just drop old
+interfaces.  Sadly as well, the R6RS and R7RS standards both part from a
+base of R5RS, but end up in different and somewhat incompatible designs.
+</p>
+<p>Guile&rsquo;s approach is to pick a set of port primitives that make sense
+together.  We document that set of primitives, design our internal
+interfaces around them, and recommend them to users.  As the R6RS I/O
+system is the most capable standard that Scheme has yet produced in this
+domain, we mostly recommend that; <code class="code">(ice-9 binary-ports)</code> and
+<code class="code">(ice-9 textual-ports)</code> are wholly modelled on <code class="code">(rnrs io
+ports)</code>.  Guile does not wholly copy R6RS, however; See <a class="xref" href="R6RS-Incompatibilities.html">Incompatibilities with the R6RS</a>.
+</p>
+<p>At the same time, we have many venerable port interfaces, lore handed
+down to us from our hacker ancestors.  Most of these interfaces even
+predate the expectation that Scheme should have modules, so they are
+present in the default environment.  In Guile we support them as well
+and we have no plans to remove them, but again we don&rsquo;t recommend them
+for new users.
+</p>
+<a class="index-entry-id" id="index-char_002dready_003f-1"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dready_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-ready?</strong> <var class="def-var-arguments">[port]</var><a class="copiable-link" href='#index-char_002dready_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if a character is ready on input <var class="var">port</var>
+and return <code class="code">#f</code> otherwise.  If <code class="code">char-ready?</code> returns
+<code class="code">#t</code> then the next <code class="code">read-char</code> operation on
+<var class="var">port</var> is guaranteed not to hang.  If <var class="var">port</var> is a file
+port at end of file then <code class="code">char-ready?</code> returns <code class="code">#t</code>.
+</p>
+<p><code class="code">char-ready?</code> exists to make it possible for a
+program to accept characters from interactive ports without
+getting stuck waiting for input.  Any input editors associated
+with such ports must make sure that characters whose existence
+has been asserted by <code class="code">char-ready?</code> cannot be rubbed out.
+If <code class="code">char-ready?</code> were to return <code class="code">#f</code> at end of file,
+a port at end of file would be indistinguishable from an
+interactive port that has no ready characters.
+</p>
+<p>Note that <code class="code">char-ready?</code> only works reliably for terminals and
+sockets with one-byte encodings.  Under the hood it will return
+<code class="code">#t</code> if the port has any input buffered, or if the file descriptor
+that backs the port polls as readable, indicating that Guile can fetch
+more bytes from the kernel.  However being able to fetch one byte
+doesn&rsquo;t mean that a full character is available; See <a class="xref" href="Encoding.html">Encoding</a>.  Also,
+on many systems it&rsquo;s possible for a file descriptor to poll as readable,
+but then block when it comes time to read bytes.  Note also that on
+Linux kernels, all file ports backed by files always poll as readable.
+For non-file ports, this procedure always returns <code class="code">#t</code>, except for
+soft ports, which have a <code class="code">char-ready?</code> handler.  See <a class="xref" href="Soft-Ports.html">Soft Ports</a>.
+</p>
+<p>In short, this is a legacy procedure whose semantics are hard to
+provide.  However it is a useful check to see if any input is buffered.
+See <a class="xref" href="Non_002dBlocking-I_002fO.html">Non-Blocking I/O</a>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-read_002dchar-3"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-read_002dchar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read-char</strong> <var class="def-var-arguments">[port]</var><a class="copiable-link" href='#index-read_002dchar'> &para;</a></span></dt>
+<dd><p>The same as <code class="code">get-char</code>, except that <var class="var">port</var> defaults to the
+current input port.  See <a class="xref" href="Textual-I_002fO.html">Textual I/O</a>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-peek_002dchar-3"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-peek_002dchar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">peek-char</strong> <var class="def-var-arguments">[port]</var><a class="copiable-link" href='#index-peek_002dchar'> &para;</a></span></dt>
+<dd><p>The same as <code class="code">lookahead-char</code>, except that <var class="var">port</var> defaults to
+the current input port.  See <a class="xref" href="Textual-I_002fO.html">Textual I/O</a>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-unread_002dchar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">unread-char</strong> <var class="def-var-arguments">cobj [port]</var><a class="copiable-link" href='#index-unread_002dchar'> &para;</a></span></dt>
+<dd><p>The same as <code class="code">unget-char</code>, except that <var class="var">port</var> defaults to the
+current input port, and the arguments are swapped.  See <a class="xref" href="Textual-I_002fO.html">Textual I/O</a>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-unread_002dstring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">unread-string</strong> <var class="def-var-arguments">str port</var><a class="copiable-link" href='#index-unread_002dstring'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005funread_005fstring"><span class="category-def">C Function: </span><span><strong class="def-name">scm_unread_string</strong> <var class="def-var-arguments">(str, port)</var><a class="copiable-link" href='#index-scm_005funread_005fstring'> &para;</a></span></dt>
+<dd><p>The same as <code class="code">unget-string</code>, except that <var class="var">port</var> defaults to the
+current input port, and the arguments are swapped.  See <a class="xref" href="Textual-I_002fO.html">Textual I/O</a>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-newline-3"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-newline"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">newline</strong> <var class="def-var-arguments">[port]</var><a class="copiable-link" href='#index-newline'> &para;</a></span></dt>
+<dd><p>Send a newline to <var class="var">port</var>.  If <var class="var">port</var> is omitted, send to the
+current output port.  Equivalent to <code class="code">(put-char port #\newline)</code>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-write_002dchar-3"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-write_002dchar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">write-char</strong> <var class="def-var-arguments">chr [port]</var><a class="copiable-link" href='#index-write_002dchar'> &para;</a></span></dt>
+<dd><p>The same as <code class="code">put-char</code>, except that <var class="var">port</var> defaults to the
+current input port, and the arguments are swapped.  See <a class="xref" href="Textual-I_002fO.html">Textual I/O</a>.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Using-Ports-from-C.html">Using Ports from C</a>, Previous: <a href="Port-Types.html">Types of Port</a>, Up: <a href="Input-and-Output.html">Input and Output</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

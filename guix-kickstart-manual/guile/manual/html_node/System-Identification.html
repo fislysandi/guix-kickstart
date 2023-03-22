@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>System Identification (Guile Reference Manual)</title>
+
+<meta name="description" content="System Identification (Guile Reference Manual)">
+<meta name="keywords" content="System Identification (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="POSIX.html" rel="up" title="POSIX">
+<link href="Locales.html" rel="next" title="Locales">
+<link href="Networking.html" rel="prev" title="Networking">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="System-Identification">
+<div class="nav-panel">
+<p>
+Next: <a href="Locales.html" accesskey="n" rel="next">Locales</a>, Previous: <a href="Networking.html" accesskey="p" rel="prev">Networking</a>, Up: <a href="POSIX.html" accesskey="u" rel="up"><abbr class="acronym">POSIX</abbr> System Calls and Networking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="System-Identification-1">7.2.12 System Identification</h4>
+<a class="index-entry-id" id="index-system-name"></a>
+
+<p>This section lists the various procedures Guile provides for accessing
+information about the system it runs on.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-uname"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">uname</strong><a class="copiable-link" href='#index-uname'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005funame"><span class="category-def">C Function: </span><span><strong class="def-name">scm_uname</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005funame'> &para;</a></span></dt>
+<dd><p>Return an object with some information about the computer
+system the program is running on.
+</p>
+<p>The following procedures accept an object as returned by <code class="code">uname</code>
+and return a selected component (all of which are strings).
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-utsname_003asysname"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">utsname:sysname</strong> <var class="def-var-arguments">un</var><a class="copiable-link" href='#index-utsname_003asysname'> &para;</a></span></dt>
+<dd><p>The name of the operating system.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-utsname_003anodename"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">utsname:nodename</strong> <var class="def-var-arguments">un</var><a class="copiable-link" href='#index-utsname_003anodename'> &para;</a></span></dt>
+<dd><p>The network name of the computer.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-utsname_003arelease"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">utsname:release</strong> <var class="def-var-arguments">un</var><a class="copiable-link" href='#index-utsname_003arelease'> &para;</a></span></dt>
+<dd><p>The current release level of the operating system implementation.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-utsname_003aversion"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">utsname:version</strong> <var class="def-var-arguments">un</var><a class="copiable-link" href='#index-utsname_003aversion'> &para;</a></span></dt>
+<dd><p>The current version level within the release of the operating system.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-utsname_003amachine"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">utsname:machine</strong> <var class="def-var-arguments">un</var><a class="copiable-link" href='#index-utsname_003amachine'> &para;</a></span></dt>
+<dd><p>A description of the hardware.
+</p></dd></dl>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-gethostname"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">gethostname</strong><a class="copiable-link" href='#index-gethostname'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgethostname"><span class="category-def">C Function: </span><span><strong class="def-name">scm_gethostname</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fgethostname'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-host-name"></a>
+<p>Return the host name of the current processor.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-sethostname"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sethostname</strong> <var class="def-var-arguments">name</var><a class="copiable-link" href='#index-sethostname'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsethostname"><span class="category-def">C Function: </span><span><strong class="def-name">scm_sethostname</strong> <var class="def-var-arguments">(name)</var><a class="copiable-link" href='#index-scm_005fsethostname'> &para;</a></span></dt>
+<dd><p>Set the host name of the current processor to <var class="var">name</var>. May
+only be used by the superuser.  The return value is not
+specified.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Locales.html">Locales</a>, Previous: <a href="Networking.html">Networking</a>, Up: <a href="POSIX.html"><abbr class="acronym">POSIX</abbr> System Calls and Networking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Option Specification (Guile Reference Manual)</title>
+
+<meta name="description" content="Option Specification (Guile Reference Manual)">
+<meta name="keywords" content="Option Specification (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="getopt_002dlong.html" rel="up" title="getopt-long">
+<link href="Command-Line-Format.html" rel="next" title="Command Line Format">
+<link href="getopt_002dlong-Example.html" rel="prev" title="getopt-long Example">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Option-Specification">
+<div class="nav-panel">
+<p>
+Next: <a href="Command-Line-Format.html" accesskey="n" rel="next">Expected Command Line Format</a>, Previous: <a href="getopt_002dlong-Example.html" accesskey="p" rel="prev">A Short getopt-long Example</a>, Up: <a href="getopt_002dlong.html" accesskey="u" rel="up">The (ice-9 getopt-long) Module</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="How-to-Write-an-Option-Specification">7.4.2 How to Write an Option Specification</h4>
+
+<p>An option specification is an association list (see <a class="pxref" href="Association-Lists.html">Association Lists</a>) with one list element for each supported option. The key of each
+list element is a symbol that names the option, while the value is a
+list of option properties:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">OPTION-SPEC ::=  '( (OPT-NAME1 (PROP-NAME PROP-VALUE) &hellip;)
+                    (OPT-NAME2 (PROP-NAME PROP-VALUE) &hellip;)
+                    (OPT-NAME3 (PROP-NAME PROP-VALUE) &hellip;)
+                    &hellip;
+                  )
+</pre></div>
+
+<p>Each <var class="var">opt-name</var> specifies the long option name for that option.  For
+example, a list element with <var class="var">opt-name</var> <code class="code">background</code> specifies
+an option that can be specified on the command line using the long
+option <code class="code">--background</code>.  Further information about the option &mdash;
+whether it takes a value, whether it is required to be present in the
+command line, and so on &mdash; is specified by the option properties.
+</p>
+<p>In the example of the preceding section, we already saw that a long
+option name can have a equivalent <em class="dfn">short option</em> character.  The
+equivalent short option character can be set for an option by specifying
+a <code class="code">single-char</code> property in that option&rsquo;s property list.  For
+example, a list element like <code class="code">'(output (single-char #\o) &hellip;)</code>
+specifies an option with long name <code class="code">--output</code> that can also be
+specified by the equivalent short name <code class="code">-o</code>.
+</p>
+<p>The <code class="code">value</code> property specifies whether an option requires or
+accepts a value.  If the <code class="code">value</code> property is set to <code class="code">#t</code>, the
+option requires a value: <code class="code">getopt-long</code> will signal an error if the
+option name is present without a corresponding value.  If set to
+<code class="code">#f</code>, the option does not take a value; in this case, a non-option
+word that follows the option name in the command line will be treated as
+a non-option argument.  If set to the symbol <code class="code">optional</code>, the option
+accepts a value but does not require one: a non-option word that follows
+the option name in the command line will be interpreted as that option&rsquo;s
+value.  If the option name for an option with <code class="code">'(value optional)</code>
+is immediately followed in the command line by <em class="emph">another</em> option
+name, the value for the first option is implicitly <code class="code">#t</code>.
+</p>
+<p>The <code class="code">required?</code> property indicates whether an option is required to
+be present in the command line.  If the <code class="code">required?</code>  property is
+set to <code class="code">#t</code>, <code class="code">getopt-long</code> will signal an error if the option
+is not specified.
+</p>
+<p>Finally, the <code class="code">predicate</code> property can be used to constrain the
+possible values of an option.  If used, the <code class="code">predicate</code> property
+should be set to a procedure that takes one argument &mdash; the proposed
+option value as a string &mdash; and returns either <code class="code">#t</code> or <code class="code">#f</code>
+according as the proposed value is or is not acceptable.  If the
+predicate procedure returns <code class="code">#f</code>, <code class="code">getopt-long</code> will signal an
+error.
+</p>
+<p>By default, options do not have single-character equivalents, are not
+required, and do not take values.  Where the list element for an option
+includes a <code class="code">value</code> property but no <code class="code">predicate</code> property, the
+option values are unconstrained.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Command-Line-Format.html">Expected Command Line Format</a>, Previous: <a href="getopt_002dlong-Example.html">A Short getopt-long Example</a>, Up: <a href="getopt_002dlong.html">The (ice-9 getopt-long) Module</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

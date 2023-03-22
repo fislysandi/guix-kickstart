@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Lambda (Guile Reference Manual)</title>
+
+<meta name="description" content="Lambda (Guile Reference Manual)">
+<meta name="keywords" content="Lambda (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Procedures.html" rel="up" title="Procedures">
+<link href="Primitive-Procedures.html" rel="next" title="Primitive Procedures">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span.r {font-family: initial; font-weight: normal; font-style: normal}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Lambda">
+<div class="nav-panel">
+<p>
+Next: <a href="Primitive-Procedures.html" accesskey="n" rel="next">Primitive Procedures</a>, Up: <a href="Procedures.html" accesskey="u" rel="up">Procedures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Lambda_003a-Basic-Procedure-Creation">6.7.1 Lambda: Basic Procedure Creation</h4>
+<a class="index-entry-id" id="index-lambda"></a>
+
+<p>A <code class="code">lambda</code> expression evaluates to a procedure.  The environment
+which is in effect when a <code class="code">lambda</code> expression is evaluated is
+enclosed in the newly created procedure, this is referred to as a
+<em class="dfn">closure</em> (see <a class="pxref" href="About-Closure.html">The Concept of Closure</a>).
+</p>
+<p>When a procedure created by <code class="code">lambda</code> is called with some actual
+arguments, the environment enclosed in the procedure is extended by
+binding the variables named in the formal argument list to new locations
+and storing the actual arguments into these locations.  Then the body of
+the <code class="code">lambda</code> expression is evaluated sequentially.  The result of
+the last expression in the procedure body is then the result of the
+procedure invocation.
+</p>
+<p>The following examples will show how procedures can be created using
+<code class="code">lambda</code>, and what you can do with these procedures.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(lambda (x) (+ x x))       &rArr; <span class="r">a procedure</span>
+((lambda (x) (+ x x)) 4)   &rArr; 8
+</pre></div>
+
+<p>The fact that the environment in effect when creating a procedure is
+enclosed in the procedure is shown with this example:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define add4
+  (let ((x 4))
+    (lambda (y) (+ x y))))
+(add4 6)                   &rArr; 10
+</pre></div>
+
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-lambda-1"><span class="category-def">syntax: </span><span><strong class="def-name">lambda</strong> <var class="def-var-arguments">formals body</var><a class="copiable-link" href='#index-lambda-1'> &para;</a></span></dt>
+<dd><p><var class="var">formals</var> should be a formal argument list as described in the
+following table.
+</p>
+<dl class="table">
+<dt><code class="code">(<var class="var">variable1</var> &hellip;)</code></dt>
+<dd><p>The procedure takes a fixed number of arguments; when the procedure is
+called, the arguments will be stored into the newly created location for
+the formal variables.
+</p></dd>
+<dt><code class="code"><var class="var">variable</var></code></dt>
+<dd><p>The procedure takes any number of arguments; when the procedure is
+called, the sequence of actual arguments will be converted into a list
+and stored into the newly created location for the formal variable.
+</p></dd>
+<dt><code class="code">(<var class="var">variable1</var> &hellip; <var class="var">variablen</var> . <var class="var">variablen+1</var>)</code></dt>
+<dd><p>If a space-delimited period precedes the last variable, then the
+procedure takes <var class="var">n</var> or more variables where <var class="var">n</var> is the number
+of formal arguments before the period.  There must be at least one
+argument before the period.  The first <var class="var">n</var> actual arguments will be
+stored into the newly allocated locations for the first <var class="var">n</var> formal
+arguments and the sequence of the remaining actual arguments is
+converted into a list and the stored into the location for the last
+formal argument.  If there are exactly <var class="var">n</var> actual arguments, the
+empty list is stored into the location of the last formal argument.
+</p></dd>
+</dl>
+
+<p>The list in <var class="var">variable</var> or <var class="var">variablen+1</var> is always newly
+created and the procedure can modify it if desired.  This is the case
+even when the procedure is invoked via <code class="code">apply</code>, the required part
+of the list argument there will be copied (see <a class="pxref" href="Fly-Evaluation.html">Procedures for On the Fly Evaluation</a>).
+</p>
+<p><var class="var">body</var> is a sequence of Scheme expressions which are evaluated in
+order when the procedure is invoked.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Primitive-Procedures.html">Primitive Procedures</a>, Up: <a href="Procedures.html">Procedures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

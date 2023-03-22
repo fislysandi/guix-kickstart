@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Non-Local Control Flow Instructions (Guile Reference Manual)</title>
+
+<meta name="description" content="Non-Local Control Flow Instructions (Guile Reference Manual)">
+<meta name="keywords" content="Non-Local Control Flow Instructions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Instruction-Set.html" rel="up" title="Instruction Set">
+<link href="Instrumentation-Instructions.html" rel="next" title="Instrumentation Instructions">
+<link href="Trampoline-Instructions.html" rel="prev" title="Trampoline Instructions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Non_002dLocal-Control-Flow-Instructions">
+<div class="nav-panel">
+<p>
+Next: <a href="Instrumentation-Instructions.html" accesskey="n" rel="next">Instrumentation Instructions</a>, Previous: <a href="Trampoline-Instructions.html" accesskey="p" rel="prev">Trampoline Instructions</a>, Up: <a href="Instruction-Set.html" accesskey="u" rel="up">Instruction Set</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Non_002dLocal-Control-Flow-Instructions-1">9.3.7.5 Non-Local Control Flow Instructions</h4>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-capture_002dcontinuation"><span class="category-def">Instruction: </span><span><strong class="def-name">capture-continuation</strong> <code class="def-code-arguments">s24:<var class="var">dst</var></code><a class="copiable-link" href='#index-capture_002dcontinuation'> &para;</a></span></dt>
+<dd><p>Capture the current continuation, and write it to <var class="var">dst</var>.  Part of
+the implementation of <code class="code">call/cc</code>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-continuation_002dcall"><span class="category-def">Instruction: </span><span><strong class="def-name">continuation-call</strong> <code class="def-code-arguments">c24:<var class="var">contregs</var></code><a class="copiable-link" href='#index-continuation_002dcall'> &para;</a></span></dt>
+<dd><p>Return to a continuation, nonlocally.  The arguments to the continuation
+are taken from the stack.  <var class="var">contregs</var> is a free variable containing
+the reified continuation.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-abort-1"><span class="category-def">Instruction: </span><span><strong class="def-name">abort</strong> <code class="def-code-arguments">x24:<var class="var">_</var></code><a class="copiable-link" href='#index-abort-1'> &para;</a></span></dt>
+<dd><p>Abort to a prompt handler.  The tag is expected in slot 1, and the rest
+of the values in the frame are returned to the prompt handler.  This
+corresponds to a tail application of <code class="code">abort-to-prompt</code>.
+</p>
+<p>If no prompt can be found in the dynamic environment with the given tag,
+an error is signalled.  Otherwise all arguments are passed to the
+prompt&rsquo;s handler, along with the captured continuation, if necessary.
+</p>
+<p>If the prompt&rsquo;s handler can be proven to not reference the captured
+continuation, no continuation is allocated.  This decision happens
+dynamically, at run-time; the general case is that the continuation may
+be captured, and thus resumed.  A reinstated continuation will have its
+arguments pushed on the stack from slot 0, as if from a multiple-value
+return, and control resumes in the caller.  Thus to the calling
+function, a call to <code class="code">abort-to-prompt</code> looks like any other function
+call.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-compose_002dcontinuation"><span class="category-def">Instruction: </span><span><strong class="def-name">compose-continuation</strong> <code class="def-code-arguments">c24:<var class="var">cont</var></code><a class="copiable-link" href='#index-compose_002dcontinuation'> &para;</a></span></dt>
+<dd><p>Compose a partial continuation with the current continuation.  The
+arguments to the continuation are taken from the stack.  <var class="var">cont</var> is a
+free variable containing the reified continuation.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-prompt"><span class="category-def">Instruction: </span><span><strong class="def-name">prompt</strong> <code class="def-code-arguments">s24:<var class="var">tag</var> b1:<var class="var">escape-only?</var> x7:<var class="var">_</var> f24:<var class="var">proc-slot</var> x8:<var class="var">_</var> l24:<var class="var">handler-offset</var></code><a class="copiable-link" href='#index-prompt'> &para;</a></span></dt>
+<dd><p>Push a new prompt on the dynamic stack, with a tag from <var class="var">tag</var> and a
+handler at <var class="var">handler-offset</var> words from the current <var class="var">ip</var>.
+</p>
+<p>If an abort is made to this prompt, control will jump to the handler.
+The handler will expect a multiple-value return as if from a call with
+the procedure at <var class="var">proc-slot</var>, with the reified partial continuation
+as the first argument, followed by the values returned to the handler.
+If control returns to the handler, the prompt is already popped off by
+the abort mechanism.  (Guile&rsquo;s <code class="code">prompt</code> implements Felleisen&rsquo;s
+<em class="dfn">&ndash;F&ndash;</em> operator.)
+</p>
+<p>If <var class="var">escape-only?</var> is nonzero, the prompt will be marked as
+escape-only, which allows an abort to this prompt to avoid reifying the
+continuation.
+</p>
+<p>See <a class="xref" href="Prompts.html">Prompts</a>, for more information on prompts.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-throw-1"><span class="category-def">Instruction: </span><span><strong class="def-name">throw</strong> <code class="def-code-arguments">s12:<var class="var">key</var> s12:<var class="var">args</var></code><a class="copiable-link" href='#index-throw-1'> &para;</a></span></dt>
+<dd><p>Raise an error by throwing to <var class="var">key</var> and <var class="var">args</var>.  <var class="var">args</var>
+should be a list.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-throw_002fvalue"><span class="category-def">Instruction: </span><span><strong class="def-name">throw/value</strong> <code class="def-code-arguments">s24:<var class="var">value</var> n32:<var class="var">key-subr-and-message</var></code><a class="copiable-link" href='#index-throw_002fvalue'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-throw_002fvalue_002bdata"><span class="category-def">Instruction: </span><span><strong class="def-name">throw/value+data</strong> <code class="def-code-arguments">s24:<var class="var">value</var> n32:<var class="var">key-subr-and-message</var></code><a class="copiable-link" href='#index-throw_002fvalue_002bdata'> &para;</a></span></dt>
+<dd><p>Raise an error, indicating <var class="var">val</var> as the bad value.
+<var class="var">key-subr-and-message</var> should be a vector, where the first element
+is the symbol to which to throw, the second is the procedure in which to
+signal the error (a string) or <code class="code">#f</code>, and the third is a format
+string for the message, with one template.  These instructions do not
+fall through.
+</p>
+<p>Both of these instructions throw to a key with four arguments: the
+procedure that indicates the error (or <code class="code">#f</code>, the format string, a
+list with <var class="var">value</var>, and either <code class="code">#f</code> or the list with <var class="var">value</var>
+as the last argument respectively.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Instrumentation-Instructions.html">Instrumentation Instructions</a>, Previous: <a href="Trampoline-Instructions.html">Trampoline Instructions</a>, Up: <a href="Instruction-Set.html">Instruction Set</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

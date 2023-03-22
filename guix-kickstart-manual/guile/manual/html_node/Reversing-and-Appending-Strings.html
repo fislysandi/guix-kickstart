@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Reversing and Appending Strings (Guile Reference Manual)</title>
+
+<meta name="description" content="Reversing and Appending Strings (Guile Reference Manual)">
+<meta name="keywords" content="Reversing and Appending Strings (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Strings.html" rel="up" title="Strings">
+<link href="Mapping-Folding-and-Unfolding.html" rel="next" title="Mapping Folding and Unfolding">
+<link href="Alphabetic-Case-Mapping.html" rel="prev" title="Alphabetic Case Mapping">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Reversing-and-Appending-Strings">
+<div class="nav-panel">
+<p>
+Next: <a href="Mapping-Folding-and-Unfolding.html" accesskey="n" rel="next">Mapping, Folding, and Unfolding</a>, Previous: <a href="Alphabetic-Case-Mapping.html" accesskey="p" rel="prev">Alphabetic Case Mapping</a>, Up: <a href="Strings.html" accesskey="u" rel="up">Strings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Reversing-and-Appending-Strings-1">6.6.5.10 Reversing and Appending Strings</h4>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dreverse"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-reverse</strong> <var class="def-var-arguments">str [start [end]]</var><a class="copiable-link" href='#index-string_002dreverse'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005freverse"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_reverse</strong> <var class="def-var-arguments">(str, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005freverse'> &para;</a></span></dt>
+<dd><p>Reverse the string <var class="var">str</var>.  The optional arguments
+<var class="var">start</var> and <var class="var">end</var> delimit the region of <var class="var">str</var> to
+operate on.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dreverse_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-reverse!</strong> <var class="def-var-arguments">str [start [end]]</var><a class="copiable-link" href='#index-string_002dreverse_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005freverse_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_reverse_x</strong> <var class="def-var-arguments">(str, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005freverse_005fx'> &para;</a></span></dt>
+<dd><p>Reverse the string <var class="var">str</var> in-place.  The optional arguments
+<var class="var">start</var> and <var class="var">end</var> delimit the region of <var class="var">str</var> to
+operate on.  The return value is unspecified.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-string_002dappend-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dappend"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-append</strong> <var class="def-var-arguments">arg &hellip;</var><a class="copiable-link" href='#index-string_002dappend'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fappend"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_append</strong> <var class="def-var-arguments">(args)</var><a class="copiable-link" href='#index-scm_005fstring_005fappend'> &para;</a></span></dt>
+<dd><p>Return a newly allocated string whose characters form the
+concatenation of the given strings, <var class="var">arg</var> <small class="enddots">...</small>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(let ((h &quot;hello &quot;))
+  (string-append h &quot;world&quot;))
+&rArr; &quot;hello world&quot;
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dappend_002fshared"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-append/shared</strong> <var class="def-var-arguments">arg &hellip;</var><a class="copiable-link" href='#index-string_002dappend_002fshared'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fappend_005fshared"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_append_shared</strong> <var class="def-var-arguments">(args)</var><a class="copiable-link" href='#index-scm_005fstring_005fappend_005fshared'> &para;</a></span></dt>
+<dd><p>Like <code class="code">string-append</code>, but the result may share memory
+with the argument strings.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dconcatenate"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-concatenate</strong> <var class="def-var-arguments">ls</var><a class="copiable-link" href='#index-string_002dconcatenate'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fconcatenate"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_concatenate</strong> <var class="def-var-arguments">(ls)</var><a class="copiable-link" href='#index-scm_005fstring_005fconcatenate'> &para;</a></span></dt>
+<dd><p>Append the elements (which must be strings) of <var class="var">ls</var> together into a
+single string.  Guaranteed to return a freshly allocated string.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dconcatenate_002dreverse"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-concatenate-reverse</strong> <var class="def-var-arguments">ls [final_string [end]]</var><a class="copiable-link" href='#index-string_002dconcatenate_002dreverse'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fconcatenate_005freverse"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_concatenate_reverse</strong> <var class="def-var-arguments">(ls, final_string, end)</var><a class="copiable-link" href='#index-scm_005fstring_005fconcatenate_005freverse'> &para;</a></span></dt>
+<dd><p>Without optional arguments, this procedure is equivalent to
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(string-concatenate (reverse ls))
+</pre></div>
+
+<p>If the optional argument <var class="var">final_string</var> is specified, it is
+consed onto the beginning to <var class="var">ls</var> before performing the
+list-reverse and string-concatenate operations.  If <var class="var">end</var>
+is given, only the characters of <var class="var">final_string</var> up to index
+<var class="var">end</var> are used.
+</p>
+<p>Guaranteed to return a freshly allocated string.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dconcatenate_002fshared"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-concatenate/shared</strong> <var class="def-var-arguments">ls</var><a class="copiable-link" href='#index-string_002dconcatenate_002fshared'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fconcatenate_005fshared"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_concatenate_shared</strong> <var class="def-var-arguments">(ls)</var><a class="copiable-link" href='#index-scm_005fstring_005fconcatenate_005fshared'> &para;</a></span></dt>
+<dd><p>Like <code class="code">string-concatenate</code>, but the result may share memory
+with the strings in the list <var class="var">ls</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dconcatenate_002dreverse_002fshared"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-concatenate-reverse/shared</strong> <var class="def-var-arguments">ls [final_string [end]]</var><a class="copiable-link" href='#index-string_002dconcatenate_002dreverse_002fshared'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fconcatenate_005freverse_005fshared"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_concatenate_reverse_shared</strong> <var class="def-var-arguments">(ls, final_string, end)</var><a class="copiable-link" href='#index-scm_005fstring_005fconcatenate_005freverse_005fshared'> &para;</a></span></dt>
+<dd><p>Like <code class="code">string-concatenate-reverse</code>, but the result may
+share memory with the strings in the <var class="var">ls</var> arguments.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Mapping-Folding-and-Unfolding.html">Mapping, Folding, and Unfolding</a>, Previous: <a href="Alphabetic-Case-Mapping.html">Alphabetic Case Mapping</a>, Up: <a href="Strings.html">Strings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

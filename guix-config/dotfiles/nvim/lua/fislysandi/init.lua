@@ -42,6 +42,8 @@ for k, v in pairs(options) do
 end
 
 
+vim.g["conjure#filetype#scheme"] = "conjure.client.guile.socket"
+
 -- Set the runtime path
 --vim.o.runtimepath = vim.o.runtimepath .. ';' .. 'C:/Users/angryteapodthebonedo/AppData/Local/nvim'
 

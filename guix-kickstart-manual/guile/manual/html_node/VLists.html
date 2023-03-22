@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>VLists (Guile Reference Manual)</title>
+
+<meta name="description" content="VLists (Guile Reference Manual)">
+<meta name="keywords" content="VLists (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Data-Types.html" rel="up" title="Data Types">
+<link href="Record-Overview.html" rel="next" title="Record Overview">
+<link href="Arrays.html" rel="prev" title="Arrays">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="VLists">
+<div class="nav-panel">
+<p>
+Next: <a href="Record-Overview.html" accesskey="n" rel="next">Record Overview</a>, Previous: <a href="Arrays.html" accesskey="p" rel="prev">Arrays</a>, Up: <a href="Data-Types.html" accesskey="u" rel="up">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="VLists-1">6.6.14 VLists</h4>
+
+<a class="index-entry-id" id="index-vlist"></a>
+
+<p>The <code class="code">(ice-9 vlist)</code> module provides an implementation of the <em class="dfn">VList</em>
+data structure designed by Phil Bagwell in 2002.  VLists are immutable lists,
+which can contain any Scheme object.  They improve on standard Scheme linked
+lists in several areas:
+</p>
+<ul class="itemize mark-bullet">
+<li>Random access has typically constant-time complexity.
+
+</li><li>Computing the length of a VList has time complexity logarithmic in the number of
+elements.
+
+</li><li>VLists use less storage space than standard lists.
+
+</li><li>VList elements are stored in contiguous regions, which improves memory locality
+and leads to more efficient use of hardware caches.
+</li></ul>
+
+<p>The idea behind VLists is to store vlist elements in increasingly large
+contiguous blocks (implemented as vectors here).  These blocks are linked to one
+another using a pointer to the next block and an offset within that block.  The
+size of these blocks form a geometric series with ratio
+<code class="code">block-growth-factor</code> (2 by default).
+</p>
+<p>The VList structure also serves as the basis for the <em class="dfn">VList-based hash
+lists</em> or &ldquo;vhashes&rdquo;, an immutable dictionary type (see <a class="pxref" href="VHashes.html">VList-Based Hash Lists or &ldquo;VHashes&rdquo;</a>).
+</p>
+<p>However, the current implementation in <code class="code">(ice-9 vlist)</code> has several
+noteworthy shortcomings:
+</p>
+<ul class="itemize mark-bullet">
+<li>It is <em class="emph">not</em> thread-safe.  Although operations on vlists are all
+<em class="dfn">referentially transparent</em> (i.e., purely functional), adding elements to a
+vlist with <code class="code">vlist-cons</code> mutates part of its internal structure, which makes
+it non-thread-safe.  This could be fixed, but it would slow down
+<code class="code">vlist-cons</code>.
+
+</li><li><code class="code">vlist-cons</code> always allocates at least as much memory as <code class="code">cons</code>.
+Again, Phil Bagwell describes how to fix it, but that would require tuning the
+garbage collector in a way that may not be generally beneficial.
+
+</li><li><code class="code">vlist-cons</code> is a Scheme procedure compiled to bytecode, and it does not
+compete with the straightforward C implementation of <code class="code">cons</code>, and with the
+fact that the VM has a special <code class="code">cons</code> instruction.
+
+</li></ul>
+
+<p>We hope to address these in the future.
+</p>
+<p>The programming interface exported by <code class="code">(ice-9 vlist)</code> is defined below.
+Most of it is the same as SRFI-1 with an added <code class="code">vlist-</code> prefix to function
+names.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-vlist_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vlist?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-vlist_003f'> &para;</a></span></dt>
+<dd><p>Return true if <var class="var">obj</var> is a VList.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-vlist_002dnull"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">vlist-null</strong><a class="copiable-link" href='#index-vlist_002dnull'> &para;</a></span></dt>
+<dd><p>The empty VList.  Note that it&rsquo;s possible to create an empty VList not
+<code class="code">eq?</code> to <code class="code">vlist-null</code>; thus, callers should always use
+<code class="code">vlist-null?</code> when testing whether a VList is empty.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vlist_002dnull_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vlist-null?</strong> <var class="def-var-arguments">vlist</var><a class="copiable-link" href='#index-vlist_002dnull_003f'> &para;</a></span></dt>
+<dd><p>Return true if <var class="var">vlist</var> is empty.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vlist_002dcons"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vlist-cons</strong> <var class="def-var-arguments">item vlist</var><a class="copiable-link" href='#index-vlist_002dcons'> &para;</a></span></dt>
+<dd><p>Return a new vlist with <var class="var">item</var> as its head and <var class="var">vlist</var> as its tail.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vlist_002dhead"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vlist-head</strong> <var class="def-var-arguments">vlist</var><a class="copiable-link" href='#index-vlist_002dhead'> &para;</a></span></dt>
+<dd><p>Return the head of <var class="var">vlist</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vlist_002dtail"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vlist-tail</strong> <var class="def-var-arguments">vlist</var><a class="copiable-link" href='#index-vlist_002dtail'> &para;</a></span></dt>
+<dd><p>Return the tail of <var class="var">vlist</var>.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-block_002dgrowth_002dfactor"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">block-growth-factor</strong><a class="copiable-link" href='#index-block_002dgrowth_002dfactor'> &para;</a></span></dt>
+<dd><p>A fluid that defines the growth factor of VList blocks, 2 by default.
+</p></dd></dl>
+
+<p>The functions below provide the usual set of higher-level list operations.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-vlist_002dfold"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vlist-fold</strong> <var class="def-var-arguments">proc init vlist</var><a class="copiable-link" href='#index-vlist_002dfold'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-vlist_002dfold_002dright"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vlist-fold-right</strong> <var class="def-var-arguments">proc init vlist</var><a class="copiable-link" href='#index-vlist_002dfold_002dright'> &para;</a></span></dt>
+<dd><p>Fold over <var class="var">vlist</var>, calling <var class="var">proc</var> for each element, as for SRFI-1
+<code class="code">fold</code> and <code class="code">fold-right</code> (see <a class="pxref" href="SRFI_002d1.html"><code class="code">fold</code></a>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vlist_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vlist-ref</strong> <var class="def-var-arguments">vlist index</var><a class="copiable-link" href='#index-vlist_002dref'> &para;</a></span></dt>
+<dd><p>Return the element at index <var class="var">index</var> in <var class="var">vlist</var>.  This is typically a
+constant-time operation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vlist_002dlength"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vlist-length</strong> <var class="def-var-arguments">vlist</var><a class="copiable-link" href='#index-vlist_002dlength'> &para;</a></span></dt>
+<dd><p>Return the length of <var class="var">vlist</var>.  This is typically logarithmic in the number
+of elements in <var class="var">vlist</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vlist_002dreverse"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vlist-reverse</strong> <var class="def-var-arguments">vlist</var><a class="copiable-link" href='#index-vlist_002dreverse'> &para;</a></span></dt>
+<dd><p>Return a new <var class="var">vlist</var> whose content are those of <var class="var">vlist</var> in reverse
+order.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vlist_002dmap"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vlist-map</strong> <var class="def-var-arguments">proc vlist</var><a class="copiable-link" href='#index-vlist_002dmap'> &para;</a></span></dt>
+<dd><p>Map <var class="var">proc</var> over the elements of <var class="var">vlist</var> and return a new vlist.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vlist_002dfor_002deach"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vlist-for-each</strong> <var class="def-var-arguments">proc vlist</var><a class="copiable-link" href='#index-vlist_002dfor_002deach'> &para;</a></span></dt>
+<dd><p>Call <var class="var">proc</var> on each element of <var class="var">vlist</var>.  The result is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vlist_002ddrop"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vlist-drop</strong> <var class="def-var-arguments">vlist count</var><a class="copiable-link" href='#index-vlist_002ddrop'> &para;</a></span></dt>
+<dd><p>Return a new vlist that does not contain the <var class="var">count</var> first elements of
+<var class="var">vlist</var>.  This is typically a constant-time operation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vlist_002dtake"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vlist-take</strong> <var class="def-var-arguments">vlist count</var><a class="copiable-link" href='#index-vlist_002dtake'> &para;</a></span></dt>
+<dd><p>Return a new vlist that contains only the <var class="var">count</var> first elements of
+<var class="var">vlist</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vlist_002dfilter"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vlist-filter</strong> <var class="def-var-arguments">pred vlist</var><a class="copiable-link" href='#index-vlist_002dfilter'> &para;</a></span></dt>
+<dd><p>Return a new vlist containing all the elements from <var class="var">vlist</var> that satisfy
+<var class="var">pred</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vlist_002ddelete"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vlist-delete</strong> <var class="def-var-arguments">x vlist [equal?]</var><a class="copiable-link" href='#index-vlist_002ddelete'> &para;</a></span></dt>
+<dd><p>Return a new vlist corresponding to <var class="var">vlist</var> without the elements
+<var class="var">equal?</var> to <var class="var">x</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vlist_002dunfold"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vlist-unfold</strong> <var class="def-var-arguments">p f g seed [tail-gen]</var><a class="copiable-link" href='#index-vlist_002dunfold'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-vlist_002dunfold_002dright"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vlist-unfold-right</strong> <var class="def-var-arguments">p f g seed [tail]</var><a class="copiable-link" href='#index-vlist_002dunfold_002dright'> &para;</a></span></dt>
+<dd><p>Return a new vlist, as for SRFI-1 <code class="code">unfold</code> and <code class="code">unfold-right</code>
+(see <a class="pxref" href="SRFI_002d1.html"><code class="code">unfold</code></a>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vlist_002dappend"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vlist-append</strong> <var class="def-var-arguments">vlist &hellip;</var><a class="copiable-link" href='#index-vlist_002dappend'> &para;</a></span></dt>
+<dd><p>Append the given vlists and return the resulting vlist.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-list_002d_003evlist"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list-&gt;vlist</strong> <var class="def-var-arguments">lst</var><a class="copiable-link" href='#index-list_002d_003evlist'> &para;</a></span></dt>
+<dd><p>Return a new vlist whose contents correspond to <var class="var">lst</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vlist_002d_003elist"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vlist-&gt;list</strong> <var class="def-var-arguments">vlist</var><a class="copiable-link" href='#index-vlist_002d_003elist'> &para;</a></span></dt>
+<dd><p>Return a new list whose contents match those of <var class="var">vlist</var>.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Record-Overview.html">Record Overview</a>, Previous: <a href="Arrays.html">Arrays</a>, Up: <a href="Data-Types.html">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

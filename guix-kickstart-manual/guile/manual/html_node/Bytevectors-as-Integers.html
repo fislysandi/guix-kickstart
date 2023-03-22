@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Bytevectors as Integers (Guile Reference Manual)</title>
+
+<meta name="description" content="Bytevectors as Integers (Guile Reference Manual)">
+<meta name="keywords" content="Bytevectors as Integers (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Bytevectors.html" rel="up" title="Bytevectors">
+<link href="Bytevectors-and-Integer-Lists.html" rel="next" title="Bytevectors and Integer Lists">
+<link href="Bytevector-Manipulation.html" rel="prev" title="Bytevector Manipulation">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Bytevectors-as-Integers">
+<div class="nav-panel">
+<p>
+Next: <a href="Bytevectors-and-Integer-Lists.html" accesskey="n" rel="next">Converting Bytevectors to/from Integer Lists</a>, Previous: <a href="Bytevector-Manipulation.html" accesskey="p" rel="prev">Manipulating Bytevectors</a>, Up: <a href="Bytevectors.html" accesskey="u" rel="up">Bytevectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Interpreting-Bytevector-Contents-as-Integers">6.6.12.3 Interpreting Bytevector Contents as Integers</h4>
+
+<p>The contents of a bytevector can be interpreted as a sequence of
+integers of any given size, sign, and endianness.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(let ((bv (make-bytevector 4)))
+  (bytevector-u8-set! bv 0 #x12)
+  (bytevector-u8-set! bv 1 #x34)
+  (bytevector-u8-set! bv 2 #x56)
+  (bytevector-u8-set! bv 3 #x78)
+
+  (map (lambda (number)
+         (number-&gt;string number 16))
+       (list (bytevector-u8-ref bv 0)
+             (bytevector-u16-ref bv 0 (endianness big))
+             (bytevector-u32-ref bv 0 (endianness little)))))
+
+&rArr; (&quot;12&quot; &quot;1234&quot; &quot;78563412&quot;)
+</pre></div>
+
+<p>The most generic procedures to interpret bytevector contents as integers
+are described below.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-bytevector_002duint_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-uint-ref</strong> <var class="def-var-arguments">bv index endianness size</var><a class="copiable-link" href='#index-bytevector_002duint_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fuint_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_uint_ref</strong> <var class="def-var-arguments">(bv, index, endianness, size)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fuint_005fref'> &para;</a></span></dt>
+<dd><p>Return the <var class="var">size</var>-byte long unsigned integer at index <var class="var">index</var> in
+<var class="var">bv</var>, decoded according to <var class="var">endianness</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bytevector_002dsint_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-sint-ref</strong> <var class="def-var-arguments">bv index endianness size</var><a class="copiable-link" href='#index-bytevector_002dsint_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fsint_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_sint_ref</strong> <var class="def-var-arguments">(bv, index, endianness, size)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fsint_005fref'> &para;</a></span></dt>
+<dd><p>Return the <var class="var">size</var>-byte long signed integer at index <var class="var">index</var> in
+<var class="var">bv</var>, decoded according to <var class="var">endianness</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bytevector_002duint_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-uint-set!</strong> <var class="def-var-arguments">bv index value endianness size</var><a class="copiable-link" href='#index-bytevector_002duint_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fuint_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_uint_set_x</strong> <var class="def-var-arguments">(bv, index, value, endianness, size)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fuint_005fset_005fx'> &para;</a></span></dt>
+<dd><p>Set the <var class="var">size</var>-byte long unsigned integer at <var class="var">index</var> to
+<var class="var">value</var>, encoded according to <var class="var">endianness</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bytevector_002dsint_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-sint-set!</strong> <var class="def-var-arguments">bv index value endianness size</var><a class="copiable-link" href='#index-bytevector_002dsint_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fsint_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_sint_set_x</strong> <var class="def-var-arguments">(bv, index, value, endianness, size)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fsint_005fset_005fx'> &para;</a></span></dt>
+<dd><p>Set the <var class="var">size</var>-byte long signed integer at <var class="var">index</var> to
+<var class="var">value</var>, encoded according to <var class="var">endianness</var>.
+</p></dd></dl>
+
+<p>The following procedures are similar to the ones above, but specialized
+to a given integer size:
+</p>
+<a class="anchor" id="x_002dbytevector_002du8_002dref"></a><dl class="first-deffn">
+<dt class="deffn" id="index-bytevector_002du8_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-u8-ref</strong> <var class="def-var-arguments">bv index</var><a class="copiable-link" href='#index-bytevector_002du8_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002ds8_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-s8-ref</strong> <var class="def-var-arguments">bv index</var><a class="copiable-link" href='#index-bytevector_002ds8_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002du16_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-u16-ref</strong> <var class="def-var-arguments">bv index endianness</var><a class="copiable-link" href='#index-bytevector_002du16_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002ds16_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-s16-ref</strong> <var class="def-var-arguments">bv index endianness</var><a class="copiable-link" href='#index-bytevector_002ds16_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002du32_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-u32-ref</strong> <var class="def-var-arguments">bv index endianness</var><a class="copiable-link" href='#index-bytevector_002du32_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002ds32_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-s32-ref</strong> <var class="def-var-arguments">bv index endianness</var><a class="copiable-link" href='#index-bytevector_002ds32_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002du64_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-u64-ref</strong> <var class="def-var-arguments">bv index endianness</var><a class="copiable-link" href='#index-bytevector_002du64_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002ds64_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-s64-ref</strong> <var class="def-var-arguments">bv index endianness</var><a class="copiable-link" href='#index-bytevector_002ds64_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fu8_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_u8_ref</strong> <var class="def-var-arguments">(bv, index)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fu8_005fref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fs8_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_s8_ref</strong> <var class="def-var-arguments">(bv, index)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fs8_005fref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fu16_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_u16_ref</strong> <var class="def-var-arguments">(bv, index, endianness)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fu16_005fref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fs16_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_s16_ref</strong> <var class="def-var-arguments">(bv, index, endianness)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fs16_005fref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fu32_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_u32_ref</strong> <var class="def-var-arguments">(bv, index, endianness)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fu32_005fref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fs32_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_s32_ref</strong> <var class="def-var-arguments">(bv, index, endianness)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fs32_005fref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fu64_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_u64_ref</strong> <var class="def-var-arguments">(bv, index, endianness)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fu64_005fref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fs64_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_s64_ref</strong> <var class="def-var-arguments">(bv, index, endianness)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fs64_005fref'> &para;</a></span></dt>
+<dd><p>Return the unsigned <var class="var">n</var>-bit (signed) integer (where <var class="var">n</var> is 8,
+16, 32 or 64) from <var class="var">bv</var> at <var class="var">index</var>, decoded according to
+<var class="var">endianness</var>.
+</p></dd></dl>
+
+<a class="anchor" id="x_002dbytevector_002du8_002dset_0021"></a><dl class="first-deffn">
+<dt class="deffn" id="index-bytevector_002du8_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-u8-set!</strong> <var class="def-var-arguments">bv index value</var><a class="copiable-link" href='#index-bytevector_002du8_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002ds8_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-s8-set!</strong> <var class="def-var-arguments">bv index value</var><a class="copiable-link" href='#index-bytevector_002ds8_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002du16_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-u16-set!</strong> <var class="def-var-arguments">bv index value endianness</var><a class="copiable-link" href='#index-bytevector_002du16_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002ds16_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-s16-set!</strong> <var class="def-var-arguments">bv index value endianness</var><a class="copiable-link" href='#index-bytevector_002ds16_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002du32_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-u32-set!</strong> <var class="def-var-arguments">bv index value endianness</var><a class="copiable-link" href='#index-bytevector_002du32_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002ds32_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-s32-set!</strong> <var class="def-var-arguments">bv index value endianness</var><a class="copiable-link" href='#index-bytevector_002ds32_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002du64_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-u64-set!</strong> <var class="def-var-arguments">bv index value endianness</var><a class="copiable-link" href='#index-bytevector_002du64_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002ds64_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-s64-set!</strong> <var class="def-var-arguments">bv index value endianness</var><a class="copiable-link" href='#index-bytevector_002ds64_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fu8_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_u8_set_x</strong> <var class="def-var-arguments">(bv, index, value)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fu8_005fset_005fx'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fs8_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_s8_set_x</strong> <var class="def-var-arguments">(bv, index, value)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fs8_005fset_005fx'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fu16_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_u16_set_x</strong> <var class="def-var-arguments">(bv, index, value, endianness)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fu16_005fset_005fx'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fs16_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_s16_set_x</strong> <var class="def-var-arguments">(bv, index, value, endianness)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fs16_005fset_005fx'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fu32_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_u32_set_x</strong> <var class="def-var-arguments">(bv, index, value, endianness)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fu32_005fset_005fx'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fs32_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_s32_set_x</strong> <var class="def-var-arguments">(bv, index, value, endianness)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fs32_005fset_005fx'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fu64_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_u64_set_x</strong> <var class="def-var-arguments">(bv, index, value, endianness)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fu64_005fset_005fx'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fs64_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_s64_set_x</strong> <var class="def-var-arguments">(bv, index, value, endianness)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fs64_005fset_005fx'> &para;</a></span></dt>
+<dd><p>Store <var class="var">value</var> as an <var class="var">n</var>-bit (signed) integer (where <var class="var">n</var> is
+8, 16, 32 or 64) in <var class="var">bv</var> at <var class="var">index</var>, encoded according to
+<var class="var">endianness</var>.
+</p></dd></dl>
+
+<p>Finally, a variant specialized for the host&rsquo;s endianness is available
+for each of these functions (with the exception of the <code class="code">u8</code> and
+<code class="code">s8</code> accessors, as endianness is about byte order and there is only
+1 byte):
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-bytevector_002du16_002dnative_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-u16-native-ref</strong> <var class="def-var-arguments">bv index</var><a class="copiable-link" href='#index-bytevector_002du16_002dnative_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002ds16_002dnative_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-s16-native-ref</strong> <var class="def-var-arguments">bv index</var><a class="copiable-link" href='#index-bytevector_002ds16_002dnative_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002du32_002dnative_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-u32-native-ref</strong> <var class="def-var-arguments">bv index</var><a class="copiable-link" href='#index-bytevector_002du32_002dnative_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002ds32_002dnative_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-s32-native-ref</strong> <var class="def-var-arguments">bv index</var><a class="copiable-link" href='#index-bytevector_002ds32_002dnative_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002du64_002dnative_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-u64-native-ref</strong> <var class="def-var-arguments">bv index</var><a class="copiable-link" href='#index-bytevector_002du64_002dnative_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002ds64_002dnative_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-s64-native-ref</strong> <var class="def-var-arguments">bv index</var><a class="copiable-link" href='#index-bytevector_002ds64_002dnative_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fu16_005fnative_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_u16_native_ref</strong> <var class="def-var-arguments">(bv, index)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fu16_005fnative_005fref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fs16_005fnative_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_s16_native_ref</strong> <var class="def-var-arguments">(bv, index)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fs16_005fnative_005fref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fu32_005fnative_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_u32_native_ref</strong> <var class="def-var-arguments">(bv, index)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fu32_005fnative_005fref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fs32_005fnative_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_s32_native_ref</strong> <var class="def-var-arguments">(bv, index)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fs32_005fnative_005fref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fu64_005fnative_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_u64_native_ref</strong> <var class="def-var-arguments">(bv, index)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fu64_005fnative_005fref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fs64_005fnative_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_s64_native_ref</strong> <var class="def-var-arguments">(bv, index)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fs64_005fnative_005fref'> &para;</a></span></dt>
+<dd><p>Return the unsigned <var class="var">n</var>-bit (signed) integer (where <var class="var">n</var> is 8,
+16, 32 or 64) from <var class="var">bv</var> at <var class="var">index</var>, decoded according to the
+host&rsquo;s native endianness.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bytevector_002du16_002dnative_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-u16-native-set!</strong> <var class="def-var-arguments">bv index value</var><a class="copiable-link" href='#index-bytevector_002du16_002dnative_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002ds16_002dnative_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-s16-native-set!</strong> <var class="def-var-arguments">bv index value</var><a class="copiable-link" href='#index-bytevector_002ds16_002dnative_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002du32_002dnative_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-u32-native-set!</strong> <var class="def-var-arguments">bv index value</var><a class="copiable-link" href='#index-bytevector_002du32_002dnative_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002ds32_002dnative_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-s32-native-set!</strong> <var class="def-var-arguments">bv index value</var><a class="copiable-link" href='#index-bytevector_002ds32_002dnative_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002du64_002dnative_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-u64-native-set!</strong> <var class="def-var-arguments">bv index value</var><a class="copiable-link" href='#index-bytevector_002du64_002dnative_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002ds64_002dnative_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-s64-native-set!</strong> <var class="def-var-arguments">bv index value</var><a class="copiable-link" href='#index-bytevector_002ds64_002dnative_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fu16_005fnative_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_u16_native_set_x</strong> <var class="def-var-arguments">(bv, index, value)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fu16_005fnative_005fset_005fx'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fs16_005fnative_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_s16_native_set_x</strong> <var class="def-var-arguments">(bv, index, value)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fs16_005fnative_005fset_005fx'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fu32_005fnative_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_u32_native_set_x</strong> <var class="def-var-arguments">(bv, index, value)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fu32_005fnative_005fset_005fx'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fs32_005fnative_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_s32_native_set_x</strong> <var class="def-var-arguments">(bv, index, value)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fs32_005fnative_005fset_005fx'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fu64_005fnative_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_u64_native_set_x</strong> <var class="def-var-arguments">(bv, index, value)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fu64_005fnative_005fset_005fx'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fs64_005fnative_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_s64_native_set_x</strong> <var class="def-var-arguments">(bv, index, value)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fs64_005fnative_005fset_005fx'> &para;</a></span></dt>
+<dd><p>Store <var class="var">value</var> as an <var class="var">n</var>-bit (signed) integer (where <var class="var">n</var> is
+8, 16, 32 or 64) in <var class="var">bv</var> at <var class="var">index</var>, encoded according to the
+host&rsquo;s native endianness.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Bytevectors-and-Integer-Lists.html">Converting Bytevectors to/from Integer Lists</a>, Previous: <a href="Bytevector-Manipulation.html">Manipulating Bytevectors</a>, Up: <a href="Bytevectors.html">Bytevectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

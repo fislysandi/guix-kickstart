@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Booleans (Guile Reference Manual)</title>
+
+<meta name="description" content="Booleans (Guile Reference Manual)">
+<meta name="keywords" content="Booleans (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Data-Types.html" rel="up" title="Data Types">
+<link href="Numbers.html" rel="next" title="Numbers">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Booleans">
+<div class="nav-panel">
+<p>
+Next: <a href="Numbers.html" accesskey="n" rel="next">Numerical data types</a>, Up: <a href="Data-Types.html" accesskey="u" rel="up">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Booleans-1">6.6.1 Booleans</h4>
+<a class="index-entry-id" id="index-Booleans"></a>
+
+<p>The two boolean values are <code class="code">#t</code> for true and <code class="code">#f</code> for false.
+They can also be written as <code class="code">#true</code> and <code class="code">#false</code>, as per R7RS.
+</p>
+<p>Boolean values are returned by predicate procedures, such as the general
+equality predicates <code class="code">eq?</code>, <code class="code">eqv?</code> and <code class="code">equal?</code>
+(see <a class="pxref" href="Equality.html">Equality</a>) and numerical and string comparison operators like
+<code class="code">string=?</code> (see <a class="pxref" href="String-Comparison.html">String Comparison</a>) and <code class="code">&lt;=</code>
+(see <a class="pxref" href="Comparison.html">Comparison Predicates</a>).
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(&lt;= 3 8)
+&rArr; #t
+
+(&lt;= 3 -3)
+&rArr; #f
+
+(equal? &quot;house&quot; &quot;houses&quot;)
+&rArr; #f
+
+(eq? #f #f)
+&rArr;
+#t
+</pre></div>
+
+<p>In test condition contexts like <code class="code">if</code> and <code class="code">cond</code>
+(see <a class="pxref" href="Conditionals.html">Simple Conditional Evaluation</a>), where a group of subexpressions will be
+evaluated only if a <var class="var">condition</var> expression evaluates to &ldquo;true&rdquo;,
+&ldquo;true&rdquo; means any value at all except <code class="code">#f</code>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(if #t &quot;yes&quot; &quot;no&quot;)
+&rArr; &quot;yes&quot;
+
+(if 0 &quot;yes&quot; &quot;no&quot;)
+&rArr; &quot;yes&quot;
+
+(if #f &quot;yes&quot; &quot;no&quot;)
+&rArr; &quot;no&quot;
+</pre></div>
+
+<p>A result of this asymmetry is that typical Scheme source code more often
+uses <code class="code">#f</code> explicitly than <code class="code">#t</code>: <code class="code">#f</code> is necessary to
+represent an <code class="code">if</code> or <code class="code">cond</code> false value, whereas <code class="code">#t</code> is
+not necessary to represent an <code class="code">if</code> or <code class="code">cond</code> true value.
+</p>
+<p>It is important to note that <code class="code">#f</code> is <strong class="strong">not</strong> equivalent to any
+other Scheme value.  In particular, <code class="code">#f</code> is not the same as the
+number 0 (like in C and C++), and not the same as the &ldquo;empty list&rdquo;
+(like in some Lisp dialects).
+</p>
+<p>In C, the two Scheme boolean values are available as the two constants
+<code class="code">SCM_BOOL_T</code> for <code class="code">#t</code> and <code class="code">SCM_BOOL_F</code> for <code class="code">#f</code>.
+Care must be taken with the false value <code class="code">SCM_BOOL_F</code>: it is not
+false when used in C conditionals.  In order to test for it, use
+<code class="code">scm_is_false</code> or <code class="code">scm_is_true</code>.
+</p>
+<a class="index-entry-id" id="index-not-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-not"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">not</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-not'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fnot"><span class="category-def">C Function: </span><span><strong class="def-name">scm_not</strong> <var class="def-var-arguments">(x)</var><a class="copiable-link" href='#index-scm_005fnot'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">x</var> is <code class="code">#f</code>, else return <code class="code">#f</code>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-boolean_003f-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-boolean_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">boolean?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-boolean_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fboolean_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_boolean_p</strong> <var class="def-var-arguments">(obj)</var><a class="copiable-link" href='#index-scm_005fboolean_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is either <code class="code">#t</code> or <code class="code">#f</code>, else
+return <code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deftypevr">
+<dt class="deftypevr" id="index-SCM_005fBOOL_005fT"><span class="category-def">C Macro: </span><span><code class="def-type">SCM</code> <strong class="def-name">SCM_BOOL_T</strong><a class="copiable-link" href='#index-SCM_005fBOOL_005fT'> &para;</a></span></dt>
+<dd><p>The <code class="code">SCM</code> representation of the Scheme object <code class="code">#t</code>.
+</p></dd></dl>
+
+<dl class="first-deftypevr">
+<dt class="deftypevr" id="index-SCM_005fBOOL_005fF"><span class="category-def">C Macro: </span><span><code class="def-type">SCM</code> <strong class="def-name">SCM_BOOL_F</strong><a class="copiable-link" href='#index-SCM_005fBOOL_005fF'> &para;</a></span></dt>
+<dd><p>The <code class="code">SCM</code> representation of the Scheme object <code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fis_005ftrue"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_is_true</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-scm_005fis_005ftrue'> &para;</a></span></dt>
+<dd><p>Return <code class="code">0</code> if <var class="var">obj</var> is <code class="code">#f</code>, else return <code class="code">1</code>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fis_005ffalse"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_is_false</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-scm_005fis_005ffalse'> &para;</a></span></dt>
+<dd><p>Return <code class="code">1</code> if <var class="var">obj</var> is <code class="code">#f</code>, else return <code class="code">0</code>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fis_005fbool"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_is_bool</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-scm_005fis_005fbool'> &para;</a></span></dt>
+<dd><p>Return <code class="code">1</code> if <var class="var">obj</var> is either <code class="code">#t</code> or <code class="code">#f</code>, else
+return <code class="code">0</code>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005ffrom_005fbool"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_bool</strong> <code class="def-code-arguments">(int val)</code><a class="copiable-link" href='#index-scm_005ffrom_005fbool'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#f</code> if <var class="var">val</var> is <code class="code">0</code>, else return <code class="code">#t</code>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fto_005fbool"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_to_bool</strong> <code class="def-code-arguments">(SCM val)</code><a class="copiable-link" href='#index-scm_005fto_005fbool'> &para;</a></span></dt>
+<dd><p>Return <code class="code">1</code> if <var class="var">val</var> is <code class="code">SCM_BOOL_T</code>, return <code class="code">0</code>
+when <var class="var">val</var> is <code class="code">SCM_BOOL_F</code>, else signal a &lsquo;wrong type&rsquo; error.
+</p>
+<p>You should probably use <code class="code">scm_is_true</code> instead of this function
+when you just want to test a <code class="code">SCM</code> value for trueness.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Numbers.html">Numerical data types</a>, Up: <a href="Data-Types.html">Data Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

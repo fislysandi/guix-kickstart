@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Tree-IL (Guile Reference Manual)</title>
+
+<meta name="description" content="Tree-IL (Guile Reference Manual)">
+<meta name="keywords" content="Tree-IL (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Compiling-to-the-Virtual-Machine.html" rel="up" title="Compiling to the Virtual Machine">
+<link href="Continuation_002dPassing-Style.html" rel="next" title="Continuation-Passing Style">
+<link href="The-Scheme-Compiler.html" rel="prev" title="The Scheme Compiler">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Tree_002dIL">
+<div class="nav-panel">
+<p>
+Next: <a href="Continuation_002dPassing-Style.html" accesskey="n" rel="next">Continuation-Passing Style</a>, Previous: <a href="The-Scheme-Compiler.html" accesskey="p" rel="prev">The Scheme Compiler</a>, Up: <a href="Compiling-to-the-Virtual-Machine.html" accesskey="u" rel="up">Compiling to the Virtual Machine</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Tree_002dIL-1">9.4.3 Tree-IL</h4>
+
+<p>Tree Intermediate Language (Tree-IL) is a structured intermediate
+language that is close in expressive power to Scheme. It is an
+expanded, pre-analyzed Scheme.
+</p>
+<p>Tree-IL is &ldquo;structured&rdquo; in the sense that its representation is
+based on records, not S-expressions. This gives a rigidity to the
+language that ensures that compiling to a lower-level language only
+requires a limited set of transformations. For example, the Tree-IL
+type <code class="code">&lt;const&gt;</code> is a record type with two fields, <code class="code">src</code> and
+<code class="code">exp</code>. Instances of this type are created via <code class="code">make-const</code>.
+Fields of this type are accessed via the <code class="code">const-src</code> and
+<code class="code">const-exp</code> procedures. There is also a predicate, <code class="code">const?</code>.
+See <a class="xref" href="Records.html">Records</a>, for more information on records.
+</p>
+
+<p>All Tree-IL types have a <code class="code">src</code> slot, which holds source location
+information for the expression. This information, if present, will be
+residualized into the compiled object code, allowing backtraces to
+show source information. The format of <code class="code">src</code> is the same as that
+returned by Guile&rsquo;s <code class="code">source-properties</code> function. See <a class="xref" href="Source-Properties.html">Source Properties</a>, for more information.
+</p>
+<p>Although Tree-IL objects are represented internally using records,
+there is also an equivalent S-expression external representation for
+each kind of Tree-IL. For example, the S-expression representation
+of <code class="code">#&lt;const src: #f exp: 3&gt;</code> expression would be:
+</p>
+<div class="example">
+<pre class="example-preformatted">(const 3)
+</pre></div>
+
+<p>Users may program with this format directly at the REPL:
+</p>
+<div class="example">
+<pre class="example-preformatted">scheme@(guile-user)&gt; ,language tree-il
+Happy hacking with Tree Intermediate Language!  To switch back, type `,L scheme'.
+tree-il@(guile-user)&gt; (call (primitive +) (const 32) (const 10))
+&rArr; 42
+</pre></div>
+
+<p>The <code class="code">src</code> fields are left out of the external representation.
+</p>
+<p>One may create Tree-IL objects from their external representations via
+calling <code class="code">parse-tree-il</code>, the reader for Tree-IL. If any source
+information is attached to the input S-expression, it will be
+propagated to the resulting Tree-IL expressions. This is probably the
+easiest way to compile to Tree-IL: just make the appropriate external
+representations in S-expression format, and let <code class="code">parse-tree-il</code>
+take care of the rest.
+</p>
+<dl class="first-deftp">
+<dt class="deftp" id="index-_003cvoid_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;void&gt;</strong> <var class="def-var-arguments">src</var><a class="copiable-link" href='#index-_003cvoid_003e'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028void_0029"><span class="category-def">External Representation: </span><span><strong class="def-name">(void)</strong><a class="copiable-link" href='#index-_0028void_0029'> &para;</a></span></dt>
+<dd><p>An empty expression.  In practice, equivalent to Scheme&rsquo;s <code class="code">(if #f
+#f)</code>.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_003cconst_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;const&gt;</strong> <var class="def-var-arguments">src exp</var><a class="copiable-link" href='#index-_003cconst_003e'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028const"><span class="category-def">External Representation: </span><span><strong class="def-name">(const</strong> <var class="def-var-arguments"><var class="var">exp</var>)</var><a class="copiable-link" href='#index-_0028const'> &para;</a></span></dt>
+<dd><p>A constant.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_003cprimitive_002dref_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;primitive-ref&gt;</strong> <var class="def-var-arguments">src name</var><a class="copiable-link" href='#index-_003cprimitive_002dref_003e'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028primitive"><span class="category-def">External Representation: </span><span><strong class="def-name">(primitive</strong> <var class="def-var-arguments"><var class="var">name</var>)</var><a class="copiable-link" href='#index-_0028primitive'> &para;</a></span></dt>
+<dd><p>A reference to a &ldquo;primitive&rdquo;.  A primitive is a procedure that, when
+compiled, may be open-coded.  For example, <code class="code">cons</code> is usually
+recognized as a primitive, so that it compiles down to a single
+instruction.
+</p>
+<p>Compilation of Tree-IL usually begins with a pass that resolves some
+<code class="code">&lt;module-ref&gt;</code> and <code class="code">&lt;toplevel-ref&gt;</code> expressions to
+<code class="code">&lt;primitive-ref&gt;</code> expressions.  The actual compilation pass has
+special cases for calls to certain primitives, like <code class="code">apply</code> or
+<code class="code">cons</code>.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_003clexical_002dref_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;lexical-ref&gt;</strong> <var class="def-var-arguments">src name gensym</var><a class="copiable-link" href='#index-_003clexical_002dref_003e'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028lexical"><span class="category-def">External Representation: </span><span><strong class="def-name">(lexical</strong> <var class="def-var-arguments"><var class="var">name</var> <var class="var">gensym</var>)</var><a class="copiable-link" href='#index-_0028lexical'> &para;</a></span></dt>
+<dd><p>A reference to a lexically-bound variable.  The <var class="var">name</var> is the
+original name of the variable in the source program. <var class="var">gensym</var> is a
+unique identifier for this variable.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_003clexical_002dset_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;lexical-set&gt;</strong> <var class="def-var-arguments">src name gensym exp</var><a class="copiable-link" href='#index-_003clexical_002dset_003e'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028set_0021"><span class="category-def">External Representation: </span><span><strong class="def-name">(set!</strong> <var class="def-var-arguments">(lexical <var class="var">name</var> <var class="var">gensym</var>) <var class="var">exp</var>)</var><a class="copiable-link" href='#index-_0028set_0021'> &para;</a></span></dt>
+<dd><p>Sets a lexically-bound variable.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_003cmodule_002dref_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;module-ref&gt;</strong> <var class="def-var-arguments">src mod name public?</var><a class="copiable-link" href='#index-_003cmodule_002dref_003e'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028_0040"><span class="category-def">External Representation: </span><span><strong class="def-name">(@</strong> <var class="def-var-arguments"><var class="var">mod</var> <var class="var">name</var>)</var><a class="copiable-link" href='#index-_0028_0040'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028_0040_0040"><span class="category-def">External Representation: </span><span><strong class="def-name">(@@</strong> <var class="def-var-arguments"><var class="var">mod</var> <var class="var">name</var>)</var><a class="copiable-link" href='#index-_0028_0040_0040'> &para;</a></span></dt>
+<dd><p>A reference to a variable in a specific module. <var class="var">mod</var> should be
+the name of the module, e.g. <code class="code">(guile-user)</code>.
+</p>
+<p>If <var class="var">public?</var> is true, the variable named <var class="var">name</var> will be looked
+up in <var class="var">mod</var>&rsquo;s public interface, and serialized with <code class="code">@</code>;
+otherwise it will be looked up among the module&rsquo;s private bindings,
+and is serialized with <code class="code">@@</code>.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_003cmodule_002dset_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;module-set&gt;</strong> <var class="def-var-arguments">src mod name public? exp</var><a class="copiable-link" href='#index-_003cmodule_002dset_003e'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028set_0021-1"><span class="category-def">External Representation: </span><span><strong class="def-name">(set!</strong> <var class="def-var-arguments">(@ <var class="var">mod</var> <var class="var">name</var>) <var class="var">exp</var>)</var><a class="copiable-link" href='#index-_0028set_0021-1'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028set_0021-2"><span class="category-def">External Representation: </span><span><strong class="def-name">(set!</strong> <var class="def-var-arguments">(@@ <var class="var">mod</var> <var class="var">name</var>) <var class="var">exp</var>)</var><a class="copiable-link" href='#index-_0028set_0021-2'> &para;</a></span></dt>
+<dd><p>Sets a variable in a specific module.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_003ctoplevel_002dref_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;toplevel-ref&gt;</strong> <var class="def-var-arguments">src name</var><a class="copiable-link" href='#index-_003ctoplevel_002dref_003e'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028toplevel"><span class="category-def">External Representation: </span><span><strong class="def-name">(toplevel</strong> <var class="def-var-arguments"><var class="var">name</var>)</var><a class="copiable-link" href='#index-_0028toplevel'> &para;</a></span></dt>
+<dd><p>References a variable from the current procedure&rsquo;s module.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_003ctoplevel_002dset_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;toplevel-set&gt;</strong> <var class="def-var-arguments">src name exp</var><a class="copiable-link" href='#index-_003ctoplevel_002dset_003e'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028set_0021-3"><span class="category-def">External Representation: </span><span><strong class="def-name">(set!</strong> <var class="def-var-arguments">(toplevel <var class="var">name</var>) <var class="var">exp</var>)</var><a class="copiable-link" href='#index-_0028set_0021-3'> &para;</a></span></dt>
+<dd><p>Sets a variable in the current procedure&rsquo;s module.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_003ctoplevel_002ddefine_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;toplevel-define&gt;</strong> <var class="def-var-arguments">src name exp</var><a class="copiable-link" href='#index-_003ctoplevel_002ddefine_003e'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028define"><span class="category-def">External Representation: </span><span><strong class="def-name">(define</strong> <var class="def-var-arguments"><var class="var">name</var> <var class="var">exp</var>)</var><a class="copiable-link" href='#index-_0028define'> &para;</a></span></dt>
+<dd><p>Defines a new top-level variable in the current procedure&rsquo;s module.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_003cconditional_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;conditional&gt;</strong> <var class="def-var-arguments">src test then else</var><a class="copiable-link" href='#index-_003cconditional_003e'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028if"><span class="category-def">External Representation: </span><span><strong class="def-name">(if</strong> <var class="def-var-arguments"><var class="var">test</var> <var class="var">then</var> <var class="var">else</var>)</var><a class="copiable-link" href='#index-_0028if'> &para;</a></span></dt>
+<dd><p>A conditional. Note that <var class="var">else</var> is not optional.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_003ccall_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;call&gt;</strong> <var class="def-var-arguments">src proc args</var><a class="copiable-link" href='#index-_003ccall_003e'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028call"><span class="category-def">External Representation: </span><span><strong class="def-name">(call</strong> <var class="def-var-arguments"><var class="var">proc</var> . <var class="var">args</var>)</var><a class="copiable-link" href='#index-_0028call'> &para;</a></span></dt>
+<dd><p>A procedure call.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_003cprimcall_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;primcall&gt;</strong> <var class="def-var-arguments">src name args</var><a class="copiable-link" href='#index-_003cprimcall_003e'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028primcall"><span class="category-def">External Representation: </span><span><strong class="def-name">(primcall</strong> <var class="def-var-arguments"><var class="var">name</var> . <var class="var">args</var>)</var><a class="copiable-link" href='#index-_0028primcall'> &para;</a></span></dt>
+<dd><p>A call to a primitive.  Equivalent to <code class="code">(call (primitive <var class="var">name</var>)
+. <var class="var">args</var>)</code>.  This construct is often more convenient to generate and
+analyze than <code class="code">&lt;call&gt;</code>.
+</p>
+<p>As part of the compilation process, instances of <code class="code">(call (primitive
+<var class="var">name</var>) . <var class="var">args</var>)</code> are transformed into primcalls.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_003cseq_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;seq&gt;</strong> <var class="def-var-arguments">src head tail</var><a class="copiable-link" href='#index-_003cseq_003e'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028seq"><span class="category-def">External Representation: </span><span><strong class="def-name">(seq</strong> <var class="def-var-arguments"><var class="var">head</var> <var class="var">tail</var>)</var><a class="copiable-link" href='#index-_0028seq'> &para;</a></span></dt>
+<dd><p>A sequence.  The semantics is that <var class="var">head</var> is evaluated first, and
+any resulting values are ignored.  Then <var class="var">tail</var> is evaluated, in tail
+position.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_003clambda_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;lambda&gt;</strong> <var class="def-var-arguments">src meta body</var><a class="copiable-link" href='#index-_003clambda_003e'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028lambda"><span class="category-def">External Representation: </span><span><strong class="def-name">(lambda</strong> <var class="def-var-arguments"><var class="var">meta</var> <var class="var">body</var>)</var><a class="copiable-link" href='#index-_0028lambda'> &para;</a></span></dt>
+<dd><p>A closure.  <var class="var">meta</var> is an association list of properties for the
+procedure.  <var class="var">body</var> is a single Tree-IL expression of type
+<code class="code">&lt;lambda-case&gt;</code>.  As the <code class="code">&lt;lambda-case&gt;</code> clause can chain to
+an alternate clause, this makes Tree-IL&rsquo;s <code class="code">&lt;lambda&gt;</code> have the
+expressiveness of Scheme&rsquo;s <code class="code">case-lambda</code>.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_003clambda_002dcase_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;lambda-case&gt;</strong> <var class="def-var-arguments">req opt rest kw inits gensyms body alternate</var><a class="copiable-link" href='#index-_003clambda_002dcase_003e'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028lambda_002dcase"><span class="category-def">External Representation: </span><span><strong class="def-name">(lambda-case</strong> <var class="def-var-arguments">((<var class="var">req</var> <var class="var">opt</var> <var class="var">rest</var> <var class="var">kw</var> <var class="var">inits</var> <var class="var">gensyms</var>)                <var class="var">body</var>)               [<var class="var">alternate</var>])</var><a class="copiable-link" href='#index-_0028lambda_002dcase'> &para;</a></span></dt>
+<dd><p>One clause of a <code class="code">case-lambda</code>.  A <code class="code">lambda</code> expression in
+Scheme is treated as a <code class="code">case-lambda</code> with one clause.
+</p>
+<p><var class="var">req</var> is a list of the procedure&rsquo;s required arguments, as symbols.
+<var class="var">opt</var> is a list of the optional arguments, or <code class="code">#f</code> if there
+are no optional arguments. <var class="var">rest</var> is the name of the rest
+argument, or <code class="code">#f</code>.
+</p>
+<p><var class="var">kw</var> is a list of the form, <code class="code">(<var class="var">allow-other-keys?</var>
+(<var class="var">keyword</var> <var class="var">name</var> <var class="var">var</var>) ...)</code>, where <var class="var">keyword</var> is the
+keyword corresponding to the argument named <var class="var">name</var>, and whose
+corresponding gensym is <var class="var">var</var>, or <code class="code">#f</code> if there are no keyword
+arguments.  <var class="var">inits</var> are tree-il expressions corresponding to all of
+the optional and keyword arguments, evaluated to bind variables whose
+value is not supplied by the procedure caller.  Each <var class="var">init</var>
+expression is evaluated in the lexical context of previously bound
+variables, from left to right.
+</p>
+<p><var class="var">gensyms</var> is a list of gensyms corresponding to all arguments:
+first all of the required arguments, then the optional arguments if
+any, then the rest argument if any, then all of the keyword arguments.
+</p>
+<p><var class="var">body</var> is the body of the clause.  If the procedure is called with
+an appropriate number of arguments, <var class="var">body</var> is evaluated in tail
+position.  Otherwise, if there is an <var class="var">alternate</var>, it should be a
+<code class="code">&lt;lambda-case&gt;</code> expression, representing the next clause to try.
+If there is no <var class="var">alternate</var>, a wrong-number-of-arguments error is
+signaled.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_003clet_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;let&gt;</strong> <var class="def-var-arguments">src names gensyms vals exp</var><a class="copiable-link" href='#index-_003clet_003e'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028let"><span class="category-def">External Representation: </span><span><strong class="def-name">(let</strong> <var class="def-var-arguments"><var class="var">names</var> <var class="var">gensyms</var> <var class="var">vals</var> <var class="var">exp</var>)</var><a class="copiable-link" href='#index-_0028let'> &para;</a></span></dt>
+<dd><p>Lexical binding, like Scheme&rsquo;s <code class="code">let</code>.  <var class="var">names</var> are the original
+binding names, <var class="var">gensyms</var> are gensyms corresponding to the
+<var class="var">names</var>, and <var class="var">vals</var> are Tree-IL expressions for the values.
+<var class="var">exp</var> is a single Tree-IL expression.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_003cletrec_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;letrec&gt;</strong> <var class="def-var-arguments">in-order? src names gensyms vals exp</var><a class="copiable-link" href='#index-_003cletrec_003e'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028letrec"><span class="category-def">External Representation: </span><span><strong class="def-name">(letrec</strong> <var class="def-var-arguments"><var class="var">names</var> <var class="var">gensyms</var> <var class="var">vals</var> <var class="var">exp</var>)</var><a class="copiable-link" href='#index-_0028letrec'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028letrec_002a"><span class="category-def">External Representation: </span><span><strong class="def-name">(letrec*</strong> <var class="def-var-arguments"><var class="var">names</var> <var class="var">gensyms</var> <var class="var">vals</var> <var class="var">exp</var>)</var><a class="copiable-link" href='#index-_0028letrec_002a'> &para;</a></span></dt>
+<dd><p>A version of <code class="code">&lt;let&gt;</code> that creates recursive bindings, like
+Scheme&rsquo;s <code class="code">letrec</code>, or <code class="code">letrec*</code> if <var class="var">in-order?</var> is true.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_003cprompt_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;prompt&gt;</strong> <var class="def-var-arguments">escape-only? tag body handler</var><a class="copiable-link" href='#index-_003cprompt_003e'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028prompt"><span class="category-def">External Representation: </span><span><strong class="def-name">(prompt</strong> <var class="def-var-arguments"><var class="var">escape-only?</var> <var class="var">tag</var> <var class="var">body</var> <var class="var">handler</var>)</var><a class="copiable-link" href='#index-_0028prompt'> &para;</a></span></dt>
+<dd><p>A dynamic prompt.  Instates a prompt named <var class="var">tag</var>, an expression,
+during the dynamic extent of the execution of <var class="var">body</var>, also an
+expression.  If an abort occurs to this prompt, control will be passed
+to <var class="var">handler</var>, also an expression, which should be a procedure.  The
+first argument to the handler procedure will be the captured
+continuation, followed by all of the values passed to the abort.  If
+<var class="var">escape-only?</var> is true, the handler should be a <code class="code">&lt;lambda&gt;</code> with
+a single <code class="code">&lt;lambda-case&gt;</code> body expression with no optional or
+keyword arguments, and no alternate, and whose first argument is
+unreferenced.  See <a class="xref" href="Prompts.html">Prompts</a>, for more information.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_003cabort_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;abort&gt;</strong> <var class="def-var-arguments">tag args tail</var><a class="copiable-link" href='#index-_003cabort_003e'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028abort"><span class="category-def">External Representation: </span><span><strong class="def-name">(abort</strong> <var class="def-var-arguments"><var class="var">tag</var> <var class="var">args</var> <var class="var">tail</var>)</var><a class="copiable-link" href='#index-_0028abort'> &para;</a></span></dt>
+<dd><p>An abort to the nearest prompt with the name <var class="var">tag</var>, an expression.
+<var class="var">args</var> should be a list of expressions to pass to the prompt&rsquo;s
+handler, and <var class="var">tail</var> should be an expression that will evaluate to
+a list of additional arguments.  An abort will save the partial
+continuation, which may later be reinstated, resulting in the
+<code class="code">&lt;abort&gt;</code> expression evaluating to some number of values.
+</p></dd></dl>
+
+<p>There are two Tree-IL constructs that are not normally produced by
+higher-level compilers, but instead are generated during the
+source-to-source optimization and analysis passes that the Tree-IL
+compiler does.  Users should not generate these expressions directly,
+unless they feel very clever, as the default analysis pass will generate
+them as necessary.
+</p>
+<dl class="first-deftp">
+<dt class="deftp" id="index-_003clet_002dvalues_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;let-values&gt;</strong> <var class="def-var-arguments">src names gensyms exp body</var><a class="copiable-link" href='#index-_003clet_002dvalues_003e'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028let_002dvalues"><span class="category-def">External Representation: </span><span><strong class="def-name">(let-values</strong> <var class="def-var-arguments"><var class="var">names</var> <var class="var">gensyms</var> <var class="var">exp</var> <var class="var">body</var>)</var><a class="copiable-link" href='#index-_0028let_002dvalues'> &para;</a></span></dt>
+<dd><p>Like Scheme&rsquo;s <code class="code">receive</code> &ndash; binds the values returned by
+evaluating <code class="code">exp</code> to the <code class="code">lambda</code>-like bindings described by
+<var class="var">gensyms</var>.  That is to say, <var class="var">gensyms</var> may be an improper list.
+</p>
+<p><code class="code">&lt;let-values&gt;</code> is an optimization of a <code class="code">&lt;call&gt;</code> to the
+primitive, <code class="code">call-with-values</code>.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_003cfix_003e"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">&lt;fix&gt;</strong> <var class="def-var-arguments">src names gensyms vals body</var><a class="copiable-link" href='#index-_003cfix_003e'> &para;</a></span></dt>
+<dt class="deftpx def-cmd-deftp" id="index-_0028fix"><span class="category-def">External Representation: </span><span><strong class="def-name">(fix</strong> <var class="def-var-arguments"><var class="var">names</var> <var class="var">gensyms</var> <var class="var">vals</var> <var class="var">body</var>)</var><a class="copiable-link" href='#index-_0028fix'> &para;</a></span></dt>
+<dd><p>Like <code class="code">&lt;letrec&gt;</code>, but only for <var class="var">vals</var> that are unset
+<code class="code">lambda</code> expressions.
+</p>
+<p><code class="code">fix</code> is an optimization of <code class="code">letrec</code> (and <code class="code">let</code>).
+</p></dd></dl>
+
+<p>Tree-IL is a convenient compilation target from source languages.  It
+can be convenient as a medium for optimization, though CPS is usually
+better.  The strength of Tree-IL is that it does not fix order of
+evaluation, so it makes some code motion a bit easier.
+</p>
+<p>Optimization passes performed on Tree-IL currently include:
+</p>
+<ul class="itemize mark-bullet">
+<li>Open-coding (turning toplevel-refs into primitive-refs,
+and calls to primitives to primcalls)
+</li><li>Partial evaluation (comprising inlining, copy propagation, and
+constant folding)
+</li></ul>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Continuation_002dPassing-Style.html">Continuation-Passing Style</a>, Previous: <a href="The-Scheme-Compiler.html">The Scheme Compiler</a>, Up: <a href="Compiling-to-the-Virtual-Machine.html">Compiling to the Virtual Machine</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

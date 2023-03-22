@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Gettext Support (Guile Reference Manual)</title>
+
+<meta name="description" content="Gettext Support (Guile Reference Manual)">
+<meta name="keywords" content="Gettext Support (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Internationalization.html" rel="up" title="Internationalization">
+<link href="Accessing-Locale-Information.html" rel="prev" title="Accessing Locale Information">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Gettext-Support">
+<div class="nav-panel">
+<p>
+Previous: <a href="Accessing-Locale-Information.html" accesskey="p" rel="prev">Accessing Locale Information</a>, Up: <a href="Internationalization.html" accesskey="u" rel="up">Support for Internationalization</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Gettext-Support-1">6.25.6 Gettext Support</h4>
+
+<p>Guile provides an interface to GNU <code class="code">gettext</code> for translating
+message strings (see <a data-manual="gettext" href="http://www.gnu.org/software/gettext/manual/html_node/Introduction.html#Introduction">Introduction</a> in <cite class="cite">GNU <code class="code">gettext</code>
+utilities</cite>).
+</p>
+<p>Messages are collected in domains, so different libraries and programs
+maintain different message catalogues.  The <var class="var">domain</var> parameter in
+the functions below is a string (it becomes part of the message
+catalog filename).
+</p>
+<p>When <code class="code">gettext</code> is not available, or if Guile was configured
+&lsquo;<samp class="samp">--without-nls</samp>&rsquo;, dummy functions doing no translation are
+provided.  When <code class="code">gettext</code> support is available in Guile, the
+<code class="code">i18n</code> feature is provided (see <a class="pxref" href="Feature-Tracking.html">Feature Tracking</a>).
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-gettext"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">gettext</strong> <var class="def-var-arguments">msg [domain [category]]</var><a class="copiable-link" href='#index-gettext'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgettext"><span class="category-def">C Function: </span><span><strong class="def-name">scm_gettext</strong> <var class="def-var-arguments">(msg, domain, category)</var><a class="copiable-link" href='#index-scm_005fgettext'> &para;</a></span></dt>
+<dd><p>Return the translation of <var class="var">msg</var> in <var class="var">domain</var>.  <var class="var">domain</var> is
+optional and defaults to the domain set through <code class="code">textdomain</code>
+below.  <var class="var">category</var> is optional and defaults to <code class="code">LC_MESSAGES</code>
+(see <a class="pxref" href="Locales.html">Locales</a>).
+</p>
+<p>Normal usage is for <var class="var">msg</var> to be a literal string.
+<code class="command">xgettext</code> can extract those from the source to form a message
+catalogue ready for translators (see <a data-manual="gettext" href="http://www.gnu.org/software/gettext/manual/html_node/xgettext-Invocation.html#xgettext-Invocation">Invoking
+the <code class="command">xgettext</code> Program</a> in <cite class="cite">GNU <code class="code">gettext</code>
+utilities</cite>).
+</p>
+<div class="example">
+<pre class="example-preformatted">(display (gettext &quot;You are in a maze of twisty passages.&quot;))
+</pre></div>
+
+<p>It is conventional to use <code class="code">G_</code> as a shorthand for
+<code class="code">gettext</code>.<a class="footnote" id="DOCF23" href="#FOOT23"><sup>23</sup></a>  Libraries can define <code class="code">G_</code> in such
+a way to look up translations using its specific <var class="var">domain</var>, allowing
+different parts of a program to have different translation sources.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (G_ msg) (gettext msg &quot;mylibrary&quot;))
+(display (G_ &quot;File not found.&quot;))
+</pre></div>
+
+<p><code class="code">G_</code> is also a good place to perhaps strip disambiguating extra
+text from the message string, as for instance in <a data-manual="gettext" href="http://www.gnu.org/software/gettext/manual/html_node/GUI-program-problems.html#GUI-program-problems">How to use <code class="code">gettext</code> in GUI programs</a> in <cite class="cite">GNU
+<code class="code">gettext</code> utilities</cite>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ngettext"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ngettext</strong> <var class="def-var-arguments">msg msgplural n [domain [category]]</var><a class="copiable-link" href='#index-ngettext'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fngettext"><span class="category-def">C Function: </span><span><strong class="def-name">scm_ngettext</strong> <var class="def-var-arguments">(msg, msgplural, n, domain, category)</var><a class="copiable-link" href='#index-scm_005fngettext'> &para;</a></span></dt>
+<dd><p>Return the translation of <var class="var">msg</var>/<var class="var">msgplural</var> in <var class="var">domain</var>,
+with a plural form chosen appropriately for the number <var class="var">n</var>.
+<var class="var">domain</var> is optional and defaults to the domain set through
+<code class="code">textdomain</code> below.  <var class="var">category</var> is optional and defaults to
+<code class="code">LC_MESSAGES</code> (see <a class="pxref" href="Locales.html">Locales</a>).
+</p>
+<p><var class="var">msg</var> is the singular form, and <var class="var">msgplural</var> the plural.  When
+no translation is available, <var class="var">msg</var> is used if <em class="math"><var class="var">n</var> = 1</em>,
+or <var class="var">msgplural</var> otherwise.  When translated, the message catalogue
+can have a different rule, and can have more than two possible forms.
+</p>
+<p>As per <code class="code">gettext</code> above, normal usage is for <var class="var">msg</var> and
+<var class="var">msgplural</var> to be literal strings, since <code class="command">xgettext</code> can
+extract them from the source to build a message catalogue.  For
+example,
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (done n)
+  (format #t (ngettext &quot;~a file processed\n&quot;
+                       &quot;~a files processed\n&quot; n)
+             n))
+
+(done 1) -| 1 file processed
+(done 3) -| 3 files processed
+</pre></div>
+
+<p>It&rsquo;s important to use <code class="code">ngettext</code> rather than plain <code class="code">gettext</code>
+for plurals, since the rules for singular and plural forms in English
+are not the same in other languages.  Only <code class="code">ngettext</code> will allow
+translators to give correct forms (see <a data-manual="gettext" href="http://www.gnu.org/software/gettext/manual/html_node/Plural-forms.html#Plural-forms">Additional
+functions for plural forms</a> in <cite class="cite">GNU <code class="code">gettext</code> utilities</cite>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-textdomain"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">textdomain</strong> <var class="def-var-arguments">[domain]</var><a class="copiable-link" href='#index-textdomain'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005ftextdomain"><span class="category-def">C Function: </span><span><strong class="def-name">scm_textdomain</strong> <var class="def-var-arguments">(domain)</var><a class="copiable-link" href='#index-scm_005ftextdomain'> &para;</a></span></dt>
+<dd><p>Get or set the default gettext domain.  When called with no parameter
+the current domain is returned.  When called with a parameter,
+<var class="var">domain</var> is set as the current domain, and that new value
+returned.  For example,
+</p>
+<div class="example">
+<pre class="example-preformatted">(textdomain &quot;myprog&quot;)
+&rArr; &quot;myprog&quot;
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bindtextdomain"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bindtextdomain</strong> <var class="def-var-arguments">domain [directory]</var><a class="copiable-link" href='#index-bindtextdomain'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbindtextdomain"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bindtextdomain</strong> <var class="def-var-arguments">(domain, directory)</var><a class="copiable-link" href='#index-scm_005fbindtextdomain'> &para;</a></span></dt>
+<dd><p>Get or set the directory under which to find message files for
+<var class="var">domain</var>.  When called without a <var class="var">directory</var> the current
+setting is returned.  When called with a <var class="var">directory</var>,
+<var class="var">directory</var> is set for <var class="var">domain</var> and that new setting returned.
+For example,
+</p>
+<div class="example">
+<pre class="example-preformatted">(bindtextdomain &quot;myprog&quot; &quot;/my/tree/share/locale&quot;)
+&rArr; &quot;/my/tree/share/locale&quot;
+</pre></div>
+
+<p>When using Autoconf/Automake, an application should arrange for the
+configured <code class="code">localedir</code> to get into the program (by substituting,
+or by generating a config file) and set that for its domain.  This
+ensures the catalogue can be found even when installed in a
+non-standard location.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bind_002dtextdomain_002dcodeset"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bind-textdomain-codeset</strong> <var class="def-var-arguments">domain [encoding]</var><a class="copiable-link" href='#index-bind_002dtextdomain_002dcodeset'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbind_005ftextdomain_005fcodeset"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bind_textdomain_codeset</strong> <var class="def-var-arguments">(domain, encoding)</var><a class="copiable-link" href='#index-scm_005fbind_005ftextdomain_005fcodeset'> &para;</a></span></dt>
+<dd><p>Get or set the text encoding to be used by <code class="code">gettext</code> for messages
+from <var class="var">domain</var>.  <var class="var">encoding</var> is a string, the name of a coding
+system, for instance <code class="code">&quot;8859_1&quot;</code>.  (On a Unix/POSIX system the
+<code class="command">iconv</code> program can list all available encodings.)
+</p>
+<p>When called without an <var class="var">encoding</var> the current setting is returned,
+or <code class="code">#f</code> if none yet set.  When called with an <var class="var">encoding</var>, it
+is set for <var class="var">domain</var> and that new setting returned.  For example,
+</p>
+<div class="example">
+<pre class="example-preformatted">(bind-textdomain-codeset &quot;myprog&quot;)
+&rArr; #f
+(bind-textdomain-codeset &quot;myprog&quot; &quot;latin-9&quot;)
+&rArr; &quot;latin-9&quot;
+</pre></div>
+
+<p>The encoding requested can be different from the translated data file,
+messages will be recoded as necessary.  But note that when there is no
+translation, <code class="code">gettext</code> returns its <var class="var">msg</var> unchanged, ie.
+without any recoding.  For that reason source message strings are best
+as plain ASCII.
+</p>
+<p>Currently Guile has no understanding of multi-byte characters, and
+string functions won&rsquo;t recognise character boundaries in multi-byte
+strings.  An application will at least be able to pass such strings
+through to some output though.  Perhaps this will change in the
+future.
+</p></dd></dl>
+
+
+</div>
+<div class="footnotes-segment">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5 class="footnote-body-heading"><a id="FOOT23" href="#DOCF23">(23)</a></h5>
+<p>Users of <code class="code">gettext</code> might be a bit
+surprised that <code class="code">G_</code> is the conventional abbreviation for
+<code class="code">gettext</code>.  In most other languages, the conventional shorthand is
+<code class="code">_</code>.  Guile uses <code class="code">G_</code> because <code class="code">_</code> is already taken, as it
+is bound to a syntactic keyword used by <code class="code">syntax-rules</code>,
+<code class="code">match</code>, and other macros.</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Accessing-Locale-Information.html">Accessing Locale Information</a>, Up: <a href="Internationalization.html">Support for Internationalization</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

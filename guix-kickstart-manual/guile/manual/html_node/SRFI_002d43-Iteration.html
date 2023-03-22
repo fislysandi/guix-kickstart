@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-43 Iteration (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-43 Iteration (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-43 Iteration (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI_002d43.html" rel="up" title="SRFI-43">
+<link href="SRFI_002d43-Searching.html" rel="next" title="SRFI-43 Searching">
+<link href="SRFI_002d43-Selectors.html" rel="prev" title="SRFI-43 Selectors">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="SRFI_002d43-Iteration">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d43-Searching.html" accesskey="n" rel="next">SRFI-43 Searching</a>, Previous: <a href="SRFI_002d43-Selectors.html" accesskey="p" rel="prev">SRFI-43 Selectors</a>, Up: <a href="SRFI_002d43.html" accesskey="u" rel="up">SRFI-43 - Vector Library</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="SRFI_002d43-Iteration-1">7.5.30.4 SRFI-43 Iteration</h4>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dfold"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-fold</strong> <var class="def-var-arguments">kons knil vec1 vec2 &hellip;</var><a class="copiable-link" href='#index-vector_002dfold'> &para;</a></span></dt>
+<dd><p>The fundamental vector iterator.  <var class="var">kons</var> is iterated over each index
+in all of the vectors, stopping at the end of the shortest; <var class="var">kons</var>
+is applied as
+</p><div class="example smalllisp lisp">
+<pre class="lisp-preformatted">(kons i state (vector-ref vec1 i) (vector-ref vec2 i) ...)
+</pre></div>
+<p>where <var class="var">state</var> is the current state value, and <var class="var">i</var> is the current
+index.  The current state value begins with <var class="var">knil</var>, and becomes
+whatever <var class="var">kons</var> returned at the respective iteration.  The iteration
+is strictly left-to-right.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dfold_002dright"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-fold-right</strong> <var class="def-var-arguments">kons knil vec1 vec2 &hellip;</var><a class="copiable-link" href='#index-vector_002dfold_002dright'> &para;</a></span></dt>
+<dd><p>Similar to <code class="code">vector-fold</code>, but it iterates right-to-left instead of
+left-to-right.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dmap"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-map</strong> <var class="def-var-arguments">f vec1 vec2 &hellip;</var><a class="copiable-link" href='#index-vector_002dmap'> &para;</a></span></dt>
+<dd><p>Return a new vector of the shortest size of the vector arguments.  Each
+element at index i of the new vector is mapped from the old vectors by
+</p><div class="example smalllisp lisp">
+<pre class="lisp-preformatted">(f i (vector-ref vec1 i) (vector-ref vec2 i) ...)
+</pre></div>
+<p>The dynamic order of application of <var class="var">f</var> is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dmap_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-map!</strong> <var class="def-var-arguments">f vec1 vec2 &hellip;</var><a class="copiable-link" href='#index-vector_002dmap_0021'> &para;</a></span></dt>
+<dd><p>Similar to <code class="code">vector-map</code>, but rather than mapping the new elements
+into a new vector, the new mapped elements are destructively inserted
+into <var class="var">vec1</var>.  The dynamic order of application of <var class="var">f</var> is
+unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dfor_002deach"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-for-each</strong> <var class="def-var-arguments">f vec1 vec2 &hellip;</var><a class="copiable-link" href='#index-vector_002dfor_002deach'> &para;</a></span></dt>
+<dd><p>Call <code class="code">(f i (vector-ref vec1 i) (vector-ref vec2 i) ...)</code> for each
+index i less than the length of the shortest vector passed.  The
+iteration is strictly left-to-right.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dcount"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-count</strong> <var class="def-var-arguments">pred? vec1 vec2 &hellip;</var><a class="copiable-link" href='#index-vector_002dcount'> &para;</a></span></dt>
+<dd><p>Count the number of parallel elements in the vectors that satisfy
+<var class="var">pred?</var>, which is applied, for each index i less than the length of
+the smallest vector, to i and each parallel element in the vectors at
+that index, in order.
+</p>
+<div class="example">
+<pre class="example-preformatted">(vector-count (lambda (i elt) (even? elt))
+              '#(3 1 4 1 5 9 2 5 6))
+&rArr; 3
+(vector-count (lambda (i x y) (&lt; x y))
+              '#(1 3 6 9) '#(2 4 6 8 10 12))
+&rArr; 2
+</pre></div>
+</dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d43-Searching.html">SRFI-43 Searching</a>, Previous: <a href="SRFI_002d43-Selectors.html">SRFI-43 Selectors</a>, Up: <a href="SRFI_002d43.html">SRFI-43 - Vector Library</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

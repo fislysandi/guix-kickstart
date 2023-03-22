@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Parallel Installations (Guile Reference Manual)</title>
+
+<meta name="description" content="Parallel Installations (Guile Reference Manual)">
+<meta name="keywords" content="Parallel Installations (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Programming-in-C.html" rel="up" title="Programming in C">
+<link href="Linking-Programs-With-Guile.html" rel="next" title="Linking Programs With Guile">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Parallel-Installations">
+<div class="nav-panel">
+<p>
+Next: <a href="Linking-Programs-With-Guile.html" accesskey="n" rel="next">Linking Programs With Guile</a>, Up: <a href="Programming-in-C.html" accesskey="u" rel="up">Programming in C</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Parallel-Installations-1">5.1 Parallel Installations</h3>
+
+<a class="index-entry-id" id="index-pkg_002dconfig"></a>
+<a class="index-entry-id" id="index-effective-version"></a>
+
+<p>Guile provides strong API and ABI stability guarantees during stable
+series, so that if a user writes a program against Guile version 2.2.3,
+it will be compatible with some future version 2.2.7.  We say in this
+case that 2.2 is the <em class="dfn">effective version</em>, composed of the major and
+minor versions, in this case 2 and 2.
+</p>
+<p>Users may install multiple effective versions of Guile, with each
+version&rsquo;s headers, libraries, and Scheme files under their own
+directories.  This provides the necessary stability guarantee for users,
+while also allowing Guile developers to evolve the language and its
+implementation.
+</p>
+<p>However, parallel installability does have a down-side, in that users
+need to know which version of Guile to ask for, when they build against
+Guile.  Guile solves this problem by installing a file to be read by the
+<code class="code">pkg-config</code> utility, a tool to query installed packages by name.
+Guile encodes the version into its pkg-config name, so that users can
+ask for <code class="code">guile-2.2</code> or <code class="code">guile-3.0</code>, as appropriate.
+</p>
+<p>For effective version 3.0, for example, you would
+invoke <code class="code">pkg-config --cflags --libs guile-3.0</code>
+to get the compilation and linking flags necessary to link to version
+3.0 of Guile.  You would typically run
+<code class="code">pkg-config</code> during the configuration phase of your program and use
+the obtained information in the Makefile.
+</p>
+<p>Guile&rsquo;s <code class="code">pkg-config</code> file,
+<samp class="file">guile-3.0.pc</samp>, defines additional useful
+variables:
+</p>
+<dl class="table">
+<dt id='index-sitedir'><span><code class="code">sitedir</code><a class="copiable-link" href='#index-sitedir'> &para;</a></span></dt>
+<dd><p>The default directory where Guile looks for Scheme source and compiled
+files (see <a class="pxref" href="Installing-Site-Packages.html">%site-dir</a>).  Run
+<code class="command">pkg-config guile-3.0 --variable=sitedir</code>
+to see its value.  See <a class="xref" href="Autoconf-Macros.html">GUILE_SITE_DIR</a>, for more on
+how to use it from Autoconf.
+</p>
+</dd>
+<dt id='index-extensiondir'><span><code class="code">extensiondir</code><a class="copiable-link" href='#index-extensiondir'> &para;</a></span></dt>
+<dd><p>The default directory where Guile looks for extensions&mdash;i.e., shared
+libraries providing additional features (see <a class="pxref" href="Foreign-Extensions.html">Foreign Extensions</a>).
+Run <code class="command">pkg-config guile-3.0
+--variable=extensiondir</code> to see its value.
+</p>
+</dd>
+<dt id='index-program-name-transformations_002c-dealing-with'><span><code class="code">guile</code><a class="copiable-link" href='#index-program-name-transformations_002c-dealing-with'> &para;</a></span></dt>
+<dt><code class="code">guild</code></dt>
+<dd><p>The absolute file name of the <code class="command">guile</code> and <code class="command">guild</code>
+commands<a class="footnote" id="DOCF3" href="#FOOT3"><sup>3</sup></a>.  Run <code class="command">pkg-config
+guile-3.0 --variable=guile</code> or
+<code class="code">--variable=guild</code> to see their value.
+</p>
+<p>These variables allow users to deal with program name transformations
+that may be specified when configuring Guile with
+<code class="code">--program-transform-name</code>, <code class="code">--program-suffix</code>, or
+<code class="code">--program-prefix</code> (see <a data-manual="autoconf" href="http://www.gnu.org/software/autoconf/manual/html_node/Transformation-Options.html#Transformation-Options">Transformation Options</a> in <cite class="cite">GNU
+Autoconf Manual</cite>).
+</p></dd>
+</dl>
+
+<p>See the <code class="code">pkg-config</code> man page, for more information, or its web
+site, <a class="url" href="http://pkg-config.freedesktop.org/">http://pkg-config.freedesktop.org/</a>.
+See <a class="xref" href="Autoconf-Support.html">Autoconf Support</a>, for more on checking for Guile from within a
+<code class="code">configure.ac</code> file.
+</p>
+
+
+</div>
+<div class="footnotes-segment">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5 class="footnote-body-heading"><a id="FOOT3" href="#DOCF3">(3)</a></h5>
+<p>The <code class="code">guile</code> and <code class="code">guild</code> variables defined
+starting from Guile version 2.0.12.</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Linking-Programs-With-Guile.html">Linking Programs With Guile</a>, Up: <a href="Programming-in-C.html">Programming in C</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

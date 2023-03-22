@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-60 (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-60 (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-60 (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI-Support.html" rel="up" title="SRFI Support">
+<link href="SRFI_002d61.html" rel="next" title="SRFI-61">
+<link href="SRFI_002d55.html" rel="prev" title="SRFI-55">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="SRFI_002d60">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d61.html" accesskey="n" rel="next">SRFI-61 - A more general <code class="code">cond</code> clause</a>, Previous: <a href="SRFI_002d55.html" accesskey="p" rel="prev">SRFI-55 - Requiring Features</a>, Up: <a href="SRFI-Support.html" accesskey="u" rel="up">SRFI Support Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="SRFI_002d60-_002d-Integers-as-Bits">7.5.34 SRFI-60 - Integers as Bits</h4>
+<a class="index-entry-id" id="index-SRFI_002d60"></a>
+<a class="index-entry-id" id="index-integers-as-bits"></a>
+<a class="index-entry-id" id="index-bitwise-logical"></a>
+
+<p>This SRFI provides various functions for treating integers as bits and
+for bitwise manipulations.  These functions can be obtained with,
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (srfi srfi-60))
+</pre></div>
+
+<p>Integers are treated as infinite precision twos-complement, the same
+as in the core logical functions (see <a class="pxref" href="Bitwise-Operations.html">Bitwise Operations</a>).  And
+likewise bit indexes start from 0 for the least significant bit.  The
+following functions in this SRFI are already in the Guile core,
+</p>
+<blockquote class="quotation">
+<p><code class="code">logand</code>,
+<code class="code">logior</code>,
+<code class="code">logxor</code>,
+<code class="code">lognot</code>,
+<code class="code">logtest</code>,
+<code class="code">logcount</code>,
+<code class="code">integer-length</code>,
+<code class="code">logbit?</code>,
+<code class="code">ash</code>
+</p></blockquote>
+
+<br>
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-bitwise_002dand"><span class="category-def">Function: </span><span><strong class="def-name">bitwise-and</strong> <var class="def-var-arguments">n1 ...</var><a class="copiable-link" href='#index-bitwise_002dand'> &para;</a></span></dt>
+<dt class="deffnx defunx-alias-deffnx def-cmd-deffn" id="index-bitwise_002dior"><span class="category-def">Function: </span><span><strong class="def-name">bitwise-ior</strong> <var class="def-var-arguments">n1 ...</var><a class="copiable-link" href='#index-bitwise_002dior'> &para;</a></span></dt>
+<dt class="deffnx defunx-alias-deffnx def-cmd-deffn" id="index-bitwise_002dxor"><span class="category-def">Function: </span><span><strong class="def-name">bitwise-xor</strong> <var class="def-var-arguments">n1 ...</var><a class="copiable-link" href='#index-bitwise_002dxor'> &para;</a></span></dt>
+<dt class="deffnx defunx-alias-deffnx def-cmd-deffn" id="index-bitwise_002dnot"><span class="category-def">Function: </span><span><strong class="def-name">bitwise-not</strong> <var class="def-var-arguments">n</var><a class="copiable-link" href='#index-bitwise_002dnot'> &para;</a></span></dt>
+<dt class="deffnx defunx-alias-deffnx def-cmd-deffn" id="index-any_002dbits_002dset_003f"><span class="category-def">Function: </span><span><strong class="def-name">any-bits-set?</strong> <var class="def-var-arguments">j k</var><a class="copiable-link" href='#index-any_002dbits_002dset_003f'> &para;</a></span></dt>
+<dt class="deffnx defunx-alias-deffnx def-cmd-deffn" id="index-bit_002dset_003f"><span class="category-def">Function: </span><span><strong class="def-name">bit-set?</strong> <var class="def-var-arguments">index n</var><a class="copiable-link" href='#index-bit_002dset_003f'> &para;</a></span></dt>
+<dt class="deffnx defunx-alias-deffnx def-cmd-deffn" id="index-arithmetic_002dshift"><span class="category-def">Function: </span><span><strong class="def-name">arithmetic-shift</strong> <var class="def-var-arguments">n count</var><a class="copiable-link" href='#index-arithmetic_002dshift'> &para;</a></span></dt>
+<dt class="deffnx defunx-alias-deffnx def-cmd-deffn" id="index-bit_002dfield"><span class="category-def">Function: </span><span><strong class="def-name">bit-field</strong> <var class="def-var-arguments">n start end</var><a class="copiable-link" href='#index-bit_002dfield'> &para;</a></span></dt>
+<dt class="deffnx defunx-alias-deffnx def-cmd-deffn" id="index-bit_002dcount"><span class="category-def">Function: </span><span><strong class="def-name">bit-count</strong> <var class="def-var-arguments">n</var><a class="copiable-link" href='#index-bit_002dcount'> &para;</a></span></dt>
+<dd><p>Aliases for <code class="code">logand</code>, <code class="code">logior</code>, <code class="code">logxor</code>,
+<code class="code">lognot</code>, <code class="code">logtest</code>, <code class="code">logbit?</code>, <code class="code">ash</code>,
+<code class="code">bit-extract</code> and <code class="code">logcount</code> respectively.
+</p>
+<p>Note that the name <code class="code">bit-count</code> conflicts with <code class="code">bit-count</code> in
+the core (see <a class="pxref" href="Bit-Vectors.html">Bit Vectors</a>).
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-bitwise_002dif"><span class="category-def">Function: </span><span><strong class="def-name">bitwise-if</strong> <var class="def-var-arguments">mask n1 n0</var><a class="copiable-link" href='#index-bitwise_002dif'> &para;</a></span></dt>
+<dt class="deffnx defunx-alias-deffnx def-cmd-deffn" id="index-bitwise_002dmerge"><span class="category-def">Function: </span><span><strong class="def-name">bitwise-merge</strong> <var class="def-var-arguments">mask n1 n0</var><a class="copiable-link" href='#index-bitwise_002dmerge'> &para;</a></span></dt>
+<dd><p>Return an integer with bits selected from <var class="var">n1</var> and <var class="var">n0</var>
+according to <var class="var">mask</var>.  Those bits where <var class="var">mask</var> has 1s are taken
+from <var class="var">n1</var>, and those where <var class="var">mask</var> has 0s are taken from
+<var class="var">n0</var>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(bitwise-if 3 #b0101 #b1010) &rArr; 9
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-log2_002dbinary_002dfactors"><span class="category-def">Function: </span><span><strong class="def-name">log2-binary-factors</strong> <var class="def-var-arguments">n</var><a class="copiable-link" href='#index-log2_002dbinary_002dfactors'> &para;</a></span></dt>
+<dt class="deffnx defunx-alias-deffnx def-cmd-deffn" id="index-first_002dset_002dbit"><span class="category-def">Function: </span><span><strong class="def-name">first-set-bit</strong> <var class="def-var-arguments">n</var><a class="copiable-link" href='#index-first_002dset_002dbit'> &para;</a></span></dt>
+<dd><p>Return a count of how many factors of 2 are present in <var class="var">n</var>.  This
+is also the bit index of the lowest 1 bit in <var class="var">n</var>.  If <var class="var">n</var> is
+0, the return is <em class="math">-1</em>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(log2-binary-factors 6) &rArr; 1
+(log2-binary-factors -8) &rArr; 3
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-copy_002dbit"><span class="category-def">Function: </span><span><strong class="def-name">copy-bit</strong> <var class="def-var-arguments">index n newbit</var><a class="copiable-link" href='#index-copy_002dbit'> &para;</a></span></dt>
+<dd><p>Return <var class="var">n</var> with the bit at <var class="var">index</var> set according to
+<var class="var">newbit</var>.  <var class="var">newbit</var> should be <code class="code">#t</code> to set the bit to 1,
+or <code class="code">#f</code> to set it to 0.  Bits other than at <var class="var">index</var> are
+unchanged in the return.
+</p>
+<div class="example">
+<pre class="example-preformatted">(copy-bit 1 #b0101 #t) &rArr; 7
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-copy_002dbit_002dfield"><span class="category-def">Function: </span><span><strong class="def-name">copy-bit-field</strong> <var class="def-var-arguments">n newbits start end</var><a class="copiable-link" href='#index-copy_002dbit_002dfield'> &para;</a></span></dt>
+<dd><p>Return <var class="var">n</var> with the bits from <var class="var">start</var> (inclusive) to <var class="var">end</var>
+(exclusive) changed to the value <var class="var">newbits</var>.
+</p>
+<p>The least significant bit in <var class="var">newbits</var> goes to <var class="var">start</var>, the
+next to <em class="math"><var class="var">start</var>+1</em>, etc.  Anything in <var class="var">newbits</var> past the
+<var class="var">end</var> given is ignored.
+</p>
+<div class="example">
+<pre class="example-preformatted">(copy-bit-field #b10000 #b11 1 3) &rArr; #b10110
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-rotate_002dbit_002dfield"><span class="category-def">Function: </span><span><strong class="def-name">rotate-bit-field</strong> <var class="def-var-arguments">n count start end</var><a class="copiable-link" href='#index-rotate_002dbit_002dfield'> &para;</a></span></dt>
+<dd><p>Return <var class="var">n</var> with the bit field from <var class="var">start</var> (inclusive) to
+<var class="var">end</var> (exclusive) rotated upwards by <var class="var">count</var> bits.
+</p>
+<p><var class="var">count</var> can be positive or negative, and it can be more than the
+field width (it&rsquo;ll be reduced modulo the width).
+</p>
+<div class="example">
+<pre class="example-preformatted">(rotate-bit-field #b0110 2 1 4) &rArr; #b1010
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-reverse_002dbit_002dfield"><span class="category-def">Function: </span><span><strong class="def-name">reverse-bit-field</strong> <var class="def-var-arguments">n start end</var><a class="copiable-link" href='#index-reverse_002dbit_002dfield'> &para;</a></span></dt>
+<dd><p>Return <var class="var">n</var> with the bits from <var class="var">start</var> (inclusive) to <var class="var">end</var>
+(exclusive) reversed.
+</p>
+<div class="example">
+<pre class="example-preformatted">(reverse-bit-field #b101001 2 4) &rArr; #b100101
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-integer_002d_003elist"><span class="category-def">Function: </span><span><strong class="def-name">integer-&gt;list</strong> <var class="def-var-arguments">n [len]</var><a class="copiable-link" href='#index-integer_002d_003elist'> &para;</a></span></dt>
+<dd><p>Return bits from <var class="var">n</var> in the form of a list of <code class="code">#t</code> for 1 and
+<code class="code">#f</code> for 0.  The least significant <var class="var">len</var> bits are returned,
+and the first list element is the most significant of those bits.  If
+<var class="var">len</var> is not given, the default is <code class="code">(integer-length <var class="var">n</var>)</code>
+(see <a class="pxref" href="Bitwise-Operations.html">Bitwise Operations</a>).
+</p>
+<div class="example">
+<pre class="example-preformatted">(integer-&gt;list 6)   &rArr; (#t #t #f)
+(integer-&gt;list 1 4) &rArr; (#f #f #f #t)
+</pre></div>
+</dd></dl>
+   
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-list_002d_003einteger"><span class="category-def">Function: </span><span><strong class="def-name">list-&gt;integer</strong> <var class="def-var-arguments">lst</var><a class="copiable-link" href='#index-list_002d_003einteger'> &para;</a></span></dt>
+<dt class="deffnx defunx-alias-deffnx def-cmd-deffn" id="index-booleans_002d_003einteger"><span class="category-def">Function: </span><span><strong class="def-name">booleans-&gt;integer</strong> <var class="def-var-arguments">bool&hellip;</var><a class="copiable-link" href='#index-booleans_002d_003einteger'> &para;</a></span></dt>
+<dd><p>Return an integer formed bitwise from the given <var class="var">lst</var> list of
+booleans, or for <code class="code">booleans-&gt;integer</code> from the <var class="var">bool</var>
+arguments.
+</p>
+<p>Each boolean is <code class="code">#t</code> for a 1 and <code class="code">#f</code> for a 0.  The first
+element becomes the most significant bit in the return.
+</p>
+<div class="example">
+<pre class="example-preformatted">(list-&gt;integer '(#t #f #t #f)) &rArr; 10
+</pre></div>
+</dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d61.html">SRFI-61 - A more general <code class="code">cond</code> clause</a>, Previous: <a href="SRFI_002d55.html">SRFI-55 - Requiring Features</a>, Up: <a href="SRFI-Support.html">SRFI Support Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

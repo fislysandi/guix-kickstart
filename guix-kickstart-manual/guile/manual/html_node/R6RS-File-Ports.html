@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>R6RS File Ports (Guile Reference Manual)</title>
+
+<meta name="description" content="R6RS File Ports (Guile Reference Manual)">
+<meta name="keywords" content="R6RS File Ports (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="R6RS-Standard-Libraries.html" rel="up" title="R6RS Standard Libraries">
+<link href="rnrs-io-simple.html" rel="next" title="rnrs io simple">
+<link href="rnrs-io-ports.html" rel="prev" title="rnrs io ports">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="R6RS-File-Ports">
+<div class="nav-panel">
+<p>
+Next: <a href="rnrs-io-simple.html" accesskey="n" rel="next">rnrs io simple</a>, Previous: <a href="rnrs-io-ports.html" accesskey="p" rel="prev">rnrs io ports</a>, Up: <a href="R6RS-Standard-Libraries.html" accesskey="u" rel="up">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="R6RS-File-Ports-1">7.6.2.17 R6RS File Ports</h4>
+
+<p>The facilities described in this section are exported by the <code class="code">(rnrs
+io ports)</code> module.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-buffer_002dmode"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">buffer-mode</strong> <var class="def-var-arguments"><var class="var">buffer-mode-symbol</var></var><a class="copiable-link" href='#index-buffer_002dmode'> &para;</a></span></dt>
+<dd><p><var class="var">buffer-mode-symbol</var> must be a symbol whose name is one of
+<code class="code">none</code>, <code class="code">line</code>, and <code class="code">block</code>. The result is the
+corresponding symbol, and specifies the associated buffer mode.
+See <a class="xref" href="Buffering.html">Buffering</a>, for a discussion of these different buffer modes.  To
+control the amount of buffering, use <code class="code">setvbuf</code> instead.  Note that
+only the name of <var class="var">buffer-mode-symbol</var> is significant.
+</p>
+<p>See <a class="xref" href="Buffering.html">Buffering</a>, for a discussion of port buffering.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-buffer_002dmode_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">buffer-mode?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-buffer_002dmode_003f'> &para;</a></span></dt>
+<dd><p>Returns <code class="code">#t</code> if the argument is a valid buffer-mode symbol, and
+returns <code class="code">#f</code> otherwise.
+</p></dd></dl>
+
+<p>When opening a file, the various procedures accept a <code class="code">file-options</code>
+object that encapsulates flags to specify how the file is to be
+opened. A <code class="code">file-options</code> object is an enum-set (see <a class="pxref" href="rnrs-enums.html">rnrs enums</a>)
+over the symbols constituting valid file options.
+</p>
+<p>A <var class="var">file-options</var> parameter name means that the corresponding
+argument must be a file-options object.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-file_002doptions"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">file-options</strong> <var class="def-var-arguments"><var class="var">file-options-symbol</var> ...</var><a class="copiable-link" href='#index-file_002doptions'> &para;</a></span></dt>
+<dd>
+<p>Each <var class="var">file-options-symbol</var> must be a symbol.
+</p>
+<p>The <code class="code">file-options</code> syntax returns a file-options object that
+encapsulates the specified options.
+</p>
+<p>When supplied to an operation that opens a file for output, the
+file-options object returned by <code class="code">(file-options)</code> specifies that the
+file is created if it does not exist and an exception with condition
+type <code class="code">&amp;i/o-file-already-exists</code> is raised if it does exist.  The
+following standard options can be included to modify the default
+behavior.
+</p>
+<dl class="table">
+<dt><code class="code">no-create</code></dt>
+<dd><p>If the file does not already exist, it is not created;
+      instead, an exception with condition type <code class="code">&amp;i/o-file-does-not-exist</code>
+      is raised.
+      If the file already exists, the exception with condition type
+      <code class="code">&amp;i/o-file-already-exists</code> is not raised
+      and the file is truncated to zero length.
+</p></dd>
+<dt><code class="code">no-fail</code></dt>
+<dd><p>If the file already exists, the exception with condition type
+      <code class="code">&amp;i/o-file-already-exists</code> is not raised,
+      even if <code class="code">no-create</code> is not included,
+      and the file is truncated to zero length.
+</p></dd>
+<dt><code class="code">no-truncate</code></dt>
+<dd><p>If the file already exists and the exception with condition type
+      <code class="code">&amp;i/o-file-already-exists</code> has been inhibited by inclusion of
+      <code class="code">no-create</code> or <code class="code">no-fail</code>, the file is not truncated, but
+      the port&rsquo;s current position is still set to the beginning of the
+      file.
+</p></dd>
+</dl>
+
+<p>These options have no effect when a file is opened only for input.
+Symbols other than those listed above may be used as
+<var class="var">file-options-symbol</var>s; they have implementation-specific meaning,
+if any.
+</p>
+<blockquote class="quotation">
+<p><b class="b">Note:</b> Only the name of <var class="var">file-options-symbol</var> is significant.
+</p></blockquote>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-open_002dfile_002dinput_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-file-input-port</strong> <var class="def-var-arguments">filename</var><a class="copiable-link" href='#index-open_002dfile_002dinput_002dport'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-open_002dfile_002dinput_002dport-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-file-input-port</strong> <var class="def-var-arguments">filename file-options</var><a class="copiable-link" href='#index-open_002dfile_002dinput_002dport-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-open_002dfile_002dinput_002dport-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-file-input-port</strong> <var class="def-var-arguments">filename file-options buffer-mode</var><a class="copiable-link" href='#index-open_002dfile_002dinput_002dport-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-open_002dfile_002dinput_002dport-3"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-file-input-port</strong> <var class="def-var-arguments">filename file-options buffer-mode maybe-transcoder</var><a class="copiable-link" href='#index-open_002dfile_002dinput_002dport-3'> &para;</a></span></dt>
+<dd><p><var class="var">maybe-transcoder</var> must be either a transcoder or <code class="code">#f</code>.
+</p>
+<p>The <code class="code">open-file-input-port</code> procedure returns an
+input port for the named file. The <var class="var">file-options</var> and
+<var class="var">maybe-transcoder</var> arguments are optional.
+</p>
+<p>The <var class="var">file-options</var> argument, which may determine various aspects of
+the returned port, defaults to the value of <code class="code">(file-options)</code>.
+</p>
+<p>The <var class="var">buffer-mode</var> argument, if supplied,
+must be one of the symbols that name a buffer mode.
+The <var class="var">buffer-mode</var> argument defaults to <code class="code">block</code>.
+</p>
+<p>If <var class="var">maybe-transcoder</var> is a transcoder, it becomes the transcoder associated
+with the returned port.
+</p>
+<p>If <var class="var">maybe-transcoder</var> is <code class="code">#f</code> or absent,
+the port will be a binary port and will support the
+<code class="code">port-position</code> and <code class="code">set-port-position!</code>  operations.
+Otherwise the port will be a textual port, and whether it supports
+the <code class="code">port-position</code> and <code class="code">set-port-position!</code> operations
+is implementation-dependent (and possibly transcoder-dependent).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-open_002dfile_002doutput_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-file-output-port</strong> <var class="def-var-arguments">filename</var><a class="copiable-link" href='#index-open_002dfile_002doutput_002dport'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-open_002dfile_002doutput_002dport-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-file-output-port</strong> <var class="def-var-arguments">filename file-options</var><a class="copiable-link" href='#index-open_002dfile_002doutput_002dport-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-open_002dfile_002doutput_002dport-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-file-output-port</strong> <var class="def-var-arguments">filename file-options buffer-mode</var><a class="copiable-link" href='#index-open_002dfile_002doutput_002dport-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-open_002dfile_002doutput_002dport-3"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-file-output-port</strong> <var class="def-var-arguments">filename file-options buffer-mode maybe-transcoder</var><a class="copiable-link" href='#index-open_002dfile_002doutput_002dport-3'> &para;</a></span></dt>
+<dd><p><var class="var">maybe-transcoder</var> must be either a transcoder or <code class="code">#f</code>.
+</p>
+<p>The <code class="code">open-file-output-port</code> procedure returns an output port for the named file.
+</p>
+<p>The <var class="var">file-options</var> argument, which may determine various aspects of
+the returned port, defaults to the value of <code class="code">(file-options)</code>.
+</p>
+<p>The <var class="var">buffer-mode</var> argument, if supplied,
+must be one of the symbols that name a buffer mode.
+The <var class="var">buffer-mode</var> argument defaults to <code class="code">block</code>.
+</p>
+<p>If <var class="var">maybe-transcoder</var> is a transcoder, it becomes the transcoder
+associated with the port.
+</p>
+<p>If <var class="var">maybe-transcoder</var> is <code class="code">#f</code> or absent,
+the port will be a binary port and will support the
+<code class="code">port-position</code> and <code class="code">set-port-position!</code>  operations.
+Otherwise the port will be a textual port, and whether it supports
+the <code class="code">port-position</code> and <code class="code">set-port-position!</code> operations
+is implementation-dependent (and possibly transcoder-dependent).
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="rnrs-io-simple.html">rnrs io simple</a>, Previous: <a href="rnrs-io-ports.html">rnrs io ports</a>, Up: <a href="R6RS-Standard-Libraries.html">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

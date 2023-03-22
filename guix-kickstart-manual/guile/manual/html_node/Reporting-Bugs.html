@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Reporting Bugs (Guile Reference Manual)</title>
+
+<meta name="description" content="Reporting Bugs (Guile Reference Manual)">
+<meta name="keywords" content="Reporting Bugs (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Hello-Guile_0021.html" rel="up" title="Hello Guile!">
+<link href="Using-the-Guile-Module-System.html" rel="prev" title="Using the Guile Module System">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Reporting-Bugs">
+<div class="nav-panel">
+<p>
+Previous: <a href="Using-the-Guile-Module-System.html" accesskey="p" rel="prev">Using the Guile Module System</a>, Up: <a href="Hello-Guile_0021.html" accesskey="u" rel="up">Hello Guile!</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Reporting-Bugs-1">2.6 Reporting Bugs</h3>
+
+<p>Any problems with the installation should be reported to
+<a class="email" href="mailto:bug-guile@gnu.org">bug-guile@gnu.org</a>.
+</p>
+<p>If you find a bug in Guile, please report it to the Guile developers, so
+they can fix it.  They may also be able to suggest workarounds when it
+is not possible for you to apply the bug-fix or install a new version of
+Guile yourself.
+</p>
+<p>Before sending in bug reports, please check with the following list that
+you really have found a bug.
+</p>
+<ul class="itemize mark-bullet">
+<li>Whenever documentation and actual behavior differ, you have certainly
+found a bug, either in the documentation or in the program.
+
+</li><li>When Guile crashes, it is a bug.
+
+</li><li>When Guile hangs or takes forever to complete a task, it is a bug.
+
+</li><li>When calculations produce wrong results, it is a bug.
+
+</li><li>When Guile signals an error for valid Scheme programs, it is a bug.
+
+</li><li>When Guile does not signal an error for invalid Scheme programs, it may
+be a bug, unless this is explicitly documented.
+
+</li><li>When some part of the documentation is not clear and does not make sense
+to you even after re-reading the section, it is a bug.
+</li></ul>
+
+<p>Before reporting the bug, check whether any programs you have loaded
+into Guile, including your <samp class="file">.guile</samp> file, set any variables that
+may affect the functioning of Guile.  Also, see whether the problem
+happens in a freshly started Guile without loading your <samp class="file">.guile</samp>
+file (start Guile with the <code class="code">-q</code> switch to prevent loading the init
+file).  If the problem does <em class="emph">not</em> occur then, you must report the
+precise contents of any programs that you must load into Guile in order
+to cause the problem to occur.
+</p>
+<p>When you write a bug report, please make sure to include as much of the
+information described below in the report.  If you can&rsquo;t figure out some
+of the items, it is not a problem, but the more information we get, the
+more likely we can diagnose and fix the bug.
+</p>
+<ul class="itemize mark-bullet">
+<li>The version number of Guile. You can get this information from invoking
+&lsquo;<samp class="samp">guile --version</samp>&rsquo; at your shell, or calling <code class="code">(version)</code> from
+within Guile.
+
+</li><li>Your machine type, as determined by the <code class="code">config.guess</code> shell
+script. If you have a Guile checkout, this file is located in
+<code class="code">build-aux</code>; otherwise you can fetch the latest version from
+<a class="uref" href="http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD">http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD</a>.
+
+<div class="example">
+<pre class="example-preformatted">$ build-aux/config.guess
+x86_64-unknown-linux-gnu
+</pre></div>
+
+</li><li>If you installed Guile from a binary package, the version of that
+package. On systems that use RPM, use <code class="code">rpm -qa | grep guile</code>. On systems
+that use DPKG, <code class="code">dpkg -l | grep guile</code>. 
+
+</li><li>If you built Guile yourself, the build configuration that you used:
+
+<div class="example">
+<pre class="example-preformatted">$ ./config.status --config
+'--enable-error-on-warning' '--disable-deprecated'...
+</pre></div>
+
+</li><li>A complete description of how to reproduce the bug.
+
+<p>If you have a Scheme program that produces the bug, please include it in
+the bug report. If your program is too big to include, please try to
+reduce your code to a minimal test case.
+</p>
+<p>If you can reproduce your problem at the REPL, that is best. Give a
+transcript of the expressions you typed at the REPL.
+</p>
+</li><li>A description of the incorrect behavior.  For example, &quot;The Guile
+process gets a fatal signal,&quot; or, &quot;The resulting output is as follows,
+which I think is wrong.&quot;
+
+<p>If the manifestation of the bug is a Guile error message, it is
+important to report the precise text of the error message, and a
+backtrace showing how the Scheme program arrived at the error. This can
+be done using the <code class="code">,backtrace</code> command in Guile&rsquo;s debugger.
+</p></li></ul>
+
+<p>If your bug causes Guile to crash, additional information from a
+low-level debugger such as GDB might be helpful. If you have built Guile
+yourself, you can run Guile under GDB via the
+<code class="code">meta/gdb-uninstalled-guile</code> script. Instead of invoking Guile as
+usual, invoke the wrapper script, type <code class="code">run</code> to start the process,
+then <code class="code">backtrace</code> when the crash comes. Include that backtrace in
+your report.
+</p>
+
+
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Using-the-Guile-Module-System.html">Using the Guile Module System</a>, Up: <a href="Hello-Guile_0021.html">Hello Guile!</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-171 Applying Transducers (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-171 Applying Transducers (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-171 Applying Transducers (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI_002d171.html" rel="up" title="SRFI-171">
+<link href="SRFI_002d171-Reducers.html" rel="next" title="SRFI-171 Reducers">
+<link href="SRFI_002d171-General-Discussion.html" rel="prev" title="SRFI-171 General Discussion">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="SRFI_002d171-Applying-Transducers">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d171-Reducers.html" accesskey="n" rel="next">Reducers</a>, Previous: <a href="SRFI_002d171-General-Discussion.html" accesskey="p" rel="prev">SRFI-171 General Discussion</a>, Up: <a href="SRFI_002d171.html" accesskey="u" rel="up">Transducers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Applying-Transducers">7.5.46.2 Applying Transducers</h4>
+<a class="index-entry-id" id="index-transducers-applying"></a>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-list_002dtransduce"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list-transduce</strong> <var class="def-var-arguments">xform f lst</var><a class="copiable-link" href='#index-list_002dtransduce'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-list_002dtransduce-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list-transduce</strong> <var class="def-var-arguments">xform f identity lst</var><a class="copiable-link" href='#index-list_002dtransduce-1'> &para;</a></span></dt>
+<dd><p>Initialize the transducer <var class="var">xform</var> by passing the reducer <var class="var">f</var>
+to it.  If no identity is provided, <var class="var">f</var> runs without arguments to
+return the reducer identity.  It then reduces over <var class="var">lst</var> using the
+identity as the seed.
+</p>
+<p>If one of the transducers finishes early (such as <code class="code">ttake</code> or
+<code class="code">tdrop</code>), it communicates this by returning a reduced value, which
+in the guile implementation is just a value wrapped in a SRFI 9 record
+type named &ldquo;reduced&rdquo;.  If such a value is returned by the transducer,
+<code class="code">list-transduce</code> must stop execution and return an unreduced value
+immediately.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dtransduce"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-transduce</strong> <var class="def-var-arguments">xform f vec</var><a class="copiable-link" href='#index-vector_002dtransduce'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-vector_002dtransduce-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-transduce</strong> <var class="def-var-arguments">xform f identity vec</var><a class="copiable-link" href='#index-vector_002dtransduce-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_002dtransduce"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-transduce</strong> <var class="def-var-arguments">xform f str</var><a class="copiable-link" href='#index-string_002dtransduce'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_002dtransduce-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-transduce</strong> <var class="def-var-arguments">xform f identity str</var><a class="copiable-link" href='#index-string_002dtransduce-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002du8_002dtransduce"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-u8-transduce</strong> <var class="def-var-arguments">xform f bv</var><a class="copiable-link" href='#index-bytevector_002du8_002dtransduce'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_002du8_002dtransduce-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-u8-transduce</strong> <var class="def-var-arguments">xform f identity bv</var><a class="copiable-link" href='#index-bytevector_002du8_002dtransduce-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-generator_002dtransduce"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">generator-transduce</strong> <var class="def-var-arguments">xform f gen</var><a class="copiable-link" href='#index-generator_002dtransduce'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-generator_002dtransduce-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">generator-transduce</strong> <var class="def-var-arguments">xform f identity gen</var><a class="copiable-link" href='#index-generator_002dtransduce-1'> &para;</a></span></dt>
+<dd>
+<p>Same as <code class="code">list-transduce</code>, but for vectors, strings, u8-bytevectors
+and SRFI-158-styled generators respectively.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-port_002dtransduce"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">port-transduce</strong> <var class="def-var-arguments">xform f reader</var><a class="copiable-link" href='#index-port_002dtransduce'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-port_002dtransduce-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">port-transduce</strong> <var class="def-var-arguments">xform f reader port</var><a class="copiable-link" href='#index-port_002dtransduce-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-port_002dtransduce-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">port-transduce</strong> <var class="def-var-arguments">xform f identity reader port</var><a class="copiable-link" href='#index-port_002dtransduce-2'> &para;</a></span></dt>
+<dd>
+<p>Same as <code class="code">list-transduce</code> but for ports.  Called without a port, it
+reduces over the results of applying <var class="var">reader</var> until the EOF-object
+is returned, presumably to read from <code class="code">current-input-port</code>.  With a
+port <var class="var">reader</var> is applied to <var class="var">port</var> instead of without any
+arguments.  If <var class="var">identity</var> is provided, that is used as the initial
+identity in the reduction.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d171-Reducers.html">Reducers</a>, Previous: <a href="SRFI_002d171-General-Discussion.html">SRFI-171 General Discussion</a>, Up: <a href="SRFI_002d171.html">Transducers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

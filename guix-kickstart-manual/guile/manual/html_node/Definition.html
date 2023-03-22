@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Definition (Guile Reference Manual)</title>
+
+<meta name="description" content="Definition (Guile Reference Manual)">
+<meta name="keywords" content="Definition (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="About-Data.html" rel="up" title="About Data">
+<link href="Values-and-Variables.html" rel="prev" title="Values and Variables">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Definition">
+<div class="nav-panel">
+<p>
+Previous: <a href="Values-and-Variables.html" accesskey="p" rel="prev">Values and Variables</a>, Up: <a href="About-Data.html" accesskey="u" rel="up">Data Types, Values and Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Defining-and-Setting-Variables">3.1.3 Defining and Setting Variables</h4>
+
+<p>To define a new variable, you use Scheme&rsquo;s <code class="code">define</code> syntax like
+this:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define <var class="var">variable-name</var> <var class="var">value</var>)
+</pre></div>
+
+<p>This makes a new variable called <var class="var">variable-name</var> and stores
+<var class="var">value</var> in it as the variable&rsquo;s initial value.  For example:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">;; Make a variable `x' with initial numeric value 1.
+(define x 1)
+
+;; Make a variable `organization' with an initial string value.
+(define organization &quot;Free Software Foundation&quot;)
+</pre></div>
+
+<p>(In Scheme, a semicolon marks the beginning of a comment that continues
+until the end of the line.  So the lines beginning <code class="code">;;</code> are
+comments.)
+</p>
+<p>Changing the value of an already existing variable is very similar,
+except that <code class="code">define</code> is replaced by the Scheme syntax <code class="code">set!</code>,
+like this:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(set! <var class="var">variable-name</var> <var class="var">new-value</var>)
+</pre></div>
+
+<p>Remember that variables do not have fixed types, so <var class="var">new-value</var> may
+have a completely different type from whatever was previously stored in
+the location named by <var class="var">variable-name</var>.  Both of the following
+examples are therefore correct.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">;; Change the value of `x' to 5.
+(set! x 5)
+
+;; Change the value of `organization' to the FSF's street number.
+(set! organization 545)
+</pre></div>
+
+<p>In these examples, <var class="var">value</var> and <var class="var">new-value</var> are literal numeric
+or string values.  In general, however, <var class="var">value</var> and <var class="var">new-value</var>
+can be any Scheme expression.  Even though we have not yet covered the
+forms that Scheme expressions can take (see <a class="pxref" href="About-Expressions.html">Expressions and Evaluation</a>), you
+can probably guess what the following <code class="code">set!</code> example does&hellip;
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(set! x (+ x 1))
+</pre></div>
+
+<p>(Note: this is not a complete description of <code class="code">define</code> and
+<code class="code">set!</code>, because we need to introduce some other aspects of Scheme
+before the missing pieces can be filled in.  If, however, you are
+already familiar with the structure of Scheme, you may like to read
+about those missing pieces immediately by jumping ahead to the following
+references.
+</p>
+<ul class="itemize mark-bullet">
+<li><a class="ref" href="Lambda-Alternatives.html">Lambda Alternatives</a>, to read about an alternative form of the
+<code class="code">define</code> syntax that can be used when defining new procedures.
+
+</li><li><a class="ref" href="Procedures-with-Setters.html">Procedures with Setters</a>, to read about an alternative form of the
+<code class="code">set!</code> syntax that helps with changing a single value in the depths
+of a compound data structure.)
+
+</li><li>See <a class="xref" href="Internal-Definitions.html">Internal definitions</a>, to read about using <code class="code">define</code> other
+than at top level in a Scheme program, including a discussion of when it
+works to use <code class="code">define</code> rather than <code class="code">set!</code> to change the value
+of an existing variable.
+</li></ul>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Values-and-Variables.html">Values and Variables</a>, Up: <a href="About-Data.html">Data Types, Values and Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

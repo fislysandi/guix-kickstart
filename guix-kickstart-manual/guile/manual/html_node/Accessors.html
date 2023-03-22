@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Accessors (Guile Reference Manual)</title>
+
+<meta name="description" content="Accessors (Guile Reference Manual)">
+<meta name="keywords" content="Accessors (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Methods-and-Generic-Functions.html" rel="up" title="Methods and Generic Functions">
+<link href="Extending-Primitives.html" rel="next" title="Extending Primitives">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Accessors">
+<div class="nav-panel">
+<p>
+Next: <a href="Extending-Primitives.html" accesskey="n" rel="next">Extending Primitives</a>, Up: <a href="Methods-and-Generic-Functions.html" accesskey="u" rel="up">Methods and Generic Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Accessors-1">8.6.1 Accessors</h4>
+
+<p>An accessor is a generic function that can also be used with the
+generalized <code class="code">set!</code> syntax (see <a class="pxref" href="Procedures-with-Setters.html">Procedures with Setters</a>).  Guile
+will handle a call like
+</p>
+<div class="example">
+<pre class="example-preformatted">(set! (<code class="code">accessor</code> <code class="code">args</code>&hellip;) <code class="code">value</code>)
+</pre></div>
+
+<p>by calling the most specialized method of <code class="code">accessor</code> that matches
+the classes of <code class="code">args</code> and <code class="code">value</code>.  <code class="code">define-accessor</code> is
+used to bind an identifier to an accessor.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-define_002daccessor"><span class="category-def">syntax: </span><span><strong class="def-name">define-accessor</strong> <var class="def-var-arguments">symbol</var><a class="copiable-link" href='#index-define_002daccessor'> &para;</a></span></dt>
+<dd><p>Create an accessor with name <var class="var">symbol</var> and bind it to the variable
+<var class="var">symbol</var>.  If <var class="var">symbol</var> was previously bound to a Scheme
+procedure (or procedure-with-setter), the old procedure (and setter) is
+incorporated into the new accessor as its default procedure (and
+setter).  Any other previous value, including an existing generic
+function or accessor, is discarded and replaced by a new, empty
+accessor.
+</p></dd></dl>
+
+
+</div>
+
+
+
+</body>
+</html>

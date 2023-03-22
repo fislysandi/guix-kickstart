@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Handling Invocation Errors (Guile Reference Manual)</title>
+
+<meta name="description" content="Handling Invocation Errors (Guile Reference Manual)">
+<meta name="keywords" content="Handling Invocation Errors (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Methods-and-Generic-Functions.html" rel="up" title="Methods and Generic Functions">
+<link href="Generic-Function-and-Method-Examples.html" rel="prev" title="Generic Function and Method Examples">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Handling-Invocation-Errors">
+<div class="nav-panel">
+<p>
+Previous: <a href="Generic-Function-and-Method-Examples.html" accesskey="p" rel="prev">Generic Function and Method Examples</a>, Up: <a href="Methods-and-Generic-Functions.html" accesskey="u" rel="up">Methods and Generic Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Handling-Invocation-Errors-1">8.6.6 Handling Invocation Errors</h4>
+
+<p>If a generic function is invoked with a combination of parameters for
+which there is no applicable method, GOOPS raises an error.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-no_002dmethod"><span class="category-def">generic: </span><span><strong class="def-name">no-method</strong><a class="copiable-link" href='#index-no_002dmethod'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-no_002dmethod-1"><span class="category-def">method: </span><span><strong class="def-name">no-method</strong> <var class="def-var-arguments">(gf &lt;generic&gt;) args</var><a class="copiable-link" href='#index-no_002dmethod-1'> &para;</a></span></dt>
+<dd><p>When an application invokes a generic function, and no methods at all
+have been defined for that generic function, GOOPS calls the
+<code class="code">no-method</code> generic function.  The default method calls
+<code class="code">goops-error</code> with an appropriate message.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-no_002dapplicable_002dmethod"><span class="category-def">generic: </span><span><strong class="def-name">no-applicable-method</strong><a class="copiable-link" href='#index-no_002dapplicable_002dmethod'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-no_002dapplicable_002dmethod-1"><span class="category-def">method: </span><span><strong class="def-name">no-applicable-method</strong> <var class="def-var-arguments">(gf &lt;generic&gt;) args</var><a class="copiable-link" href='#index-no_002dapplicable_002dmethod-1'> &para;</a></span></dt>
+<dd><p>When an application applies a generic function to a set of arguments,
+and no methods have been defined for those argument types, GOOPS calls
+the <code class="code">no-applicable-method</code> generic function.  The default method
+calls <code class="code">goops-error</code> with an appropriate message.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-no_002dnext_002dmethod"><span class="category-def">generic: </span><span><strong class="def-name">no-next-method</strong><a class="copiable-link" href='#index-no_002dnext_002dmethod'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-no_002dnext_002dmethod-1"><span class="category-def">method: </span><span><strong class="def-name">no-next-method</strong> <var class="def-var-arguments">(gf &lt;generic&gt;) args</var><a class="copiable-link" href='#index-no_002dnext_002dmethod-1'> &para;</a></span></dt>
+<dd><p>When a generic function method calls <code class="code">(next-method)</code> to invoke the
+next less specialized method for that generic function, and no less
+specialized methods have been defined for the current generic function
+arguments, GOOPS calls the <code class="code">no-next-method</code> generic function.  The
+default method calls <code class="code">goops-error</code> with an appropriate message.
+</p></dd></dl>
+
+
+</div>
+
+
+
+</body>
+</html>

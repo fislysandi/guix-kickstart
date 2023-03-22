@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Traps (Guile Reference Manual)</title>
+
+<meta name="description" content="Traps (Guile Reference Manual)">
+<meta name="keywords" content="Traps (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Debugging.html" rel="up" title="Debugging">
+<link href="GDB-Support.html" rel="next" title="GDB Support">
+<link href="Programmatic-Error-Handling.html" rel="prev" title="Programmatic Error Handling">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Traps">
+<div class="nav-panel">
+<p>
+Next: <a href="GDB-Support.html" accesskey="n" rel="next">GDB Support</a>, Previous: <a href="Programmatic-Error-Handling.html" accesskey="p" rel="prev">Programmatic Error Handling</a>, Up: <a href="Debugging.html" accesskey="u" rel="up">Debugging Infrastructure</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Traps-1">6.26.4 Traps</h4>
+
+<a class="index-entry-id" id="index-Traps"></a>
+<a class="index-entry-id" id="index-VM-hooks"></a>
+<a class="index-entry-id" id="index-Breakpoints"></a>
+<a class="index-entry-id" id="index-Trace"></a>
+<a class="index-entry-id" id="index-Tracing"></a>
+<a class="index-entry-id" id="index-Code-coverage"></a>
+<a class="index-entry-id" id="index-Profiling"></a>
+<p>Guile&rsquo;s virtual machine can be configured to call out at key points to
+arbitrary user-specified procedures.
+</p>
+<p>In principle, these <em class="dfn">hooks</em> allow Scheme code to implement any model
+it chooses for examining the evaluation stack as program execution
+proceeds, and for suspending execution to be resumed later.
+</p>
+<p>VM hooks are very low-level, though, and so Guile also has a library of
+higher-level <em class="dfn">traps</em> on top of the VM hooks. A trap is an execution
+condition that, when fulfilled, will fire a handler. For example, Guile
+defines a trap that fires when control reaches a certain source
+location.
+</p>
+<p>Finally, Guile also defines a third level of abstractions: per-thread
+<em class="dfn">trap states</em>. A trap state exists to give names to traps, and to
+hold on to the set of traps so that they can be enabled, disabled, or
+removed. The trap state infrastructure defines the most useful
+abstractions for most cases. For example, Guile&rsquo;s REPL uses trap state
+functions to set breakpoints and tracepoints.
+</p>
+<p>The following subsections describe all this in detail, for both the
+user wanting to use traps, and the developer interested in
+understanding how the interface hangs together.
+</p>
+
+
+
+<ul class="mini-toc">
+<li><a href="VM-Hooks.html" accesskey="1">VM Hooks</a></li>
+<li><a href="Trap-Interface.html" accesskey="2">Trap Interface</a></li>
+<li><a href="Low_002dLevel-Traps.html" accesskey="3">Low-Level Traps</a></li>
+<li><a href="Tracing-Traps.html" accesskey="4">Tracing Traps</a></li>
+<li><a href="Trap-States.html" accesskey="5">Trap States</a></li>
+<li><a href="High_002dLevel-Traps.html" accesskey="6">High-Level Traps</a></li>
+</ul>
+</div>
+
+
+
+</body>
+</html>

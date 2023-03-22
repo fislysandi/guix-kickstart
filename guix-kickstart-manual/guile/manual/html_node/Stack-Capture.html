@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Stack Capture (Guile Reference Manual)</title>
+
+<meta name="description" content="Stack Capture (Guile Reference Manual)">
+<meta name="keywords" content="Stack Capture (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Evaluation-Model.html" rel="up" title="Evaluation Model">
+<link href="Stacks.html" rel="next" title="Stacks">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Stack-Capture">
+<div class="nav-panel">
+<p>
+Next: <a href="Stacks.html" accesskey="n" rel="next">Stacks</a>, Up: <a href="Evaluation-Model.html" accesskey="u" rel="up">Evaluation and the Scheme Stack</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Stack-Capture-1">6.26.1.1 Stack Capture</h4>
+
+<p>A Scheme program can use the <code class="code">make-stack</code> primitive anywhere in its
+code, with first arg <code class="code">#t</code>, to construct a Scheme value that
+describes the Scheme stack at that point.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(make-stack #t)
+&rArr;
+#&lt;stack 25205a0&gt;
+</pre></div>
+
+<p>Use <code class="code">start-stack</code> to limit the stack extent captured by future
+<code class="code">make-stack</code> calls.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dstack"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-stack</strong> <var class="def-var-arguments">obj arg &hellip;</var><a class="copiable-link" href='#index-make_002dstack'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmake_005fstack"><span class="category-def">C Function: </span><span><strong class="def-name">scm_make_stack</strong> <var class="def-var-arguments">(obj, args)</var><a class="copiable-link" href='#index-scm_005fmake_005fstack'> &para;</a></span></dt>
+<dd><p>Create a new stack. If <var class="var">obj</var> is <code class="code">#t</code>, the current
+evaluation stack is used for creating the stack frames,
+otherwise the frames are taken from <var class="var">obj</var> (which must be
+a continuation or a frame object).
+</p>
+<p><var class="var">arg</var> &hellip; can be any combination of integer, procedure, address
+range, and prompt tag values.
+</p>
+<p>These values specify various ways of cutting away uninteresting stack
+frames from the top and bottom of the stack that <code class="code">make-stack</code>
+returns.  They come in pairs like this:  <code class="code">(<var class="var">inner_cut_1</var>
+<var class="var">outer_cut_1</var> <var class="var">inner_cut_2</var> <var class="var">outer_cut_2</var> &hellip;)</code>.
+</p>
+<p>Each <var class="var">inner_cut_i</var> can be an integer, a procedure, an address range,
+or a prompt tag.  An integer means to cut away exactly that number of
+frames.  A procedure means to cut away all frames up to but excluding
+the frame whose procedure matches the specified one.  An address range
+is a pair of integers indicating the low and high addresses of a
+procedure&rsquo;s code, and is the same as cutting away to a procedure (though
+with less work).  Anything else is interpreted as a prompt tag which
+cuts away all frames that are inside a prompt with the given tag.
+</p>
+<p>Each <var class="var">outer_cut_i</var> can likewise be an integer, a procedure, an
+address range, or a prompt tag.  An integer means to cut away that
+number of frames.  A procedure means to cut away frames down to but
+excluding the frame whose procedure matches the specified one.  An
+address range is the same, but with the procedure&rsquo;s code specified as an
+address range.  Anything else is taken to be a prompt tag, which cuts
+away all frames that are outside a prompt with the given tag.
+</p>
+
+<p>If the <var class="var">outer_cut_i</var> of the last pair is missing, it is taken as 0.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-start_002dstack"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">start-stack</strong> <var class="def-var-arguments">id exp</var><a class="copiable-link" href='#index-start_002dstack'> &para;</a></span></dt>
+<dd><p>Evaluate <var class="var">exp</var> on a new calling stack with identity <var class="var">id</var>.  If
+<var class="var">exp</var> is interrupted during evaluation, backtraces will not display
+frames farther back than <var class="var">exp</var>&rsquo;s top-level form.  This macro is a
+way of artificially limiting backtraces and stack procedures, largely as
+a convenience to the user.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Stacks.html">Stacks</a>, Up: <a href="Evaluation-Model.html">Evaluation and the Scheme Stack</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

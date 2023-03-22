@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Stack Layout (Guile Reference Manual)</title>
+
+<meta name="description" content="Stack Layout (Guile Reference Manual)">
+<meta name="keywords" content="Stack Layout (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="A-Virtual-Machine-for-Guile.html" rel="up" title="A Virtual Machine for Guile">
+<link href="Variables-and-the-VM.html" rel="next" title="Variables and the VM">
+<link href="VM-Concepts.html" rel="prev" title="VM Concepts">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Stack-Layout">
+<div class="nav-panel">
+<p>
+Next: <a href="Variables-and-the-VM.html" accesskey="n" rel="next">Variables and the VM</a>, Previous: <a href="VM-Concepts.html" accesskey="p" rel="prev">VM Concepts</a>, Up: <a href="A-Virtual-Machine-for-Guile.html" accesskey="u" rel="up">A Virtual Machine for Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Stack-Layout-1">9.3.3 Stack Layout</h4>
+
+<p>The stack of Guile&rsquo;s virtual machine is composed of <em class="dfn">frames</em>. Each
+frame corresponds to the application of one compiled procedure, and
+contains storage space for arguments, local variables, and some
+bookkeeping information (such as what to do after the frame is
+finished).
+</p>
+<p>While the compiler is free to do whatever it wants to, as long as the
+semantics of a computation are preserved, in practice every time you
+call a function, a new frame is created. (The notable exception of
+course is the tail call case, see <a class="pxref" href="Tail-Calls.html">Tail calls</a>.)
+</p>
+<p>The structure of the top stack frame is as follows:
+</p>
+<div class="example">
+<pre class="example-preformatted">   | ...previous frame locals...  |
+   +==============================+ &lt;- fp + 3
+   | Dynamic link                 |
+   +------------------------------+
+   | Virtual return address (vRA) |
+   +------------------------------+
+   | Machine return address (mRA) |
+   +==============================+ &lt;- fp
+   | Local 0                      |
+   +------------------------------+
+   | Local 1                      |
+   +------------------------------+
+   | ...                          |
+   +------------------------------+
+   | Local N-1                    |
+   \------------------------------/ &lt;- sp
+</pre></div>
+
+<p>In the above drawing, the stack grows downward.  At the beginning of a
+function call, the procedure being applied is in local 0, followed by
+the arguments from local 1.  After the procedure checks that it is being
+passed a compatible set of arguments, the procedure allocates some
+additional space in the frame to hold variables local to the function.
+</p>
+<p>Note that once a value in a local variable slot is no longer needed,
+Guile is free to re-use that slot.  This applies to the slots that were
+initially used for the callee and arguments, too.  For this reason,
+backtraces in Guile aren&rsquo;t always able to show all of the arguments: it
+could be that the slot corresponding to that argument was re-used by
+some other variable.
+</p>
+<p>The <em class="dfn">virtual return address</em> is the <code class="code">ip</code> that was in effect
+before this program was applied.  When we return from this activation
+frame, we will jump back to this <code class="code">ip</code>.  Likewise, the <em class="dfn">dynamic
+link</em> is the offset of the <code class="code">fp</code> that was in effect before this
+program was applied, relative to the current <code class="code">fp</code>.
+</p>
+<p>There are two return addresses: the virtual return address (vRA), and
+the machine return address (mRA).  The vRA is always present and
+indicates a bytecode address.  The mRA is only present when a call is
+made from a function with machine code (e.g. a function that has been
+JIT-compiled).
+</p>
+<p>To prepare for a non-tail application, Guile&rsquo;s VM will emit code that
+shuffles the function to apply and its arguments into appropriate stack
+slots, with three free slots below them.  The call then initializes
+those free slots to hold the machine return address (or NULL), the
+virtual return address, and the offset to the previous frame pointer
+(<code class="code">fp</code>).  It then gets the <code class="code">ip</code> for the function being called
+and adjusts <code class="code">fp</code> to point to the new call frame.
+</p>
+<p>In this way, the dynamic link links the current frame to the previous
+frame.  Computing a stack trace involves traversing these frames.
+</p>
+<p>Each stack local in Guile is 64 bits wide, even on 32-bit architectures.
+This allows Guile to preserve its uniform treatment of stack locals
+while allowing for unboxed arithmetic on 64-bit integers and
+floating-point numbers.  See <a class="xref" href="Instruction-Set.html">Instruction Set</a>, for more on unboxed
+arithmetic.
+</p>
+<p>As an implementation detail, we actually store the dynamic link as an
+offset and not an absolute value because the stack can move at runtime
+as it expands or during partial continuation calls.  If it were an
+absolute value, we would have to walk the frames, relocating frame
+pointers.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Variables-and-the-VM.html">Variables and the VM</a>, Previous: <a href="VM-Concepts.html">VM Concepts</a>, Up: <a href="A-Virtual-Machine-for-Guile.html">A Virtual Machine for Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

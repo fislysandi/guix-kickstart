@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>VM Hooks (Guile Reference Manual)</title>
+
+<meta name="description" content="VM Hooks (Guile Reference Manual)">
+<meta name="keywords" content="VM Hooks (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Traps.html" rel="up" title="Traps">
+<link href="Trap-Interface.html" rel="next" title="Trap Interface">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="VM-Hooks">
+<div class="nav-panel">
+<p>
+Next: <a href="Trap-Interface.html" accesskey="n" rel="next">Trap Interface</a>, Up: <a href="Traps.html" accesskey="u" rel="up">Traps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="VM-Hooks-1">6.26.4.1 VM Hooks</h4>
+
+<p>Everything that runs in Guile runs on its virtual machine, a C program
+that defines a number of operations that Scheme programs can
+perform.
+</p>
+<p>Note that there are multiple VM &ldquo;engines&rdquo; for Guile. Only some of them
+have support for hooks compiled in. Normally the deal is that you get
+hooks if you are running interactively, and otherwise they are disabled,
+as they do have some overhead (about 10 or 20 percent).
+</p>
+<p>To ensure that you are running with hooks, pass <code class="code">--debug</code> to Guile
+when running your program, or otherwise use the <code class="code">call-with-vm</code> and
+<code class="code">set-vm-engine!</code>  procedures to ensure that you are running in a VM
+with the <code class="code">debug</code> engine.
+</p>
+<p>To digress, Guile&rsquo;s VM has 4 different hooks that can be fired at
+different times.  For implementation reasons, these hooks are not
+actually implemented with first-class Scheme hooks (see <a class="pxref" href="Hooks.html">Hooks</a>); they
+are managed using an ad-hoc interface.
+</p>
+<p>VM hooks are called with one argument: the current frame.
+See <a class="xref" href="Frames.html">Frames</a>.  Since these hooks may be fired very frequently, Guile
+does a terrible thing: it allocates the frames on the C stack instead of
+the garbage-collected heap.
+</p>
+<p>The upshot here is that the frames are only valid within the dynamic
+extent of the call to the hook. If a hook procedure keeps a reference to
+the frame outside the extent of the hook, bad things will happen.
+</p>
+<p>The interface to hooks is provided by the <code class="code">(system vm vm)</code> module:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (system vm vm))
+</pre></div>
+
+<p>All of these functions implicitly act on the VM for the current thread
+only.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-vm_002dadd_002dnext_002dhook_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vm-add-next-hook!</strong> <var class="def-var-arguments">f</var><a class="copiable-link" href='#index-vm_002dadd_002dnext_002dhook_0021'> &para;</a></span></dt>
+<dd><p>Arrange to call <var class="var">f</var> when before an instruction is retired (and
+executed).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vm_002dadd_002dapply_002dhook_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vm-add-apply-hook!</strong> <var class="def-var-arguments">f</var><a class="copiable-link" href='#index-vm_002dadd_002dapply_002dhook_0021'> &para;</a></span></dt>
+<dd><p>Arrange to call <var class="var">f</var> whenever a procedure is applied.  The frame
+locals will be the callee, followed by the arguments to the call.
+</p>
+<p>Note that procedure application is somewhat orthogonal to continuation
+pushes and pops.  To know whether a call is a tail call or not, with
+respect to the frame previously in place, check the value of the frame
+pointer compared the previous frame pointer.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vm_002dadd_002dreturn_002dhook_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vm-add-return-hook!</strong> <var class="def-var-arguments">f</var><a class="copiable-link" href='#index-vm_002dadd_002dreturn_002dhook_0021'> &para;</a></span></dt>
+<dd><p>Arrange to call <var class="var">f</var> before returning from a frame.  The values in
+the frame will be the frame&rsquo;s return values.
+</p>
+<p>Note that it&rsquo;s possible to return from an &ldquo;inner&rdquo; frame: one that was
+not immediately proceeded by a call with that frame pointer.  In that
+case, it corresponds to a non-local control flow jump, either because of
+applying a composable continuation or because of restoring a saved
+undelimited continuation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vm_002dadd_002dabort_002dhook_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vm-add-abort-hook!</strong><a class="copiable-link" href='#index-vm_002dadd_002dabort_002dhook_0021'> &para;</a></span></dt>
+<dd><p>Arrange to call <var class="var">f</var> after aborting to a prompt.  See <a class="xref" href="Prompts.html">Prompts</a>.
+</p>
+<p>Unfortunately, the values passed to the prompt handler are not easily
+available to <var class="var">f</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vm_002dremove_002dnext_002dhook_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vm-remove-next-hook!</strong> <var class="def-var-arguments">f</var><a class="copiable-link" href='#index-vm_002dremove_002dnext_002dhook_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-vm_002dremove_002dapply_002dhook_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vm-remove-apply-hook!</strong> <var class="def-var-arguments">f</var><a class="copiable-link" href='#index-vm_002dremove_002dapply_002dhook_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-vm_002dremove_002dreturn_002dhook_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vm-remove-return-hook!</strong> <var class="def-var-arguments">f</var><a class="copiable-link" href='#index-vm_002dremove_002dreturn_002dhook_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-vm_002dremove_002dabort_002dhook_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vm-remove-abort-hook!</strong> <var class="def-var-arguments">f</var><a class="copiable-link" href='#index-vm_002dremove_002dabort_002dhook_0021'> &para;</a></span></dt>
+<dd><p>Remove <var class="var">f</var> from the corresponding VM hook for the current thread.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-VM-trace-level"></a>
+<p>These hooks do impose a performance penalty, if they are on. Obviously,
+the <code class="code">vm-next-hook</code> has quite an impact, performance-wise. Therefore
+Guile exposes a single, heavy-handed knob to turn hooks on or off, the
+<em class="dfn">VM trace level</em>. If the trace level is positive, hooks run;
+otherwise they don&rsquo;t.
+</p>
+<p>For convenience, when the VM fires a hook, it does so with the trap
+level temporarily set to 0.  That way the hooks don&rsquo;t fire while you&rsquo;re
+handling a hook.  The trace level is restored to whatever it was once the hook
+procedure finishes.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-vm_002dtrace_002dlevel"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vm-trace-level</strong><a class="copiable-link" href='#index-vm_002dtrace_002dlevel'> &para;</a></span></dt>
+<dd><p>Retrieve the &ldquo;trace level&rdquo; of the VM. If positive, the trace hooks
+associated with <var class="var">vm</var> will be run. The initial trace level is 0.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-set_002dvm_002dtrace_002dlevel_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-vm-trace-level!</strong> <var class="def-var-arguments">level</var><a class="copiable-link" href='#index-set_002dvm_002dtrace_002dlevel_0021'> &para;</a></span></dt>
+<dd><p>Set the &ldquo;trace level&rdquo; of the VM.
+</p></dd></dl>
+
+<p>See <a class="xref" href="A-Virtual-Machine-for-Guile.html">A Virtual Machine for Guile</a>, for more information on Guile&rsquo;s
+virtual machine.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Trap-Interface.html">Trap Interface</a>, Up: <a href="Traps.html">Traps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

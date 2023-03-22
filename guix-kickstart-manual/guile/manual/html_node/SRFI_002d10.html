@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-10 (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-10 (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-10 (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI-Support.html" rel="up" title="SRFI Support">
+<link href="SRFI_002d11.html" rel="next" title="SRFI-11">
+<link href="SRFI_002d9.html" rel="prev" title="SRFI-9">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="SRFI_002d10">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d11.html" accesskey="n" rel="next">SRFI-11 - let-values</a>, Previous: <a href="SRFI_002d9.html" accesskey="p" rel="prev">SRFI-9 - define-record-type</a>, Up: <a href="SRFI-Support.html" accesskey="u" rel="up">SRFI Support Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="SRFI_002d10-_002d-Hash_002dComma-Reader-Extension">7.5.9 SRFI-10 - Hash-Comma Reader Extension</h4>
+<a class="index-entry-id" id="index-SRFI_002d10"></a>
+
+<a class="index-entry-id" id="index-hash_002dcomma"></a>
+<a class="index-entry-id" id="index-_0023_002c_0028_0029"></a>
+<p>This SRFI implements a reader extension <code class="code">#,()</code> called hash-comma.
+It allows the reader to give new kinds of objects, for use both in data
+and as constants or literals in source code.  This feature is available
+with
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (srfi srfi-10))
+</pre></div>
+
+<p>The new read syntax is of the form
+</p>
+<div class="example">
+<pre class="example-preformatted">#,(<var class="var">tag</var> <var class="var">arg</var>&hellip;)
+</pre></div>
+
+<p>where <var class="var">tag</var> is a symbol and the <var class="var">arg</var>s are objects taken as
+parameters.  <var class="var">tag</var>s are registered with the following procedure.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-define_002dreader_002dctor"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">define-reader-ctor</strong> <var class="def-var-arguments">tag proc</var><a class="copiable-link" href='#index-define_002dreader_002dctor'> &para;</a></span></dt>
+<dd><p>Register <var class="var">proc</var> as the constructor for a hash-comma read syntax
+starting with symbol <var class="var">tag</var>, i.e. <code class="code">#,(<var class="var">tag</var> arg&hellip;)</code>.
+<var class="var">proc</var> is called with the given arguments <code class="code">(<var class="var">proc</var>
+arg&hellip;)</code> and the object it returns is the result of the read.
+</p></dd></dl>
+
+<p>For example, a syntax giving a list of <var class="var">N</var> copies of an object.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-reader-ctor 'repeat
+  (lambda (obj reps)
+    (make-list reps obj)))
+
+(display '#,(repeat 99 3))
+-| (99 99 99)
+</pre></div>
+
+<p>Notice the quote <code class="code">'</code> when the <code class="code">#,( )</code> is used.  The
+<code class="code">repeat</code> handler returns a list and the program must quote to use
+it literally, the same as any other list.  Ie.
+</p>
+<div class="example">
+<pre class="example-preformatted">(display '#,(repeat 99 3))
+&rArr;
+(display '(99 99 99))
+</pre></div>
+
+<p>When a handler returns an object which is self-evaluating, like a
+number or a string, then there&rsquo;s no need for quoting, just as there&rsquo;s
+no need when giving those directly as literals.  For example an
+addition,
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-reader-ctor 'sum
+  (lambda (x y)
+    (+ x y)))
+(display #,(sum 123 456)) -| 579
+</pre></div>
+
+<p>Once <code class="code">(srfi srfi-10)</code> has loaded, <code class="code">#,()</code> is available
+globally, there&rsquo;s no need to use <code class="code">(srfi srfi-10)</code> in later
+modules.  Similarly the tags registered are global and can be used
+anywhere once registered.
+</p>
+<p>We do not recommend <code class="code">#,()</code> reader extensions, however, and for
+three reasons.
+</p>
+<p>First of all, this SRFI is not modular: the tag is matched by name, not
+as an identifier within a scope.  Defining a reader extension in one
+part of a program can thus affect unrelated parts of a program because
+the tag is not scoped.
+</p>
+<p>Secondly, reader extensions can be hard to manage from a time
+perspective: when does the reader extension take effect?  See <a class="xref" href="Eval-When.html">Eval-when</a>, for more discussion.
+</p>
+<p>Finally, reader extensions can easily produce objects that can&rsquo;t be
+reified to an object file by the compiler.  For example if you define a
+reader extension that makes a hash table (see <a class="pxref" href="Hash-Tables.html">Hash Tables</a>), then it
+will work fine when run with the interpreter, and you think you have a
+neat hack.  But then if you try to compile your program, after wrangling
+with the <code class="code">eval-when</code> concerns mentioned above, the compiler will
+carp that it doesn&rsquo;t know how to serialize a hash table to disk.
+</p>
+<p>In the specific case of hash tables, it would be possible for Guile to
+know how to pack hash tables into compiled files, but this doesn&rsquo;t work
+in general.  What if the object you produce is an instance of a record
+type?  Guile would then have to serialize the record type to disk too,
+and then what happens if the program independently loads the code that
+defines the record type?  Does it define the same type or a different
+type?  Guile&rsquo;s record types are nominal, not structural, so the answer
+is not clear at all.
+</p>
+<p>For all of these reasons we recommend macros over reader extensions.
+Macros fulfill many of the same needs while preserving modular
+composition, and their interaction with <code class="code">eval-when</code> is well-known.
+If you need brevity, instead use <code class="code">read-hash-extend</code> and make your
+reader extension expand to a macro invocation.  In that way we preserve
+scoping as much as possible.  See <a class="xref" href="Reader-Extensions.html">Reader Extensions</a>.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d11.html">SRFI-11 - let-values</a>, Previous: <a href="SRFI_002d9.html">SRFI-9 - define-record-type</a>, Up: <a href="SRFI-Support.html">SRFI Support Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-105 (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-105 (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-105 (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI-Support.html" rel="up" title="SRFI Support">
+<link href="SRFI_002d111.html" rel="next" title="SRFI-111">
+<link href="SRFI_002d98.html" rel="prev" title="SRFI-98">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="SRFI_002d105">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d111.html" accesskey="n" rel="next">SRFI-111 Boxes.</a>, Previous: <a href="SRFI_002d98.html" accesskey="p" rel="prev">SRFI-98 Accessing environment variables.</a>, Up: <a href="SRFI-Support.html" accesskey="u" rel="up">SRFI Support Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="SRFI_002d105-Curly_002dinfix-expressions_002e">7.5.44 SRFI-105 Curly-infix expressions.</h4>
+<a class="index-entry-id" id="index-SRFI_002d105"></a>
+<a class="index-entry-id" id="index-curly_002dinfix"></a>
+<a class="index-entry-id" id="index-curly_002dinfix_002dand_002dbracket_002dlists"></a>
+
+<p>Guile&rsquo;s built-in reader includes support for SRFI-105 curly-infix
+expressions.  See <a class="uref" href="http://srfi.schemers.org/srfi-105/srfi-105.html">the specification of SRFI-105</a>.  Some examples:
+</p>
+<div class="example">
+<pre class="example-preformatted">{n &lt;= 5}                &rArr;  (&lt;= n 5)
+{a + b + c}             &rArr;  (+ a b c)
+{a * {b + c}}           &rArr;  (* a (+ b c))
+{(- a) / b}             &rArr;  (/ (- a) b)
+{-(a) / b}              &rArr;  (/ (- a) b) as well
+{(f a b) + (g h)}       &rArr;  (+ (f a b) (g h))
+{f(a b) + g(h)}         &rArr;  (+ (f a b) (g h)) as well
+{f[a b] + g(h)}         &rArr;  (+ ($bracket-apply$ f a b) (g h))
+'{a + f(b) + x}         &rArr;  '(+ a (f b) x)
+{length(x) &gt;= 6}        &rArr;  (&gt;= (length x) 6)
+{n-1 + n-2}             &rArr;  (+ n-1 n-2)
+{n * factorial{n - 1}}  &rArr;  (* n (factorial (- n 1)))
+{{a &gt; 0} and {b &gt;= 1}}  &rArr;  (and (&gt; a 0) (&gt;= b 1))
+{f{n - 1}(x)}           &rArr;  ((f (- n 1)) x)
+{a . z}                 &rArr;  ($nfx$ a . z)
+{a + b - c}             &rArr;  ($nfx$ a + b - c)
+</pre></div>
+
+<p>To enable curly-infix expressions within a file, place the reader
+directive <code class="code">#!curly-infix</code> before the first use of curly-infix
+notation.  To globally enable curly-infix expressions in Guile&rsquo;s reader,
+set the <code class="code">curly-infix</code> read option.
+</p>
+<p>Guile also implements the following non-standard extension to SRFI-105:
+if <code class="code">curly-infix</code> is enabled and there is no other meaning assigned
+to square brackets (i.e. the <code class="code">square-brackets</code> read option is
+turned off), then lists within square brackets are read as normal lists
+but with the special symbol <code class="code">$bracket-list$</code> added to the front.
+To enable this combination of read options within a file, use the reader
+directive <code class="code">#!curly-infix-and-bracket-lists</code>.  For example:
+</p>
+<div class="example">
+<pre class="example-preformatted">[a b]    &rArr;  ($bracket-list$ a b)
+[a . b]  &rArr;  ($bracket-list$ a . b)
+</pre></div>
+
+
+<p>For more information on reader options, See <a class="xref" href="Scheme-Read.html">Reading Scheme Code</a>.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d111.html">SRFI-111 Boxes.</a>, Previous: <a href="SRFI_002d98.html">SRFI-98 Accessing environment variables.</a>, Up: <a href="SRFI-Support.html">SRFI Support Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

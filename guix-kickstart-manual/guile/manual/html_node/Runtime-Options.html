@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Runtime Options (Guile Reference Manual)</title>
+
+<meta name="description" content="Runtime Options (Guile Reference Manual)">
+<meta name="keywords" content="Runtime Options (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Options-and-Config.html" rel="up" title="Options and Config">
+<link href="Feature-Tracking.html" rel="prev" title="Feature Tracking">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Runtime-Options">
+<div class="nav-panel">
+<p>
+Previous: <a href="Feature-Tracking.html" accesskey="p" rel="prev">Feature Tracking</a>, Up: <a href="Options-and-Config.html" accesskey="u" rel="up">Configuration, Features and Runtime Options</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Runtime-Options-1">6.23.3 Runtime Options</h4>
+
+<p>There are a number of runtime options available for paramaterizing
+built-in procedures, like <code class="code">read</code>, and built-in behavior, like what
+happens on an uncaught error.
+</p>
+<p>For more information on reader options, See <a class="xref" href="Scheme-Read.html">Reading Scheme Code</a>.
+</p>
+<p>For more information on print options, See <a class="xref" href="Scheme-Write.html">Writing Scheme Values</a>.
+</p>
+<p>Finally, for more information on debugger options, See <a class="xref" href="Debug-Options.html">Debug options</a>.
+</p>
+<ul class="mini-toc">
+<li><a href="#Examples-of-option-use" accesskey="1">Examples of option use</a></li>
+</ul>
+<div class="subsubsection-level-extent" id="Examples-of-option-use">
+<h4 class="subsubsection">6.23.3.1 Examples of option use</h4>
+
+<p>Here is an example of a session in which some read and debug option
+handling procedures are used.  In this example, the user
+</p>
+<ol class="enumerate">
+<li> Notices that the symbols <code class="code">abc</code> and <code class="code">aBc</code> are not the same
+</li><li> Examines the <code class="code">read-options</code>, and sees that <code class="code">case-insensitive</code>
+is set to &ldquo;no&rdquo;.
+</li><li> Enables <code class="code">case-insensitive</code>
+</li><li> Quits the recursive prompt
+</li><li> Verifies that now <code class="code">aBc</code> and <code class="code">abc</code> are the same
+</li></ol>
+
+<div class="example smalllisp lisp">
+<pre class="lisp-preformatted">scheme@(guile-user)&gt; (define abc &quot;hello&quot;)
+scheme@(guile-user)&gt; abc
+$1 = &quot;hello&quot;
+scheme@(guile-user)&gt; aBc
+&lt;unknown-location&gt;: warning: possibly unbound variable `aBc'
+ERROR: In procedure module-lookup:
+ERROR: Unbound variable: aBc
+Entering a new prompt.  Type `,bt' for a backtrace or `,q' to continue.
+scheme@(guile-user) [1]&gt; (read-options 'help)
+copy              no    Copy source code expressions.
+positions         yes   Record positions of source code expressions.
+case-insensitive  no    Convert symbols to lower case.
+keywords          #f    Style of keyword recognition: #f, 'prefix or 'postfix.
+r6rs-hex-escapes  no    Use R6RS variable-length character and string hex escapes.
+square-brackets   yes   Treat `[' and `]' as parentheses, for R6RS compatibility.
+hungry-eol-escapes no   In strings, consume leading whitespace after an
+                        escaped end-of-line.
+curly-infix       no    Support SRFI-105 curly infix expressions.
+scheme@(guile-user) [1]&gt; (read-enable 'case-insensitive)
+$2 = (square-brackets keywords #f case-insensitive positions)
+scheme@(guile-user) [1]&gt; ,q
+scheme@(guile-user)&gt; aBc
+$3 = &quot;hello&quot;
+</pre></div>
+
+
+
+</div>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Feature-Tracking.html">Feature Tracking</a>, Up: <a href="Options-and-Config.html">Configuration, Features and Runtime Options</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

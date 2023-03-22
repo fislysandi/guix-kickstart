@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>The Scheme Compiler (Guile Reference Manual)</title>
+
+<meta name="description" content="The Scheme Compiler (Guile Reference Manual)">
+<meta name="keywords" content="The Scheme Compiler (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Compiling-to-the-Virtual-Machine.html" rel="up" title="Compiling to the Virtual Machine">
+<link href="Tree_002dIL.html" rel="next" title="Tree-IL">
+<link href="Compiler-Tower.html" rel="prev" title="Compiler Tower">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="The-Scheme-Compiler">
+<div class="nav-panel">
+<p>
+Next: <a href="Tree_002dIL.html" accesskey="n" rel="next">Tree-IL</a>, Previous: <a href="Compiler-Tower.html" accesskey="p" rel="prev">Compiler Tower</a>, Up: <a href="Compiling-to-the-Virtual-Machine.html" accesskey="u" rel="up">Compiling to the Virtual Machine</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="The-Scheme-Compiler-1">9.4.2 The Scheme Compiler</h4>
+
+<p>The job of the Scheme compiler is to expand all macros and all of Scheme
+to its most primitive expressions.  The definition of &ldquo;primitive
+expression&rdquo; is given by the inventory of constructs provided by
+Tree-IL, the target language of the Scheme compiler: procedure calls,
+conditionals, lexical references, and so on.  This is described more
+fully in the next section.
+</p>
+<p>The tricky and amusing thing about the Scheme-to-Tree-IL compiler is
+that it is completely implemented by the macro expander.  Since the
+macro expander has to run over all of the source code already in order
+to expand macros, it might as well do the analysis at the same time,
+producing Tree-IL expressions directly.
+</p>
+<p>Because this compiler is actually the macro expander, it is extensible.
+Any macro which the user writes becomes part of the compiler.
+</p>
+<p>The Scheme-to-Tree-IL expander may be invoked using the generic
+<code class="code">compile</code> procedure:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(compile '(+ 1 2) #:from 'scheme #:to 'tree-il)
+&rArr;
+#&lt;tree-il (call (toplevel +) (const 1) (const 2))&gt;
+</pre></div>
+
+<p><code class="code">(compile <var class="var">foo</var> #:from 'scheme #:to 'tree-il)</code> is entirely
+equivalent to calling the macro expander as <code class="code">(macroexpand <var class="var">foo</var>
+'c '(compile load eval))</code>.  See <a class="xref" href="Macro-Expansion.html">Macro Expansion</a>.
+<code class="code">compile-tree-il</code>, the procedure dispatched by <code class="code">compile</code> to
+<code class="code">'tree-il</code>, is a small wrapper around <code class="code">macroexpand</code>, to make
+it conform to the general form of compiler procedures in Guile&rsquo;s
+language tower.
+</p>
+<p>Compiler procedures take three arguments: an expression, an
+environment, and a keyword list of options. They return three values:
+the compiled expression, the corresponding environment for the target
+language, and a &ldquo;continuation environment&rdquo;. The compiled expression
+and environment will serve as input to the next language&rsquo;s compiler.
+The &ldquo;continuation environment&rdquo; can be used to compile another
+expression from the same source language within the same module.
+</p>
+<p>For example, you might compile the expression, <code class="code">(define-module
+(foo))</code>. This will result in a Tree-IL expression and environment. But
+if you compiled a second expression, you would want to take into account
+the compile-time effect of compiling the previous expression, which puts
+the user in the <code class="code">(foo)</code> module. That is the purpose of the
+&ldquo;continuation environment&rdquo;; you would pass it as the environment when
+compiling the subsequent expression.
+</p>
+<p>For Scheme, an environment is a module. By default, the <code class="code">compile</code>
+and <code class="code">compile-file</code> procedures compile in a fresh module, such
+that bindings and macros introduced by the expression being compiled
+are isolated:
+</p>
+<div class="example">
+<pre class="example-preformatted">(eq? (current-module) (compile '(current-module)))
+&rArr; #f
+
+(compile '(define hello 'world))
+(defined? 'hello)
+&rArr; #f
+
+(define / *)
+(eq? (compile '/) /)
+&rArr; #f
+</pre></div>
+
+<p>Similarly, changes to the <code class="code">current-reader</code> fluid (see <a class="pxref" href="Loading.html"><code class="code">current-reader</code></a>) are isolated:
+</p>
+<div class="example">
+<pre class="example-preformatted">(compile '(fluid-set! current-reader (lambda args 'fail)))
+(fluid-ref current-reader)
+&rArr; #f
+</pre></div>
+
+<p>Nevertheless, having the compiler and <em class="dfn">compilee</em> share the same name
+space can be achieved by explicitly passing <code class="code">(current-module)</code> as
+the compilation environment:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define hello 'world)
+(compile 'hello #:env (current-module))
+&rArr; world
+</pre></div>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Tree_002dIL.html">Tree-IL</a>, Previous: <a href="Compiler-Tower.html">Compiler Tower</a>, Up: <a href="Compiling-to-the-Virtual-Machine.html">Compiling to the Virtual Machine</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

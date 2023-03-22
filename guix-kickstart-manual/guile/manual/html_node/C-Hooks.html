@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>C Hooks (Guile Reference Manual)</title>
+
+<meta name="description" content="C Hooks (Guile Reference Manual)">
+<meta name="keywords" content="C Hooks (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Hooks.html" rel="up" title="Hooks">
+<link href="GC-Hooks.html" rel="next" title="GC Hooks">
+<link href="Hook-Reference.html" rel="prev" title="Hook Reference">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="C-Hooks">
+<div class="nav-panel">
+<p>
+Next: <a href="GC-Hooks.html" accesskey="n" rel="next">Hooks for Garbage Collection</a>, Previous: <a href="Hook-Reference.html" accesskey="p" rel="prev">Hook Reference</a>, Up: <a href="Hooks.html" accesskey="u" rel="up">Hooks</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Hooks-For-C-Code_002e">6.9.6.3 Hooks For C Code.</h4>
+
+<p>The hooks already described are intended to be populated by Scheme-level
+procedures.  In addition to this, the Guile library provides an
+independent set of interfaces for the creation and manipulation of hooks
+that are designed to be populated by functions implemented in C.
+</p>
+<p>The original motivation here was to provide a kind of hook that could
+safely be invoked at various points during garbage collection.
+Scheme-level hooks are unsuitable for this purpose as running them could
+itself require memory allocation, which would then invoke garbage
+collection recursively &hellip;  However, it is also the case that these
+hooks are easier to work with than the Scheme-level ones if you only
+want to register C functions with them.  So if that is mainly what your
+code needs to do, you may prefer to use this interface.
+</p>
+<p>To create a C hook, you should allocate storage for a structure of type
+<code class="code">scm_t_c_hook</code> and then initialize it using <code class="code">scm_c_hook_init</code>.
+</p>
+<dl class="first-deftp">
+<dt class="deftp" id="index-scm_005ft_005fc_005fhook"><span class="category-def">C Type: </span><span><strong class="def-name">scm_t_c_hook</strong><a class="copiable-link" href='#index-scm_005ft_005fc_005fhook'> &para;</a></span></dt>
+<dd><p>Data type for a C hook.  The internals of this type should be treated as
+opaque.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-scm_005ft_005fc_005fhook_005ftype"><span class="category-def">C Enum: </span><span><strong class="def-name">scm_t_c_hook_type</strong><a class="copiable-link" href='#index-scm_005ft_005fc_005fhook_005ftype'> &para;</a></span></dt>
+<dd><p>Enumeration of possible hook types, which are:
+</p>
+<dl class="table">
+<dt id='index-SCM_005fC_005fHOOK_005fNORMAL'><span><code class="code">SCM_C_HOOK_NORMAL</code><a class="copiable-link" href='#index-SCM_005fC_005fHOOK_005fNORMAL'> &para;</a></span></dt>
+<dd><p>Type of hook for which all the registered functions will always be called.
+</p></dd>
+<dt id='index-SCM_005fC_005fHOOK_005fOR'><span><code class="code">SCM_C_HOOK_OR</code><a class="copiable-link" href='#index-SCM_005fC_005fHOOK_005fOR'> &para;</a></span></dt>
+<dd><p>Type of hook for which the sequence of registered functions will be
+called only until one of them returns C true (a non-NULL pointer).
+</p></dd>
+<dt id='index-SCM_005fC_005fHOOK_005fAND'><span><code class="code">SCM_C_HOOK_AND</code><a class="copiable-link" href='#index-SCM_005fC_005fHOOK_005fAND'> &para;</a></span></dt>
+<dd><p>Type of hook for which the sequence of registered functions will be
+called only until one of them returns C false (a NULL pointer).
+</p></dd>
+</dl>
+</dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fhook_005finit"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_c_hook_init</strong> <code class="def-code-arguments">(scm_t_c_hook *hook, void *hook_data, scm_t_c_hook_type type)</code><a class="copiable-link" href='#index-scm_005fc_005fhook_005finit'> &para;</a></span></dt>
+<dd><p>Initialize the C hook at memory pointed to by <var class="var">hook</var>.  <var class="var">type</var>
+should be one of the values of the <code class="code">scm_t_c_hook_type</code> enumeration,
+and controls how the hook functions will be called.  <var class="var">hook_data</var> is
+a closure parameter that will be passed to all registered hook functions
+when they are called.
+</p></dd></dl>
+
+<p>To add or remove a C function from a C hook, use <code class="code">scm_c_hook_add</code>
+or <code class="code">scm_c_hook_remove</code>.  A hook function must expect three
+<code class="code">void *</code> parameters which are, respectively:
+</p>
+<dl class="table">
+<dt><var class="var">hook_data</var></dt>
+<dd><p>The hook closure data that was specified at the time the hook was
+initialized by <code class="code">scm_c_hook_init</code>.
+</p>
+</dd>
+<dt><var class="var">func_data</var></dt>
+<dd><p>The function closure data that was specified at the time that that
+function was registered with the hook by <code class="code">scm_c_hook_add</code>.
+</p>
+</dd>
+<dt><var class="var">data</var></dt>
+<dd><p>The call closure data specified by the <code class="code">scm_c_hook_run</code> call that
+runs the hook.
+</p></dd>
+</dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-scm_005ft_005fc_005fhook_005ffunction"><span class="category-def">C Type: </span><span><strong class="def-name">scm_t_c_hook_function</strong><a class="copiable-link" href='#index-scm_005ft_005fc_005fhook_005ffunction'> &para;</a></span></dt>
+<dd><p>Function type for a C hook function: takes three <code class="code">void *</code>
+parameters and returns a <code class="code">void *</code> result.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fhook_005fadd"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_c_hook_add</strong> <code class="def-code-arguments">(scm_t_c_hook *hook, scm_t_c_hook_function func, void *func_data, int appendp)</code><a class="copiable-link" href='#index-scm_005fc_005fhook_005fadd'> &para;</a></span></dt>
+<dd><p>Add function <var class="var">func</var>, with function closure data <var class="var">func_data</var>, to
+the C hook <var class="var">hook</var>.  The new function is appended to the hook&rsquo;s list
+of functions if <var class="var">appendp</var> is non-zero, otherwise prepended.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fhook_005fremove"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_c_hook_remove</strong> <code class="def-code-arguments">(scm_t_c_hook *hook, scm_t_c_hook_function func, void *func_data)</code><a class="copiable-link" href='#index-scm_005fc_005fhook_005fremove'> &para;</a></span></dt>
+<dd><p>Remove function <var class="var">func</var>, with function closure data <var class="var">func_data</var>,
+from the C hook <var class="var">hook</var>.  <code class="code">scm_c_hook_remove</code> checks both
+<var class="var">func</var> and <var class="var">func_data</var> so as to allow for the same <var class="var">func</var>
+being registered multiple times with different closure data.
+</p></dd></dl>
+
+<p>Finally, to invoke a C hook, call the <code class="code">scm_c_hook_run</code> function
+specifying the hook and the call closure data for this run:
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fhook_005frun"><span class="category-def">C Function: </span><span><code class="def-type">void *</code> <strong class="def-name">scm_c_hook_run</strong> <code class="def-code-arguments">(scm_t_c_hook *hook, void *data)</code><a class="copiable-link" href='#index-scm_005fc_005fhook_005frun'> &para;</a></span></dt>
+<dd><p>Run the C hook <var class="var">hook</var> will call closure data <var class="var">data</var>.  Subject to
+the variations for hook types <code class="code">SCM_C_HOOK_OR</code> and
+<code class="code">SCM_C_HOOK_AND</code>, <code class="code">scm_c_hook_run</code> calls <var class="var">hook</var>&rsquo;s
+registered functions in turn, passing them the hook&rsquo;s closure data, each
+function&rsquo;s closure data, and the call closure data.
+</p>
+<p><code class="code">scm_c_hook_run</code>&rsquo;s return value is the return value of the last
+function to be called.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="GC-Hooks.html">Hooks for Garbage Collection</a>, Previous: <a href="Hook-Reference.html">Hook Reference</a>, Up: <a href="Hooks.html">Hooks</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

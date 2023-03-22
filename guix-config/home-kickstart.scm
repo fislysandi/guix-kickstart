@@ -26,7 +26,9 @@
 											"pandoc"
 											"flex"
 											"python"
-											"tmux")))
+											"tmux"
+											"tor"
+											)))
 
   ;; Below is the list of Home services.  To search for available
   ;; services, run 'guix home search KEYWORD' in a terminal.
@@ -35,19 +37,19 @@
                   (home-bash-configuration
                    (aliases '(("ls" . "ls --color=auto" )
 							  ( "grep" . "grep --color=auto" )
-							  ( "greconf" . "guix home reconfigure" )
-							  ( "gcont" . "guix home container" )
+							  ( "gswitch" . "torify guix home reconfigure" )
+							  ( "gbuild" . "torify guix home container" )
 							  ( "l" . "ls -CF" )
 							  ( "la" . "ls -A" )
 							  ( "ls" . "ls --color=auto")
 							  ( "ll" . "ls -alF")))
 
                    (bashrc (list (local-file
-                                  "/home/fislysandi/guix-kickstart/guix-config//.bashrc"
+                                  "/home/fislysandi/src/guix-config//.bashrc"
                                   "bashrc")))
                    (bash-profile (list (local-file
-                                        "/home/fislysandi/guix-kickstart/guix-config//.bash_profile"
+                                        "/home/fislysandi/src/guix-config//.bash_profile"
                                         "bash_profile")))
                    (bash-logout (list (local-file
-                                       "/home/fislysandi/guix-kickstart/guix-config//.bash_logout"
+                                       "/home/fislysandi/src/guix-config//.bash_logout"
                                        "bash_logout"))))))))

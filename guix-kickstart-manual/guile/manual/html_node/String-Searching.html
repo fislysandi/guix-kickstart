@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>String Searching (Guile Reference Manual)</title>
+
+<meta name="description" content="String Searching (Guile Reference Manual)">
+<meta name="keywords" content="String Searching (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Strings.html" rel="up" title="Strings">
+<link href="Alphabetic-Case-Mapping.html" rel="next" title="Alphabetic Case Mapping">
+<link href="String-Comparison.html" rel="prev" title="String Comparison">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="String-Searching">
+<div class="nav-panel">
+<p>
+Next: <a href="Alphabetic-Case-Mapping.html" accesskey="n" rel="next">Alphabetic Case Mapping</a>, Previous: <a href="String-Comparison.html" accesskey="p" rel="prev">String Comparison</a>, Up: <a href="Strings.html" accesskey="u" rel="up">Strings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="String-Searching-1">6.6.5.8 String Searching</h4>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dindex"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-index</strong> <var class="def-var-arguments">s char_pred [start [end]]</var><a class="copiable-link" href='#index-string_002dindex'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005findex"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_index</strong> <var class="def-var-arguments">(s, char_pred, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005findex'> &para;</a></span></dt>
+<dd><p>Search through the string <var class="var">s</var> from left to right, returning
+the index of the first occurrence of a character which
+</p>
+<ul class="itemize mark-bullet">
+<li>equals <var class="var">char_pred</var>, if it is character,
+
+</li><li>satisfies the predicate <var class="var">char_pred</var>, if it is a procedure,
+
+</li><li>is in the set <var class="var">char_pred</var>, if it is a character set.
+</li></ul>
+
+<p>Return <code class="code">#f</code> if no match is found.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002drindex"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-rindex</strong> <var class="def-var-arguments">s char_pred [start [end]]</var><a class="copiable-link" href='#index-string_002drindex'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005frindex"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_rindex</strong> <var class="def-var-arguments">(s, char_pred, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005frindex'> &para;</a></span></dt>
+<dd><p>Search through the string <var class="var">s</var> from right to left, returning
+the index of the last occurrence of a character which
+</p>
+<ul class="itemize mark-bullet">
+<li>equals <var class="var">char_pred</var>, if it is character,
+
+</li><li>satisfies the predicate <var class="var">char_pred</var>, if it is a procedure,
+
+</li><li>is in the set if <var class="var">char_pred</var> is a character set.
+</li></ul>
+
+<p>Return <code class="code">#f</code> if no match is found.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dprefix_002dlength"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-prefix-length</strong> <var class="def-var-arguments">s1 s2 [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_002dprefix_002dlength'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fprefix_005flength"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_prefix_length</strong> <var class="def-var-arguments">(s1, s2, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005fprefix_005flength'> &para;</a></span></dt>
+<dd><p>Return the length of the longest common prefix of the two
+strings.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dprefix_002dlength_002dci"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-prefix-length-ci</strong> <var class="def-var-arguments">s1 s2 [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_002dprefix_002dlength_002dci'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fprefix_005flength_005fci"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_prefix_length_ci</strong> <var class="def-var-arguments">(s1, s2, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005fprefix_005flength_005fci'> &para;</a></span></dt>
+<dd><p>Return the length of the longest common prefix of the two
+strings, ignoring character case.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dsuffix_002dlength"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-suffix-length</strong> <var class="def-var-arguments">s1 s2 [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_002dsuffix_002dlength'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fsuffix_005flength"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_suffix_length</strong> <var class="def-var-arguments">(s1, s2, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005fsuffix_005flength'> &para;</a></span></dt>
+<dd><p>Return the length of the longest common suffix of the two
+strings.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dsuffix_002dlength_002dci"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-suffix-length-ci</strong> <var class="def-var-arguments">s1 s2 [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_002dsuffix_002dlength_002dci'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fsuffix_005flength_005fci"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_suffix_length_ci</strong> <var class="def-var-arguments">(s1, s2, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005fsuffix_005flength_005fci'> &para;</a></span></dt>
+<dd><p>Return the length of the longest common suffix of the two
+strings, ignoring character case.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dprefix_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-prefix?</strong> <var class="def-var-arguments">s1 s2 [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_002dprefix_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fprefix_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_prefix_p</strong> <var class="def-var-arguments">(s1, s2, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005fprefix_005fp'> &para;</a></span></dt>
+<dd><p>Is <var class="var">s1</var> a prefix of <var class="var">s2</var>?
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dprefix_002dci_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-prefix-ci?</strong> <var class="def-var-arguments">s1 s2 [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_002dprefix_002dci_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fprefix_005fci_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_prefix_ci_p</strong> <var class="def-var-arguments">(s1, s2, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005fprefix_005fci_005fp'> &para;</a></span></dt>
+<dd><p>Is <var class="var">s1</var> a prefix of <var class="var">s2</var>, ignoring character case?
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dsuffix_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-suffix?</strong> <var class="def-var-arguments">s1 s2 [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_002dsuffix_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fsuffix_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_suffix_p</strong> <var class="def-var-arguments">(s1, s2, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005fsuffix_005fp'> &para;</a></span></dt>
+<dd><p>Is <var class="var">s1</var> a suffix of <var class="var">s2</var>?
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dsuffix_002dci_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-suffix-ci?</strong> <var class="def-var-arguments">s1 s2 [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_002dsuffix_002dci_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fsuffix_005fci_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_suffix_ci_p</strong> <var class="def-var-arguments">(s1, s2, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005fsuffix_005fci_005fp'> &para;</a></span></dt>
+<dd><p>Is <var class="var">s1</var> a suffix of <var class="var">s2</var>, ignoring character case?
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dindex_002dright"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-index-right</strong> <var class="def-var-arguments">s char_pred [start [end]]</var><a class="copiable-link" href='#index-string_002dindex_002dright'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005findex_005fright"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_index_right</strong> <var class="def-var-arguments">(s, char_pred, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005findex_005fright'> &para;</a></span></dt>
+<dd><p>Search through the string <var class="var">s</var> from right to left, returning
+the index of the last occurrence of a character which
+</p>
+<ul class="itemize mark-bullet">
+<li>equals <var class="var">char_pred</var>, if it is character,
+
+</li><li>satisfies the predicate <var class="var">char_pred</var>, if it is a procedure,
+
+</li><li>is in the set if <var class="var">char_pred</var> is a character set.
+</li></ul>
+
+<p>Return <code class="code">#f</code> if no match is found.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dskip"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-skip</strong> <var class="def-var-arguments">s char_pred [start [end]]</var><a class="copiable-link" href='#index-string_002dskip'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fskip"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_skip</strong> <var class="def-var-arguments">(s, char_pred, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005fskip'> &para;</a></span></dt>
+<dd><p>Search through the string <var class="var">s</var> from left to right, returning
+the index of the first occurrence of a character which
+</p>
+<ul class="itemize mark-bullet">
+<li>does not equal <var class="var">char_pred</var>, if it is character,
+
+</li><li>does not satisfy the predicate <var class="var">char_pred</var>, if it is a
+procedure,
+
+</li><li>is not in the set if <var class="var">char_pred</var> is a character set.
+</li></ul>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dskip_002dright"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-skip-right</strong> <var class="def-var-arguments">s char_pred [start [end]]</var><a class="copiable-link" href='#index-string_002dskip_002dright'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fskip_005fright"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_skip_right</strong> <var class="def-var-arguments">(s, char_pred, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005fskip_005fright'> &para;</a></span></dt>
+<dd><p>Search through the string <var class="var">s</var> from right to left, returning
+the index of the last occurrence of a character which
+</p>
+<ul class="itemize mark-bullet">
+<li>does not equal <var class="var">char_pred</var>, if it is character,
+
+</li><li>does not satisfy the predicate <var class="var">char_pred</var>, if it is a
+procedure,
+
+</li><li>is not in the set if <var class="var">char_pred</var> is a character set.
+</li></ul>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dcount"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-count</strong> <var class="def-var-arguments">s char_pred [start [end]]</var><a class="copiable-link" href='#index-string_002dcount'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fcount"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_count</strong> <var class="def-var-arguments">(s, char_pred, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005fcount'> &para;</a></span></dt>
+<dd><p>Return the count of the number of characters in the string
+<var class="var">s</var> which
+</p>
+<ul class="itemize mark-bullet">
+<li>equals <var class="var">char_pred</var>, if it is character,
+
+</li><li>satisfies the predicate <var class="var">char_pred</var>, if it is a procedure.
+
+</li><li>is in the set <var class="var">char_pred</var>, if it is a character set.
+</li></ul>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dcontains"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-contains</strong> <var class="def-var-arguments">s1 s2 [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_002dcontains'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fcontains"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_contains</strong> <var class="def-var-arguments">(s1, s2, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005fcontains'> &para;</a></span></dt>
+<dd><p>Does string <var class="var">s1</var> contain string <var class="var">s2</var>?  Return the index
+in <var class="var">s1</var> where <var class="var">s2</var> occurs as a substring, or false.
+The optional start/end indices restrict the operation to the
+indicated substrings.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dcontains_002dci"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-contains-ci</strong> <var class="def-var-arguments">s1 s2 [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_002dcontains_002dci'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fcontains_005fci"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_contains_ci</strong> <var class="def-var-arguments">(s1, s2, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005fcontains_005fci'> &para;</a></span></dt>
+<dd><p>Does string <var class="var">s1</var> contain string <var class="var">s2</var>?  Return the index
+in <var class="var">s1</var> where <var class="var">s2</var> occurs as a substring, or false.
+The optional start/end indices restrict the operation to the
+indicated substrings.  Character comparison is done
+case-insensitively.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Alphabetic-Case-Mapping.html">Alphabetic Case Mapping</a>, Previous: <a href="String-Comparison.html">String Comparison</a>, Up: <a href="Strings.html">Strings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

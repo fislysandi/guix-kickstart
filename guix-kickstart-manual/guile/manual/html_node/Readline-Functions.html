@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Readline Functions (Guile Reference Manual)</title>
+
+<meta name="description" content="Readline Functions (Guile Reference Manual)">
+<meta name="keywords" content="Readline Functions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Readline-Support.html" rel="up" title="Readline Support">
+<link href="Readline-Options.html" rel="prev" title="Readline Options">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Readline-Functions">
+<div class="nav-panel">
+<p>
+Previous: <a href="Readline-Options.html" accesskey="p" rel="prev">Readline Options</a>, Up: <a href="Readline-Support.html" accesskey="u" rel="up">Readline Support</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Readline-Functions-1">7.9.3 Readline Functions</h4>
+
+<p>The following functions are provided by
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 readline))
+</pre></div>
+
+<p>There are two ways to use readline from Scheme code, either make calls
+to <code class="code">readline</code> directly to get line by line input, or use the
+readline port below with all the usual reading functions.
+</p>
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-readline-1"><span class="category-def">Function: </span><span><strong class="def-name">readline</strong> <var class="def-var-arguments">[prompt]</var><a class="copiable-link" href='#index-readline-1'> &para;</a></span></dt>
+<dd><p>Read a line of input from the user and return it as a string (without
+a newline at the end).  <var class="var">prompt</var> is the prompt to show, or the
+default is the string set in <code class="code">set-readline-prompt!</code> below.
+</p>
+<div class="example">
+<pre class="example-preformatted">(readline &quot;Type something: &quot;) &rArr; &quot;hello&quot;
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-set_002dreadline_002dinput_002dport_0021"><span class="category-def">Function: </span><span><strong class="def-name">set-readline-input-port!</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-set_002dreadline_002dinput_002dport_0021'> &para;</a></span></dt>
+<dt class="deffnx defunx-alias-deffnx def-cmd-deffn" id="index-set_002dreadline_002doutput_002dport_0021"><span class="category-def">Function: </span><span><strong class="def-name">set-readline-output-port!</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-set_002dreadline_002doutput_002dport_0021'> &para;</a></span></dt>
+<dd><p>Set the input and output port the readline function should read from
+and write to.  <var class="var">port</var> must be a file port (see <a class="pxref" href="File-Ports.html">File Ports</a>),
+and should usually be a terminal.
+</p>
+<p>The default is the <code class="code">current-input-port</code> and
+<code class="code">current-output-port</code> (see <a class="pxref" href="Default-Ports.html">Default Ports for Input, Output and Errors</a>) when <code class="code">(ice-9
+readline)</code> loads, which in an interactive user session means the Unix
+&ldquo;standard input&rdquo; and &ldquo;standard output&rdquo;.
+</p></dd></dl>
+
+<ul class="mini-toc">
+<li><a href="#Readline-Port" accesskey="1">Readline Port</a></li>
+<li><a href="#Completion" accesskey="2">Completion</a></li>
+</ul>
+<div class="subsubsection-level-extent" id="Readline-Port">
+<h4 class="subsubsection">7.9.3.1 Readline Port</h4>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-readline_002dport"><span class="category-def">Function: </span><span><strong class="def-name">readline-port</strong><a class="copiable-link" href='#index-readline_002dport'> &para;</a></span></dt>
+<dd><p>Return a buffered input port (see <a class="pxref" href="Buffered-Input.html">Buffered Input</a>) which calls the
+<code class="code">readline</code> function above to get input.  This port can be used
+with all the usual reading functions (<code class="code">read</code>, <code class="code">read-char</code>,
+etc), and the user gets the interactive editing features of readline.
+</p>
+<p>There&rsquo;s only a single readline port created.  <code class="code">readline-port</code>
+creates it when first called, and on subsequent calls just returns
+what it previously made.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-activate_002dreadline"><span class="category-def">Function: </span><span><strong class="def-name">activate-readline</strong><a class="copiable-link" href='#index-activate_002dreadline'> &para;</a></span></dt>
+<dd><p>If the <code class="code">current-input-port</code> is a terminal (see <a class="pxref" href="Terminals-and-Ptys.html"><code class="code">isatty?</code></a>) then enable readline for all reading from
+<code class="code">current-input-port</code> (see <a class="pxref" href="Default-Ports.html">Default Ports for Input, Output and Errors</a>) and enable readline
+features in the interactive REPL (see <a class="pxref" href="The-REPL.html">Using the Guile REPL</a>).
+</p>
+<div class="example">
+<pre class="example-preformatted">(activate-readline)
+(read-char)
+</pre></div>
+
+<p><code class="code">activate-readline</code> enables readline on <code class="code">current-input-port</code>
+simply by a <code class="code">set-current-input-port</code> to the <code class="code">readline-port</code>
+above.  An application can do that directly if the extra REPL features
+that <code class="code">activate-readline</code> adds are not wanted.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-set_002dreadline_002dprompt_0021"><span class="category-def">Function: </span><span><strong class="def-name">set-readline-prompt!</strong> <var class="def-var-arguments">prompt1 [prompt2]</var><a class="copiable-link" href='#index-set_002dreadline_002dprompt_0021'> &para;</a></span></dt>
+<dd><p>Set the prompt string to print when reading input.  This is used when
+reading through <code class="code">readline-port</code>, and is also the default prompt
+for the <code class="code">readline</code> function above.
+</p>
+<p><var class="var">prompt1</var> is the initial prompt shown.  If a user might enter an
+expression across multiple lines, then <var class="var">prompt2</var> is a different
+prompt to show further input required.  In the Guile REPL for instance
+this is an ellipsis (&lsquo;<samp class="samp">...</samp>&rsquo;).
+</p>
+<p>See <code class="code">set-buffered-input-continuation?!</code> (see <a class="pxref" href="Buffered-Input.html">Buffered Input</a>)
+for an application to indicate the boundaries of logical expressions
+(assuming of course an application has such a notion).
+</p></dd></dl>
+
+</div>
+<div class="subsubsection-level-extent" id="Completion">
+<h4 class="subsubsection">7.9.3.2 Completion</h4>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-with_002dreadline_002dcompletion_002dfunction"><span class="category-def">Function: </span><span><strong class="def-name">with-readline-completion-function</strong> <var class="def-var-arguments">completer thunk</var><a class="copiable-link" href='#index-with_002dreadline_002dcompletion_002dfunction'> &para;</a></span></dt>
+<dd><p>Call <code class="code">(<var class="var">thunk</var>)</code> with <var class="var">completer</var> as the readline tab
+completion function to be used in any readline calls within that
+<var class="var">thunk</var>.  <var class="var">completer</var> can be <code class="code">#f</code> for no completion.
+</p>
+<p><var class="var">completer</var> will be called as <code class="code">(<var class="var">completer</var> text state)</code>,
+as described in (see <a data-manual="readline" href="http://cnswww.cns.cwru.edu/php/chet/readline/readline.html#How-Completing-Works">How Completing Works</a> in <cite class="cite">GNU Readline
+Library</cite>).  <var class="var">text</var> is a partial word to be completed, and each
+<var class="var">completer</var> call should return a possible completion string or
+<code class="code">#f</code> when no more.  <var class="var">state</var> is <code class="code">#f</code> for the first call
+asking about a new <var class="var">text</var> then <code class="code">#t</code> while getting further
+completions of that <var class="var">text</var>.
+</p>
+<p>Here&rsquo;s an example <var class="var">completer</var> for user login names from the
+password file (see <a class="pxref" href="User-Information.html">User Information</a>), much like readline&rsquo;s own
+<code class="code">rl_username_completion_function</code>,
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (username-completer-function text state)
+  (if (not state)
+      (setpwent))  ;; new, go to start of database
+  (let more ((pw (getpwent)))
+    (if pw
+        (if (string-prefix? text (passwd:name pw))
+            (passwd:name pw)     ;; this name matches, return it
+            (more (getpwent)))   ;; doesn't match, look at next
+        (begin
+          ;; end of database, close it and return #f
+          (endpwent)
+          #f))))
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-apropos_002dcompletion_002dfunction"><span class="category-def">Function: </span><span><strong class="def-name">apropos-completion-function</strong> <var class="def-var-arguments">text state</var><a class="copiable-link" href='#index-apropos_002dcompletion_002dfunction'> &para;</a></span></dt>
+<dd><p>A completion function offering completions for Guile functions and
+variables (all <code class="code">define</code>s).  This is the default completion
+function.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-filename_002dcompletion_002dfunction"><span class="category-def">Function: </span><span><strong class="def-name">filename-completion-function</strong> <var class="def-var-arguments">text state</var><a class="copiable-link" href='#index-filename_002dcompletion_002dfunction'> &para;</a></span></dt>
+<dd><p>A completion function offering filename completions.  This is
+readline&rsquo;s <code class="code">rl_filename_completion_function</code> (see <a data-manual="readline" href="http://cnswww.cns.cwru.edu/php/chet/readline/readline.html#Completion-Functions">Completion
+Functions</a> in <cite class="cite">GNU Readline Library</cite>).
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-make_002dcompletion_002dfunction"><span class="category-def">Function: </span><span><strong class="def-name">make-completion-function</strong> <var class="def-var-arguments">string-list</var><a class="copiable-link" href='#index-make_002dcompletion_002dfunction'> &para;</a></span></dt>
+<dd><p>Return a completion function which offers completions from the
+possibilities in <var class="var">string-list</var>.  Matching is case-sensitive.
+</p></dd></dl>
+
+
+
+</div>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Readline-Options.html">Readline Options</a>, Up: <a href="Readline-Support.html">Readline Support</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

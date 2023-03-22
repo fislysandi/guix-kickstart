@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Standard Error Handling (Guile Reference Manual)</title>
+
+<meta name="description" content="Standard Error Handling (Guile Reference Manual)">
+<meta name="keywords" content="Standard Error Handling (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Programmatic-Error-Handling.html" rel="up" title="Programmatic Error Handling">
+<link href="Stack-Overflow.html" rel="next" title="Stack Overflow">
+<link href="Pre_002dUnwind-Debugging.html" rel="prev" title="Pre-Unwind Debugging">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Standard-Error-Handling">
+<div class="nav-panel">
+<p>
+Next: <a href="Stack-Overflow.html" accesskey="n" rel="next">Stack Overflow</a>, Previous: <a href="Pre_002dUnwind-Debugging.html" accesskey="p" rel="prev">Pre-Unwind Debugging</a>, Up: <a href="Programmatic-Error-Handling.html" accesskey="u" rel="up">Programmatic Error Handling</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="call_002dwith_002derror_002dhandling">6.26.3.3 call-with-error-handling</h4>
+
+<p>The Guile REPL code (in <samp class="file">system/repl/repl.scm</samp> and related files)
+uses a <code class="code">catch</code> with a pre-unwind handler to capture the stack when
+an error occurs in an expression that was typed into the REPL, and debug
+that stack interactively in the context of the error.
+</p>
+<p>These procedures are available for use by user programs, in the
+<code class="code">(system repl error-handling)</code> module.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(use-modules (system repl error-handling))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-call_002dwith_002derror_002dhandling"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call-with-error-handling</strong> <var class="def-var-arguments">thunk        [#:on-error on-error=&rsquo;debug] [#:post-error post-error=&rsquo;catch]        [#:pass-keys pass-keys=&rsquo;(quit)]        [#:report-keys report-keys=&rsquo;(stack-overflow)]        [#:trap-handler trap-handler=&rsquo;debug]</var><a class="copiable-link" href='#index-call_002dwith_002derror_002dhandling'> &para;</a></span></dt>
+<dd><p>Call a thunk in a context in which errors are handled.
+</p>
+<p>Note that this function was written when <code class="code">throw</code>/<code class="code">catch</code> were
+the fundamental exception handling primitives in Guile, and so exposes
+some aspects of that interface (notably in the form of the procedural
+handlers).  Guile will probably replace this function with a
+<code class="code">call-with-standard-exception-handling</code> in the future.
+</p>
+<p>There are five keyword arguments:
+</p>
+<dl class="table">
+<dt><var class="var">on-error</var></dt>
+<dd><p>Specifies what to do before the stack is unwound.
+</p>
+<p>Valid options are <code class="code">debug</code> (the default), which will enter a
+debugger; <code class="code">pass</code>, in which case nothing is done, and the exception
+is rethrown; or a procedure, which will be the pre-unwind handler.
+</p>
+</dd>
+<dt><var class="var">post-error</var></dt>
+<dd><p>Specifies what to do after the stack is unwound.
+</p>
+<p>Valid options are <code class="code">catch</code> (the default), which will silently catch
+errors, returning the unspecified value; <code class="code">report</code>, which prints out
+a description of the error (via <code class="code">display-error</code>), and then returns
+the unspecified value; or a procedure, which will be the catch handler.
+</p>
+</dd>
+<dt><var class="var">trap-handler</var></dt>
+<dd><p>Specifies a trap handler: what to do when a breakpoint is hit.
+</p>
+<p>Valid options are <code class="code">debug</code>, which will enter the debugger;
+<code class="code">pass</code>, which does nothing; or <code class="code">disabled</code>, which disables
+traps entirely.  See <a class="xref" href="Traps.html">Traps</a>, for more information.
+</p>
+</dd>
+<dt><var class="var">pass-keys</var></dt>
+<dd><p>A set of keys to ignore, as a list.
+</p>
+</dd>
+<dt><var class="var">report-keys</var></dt>
+<dd><p>A set of keys to always report even if the post-error handler is
+<code class="code">catch</code>, as a list.
+</p></dd>
+</dl>
+</dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Stack-Overflow.html">Stack Overflow</a>, Previous: <a href="Pre_002dUnwind-Debugging.html">Pre-Unwind Debugging</a>, Up: <a href="Programmatic-Error-Handling.html">Programmatic Error Handling</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

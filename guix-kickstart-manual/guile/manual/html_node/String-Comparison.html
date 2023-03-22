@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>String Comparison (Guile Reference Manual)</title>
+
+<meta name="description" content="String Comparison (Guile Reference Manual)">
+<meta name="keywords" content="String Comparison (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Strings.html" rel="up" title="Strings">
+<link href="String-Searching.html" rel="next" title="String Searching">
+<link href="String-Modification.html" rel="prev" title="String Modification">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="String-Comparison">
+<div class="nav-panel">
+<p>
+Next: <a href="String-Searching.html" accesskey="n" rel="next">String Searching</a>, Previous: <a href="String-Modification.html" accesskey="p" rel="prev">String Modification</a>, Up: <a href="Strings.html" accesskey="u" rel="up">Strings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="String-Comparison-1">6.6.5.7 String Comparison</h4>
+
+<p>The procedures in this section are similar to the character ordering
+predicates (see <a class="pxref" href="Characters.html">Characters</a>), but are defined on character sequences.
+</p>
+<p>The first set is specified in R5RS and has names that end in <code class="code">?</code>.
+The second set is specified in SRFI-13 and the names have not ending
+<code class="code">?</code>.
+</p>
+<p>The predicates ending in <code class="code">-ci</code> ignore the character case
+when comparing strings.  For now, case-insensitive comparison is done
+using the R5RS rules, where every lower-case character that has a
+single character upper-case form is converted to uppercase before
+comparison.  See See <a class="xref" href="Text-Collation.html">the <code class="code">(ice-9
+i18n)</code> module</a>, for locale-dependent string comparison.
+</p>
+<a class="index-entry-id" id="index-string_003d_003f-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_003d_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string=?</strong> <var class="def-var-arguments">s1 s2 s3 &hellip;</var><a class="copiable-link" href='#index-string_003d_003f'> &para;</a></span></dt>
+<dd><p>Lexicographic equality predicate; return <code class="code">#t</code> if all strings are
+the same length and contain the same characters in the same positions,
+otherwise return <code class="code">#f</code>.
+</p>
+<p>The procedure <code class="code">string-ci=?</code> treats upper and lower case
+letters as though they were the same character, but
+<code class="code">string=?</code> treats upper and lower case as distinct
+characters.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-string_003c_003f-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_003c_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string&lt;?</strong> <var class="def-var-arguments">s1 s2 s3 &hellip;</var><a class="copiable-link" href='#index-string_003c_003f'> &para;</a></span></dt>
+<dd><p>Lexicographic ordering predicate; return <code class="code">#t</code> if, for every pair of
+consecutive string arguments <var class="var">str_i</var> and <var class="var">str_i+1</var>, <var class="var">str_i</var> is
+lexicographically less than <var class="var">str_i+1</var>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-string_003c_003d_003f-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_003c_003d_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string&lt;=?</strong> <var class="def-var-arguments">s1 s2 s3 &hellip;</var><a class="copiable-link" href='#index-string_003c_003d_003f'> &para;</a></span></dt>
+<dd><p>Lexicographic ordering predicate; return <code class="code">#t</code> if, for every pair of
+consecutive string arguments <var class="var">str_i</var> and <var class="var">str_i+1</var>, <var class="var">str_i</var> is
+lexicographically less than or equal to <var class="var">str_i+1</var>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-string_003e_003f-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_003e_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string&gt;?</strong> <var class="def-var-arguments">s1 s2 s3 &hellip;</var><a class="copiable-link" href='#index-string_003e_003f'> &para;</a></span></dt>
+<dd><p>Lexicographic ordering predicate; return <code class="code">#t</code> if, for every pair of
+consecutive string arguments <var class="var">str_i</var> and <var class="var">str_i+1</var>, <var class="var">str_i</var> is
+lexicographically greater than <var class="var">str_i+1</var>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-string_003e_003d_003f-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_003e_003d_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string&gt;=?</strong> <var class="def-var-arguments">s1 s2 s3 &hellip;</var><a class="copiable-link" href='#index-string_003e_003d_003f'> &para;</a></span></dt>
+<dd><p>Lexicographic ordering predicate; return <code class="code">#t</code> if, for every pair of
+consecutive string arguments <var class="var">str_i</var> and <var class="var">str_i+1</var>, <var class="var">str_i</var> is
+lexicographically greater than or equal to <var class="var">str_i+1</var>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-string_002dci_003d_003f-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dci_003d_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-ci=?</strong> <var class="def-var-arguments">s1 s2 s3 &hellip;</var><a class="copiable-link" href='#index-string_002dci_003d_003f'> &para;</a></span></dt>
+<dd><p>Case-insensitive string equality predicate; return <code class="code">#t</code> if
+all strings are the same length and their component
+characters match (ignoring case) at each position; otherwise
+return <code class="code">#f</code>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-string_002dci_003c_003f-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dci_003c_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-ci&lt;?</strong> <var class="def-var-arguments">s1 s2 s3 &hellip;</var><a class="copiable-link" href='#index-string_002dci_003c_003f'> &para;</a></span></dt>
+<dd><p>Case insensitive lexicographic ordering predicate; return <code class="code">#t</code> if,
+for every pair of consecutive string arguments <var class="var">str_i</var> and
+<var class="var">str_i+1</var>, <var class="var">str_i</var> is lexicographically less than <var class="var">str_i+1</var>
+regardless of case.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-string_003c_003d_003f-3"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dci_003c_003d_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-ci&lt;=?</strong> <var class="def-var-arguments">s1 s2 s3 &hellip;</var><a class="copiable-link" href='#index-string_002dci_003c_003d_003f'> &para;</a></span></dt>
+<dd><p>Case insensitive lexicographic ordering predicate; return <code class="code">#t</code> if,
+for every pair of consecutive string arguments <var class="var">str_i</var> and
+<var class="var">str_i+1</var>, <var class="var">str_i</var> is lexicographically less than or equal to
+<var class="var">str_i+1</var> regardless of case.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-string_002dci_003e_003f-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dci_003e_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-ci&gt;?</strong> <var class="def-var-arguments">s1 s2 s3 &hellip;</var><a class="copiable-link" href='#index-string_002dci_003e_003f'> &para;</a></span></dt>
+<dd><p>Case insensitive lexicographic ordering predicate; return <code class="code">#t</code> if,
+for every pair of consecutive string arguments <var class="var">str_i</var> and
+<var class="var">str_i+1</var>, <var class="var">str_i</var> is lexicographically greater than
+<var class="var">str_i+1</var> regardless of case.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-string_002dci_003e_003d_003f-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dci_003e_003d_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-ci&gt;=?</strong> <var class="def-var-arguments">s1 s2 s3 &hellip;</var><a class="copiable-link" href='#index-string_002dci_003e_003d_003f'> &para;</a></span></dt>
+<dd><p>Case insensitive lexicographic ordering predicate; return <code class="code">#t</code> if,
+for every pair of consecutive string arguments <var class="var">str_i</var> and
+<var class="var">str_i+1</var>, <var class="var">str_i</var> is lexicographically greater than or equal to
+<var class="var">str_i+1</var> regardless of case.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dcompare"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-compare</strong> <var class="def-var-arguments">s1 s2 proc_lt proc_eq proc_gt [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_002dcompare'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fcompare"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_compare</strong> <var class="def-var-arguments">(s1, s2, proc_lt, proc_eq, proc_gt, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005fcompare'> &para;</a></span></dt>
+<dd><p>Apply <var class="var">proc_lt</var>, <var class="var">proc_eq</var>, <var class="var">proc_gt</var> to the
+mismatch index, depending upon whether <var class="var">s1</var> is less than,
+equal to, or greater than <var class="var">s2</var>.  The mismatch index is the
+largest index <var class="var">i</var> such that for every 0 &lt;= <var class="var">j</var> &lt;
+<var class="var">i</var>, <var class="var">s1</var>[<var class="var">j</var>] = <var class="var">s2</var>[<var class="var">j</var>] &ndash; that is,
+<var class="var">i</var> is the first position that does not match.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dcompare_002dci"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-compare-ci</strong> <var class="def-var-arguments">s1 s2 proc_lt proc_eq proc_gt [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_002dcompare_002dci'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fcompare_005fci"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_compare_ci</strong> <var class="def-var-arguments">(s1, s2, proc_lt, proc_eq, proc_gt, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005fcompare_005fci'> &para;</a></span></dt>
+<dd><p>Apply <var class="var">proc_lt</var>, <var class="var">proc_eq</var>, <var class="var">proc_gt</var> to the
+mismatch index, depending upon whether <var class="var">s1</var> is less than,
+equal to, or greater than <var class="var">s2</var>.  The mismatch index is the
+largest index <var class="var">i</var> such that for every 0 &lt;= <var class="var">j</var> &lt;
+<var class="var">i</var>, <var class="var">s1</var>[<var class="var">j</var>] = <var class="var">s2</var>[<var class="var">j</var>] &ndash; that is,
+<var class="var">i</var> is the first position where the lowercased letters 
+do not match.
+</p>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_003d"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string=</strong> <var class="def-var-arguments">s1 s2 [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_003d'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005feq"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_eq</strong> <var class="def-var-arguments">(s1, s2, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005feq'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#f</code> if <var class="var">s1</var> and <var class="var">s2</var> are not equal, a true
+value otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_003c_003e"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string&lt;&gt;</strong> <var class="def-var-arguments">s1 s2 [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_003c_003e'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fneq"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_neq</strong> <var class="def-var-arguments">(s1, s2, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005fneq'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#f</code> if <var class="var">s1</var> and <var class="var">s2</var> are equal, a true
+value otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_003c"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string&lt;</strong> <var class="def-var-arguments">s1 s2 [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_003c'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005flt"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_lt</strong> <var class="def-var-arguments">(s1, s2, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005flt'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#f</code> if <var class="var">s1</var> is greater or equal to <var class="var">s2</var>, a
+true value otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_003e"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string&gt;</strong> <var class="def-var-arguments">s1 s2 [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_003e'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fgt"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_gt</strong> <var class="def-var-arguments">(s1, s2, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005fgt'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#f</code> if <var class="var">s1</var> is less or equal to <var class="var">s2</var>, a
+true value otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_003c_003d"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string&lt;=</strong> <var class="def-var-arguments">s1 s2 [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_003c_003d'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fle"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_le</strong> <var class="def-var-arguments">(s1, s2, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005fle'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#f</code> if <var class="var">s1</var> is greater to <var class="var">s2</var>, a true
+value otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_003e_003d"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string&gt;=</strong> <var class="def-var-arguments">s1 s2 [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_003e_003d'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fge"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_ge</strong> <var class="def-var-arguments">(s1, s2, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005fge'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#f</code> if <var class="var">s1</var> is less to <var class="var">s2</var>, a true value
+otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dci_003d"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-ci=</strong> <var class="def-var-arguments">s1 s2 [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_002dci_003d'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fci_005feq"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_ci_eq</strong> <var class="def-var-arguments">(s1, s2, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005fci_005feq'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#f</code> if <var class="var">s1</var> and <var class="var">s2</var> are not equal, a true
+value otherwise.  The character comparison is done
+case-insensitively.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dci_003c_003e"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-ci&lt;&gt;</strong> <var class="def-var-arguments">s1 s2 [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_002dci_003c_003e'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fci_005fneq"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_ci_neq</strong> <var class="def-var-arguments">(s1, s2, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005fci_005fneq'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#f</code> if <var class="var">s1</var> and <var class="var">s2</var> are equal, a true
+value otherwise.  The character comparison is done
+case-insensitively.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dci_003c"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-ci&lt;</strong> <var class="def-var-arguments">s1 s2 [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_002dci_003c'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fci_005flt"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_ci_lt</strong> <var class="def-var-arguments">(s1, s2, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005fci_005flt'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#f</code> if <var class="var">s1</var> is greater or equal to <var class="var">s2</var>, a
+true value otherwise.  The character comparison is done
+case-insensitively.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dci_003e"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-ci&gt;</strong> <var class="def-var-arguments">s1 s2 [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_002dci_003e'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fci_005fgt"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_ci_gt</strong> <var class="def-var-arguments">(s1, s2, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005fci_005fgt'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#f</code> if <var class="var">s1</var> is less or equal to <var class="var">s2</var>, a
+true value otherwise.  The character comparison is done
+case-insensitively.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dci_003c_003d"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-ci&lt;=</strong> <var class="def-var-arguments">s1 s2 [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_002dci_003c_003d'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fci_005fle"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_ci_le</strong> <var class="def-var-arguments">(s1, s2, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005fci_005fle'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#f</code> if <var class="var">s1</var> is greater to <var class="var">s2</var>, a true
+value otherwise.  The character comparison is done
+case-insensitively.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dci_003e_003d"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-ci&gt;=</strong> <var class="def-var-arguments">s1 s2 [start1 [end1 [start2 [end2]]]]</var><a class="copiable-link" href='#index-string_002dci_003e_003d'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fci_005fge"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_ci_ge</strong> <var class="def-var-arguments">(s1, s2, start1, end1, start2, end2)</var><a class="copiable-link" href='#index-scm_005fstring_005fci_005fge'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#f</code> if <var class="var">s1</var> is less to <var class="var">s2</var>, a true value
+otherwise.  The character comparison is done
+case-insensitively.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dhash"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-hash</strong> <var class="def-var-arguments">s [bound [start [end]]]</var><a class="copiable-link" href='#index-string_002dhash'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsubstring_005fhash"><span class="category-def">C Function: </span><span><strong class="def-name">scm_substring_hash</strong> <var class="def-var-arguments">(s, bound, start, end)</var><a class="copiable-link" href='#index-scm_005fsubstring_005fhash'> &para;</a></span></dt>
+<dd><p>Compute a hash value for <var class="var">s</var>.  The optional argument <var class="var">bound</var> is a non-negative exact integer specifying the range of the hash function. A positive value restricts the return value to the range [0,bound).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dhash_002dci"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-hash-ci</strong> <var class="def-var-arguments">s [bound [start [end]]]</var><a class="copiable-link" href='#index-string_002dhash_002dci'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsubstring_005fhash_005fci"><span class="category-def">C Function: </span><span><strong class="def-name">scm_substring_hash_ci</strong> <var class="def-var-arguments">(s, bound, start, end)</var><a class="copiable-link" href='#index-scm_005fsubstring_005fhash_005fci'> &para;</a></span></dt>
+<dd><p>Compute a hash value for <var class="var">s</var>.  The optional argument <var class="var">bound</var> is a non-negative exact integer specifying the range of the hash function. A positive value restricts the return value to the range [0,bound).
+</p></dd></dl>
+
+<p>Because the same visual appearance of an abstract Unicode character can 
+be obtained via multiple sequences of Unicode characters, even the 
+case-insensitive string comparison functions described above may return
+<code class="code">#f</code> when presented with strings containing different 
+representations of the same character.  For example, the Unicode 
+character &ldquo;LATIN SMALL LETTER S WITH DOT BELOW AND DOT ABOVE&rdquo; can be 
+represented with a single character (U+1E69) or by the character &ldquo;LATIN
+SMALL LETTER S&rdquo; (U+0073) followed by the combining marks &ldquo;COMBINING 
+DOT BELOW&rdquo; (U+0323) and &ldquo;COMBINING DOT ABOVE&rdquo; (U+0307).
+</p>
+<p>For this reason, it is often desirable to ensure that the strings
+to be compared are using a mutually consistent representation for every 
+character.  The Unicode standard defines two methods of normalizing the
+contents of strings: Decomposition, which breaks composite characters 
+into a set of constituent characters with an ordering defined by the
+Unicode Standard; and composition, which performs the converse.
+</p>
+<p>There are two decomposition operations.  &ldquo;Canonical decomposition&rdquo; 
+produces character sequences that share the same visual appearance as
+the original characters, while &ldquo;compatibility decomposition&rdquo; produces
+ones whose visual appearances may differ from the originals but which
+represent the same abstract character.
+</p>
+<p>These operations are encapsulated in the following set of normalization
+forms:
+</p>
+<dl class="table">
+<dt><em class="dfn">NFD</em></dt>
+<dd><p>Characters are decomposed to their canonical forms.
+</p>
+</dd>
+<dt><em class="dfn">NFKD</em></dt>
+<dd><p>Characters are decomposed to their compatibility forms.
+</p>
+</dd>
+<dt><em class="dfn">NFC</em></dt>
+<dd><p>Characters are decomposed to their canonical forms, then composed.
+</p>
+</dd>
+<dt><em class="dfn">NFKC</em></dt>
+<dd><p>Characters are decomposed to their compatibility forms, then composed.
+</p>
+</dd>
+</dl>
+
+<p>The functions below put their arguments into one of the forms described
+above.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dnormalize_002dnfd"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-normalize-nfd</strong> <var class="def-var-arguments">s</var><a class="copiable-link" href='#index-string_002dnormalize_002dnfd'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fnormalize_005fnfd"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_normalize_nfd</strong> <var class="def-var-arguments">(s)</var><a class="copiable-link" href='#index-scm_005fstring_005fnormalize_005fnfd'> &para;</a></span></dt>
+<dd><p>Return the <code class="code">NFD</code> normalized form of <var class="var">s</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dnormalize_002dnfkd"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-normalize-nfkd</strong> <var class="def-var-arguments">s</var><a class="copiable-link" href='#index-string_002dnormalize_002dnfkd'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fnormalize_005fnfkd"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_normalize_nfkd</strong> <var class="def-var-arguments">(s)</var><a class="copiable-link" href='#index-scm_005fstring_005fnormalize_005fnfkd'> &para;</a></span></dt>
+<dd><p>Return the <code class="code">NFKD</code> normalized form of <var class="var">s</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dnormalize_002dnfc"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-normalize-nfc</strong> <var class="def-var-arguments">s</var><a class="copiable-link" href='#index-string_002dnormalize_002dnfc'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fnormalize_005fnfc"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_normalize_nfc</strong> <var class="def-var-arguments">(s)</var><a class="copiable-link" href='#index-scm_005fstring_005fnormalize_005fnfc'> &para;</a></span></dt>
+<dd><p>Return the <code class="code">NFC</code> normalized form of <var class="var">s</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dnormalize_002dnfkc"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-normalize-nfkc</strong> <var class="def-var-arguments">s</var><a class="copiable-link" href='#index-string_002dnormalize_002dnfkc'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fnormalize_005fnfkc"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_normalize_nfkc</strong> <var class="def-var-arguments">(s)</var><a class="copiable-link" href='#index-scm_005fstring_005fnormalize_005fnfkc'> &para;</a></span></dt>
+<dd><p>Return the <code class="code">NFKC</code> normalized form of <var class="var">s</var>.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="String-Searching.html">String Searching</a>, Previous: <a href="String-Modification.html">String Modification</a>, Up: <a href="Strings.html">Strings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Block Comments (Guile Reference Manual)</title>
+
+<meta name="description" content="Block Comments (Guile Reference Manual)">
+<meta name="keywords" content="Block Comments (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Scheme-Syntax.html" rel="up" title="Scheme Syntax">
+<link href="Case-Sensitivity.html" rel="next" title="Case Sensitivity">
+<link href="Comments.html" rel="prev" title="Comments">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Block-Comments">
+<div class="nav-panel">
+<p>
+Next: <a href="Case-Sensitivity.html" accesskey="n" rel="next">Case Sensitivity</a>, Previous: <a href="Comments.html" accesskey="p" rel="prev">Comments</a>, Up: <a href="Scheme-Syntax.html" accesskey="u" rel="up">Scheme Syntax: Standard and Guile Extensions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Block-Comments-1">6.16.1.3 Block Comments</h4>
+<a class="index-entry-id" id="index-multiline-comments"></a>
+<a class="index-entry-id" id="index-block-comments"></a>
+<a class="index-entry-id" id="index-_0023_0021"></a>
+<a class="index-entry-id" id="index-_0021_0023"></a>
+
+
+<p>In addition to the standard line comments defined by R5RS, Guile has
+another comment type for multiline comments, called <em class="dfn">block
+comments</em>.  This type of comment begins with the character sequence
+<code class="code">#!</code> and ends with the characters <code class="code">!#</code>.
+</p>
+<p>These comments are compatible with the block
+comments in the Scheme Shell <samp class="file">scsh</samp> (see <a class="pxref" href="The-Scheme-shell-_0028scsh_0029.html">The Scheme shell (scsh)</a>).  The characters <code class="code">#!</code> were chosen because they are the
+magic characters used in shell scripts for indicating that the name of
+the program for executing the script follows on the same line.
+</p>
+<p>Thus a Guile script often starts like this.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">#! /usr/local/bin/guile -s
+!#
+</pre></div>
+
+<p>More details on Guile scripting can be found in the scripting section
+(see <a class="pxref" href="Guile-Scripting.html">Guile Scripting</a>).
+</p>
+<a class="index-entry-id" id="index-R6RS-block-comments"></a>
+<a class="index-entry-id" id="index-SRFI_002d30-block-comments"></a>
+<p>Similarly, Guile (starting from version 2.0) supports nested block
+comments as specified by R6RS and
+<a class="url" href="http://srfi.schemers.org/srfi-30/srfi-30.html">SRFI-30</a>:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(+ 1 #| this is a #| nested |# block comment |# 2)
+&rArr; 3
+</pre></div>
+
+<p>For backward compatibility, this syntax can be overridden with
+<code class="code">read-hash-extend</code> (see <a class="pxref" href="Reader-Extensions.html"><code class="code">read-hash-extend</code></a>).
+</p>
+<p>There is one special case where the contents of a comment can actually
+affect the interpretation of code.  When a character encoding
+declaration, such as <code class="code">coding: utf-8</code> appears in one of the first
+few lines of a source file, it indicates to Guile&rsquo;s default reader
+that this source code file is not ASCII.  For details see <a class="ref" href="Character-Encoding-of-Source-Files.html">Character Encoding of Source Files</a>.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Case-Sensitivity.html">Case Sensitivity</a>, Previous: <a href="Comments.html">Comments</a>, Up: <a href="Scheme-Syntax.html">Scheme Syntax: Standard and Guile Extensions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

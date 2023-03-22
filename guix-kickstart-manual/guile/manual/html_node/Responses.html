@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Responses (Guile Reference Manual)</title>
+
+<meta name="description" content="Responses (Guile Reference Manual)">
+<meta name="keywords" content="Responses (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Web.html" rel="up" title="Web">
+<link href="Web-Client.html" rel="next" title="Web Client">
+<link href="Requests.html" rel="prev" title="Requests">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Responses">
+<div class="nav-panel">
+<p>
+Next: <a href="Web-Client.html" accesskey="n" rel="next">Web Client</a>, Previous: <a href="Requests.html" accesskey="p" rel="prev">HTTP Requests</a>, Up: <a href="Web.html" accesskey="u" rel="up"><abbr class="acronym">HTTP</abbr>, the Web, and All That</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="HTTP-Responses">7.3.7 HTTP Responses</h4>
+
+<div class="example">
+<pre class="example-preformatted">(use-modules (web response))
+</pre></div>
+
+<p>As with requests (see <a class="pxref" href="Requests.html">HTTP Requests</a>), Guile offers a data type for HTTP
+responses.  Again, the body is represented separately from the request.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-response_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-response_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dversion"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-version</strong> <var class="def-var-arguments">response</var><a class="copiable-link" href='#index-response_002dversion'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dcode"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-code</strong> <var class="def-var-arguments">response</var><a class="copiable-link" href='#index-response_002dcode'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dreason_002dphrase"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-reason-phrase</strong> <var class="def-var-arguments">response</var><a class="copiable-link" href='#index-response_002dreason_002dphrase'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dheaders"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-headers</strong> <var class="def-var-arguments">response</var><a class="copiable-link" href='#index-response_002dheaders'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-port</strong> <var class="def-var-arguments">response</var><a class="copiable-link" href='#index-response_002dport'> &para;</a></span></dt>
+<dd><p>A predicate and field accessors for the response type.  The fields are as
+follows:
+</p><dl class="table">
+<dt><code class="code">version</code></dt>
+<dd><p>The HTTP version pair, like <code class="code">(1 . 1)</code>.
+</p></dd>
+<dt><code class="code">code</code></dt>
+<dd><p>The HTTP response code, like <code class="code">200</code>.
+</p></dd>
+<dt><code class="code">reason-phrase</code></dt>
+<dd><p>The reason phrase, or the standard reason phrase for the response&rsquo;s
+code.
+</p></dd>
+<dt><code class="code">headers</code></dt>
+<dd><p>The response headers, as an alist of parsed values.
+</p></dd>
+<dt><code class="code">port</code></dt>
+<dd><p>The port on which to read or write a response body, if any.
+</p></dd>
+</dl>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-read_002dresponse"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read-response</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-read_002dresponse'> &para;</a></span></dt>
+<dd><p>Read an HTTP response from <var class="var">port</var>.
+</p>
+<p>As a side effect, sets the encoding on <var class="var">port</var> to ISO-8859-1
+(latin-1), so that reading one character reads one byte. See the
+discussion of character sets in <a class="ref" href="#Responses">HTTP Responses</a>, for more information.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-build_002dresponse"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">build-response</strong> <var class="def-var-arguments">[#:version=&rsquo;(1 . 1)] [#:code=200] [#:reason-phrase=#f] [#:headers=&rsquo;()] [#:port=#f] [#:validate-headers?=#t]</var><a class="copiable-link" href='#index-build_002dresponse'> &para;</a></span></dt>
+<dd><p>Construct an HTTP response object. If <var class="var">validate-headers?</var> is true,
+the headers are each run through their respective validators.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-adapt_002dresponse_002dversion"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">adapt-response-version</strong> <var class="def-var-arguments">response version</var><a class="copiable-link" href='#index-adapt_002dresponse_002dversion'> &para;</a></span></dt>
+<dd><p>Adapt the given response to a different HTTP version.  Return a new HTTP
+response.
+</p>
+<p>The idea is that many applications might just build a response for the
+default HTTP version, and this method could handle a number of
+programmatic transformations to respond to older HTTP versions (0.9 and
+1.0). But currently this function is a bit heavy-handed, just updating
+the version field.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-write_002dresponse"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">write-response</strong> <var class="def-var-arguments">r port</var><a class="copiable-link" href='#index-write_002dresponse'> &para;</a></span></dt>
+<dd><p>Write the given HTTP response to <var class="var">port</var>.
+</p>
+<p>Return a new response, whose <code class="code">response-port</code> will continue writing
+on <var class="var">port</var>, perhaps using some transfer encoding.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-response_002dmust_002dnot_002dinclude_002dbody_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-must-not-include-body?</strong> <var class="def-var-arguments">r</var><a class="copiable-link" href='#index-response_002dmust_002dnot_002dinclude_002dbody_003f'> &para;</a></span></dt>
+<dd><p>Some responses, like those with status code 304, are specified as never
+having bodies.  This predicate returns <code class="code">#t</code> for those responses.
+</p>
+<p>Note also, though, that responses to <code class="code">HEAD</code> requests must also not
+have a body.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-response_002dbody_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-body-port</strong> <var class="def-var-arguments">r [#:decode?=#t] [#:keep-alive?=#t]</var><a class="copiable-link" href='#index-response_002dbody_002dport'> &para;</a></span></dt>
+<dd><p>Return an input port from which the body of <var class="var">r</var> can be read.  The encoding
+of the returned port is set according to <var class="var">r</var>&rsquo;s <code class="code">content-type</code> header,
+when it&rsquo;s textual, except if <var class="var">decode?</var> is <code class="code">#f</code>.  Return <code class="code">#f</code>
+when no body is available.
+</p>
+<p>When <var class="var">keep-alive?</var> is <code class="code">#f</code>, closing the returned port also closes
+<var class="var">r</var>&rsquo;s response port.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-read_002dresponse_002dbody"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read-response-body</strong> <var class="def-var-arguments">r</var><a class="copiable-link" href='#index-read_002dresponse_002dbody'> &para;</a></span></dt>
+<dd><p>Read the response body from <var class="var">r</var>, as a bytevector.  Returns <code class="code">#f</code>
+if there was no response body.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-write_002dresponse_002dbody"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">write-response-body</strong> <var class="def-var-arguments">r bv</var><a class="copiable-link" href='#index-write_002dresponse_002dbody'> &para;</a></span></dt>
+<dd><p>Write <var class="var">bv</var>, a bytevector, to the port corresponding to the HTTP
+response <var class="var">r</var>.
+</p></dd></dl>
+
+<p>As with requests, the various headers that are typically associated with
+HTTP responses may be accessed with these dedicated accessors.
+See <a class="xref" href="HTTP-Headers.html">HTTP Headers</a>, for more information on the format of parsed
+headers.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-response_002daccept_002dranges"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-accept-ranges</strong> <var class="def-var-arguments">response [default=#f]</var><a class="copiable-link" href='#index-response_002daccept_002dranges'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dage"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-age</strong> <var class="def-var-arguments">response [default=&rsquo;()]</var><a class="copiable-link" href='#index-response_002dage'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dallow"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-allow</strong> <var class="def-var-arguments">response [default=&rsquo;()]</var><a class="copiable-link" href='#index-response_002dallow'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dcache_002dcontrol"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-cache-control</strong> <var class="def-var-arguments">response [default=&rsquo;()]</var><a class="copiable-link" href='#index-response_002dcache_002dcontrol'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dconnection"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-connection</strong> <var class="def-var-arguments">response [default=&rsquo;()]</var><a class="copiable-link" href='#index-response_002dconnection'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dcontent_002dencoding"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-content-encoding</strong> <var class="def-var-arguments">response [default=&rsquo;()]</var><a class="copiable-link" href='#index-response_002dcontent_002dencoding'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dcontent_002dlanguage"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-content-language</strong> <var class="def-var-arguments">response [default=&rsquo;()]</var><a class="copiable-link" href='#index-response_002dcontent_002dlanguage'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dcontent_002dlength"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-content-length</strong> <var class="def-var-arguments">response [default=#f]</var><a class="copiable-link" href='#index-response_002dcontent_002dlength'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dcontent_002dlocation"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-content-location</strong> <var class="def-var-arguments">response [default=#f]</var><a class="copiable-link" href='#index-response_002dcontent_002dlocation'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dcontent_002dmd5"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-content-md5</strong> <var class="def-var-arguments">response [default=#f]</var><a class="copiable-link" href='#index-response_002dcontent_002dmd5'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dcontent_002drange"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-content-range</strong> <var class="def-var-arguments">response [default=#f]</var><a class="copiable-link" href='#index-response_002dcontent_002drange'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dcontent_002dtype"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-content-type</strong> <var class="def-var-arguments">response [default=#f]</var><a class="copiable-link" href='#index-response_002dcontent_002dtype'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002ddate"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-date</strong> <var class="def-var-arguments">response [default=#f]</var><a class="copiable-link" href='#index-response_002ddate'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002detag"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-etag</strong> <var class="def-var-arguments">response [default=#f]</var><a class="copiable-link" href='#index-response_002detag'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dexpires"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-expires</strong> <var class="def-var-arguments">response [default=#f]</var><a class="copiable-link" href='#index-response_002dexpires'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dlast_002dmodified"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-last-modified</strong> <var class="def-var-arguments">response [default=#f]</var><a class="copiable-link" href='#index-response_002dlast_002dmodified'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dlocation"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-location</strong> <var class="def-var-arguments">response [default=#f]</var><a class="copiable-link" href='#index-response_002dlocation'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dpragma"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-pragma</strong> <var class="def-var-arguments">response [default=&rsquo;()]</var><a class="copiable-link" href='#index-response_002dpragma'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dproxy_002dauthenticate"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-proxy-authenticate</strong> <var class="def-var-arguments">response [default=#f]</var><a class="copiable-link" href='#index-response_002dproxy_002dauthenticate'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dretry_002dafter"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-retry-after</strong> <var class="def-var-arguments">response [default=#f]</var><a class="copiable-link" href='#index-response_002dretry_002dafter'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dserver"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-server</strong> <var class="def-var-arguments">response [default=#f]</var><a class="copiable-link" href='#index-response_002dserver'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dtrailer"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-trailer</strong> <var class="def-var-arguments">response [default=&rsquo;()]</var><a class="copiable-link" href='#index-response_002dtrailer'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dtransfer_002dencoding"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-transfer-encoding</strong> <var class="def-var-arguments">response [default=&rsquo;()]</var><a class="copiable-link" href='#index-response_002dtransfer_002dencoding'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dupgrade"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-upgrade</strong> <var class="def-var-arguments">response [default=&rsquo;()]</var><a class="copiable-link" href='#index-response_002dupgrade'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dvary"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-vary</strong> <var class="def-var-arguments">response [default=&rsquo;()]</var><a class="copiable-link" href='#index-response_002dvary'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dvia"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-via</strong> <var class="def-var-arguments">response [default=&rsquo;()]</var><a class="copiable-link" href='#index-response_002dvia'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dwarning"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-warning</strong> <var class="def-var-arguments">response [default=&rsquo;()]</var><a class="copiable-link" href='#index-response_002dwarning'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-response_002dwww_002dauthenticate"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">response-www-authenticate</strong> <var class="def-var-arguments">response [default=#f]</var><a class="copiable-link" href='#index-response_002dwww_002dauthenticate'> &para;</a></span></dt>
+<dd><p>Return the given response header, or <var class="var">default</var> if none was present.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-text_002dcontent_002dtype_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">text-content-type?</strong> <var class="def-var-arguments"><var class="var">type</var></var><a class="copiable-link" href='#index-text_002dcontent_002dtype_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">type</var>, a symbol as returned by
+<code class="code">response-content-type</code>, represents a textual type such as
+<code class="code">text/plain</code>.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Web-Client.html">Web Client</a>, Previous: <a href="Requests.html">HTTP Requests</a>, Up: <a href="Web.html"><abbr class="acronym">HTTP</abbr>, the Web, and All That</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

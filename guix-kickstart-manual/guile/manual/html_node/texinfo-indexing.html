@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>texinfo indexing (Guile Reference Manual)</title>
+
+<meta name="description" content="texinfo indexing (Guile Reference Manual)">
+<meta name="keywords" content="texinfo indexing (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Texinfo-Processing.html" rel="up" title="Texinfo Processing">
+<link href="texinfo-string_002dutils.html" rel="next" title="texinfo string-utils">
+<link href="texinfo-html.html" rel="prev" title="texinfo html">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="texinfo-indexing">
+<div class="nav-panel">
+<p>
+Next: <a href="texinfo-string_002dutils.html" accesskey="n" rel="next">(texinfo string-utils)</a>, Previous: <a href="texinfo-html.html" accesskey="p" rel="prev">(texinfo html)</a>, Up: <a href="Texinfo-Processing.html" accesskey="u" rel="up">Texinfo Processing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="g_t_0028texinfo-indexing_0029">7.22.4 (texinfo indexing)</h4>
+<ul class="mini-toc">
+<li><a href="#Overview-8" accesskey="1">Overview</a></li>
+<li><a href="#Usage-8" accesskey="2">Usage</a></li>
+</ul>
+<div class="subsubsection-level-extent" id="Overview-8">
+<h4 class="subsubsection">7.22.4.1 Overview</h4>
+<p>Given a piece of stexi, return an index of a specified variety.
+</p>
+<p>Note that currently, <code class="code">stexi-extract-index</code> doesn&rsquo;t differentiate
+between different kinds of index entries. That&rsquo;s a bug ;)
+</p>
+</div>
+<div class="subsubsection-level-extent" id="Usage-8">
+<h4 class="subsubsection">7.22.4.2 Usage</h4>
+<a class="anchor" id="texinfo-indexing-stexi_002dextract_002dindex"></a><dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-stexi_002dextract_002dindex"><span class="category-def">Function: </span><span><strong class="def-name">stexi-extract-index</strong> <var class="def-var-arguments">tree manual-name kind</var><a class="copiable-link" href='#index-stexi_002dextract_002dindex'> &para;</a></span></dt>
+<dd><p>Given an stexi tree <var class="var">tree</var>, index all of the entries of type
+<var class="var">kind</var>. <var class="var">kind</var> can be one of the predefined texinfo indices
+(<code class="code">concept</code>, <code class="code">variable</code>, <code class="code">function</code>, <code class="code">key</code>,
+<code class="code">program</code>, <code class="code">type</code>) or one of the special symbols <code class="code">auto</code>
+or <code class="code">all</code>. <code class="code">auto</code> will scan the stext for a <code class="code">(printindex)</code>
+statement, and <code class="code">all</code> will generate an index from all entries,
+regardless of type.
+</p>
+<p>The returned index is a list of pairs, the <small class="sc">CAR</small> of which is the
+entry (a string) and the <small class="sc">CDR</small> of which is a node name (a string).
+</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+
+</body>
+</html>

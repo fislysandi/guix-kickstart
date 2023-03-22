@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Futures (Guile Reference Manual)</title>
+
+<meta name="description" content="Futures (Guile Reference Manual)">
+<meta name="keywords" content="Futures (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Scheduling.html" rel="up" title="Scheduling">
+<link href="Parallel-Forms.html" rel="next" title="Parallel Forms">
+<link href="Blocking.html" rel="prev" title="Blocking">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Futures">
+<div class="nav-panel">
+<p>
+Next: <a href="Parallel-Forms.html" accesskey="n" rel="next">Parallel forms</a>, Previous: <a href="Blocking.html" accesskey="p" rel="prev">Blocking in Guile Mode</a>, Up: <a href="Scheduling.html" accesskey="u" rel="up">Threads, Mutexes, Asyncs and Dynamic Roots</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Futures-1">6.22.7 Futures</h4>
+<a class="index-entry-id" id="index-futures"></a>
+<a class="index-entry-id" id="index-fine_002dgrain-parallelism"></a>
+<a class="index-entry-id" id="index-parallelism"></a>
+
+<p>The <code class="code">(ice-9 futures)</code> module provides <em class="dfn">futures</em>, a construct
+for fine-grain parallelism.  A future is a wrapper around an expression
+whose computation may occur in parallel with the code of the calling
+thread, and possibly in parallel with other futures.  Like promises,
+futures are essentially proxies that can be queried to obtain the value
+of the enclosed expression:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(touch (future (+ 2 3)))
+&rArr; 5
+</pre></div>
+
+<p>However, unlike promises, the expression associated with a future may be
+evaluated on another CPU core, should one be available.  This supports
+<em class="dfn">fine-grain parallelism</em>, because even relatively small computations
+can be embedded in futures.  Consider this sequential code:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define (find-prime lst1 lst2)
+  (or (find prime? lst1)
+      (find prime? lst2)))
+</pre></div>
+
+<p>The two arms of <code class="code">or</code> are potentially computation-intensive.  They
+are independent of one another, yet, they are evaluated sequentially
+when the first one returns <code class="code">#f</code>.  Using futures, one could rewrite
+it like this:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define (find-prime lst1 lst2)
+  (let ((f (future (find prime? lst2))))
+    (or (find prime? lst1)
+        (touch f))))
+</pre></div>
+
+<p>This preserves the semantics of <code class="code">find-prime</code>.  On a multi-core
+machine, though, the computation of <code class="code">(find prime? lst2)</code> may be
+done in parallel with that of the other <code class="code">find</code> call, which can
+reduce the execution time of <code class="code">find-prime</code>.
+</p>
+<p>Futures may be nested: a future can itself spawn and then <code class="code">touch</code>
+other futures, leading to a directed acyclic graph of futures.  Using
+this facility, a parallel <code class="code">map</code> procedure can be defined along
+these lines:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(use-modules (ice-9 futures) (ice-9 match))
+
+(define (par-map proc lst)
+  (match lst
+    (()
+     '())
+    ((head tail ...)
+     (let ((tail (future (par-map proc tail)))
+           (head (proc head)))
+       (cons head (touch tail))))))
+</pre></div>
+
+<p>Note that futures are intended for the evaluation of purely functional
+expressions.  Expressions that have side-effects or rely on I/O may
+require additional care, such as explicit synchronization
+(see <a class="pxref" href="Mutexes-and-Condition-Variables.html">Mutexes and Condition Variables</a>).
+</p>
+<p>Guile&rsquo;s futures are implemented on top of POSIX threads
+(see <a class="pxref" href="Threads.html">Threads</a>).  Internally, a fixed-size pool of threads is used to
+evaluate futures, such that offloading the evaluation of an expression
+to another thread doesn&rsquo;t incur thread creation costs.  By default, the
+pool contains one thread per available CPU core, minus one, to account
+for the main thread.  The number of available CPU cores is determined
+using <code class="code">current-processor-count</code> (see <a class="pxref" href="Processes.html">Processes</a>).
+</p>
+<p>When a thread touches a future that has not completed yet, it processes
+any pending future while waiting for it to complete, or just waits if
+there are no pending futures.  When <code class="code">touch</code> is called from within a
+future, the execution of the calling future is suspended, allowing its
+host thread to process other futures, and resumed when the touched
+future has completed.  This suspend/resume is achieved by capturing the
+calling future&rsquo;s continuation, and later reinstating it (see <a class="pxref" href="Prompts.html">delimited continuations</a>).
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-future"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">future</strong> <var class="def-var-arguments">exp</var><a class="copiable-link" href='#index-future'> &para;</a></span></dt>
+<dd><p>Return a future for expression <var class="var">exp</var>.  This is equivalent to:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(make-future (lambda () exp))
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dfuture"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-future</strong> <var class="def-var-arguments">thunk</var><a class="copiable-link" href='#index-make_002dfuture'> &para;</a></span></dt>
+<dd><p>Return a future for <var class="var">thunk</var>, a zero-argument procedure.
+</p>
+<p>This procedure returns immediately.  Execution of <var class="var">thunk</var> may begin
+in parallel with the calling thread&rsquo;s computations, if idle CPU cores
+are available, or it may start when <code class="code">touch</code> is invoked on the
+returned future.
+</p>
+<p>If the execution of <var class="var">thunk</var> throws an exception, that exception will
+be re-thrown when <code class="code">touch</code> is invoked on the returned future.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-future_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">future?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-future_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is a future.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-touch"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">touch</strong> <var class="def-var-arguments">f</var><a class="copiable-link" href='#index-touch'> &para;</a></span></dt>
+<dd><p>Return the result of the expression embedded in future <var class="var">f</var>.
+</p>
+<p>If the result was already computed in parallel, <code class="code">touch</code> returns
+instantaneously.  Otherwise, it waits for the computation to complete,
+if it already started, or initiates it.  In the former case, the calling
+thread may process other futures in the meantime.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Parallel-Forms.html">Parallel forms</a>, Previous: <a href="Blocking.html">Blocking in Guile Mode</a>, Up: <a href="Scheduling.html">Threads, Mutexes, Asyncs and Dynamic Roots</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

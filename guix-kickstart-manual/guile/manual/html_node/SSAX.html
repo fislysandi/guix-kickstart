@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SSAX (Guile Reference Manual)</title>
+
+<meta name="description" content="SSAX (Guile Reference Manual)">
+<meta name="keywords" content="SSAX (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SXML.html" rel="up" title="SXML">
+<link href="Transforming-SXML.html" rel="next" title="Transforming SXML">
+<link href="Reading-and-Writing-XML.html" rel="prev" title="Reading and Writing XML">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="SSAX">
+<div class="nav-panel">
+<p>
+Next: <a href="Transforming-SXML.html" accesskey="n" rel="next">Transforming SXML</a>, Previous: <a href="Reading-and-Writing-XML.html" accesskey="p" rel="prev">Reading and Writing XML</a>, Up: <a href="SXML.html" accesskey="u" rel="up">SXML</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="SSAX_003a-A-Functional-XML-Parsing-Toolkit">7.21.3 SSAX: A Functional XML Parsing Toolkit</h4>
+
+<p>Guile&rsquo;s XML parser is based on Oleg Kiselyov&rsquo;s powerful XML parsing
+toolkit, SSAX.
+</p>
+<ul class="mini-toc">
+<li><a href="#History-1" accesskey="1">History</a></li>
+<li><a href="#Implementation" accesskey="2">Implementation</a></li>
+<li><a href="#Usage" accesskey="3">Usage</a></li>
+</ul>
+<div class="subsubsection-level-extent" id="History-1">
+<h4 class="subsubsection">7.21.3.1 History</h4>
+
+<p>Back in the 1990s, when the world was young again and XML was the
+solution to all of its problems, there were basically two kinds of XML
+parsers out there: DOM parsers and SAX parsers.
+</p>
+<p>A DOM parser reads through an entire XML document, building up a tree of
+&ldquo;DOM objects&rdquo; representing the document structure.  They are very easy
+to use, but sometimes you don&rsquo;t actually want all of the information in
+a document; building an object tree is not necessary if all you want to
+do is to count word frequencies in a document, for example.
+</p>
+<p>SAX parsers were created to give the programmer more control on the
+parsing process.  A programmer gives the SAX parser a number of
+&ldquo;callbacks&rdquo;: functions that will be called on various features of the
+XML stream as they are encountered.  SAX parsers are more efficient, but
+much harder to use, as users typically have to manually maintain a
+stack of open elements.
+</p>
+<p>Kiselyov realized that the SAX programming model could be made much
+simpler if the callbacks were formulated not as a linear fold across the
+features of the XML stream, but as a <em class="emph">tree fold</em> over the structure
+implicit in the XML.  In this way, the user has a very convenient,
+functional-style interface that can still generate optimal parsers.
+</p>
+<p>The <code class="code">xml-&gt;sxml</code> interface from the <code class="code">(sxml simple)</code> module is a
+DOM-style parser built using SSAX, though it returns SXML instead of DOM
+objects.
+</p>
+</div>
+<div class="subsubsection-level-extent" id="Implementation">
+<h4 class="subsubsection">7.21.3.2 Implementation</h4>
+
+<p><code class="code">(sxml ssax)</code> is a package of low-to-high level lexing and parsing
+procedures that can be combined to yield a SAX, a DOM, a validating
+parser, or a parser intended for a particular document type.  The
+procedures in the package can be used separately to tokenize or parse
+various pieces of XML documents.  The package supports XML Namespaces,
+internal and external parsed entities, user-controlled handling of
+whitespace, and validation.  This module therefore is intended to be a
+framework, a set of &ldquo;Lego blocks&rdquo; you can use to build a parser
+following any discipline and performing validation to any degree.  As an
+example of the parser construction, the source file includes a
+semi-validating SXML parser.
+</p>
+<p>SSAX has a &ldquo;sequential&rdquo; feel of SAX yet a &ldquo;functional style&rdquo; of DOM.
+Like a SAX parser, the framework scans the document only once and
+permits incremental processing.  An application that handles document
+elements in order can run as efficiently as possible.  <em class="emph">Unlike</em> a
+SAX parser, the framework does not require an application register
+stateful callbacks and surrender control to the parser.  Rather, it is
+the application that can drive the framework &ndash; calling its functions to
+get the current lexical or syntax element.  These functions do not
+maintain or mutate any state save the input port.  Therefore, the
+framework permits parsing of XML in a pure functional style, with the
+input port being a monad (or a linear, read-once parameter).
+</p>
+<p>Besides the <var class="var">port</var>, there is another monad &ndash; <var class="var">seed</var>.  Most of
+the middle- and high-level parsers are single-threaded through the
+<var class="var">seed</var>.  The functions of this framework do not process or affect
+the <var class="var">seed</var> in any way: they simply pass it around as an instance of
+an opaque datatype.  User functions, on the other hand, can use the seed
+to maintain user&rsquo;s state, to accumulate parsing results, etc.  A user
+can freely mix their own functions with those of the framework.  On the
+other hand, the user may wish to instantiate a high-level parser:
+<code class="code">SSAX:make-elem-parser</code> or <code class="code">SSAX:make-parser</code>.  In the latter
+case, the user must provide functions of specific signatures, which are
+called at predictable moments during the parsing: to handle character
+data, element data, or processing instructions (PI).  The functions are
+always given the <var class="var">seed</var>, among other parameters, and must return the
+new <var class="var">seed</var>.
+</p>
+<p>From a functional point of view, XML parsing is a combined
+pre-post-order traversal of a &ldquo;tree&rdquo; that is the XML document itself.
+This down-and-up traversal tells the user about an element when its
+start tag is encountered.  The user is notified about the element once
+more, after all element&rsquo;s children have been handled.  The process of
+XML parsing therefore is a fold over the raw XML document.  Unlike a
+fold over trees defined in [1], the parser is necessarily
+single-threaded &ndash; obviously as elements in a text XML document are laid
+down sequentially.  The parser therefore is a tree fold that has been
+transformed to accept an accumulating parameter [1,2].
+</p>
+<p>Formally, the denotational semantics of the parser can be expressed as
+</p>
+<div class="example smallexample">
+<pre class="example-preformatted"> parser:: (Start-tag -&gt; Seed -&gt; Seed) -&gt;
+	   (Start-tag -&gt; Seed -&gt; Seed -&gt; Seed) -&gt;
+	   (Char-Data -&gt; Seed -&gt; Seed) -&gt;
+	   XML-text-fragment -&gt; Seed -&gt; Seed
+ parser fdown fup fchar &quot;&lt;elem attrs&gt; content &lt;/elem&gt;&quot; seed
+  = fup &quot;&lt;elem attrs&gt;&quot; seed
+	(parser fdown fup fchar &quot;content&quot; (fdown &quot;&lt;elem attrs&gt;&quot; seed))
+
+ parser fdown fup fchar &quot;char-data content&quot; seed
+  = parser fdown fup fchar &quot;content&quot; (fchar &quot;char-data&quot; seed)
+
+ parser fdown fup fchar &quot;elem-content content&quot; seed
+  = parser fdown fup fchar &quot;content&quot; (
+	parser fdown fup fchar &quot;elem-content&quot; seed)
+</pre></div>
+
+<p>Compare the last two equations with the left fold
+</p>
+<div class="example smallexample">
+<pre class="example-preformatted"> fold-left kons elem:list seed = fold-left kons list (kons elem seed)
+</pre></div>
+
+<p>The real parser created by <code class="code">SSAX:make-parser</code> is slightly more
+complicated, to account for processing instructions, entity references,
+namespaces, processing of document type declaration, etc.
+</p>
+<p>The XML standard document referred to in this module is
+<a class="uref" href="http://www.w3.org/TR/1998/REC-xml-19980210.html">http://www.w3.org/TR/1998/REC-xml-19980210.html</a>
+</p>
+<p>The present file also defines a procedure that parses the text of an XML
+document or of a separate element into SXML, an S-expression-based model
+of an XML Information Set.  SXML is also an Abstract Syntax Tree of an
+XML document.  SXML is similar but not identical to DOM; SXML is
+particularly suitable for Scheme-based XML/HTML authoring, SXPath
+queries, and tree transformations.  See SXML.html for more details.
+SXML is a term implementation of evaluation of the XML document [3].
+The other implementation is context-passing.
+</p>
+<p>The present frameworks fully supports the XML Namespaces Recommendation:
+<a class="uref" href="http://www.w3.org/TR/REC-xml-names/">http://www.w3.org/TR/REC-xml-names/</a>.
+</p>
+<p>Other links:
+</p>
+<dl class="table">
+<dt>[1]</dt>
+<dd><p>Jeremy Gibbons, Geraint Jones, &quot;The Under-appreciated Unfold,&quot; Proc.
+ICFP&rsquo;98, 1998, pp. 273-279.
+</p>
+</dd>
+<dt>[2]</dt>
+<dd><p>Richard S. Bird, The promotion and accumulation strategies in
+transformational programming, ACM Trans. Progr. Lang. Systems,
+6(4):487-504, October 1984.
+</p>
+</dd>
+<dt>[3]</dt>
+<dd><p>Ralf Hinze, &quot;Deriving Backtracking Monad Transformers,&quot; Functional
+Pearl. Proc ICFP&rsquo;00, pp. 186-197.
+</p>
+</dd>
+</dl>
+
+</div>
+<div class="subsubsection-level-extent" id="Usage">
+<h4 class="subsubsection">7.21.3.3 Usage</h4>
+<dl class="first-deffn">
+<dt class="deffn" id="index-current_002dssax_002derror_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">current-ssax-error-port</strong><a class="copiable-link" href='#index-current_002dssax_002derror_002dport'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-with_002dssax_002derror_002dto_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">with-ssax-error-to-port</strong> <var class="def-var-arguments">port thunk</var><a class="copiable-link" href='#index-with_002dssax_002derror_002dto_002dport'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-xml_002dtoken_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">xml-token?</strong> <var class="def-var-arguments">_</var><a class="copiable-link" href='#index-xml_002dtoken_003f'> &para;</a></span></dt>
+<dd><pre class="verbatim"> -- Scheme Procedure: pair? x
+     Return `#t' if X is a pair; otherwise return `#f'.
+
+ 
+</pre></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-xml_002dtoken_002dkind"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">xml-token-kind</strong> <var class="def-var-arguments">token</var><a class="copiable-link" href='#index-xml_002dtoken_002dkind'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-xml_002dtoken_002dhead"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">xml-token-head</strong> <var class="def-var-arguments">token</var><a class="copiable-link" href='#index-xml_002dtoken_002dhead'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dempty_002dattlist"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-empty-attlist</strong><a class="copiable-link" href='#index-make_002dempty_002dattlist'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-attlist_002dadd"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">attlist-add</strong> <var class="def-var-arguments">attlist name-value</var><a class="copiable-link" href='#index-attlist_002dadd'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-attlist_002dnull_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">attlist-null?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-attlist_002dnull_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">x</var> is the empty list, else <code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-attlist_002dremove_002dtop"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">attlist-remove-top</strong> <var class="def-var-arguments">attlist</var><a class="copiable-link" href='#index-attlist_002dremove_002dtop'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-attlist_002d_003ealist"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">attlist-&gt;alist</strong> <var class="def-var-arguments">attlist</var><a class="copiable-link" href='#index-attlist_002d_003ealist'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-attlist_002dfold"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">attlist-fold</strong> <var class="def-var-arguments">kons knil lis1</var><a class="copiable-link" href='#index-attlist_002dfold'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-define_002dparsed_002dentity_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">define-parsed-entity!</strong> <var class="def-var-arguments">entity str</var><a class="copiable-link" href='#index-define_002dparsed_002dentity_0021'> &para;</a></span></dt>
+<dd><p>Define a new parsed entity.  <var class="var">entity</var> should be a symbol.
+</p>
+<p>Instances of &amp;<var class="var">entity</var>; in XML text will be replaced with the string
+<var class="var">str</var>, which will then be parsed.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-reset_002dparsed_002dentity_002ddefinitions_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">reset-parsed-entity-definitions!</strong><a class="copiable-link" href='#index-reset_002dparsed_002dentity_002ddefinitions_0021'> &para;</a></span></dt>
+<dd><p>Restore the set of parsed entity definitions to its initial state.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ssax_003auri_002dstring_002d_003esymbol"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ssax:uri-string-&gt;symbol</strong> <var class="def-var-arguments">uri-str</var><a class="copiable-link" href='#index-ssax_003auri_002dstring_002d_003esymbol'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ssax_003askip_002dinternal_002ddtd"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ssax:skip-internal-dtd</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-ssax_003askip_002dinternal_002ddtd'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ssax_003aread_002dpi_002dbody_002das_002dstring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ssax:read-pi-body-as-string</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-ssax_003aread_002dpi_002dbody_002das_002dstring'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ssax_003areverse_002dcollect_002dstr_002ddrop_002dws"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ssax:reverse-collect-str-drop-ws</strong> <var class="def-var-arguments">fragments</var><a class="copiable-link" href='#index-ssax_003areverse_002dcollect_002dstr_002ddrop_002dws'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ssax_003aread_002dmarkup_002dtoken"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ssax:read-markup-token</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-ssax_003aread_002dmarkup_002dtoken'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ssax_003aread_002dcdata_002dbody"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ssax:read-cdata-body</strong> <var class="def-var-arguments">port str-handler seed</var><a class="copiable-link" href='#index-ssax_003aread_002dcdata_002dbody'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ssax_003aread_002dchar_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ssax:read-char-ref</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-ssax_003aread_002dchar_002dref'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ssax_003aread_002dattributes"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ssax:read-attributes</strong> <var class="def-var-arguments">port entities</var><a class="copiable-link" href='#index-ssax_003aread_002dattributes'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ssax_003acomplete_002dstart_002dtag"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ssax:complete-start-tag</strong> <var class="def-var-arguments">tag-head port elems entities namespaces</var><a class="copiable-link" href='#index-ssax_003acomplete_002dstart_002dtag'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ssax_003aread_002dexternal_002did"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ssax:read-external-id</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-ssax_003aread_002dexternal_002did'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ssax_003aread_002dchar_002ddata"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ssax:read-char-data</strong> <var class="def-var-arguments">port expect-eof? str-handler seed</var><a class="copiable-link" href='#index-ssax_003aread_002dchar_002ddata'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ssax_003axml_002d_003esxml"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ssax:xml-&gt;sxml</strong> <var class="def-var-arguments">port namespace-prefix-assig</var><a class="copiable-link" href='#index-ssax_003axml_002d_003esxml'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ssax_003amake_002dparser"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">ssax:make-parser</strong> <var class="def-var-arguments">. kw-val-pairs</var><a class="copiable-link" href='#index-ssax_003amake_002dparser'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ssax_003amake_002dpi_002dparser"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">ssax:make-pi-parser</strong> <var class="def-var-arguments">orig-handlers</var><a class="copiable-link" href='#index-ssax_003amake_002dpi_002dparser'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ssax_003amake_002delem_002dparser"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">ssax:make-elem-parser</strong> <var class="def-var-arguments">my-new-level-seed my-finish-element my-char-data-handler my-pi-handlers</var><a class="copiable-link" href='#index-ssax_003amake_002delem_002dparser'> &para;</a></span></dt>
+</dl>
+
+</div>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Transforming-SXML.html">Transforming SXML</a>, Previous: <a href="Reading-and-Writing-XML.html">Reading and Writing XML</a>, Up: <a href="SXML.html">SXML</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

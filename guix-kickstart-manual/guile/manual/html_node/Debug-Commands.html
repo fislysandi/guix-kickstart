@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Debug Commands (Guile Reference Manual)</title>
+
+<meta name="description" content="Debug Commands (Guile Reference Manual)">
+<meta name="keywords" content="Debug Commands (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="REPL-Commands.html" rel="up" title="REPL Commands">
+<link href="Inspect-Commands.html" rel="next" title="Inspect Commands">
+<link href="Profile-Commands.html" rel="prev" title="Profile Commands">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Debug-Commands">
+<div class="nav-panel">
+<p>
+Next: <a href="Inspect-Commands.html" accesskey="n" rel="next">Inspect Commands</a>, Previous: <a href="Profile-Commands.html" accesskey="p" rel="prev">Profile Commands</a>, Up: <a href="REPL-Commands.html" accesskey="u" rel="up">REPL Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Debug-Commands-1">4.4.4.6 Debug Commands</h4>
+
+<p>These debugging commands are only available within a recursive REPL;
+they do not work at the top level.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-backtrace"><span class="category-def">REPL Command: </span><span><strong class="def-name">backtrace</strong> <var class="def-var-arguments">[count] [#:width w] [#:full? f]</var><a class="copiable-link" href='#index-backtrace'> &para;</a></span></dt>
+<dd><p>Print a backtrace.
+</p>
+<p>Print a backtrace of all stack frames, or innermost <var class="var">count</var> frames.
+If <var class="var">count</var> is negative, the last <var class="var">count</var> frames will be shown.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-up"><span class="category-def">REPL Command: </span><span><strong class="def-name">up</strong> <var class="def-var-arguments">[count]</var><a class="copiable-link" href='#index-up'> &para;</a></span></dt>
+<dd><p>Select a calling stack frame.
+</p>
+<p>Select and print stack frames that called this one.
+An argument says how many frames up to go.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-down"><span class="category-def">REPL Command: </span><span><strong class="def-name">down</strong> <var class="def-var-arguments">[count]</var><a class="copiable-link" href='#index-down'> &para;</a></span></dt>
+<dd><p>Select a called stack frame.
+</p>
+<p>Select and print stack frames called by this one.
+An argument says how many frames down to go.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-frame"><span class="category-def">REPL Command: </span><span><strong class="def-name">frame</strong> <var class="def-var-arguments">[idx]</var><a class="copiable-link" href='#index-frame'> &para;</a></span></dt>
+<dd><p>Show a frame.
+</p>
+<p>Show the selected frame.  With an argument, select a frame by index,
+then show it.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-locals"><span class="category-def">REPL Command: </span><span><strong class="def-name">locals</strong><a class="copiable-link" href='#index-locals'> &para;</a></span></dt>
+<dd><p>Show local variables.
+</p>
+<p>Show locally-bound variables in the selected frame.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-error_002dmessage"><span class="category-def">REPL Command: </span><span><strong class="def-name">error-message</strong><a class="copiable-link" href='#index-error_002dmessage'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-error"><span class="category-def">REPL Command: </span><span><strong class="def-name">error</strong><a class="copiable-link" href='#index-error'> &para;</a></span></dt>
+<dd><p>Show error message.
+</p>
+<p>Display the message associated with the error that started the current
+debugging REPL.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-registers"><span class="category-def">REPL Command: </span><span><strong class="def-name">registers</strong><a class="copiable-link" href='#index-registers'> &para;</a></span></dt>
+<dd><p>Show the VM registers associated with the current frame.
+</p>
+<p>See <a class="xref" href="Stack-Layout.html">Stack Layout</a>, for more information on VM stack frames.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-width"><span class="category-def">REPL Command: </span><span><strong class="def-name">width</strong> <var class="def-var-arguments">[cols]</var><a class="copiable-link" href='#index-width'> &para;</a></span></dt>
+<dd><p>Sets the number of display columns in the output of <code class="code">,backtrace</code>
+and <code class="code">,locals</code> to <var class="var">cols</var>.  If <var class="var">cols</var> is not given, the width
+of the terminal is used.
+</p></dd></dl>
+
+<p>The next 3 commands work at any REPL.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-break"><span class="category-def">REPL Command: </span><span><strong class="def-name">break</strong> <var class="def-var-arguments">proc</var><a class="copiable-link" href='#index-break'> &para;</a></span></dt>
+<dd><p>Set a breakpoint at <var class="var">proc</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-break_002dat_002dsource"><span class="category-def">REPL Command: </span><span><strong class="def-name">break-at-source</strong> <var class="def-var-arguments">file line</var><a class="copiable-link" href='#index-break_002dat_002dsource'> &para;</a></span></dt>
+<dd><p>Set a breakpoint at the given source location.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-tracepoint"><span class="category-def">REPL Command: </span><span><strong class="def-name">tracepoint</strong> <var class="def-var-arguments">proc</var><a class="copiable-link" href='#index-tracepoint'> &para;</a></span></dt>
+<dd><p>Set a tracepoint on the given procedure. This will cause all calls to
+the procedure to print out a tracing message. See <a class="xref" href="Tracing-Traps.html">Tracing Traps</a>, for
+more information.
+</p></dd></dl>
+
+<p>The rest of the commands in this subsection all apply only when the
+stack is <em class="dfn">continuable</em> &mdash; in other words when it makes sense for
+the program that the stack comes from to continue running.  Usually this
+means that the program stopped because of a trap or a breakpoint.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-step"><span class="category-def">REPL Command: </span><span><strong class="def-name">step</strong><a class="copiable-link" href='#index-step'> &para;</a></span></dt>
+<dd><p>Tell the debugged program to step to the next source location.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-next"><span class="category-def">REPL Command: </span><span><strong class="def-name">next</strong><a class="copiable-link" href='#index-next'> &para;</a></span></dt>
+<dd><p>Tell the debugged program to step to the next source location in the
+same frame.  (See <a class="ref" href="Traps.html">Traps</a> for the details of how this works.)
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-finish"><span class="category-def">REPL Command: </span><span><strong class="def-name">finish</strong><a class="copiable-link" href='#index-finish'> &para;</a></span></dt>
+<dd><p>Tell the program being debugged to continue running until the completion
+of the current stack frame, and at that time to print the result and
+reenter the REPL.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Inspect-Commands.html">Inspect Commands</a>, Previous: <a href="Profile-Commands.html">Profile Commands</a>, Up: <a href="REPL-Commands.html">REPL Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

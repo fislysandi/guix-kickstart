@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Dia Objects (Guile Reference Manual)</title>
+
+<meta name="description" content="Dia Objects (Guile Reference Manual)">
+<meta name="keywords" content="Dia Objects (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Extending-Dia.html" rel="up" title="Extending Dia">
+<link href="Dia-Primitives.html" rel="next" title="Dia Primitives">
+<link href="Dia-Steps.html" rel="prev" title="Dia Steps">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Dia-Objects">
+<div class="nav-panel">
+<p>
+Next: <a href="Dia-Primitives.html" accesskey="n" rel="next">Writing Guile Primitives for Dia</a>, Previous: <a href="Dia-Steps.html" accesskey="p" rel="prev">Four Steps Required to Add Guile</a>, Up: <a href="Extending-Dia.html" accesskey="u" rel="up">How One Might Extend Dia Using Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="How-to-Represent-Dia-Data-in-Scheme">5.7.1.3 How to Represent Dia Data in Scheme</h4>
+
+<p>For all but the most trivial applications, you will probably want to
+allow some representation of your domain objects to exist on the Scheme
+level.  This is where foreign objects come in, and with them issues of
+lifetime management and garbage collection.
+</p>
+<p>To get more concrete about this, let&rsquo;s look again at the example we gave
+earlier of how application users can use Guile to build higher-level
+functions from the primitives that Dia itself provides.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define (change-squares'-fill-pattern new-pattern)
+  (for-each-shape current-page
+    (lambda (shape)
+      (if (square? shape)
+          (change-fill-pattern shape new-pattern)))))
+</pre></div>
+
+<p>Consider what is stored here in the variable <code class="code">shape</code>.  For each
+shape on the current page, the <code class="code">for-each-shape</code> primitive calls
+<code class="code">(lambda (shape) &hellip;)</code> with an argument representing that
+shape.  Question is: how is that argument represented on the Scheme
+level?  The issues are as follows.
+</p>
+<ul class="itemize mark-bullet">
+<li>Whatever the representation, it has to be decodable again by the C code
+for the <code class="code">square?</code> and <code class="code">change-fill-pattern</code> primitives.  In
+other words, a primitive like <code class="code">square?</code> has somehow to be able to
+turn the value that it receives back into something that points to the
+underlying C structure describing a shape.
+
+</li><li>The representation must also cope with Scheme code holding on to the
+value for later use.  What happens if the Scheme code stores
+<code class="code">shape</code> in a global variable, but then that shape is deleted (in a
+way that the Scheme code is not aware of), and later on some other
+Scheme code uses that global variable again in a call to, say,
+<code class="code">square?</code>?
+
+</li><li>The lifetime and memory allocation of objects that exist <em class="emph">only</em> in
+the Scheme world is managed automatically by Guile&rsquo;s garbage collector
+using one simple rule: when there are no remaining references to an
+object, the object is considered dead and so its memory is freed.  But
+for objects that exist in both C and Scheme, the picture is more
+complicated; in the case of Dia, where the <code class="code">shape</code> argument passes
+transiently in and out of the Scheme world, it would be quite wrong the
+<strong class="strong">delete</strong> the underlying C shape just because the Scheme code has
+finished evaluation.  How do we avoid this happening?
+</li></ul>
+
+<p>One resolution of these issues is for the Scheme-level representation of
+a shape to be a new, Scheme-specific C structure wrapped up as a foreign
+object.  The foreign object is what is passed into and out of Scheme
+code, and the Scheme-specific C structure inside the foreign object
+points to Dia&rsquo;s underlying C structure so that the code for primitives
+like <code class="code">square?</code> can get at it.
+</p>
+<p>To cope with an underlying shape being deleted while Scheme code is
+still holding onto a Scheme shape value, the underlying C structure
+should have a new field that points to the Scheme-specific foreign
+object.  When a shape is deleted, the relevant code chains through to
+the Scheme-specific structure and sets its pointer back to the
+underlying structure to NULL.  Thus the foreign object value for the
+shape continues to exist, but any primitive code that tries to use it
+will detect that the underlying shape has been deleted because the
+underlying structure pointer is NULL.
+</p>
+<p>So, to summarize the steps involved in this resolution of the problem
+(and assuming that the underlying C structure for a shape is
+<code class="code">struct dia_shape</code>):
+</p>
+<ul class="itemize mark-bullet">
+<li>Define a new Scheme-specific structure that <em class="emph">points</em> to the
+underlying C structure:
+
+<div class="example lisp">
+<pre class="lisp-preformatted">struct dia_guile_shape
+{
+  struct dia_shape * c_shape;   /* NULL =&gt; deleted */
+}
+</pre></div>
+
+</li><li>Add a field to <code class="code">struct dia_shape</code> that points to its <code class="code">struct
+dia_guile_shape</code> if it has one &mdash;
+
+<div class="example lisp">
+<pre class="lisp-preformatted">struct dia_shape
+{
+  &hellip;
+  struct dia_guile_shape * guile_shape;
+}
+</pre></div>
+
+<p>&mdash; so that C code can set <code class="code">guile_shape-&gt;c_shape</code> to NULL when the
+underlying shape is deleted.
+</p>
+</li><li>Wrap <code class="code">struct dia_guile_shape</code> as a foreign object type.
+
+</li><li>Whenever you need to represent a C shape onto the Scheme level, create a
+foreign object instance for it, and pass that.
+
+</li><li>In primitive code that receives a shape foreign object instance, check the
+<code class="code">c_shape</code> field when decoding it, to find out whether the
+underlying C shape is still there.
+</li></ul>
+
+<p>As far as memory management is concerned, the foreign object values and
+their Scheme-specific structures are under the control of the garbage
+collector, whereas the underlying C structures are explicitly managed in
+exactly the same way that Dia managed them before we thought of adding
+Guile.
+</p>
+<p>When the garbage collector decides to free a shape foreign object value,
+it calls the <em class="dfn">finalizer</em> function that was specified when defining
+the shape foreign object type.  To maintain the correctness of the
+<code class="code">guile_shape</code> field in the underlying C structure, this function
+should chain through to the underlying C structure (if it still exists)
+and set its <code class="code">guile_shape</code> field to NULL.
+</p>
+<p>For full documentation on defining and using foreign object types, see
+<a class="ref" href="Defining-New-Foreign-Object-Types.html">Defining New Foreign Object Types</a>.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Dia-Primitives.html">Writing Guile Primitives for Dia</a>, Previous: <a href="Dia-Steps.html">Four Steps Required to Add Guile</a>, Up: <a href="Extending-Dia.html">How One Might Extend Dia Using Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

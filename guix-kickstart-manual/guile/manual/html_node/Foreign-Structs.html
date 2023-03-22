@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Foreign Structs (Guile Reference Manual)</title>
+
+<meta name="description" content="Foreign Structs (Guile Reference Manual)">
+<meta name="keywords" content="Foreign Structs (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Foreign-Function-Interface.html" rel="up" title="Foreign Function Interface">
+<link href="More-Foreign-Functions.html" rel="next" title="More Foreign Functions">
+<link href="Void-Pointers-and-Byte-Access.html" rel="prev" title="Void Pointers and Byte Access">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Foreign-Structs">
+<div class="nav-panel">
+<p>
+Next: <a href="More-Foreign-Functions.html" accesskey="n" rel="next">More Foreign Functions</a>, Previous: <a href="Void-Pointers-and-Byte-Access.html" accesskey="p" rel="prev">Void Pointers and Byte Access</a>, Up: <a href="Foreign-Function-Interface.html" accesskey="u" rel="up">Foreign Function Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Foreign-Structs-1">6.19.7 Foreign Structs</h4>
+
+<p>Finally, one last note on foreign values before moving on to actually
+calling foreign functions. Sometimes you need to deal with C structs,
+which requires interpreting each element of the struct according to the
+its type, offset, and alignment. The <code class="code">(system foreign)</code> module has
+some primitives to support this.
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (system foreign))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-sizeof"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sizeof</strong> <var class="def-var-arguments">type</var><a class="copiable-link" href='#index-sizeof'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsizeof"><span class="category-def">C Function: </span><span><strong class="def-name">scm_sizeof</strong> <var class="def-var-arguments">(type)</var><a class="copiable-link" href='#index-scm_005fsizeof'> &para;</a></span></dt>
+<dd><p>Return the size of <var class="var">type</var>, in bytes.
+</p>
+<p><var class="var">type</var> should be a valid C type, like <code class="code">int</code>.
+Alternately <var class="var">type</var> may be the symbol <code class="code">*</code>, in which
+case the size of a pointer is returned. <var class="var">type</var> may
+also be a list of types, in which case the size of a
+<code class="code">struct</code> with ABI-conventional packing is returned.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-alignof"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">alignof</strong> <var class="def-var-arguments">type</var><a class="copiable-link" href='#index-alignof'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005falignof"><span class="category-def">C Function: </span><span><strong class="def-name">scm_alignof</strong> <var class="def-var-arguments">(type)</var><a class="copiable-link" href='#index-scm_005falignof'> &para;</a></span></dt>
+<dd><p>Return the alignment of <var class="var">type</var>, in bytes.
+</p>
+<p><var class="var">type</var> should be a valid C type, like <code class="code">int</code>.
+Alternately <var class="var">type</var> may be the symbol <code class="code">*</code>, in which
+case the alignment of a pointer is returned. <var class="var">type</var> may
+also be a list of types, in which case the alignment of a
+<code class="code">struct</code> with ABI-conventional packing is returned.
+</p></dd></dl>
+
+<p>Guile also provides some convenience methods to pack and unpack foreign
+pointers wrapping C structs.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dc_002dstruct"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-c-struct</strong> <var class="def-var-arguments">types vals</var><a class="copiable-link" href='#index-make_002dc_002dstruct'> &para;</a></span></dt>
+<dd><p>Create a foreign pointer to a C struct containing <var class="var">vals</var> with types
+<code class="code">types</code>.
+</p>
+<p><var class="var">vals</var> and <code class="code">types</code> should be lists of the same length.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-parse_002dc_002dstruct"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">parse-c-struct</strong> <var class="def-var-arguments">foreign types</var><a class="copiable-link" href='#index-parse_002dc_002dstruct'> &para;</a></span></dt>
+<dd><p>Parse a foreign pointer to a C struct, returning a list of values.
+</p>
+<p><code class="code">types</code> should be a list of C types.
+</p></dd></dl>
+
+<p>For example, to create and parse the equivalent of a <code class="code">struct {
+int64_t a; uint8_t b; }</code>:
+</p>
+<div class="example">
+<pre class="example-preformatted">(parse-c-struct (make-c-struct (list int64 uint8)
+                               (list 300 43))
+                (list int64 uint8))
+&rArr; (300 43)
+</pre></div>
+
+<p>As yet, Guile only has convenience routines to support
+conventionally-packed structs. But given the <code class="code">bytevector-&gt;pointer</code>
+and <code class="code">pointer-&gt;bytevector</code> routines, one can create and parse
+tightly packed structs and unions by hand. See the code for
+<code class="code">(system foreign)</code> for details.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="More-Foreign-Functions.html">More Foreign Functions</a>, Previous: <a href="Void-Pointers-and-Byte-Access.html">Void Pointers and Byte Access</a>, Up: <a href="Foreign-Function-Interface.html">Foreign Function Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

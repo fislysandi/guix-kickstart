@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Case-lambda (Guile Reference Manual)</title>
+
+<meta name="description" content="Case-lambda (Guile Reference Manual)">
+<meta name="keywords" content="Case-lambda (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Procedures.html" rel="up" title="Procedures">
+<link href="Higher_002dOrder-Functions.html" rel="next" title="Higher-Order Functions">
+<link href="Optional-Arguments.html" rel="prev" title="Optional Arguments">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Case_002dlambda">
+<div class="nav-panel">
+<p>
+Next: <a href="Higher_002dOrder-Functions.html" accesskey="n" rel="next">Higher-Order Functions</a>, Previous: <a href="Optional-Arguments.html" accesskey="p" rel="prev">Optional Arguments</a>, Up: <a href="Procedures.html" accesskey="u" rel="up">Procedures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Case_002dlambda-1">6.7.5 Case-lambda</h4>
+<a class="index-entry-id" id="index-SRFI_002d16"></a>
+<a class="index-entry-id" id="index-variable-arity"></a>
+<a class="index-entry-id" id="index-arity_002c-variable"></a>
+
+<p>R5RS&rsquo;s rest arguments are indeed useful and very general, but they
+often aren&rsquo;t the most appropriate or efficient means to get the job
+done. For example, <code class="code">lambda*</code> is a much better solution to the
+optional argument problem than <code class="code">lambda</code> with rest arguments.
+</p>
+<a class="index-entry-id" id="index-case_002dlambda"></a>
+<p>Likewise, <code class="code">case-lambda</code> works well for when you want one
+procedure to do double duty (or triple, or ...), without the penalty
+of consing a rest list.
+</p>
+<p>For example:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define (make-accum n)
+  (case-lambda
+    (() n)
+    ((m) (set! n (+ n m)) n)))
+
+(define a (make-accum 20))
+(a) &rArr; 20
+(a 10) &rArr; 30
+(a) &rArr; 30
+</pre></div>
+
+<p>The value returned by a <code class="code">case-lambda</code> form is a procedure which
+matches the number of actual arguments against the formals in the
+various clauses, in order. The first matching clause is selected, the
+corresponding values from the actual parameter list are bound to the
+variable names in the clauses and the body of the clause is evaluated.
+If no clause matches, an error is signalled.
+</p>
+<p>The syntax of the <code class="code">case-lambda</code> form is defined in the following
+EBNF grammar. <em class="dfn">Formals</em> means a formal argument list just like
+with <code class="code">lambda</code> (see <a class="pxref" href="Lambda.html">Lambda: Basic Procedure Creation</a>).
+</p>
+<div class="example">
+<div class="group"><pre class="example-preformatted">&lt;case-lambda&gt;
+   --&gt; (case-lambda &lt;case-lambda-clause&gt;*)
+   --&gt; (case-lambda &lt;docstring&gt; &lt;case-lambda-clause&gt;*)
+&lt;case-lambda-clause&gt;
+   --&gt; (&lt;formals&gt; &lt;definition-or-command&gt;*)
+&lt;formals&gt;
+   --&gt; (&lt;identifier&gt;*)
+     | (&lt;identifier&gt;* . &lt;identifier&gt;)
+     | &lt;identifier&gt;
+</pre></div></div>
+
+<p>Rest lists can be useful with <code class="code">case-lambda</code>:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define plus
+  (case-lambda
+    &quot;Return the sum of all arguments.&quot;
+    (() 0)
+    ((a) a)
+    ((a b) (+ a b))
+    ((a b . rest) (apply plus (+ a b) rest))))
+(plus 1 2 3) &rArr; 6
+</pre></div>
+
+<a class="index-entry-id" id="index-case_002dlambda_002a"></a>
+<p>Also, for completeness. Guile defines <code class="code">case-lambda*</code> as well,
+which is like <code class="code">case-lambda</code>, except with <code class="code">lambda*</code> clauses.
+A <code class="code">case-lambda*</code> clause matches if the arguments fill the
+required arguments, but are not too many for the optional and/or rest
+arguments.
+</p>
+<p>Keyword arguments are possible with <code class="code">case-lambda*</code> as well, but
+they do not contribute to the &ldquo;matching&rdquo; behavior, and their
+interactions with required, optional, and rest arguments can be
+surprising.
+</p>
+<p>For the purposes of <code class="code">case-lambda*</code> (and of <code class="code">case-lambda</code>, as a
+special case), a clause <em class="dfn">matches</em> if it has enough required
+arguments, and not too many positional arguments.  The required
+arguments are any arguments before the <code class="code">#:optional</code>, <code class="code">#:key</code>,
+and <code class="code">#:rest</code> arguments.  <em class="dfn">Positional</em> arguments are the
+required arguments, together with the optional arguments.
+</p>
+<p>In the absence of <code class="code">#:key</code> or <code class="code">#:rest</code> arguments, it&rsquo;s easy to
+see how there could be too many positional arguments: you pass 5
+arguments to a function that only takes 4 arguments, including optional
+arguments.  If there is a <code class="code">#:rest</code> argument, there can never be too
+many positional arguments: any application with enough required
+arguments for a clause will match that clause, even if there are also
+<code class="code">#:key</code> arguments.
+</p>
+<p>Otherwise, for applications to a clause with <code class="code">#:key</code> arguments (and
+without a <code class="code">#:rest</code> argument), a clause will match there only if
+there are enough required arguments and if the next argument after
+binding required and optional arguments, if any, is a keyword.  For
+efficiency reasons, Guile is currently unable to include keyword
+arguments in the matching algorithm.  Clauses match on positional
+arguments only, not by comparing a given keyword to the available set of
+keyword arguments that a function has.
+</p>
+<p>Some examples follow.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define f
+  (case-lambda*
+    ((a #:optional b) 'clause-1)
+    ((a #:optional b #:key c) 'clause-2)
+    ((a #:key d) 'clause-3)
+    ((#:key e #:rest f) 'clause-4)))
+
+(f) &rArr; clause-4
+(f 1) &rArr; clause-1
+(f) &rArr; clause-4
+(f #:e 10) clause-1
+(f 1 #:foo) clause-1
+(f 1 #:c 2) clause-2
+(f #:a #:b #:c #:d #:e) clause-4
+
+;; clause-2 will match anything that clause-3 would match.
+(f 1 #:d 2) &rArr; error: bad keyword args in clause 2
+</pre></div>
+
+<p>Don&rsquo;t forget that the clauses are matched in order, and the first
+matching clause will be taken.  This can result in a keyword being bound
+to a required argument, as in the case of <code class="code">f #:e 10</code>.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Higher_002dOrder-Functions.html">Higher-Order Functions</a>, Previous: <a href="Optional-Arguments.html">Optional Arguments</a>, Up: <a href="Procedures.html">Procedures</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

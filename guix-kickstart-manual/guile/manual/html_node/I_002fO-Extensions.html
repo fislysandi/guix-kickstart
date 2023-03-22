@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>I/O Extensions (Guile Reference Manual)</title>
+
+<meta name="description" content="I/O Extensions (Guile Reference Manual)">
+<meta name="keywords" content="I/O Extensions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Input-and-Output.html" rel="up" title="Input and Output">
+<link href="Non_002dBlocking-I_002fO.html" rel="next" title="Non-Blocking I/O">
+<link href="Using-Ports-from-C.html" rel="prev" title="Using Ports from C">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="I_002fO-Extensions">
+<div class="nav-panel">
+<p>
+Next: <a href="Non_002dBlocking-I_002fO.html" accesskey="n" rel="next">Non-Blocking I/O</a>, Previous: <a href="Using-Ports-from-C.html" accesskey="p" rel="prev">Using Ports from C</a>, Up: <a href="Input-and-Output.html" accesskey="u" rel="up">Input and Output</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Implementing-New-Port-Types-in-C">6.12.13 Implementing New Port Types in C</h4>
+
+<p>This section describes how to implement a new port type in C.  Although
+ports support many operations, as a data structure they present an
+opaque interface to the user.  To the port implementor, you have two
+pieces of information to work with: the port type, and the port&rsquo;s
+&ldquo;stream&rdquo;.  The port type is an opaque pointer allocated when defining
+your port type.  It is your key into the port API, and it helps you
+identify which ports are actually yours.  The &ldquo;stream&rdquo; is a pointer
+you control, and which you set when you create a port.  Get a stream
+from a port using the <code class="code">SCM_STREAM</code> macro.  Note that your port
+methods are only ever called with ports of your type.
+</p>
+<p>A port type is created by calling <code class="code">scm_make_port_type</code>.  Once you
+have your port type, you can create ports with <code class="code">scm_c_make_port</code>,
+or <code class="code">scm_c_make_port_with_encoding</code>.
+</p>
+<dl class="first-deftypefn first-deftypefun-alias-first-deftypefn">
+<dt class="deftypefn deftypefun-alias-deftypefn" id="index-scm_005fmake_005fport_005ftype"><span class="category-def">Function: </span><span><code class="def-type">scm_t_port_type*</code> <strong class="def-name">scm_make_port_type</strong> <code class="def-code-arguments">(char *name, size_t (*read) (SCM port, SCM dst, size_t start, size_t count), size_t (*write) (SCM port, SCM src, size_t start, size_t count))</code><a class="copiable-link" href='#index-scm_005fmake_005fport_005ftype'> &para;</a></span></dt>
+<dd><p>Define a new port type.  The <var class="var">name</var>, <var class="var">read</var> and <var class="var">write</var>
+parameters are initial values for those port type fields, as described
+below.  The other fields are initialized with default values and can be
+changed later.
+</p></dd></dl>
+
+<dl class="first-deftypefn first-deftypefun-alias-first-deftypefn">
+<dt class="deftypefn deftypefun-alias-deftypefn" id="index-scm_005fc_005fmake_005fport_005fwith_005fencoding"><span class="category-def">Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_c_make_port_with_encoding</strong> <code class="def-code-arguments">(scm_t_port_type *type, unsigned long mode_bits, SCM encoding, SCM conversion_strategy, scm_t_bits stream)</code><a class="copiable-link" href='#index-scm_005fc_005fmake_005fport_005fwith_005fencoding'> &para;</a></span></dt>
+<dt class="deftypefnx deftypefunx-alias-deftypefnx def-cmd-deftypefn" id="index-scm_005fc_005fmake_005fport"><span class="category-def">Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_c_make_port</strong> <code class="def-code-arguments">(scm_t_port_type *type, unsigned long mode_bits, scm_t_bits stream)</code><a class="copiable-link" href='#index-scm_005fc_005fmake_005fport'> &para;</a></span></dt>
+<dd><p>Make a port with the given <var class="var">type</var>.  The <var class="var">stream</var> indicates the
+private data associated with the port, which your port implementation
+may later retrieve with <code class="code">SCM_STREAM</code>.  The mode bits should include
+one or more of the flags <code class="code">SCM_RDNG</code> or <code class="code">SCM_WRTNG</code>, indicating
+that the port is an input and/or an output port, respectively.  The mode
+bits may also include <code class="code">SCM_BUF0</code> or <code class="code">SCM_BUFLINE</code>, indicating
+that the port should be unbuffered or line-buffered, respectively.  The
+default is that the port will be block-buffered.  See <a class="xref" href="Buffering.html">Buffering</a>.
+</p>
+<p>As you would imagine, <var class="var">encoding</var> and <var class="var">conversion_strategy</var>
+specify the port&rsquo;s initial textual encoding and conversion strategy.
+Both are symbols.  <code class="code">scm_c_make_port</code> is the same as
+<code class="code">scm_c_make_port_with_encoding</code>, except it uses the default port
+encoding and conversion strategy.
+</p></dd></dl>
+
+<p>The port type has a number of associate procedures and properties which
+collectively implement the port&rsquo;s behavior.  Creating a new port type
+mostly involves writing these procedures.
+</p>
+<dl class="table">
+<dt><code class="code">name</code></dt>
+<dd><p>A pointer to a NUL terminated string: the name of the port type.  This
+property is initialized via the first argument to
+<code class="code">scm_make_port_type</code>.
+</p>
+</dd>
+<dt><code class="code">read</code></dt>
+<dd><p>A port&rsquo;s <code class="code">read</code> implementation fills read buffers.  It should copy
+bytes to the supplied bytevector <code class="code">dst</code>, starting at offset
+<code class="code">start</code> and continuing for <code class="code">count</code> bytes, returning the number
+of bytes read.
+</p>
+</dd>
+<dt><code class="code">write</code></dt>
+<dd><p>A port&rsquo;s <code class="code">write</code> implementation flushes write buffers to the
+mutable store.
+It should write out bytes from the supplied bytevector <code class="code">src</code>,
+starting at offset <code class="code">start</code> and continuing for <code class="code">count</code> bytes,
+and return the number of bytes that were written.
+</p>
+</dd>
+<dt><code class="code">read_wait_fd</code></dt>
+<dt><code class="code">write_wait_fd</code></dt>
+<dd><p>If a port&rsquo;s <code class="code">read</code> or <code class="code">write</code> function returns <code class="code">(size_t)
+-1</code>, that indicates that reading or writing would block.  In that case
+to preserve the illusion of a blocking read or write operation, Guile&rsquo;s
+C port run-time will <code class="code">poll</code> on the file descriptor returned by
+either the port&rsquo;s <code class="code">read_wait_fd</code> or <code class="code">write_wait_fd</code> function.
+Set using
+</p>
+<dl class="first-deftypefn first-deftypefun-alias-first-deftypefn">
+<dt class="deftypefn deftypefun-alias-deftypefn" id="index-scm_005fset_005fport_005fread_005fwait_005ffd"><span class="category-def">Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_set_port_read_wait_fd</strong> <code class="def-code-arguments">(scm_t_port_type *type, int (*wait_fd) (SCM port))</code><a class="copiable-link" href='#index-scm_005fset_005fport_005fread_005fwait_005ffd'> &para;</a></span></dt>
+<dt class="deftypefnx deftypefunx-alias-deftypefnx def-cmd-deftypefn" id="index-scm_005fset_005fport_005fwrite_005fwait_005ffd"><span class="category-def">Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_set_port_write_wait_fd</strong> <code class="def-code-arguments">(scm_t_port_type *type, int (*wait_fd) (SCM port))</code><a class="copiable-link" href='#index-scm_005fset_005fport_005fwrite_005fwait_005ffd'> &para;</a></span></dt>
+</dl>
+
+<p>Only a port type which implements the <code class="code">read_wait_fd</code> or
+<code class="code">write_wait_fd</code> port methods can usefully return <code class="code">(size_t) -1</code>
+from a read or write function.  See <a class="xref" href="Non_002dBlocking-I_002fO.html">Non-Blocking I/O</a>, for more on
+non-blocking I/O in Guile.
+</p>
+</dd>
+<dt><code class="code">print</code></dt>
+<dd><p>Called when <code class="code">write</code> is called on the port, to print a port
+description.  For example, for a file port it may produce something
+like: <code class="code">#&lt;input: /etc/passwd 3&gt;</code>.  Set using
+</p>
+<dl class="first-deftypefn first-deftypefun-alias-first-deftypefn">
+<dt class="deftypefn deftypefun-alias-deftypefn" id="index-scm_005fset_005fport_005fprint"><span class="category-def">Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_set_port_print</strong> <code class="def-code-arguments">(scm_t_port_type *type, int (*print) (SCM port, SCM dest_port, scm_print_state *pstate))</code><a class="copiable-link" href='#index-scm_005fset_005fport_005fprint'> &para;</a></span></dt>
+<dd><p>The first argument <var class="var">port</var> is the port being printed, the second
+argument <var class="var">dest_port</var> is where its description should go.
+</p></dd></dl>
+
+</dd>
+<dt><code class="code">close</code></dt>
+<dd><p>Called when the port is closed.  It should free any resources used by
+the port.  Set using
+</p>
+<dl class="first-deftypefn first-deftypefun-alias-first-deftypefn">
+<dt class="deftypefn deftypefun-alias-deftypefn" id="index-scm_005fset_005fport_005fclose"><span class="category-def">Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_set_port_close</strong> <code class="def-code-arguments">(scm_t_port_type *type, void (*close) (SCM port))</code><a class="copiable-link" href='#index-scm_005fset_005fport_005fclose'> &para;</a></span></dt>
+</dl>
+
+<p>By default, ports that are garbage collected just go away without
+closing.  If your port type needs to release some external resource like
+a file descriptor, or needs to make sure that its internal buffers are
+flushed even if the port is collected while it was open, then mark the
+port type as needing a close on GC.
+</p>
+<dl class="first-deftypefn first-deftypefun-alias-first-deftypefn">
+<dt class="deftypefn deftypefun-alias-deftypefn" id="index-scm_005fset_005fport_005fneeds_005fclose_005fon_005fgc"><span class="category-def">Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_set_port_needs_close_on_gc</strong> <code class="def-code-arguments">(scm_t_port_type *type, int needs_close_p)</code><a class="copiable-link" href='#index-scm_005fset_005fport_005fneeds_005fclose_005fon_005fgc'> &para;</a></span></dt>
+</dl>
+
+</dd>
+<dt><code class="code">seek</code></dt>
+<dd><p>Set the current position of the port.  Guile will flush read and/or
+write buffers before seeking, as appropriate.
+</p>
+<dl class="first-deftypefn first-deftypefun-alias-first-deftypefn">
+<dt class="deftypefn deftypefun-alias-deftypefn" id="index-scm_005fset_005fport_005fseek"><span class="category-def">Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_set_port_seek</strong> <code class="def-code-arguments">(scm_t_port_type *type, scm_t_off (*seek) (SCM port, scm_t_off offset, int whence))</code><a class="copiable-link" href='#index-scm_005fset_005fport_005fseek'> &para;</a></span></dt>
+</dl>
+
+</dd>
+<dt><code class="code">truncate</code></dt>
+<dd><p>Truncate the port data to be specified length.  Guile will flush buffers
+before hand, as appropriate.  Set using
+</p>
+<dl class="first-deftypefn first-deftypefun-alias-first-deftypefn">
+<dt class="deftypefn deftypefun-alias-deftypefn" id="index-scm_005fset_005fport_005ftruncate"><span class="category-def">Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_set_port_truncate</strong> <code class="def-code-arguments">(scm_t_port_type *type, void (*truncate) (SCM port, scm_t_off length))</code><a class="copiable-link" href='#index-scm_005fset_005fport_005ftruncate'> &para;</a></span></dt>
+</dl>
+
+</dd>
+<dt><code class="code">random_access_p</code></dt>
+<dd><p>Determine whether this port is a random-access port.
+</p>
+<a class="index-entry-id" id="index-random-access"></a>
+<p>Seeking on a random-access port with buffered input, or switching to
+writing after reading, will cause the buffered input to be discarded and
+Guile will seek the port back the buffered number of bytes.  Likewise
+seeking on a random-access port with buffered output, or switching to
+reading after writing, will flush pending bytes with a call to the
+<code class="code">write</code> procedure.  See <a class="xref" href="Buffering.html">Buffering</a>.
+</p>
+<p>Indicate to Guile that your port needs this behavior by returning a
+nonzero value from your <code class="code">random_access_p</code> function.  The default
+implementation of this function returns nonzero if the port type
+supplies a seek implementation.
+</p>
+<dl class="first-deftypefn first-deftypefun-alias-first-deftypefn">
+<dt class="deftypefn deftypefun-alias-deftypefn" id="index-scm_005fset_005fport_005frandom_005faccess_005fp"><span class="category-def">Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_set_port_random_access_p</strong> <code class="def-code-arguments">(scm_t_port_type *type, int (*random_access_p) (SCM port));</code><a class="copiable-link" href='#index-scm_005fset_005fport_005frandom_005faccess_005fp'> &para;</a></span></dt>
+</dl>
+
+</dd>
+<dt><code class="code">get_natural_buffer_sizes</code></dt>
+<dd><p>Guile will internally attach buffers to ports.  An input port always has
+a read buffer and an output port always has a write buffer.
+See <a class="xref" href="Buffering.html">Buffering</a>.  A port buffer consists of a bytevector, along with
+some cursors into that bytevector denoting where to get and put data.
+</p>
+<p>Port implementations generally don&rsquo;t have to be concerned with
+buffering: a port type&rsquo;s <code class="code">read</code> or <code class="code">write</code> function will
+receive the buffer&rsquo;s bytevector as an argument, along with an offset and
+a length into that bytevector, and should then either fill or empty that
+bytevector.  However in some cases, port implementations may be able to
+provide an appropriate default buffer size to Guile.
+</p>
+<dl class="first-deftypefn first-deftypefun-alias-first-deftypefn">
+<dt class="deftypefn deftypefun-alias-deftypefn" id="index-scm_005fset_005fport_005fget_005fnatural_005fbuffer_005fsizes"><span class="category-def">Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_set_port_get_natural_buffer_sizes</strong> <code class="def-code-arguments">(scm_t_port_type *type, void (*get_natural_buffer_sizes) (SCM, size_t *read_buf_size, size_t *write_buf_size))</code><a class="copiable-link" href='#index-scm_005fset_005fport_005fget_005fnatural_005fbuffer_005fsizes'> &para;</a></span></dt>
+<dd><p>Fill in <var class="var">read_buf_size</var> and <var class="var">write_buf_size</var> with an appropriate buffer size for this port, if one is known.
+</p></dd></dl>
+
+<p>File ports implement a <code class="code">get_natural_buffer_sizes</code> to let the
+operating system inform Guile about the appropriate buffer sizes for the
+particular file opened by the port.
+</p></dd>
+</dl>
+
+<p>Note that calls to all of these methods can proceed in parallel and
+concurrently and from any thread up until the point that the port is
+closed.  The call to <code class="code">close</code> will happen when no other method is
+running, and no method will be called after the <code class="code">close</code> method is
+called.  If your port implementation needs mutual exclusion to prevent
+concurrency, it is responsible for locking appropriately.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Non_002dBlocking-I_002fO.html">Non-Blocking I/O</a>, Previous: <a href="Using-Ports-from-C.html">Using Ports from C</a>, Up: <a href="Input-and-Output.html">Input and Output</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

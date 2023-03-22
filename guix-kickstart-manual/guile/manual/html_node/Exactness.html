@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Exactness (Guile Reference Manual)</title>
+
+<meta name="description" content="Exactness (Guile Reference Manual)">
+<meta name="keywords" content="Exactness (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Numbers.html" rel="up" title="Numbers">
+<link href="Number-Syntax.html" rel="next" title="Number Syntax">
+<link href="Complex-Numbers.html" rel="prev" title="Complex Numbers">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Exactness">
+<div class="nav-panel">
+<p>
+Next: <a href="Number-Syntax.html" accesskey="n" rel="next">Read Syntax for Numerical Data</a>, Previous: <a href="Complex-Numbers.html" accesskey="p" rel="prev">Complex Numbers</a>, Up: <a href="Numbers.html" accesskey="u" rel="up">Numerical data types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Exact-and-Inexact-Numbers">6.6.2.5 Exact and Inexact Numbers</h4>
+<a class="index-entry-id" id="index-Exact-numbers"></a>
+<a class="index-entry-id" id="index-Inexact-numbers"></a>
+
+<a class="index-entry-id" id="index-exact_003f-2"></a>
+<a class="index-entry-id" id="index-inexact_003f-2"></a>
+<a class="index-entry-id" id="index-exact_002d_003einexact-2"></a>
+<a class="index-entry-id" id="index-inexact_002d_003eexact-2"></a>
+
+<p>R5RS requires that, with few exceptions, a calculation involving inexact
+numbers always produces an inexact result.  To meet this requirement,
+Guile distinguishes between an exact integer value such as &lsquo;<samp class="samp">5</samp>&rsquo; and
+the corresponding inexact integer value which, to the limited precision
+available, has no fractional part, and is printed as &lsquo;<samp class="samp">5.0</samp>&rsquo;.  Guile
+will only convert the latter value to the former when forced to do so by
+an invocation of the <code class="code">inexact-&gt;exact</code> procedure.
+</p>
+<p>The only exception to the above requirement is when the values of the
+inexact numbers do not affect the result.  For example <code class="code">(expt n 0)</code>
+is &lsquo;<samp class="samp">1</samp>&rsquo; for any value of <code class="code">n</code>, therefore <code class="code">(expt 5.0 0)</code> is
+permitted to return an exact &lsquo;<samp class="samp">1</samp>&rsquo;.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-exact_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exact?</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-exact_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fexact_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_exact_p</strong> <var class="def-var-arguments">(z)</var><a class="copiable-link" href='#index-scm_005fexact_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if the number <var class="var">z</var> is exact, <code class="code">#f</code>
+otherwise.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(exact? 2)
+&rArr; #t
+
+(exact? 0.5)
+&rArr; #f
+
+(exact? (/ 2))
+&rArr; #t
+</pre></div>
+
+</dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fis_005fexact"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_is_exact</strong> <code class="def-code-arguments">(SCM z)</code><a class="copiable-link" href='#index-scm_005fis_005fexact'> &para;</a></span></dt>
+<dd><p>Return a <code class="code">1</code> if the number <var class="var">z</var> is exact, and <code class="code">0</code>
+otherwise.  This is equivalent to <code class="code">scm_is_true (scm_exact_p (z))</code>.
+</p>
+<p>An alternate approch to testing the exactness of a number is to 
+use <code class="code">scm_is_signed_integer</code> or <code class="code">scm_is_unsigned_integer</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-inexact_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">inexact?</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-inexact_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005finexact_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_inexact_p</strong> <var class="def-var-arguments">(z)</var><a class="copiable-link" href='#index-scm_005finexact_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if the number <var class="var">z</var> is inexact, <code class="code">#f</code>
+else.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fis_005finexact"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_is_inexact</strong> <code class="def-code-arguments">(SCM z)</code><a class="copiable-link" href='#index-scm_005fis_005finexact'> &para;</a></span></dt>
+<dd><p>Return a <code class="code">1</code> if the number <var class="var">z</var> is inexact, and <code class="code">0</code>
+otherwise.  This is equivalent to <code class="code">scm_is_true (scm_inexact_p (z))</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-inexact_002d_003eexact"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">inexact-&gt;exact</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-inexact_002d_003eexact'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005finexact_005fto_005fexact"><span class="category-def">C Function: </span><span><strong class="def-name">scm_inexact_to_exact</strong> <var class="def-var-arguments">(z)</var><a class="copiable-link" href='#index-scm_005finexact_005fto_005fexact'> &para;</a></span></dt>
+<dd><p>Return an exact number that is numerically closest to <var class="var">z</var>, when
+there is one.  For inexact rationals, Guile returns the exact rational
+that is numerically equal to the inexact rational.  Inexact complex
+numbers with a non-zero imaginary part can not be made exact.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(inexact-&gt;exact 0.5)
+&rArr; 1/2
+</pre></div>
+
+<p>The following happens because 12/10 is not exactly representable as a
+<code class="code">double</code> (on most platforms).  However, when reading a decimal
+number that has been marked exact with the &ldquo;#e&rdquo; prefix, Guile is
+able to represent it correctly.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(inexact-&gt;exact 1.2)  
+&rArr; 5404319552844595/4503599627370496
+
+#e1.2
+&rArr; 6/5
+</pre></div>
+
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-exact_002d_003einexact"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exact-&gt;inexact</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-exact_002d_003einexact'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fexact_005fto_005finexact"><span class="category-def">C Function: </span><span><strong class="def-name">scm_exact_to_inexact</strong> <var class="def-var-arguments">(z)</var><a class="copiable-link" href='#index-scm_005fexact_005fto_005finexact'> &para;</a></span></dt>
+<dd><p>Convert the number <var class="var">z</var> to its inexact representation.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Number-Syntax.html">Read Syntax for Numerical Data</a>, Previous: <a href="Complex-Numbers.html">Complex Numbers</a>, Up: <a href="Numbers.html">Numerical data types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

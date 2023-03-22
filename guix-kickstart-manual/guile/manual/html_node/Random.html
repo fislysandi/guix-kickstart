@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Random (Guile Reference Manual)</title>
+
+<meta name="description" content="Random (Guile Reference Manual)">
+<meta name="keywords" content="Random (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Numbers.html" rel="up" title="Numbers">
+<link href="Bitwise-Operations.html" rel="prev" title="Bitwise Operations">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Random">
+<div class="nav-panel">
+<p>
+Previous: <a href="Bitwise-Operations.html" accesskey="p" rel="prev">Bitwise Operations</a>, Up: <a href="Numbers.html" accesskey="u" rel="up">Numerical data types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Random-Number-Generation">6.6.2.14 Random Number Generation</h4>
+
+<p>Pseudo-random numbers are generated from a random state object, which
+can be created with <code class="code">seed-&gt;random-state</code> or
+<code class="code">datum-&gt;random-state</code>.  An external representation (i.e. one
+which can written with <code class="code">write</code> and read with <code class="code">read</code>) of a
+random state object can be obtained via
+<code class="code">random-state-&gt;datum</code>.  The <var class="var">state</var> parameter to the
+various functions below is optional, it defaults to the state object
+in the <code class="code">*random-state*</code> variable.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-copy_002drandom_002dstate"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">copy-random-state</strong> <var class="def-var-arguments">[state]</var><a class="copiable-link" href='#index-copy_002drandom_002dstate'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcopy_005frandom_005fstate"><span class="category-def">C Function: </span><span><strong class="def-name">scm_copy_random_state</strong> <var class="def-var-arguments">(state)</var><a class="copiable-link" href='#index-scm_005fcopy_005frandom_005fstate'> &para;</a></span></dt>
+<dd><p>Return a copy of the random state <var class="var">state</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-random"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">random</strong> <var class="def-var-arguments">n [state]</var><a class="copiable-link" href='#index-random'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005frandom"><span class="category-def">C Function: </span><span><strong class="def-name">scm_random</strong> <var class="def-var-arguments">(n, state)</var><a class="copiable-link" href='#index-scm_005frandom'> &para;</a></span></dt>
+<dd><p>Return a number in [0, <var class="var">n</var>).
+</p>
+<p>Accepts a positive integer or real n and returns a
+number of the same type between zero (inclusive) and
+<var class="var">n</var> (exclusive). The values returned have a uniform
+distribution.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-random_003aexp"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">random:exp</strong> <var class="def-var-arguments">[state]</var><a class="copiable-link" href='#index-random_003aexp'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005frandom_005fexp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_random_exp</strong> <var class="def-var-arguments">(state)</var><a class="copiable-link" href='#index-scm_005frandom_005fexp'> &para;</a></span></dt>
+<dd><p>Return an inexact real in an exponential distribution with mean
+1.  For an exponential distribution with mean <var class="var">u</var> use <code class="code">(*
+<var class="var">u</var> (random:exp))</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-random_003ahollow_002dsphere_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">random:hollow-sphere!</strong> <var class="def-var-arguments">vect [state]</var><a class="copiable-link" href='#index-random_003ahollow_002dsphere_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005frandom_005fhollow_005fsphere_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_random_hollow_sphere_x</strong> <var class="def-var-arguments">(vect, state)</var><a class="copiable-link" href='#index-scm_005frandom_005fhollow_005fsphere_005fx'> &para;</a></span></dt>
+<dd><p>Fills <var class="var">vect</var> with inexact real random numbers the sum of whose
+squares is equal to 1.0.  Thinking of <var class="var">vect</var> as coordinates in
+space of dimension <var class="var">n</var> <em class="math">=</em> <code class="code">(vector-length <var class="var">vect</var>)</code>,
+the coordinates are uniformly distributed over the surface of the unit
+n-sphere.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-random_003anormal"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">random:normal</strong> <var class="def-var-arguments">[state]</var><a class="copiable-link" href='#index-random_003anormal'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005frandom_005fnormal"><span class="category-def">C Function: </span><span><strong class="def-name">scm_random_normal</strong> <var class="def-var-arguments">(state)</var><a class="copiable-link" href='#index-scm_005frandom_005fnormal'> &para;</a></span></dt>
+<dd><p>Return an inexact real in a normal distribution.  The distribution
+used has mean 0 and standard deviation 1.  For a normal distribution
+with mean <var class="var">m</var> and standard deviation <var class="var">d</var> use <code class="code">(+ <var class="var">m</var>
+(* <var class="var">d</var> (random:normal)))</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-random_003anormal_002dvector_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">random:normal-vector!</strong> <var class="def-var-arguments">vect [state]</var><a class="copiable-link" href='#index-random_003anormal_002dvector_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005frandom_005fnormal_005fvector_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_random_normal_vector_x</strong> <var class="def-var-arguments">(vect, state)</var><a class="copiable-link" href='#index-scm_005frandom_005fnormal_005fvector_005fx'> &para;</a></span></dt>
+<dd><p>Fills <var class="var">vect</var> with inexact real random numbers that are
+independent and standard normally distributed
+(i.e., with mean 0 and variance 1).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-random_003asolid_002dsphere_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">random:solid-sphere!</strong> <var class="def-var-arguments">vect [state]</var><a class="copiable-link" href='#index-random_003asolid_002dsphere_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005frandom_005fsolid_005fsphere_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_random_solid_sphere_x</strong> <var class="def-var-arguments">(vect, state)</var><a class="copiable-link" href='#index-scm_005frandom_005fsolid_005fsphere_005fx'> &para;</a></span></dt>
+<dd><p>Fills <var class="var">vect</var> with inexact real random numbers the sum of whose
+squares is less than 1.0.  Thinking of <var class="var">vect</var> as coordinates in
+space of dimension <var class="var">n</var> <em class="math">=</em> <code class="code">(vector-length <var class="var">vect</var>)</code>,
+the coordinates are uniformly distributed within the unit
+<var class="var">n</var>-sphere.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-random_003auniform"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">random:uniform</strong> <var class="def-var-arguments">[state]</var><a class="copiable-link" href='#index-random_003auniform'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005frandom_005funiform"><span class="category-def">C Function: </span><span><strong class="def-name">scm_random_uniform</strong> <var class="def-var-arguments">(state)</var><a class="copiable-link" href='#index-scm_005frandom_005funiform'> &para;</a></span></dt>
+<dd><p>Return a uniformly distributed inexact real random number in
+[0,1).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-seed_002d_003erandom_002dstate"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">seed-&gt;random-state</strong> <var class="def-var-arguments">seed</var><a class="copiable-link" href='#index-seed_002d_003erandom_002dstate'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fseed_005fto_005frandom_005fstate"><span class="category-def">C Function: </span><span><strong class="def-name">scm_seed_to_random_state</strong> <var class="def-var-arguments">(seed)</var><a class="copiable-link" href='#index-scm_005fseed_005fto_005frandom_005fstate'> &para;</a></span></dt>
+<dd><p>Return a new random state using <var class="var">seed</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-datum_002d_003erandom_002dstate"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">datum-&gt;random-state</strong> <var class="def-var-arguments">datum</var><a class="copiable-link" href='#index-datum_002d_003erandom_002dstate'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fdatum_005fto_005frandom_005fstate"><span class="category-def">C Function: </span><span><strong class="def-name">scm_datum_to_random_state</strong> <var class="def-var-arguments">(datum)</var><a class="copiable-link" href='#index-scm_005fdatum_005fto_005frandom_005fstate'> &para;</a></span></dt>
+<dd><p>Return a new random state from <var class="var">datum</var>, which should have been
+obtained by <code class="code">random-state-&gt;datum</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-random_002dstate_002d_003edatum"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">random-state-&gt;datum</strong> <var class="def-var-arguments">state</var><a class="copiable-link" href='#index-random_002dstate_002d_003edatum'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005frandom_005fstate_005fto_005fdatum"><span class="category-def">C Function: </span><span><strong class="def-name">scm_random_state_to_datum</strong> <var class="def-var-arguments">(state)</var><a class="copiable-link" href='#index-scm_005frandom_005fstate_005fto_005fdatum'> &para;</a></span></dt>
+<dd><p>Return a datum representation of <var class="var">state</var> that may be written out and
+read back with the Scheme reader.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-random_002dstate_002dfrom_002dplatform"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">random-state-from-platform</strong><a class="copiable-link" href='#index-random_002dstate_002dfrom_002dplatform'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005frandom_005fstate_005ffrom_005fplatform"><span class="category-def">C Function: </span><span><strong class="def-name">scm_random_state_from_platform</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005frandom_005fstate_005ffrom_005fplatform'> &para;</a></span></dt>
+<dd><p>Construct a new random state seeded from a platform-specific source of
+entropy, appropriate for use in non-security-critical applications.
+Currently <samp class="file">/dev/urandom</samp> is tried first, or else the seed is based
+on the time, date, process ID, an address from a freshly allocated heap
+cell, an address from the local stack frame, and a high-resolution timer
+if available.
+</p></dd></dl>
+
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-_002arandom_002dstate_002a"><span class="category-def">Variable: </span><span><strong class="def-name">*random-state*</strong><a class="copiable-link" href='#index-_002arandom_002dstate_002a'> &para;</a></span></dt>
+<dd><p>The global random state used by the above functions when the
+<var class="var">state</var> parameter is not given.
+</p></dd></dl>
+
+<p>Note that the initial value of <code class="code">*random-state*</code> is the same every
+time Guile starts up.  Therefore, if you don&rsquo;t pass a <var class="var">state</var>
+parameter to the above procedures, and you don&rsquo;t set
+<code class="code">*random-state*</code> to <code class="code">(seed-&gt;random-state your-seed)</code>, where
+<code class="code">your-seed</code> is something that <em class="emph">isn&rsquo;t</em> the same every time,
+you&rsquo;ll get the same sequence of &ldquo;random&rdquo; numbers on every run.
+</p>
+<p>For example, unless the relevant source code has changed, <code class="code">(map
+random (cdr (iota 30)))</code>, if the first use of random numbers since
+Guile started up, will always give:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(map random (cdr (iota 19)))
+&rArr;
+(0 1 1 2 2 2 1 2 6 7 10 0 5 3 12 5 5 12)
+</pre></div>
+
+<p>To seed the random state in a sensible way for non-security-critical
+applications, do this during initialization of your program:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(set! *random-state* (random-state-from-platform))
+</pre></div>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Bitwise-Operations.html">Bitwise Operations</a>, Up: <a href="Numbers.html">Numerical data types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

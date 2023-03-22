@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>rnrs syntax-case (Guile Reference Manual)</title>
+
+<meta name="description" content="rnrs syntax-case (Guile Reference Manual)">
+<meta name="keywords" content="rnrs syntax-case (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="R6RS-Standard-Libraries.html" rel="up" title="R6RS Standard Libraries">
+<link href="rnrs-hashtables.html" rel="next" title="rnrs hashtables">
+<link href="rnrs-arithmetic-bitwise.html" rel="prev" title="rnrs arithmetic bitwise">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="rnrs-syntax_002dcase">
+<div class="nav-panel">
+<p>
+Next: <a href="rnrs-hashtables.html" accesskey="n" rel="next">rnrs hashtables</a>, Previous: <a href="rnrs-arithmetic-bitwise.html" accesskey="p" rel="prev">rnrs arithmetic bitwise</a>, Up: <a href="R6RS-Standard-Libraries.html" accesskey="u" rel="up">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="rnrs-syntax_002dcase-1">7.6.2.24 rnrs syntax-case</h4>
+
+<p>The <code class="code">(rnrs syntax-case (6))</code> library provides access to the 
+<code class="code">syntax-case</code> system for writing hygienic macros.  With one
+exception, all of the forms and procedures exported by this library
+are &ldquo;re-exports&rdquo; of Guile&rsquo;s native support for <code class="code">syntax-case</code>;
+See <a class="xref" href="Syntax-Case.html">Support for the <code class="code">syntax-case</code> System</a>, for documentation, examples, and rationale. 
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dvariable_002dtransformer-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-variable-transformer</strong> <var class="def-var-arguments">proc</var><a class="copiable-link" href='#index-make_002dvariable_002dtransformer-1'> &para;</a></span></dt>
+<dd><p>Creates a new variable transformer out of <var class="var">proc</var>, a procedure that
+takes a syntax object as input and returns a syntax object.  If an
+identifier to which the result of this procedure is bound appears on the
+left-hand side of a <code class="code">set!</code> expression, <var class="var">proc</var> will be called
+with a syntax object representing the entire <code class="code">set!</code> expression,
+and its return value will replace that <code class="code">set!</code> expression. 
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-syntax_002dcase-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">syntax-case</strong> <var class="def-var-arguments">expression (literal ...) clause ...</var><a class="copiable-link" href='#index-syntax_002dcase-1'> &para;</a></span></dt>
+<dd><p>The <code class="code">syntax-case</code> pattern matching form.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-syntax-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">syntax</strong> <var class="def-var-arguments">template</var><a class="copiable-link" href='#index-syntax-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-quasisyntax"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">quasisyntax</strong> <var class="def-var-arguments">template</var><a class="copiable-link" href='#index-quasisyntax'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-unsyntax"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">unsyntax</strong> <var class="def-var-arguments">template</var><a class="copiable-link" href='#index-unsyntax'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-unsyntax_002dsplicing"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">unsyntax-splicing</strong> <var class="def-var-arguments">template</var><a class="copiable-link" href='#index-unsyntax_002dsplicing'> &para;</a></span></dt>
+<dd><p>These forms allow references to be made in the body of a syntax-case 
+output expression subform to datum and non-datum values.  They are 
+identical to the forms provided by Guile&rsquo;s core library;
+See <a class="xref" href="Syntax-Case.html">Support for the <code class="code">syntax-case</code> System</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-identifier_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">identifier?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-identifier_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bound_002didentifier_003d_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bound-identifier=?</strong> <var class="def-var-arguments">id1 id2</var><a class="copiable-link" href='#index-bound_002didentifier_003d_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-free_002didentifier_003d_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">free-identifier=?</strong> <var class="def-var-arguments">id1 id2</var><a class="copiable-link" href='#index-free_002didentifier_003d_003f-1'> &para;</a></span></dt>
+<dd><p>These predicate procedures operate on syntax objects representing
+Scheme identifiers.  <code class="code">identifier?</code> returns <code class="code">#t</code> if <var class="var">obj</var>
+represents an identifier, <code class="code">#f</code> otherwise.  
+<code class="code">bound-identifier=?</code> returns <code class="code">#t</code> if and only if a binding for
+<var class="var">id1</var> would capture a reference to <var class="var">id2</var> in the transformer&rsquo;s 
+output, or vice-versa.  <code class="code">free-identifier=?</code> returns <code class="code">#t</code> if
+and only <var class="var">id1</var> and <var class="var">id2</var> would refer to the same binding in the
+output of the transformer, independent of any bindings introduced by the
+transformer.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-generate_002dtemporaries-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">generate-temporaries</strong> <var class="def-var-arguments">l</var><a class="copiable-link" href='#index-generate_002dtemporaries-1'> &para;</a></span></dt>
+<dd><p>Returns a list, of the same length as <var class="var">l</var>, which must be a list or
+a syntax object representing a list, of globally unique symbols.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-syntax_002d_003edatum-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">syntax-&gt;datum</strong> <var class="def-var-arguments">syntax-object</var><a class="copiable-link" href='#index-syntax_002d_003edatum-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-datum_002d_003esyntax-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">datum-&gt;syntax</strong> <var class="def-var-arguments">template-id datum</var><a class="copiable-link" href='#index-datum_002d_003esyntax-1'> &para;</a></span></dt>
+<dd><p>These procedures convert wrapped syntax objects to and from Scheme datum
+values.  The syntax object returned by <code class="code">datum-&gt;syntax</code> shares
+contextual information with the syntax object <var class="var">template-id</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-syntax_002dviolation"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">syntax-violation</strong> <var class="def-var-arguments">whom message form</var><a class="copiable-link" href='#index-syntax_002dviolation'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-syntax_002dviolation-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">syntax-violation</strong> <var class="def-var-arguments">whom message form subform</var><a class="copiable-link" href='#index-syntax_002dviolation-1'> &para;</a></span></dt>
+<dd><p>Constructs a new compound condition that includes the following
+simple conditions:
+</p><ul class="itemize mark-bullet">
+<li>If <var class="var">whom</var> is not <code class="code">#f</code>, a <code class="code">&amp;who</code> condition with the
+<var class="var">whom</var> as its field
+</li><li>A <code class="code">&amp;message</code> condition with the specified <var class="var">message</var>
+</li><li>A <code class="code">&amp;syntax</code> condition with the specified <var class="var">form</var> and optional
+<var class="var">subform</var> fields
+</li></ul>
+</dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="rnrs-hashtables.html">rnrs hashtables</a>, Previous: <a href="rnrs-arithmetic-bitwise.html">rnrs arithmetic bitwise</a>, Up: <a href="R6RS-Standard-Libraries.html">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Why a VM? (Guile Reference Manual)</title>
+
+<meta name="description" content="Why a VM? (Guile Reference Manual)">
+<meta name="keywords" content="Why a VM? (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="A-Virtual-Machine-for-Guile.html" rel="up" title="A Virtual Machine for Guile">
+<link href="VM-Concepts.html" rel="next" title="VM Concepts">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Why-a-VM_003f">
+<div class="nav-panel">
+<p>
+Next: <a href="VM-Concepts.html" accesskey="n" rel="next">VM Concepts</a>, Up: <a href="A-Virtual-Machine-for-Guile.html" accesskey="u" rel="up">A Virtual Machine for Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Why-a-VM_003f-1">9.3.1 Why a VM?</h4>
+
+<a class="index-entry-id" id="index-interpreter"></a>
+<p>For a long time, Guile only had a Scheme interpreter, implemented in C.
+Guile&rsquo;s interpreter operated directly on the S-expression representation
+of Scheme source code.
+</p>
+<p>But while the interpreter was highly optimized and hand-tuned, it still
+performed many needless computations during the course of evaluating a
+Scheme expression.  For example, application of a function to arguments
+needlessly consed up the arguments in a list. Evaluation of an
+expression like <code class="code">(f x y)</code> always had to figure out whether <var class="var">f</var>
+was a procedure, or a special form like <code class="code">if</code>, or something else.
+The interpreter represented the lexical environment as a heap data
+structure, so every evaluation caused allocation, which was of course
+slow.  Et cetera.
+</p>
+<p>The solution to the slow-interpreter problem was to compile the
+higher-level language, Scheme, into a lower-level language for which all
+of the checks and dispatching have already been done&mdash;the code is
+instead stripped to the bare minimum needed to &ldquo;do the job&rdquo;.
+</p>
+<p>The question becomes then, what low-level language to choose? There are
+many options.  We could compile to native code directly, but that poses
+portability problems for Guile, as it is a highly cross-platform
+project.
+</p>
+<p>So we want the performance gains that compilation provides, but we
+also want to maintain the portability benefits of a single code path.
+The obvious solution is to compile to a virtual machine that is
+present on all Guile installations.
+</p>
+<p>The easiest (and most fun) way to depend on a virtual machine is to
+implement the virtual machine within Guile itself.  Guile contains a
+bytecode interpreter (written in C) and a Scheme to bytecode compiler
+(written in Scheme).  This way the virtual machine provides what Scheme
+needs (tail calls, multiple values, <code class="code">call/cc</code>) and can provide
+optimized inline instructions for Guile as well (GC-managed allocations,
+type checks, etc.).
+</p>
+<p>Guile also includes a just-in-time (JIT) compiler to translate bytecode
+to native code.  Because Guile embeds a portable code generation library
+(<a class="url" href="https://gitlab.com/wingo/lightening">https://gitlab.com/wingo/lightening</a>), we keep the benefits of
+portability while also benefitting from fast native code.  To avoid too
+much time spent in the JIT compiler itself, Guile is tuned to only emit
+machine code for bytecode that is called often.
+</p>
+<p>The rest of this section describes that VM that Guile implements, and
+the compiled procedures that run on it.
+</p>
+<p>Before moving on, though, we should note that though we spoke of the
+interpreter in the past tense, Guile still has an interpreter. The
+difference is that before, it was Guile&rsquo;s main Scheme implementation,
+and so was implemented in highly optimized C; now, it is actually
+implemented in Scheme, and compiled down to VM bytecode, just like any
+other program.  (There is still a C interpreter around, used to
+bootstrap the compiler, but it is not normally used at runtime.)
+</p>
+<p>The upside of implementing the interpreter in Scheme is that we preserve
+tail calls and multiple-value handling between interpreted and compiled
+code, and with advent of the JIT compiler in Guile 3.0 we reach the
+speed of the old hand-tuned C implementation; it&rsquo;s the best of both
+worlds.
+</p>
+<p>Also note that this decision to implement a bytecode compiler does not
+preclude ahead-of-time native compilation.  More possibilities are
+discussed in <a class="ref" href="Extending-the-Compiler.html">Extending the Compiler</a>.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="VM-Concepts.html">VM Concepts</a>, Up: <a href="A-Virtual-Machine-for-Guile.html">A Virtual Machine for Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

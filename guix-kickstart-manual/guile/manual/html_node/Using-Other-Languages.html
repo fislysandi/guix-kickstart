@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Using Other Languages (Guile Reference Manual)</title>
+
+<meta name="description" content="Using Other Languages (Guile Reference Manual)">
+<meta name="keywords" content="Using Other Languages (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Other-Languages.html" rel="up" title="Other Languages">
+<link href="Emacs-Lisp.html" rel="next" title="Emacs Lisp">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Using-Other-Languages">
+<div class="nav-panel">
+<p>
+Next: <a href="Emacs-Lisp.html" accesskey="n" rel="next">Emacs Lisp</a>, Up: <a href="Other-Languages.html" accesskey="u" rel="up">Support for Other Languages</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Using-Other-Languages-1">6.24.1 Using Other Languages</h4>
+
+<p>There are currently only two ways to access other languages from within
+Guile: at the REPL, and programmatically, via <code class="code">compile</code>,
+<code class="code">read-and-compile</code>, and <code class="code">compile-file</code>.
+</p>
+<p>The REPL is Guile&rsquo;s command prompt (see <a class="pxref" href="Using-Guile-Interactively.html">Using Guile Interactively</a>).
+The REPL has a concept of the &ldquo;current language&rdquo;, which defaults to
+Scheme. The user may change that language, via the meta-command
+<code class="code">,language</code>.
+</p>
+<p>For example, the following meta-command enables Emacs Lisp input:
+</p>
+<div class="example">
+<pre class="example-preformatted">scheme@(guile-user)&gt; ,language elisp
+Happy hacking with Emacs Lisp!  To switch back, type `,L scheme'.
+elisp@(guile-user)&gt; (eq 1 2)
+$1 = #nil
+</pre></div>
+
+<p>Each language has its short name: for example, <code class="code">elisp</code>, for Elisp.
+The same short name may be used to compile source code programmatically,
+via <code class="code">compile</code>:
+</p>
+<div class="example">
+<pre class="example-preformatted">elisp@(guile-user)&gt; ,L scheme
+Happy hacking with Guile Scheme!  To switch back, type `,L elisp'.
+scheme@(guile-user)&gt; (compile '(eq 1 2) #:from 'elisp)
+$2 = #nil
+</pre></div>
+
+<p>Granted, as the input to <code class="code">compile</code> is a datum, this works best for
+Lispy languages, which have a straightforward datum representation.
+Other languages that need more parsing are better dealt with as strings.
+</p>
+<p>The easiest way to deal with syntax-heavy language is with files, via
+<code class="code">compile-file</code> and friends. However it is possible to invoke a
+language&rsquo;s reader on a port, and then compile the resulting expression
+(which is a datum at that point). For more information,
+See <a class="xref" href="Compilation.html">Compiling Scheme Code</a>.
+</p>
+<p>For more details on introspecting aspects of different languages,
+See <a class="xref" href="Compiler-Tower.html">Compiler Tower</a>.
+</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Function Prologue Instructions (Guile Reference Manual)</title>
+
+<meta name="description" content="Function Prologue Instructions (Guile Reference Manual)">
+<meta name="keywords" content="Function Prologue Instructions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Instruction-Set.html" rel="up" title="Instruction Set">
+<link href="Shuffling-Instructions.html" rel="next" title="Shuffling Instructions">
+<link href="Call-and-Return-Instructions.html" rel="prev" title="Call and Return Instructions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Function-Prologue-Instructions">
+<div class="nav-panel">
+<p>
+Next: <a href="Shuffling-Instructions.html" accesskey="n" rel="next">Shuffling Instructions</a>, Previous: <a href="Call-and-Return-Instructions.html" accesskey="p" rel="prev">Call and Return Instructions</a>, Up: <a href="Instruction-Set.html" accesskey="u" rel="up">Instruction Set</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Function-Prologue-Instructions-1">9.3.7.2 Function Prologue Instructions</h4>
+
+<p>A function call in Guile is very cheap: the VM simply hands control to
+the procedure. The procedure itself is responsible for asserting that it
+has been passed an appropriate number of arguments. This strategy allows
+arbitrarily complex argument parsing idioms to be developed, without
+harming the common case.
+</p>
+<p>For example, only calls to keyword-argument procedures &ldquo;pay&rdquo; for the
+cost of parsing keyword arguments. (At the time of this writing, calling
+procedures with keyword arguments is typically two to four times as
+costly as calling procedures with a fixed set of arguments.)
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-assert_002dnargs_002dee"><span class="category-def">Instruction: </span><span><strong class="def-name">assert-nargs-ee</strong> <code class="def-code-arguments">c24:<var class="var">expected</var></code><a class="copiable-link" href='#index-assert_002dnargs_002dee'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-assert_002dnargs_002dge"><span class="category-def">Instruction: </span><span><strong class="def-name">assert-nargs-ge</strong> <code class="def-code-arguments">c24:<var class="var">expected</var></code><a class="copiable-link" href='#index-assert_002dnargs_002dge'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-assert_002dnargs_002dle"><span class="category-def">Instruction: </span><span><strong class="def-name">assert-nargs-le</strong> <code class="def-code-arguments">c24:<var class="var">expected</var></code><a class="copiable-link" href='#index-assert_002dnargs_002dle'> &para;</a></span></dt>
+<dd><p>If the number of actual arguments is not <code class="code">==</code>, <code class="code">&gt;=</code>, or
+<code class="code">&lt;=</code> <var class="var">expected</var>, respectively, signal an error.
+</p>
+<p>The number of arguments is determined by subtracting the stack pointer
+from the frame pointer (<code class="code">fp - sp</code>).  See <a class="xref" href="Stack-Layout.html">Stack Layout</a>, for more
+details on stack frames.  Note that <var class="var">expected</var> includes the
+procedure itself.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-arguments_003c_003d_003f"><span class="category-def">Instruction: </span><span><strong class="def-name">arguments&lt;=?</strong> <code class="def-code-arguments">c24:<var class="var">expected</var></code><a class="copiable-link" href='#index-arguments_003c_003d_003f'> &para;</a></span></dt>
+<dd><p>Set the <code class="code">LESS_THAN</code>, <code class="code">EQUAL</code>, or <code class="code">NONE</code> comparison result
+values if the number of arguments is respectively less than, equal to,
+or greater than <var class="var">expected</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-positional_002darguments_003c_003d_003f"><span class="category-def">Instruction: </span><span><strong class="def-name">positional-arguments&lt;=?</strong> <code class="def-code-arguments">c24:<var class="var">nreq</var> x8:<var class="var">_</var> c24:<var class="var">expected</var></code><a class="copiable-link" href='#index-positional_002darguments_003c_003d_003f'> &para;</a></span></dt>
+<dd><p>Set the <code class="code">LESS_THAN</code>, <code class="code">EQUAL</code>, or <code class="code">NONE</code> comparison result
+values if the number of positional arguments is respectively less than,
+equal to, or greater than <var class="var">expected</var>.  The first <var class="var">nreq</var>
+arguments are positional arguments, as are the subsequent arguments that
+are not keywords.
+</p></dd></dl>
+
+<p>The <code class="code">arguments&lt;=?</code> and <code class="code">positional-arguments&lt;=?</code> instructions
+are used to implement multiple arities, as in <code class="code">case-lambda</code>.
+See <a class="xref" href="Case_002dlambda.html">Case-lambda</a>, for more information.  See <a class="xref" href="Branch-Instructions.html">Branch Instructions</a>,
+for more on comparison results.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-bind_002dkwargs"><span class="category-def">Instruction: </span><span><strong class="def-name">bind-kwargs</strong> <code class="def-code-arguments">c24:<var class="var">nreq</var> c8:<var class="var">flags</var> c24:<var class="var">nreq-and-opt</var> x8:<var class="var">_</var> c24:<var class="var">ntotal</var> n32:<var class="var">kw-offset</var></code><a class="copiable-link" href='#index-bind_002dkwargs'> &para;</a></span></dt>
+<dd><p><var class="var">flags</var> is a bitfield, whose lowest bit is <var class="var">allow-other-keys</var>,
+second bit is <var class="var">has-rest</var>, and whose following six bits are unused.
+</p>
+<p>Find the last positional argument, and shuffle all the rest above
+<var class="var">ntotal</var>.  Initialize the intervening locals to
+<code class="code">SCM_UNDEFINED</code>.  Then load the constant at <var class="var">kw-offset</var> words
+from the current <var class="var">ip</var>, and use it and the <var class="var">allow-other-keys</var>
+flag to bind keyword arguments.  If <var class="var">has-rest</var>, collect all shuffled
+arguments into a list, and store it in <var class="var">nreq-and-opt</var>.  Finally,
+clear the arguments that we shuffled up.
+</p>
+<p>The parsing is driven by a keyword arguments association list, looked up
+using <var class="var">kw-offset</var>.  The alist is a list of pairs of the form
+<code class="code">(<var class="var">kw</var> . <var class="var">index</var>)</code>, mapping keyword arguments to their
+local slot indices.  Unless <code class="code">allow-other-keys</code> is set, the parser
+will signal an error if an unknown key is found.
+</p>
+<p>A macro-mega-instruction.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-bind_002doptionals"><span class="category-def">Instruction: </span><span><strong class="def-name">bind-optionals</strong> <code class="def-code-arguments">f24:<var class="var">nlocals</var></code><a class="copiable-link" href='#index-bind_002doptionals'> &para;</a></span></dt>
+<dd><p>Expand the current frame to have at least <var class="var">nlocals</var> locals, filling
+in any fresh values with <code class="code">SCM_UNDEFINED</code>.  If the frame has more
+than <var class="var">nlocals</var> locals, it is left as it is.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-bind_002drest"><span class="category-def">Instruction: </span><span><strong class="def-name">bind-rest</strong> <code class="def-code-arguments">f24:<var class="var">dst</var></code><a class="copiable-link" href='#index-bind_002drest'> &para;</a></span></dt>
+<dd><p>Collect any arguments at or above <var class="var">dst</var> into a list, and store that
+list at <var class="var">dst</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-alloc_002dframe"><span class="category-def">Instruction: </span><span><strong class="def-name">alloc-frame</strong> <code class="def-code-arguments">c24:<var class="var">nlocals</var></code><a class="copiable-link" href='#index-alloc_002dframe'> &para;</a></span></dt>
+<dd><p>Ensure that there is space on the stack for <var class="var">nlocals</var> local
+variables.  The value of any new local is undefined.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-reset_002dframe"><span class="category-def">Instruction: </span><span><strong class="def-name">reset-frame</strong> <code class="def-code-arguments">c24:<var class="var">nlocals</var></code><a class="copiable-link" href='#index-reset_002dframe'> &para;</a></span></dt>
+<dd><p>Like <code class="code">alloc-frame</code>, but doesn&rsquo;t check that the stack is big enough,
+and doesn&rsquo;t initialize values to <code class="code">SCM_UNDEFINED</code>.  Used to reset
+the frame size to something less than the size that was previously set
+via alloc-frame.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-assert_002dnargs_002dee_002flocals"><span class="category-def">Instruction: </span><span><strong class="def-name">assert-nargs-ee/locals</strong> <code class="def-code-arguments">c12:<var class="var">expected</var> c12:<var class="var">nlocals</var></code><a class="copiable-link" href='#index-assert_002dnargs_002dee_002flocals'> &para;</a></span></dt>
+<dd><p>Equivalent to a sequence of <code class="code">assert-nargs-ee</code> and
+<code class="code">allocate-frame</code>.  The number of locals reserved is <var class="var">expected</var>
++ <var class="var">nlocals</var>.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Shuffling-Instructions.html">Shuffling Instructions</a>, Previous: <a href="Call-and-Return-Instructions.html">Call and Return Instructions</a>, Up: <a href="Instruction-Set.html">Instruction Set</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

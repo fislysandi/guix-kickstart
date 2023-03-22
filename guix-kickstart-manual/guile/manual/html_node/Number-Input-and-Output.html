@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Number Input and Output (Guile Reference Manual)</title>
+
+<meta name="description" content="Number Input and Output (Guile Reference Manual)">
+<meta name="keywords" content="Number Input and Output (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Internationalization.html" rel="up" title="Internationalization">
+<link href="Accessing-Locale-Information.html" rel="next" title="Accessing Locale Information">
+<link href="Character-Case-Mapping.html" rel="prev" title="Character Case Mapping">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Number-Input-and-Output">
+<div class="nav-panel">
+<p>
+Next: <a href="Accessing-Locale-Information.html" accesskey="n" rel="next">Accessing Locale Information</a>, Previous: <a href="Character-Case-Mapping.html" accesskey="p" rel="prev">Character Case Mapping</a>, Up: <a href="Internationalization.html" accesskey="u" rel="up">Support for Internationalization</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Number-Input-and-Output-1">6.25.4 Number Input and Output</h4>
+
+<p>The following procedures allow programs to read and write numbers
+written according to a particular locale.  As an example, in English,
+&ldquo;ten thousand and a half&rdquo; is usually written <code class="code">10,000.5</code> while
+in French it is written <code class="code">10 000,5</code>.  These procedures allow such
+differences to be taken into account.
+</p>
+<a class="index-entry-id" id="index-strtod"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-locale_002dstring_002d_003einteger"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-string-&gt;integer</strong> <var class="def-var-arguments">str [base [locale]]</var><a class="copiable-link" href='#index-locale_002dstring_002d_003einteger'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flocale_005fstring_005fto_005finteger"><span class="category-def">C Function: </span><span><strong class="def-name">scm_locale_string_to_integer</strong> <var class="def-var-arguments">(str, base, locale)</var><a class="copiable-link" href='#index-scm_005flocale_005fstring_005fto_005finteger'> &para;</a></span></dt>
+<dd><p>Convert string <var class="var">str</var> into an integer according to either
+<var class="var">locale</var> (a locale object as returned by <code class="code">make-locale</code>) or
+the current process locale.  If <var class="var">base</var> is specified, then it
+determines the base of the integer being read (e.g., <code class="code">16</code> for an
+hexadecimal number, <code class="code">10</code> for a decimal number); by default,
+decimal numbers are read.  Return two values (see <a class="pxref" href="Multiple-Values.html">Returning and Accepting Multiple Values</a>): an integer (on success) or <code class="code">#f</code>, and the number of
+characters read from <var class="var">str</var> (<code class="code">0</code> on failure).
+</p>
+<p>This function is based on the C library&rsquo;s <code class="code">strtol</code> function
+(see <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/Parsing-of-Integers.html#Parsing-of-Integers"><code class="code">strtol</code></a> in <cite class="cite">The GNU C Library
+Reference Manual</cite>).
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-strtod-1"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-locale_002dstring_002d_003einexact"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">locale-string-&gt;inexact</strong> <var class="def-var-arguments">str [locale]</var><a class="copiable-link" href='#index-locale_002dstring_002d_003einexact'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flocale_005fstring_005fto_005finexact"><span class="category-def">C Function: </span><span><strong class="def-name">scm_locale_string_to_inexact</strong> <var class="def-var-arguments">(str, locale)</var><a class="copiable-link" href='#index-scm_005flocale_005fstring_005fto_005finexact'> &para;</a></span></dt>
+<dd><p>Convert string <var class="var">str</var> into an inexact number according to either
+<var class="var">locale</var> (a locale object as returned by <code class="code">make-locale</code>) or
+the current process locale.  Return two values (see <a class="pxref" href="Multiple-Values.html">Returning and Accepting Multiple Values</a>): an inexact number (on success) or <code class="code">#f</code>, and the number
+of characters read from <var class="var">str</var> (<code class="code">0</code> on failure).
+</p>
+<p>This function is based on the C library&rsquo;s <code class="code">strtod</code> function
+(see <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/Parsing-of-Floats.html#Parsing-of-Floats"><code class="code">strtod</code></a> in <cite class="cite">The GNU C Library
+Reference Manual</cite>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-number_002d_003elocale_002dstring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">number-&gt;locale-string</strong> <var class="def-var-arguments">number [fraction-digits [locale]]</var><a class="copiable-link" href='#index-number_002d_003elocale_002dstring'> &para;</a></span></dt>
+<dd><p>Convert <var class="var">number</var> (an inexact) into a string according to the
+cultural conventions of either <var class="var">locale</var> (a locale object) or the
+current locale.  By default, print as many fractional digits as
+necessary, up to an upper bound.  Optionally, <var class="var">fraction-digits</var> may
+be bound to an integer specifying the number of fractional digits to be
+displayed.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-monetary_002damount_002d_003elocale_002dstring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">monetary-amount-&gt;locale-string</strong> <var class="def-var-arguments">amount intl? [locale]</var><a class="copiable-link" href='#index-monetary_002damount_002d_003elocale_002dstring'> &para;</a></span></dt>
+<dd><p>Convert <var class="var">amount</var> (an inexact denoting a monetary amount) into a
+string according to the cultural conventions of either <var class="var">locale</var> (a
+locale object) or the current locale.  If <var class="var">intl?</var> is true, then
+the international monetary format for the given locale is used
+(see <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/Currency-Symbol.html#Currency-Symbol">international and locale monetary formats</a> in <cite class="cite">The GNU C Library Reference Manual</cite>).
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Accessing-Locale-Information.html">Accessing Locale Information</a>, Previous: <a href="Character-Case-Mapping.html">Character Case Mapping</a>, Up: <a href="Internationalization.html">Support for Internationalization</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

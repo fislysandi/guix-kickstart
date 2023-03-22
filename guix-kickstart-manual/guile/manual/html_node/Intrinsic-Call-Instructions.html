@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Intrinsic Call Instructions (Guile Reference Manual)</title>
+
+<meta name="description" content="Intrinsic Call Instructions (Guile Reference Manual)">
+<meta name="keywords" content="Intrinsic Call Instructions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Instruction-Set.html" rel="up" title="Instruction Set">
+<link href="Constant-Instructions.html" rel="next" title="Constant Instructions">
+<link href="Instrumentation-Instructions.html" rel="prev" title="Instrumentation Instructions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Intrinsic-Call-Instructions">
+<div class="nav-panel">
+<p>
+Next: <a href="Constant-Instructions.html" accesskey="n" rel="next">Constant Instructions</a>, Previous: <a href="Instrumentation-Instructions.html" accesskey="p" rel="prev">Instrumentation Instructions</a>, Up: <a href="Instruction-Set.html" accesskey="u" rel="up">Instruction Set</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Intrinsic-Call-Instructions-1">9.3.7.7 Intrinsic Call Instructions</h4>
+
+<p>Guile&rsquo;s instruction set is low-level.  This is good because the separate
+components of, say, a <code class="code">vector-ref</code> operation might be able to be
+optimized out, leaving only the operations that need to be performed at
+run-time.
+</p>
+<p>However some macro-operations may need to perform large amounts of
+computation at run-time to handle all the edge cases, and whose
+micro-operation components aren&rsquo;t amenable to optimization.
+Residualizing code for the entire macro-operation would lead to code
+bloat with no benefit.
+</p>
+<p>In this kind of a case, Guile&rsquo;s VM calls out to <em class="dfn">intrinsics</em>:
+run-time routines written in the host language (currently C, possibly
+more in the future if Guile gains more run-time targets like
+WebAssembly).  There is one instruction for each instrinsic prototype;
+the intrinsic is specified by index in the instruction.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-call_002dthread"><span class="category-def">Instruction: </span><span><strong class="def-name">call-thread</strong> <code class="def-code-arguments">x24:<var class="var">_</var> c32:<var class="var">idx</var></code><a class="copiable-link" href='#index-call_002dthread'> &para;</a></span></dt>
+<dd><p>Call the <code class="code">void</code>-returning instrinsic with index <var class="var">idx</var>, passing
+the current <code class="code">scm_thread*</code> as the argument.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-call_002dthread_002dscm"><span class="category-def">Instruction: </span><span><strong class="def-name">call-thread-scm</strong> <code class="def-code-arguments">s24:<var class="var">a</var> c32:<var class="var">idx</var></code><a class="copiable-link" href='#index-call_002dthread_002dscm'> &para;</a></span></dt>
+<dd><p>Call the <code class="code">void</code>-returning instrinsic with index <var class="var">idx</var>, passing
+the current <code class="code">scm_thread*</code> and the <code class="code">scm</code> local <var class="var">a</var> as
+arguments.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-call_002dthread_002dscm_002dscm"><span class="category-def">Instruction: </span><span><strong class="def-name">call-thread-scm-scm</strong> <code class="def-code-arguments">s12:<var class="var">a</var> s12:<var class="var">b</var> c32:<var class="var">idx</var></code><a class="copiable-link" href='#index-call_002dthread_002dscm_002dscm'> &para;</a></span></dt>
+<dd><p>Call the <code class="code">void</code>-returning instrinsic with index <var class="var">idx</var>, passing
+the current <code class="code">scm_thread*</code> and the <code class="code">scm</code> locals <var class="var">a</var> and
+<var class="var">b</var> as arguments.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-call_002dscm_002dsz_002du32"><span class="category-def">Instruction: </span><span><strong class="def-name">call-scm-sz-u32</strong> <code class="def-code-arguments">s12:<var class="var">a</var> s12:<var class="var">b</var> c32:<var class="var">idx</var></code><a class="copiable-link" href='#index-call_002dscm_002dsz_002du32'> &para;</a></span></dt>
+<dd><p>Call the <code class="code">void</code>-returning instrinsic with index <var class="var">idx</var>, passing
+the locals <var class="var">a</var>, <var class="var">b</var>, and <var class="var">c</var> as arguments.  <var class="var">a</var> is a
+<code class="code">scm</code> value, while <var class="var">b</var> and <var class="var">c</var> are raw <code class="code">u64</code> values
+which fit into <code class="code">size_t</code> and <code class="code">uint32_t</code> types, respectively.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-call_002dscm_003c_002dthread"><span class="category-def">Instruction: </span><span><strong class="def-name">call-scm&lt;-thread</strong> <code class="def-code-arguments">s24:<var class="var">dst</var> c32:<var class="var">idx</var></code><a class="copiable-link" href='#index-call_002dscm_003c_002dthread'> &para;</a></span></dt>
+<dd><p>Call the <code class="code">SCM</code>-returning instrinsic with index <var class="var">idx</var>, passing
+the current <code class="code">scm_thread*</code> as the argument.  Place the result in
+<var class="var">dst</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-call_002dscm_003c_002du64"><span class="category-def">Instruction: </span><span><strong class="def-name">call-scm&lt;-u64</strong> <code class="def-code-arguments">s12:<var class="var">dst</var> s12:<var class="var">a</var> c32:<var class="var">idx</var></code><a class="copiable-link" href='#index-call_002dscm_003c_002du64'> &para;</a></span></dt>
+<dd><p>Call the <code class="code">SCM</code>-returning instrinsic with index <var class="var">idx</var>, passing
+<code class="code">u64</code> local <var class="var">a</var> as the argument.  Place the result in
+<var class="var">dst</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-call_002dscm_003c_002ds64"><span class="category-def">Instruction: </span><span><strong class="def-name">call-scm&lt;-s64</strong> <code class="def-code-arguments">s12:<var class="var">dst</var> s12:<var class="var">a</var> c32:<var class="var">idx</var></code><a class="copiable-link" href='#index-call_002dscm_003c_002ds64'> &para;</a></span></dt>
+<dd><p>Call the <code class="code">SCM</code>-returning instrinsic with index <var class="var">idx</var>, passing
+<code class="code">s64</code> local <var class="var">a</var> as the argument.  Place the result in
+<var class="var">dst</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-call_002dscm_003c_002dscm"><span class="category-def">Instruction: </span><span><strong class="def-name">call-scm&lt;-scm</strong> <code class="def-code-arguments">s12:<var class="var">dst</var> s12:<var class="var">a</var> c32:<var class="var">idx</var></code><a class="copiable-link" href='#index-call_002dscm_003c_002dscm'> &para;</a></span></dt>
+<dd><p>Call the <code class="code">SCM</code>-returning instrinsic with index <var class="var">idx</var>, passing
+<code class="code">scm</code> local <var class="var">a</var> as the argument.  Place the result in
+<var class="var">dst</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-call_002du64_003c_002dscm"><span class="category-def">Instruction: </span><span><strong class="def-name">call-u64&lt;-scm</strong> <code class="def-code-arguments">s12:<var class="var">dst</var> s12:<var class="var">a</var> c32:<var class="var">idx</var></code><a class="copiable-link" href='#index-call_002du64_003c_002dscm'> &para;</a></span></dt>
+<dd><p>Call the <code class="code">uint64_t</code>-returning instrinsic with index <var class="var">idx</var>,
+passing <code class="code">scm</code> local <var class="var">a</var> as the argument.  Place the <code class="code">u64</code>
+result in <var class="var">dst</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-call_002ds64_003c_002dscm"><span class="category-def">Instruction: </span><span><strong class="def-name">call-s64&lt;-scm</strong> <code class="def-code-arguments">s12:<var class="var">dst</var> s12:<var class="var">a</var> c32:<var class="var">idx</var></code><a class="copiable-link" href='#index-call_002ds64_003c_002dscm'> &para;</a></span></dt>
+<dd><p>Call the <code class="code">int64_t</code>-returning instrinsic with index <var class="var">idx</var>,
+passing <code class="code">scm</code> local <var class="var">a</var> as the argument.  Place the <code class="code">s64</code>
+result in <var class="var">dst</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-call_002df64_003c_002dscm"><span class="category-def">Instruction: </span><span><strong class="def-name">call-f64&lt;-scm</strong> <code class="def-code-arguments">s12:<var class="var">dst</var> s12:<var class="var">a</var> c32:<var class="var">idx</var></code><a class="copiable-link" href='#index-call_002df64_003c_002dscm'> &para;</a></span></dt>
+<dd><p>Call the <code class="code">double</code>-returning instrinsic with index <var class="var">idx</var>,
+passing <code class="code">scm</code> local <var class="var">a</var> as the argument.  Place the <code class="code">f64</code>
+result in <var class="var">dst</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-call_002dscm_003c_002dscm_002dscm"><span class="category-def">Instruction: </span><span><strong class="def-name">call-scm&lt;-scm-scm</strong> <code class="def-code-arguments">s8:<var class="var">dst</var> s8:<var class="var">a</var> s8:<var class="var">b</var> c32:<var class="var">idx</var></code><a class="copiable-link" href='#index-call_002dscm_003c_002dscm_002dscm'> &para;</a></span></dt>
+<dd><p>Call the <code class="code">SCM</code>-returning instrinsic with index <var class="var">idx</var>, passing
+<code class="code">scm</code> locals <var class="var">a</var> and <var class="var">b</var> as arguments.  Place the
+<code class="code">scm</code> result in <var class="var">dst</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-call_002dscm_003c_002dscm_002duimm"><span class="category-def">Instruction: </span><span><strong class="def-name">call-scm&lt;-scm-uimm</strong> <code class="def-code-arguments">s8:<var class="var">dst</var> s8:<var class="var">a</var> c8:<var class="var">b</var> c32:<var class="var">idx</var></code><a class="copiable-link" href='#index-call_002dscm_003c_002dscm_002duimm'> &para;</a></span></dt>
+<dd><p>Call the <code class="code">SCM</code>-returning instrinsic with index <var class="var">idx</var>, passing
+<code class="code">scm</code> local <var class="var">a</var> and <code class="code">uint8_t</code> immediate <var class="var">b</var> as
+arguments.  Place the <code class="code">scm</code> result in <var class="var">dst</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-call_002dscm_003c_002dthread_002dscm"><span class="category-def">Instruction: </span><span><strong class="def-name">call-scm&lt;-thread-scm</strong> <code class="def-code-arguments">s12:<var class="var">dst</var> s12:<var class="var">a</var> c32:<var class="var">idx</var></code><a class="copiable-link" href='#index-call_002dscm_003c_002dthread_002dscm'> &para;</a></span></dt>
+<dd><p>Call the <code class="code">SCM</code>-returning instrinsic with index <var class="var">idx</var>, passing
+the current <code class="code">scm_thread*</code> and <code class="code">scm</code> local <var class="var">a</var> as
+arguments.  Place the <code class="code">scm</code> result in <var class="var">dst</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-call_002dscm_003c_002dscm_002du64"><span class="category-def">Instruction: </span><span><strong class="def-name">call-scm&lt;-scm-u64</strong> <code class="def-code-arguments">s8:<var class="var">dst</var> s8:<var class="var">a</var> s8:<var class="var">b</var> c32:<var class="var">idx</var></code><a class="copiable-link" href='#index-call_002dscm_003c_002dscm_002du64'> &para;</a></span></dt>
+<dd><p>Call the <code class="code">SCM</code>-returning instrinsic with index <var class="var">idx</var>, passing
+<code class="code">scm</code> local <var class="var">a</var> and <code class="code">u64</code> local <var class="var">b</var> as arguments.
+Place the <code class="code">scm</code> result in <var class="var">dst</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-call_002dscm_002dscm"><span class="category-def">Instruction: </span><span><strong class="def-name">call-scm-scm</strong> <code class="def-code-arguments">s12:<var class="var">a</var> s12:<var class="var">b</var> c32:<var class="var">idx</var></code><a class="copiable-link" href='#index-call_002dscm_002dscm'> &para;</a></span></dt>
+<dd><p>Call the <code class="code">void</code>-returning instrinsic with index <var class="var">idx</var>, passing
+<code class="code">scm</code> locals <var class="var">a</var> and <var class="var">b</var> as arguments.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-call_002dscm_002dscm_002dscm"><span class="category-def">Instruction: </span><span><strong class="def-name">call-scm-scm-scm</strong> <code class="def-code-arguments">s8:<var class="var">a</var> s8:<var class="var">b</var> s8:<var class="var">c</var> c32:<var class="var">idx</var></code><a class="copiable-link" href='#index-call_002dscm_002dscm_002dscm'> &para;</a></span></dt>
+<dd><p>Call the <code class="code">void</code>-returning instrinsic with index <var class="var">idx</var>, passing
+<code class="code">scm</code> locals <var class="var">a</var>, <var class="var">b</var>, and <var class="var">c</var> as arguments.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-call_002dscm_002duimm_002dscm"><span class="category-def">Instruction: </span><span><strong class="def-name">call-scm-uimm-scm</strong> <code class="def-code-arguments">s8:<var class="var">a</var> c8:<var class="var">b</var> s8:<var class="var">c</var> c32:<var class="var">idx</var></code><a class="copiable-link" href='#index-call_002dscm_002duimm_002dscm'> &para;</a></span></dt>
+<dd><p>Call the <code class="code">void</code>-returning instrinsic with index <var class="var">idx</var>, passing
+<code class="code">scm</code> local <var class="var">a</var>, <code class="code">uint8_t</code> immediate <var class="var">b</var>, and
+<code class="code">scm</code> local <var class="var">c</var> as arguments.
+</p></dd></dl>
+
+<p>There are corresponding macro-instructions for specific intrinsics.
+These are equivalent to <code class="code">call-<var class="var">instrinsic-kind</var></code> instructions
+with the appropriate intrinsic <var class="var">idx</var> arguments.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-add"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">add</strong> <var class="def-var-arguments">dst a b</var><a class="copiable-link" href='#index-add'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-add_002fimmediate"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">add/immediate</strong> <var class="def-var-arguments">dst a b/imm</var><a class="copiable-link" href='#index-add_002fimmediate'> &para;</a></span></dt>
+<dd><p>Add <code class="code">SCM</code> values <var class="var">a</var> and <var class="var">b</var> and place the result in
+<var class="var">dst</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-sub"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">sub</strong> <var class="def-var-arguments">dst a b</var><a class="copiable-link" href='#index-sub'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-sub_002fimmediate"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">sub/immediate</strong> <var class="def-var-arguments">dst a b/imm</var><a class="copiable-link" href='#index-sub_002fimmediate'> &para;</a></span></dt>
+<dd><p>Subtract <code class="code">SCM</code> value <var class="var">b</var> from <var class="var">a</var> and place the result in
+<var class="var">dst</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-mul"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">mul</strong> <var class="def-var-arguments">dst a b</var><a class="copiable-link" href='#index-mul'> &para;</a></span></dt>
+<dd><p>Multiply <code class="code">SCM</code> values <var class="var">a</var> and <var class="var">b</var> and place the result in
+<var class="var">dst</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-div-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">div</strong> <var class="def-var-arguments">dst a b</var><a class="copiable-link" href='#index-div-1'> &para;</a></span></dt>
+<dd><p>Divide <code class="code">SCM</code> value <var class="var">a</var> by <var class="var">b</var> and place the result in
+<var class="var">dst</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-quo"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">quo</strong> <var class="def-var-arguments">dst a b</var><a class="copiable-link" href='#index-quo'> &para;</a></span></dt>
+<dd><p>Compute the quotient of <code class="code">SCM</code> values <var class="var">a</var> and <var class="var">b</var> and place
+the result in <var class="var">dst</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-rem"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">rem</strong> <var class="def-var-arguments">dst a b</var><a class="copiable-link" href='#index-rem'> &para;</a></span></dt>
+<dd><p>Compute the remainder of <code class="code">SCM</code> values <var class="var">a</var> and <var class="var">b</var> and place
+the result in <var class="var">dst</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-mod-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">mod</strong> <var class="def-var-arguments">dst a b</var><a class="copiable-link" href='#index-mod-1'> &para;</a></span></dt>
+<dd><p>Compute the modulo of <code class="code">SCM</code> value <var class="var">a</var> by <var class="var">b</var> and place the
+result in <var class="var">dst</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-logand-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">logand</strong> <var class="def-var-arguments">dst a b</var><a class="copiable-link" href='#index-logand-1'> &para;</a></span></dt>
+<dd><p>Compute the bitwise <code class="code">and</code> of <code class="code">SCM</code> values <var class="var">a</var> and <var class="var">b</var>
+and place the result in <var class="var">dst</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-logior-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">logior</strong> <var class="def-var-arguments">dst a b</var><a class="copiable-link" href='#index-logior-1'> &para;</a></span></dt>
+<dd><p>Compute the bitwise inclusive <code class="code">or</code> of <code class="code">SCM</code> values <var class="var">a</var> and
+<var class="var">b</var> and place the result in <var class="var">dst</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-logxor-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">logxor</strong> <var class="def-var-arguments">dst a b</var><a class="copiable-link" href='#index-logxor-1'> &para;</a></span></dt>
+<dd><p>Compute the bitwise exclusive <code class="code">or</code> of <code class="code">SCM</code> values <var class="var">a</var> and
+<var class="var">b</var> and place the result in <var class="var">dst</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-logsub"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">logsub</strong> <var class="def-var-arguments">dst a b</var><a class="copiable-link" href='#index-logsub'> &para;</a></span></dt>
+<dd><p>Compute the bitwise <code class="code">and</code> of <code class="code">SCM</code> value <var class="var">a</var> and the
+bitwise <code class="code">not</code> of <var class="var">b</var> and place the result in <var class="var">dst</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-lsh"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">lsh</strong> <var class="def-var-arguments">dst a b</var><a class="copiable-link" href='#index-lsh'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-lsh_002fimmediate"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">lsh/immediate</strong> <var class="def-var-arguments">a b/imm</var><a class="copiable-link" href='#index-lsh_002fimmediate'> &para;</a></span></dt>
+<dd><p>Shift <code class="code">SCM</code> value <var class="var">a</var> left by <code class="code">u64</code> value <var class="var">b</var> bits and
+place the result in <var class="var">dst</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-rsh"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">rsh</strong> <var class="def-var-arguments">dst a b</var><a class="copiable-link" href='#index-rsh'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-rsh_002fimmediate"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">rsh/immediate</strong> <var class="def-var-arguments">dst a b/imm</var><a class="copiable-link" href='#index-rsh_002fimmediate'> &para;</a></span></dt>
+<dd><p>Shifts <code class="code">SCM</code> value <var class="var">a</var> right by <code class="code">u64</code> value <var class="var">b</var> bits
+and place the result in <var class="var">dst</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-scm_002d_003ef64"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">scm-&gt;f64</strong> <var class="def-var-arguments">dst src</var><a class="copiable-link" href='#index-scm_002d_003ef64'> &para;</a></span></dt>
+<dd><p>Convert <var class="var">src</var> to an unboxed <code class="code">f64</code> and place the result in
+<var class="var">dst</var>, or raises an error if <var class="var">src</var> is not a real number.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-scm_002d_003eu64"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">scm-&gt;u64</strong> <var class="def-var-arguments">dst src</var><a class="copiable-link" href='#index-scm_002d_003eu64'> &para;</a></span></dt>
+<dd><p>Convert <var class="var">src</var> to an unboxed <code class="code">u64</code> and place the result in
+<var class="var">dst</var>, or raises an error if <var class="var">src</var> is not an integer within
+range.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-scm_002d_003eu64_002ftruncate"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">scm-&gt;u64/truncate</strong> <var class="def-var-arguments">dst src</var><a class="copiable-link" href='#index-scm_002d_003eu64_002ftruncate'> &para;</a></span></dt>
+<dd><p>Convert <var class="var">src</var> to an unboxed <code class="code">u64</code> and place the result in
+<var class="var">dst</var>, truncating to the low 64 bits, or raises an error if
+<var class="var">src</var> is not an integer.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-scm_002d_003es64"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">scm-&gt;s64</strong> <var class="def-var-arguments">dst src</var><a class="copiable-link" href='#index-scm_002d_003es64'> &para;</a></span></dt>
+<dd><p>Convert <var class="var">src</var> to an unboxed <code class="code">s64</code> and place the result in
+<var class="var">dst</var>, or raises an error if <var class="var">src</var> is not an integer within
+range.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-u64_002d_003escm"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">u64-&gt;scm</strong> <var class="def-var-arguments">dst src</var><a class="copiable-link" href='#index-u64_002d_003escm'> &para;</a></span></dt>
+<dd><p>Convert <var class="var">u64</var> value <var class="var">src</var> to a Scheme integer in <var class="var">dst</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-s64_002d_003escm"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">s64-&gt;scm</strong> <var class="def-var-arguments">scm&lt;-s64</var><a class="copiable-link" href='#index-s64_002d_003escm'> &para;</a></span></dt>
+<dd><p>Convert <var class="var">s64</var> value <var class="var">src</var> to a Scheme integer in <var class="var">dst</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dset_0021-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">string-set!</strong> <var class="def-var-arguments">str idx ch</var><a class="copiable-link" href='#index-string_002dset_0021-1'> &para;</a></span></dt>
+<dd><p>Sets the character <var class="var">idx</var> (a <code class="code">u64</code>) of string <var class="var">str</var> to
+<var class="var">ch</var> (a <code class="code">u64</code> that is a valid character value).
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002d_003enumber-2"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">string-&gt;number</strong> <var class="def-var-arguments">dst src</var><a class="copiable-link" href='#index-string_002d_003enumber-2'> &para;</a></span></dt>
+<dd><p>Call <code class="code">string-&gt;number</code> on <var class="var">src</var> and place the result in
+<var class="var">dst</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002d_003esymbol-2"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">string-&gt;symbol</strong> <var class="def-var-arguments">dst src</var><a class="copiable-link" href='#index-string_002d_003esymbol-2'> &para;</a></span></dt>
+<dd><p>Call <code class="code">string-&gt;symbol</code> on <var class="var">src</var> and place the result in
+<var class="var">dst</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-symbol_002d_003ekeyword-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">symbol-&gt;keyword</strong> <var class="def-var-arguments">dst src</var><a class="copiable-link" href='#index-symbol_002d_003ekeyword-1'> &para;</a></span></dt>
+<dd><p>Call <code class="code">symbol-&gt;keyword</code> on <var class="var">src</var> and place the result in
+<var class="var">dst</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-class_002dof-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">class-of</strong> <var class="def-var-arguments">dst src</var><a class="copiable-link" href='#index-class_002dof-1'> &para;</a></span></dt>
+<dd><p>Set <var class="var">dst</var> to the GOOPS class of <code class="code">src</code>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-wind"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">wind</strong> <var class="def-var-arguments">winder unwinder</var><a class="copiable-link" href='#index-wind'> &para;</a></span></dt>
+<dd><p>Push wind and unwind procedures onto the dynamic stack.  Note that
+neither are actually called; the compiler should emit calls to
+<var class="var">winder</var> and <var class="var">unwinder</var> for the normal dynamic-wind control
+flow.  Also note that the compiler should have inserted checks that
+<var class="var">winder</var> and <var class="var">unwinder</var> are thunks, if it could not prove that
+to be the case.  See <a class="xref" href="Dynamic-Wind.html">Dynamic Wind</a>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-unwind"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">unwind</strong><a class="copiable-link" href='#index-unwind'> &para;</a></span></dt>
+<dd><p>Exit from the dynamic extent of an expression, popping the top entry off
+of the dynamic stack.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-push_002dfluid"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">push-fluid</strong> <var class="def-var-arguments">fluid value</var><a class="copiable-link" href='#index-push_002dfluid'> &para;</a></span></dt>
+<dd><p>Dynamically bind <var class="var">value</var> to <var class="var">fluid</var> by creating a with-fluids
+object, pushing that object on the dynamic stack.  See <a class="xref" href="Fluids-and-Dynamic-States.html">Fluids and Dynamic States</a>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-pop_002dfluid"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">pop-fluid</strong><a class="copiable-link" href='#index-pop_002dfluid'> &para;</a></span></dt>
+<dd><p>Leave the dynamic extent of a <code class="code">with-fluid*</code> expression, restoring
+the fluid to its previous value.  <code class="code">push-fluid</code> should always be
+balanced with <code class="code">pop-fluid</code>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-fluid_002dref-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">fluid-ref</strong> <var class="def-var-arguments">dst fluid</var><a class="copiable-link" href='#index-fluid_002dref-1'> &para;</a></span></dt>
+<dd><p>Place the value associated with the fluid <var class="var">fluid</var> in <var class="var">dst</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-fluid_002dset_0021-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">fluid-set!</strong> <var class="def-var-arguments">fluid value</var><a class="copiable-link" href='#index-fluid_002dset_0021-1'> &para;</a></span></dt>
+<dd><p>Set the value of the fluid <var class="var">fluid</var> to <var class="var">value</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-push_002ddynamic_002dstate"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">push-dynamic-state</strong> <var class="def-var-arguments">state</var><a class="copiable-link" href='#index-push_002ddynamic_002dstate'> &para;</a></span></dt>
+<dd><p>Save the current set of fluid bindings on the dynamic stack and instate
+the bindings from <var class="var">state</var> instead.  See <a class="xref" href="Fluids-and-Dynamic-States.html">Fluids and Dynamic States</a>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-pop_002ddynamic_002dstate"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">pop-dynamic-state</strong><a class="copiable-link" href='#index-pop_002ddynamic_002dstate'> &para;</a></span></dt>
+<dd><p>Restore a saved set of fluid bindings from the dynamic stack.
+<code class="code">push-dynamic-state</code> should always be balanced with
+<code class="code">pop-dynamic-state</code>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-resolve_002dmodule-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">resolve-module</strong> <var class="def-var-arguments">dst name public?</var><a class="copiable-link" href='#index-resolve_002dmodule-1'> &para;</a></span></dt>
+<dd><p>Look up the module named <var class="var">name</var>, resolve its public interface if the
+immediate operand <var class="var">public?</var> is true, then place the result in
+<var class="var">dst</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-lookup"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">lookup</strong> <var class="def-var-arguments">dst mod sym</var><a class="copiable-link" href='#index-lookup'> &para;</a></span></dt>
+<dd><p>Look up <var class="var">sym</var> in module <var class="var">mod</var>, placing the resulting variable
+(or <code class="code">#f</code> if not found) in <var class="var">dst</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-define_0021"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">define!</strong> <var class="def-var-arguments">dst mod sym</var><a class="copiable-link" href='#index-define_0021'> &para;</a></span></dt>
+<dd><p>Look up <var class="var">sym</var> in module <var class="var">mod</var>, placing the resulting variable in
+<var class="var">dst</var>, creating the variable if needed.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-current_002dmodule-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">current-module</strong> <var class="def-var-arguments">dst</var><a class="copiable-link" href='#index-current_002dmodule-1'> &para;</a></span></dt>
+<dd><p>Set <var class="var">dst</var> to the current module.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0024car"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">$car</strong> <var class="def-var-arguments">dst src</var><a class="copiable-link" href='#index-_0024car'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_0024cdr"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">$cdr</strong> <var class="def-var-arguments">dst src</var><a class="copiable-link" href='#index-_0024cdr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_0024set_002dcar_0021"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">$set-car!</strong> <var class="def-var-arguments">x val</var><a class="copiable-link" href='#index-_0024set_002dcar_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_0024set_002dcdr_0021"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">$set-cdr!</strong> <var class="def-var-arguments">x val</var><a class="copiable-link" href='#index-_0024set_002dcdr_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_0024variable_002dref"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">$variable-ref</strong> <var class="def-var-arguments">dst src</var><a class="copiable-link" href='#index-_0024variable_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_0024variable_002dset_0021"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">$variable-set!</strong> <var class="def-var-arguments">x val</var><a class="copiable-link" href='#index-_0024variable_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_0024vector_002dlength"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">$vector-length</strong> <var class="def-var-arguments">dst x</var><a class="copiable-link" href='#index-_0024vector_002dlength'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_0024vector_002dref"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">$vector-ref</strong> <var class="def-var-arguments">dst x idx</var><a class="copiable-link" href='#index-_0024vector_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_0024vector_002dref_002fimmediate"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">$vector-ref/immediate</strong> <var class="def-var-arguments">dst x idx/imm</var><a class="copiable-link" href='#index-_0024vector_002dref_002fimmediate'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_0024vector_002dset_0021"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">$vector-set!</strong> <var class="def-var-arguments">x idx v</var><a class="copiable-link" href='#index-_0024vector_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_0024vector_002dset_0021_002fimmediate"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">$vector-set!/immediate</strong> <var class="def-var-arguments">x idx/imm v</var><a class="copiable-link" href='#index-_0024vector_002dset_0021_002fimmediate'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_0024allocate_002dstruct"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">$allocate-struct</strong> <var class="def-var-arguments">dst vtable nwords</var><a class="copiable-link" href='#index-_0024allocate_002dstruct'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_0024struct_002dvtable"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">$struct-vtable</strong> <var class="def-var-arguments">dst src</var><a class="copiable-link" href='#index-_0024struct_002dvtable'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_0024struct_002dref"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">$struct-ref</strong> <var class="def-var-arguments">dst src idx</var><a class="copiable-link" href='#index-_0024struct_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_0024struct_002dref_002fimmediate"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">$struct-ref/immediate</strong> <var class="def-var-arguments">dst src idx/imm</var><a class="copiable-link" href='#index-_0024struct_002dref_002fimmediate'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_0024struct_002dset_0021"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">$struct-set!</strong> <var class="def-var-arguments">x idx v</var><a class="copiable-link" href='#index-_0024struct_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_0024struct_002dset_0021_002fimmediate"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">$struct-set!/immediate</strong> <var class="def-var-arguments">x idx/imm v</var><a class="copiable-link" href='#index-_0024struct_002dset_0021_002fimmediate'> &para;</a></span></dt>
+<dd><p>Intrinsics for use by the baseline compiler.  The usual strategy for CPS
+compilation is to expose the component parts of e.g. <code class="code">vector-ref</code>
+so that the compiler can learn from them and eliminate needless bits.
+However in the non-optimizing baseline compiler, that&rsquo;s just overhead,
+so we have some intrinsics that encapsulate all the usual type checks.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Constant-Instructions.html">Constant Instructions</a>, Previous: <a href="Instrumentation-Instructions.html">Instrumentation Instructions</a>, Up: <a href="Instruction-Set.html">Instruction Set</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

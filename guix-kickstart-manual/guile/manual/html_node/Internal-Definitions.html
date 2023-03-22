@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Internal Definitions (Guile Reference Manual)</title>
+
+<meta name="description" content="Internal Definitions (Guile Reference Manual)">
+<meta name="keywords" content="Internal Definitions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Binding-Constructs.html" rel="up" title="Binding Constructs">
+<link href="Binding-Reflection.html" rel="next" title="Binding Reflection">
+<link href="Local-Bindings.html" rel="prev" title="Local Bindings">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Internal-Definitions">
+<div class="nav-panel">
+<p>
+Next: <a href="Binding-Reflection.html" accesskey="n" rel="next">Querying variable bindings</a>, Previous: <a href="Local-Bindings.html" accesskey="p" rel="prev">Local Variable Bindings</a>, Up: <a href="Binding-Constructs.html" accesskey="u" rel="up">Definitions and Variable Bindings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Internal-definitions">6.10.3 Internal definitions</h4>
+
+
+<p>A <code class="code">define</code> form which appears inside the body of a <code class="code">lambda</code>,
+<code class="code">let</code>, <code class="code">let*</code>, <code class="code">letrec</code>, <code class="code">letrec*</code> or equivalent
+expression is called an <em class="dfn">internal definition</em>.  An internal
+definition differs from a top level definition (see <a class="pxref" href="Top-Level.html">Top Level Variable Definitions</a>),
+because the definition is only visible inside the complete body of the
+enclosing form.  Let us examine the following example.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(let ((frumble &quot;froz&quot;))
+  (define banana (lambda () (apple 'peach)))
+  (define apple (lambda (x) x))
+  (banana))
+&rArr;
+peach
+</pre></div>
+
+<p>Here the enclosing form is a <code class="code">let</code>, so the <code class="code">define</code>s in the
+<code class="code">let</code>-body are internal definitions.  Because the scope of the
+internal definitions is the <strong class="strong">complete</strong> body of the
+<code class="code">let</code>-expression, the <code class="code">lambda</code>-expression which gets bound to
+the variable <code class="code">banana</code> may refer to the variable <code class="code">apple</code>, even
+though its definition appears lexically <em class="emph">after</em> the definition of
+<code class="code">banana</code>.  This is because a sequence of internal definition acts
+as if it were a <code class="code">letrec*</code> expression.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(let ()
+  (define a 1)
+  (define b 2)
+  (+ a b))
+</pre></div>
+
+<p>is equivalent to
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(let ()
+  (letrec* ((a 1) (b 2))
+    (+ a b)))
+</pre></div>
+
+<p>Internal definitions may be mixed with non-definition expressions.  If
+an expression precedes a definition, it is treated as if it were a
+definition of an unreferenced variable.  So this:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(let ()
+  (define a 1)
+  (foo)
+  (define b 2)
+  (+ a b))
+</pre></div>
+
+<p>is equivalent to
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(let ()
+  (letrec* ((a 1) (_ (begin (foo) #f)) (b 2))
+    (+ a b)))
+</pre></div>
+
+<p>Another noteworthy difference to top level definitions is that within
+one group of internal definitions all variable names must be distinct.
+Whereas on the top level a second define for a given variable acts like
+a <code class="code">set!</code>, for internal definitions, duplicate bound identifiers
+signals an error.
+</p>
+<p>As a historical note, it used to be that internal bindings were expanded
+in terms of <code class="code">letrec</code>, not <code class="code">letrec*</code>. This was the situation
+for the R5RS report and before. However with the R6RS, it was recognized
+that sequential definition was a more intuitive expansion, as in the
+following case:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(let ()
+  (define a 1)
+  (define b (+ a a))
+  (+ a b))
+</pre></div>
+
+<p>Guile decided to follow the R6RS in this regard, and now expands
+internal definitions using <code class="code">letrec*</code>.  Relatedly, it used to be
+that internal definitions had to precede all expressions in the body;
+this restriction was relaxed in Guile 3.0.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Binding-Reflection.html">Querying variable bindings</a>, Previous: <a href="Local-Bindings.html">Local Variable Bindings</a>, Up: <a href="Binding-Constructs.html">Definitions and Variable Bindings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>API Overview (Guile Reference Manual)</title>
+
+<meta name="description" content="API Overview (Guile Reference Manual)">
+<meta name="keywords" content="API Overview (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="API-Reference.html" rel="up" title="API Reference">
+<link href="Deprecation.html" rel="next" title="Deprecation">
+<style type="text/css">
+<!--
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="API-Overview">
+<div class="nav-panel">
+<p>
+Next: <a href="Deprecation.html" accesskey="n" rel="next">Deprecation</a>, Up: <a href="API-Reference.html" accesskey="u" rel="up">API Reference</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Overview-of-the-Guile-API">6.1 Overview of the Guile API</h3>
+
+<p>Guile&rsquo;s application programming interface (<em class="dfn">API</em>) makes
+functionality available that an application developer can use in either
+C or Scheme programming.  The interface consists of <em class="dfn">elements</em> that
+may be macros, functions or variables in C, and procedures, variables,
+syntax or other types of object in Scheme.
+</p>
+<p>Many elements are available to both Scheme and C, in a form that is
+appropriate.  For example, the <code class="code">assq</code> Scheme procedure is also
+available as <code class="code">scm_assq</code> to C code.  These elements are documented
+only once, addressing both the Scheme and C aspects of them.
+</p>
+<p>The Scheme name of an element is related to its C name in a regular
+way.  Also, a C function takes its parameters in a systematic way.
+</p>
+<p>Normally, the name of a C function can be derived given its Scheme name,
+using some simple textual transformations:
+</p>
+<ul class="itemize mark-bullet">
+<li>Replace <code class="code">-</code> (hyphen) with <code class="code">_</code> (underscore).
+
+</li><li>Replace <code class="code">?</code> (question mark) with <code class="code">_p</code>.
+
+</li><li>Replace <code class="code">!</code> (exclamation point) with <code class="code">_x</code>.
+
+</li><li>Replace internal <code class="code">-&gt;</code> with <code class="code">_to_</code>.
+
+</li><li>Replace <code class="code">&lt;=</code> (less than or equal) with <code class="code">_leq</code>.
+
+</li><li>Replace <code class="code">&gt;=</code> (greater than or equal) with <code class="code">_geq</code>.
+
+</li><li>Replace <code class="code">&lt;</code> (less than) with <code class="code">_less</code>.
+
+</li><li>Replace <code class="code">&gt;</code> (greater than) with <code class="code">_gr</code>.
+
+</li><li>Prefix with <code class="code">scm_</code>.
+
+</li></ul>
+
+
+
+<p>A C function always takes a fixed number of arguments of type
+<code class="code">SCM</code>, even when the corresponding Scheme function takes a
+variable number.
+</p>
+<p>For some Scheme functions, some last arguments are optional; the
+corresponding C function must always be invoked with all optional
+arguments specified.  To get the effect as if an argument has not been
+specified, pass <code class="code">SCM_UNDEFINED</code> as its value.  You can not do
+this for an argument in the middle; when one argument is
+<code class="code">SCM_UNDEFINED</code> all the ones following it must be
+<code class="code">SCM_UNDEFINED</code> as well.
+</p>
+<p>Some Scheme functions take an arbitrary number of <em class="emph">rest</em>
+arguments; the corresponding C function must be invoked with a list of
+all these arguments.  This list is always the last argument of the C
+function.
+</p>
+<p>These two variants can also be combined.
+</p>
+<p>The type of the return value of a C function that corresponds to a
+Scheme function is always <code class="code">SCM</code>.  In the descriptions below,
+types are therefore often omitted but for the return value and for the
+arguments.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Deprecation.html">Deprecation</a>, Up: <a href="API-Reference.html">API Reference</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

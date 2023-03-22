@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Network Sockets and Communication (Guile Reference Manual)</title>
+
+<meta name="description" content="Network Sockets and Communication (Guile Reference Manual)">
+<meta name="keywords" content="Network Sockets and Communication (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Networking.html" rel="up" title="Networking">
+<link href="Internet-Socket-Examples.html" rel="next" title="Internet Socket Examples">
+<link href="Network-Socket-Address.html" rel="prev" title="Network Socket Address">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Network-Sockets-and-Communication">
+<div class="nav-panel">
+<p>
+Next: <a href="Internet-Socket-Examples.html" accesskey="n" rel="next">Network Socket Examples</a>, Previous: <a href="Network-Socket-Address.html" accesskey="p" rel="prev">Network Socket Address</a>, Up: <a href="Networking.html" accesskey="u" rel="up">Networking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Network-Sockets-and-Communication-1">7.2.11.4 Network Sockets and Communication</h4>
+<a class="index-entry-id" id="index-socket"></a>
+<a class="index-entry-id" id="index-network-socket"></a>
+
+<p>Socket ports can be created using <code class="code">socket</code> and <code class="code">socketpair</code>.
+The ports are initially unbuffered, to make reading and writing to the
+same port more reliable.  A buffer can be added to the port using
+<code class="code">setvbuf</code> (see <a class="pxref" href="Buffering.html">Buffering</a>).
+</p>
+<p>Most systems have limits on how many files and sockets can be open, so
+it&rsquo;s strongly recommended that socket ports be closed explicitly when
+no longer required (see <a class="pxref" href="Ports.html">Ports</a>).
+</p>
+<p>Some of the underlying C functions take values in network byte order,
+but the convention in Guile is that at the Scheme level everything is
+ordinary host byte order and conversions are made automatically where
+necessary.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-socket-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">socket</strong> <var class="def-var-arguments">family style proto</var><a class="copiable-link" href='#index-socket-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsocket"><span class="category-def">C Function: </span><span><strong class="def-name">scm_socket</strong> <var class="def-var-arguments">(family, style, proto)</var><a class="copiable-link" href='#index-scm_005fsocket'> &para;</a></span></dt>
+<dd><p>Return a new socket port of the type specified by <var class="var">family</var>,
+<var class="var">style</var> and <var class="var">proto</var>.  All three parameters are integers.  The
+possible values for <var class="var">family</var> are as follows, where supported by
+the system,
+</p>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-PF_005fUNIX"><span class="category-def">Variable: </span><span><strong class="def-name">PF_UNIX</strong><a class="copiable-link" href='#index-PF_005fUNIX'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-PF_005fINET"><span class="category-def">Variable: </span><span><strong class="def-name">PF_INET</strong><a class="copiable-link" href='#index-PF_005fINET'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-PF_005fINET6"><span class="category-def">Variable: </span><span><strong class="def-name">PF_INET6</strong><a class="copiable-link" href='#index-PF_005fINET6'> &para;</a></span></dt>
+</dl>
+
+<p>The possible values for <var class="var">style</var> are as follows, again where
+supported by the system,
+</p>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-SOCK_005fSTREAM"><span class="category-def">Variable: </span><span><strong class="def-name">SOCK_STREAM</strong><a class="copiable-link" href='#index-SOCK_005fSTREAM'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-SOCK_005fDGRAM"><span class="category-def">Variable: </span><span><strong class="def-name">SOCK_DGRAM</strong><a class="copiable-link" href='#index-SOCK_005fDGRAM'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-SOCK_005fRAW"><span class="category-def">Variable: </span><span><strong class="def-name">SOCK_RAW</strong><a class="copiable-link" href='#index-SOCK_005fRAW'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-SOCK_005fRDM"><span class="category-def">Variable: </span><span><strong class="def-name">SOCK_RDM</strong><a class="copiable-link" href='#index-SOCK_005fRDM'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-SOCK_005fSEQPACKET"><span class="category-def">Variable: </span><span><strong class="def-name">SOCK_SEQPACKET</strong><a class="copiable-link" href='#index-SOCK_005fSEQPACKET'> &para;</a></span></dt>
+</dl>
+
+<p><var class="var">proto</var> can be obtained from a protocol name using
+<code class="code">getprotobyname</code> (see <a class="pxref" href="Network-Databases.html">Network Databases</a>).  A value of zero
+means the default protocol, which is usually right.
+</p>
+<p>A socket cannot by used for communication until it has been connected
+somewhere, usually with either <code class="code">connect</code> or <code class="code">accept</code> below.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-socketpair"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">socketpair</strong> <var class="def-var-arguments">family style proto</var><a class="copiable-link" href='#index-socketpair'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsocketpair"><span class="category-def">C Function: </span><span><strong class="def-name">scm_socketpair</strong> <var class="def-var-arguments">(family, style, proto)</var><a class="copiable-link" href='#index-scm_005fsocketpair'> &para;</a></span></dt>
+<dd><p>Return a pair, the <code class="code">car</code> and <code class="code">cdr</code> of which are two unnamed
+socket ports connected to each other.  The connection is full-duplex,
+so data can be transferred in either direction between the two.
+</p>
+<p><var class="var">family</var>, <var class="var">style</var> and <var class="var">proto</var> are as per <code class="code">socket</code>
+above.  But many systems only support socket pairs in the
+<code class="code">PF_UNIX</code> family.  Zero is likely to be the only meaningful value
+for <var class="var">proto</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getsockopt"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getsockopt</strong> <var class="def-var-arguments">sock level optname</var><a class="copiable-link" href='#index-getsockopt'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-setsockopt"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">setsockopt</strong> <var class="def-var-arguments">sock level optname value</var><a class="copiable-link" href='#index-setsockopt'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgetsockopt"><span class="category-def">C Function: </span><span><strong class="def-name">scm_getsockopt</strong> <var class="def-var-arguments">(sock, level, optname)</var><a class="copiable-link" href='#index-scm_005fgetsockopt'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsetsockopt"><span class="category-def">C Function: </span><span><strong class="def-name">scm_setsockopt</strong> <var class="def-var-arguments">(sock, level, optname, value)</var><a class="copiable-link" href='#index-scm_005fsetsockopt'> &para;</a></span></dt>
+<dd><p>Get or set an option on socket port <var class="var">sock</var>.  <code class="code">getsockopt</code>
+returns the current value.  <code class="code">setsockopt</code> sets a value and the
+return is unspecified.
+</p>
+<p><var class="var">level</var> is an integer specifying a protocol layer, either
+<code class="code">SOL_SOCKET</code> for socket level options, or a protocol number from
+the <code class="code">IPPROTO</code> constants or <code class="code">getprotoent</code> (see <a class="pxref" href="Network-Databases.html">Network Databases</a>).
+</p>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-SOL_005fSOCKET"><span class="category-def">Variable: </span><span><strong class="def-name">SOL_SOCKET</strong><a class="copiable-link" href='#index-SOL_005fSOCKET'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-IPPROTO_005fIP"><span class="category-def">Variable: </span><span><strong class="def-name">IPPROTO_IP</strong><a class="copiable-link" href='#index-IPPROTO_005fIP'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-IPPROTO_005fIPV6"><span class="category-def">Variable: </span><span><strong class="def-name">IPPROTO_IPV6</strong><a class="copiable-link" href='#index-IPPROTO_005fIPV6'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-IPPROTO_005fTCP"><span class="category-def">Variable: </span><span><strong class="def-name">IPPROTO_TCP</strong><a class="copiable-link" href='#index-IPPROTO_005fTCP'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-IPPROTO_005fUDP"><span class="category-def">Variable: </span><span><strong class="def-name">IPPROTO_UDP</strong><a class="copiable-link" href='#index-IPPROTO_005fUDP'> &para;</a></span></dt>
+</dl>
+
+<p><var class="var">optname</var> is an integer specifying an option within the protocol
+layer.
+</p>
+<p>For <code class="code">SOL_SOCKET</code> level the following <var class="var">optname</var>s are defined
+(when provided by the system).  For their meaning see
+<a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/Socket_002dLevel-Options.html#Socket_002dLevel-Options">Socket-Level Options</a> in <cite class="cite">The GNU C Library Reference
+Manual</cite>, or <code class="command">man 7 socket</code>.
+</p>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-SO_005fDEBUG"><span class="category-def">Variable: </span><span><strong class="def-name">SO_DEBUG</strong><a class="copiable-link" href='#index-SO_005fDEBUG'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-SO_005fREUSEADDR"><span class="category-def">Variable: </span><span><strong class="def-name">SO_REUSEADDR</strong><a class="copiable-link" href='#index-SO_005fREUSEADDR'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-SO_005fSTYLE"><span class="category-def">Variable: </span><span><strong class="def-name">SO_STYLE</strong><a class="copiable-link" href='#index-SO_005fSTYLE'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-SO_005fTYPE"><span class="category-def">Variable: </span><span><strong class="def-name">SO_TYPE</strong><a class="copiable-link" href='#index-SO_005fTYPE'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-SO_005fERROR"><span class="category-def">Variable: </span><span><strong class="def-name">SO_ERROR</strong><a class="copiable-link" href='#index-SO_005fERROR'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-SO_005fDONTROUTE"><span class="category-def">Variable: </span><span><strong class="def-name">SO_DONTROUTE</strong><a class="copiable-link" href='#index-SO_005fDONTROUTE'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-SO_005fBROADCAST"><span class="category-def">Variable: </span><span><strong class="def-name">SO_BROADCAST</strong><a class="copiable-link" href='#index-SO_005fBROADCAST'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-SO_005fSNDBUF"><span class="category-def">Variable: </span><span><strong class="def-name">SO_SNDBUF</strong><a class="copiable-link" href='#index-SO_005fSNDBUF'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-SO_005fRCVBUF"><span class="category-def">Variable: </span><span><strong class="def-name">SO_RCVBUF</strong><a class="copiable-link" href='#index-SO_005fRCVBUF'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-SO_005fKEEPALIVE"><span class="category-def">Variable: </span><span><strong class="def-name">SO_KEEPALIVE</strong><a class="copiable-link" href='#index-SO_005fKEEPALIVE'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-SO_005fOOBINLINE"><span class="category-def">Variable: </span><span><strong class="def-name">SO_OOBINLINE</strong><a class="copiable-link" href='#index-SO_005fOOBINLINE'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-SO_005fNO_005fCHECK"><span class="category-def">Variable: </span><span><strong class="def-name">SO_NO_CHECK</strong><a class="copiable-link" href='#index-SO_005fNO_005fCHECK'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-SO_005fPRIORITY"><span class="category-def">Variable: </span><span><strong class="def-name">SO_PRIORITY</strong><a class="copiable-link" href='#index-SO_005fPRIORITY'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-SO_005fREUSEPORT"><span class="category-def">Variable: </span><span><strong class="def-name">SO_REUSEPORT</strong><a class="copiable-link" href='#index-SO_005fREUSEPORT'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-SO_005fRCVTIMEO"><span class="category-def">Variable: </span><span><strong class="def-name">SO_RCVTIMEO</strong><a class="copiable-link" href='#index-SO_005fRCVTIMEO'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-SO_005fSNDTIMEO"><span class="category-def">Variable: </span><span><strong class="def-name">SO_SNDTIMEO</strong><a class="copiable-link" href='#index-SO_005fSNDTIMEO'> &para;</a></span></dt>
+<dd><p>The <var class="var">value</var> taken or returned is an integer.
+</p></dd></dl>
+
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-SO_005fLINGER"><span class="category-def">Variable: </span><span><strong class="def-name">SO_LINGER</strong><a class="copiable-link" href='#index-SO_005fLINGER'> &para;</a></span></dt>
+<dd><p>The <var class="var">value</var> taken or returned is a pair of integers
+<code class="code">(<var class="var">ENABLE</var> . <var class="var">TIMEOUT</var>)</code>.  On old systems without timeout
+support (ie. without <code class="code">struct linger</code>), only <var class="var">ENABLE</var> has an
+effect but the value in Guile is always a pair.
+</p></dd></dl>
+
+<p>For IP level (<code class="code">IPPROTO_IP</code>) the following <var class="var">optname</var>s are
+defined (when provided by the system).  See <code class="command">man ip</code> for what
+they mean.
+</p>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-IP_005fMULTICAST_005fIF"><span class="category-def">Variable: </span><span><strong class="def-name">IP_MULTICAST_IF</strong><a class="copiable-link" href='#index-IP_005fMULTICAST_005fIF'> &para;</a></span></dt>
+<dd><p>This sets the source interface used by multicast traffic.
+</p></dd></dl>
+
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-IP_005fMULTICAST_005fTTL"><span class="category-def">Variable: </span><span><strong class="def-name">IP_MULTICAST_TTL</strong><a class="copiable-link" href='#index-IP_005fMULTICAST_005fTTL'> &para;</a></span></dt>
+<dd><p>This sets the default TTL for multicast traffic. This defaults
+to 1 and should be increased to allow traffic to pass beyond the
+local network.
+</p></dd></dl>
+
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-IP_005fADD_005fMEMBERSHIP"><span class="category-def">Variable: </span><span><strong class="def-name">IP_ADD_MEMBERSHIP</strong><a class="copiable-link" href='#index-IP_005fADD_005fMEMBERSHIP'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-IP_005fDROP_005fMEMBERSHIP"><span class="category-def">Variable: </span><span><strong class="def-name">IP_DROP_MEMBERSHIP</strong><a class="copiable-link" href='#index-IP_005fDROP_005fMEMBERSHIP'> &para;</a></span></dt>
+<dd><p>These can be used only with <code class="code">setsockopt</code>, not <code class="code">getsockopt</code>.
+<var class="var">value</var> is a pair <code class="code">(<var class="var">MULTIADDR</var> . <var class="var">INTERFACEADDR</var>)</code>
+of integer IPv4 addresses (see <a class="pxref" href="Network-Address-Conversion.html">Network Address Conversion</a>).
+<var class="var">MULTIADDR</var> is a multicast address to be added to or dropped from
+the interface <var class="var">INTERFACEADDR</var>.  <var class="var">INTERFACEADDR</var> can be
+<code class="code">INADDR_ANY</code> to have the system select the interface.
+<var class="var">INTERFACEADDR</var> can also be an interface index number, on systems
+supporting that.
+</p></dd></dl>
+
+<p>Last, for IPv6 level (<code class="code">IPPROTO_IPV6</code>), the following <var class="var">optname</var>s
+are defined.  See <code class="command">man 7 ipv6</code> for details.
+</p>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-IPV6_005fV6ONLY"><span class="category-def">Variable: </span><span><strong class="def-name">IPV6_V6ONLY</strong><a class="copiable-link" href='#index-IPV6_005fV6ONLY'> &para;</a></span></dt>
+<dd><p>Determines whether an <code class="code">AF_INET6</code> socket is restricted to
+transmitting IPv6 packets only, or whether it can also transmit packets
+for an IPv4-mapped IPv6 address.
+</p></dd></dl>
+
+</dd></dl>
+
+<p>For <code class="code">IPPROTO_TCP</code> level the following <var class="var">optname</var>s are defined
+(when provided by the system).  For their meaning see <code class="command">man 7
+tcp</code>.
+</p>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-TCP_005fNODELAY"><span class="category-def">Variable: </span><span><strong class="def-name">TCP_NODELAY</strong><a class="copiable-link" href='#index-TCP_005fNODELAY'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-TCP_005fCORK"><span class="category-def">Variable: </span><span><strong class="def-name">TCP_CORK</strong><a class="copiable-link" href='#index-TCP_005fCORK'> &para;</a></span></dt>
+<dd><p>The <var class="var">value</var> taken or returned is an integer.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-shutdown"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">shutdown</strong> <var class="def-var-arguments">sock how</var><a class="copiable-link" href='#index-shutdown'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fshutdown"><span class="category-def">C Function: </span><span><strong class="def-name">scm_shutdown</strong> <var class="def-var-arguments">(sock, how)</var><a class="copiable-link" href='#index-scm_005fshutdown'> &para;</a></span></dt>
+<dd><p>Sockets can be closed simply by using <code class="code">close-port</code>.  The
+<code class="code">shutdown</code> procedure allows reception or transmission on a
+connection to be shut down individually, according to the parameter
+<var class="var">how</var>:
+</p>
+<dl class="table">
+<dt>0</dt>
+<dd><p>Stop receiving data for this socket.  If further data arrives, reject it.
+</p></dd>
+<dt>1</dt>
+<dd><p>Stop trying to transmit data from this socket.  Discard any
+data waiting to be sent.  Stop looking for acknowledgement of
+data already sent; don&rsquo;t retransmit it if it is lost.
+</p></dd>
+<dt>2</dt>
+<dd><p>Stop both reception and transmission.
+</p></dd>
+</dl>
+
+<p>The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-connect"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">connect</strong> <var class="def-var-arguments">sock sockaddr</var><a class="copiable-link" href='#index-connect'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-connect-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">connect</strong> <var class="def-var-arguments">sock AF_INET ipv4addr port</var><a class="copiable-link" href='#index-connect-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-connect-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">connect</strong> <var class="def-var-arguments">sock AF_INET6 ipv6addr port [flowinfo [scopeid]]</var><a class="copiable-link" href='#index-connect-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-connect-3"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">connect</strong> <var class="def-var-arguments">sock AF_UNIX path</var><a class="copiable-link" href='#index-connect-3'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fconnect"><span class="category-def">C Function: </span><span><strong class="def-name">scm_connect</strong> <var class="def-var-arguments">(sock, fam, address, args)</var><a class="copiable-link" href='#index-scm_005fconnect'> &para;</a></span></dt>
+<dd><p>Initiate a connection on socket port <var class="var">sock</var> to a given address.  The
+destination is either a socket address object, or arguments the same as
+<code class="code">make-socket-address</code> would take to make such an object
+(see <a class="pxref" href="Network-Socket-Address.html">Network Socket Address</a>).  Return true unless the socket was
+configured as non-blocking and the connection could not be made
+immediately.
+</p>
+<div class="example">
+<pre class="example-preformatted">(connect sock AF_INET INADDR_LOOPBACK 23)
+(connect sock (make-socket-address AF_INET INADDR_LOOPBACK 23))
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bind"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bind</strong> <var class="def-var-arguments">sock sockaddr</var><a class="copiable-link" href='#index-bind'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bind-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bind</strong> <var class="def-var-arguments">sock AF_INET ipv4addr port</var><a class="copiable-link" href='#index-bind-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bind-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bind</strong> <var class="def-var-arguments">sock AF_INET6 ipv6addr port [flowinfo [scopeid]]</var><a class="copiable-link" href='#index-bind-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bind-3"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bind</strong> <var class="def-var-arguments">sock AF_UNIX path</var><a class="copiable-link" href='#index-bind-3'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbind"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bind</strong> <var class="def-var-arguments">(sock, fam, address, args)</var><a class="copiable-link" href='#index-scm_005fbind'> &para;</a></span></dt>
+<dd><p>Bind socket port <var class="var">sock</var> to the given address.  The address is
+either a socket address object, or arguments the same as
+<code class="code">make-socket-address</code> would take to make such an object
+(see <a class="pxref" href="Network-Socket-Address.html">Network Socket Address</a>).  The return value is unspecified.
+</p>
+<p>Generally a socket is only explicitly bound to a particular address
+when making a server, i.e. to listen on a particular port.  For an
+outgoing connection the system will assign a local address
+automatically, if not already bound.
+</p>
+<div class="example">
+<pre class="example-preformatted">(bind sock AF_INET INADDR_ANY 12345)
+(bind sock (make-socket-address AF_INET INADDR_ANY 12345))
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-listen"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">listen</strong> <var class="def-var-arguments">sock backlog</var><a class="copiable-link" href='#index-listen'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flisten"><span class="category-def">C Function: </span><span><strong class="def-name">scm_listen</strong> <var class="def-var-arguments">(sock, backlog)</var><a class="copiable-link" href='#index-scm_005flisten'> &para;</a></span></dt>
+<dd><p>Enable <var class="var">sock</var> to accept connection
+requests.  <var class="var">backlog</var> is an integer specifying
+the maximum length of the queue for pending connections.
+If the queue fills, new clients will fail to connect until
+the server calls <code class="code">accept</code> to accept a connection from
+the queue.
+</p>
+<p>The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-accept"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">accept</strong> <var class="def-var-arguments">sock [flags]</var><a class="copiable-link" href='#index-accept'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005faccept"><span class="category-def">C Function: </span><span><strong class="def-name">scm_accept</strong> <var class="def-var-arguments">(sock)</var><a class="copiable-link" href='#index-scm_005faccept'> &para;</a></span></dt>
+<dd><p>Accept a connection from socket port <var class="var">sock</var> which has been enabled
+for listening with <code class="code">listen</code> above.
+</p>
+<p>If there are no incoming connections in the queue, there are two
+possible behaviors, depending on whether <var class="var">sock</var> has been configured
+for non-blocking operation or not:
+</p>
+<ul class="itemize mark-bullet">
+<li>If there is no connection waiting and the socket was set to non-blocking
+mode with the <code class="code">O_NONBLOCK</code> port option (see <a class="pxref" href="Ports-and-File-Descriptors.html"><code class="code">fcntl</code></a>), return <code class="code">#f</code> directly.
+
+</li><li>Otherwise wait until a connection is available.
+</li></ul>
+
+<p>The return value is a pair.  The <code class="code">car</code> is a new socket port,
+connected and ready to communicate.  The <code class="code">cdr</code> is a socket address
+object (see <a class="pxref" href="Network-Socket-Address.html">Network Socket Address</a>) which is where the remote
+connection is from (like <code class="code">getpeername</code> below).
+</p>
+<p><var class="var">flags</var>, if given, may include <code class="code">SOCK_CLOEXEC</code> or
+<code class="code">SOCK_NONBLOCK</code>, which like <code class="code">O_CLOEXEC</code> and <code class="code">O_NONBLOCK</code>
+apply to the newly accepted socket.
+</p>
+<p>All communication takes place using the new socket returned.  The
+given <var class="var">sock</var> remains bound and listening, and <code class="code">accept</code> may be
+called on it again to get another incoming connection when desired.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getsockname"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getsockname</strong> <var class="def-var-arguments">sock</var><a class="copiable-link" href='#index-getsockname'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgetsockname"><span class="category-def">C Function: </span><span><strong class="def-name">scm_getsockname</strong> <var class="def-var-arguments">(sock)</var><a class="copiable-link" href='#index-scm_005fgetsockname'> &para;</a></span></dt>
+<dd><p>Return a socket address object which is the where <var class="var">sock</var> is bound
+locally.  <var class="var">sock</var> may have obtained its local address from
+<code class="code">bind</code> (above), or if a <code class="code">connect</code> is done with an otherwise
+unbound socket (which is usual) then the system will have assigned an
+address.
+</p>
+<p>Note that on many systems the address of a socket in the
+<code class="code">AF_UNIX</code> namespace cannot be read.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getpeername"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getpeername</strong> <var class="def-var-arguments">sock</var><a class="copiable-link" href='#index-getpeername'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgetpeername"><span class="category-def">C Function: </span><span><strong class="def-name">scm_getpeername</strong> <var class="def-var-arguments">(sock)</var><a class="copiable-link" href='#index-scm_005fgetpeername'> &para;</a></span></dt>
+<dd><p>Return a socket address object which is where <var class="var">sock</var> is connected
+to, i.e. the remote endpoint.
+</p>
+<p>Note that on many systems the address of a socket in the
+<code class="code">AF_UNIX</code> namespace cannot be read.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-recv_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">recv!</strong> <var class="def-var-arguments">sock buf [flags]</var><a class="copiable-link" href='#index-recv_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005frecv"><span class="category-def">C Function: </span><span><strong class="def-name">scm_recv</strong> <var class="def-var-arguments">(sock, buf, flags)</var><a class="copiable-link" href='#index-scm_005frecv'> &para;</a></span></dt>
+<dd><p>Receive data from a socket port.
+<var class="var">sock</var> must already
+be bound to the address from which data is to be received.
+<var class="var">buf</var> is a bytevector into which
+the data will be written.  The size of <var class="var">buf</var> limits
+the amount of
+data which can be received: in the case of packet
+protocols, if a packet larger than this limit is encountered
+then some data
+will be irrevocably lost.
+</p>
+<a class="index-entry-id" id="index-MSG_005fOOB"></a>
+<a class="index-entry-id" id="index-MSG_005fPEEK"></a>
+<a class="index-entry-id" id="index-MSG_005fDONTROUTE"></a>
+<p>The optional <var class="var">flags</var> argument is a value or bitwise OR of
+<code class="code">MSG_OOB</code>, <code class="code">MSG_PEEK</code>, <code class="code">MSG_DONTROUTE</code> etc.
+</p>
+<p>The value returned is the number of bytes read from the
+socket.
+</p>
+<p>Note that the data is read directly from the socket file
+descriptor:
+any unread buffered port data is ignored.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-send"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">send</strong> <var class="def-var-arguments">sock message [flags]</var><a class="copiable-link" href='#index-send'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsend"><span class="category-def">C Function: </span><span><strong class="def-name">scm_send</strong> <var class="def-var-arguments">(sock, message, flags)</var><a class="copiable-link" href='#index-scm_005fsend'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-MSG_005fOOB-1"></a>
+<a class="index-entry-id" id="index-MSG_005fPEEK-1"></a>
+<a class="index-entry-id" id="index-MSG_005fDONTROUTE-1"></a>
+<p>Transmit bytevector <var class="var">message</var> on socket port <var class="var">sock</var>.
+<var class="var">sock</var> must already be bound to a destination address.  The value
+returned is the number of bytes transmitted&mdash;it&rsquo;s possible for this
+to be less than the length of <var class="var">message</var> if the socket is set to be
+non-blocking.  The optional <var class="var">flags</var> argument is a value or bitwise
+OR of <code class="code">MSG_OOB</code>, <code class="code">MSG_PEEK</code>, <code class="code">MSG_DONTROUTE</code> etc.
+</p>
+<p>Note that the data is written directly to the socket
+file descriptor:
+any unflushed buffered port data is ignored.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-recvfrom_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">recvfrom!</strong> <var class="def-var-arguments">sock buf [flags [start [end]]]</var><a class="copiable-link" href='#index-recvfrom_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005frecvfrom"><span class="category-def">C Function: </span><span><strong class="def-name">scm_recvfrom</strong> <var class="def-var-arguments">(sock, buf, flags, start, end)</var><a class="copiable-link" href='#index-scm_005frecvfrom'> &para;</a></span></dt>
+<dd><p>Receive data from socket port <var class="var">sock</var>, returning the originating
+address as well as the data.  This function is usually for datagram
+sockets, but can be used on stream-oriented sockets too.
+</p>
+<p>The data received is stored in bytevector <var class="var">buf</var>, using
+either the whole bytevector or just the region between the optional
+<var class="var">start</var> and <var class="var">end</var> positions.  The size of <var class="var">buf</var>
+limits the amount of data that can be received.  For datagram
+protocols if a packet larger than this is received then excess
+bytes are irrevocably lost.
+</p>
+<p>The return value is a pair.  The <code class="code">car</code> is the number of bytes
+read.  The <code class="code">cdr</code> is a socket address object (see <a class="pxref" href="Network-Socket-Address.html">Network Socket Address</a>) which is where the data came from, or <code class="code">#f</code> if
+the origin is unknown.
+</p>
+<a class="index-entry-id" id="index-MSG_005fOOB-2"></a>
+<a class="index-entry-id" id="index-MSG_005fPEEK-2"></a>
+<a class="index-entry-id" id="index-MSG_005fDONTROUTE-2"></a>
+<p>The optional <var class="var">flags</var> argument is a or bitwise-OR (<code class="code">logior</code>)
+of <code class="code">MSG_OOB</code>, <code class="code">MSG_PEEK</code>, <code class="code">MSG_DONTROUTE</code> etc.
+</p>
+<p>Data is read directly from the socket file descriptor, any buffered
+port data is ignored.
+</p>
+<p>On a GNU/Linux system <code class="code">recvfrom!</code> is not multi-threading, all
+threads stop while a <code class="code">recvfrom!</code> call is in progress.  An
+application may need to use <code class="code">select</code>, <code class="code">O_NONBLOCK</code> or
+<code class="code">MSG_DONTWAIT</code> to avoid this.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-sendto"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sendto</strong> <var class="def-var-arguments">sock message sockaddr [flags]</var><a class="copiable-link" href='#index-sendto'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-sendto-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sendto</strong> <var class="def-var-arguments">sock message AF_INET ipv4addr port [flags]</var><a class="copiable-link" href='#index-sendto-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-sendto-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sendto</strong> <var class="def-var-arguments">sock message AF_INET6 ipv6addr port [flowinfo [scopeid [flags]]]</var><a class="copiable-link" href='#index-sendto-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-sendto-3"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sendto</strong> <var class="def-var-arguments">sock message AF_UNIX path [flags]</var><a class="copiable-link" href='#index-sendto-3'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsendto"><span class="category-def">C Function: </span><span><strong class="def-name">scm_sendto</strong> <var class="def-var-arguments">(sock, message, fam, address, args_and_flags)</var><a class="copiable-link" href='#index-scm_005fsendto'> &para;</a></span></dt>
+<dd><p>Transmit bytevector <var class="var">message</var> as a datagram socket port
+<var class="var">sock</var>.  The destination is specified either as a socket address
+object, or as arguments the same as would be taken by
+<code class="code">make-socket-address</code> to create such an object (see <a class="pxref" href="Network-Socket-Address.html">Network Socket Address</a>).
+</p>
+<p>The destination address may be followed by an optional <var class="var">flags</var>
+argument which is a <code class="code">logior</code> (see <a class="pxref" href="Bitwise-Operations.html">Bitwise Operations</a>) of
+<code class="code">MSG_OOB</code>, <code class="code">MSG_PEEK</code>, <code class="code">MSG_DONTROUTE</code> etc.
+</p>
+<p>The value returned is the number of bytes transmitted &ndash;
+it&rsquo;s possible for
+this to be less than the length of <var class="var">message</var> if the
+socket is
+set to be non-blocking.
+Note that the data is written directly to the socket
+file descriptor:
+any unflushed buffered port data is ignored.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Internet-Socket-Examples.html">Network Socket Examples</a>, Previous: <a href="Network-Socket-Address.html">Network Socket Address</a>, Up: <a href="Networking.html">Networking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

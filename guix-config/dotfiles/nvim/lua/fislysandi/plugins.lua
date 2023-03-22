@@ -16,6 +16,7 @@ return require('packer').startup(function()
   use 'mbbill/undotree'
   use 'nvim-treesitter/playground'
   use 'theprimeagen/harpoon'
+  use 'Olical/conjure'
   use {
   'VonHeikemen/lsp-zero.nvim',
   branch = 'v1.x',

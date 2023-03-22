@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Foreign Object Memory Management (Guile Reference Manual)</title>
+
+<meta name="description" content="Foreign Object Memory Management (Guile Reference Manual)">
+<meta name="keywords" content="Foreign Object Memory Management (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Defining-New-Foreign-Object-Types.html" rel="up" title="Defining New Foreign Object Types">
+<link href="Foreign-Objects-and-Scheme.html" rel="next" title="Foreign Objects and Scheme">
+<link href="Type-Checking-of-Foreign-Objects.html" rel="prev" title="Type Checking of Foreign Objects">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Foreign-Object-Memory-Management">
+<div class="nav-panel">
+<p>
+Next: <a href="Foreign-Objects-and-Scheme.html" accesskey="n" rel="next">Foreign Objects and Scheme</a>, Previous: <a href="Type-Checking-of-Foreign-Objects.html" accesskey="p" rel="prev">Type Checking of Foreign Objects</a>, Up: <a href="Defining-New-Foreign-Object-Types.html" accesskey="u" rel="up">Defining New Foreign Object Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Foreign-Object-Memory-Management-1">5.5.4 Foreign Object Memory Management</h4>
+
+<p>Once a foreign object has been released to the tender mercies of the
+Scheme system, it must be prepared to survive garbage collection.  In
+the example above, all the memory associated with the foreign object is
+managed by the garbage collector because we used the <code class="code">scm_gc_</code>
+allocation functions.  Thus, no special care must be taken: the garbage
+collector automatically scans them and reclaims any unused memory.
+</p>
+<p>However, when data associated with a foreign object is managed in some
+other way&mdash;e.g., <code class="code">malloc</code>&rsquo;d memory or file descriptors&mdash;it is
+possible to specify a <em class="dfn">finalizer</em> function to release those
+resources when the foreign object is reclaimed.
+</p>
+<p>As discussed in see <a class="pxref" href="Garbage-Collection.html">Garbage Collection</a>, Guile&rsquo;s garbage collector
+will reclaim inaccessible memory as needed.  This reclamation process
+runs concurrently with the main program.  When Guile analyzes the heap
+and determines that an object&rsquo;s memory can be reclaimed, that memory is
+put on a &ldquo;free list&rdquo; of objects that can be reclaimed.  Usually that&rsquo;s
+the end of it&mdash;the object is available for immediate re-use.  However
+some objects can have &ldquo;finalizers&rdquo; associated with them&mdash;functions
+that are called on reclaimable objects to effect any external cleanup
+actions.
+</p>
+<p>Finalizers are tricky business and it is best to avoid them.  They can
+be invoked at unexpected times, or not at all&mdash;for example, they are
+not invoked on process exit.  They don&rsquo;t help the garbage collector do
+its job; in fact, they are a hindrance.  Furthermore, they perturb the
+garbage collector&rsquo;s internal accounting.  The GC decides to scan the
+heap when it thinks that it is necessary, after some amount of
+allocation.  Finalizable objects almost always represent an amount of
+allocation that is invisible to the garbage collector.  The effect can
+be that the actual resource usage of a system with finalizable objects
+is higher than what the GC thinks it should be.
+</p>
+<p>All those caveats aside, some foreign object types will need finalizers.
+For example, if we had a foreign object type that wrapped file
+descriptors&mdash;and we aren&rsquo;t suggesting this, as Guile already has ports
+&mdash;then you might define the type like this:
+</p>
+<div class="example">
+<pre class="example-preformatted">static SCM file_type;
+
+static void
+finalize_file (SCM file)
+{
+  int fd = scm_foreign_object_signed_ref (file, 0);
+  if (fd &gt;= 0)
+    {
+      scm_foreign_object_signed_set_x (file, 0, -1);
+      close (fd);
+    }
+}
+
+static void
+init_file_type (void)
+{
+  SCM name, slots;
+  scm_t_struct_finalize finalizer;
+
+  name = scm_from_utf8_symbol (&quot;file&quot;);
+  slots = scm_list_1 (scm_from_utf8_symbol (&quot;fd&quot;));
+  finalizer = finalize_file;
+
+  image_type =
+    scm_make_foreign_object_type (name, slots, finalizer);
+}
+
+static SCM
+make_file (int fd)
+{
+  return scm_make_foreign_object_1 (file_type, (void *) fd);
+}
+</pre></div>
+
+<a class="index-entry-id" id="index-finalizer"></a>
+<a class="index-entry-id" id="index-finalization"></a>
+
+<p>Note that the finalizer may be invoked in ways and at times you might
+not expect.  In a Guile built without threading support, finalizers are
+invoked via &ldquo;asyncs&rdquo;, which interleaves them with running Scheme code;
+see <a class="pxref" href="Asyncs.html">Asynchronous Interrupts</a>.  If the user&rsquo;s Guile is built with support for threads,
+the finalizer will probably be called by a dedicated finalization
+thread, unless the user invokes <code class="code">scm_run_finalizers ()</code> explicitly.
+</p>
+<p>In either case, finalizers run concurrently with the main program, and
+so they need to be async-safe and thread-safe.  If for some reason this
+is impossible, perhaps because you are embedding Guile in some
+application that is not itself thread-safe, you have a few options.  One
+is to use guardians instead of finalizers, and arrange to pump the
+guardians for finalizable objects.  See <a class="xref" href="Guardians.html">Guardians</a>, for more
+information.  The other option is to disable automatic finalization
+entirely, and arrange to call <code class="code">scm_run_finalizers ()</code> at
+appropriate points.  See <a class="xref" href="Foreign-Objects.html">Foreign Objects</a>, for more on these
+interfaces.
+</p>
+<p>Finalizers are allowed to allocate memory, access GC-managed memory, and
+in general can do anything any Guile user code can do.  This was not the
+case in Guile 1.8, where finalizers were much more restricted.  In
+particular, in Guile 2.0, finalizers can resuscitate objects.  We do not
+recommend that users avail themselves of this possibility, however, as a
+resuscitated object can re-expose other finalizable objects that have
+been already finalized back to Scheme.  These objects will not be
+finalized again, but they could cause use-after-free problems to code
+that handles objects of that particular foreign object type.  To guard
+against this possibility, robust finalization routines should clear
+state from the foreign object, as in the above <code class="code">free_file</code> example.
+</p>
+<p>One final caveat.  Foreign object finalizers are associated with the
+lifetime of a foreign object, not of its fields.  If you access a field
+of a finalizable foreign object, and do not arrange to keep a reference
+on the foreign object itself, it could be that the outer foreign object
+gets finalized while you are working with its field.
+</p>
+<p>For example, consider a procedure to read some data from a file, from
+our example above.
+</p>
+<div class="example">
+<pre class="example-preformatted">SCM
+read_bytes (SCM file, SCM n)
+{
+  int fd;
+  SCM buf;
+  size_t len, pos;
+
+  scm_assert_foreign_object_type (file_type, file);
+
+  fd = scm_foreign_object_signed_ref (file, 0);
+  if (fd &lt; 0)
+    scm_wrong_type_arg_msg (&quot;read-bytes&quot;, SCM_ARG1,
+                            file, &quot;open file&quot;);
+
+  len = scm_to_size_t (n);
+  SCM buf = scm_c_make_bytevector (scm_to_size_t (n));
+
+  pos = 0;
+  while (pos &lt; len)
+    {
+      char *bytes = SCM_BYTEVECTOR_CONTENTS (buf);
+      ssize_t count = read (fd, bytes + pos, len - pos);
+      if (count &lt; 0)
+        scm_syserror (&quot;read-bytes&quot;);
+      if (count == 0)
+        break;
+      pos += count;
+    }
+
+  scm_remember_upto_here_1 (file);
+
+  return scm_values (scm_list_2 (buf, scm_from_size_t (pos)));
+}
+</pre></div>
+
+<p>After the prelude, only the <code class="code">fd</code> value is used and the C compiler
+has no reason to keep the <code class="code">file</code> object around.  If
+<code class="code">scm_c_make_bytevector</code> results in a garbage collection,
+<code class="code">file</code> might not be on the stack or anywhere else and could be
+finalized, leaving <code class="code">read</code> to read a closed (or, in a multi-threaded
+program, possibly re-used) file descriptor.  The use of
+<code class="code">scm_remember_upto_here_1</code> prevents this, by creating a reference
+to <code class="code">file</code> after all data accesses.  See <a class="xref" href="Garbage-Collection-Functions.html">Function related to Garbage Collection</a>.
+</p>
+<p><code class="code">scm_remember_upto_here_1</code> is only needed on finalizable objects,
+because garbage collection of other values is invisible to the program
+&ndash; it happens when needed, and is not observable.  But if you can, save
+yourself the headache and build your program in such a way that it
+doesn&rsquo;t need finalization.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Foreign-Objects-and-Scheme.html">Foreign Objects and Scheme</a>, Previous: <a href="Type-Checking-of-Foreign-Objects.html">Type Checking of Foreign Objects</a>, Up: <a href="Defining-New-Foreign-Object-Types.html">Defining New Foreign Object Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

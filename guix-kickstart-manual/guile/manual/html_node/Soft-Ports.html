@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Soft Ports (Guile Reference Manual)</title>
+
+<meta name="description" content="Soft Ports (Guile Reference Manual)">
+<meta name="keywords" content="Soft Ports (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Port-Types.html" rel="up" title="Port Types">
+<link href="Void-Ports.html" rel="next" title="Void Ports">
+<link href="Custom-Ports.html" rel="prev" title="Custom Ports">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Soft-Ports">
+<div class="nav-panel">
+<p>
+Next: <a href="Void-Ports.html" accesskey="n" rel="next">Void Ports</a>, Previous: <a href="Custom-Ports.html" accesskey="p" rel="prev">Custom Ports</a>, Up: <a href="Port-Types.html" accesskey="u" rel="up">Types of Port</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Soft-Ports-1">6.12.10.5 Soft Ports</h4>
+<a class="index-entry-id" id="index-Soft-port"></a>
+<a class="index-entry-id" id="index-Port_002c-soft"></a>
+
+<p>A <em class="dfn">soft port</em> is a port based on a vector of procedures capable of
+accepting or delivering characters.  It allows emulation of I/O ports.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dsoft_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-soft-port</strong> <var class="def-var-arguments">pv modes</var><a class="copiable-link" href='#index-make_002dsoft_002dport'> &para;</a></span></dt>
+<dd><p>Return a port capable of receiving or delivering characters as
+specified by the <var class="var">modes</var> string (see <a class="pxref" href="File-Ports.html">open-file</a>).  <var class="var">pv</var> must be a vector of length 5 or 6.  Its
+components are as follows:
+</p>
+<ol class="enumerate" start="0">
+<li> procedure accepting one character for output
+</li><li> procedure accepting a string for output
+</li><li> thunk for flushing output
+</li><li> thunk for getting one character
+</li><li> thunk for closing port (not by garbage collection)
+</li><li> (if present and not <code class="code">#f</code>) thunk for computing the number of
+characters that can be read from the port without blocking.
+</li></ol>
+
+<p>For an output-only port only elements 0, 1, 2, and 4 need be
+procedures.  For an input-only port only elements 3 and 4 need
+be procedures.  Thunks 2 and 4 can instead be <code class="code">#f</code> if
+there is no useful operation for them to perform.
+</p>
+<p>If thunk 3 returns <code class="code">#f</code> or an <code class="code">eof-object</code>
+(see <a data-manual="r5rs" href="../r5rs_html/Input.html#Input">eof-object?</a> in <cite class="cite">The Revised^5 Report on
+Scheme</cite>) it indicates that the port has reached end-of-file.
+For example:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define stdout (current-output-port))
+(define p (make-soft-port
+           (vector
+            (lambda (c) (write c stdout))
+            (lambda (s) (display s stdout))
+            (lambda () (display &quot;.&quot; stdout))
+            (lambda () (char-upcase (read-char)))
+            (lambda () (display &quot;@&quot; stdout)))
+           &quot;rw&quot;))
+
+(write p p) &rArr; #&lt;input-output: soft 8081e20&gt;
+</pre></div>
+</dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Void-Ports.html">Void Ports</a>, Previous: <a href="Custom-Ports.html">Custom Ports</a>, Up: <a href="Port-Types.html">Types of Port</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Low-Level Traps (Guile Reference Manual)</title>
+
+<meta name="description" content="Low-Level Traps (Guile Reference Manual)">
+<meta name="keywords" content="Low-Level Traps (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Traps.html" rel="up" title="Traps">
+<link href="Tracing-Traps.html" rel="next" title="Tracing Traps">
+<link href="Trap-Interface.html" rel="prev" title="Trap Interface">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Low_002dLevel-Traps">
+<div class="nav-panel">
+<p>
+Next: <a href="Tracing-Traps.html" accesskey="n" rel="next">Tracing Traps</a>, Previous: <a href="Trap-Interface.html" accesskey="p" rel="prev">Trap Interface</a>, Up: <a href="Traps.html" accesskey="u" rel="up">Traps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Low_002dLevel-Traps-1">6.26.4.3 Low-Level Traps</h4>
+
+<p>To summarize the last sections, traps are enabled or disabled, and when
+they are enabled, they add to various VM hooks.
+</p>
+<p>Note, however, that <em class="emph">traps do not increase the VM trace level</em>. So
+if you create a trap, it will be enabled, but unless something else
+increases the VM&rsquo;s trace level (see <a class="pxref" href="VM-Hooks.html">VM Hooks</a>), the trap will not
+fire.  It turns out that getting the VM trace level right is tricky
+without a global view of what traps are enabled.  See <a class="xref" href="Trap-States.html">Trap States</a>,
+for Guile&rsquo;s answer to this problem.
+</p>
+<p>Traps are created by calling procedures. Most of these procedures share
+a set of common keyword arguments, so rather than document them
+separately, we discuss them all together here:
+</p>
+<dl class="table">
+<dt><code class="code">#:vm</code></dt>
+<dd><p>The VM to instrument. Defaults to the current thread&rsquo;s VM.
+</p></dd>
+<dt><code class="code">#:current-frame</code></dt>
+<dd><p>For traps that enable more hooks depending on their dynamic context,
+this argument gives the current frame that the trap is running in.
+Defaults to <code class="code">#f</code>.
+</p></dd>
+</dl>
+
+<p>To have access to these procedures, you&rsquo;ll need to have imported the
+<code class="code">(system vm traps)</code> module:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(use-modules (system vm traps))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-trap_002dat_002dprocedure_002dcall"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">trap-at-procedure-call</strong> <var class="def-var-arguments">proc handler        [#:vm]</var><a class="copiable-link" href='#index-trap_002dat_002dprocedure_002dcall'> &para;</a></span></dt>
+<dd><p>A trap that calls <var class="var">handler</var> when <var class="var">proc</var> is applied.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-trap_002din_002dprocedure"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">trap-in-procedure</strong> <var class="def-var-arguments">proc        enter-handler exit-handler [#:current-frame] [#:vm]</var><a class="copiable-link" href='#index-trap_002din_002dprocedure'> &para;</a></span></dt>
+<dd><p>A trap that calls <var class="var">enter-handler</var> when control enters <var class="var">proc</var>,
+and <var class="var">exit-handler</var> when control leaves <var class="var">proc</var>.
+</p>
+<p>Control can enter a procedure via:
+</p><ul class="itemize mark-bullet">
+<li>A procedure call.
+</li><li>A return to a procedure&rsquo;s frame on the stack.
+</li><li>A continuation returning directly to an application of this procedure.
+</li></ul>
+
+<p>Control can leave a procedure via:
+</p><ul class="itemize mark-bullet">
+<li>A normal return from the procedure.
+</li><li>An application of another procedure.
+</li><li>An invocation of a continuation.
+</li><li>An abort.
+</li></ul>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-trap_002dinstructions_002din_002dprocedure"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">trap-instructions-in-procedure</strong> <var class="def-var-arguments">proc        next-handler exit-handler [#:current-frame] [#:vm]</var><a class="copiable-link" href='#index-trap_002dinstructions_002din_002dprocedure'> &para;</a></span></dt>
+<dd><p>A trap that calls <var class="var">next-handler</var> for every instruction executed in
+<var class="var">proc</var>, and <var class="var">exit-handler</var> when execution leaves <var class="var">proc</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-trap_002dat_002dprocedure_002dip_002din_002drange"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">trap-at-procedure-ip-in-range</strong> <var class="def-var-arguments">proc range        handler [#:current-frame] [#:vm]</var><a class="copiable-link" href='#index-trap_002dat_002dprocedure_002dip_002din_002drange'> &para;</a></span></dt>
+<dd><p>A trap that calls <var class="var">handler</var> when execution enters a range of
+instructions in <var class="var">proc</var>. <var class="var">range</var> is a simple of pairs,
+<code class="code">((<var class="var">start</var> . <var class="var">end</var>) ...)</code>. The <var class="var">start</var> addresses are
+inclusive, and <var class="var">end</var> addresses are exclusive.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-trap_002dat_002dsource_002dlocation"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">trap-at-source-location</strong> <var class="def-var-arguments">file user-line handler        [#:current-frame] [#:vm]</var><a class="copiable-link" href='#index-trap_002dat_002dsource_002dlocation'> &para;</a></span></dt>
+<dd><p>A trap that fires when control reaches a given source location.  The
+<var class="var">user-line</var> parameter is one-indexed, as a user counts lines,
+instead of zero-indexed, as Guile counts lines.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-trap_002dframe_002dfinish"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">trap-frame-finish</strong> <var class="def-var-arguments">frame        return-handler abort-handler [#:vm]</var><a class="copiable-link" href='#index-trap_002dframe_002dfinish'> &para;</a></span></dt>
+<dd><p>A trap that fires when control leaves the given frame. <var class="var">frame</var>
+should be a live frame in the current continuation. <var class="var">return-handler</var>
+will be called on a normal return, and <var class="var">abort-handler</var> on a nonlocal
+exit.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-trap_002din_002ddynamic_002dextent"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">trap-in-dynamic-extent</strong> <var class="def-var-arguments">proc        enter-handler return-handler abort-handler [#:vm]</var><a class="copiable-link" href='#index-trap_002din_002ddynamic_002dextent'> &para;</a></span></dt>
+<dd><p>A more traditional dynamic-wind trap, which fires <var class="var">enter-handler</var>
+when control enters <var class="var">proc</var>, <var class="var">return-handler</var> on a normal return,
+and <var class="var">abort-handler</var> on a nonlocal exit.
+</p>
+<p>Note that rewinds are not handled, so there is no rewind handler.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-trap_002dcalls_002din_002ddynamic_002dextent"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">trap-calls-in-dynamic-extent</strong> <var class="def-var-arguments">proc        apply-handler return-handler [#:current-frame] [#:vm]</var><a class="copiable-link" href='#index-trap_002dcalls_002din_002ddynamic_002dextent'> &para;</a></span></dt>
+<dd><p>A trap that calls <var class="var">apply-handler</var> every time a procedure is applied,
+and <var class="var">return-handler</var> for returns, but only during the dynamic extent
+of an application of <var class="var">proc</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-trap_002dinstructions_002din_002ddynamic_002dextent"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">trap-instructions-in-dynamic-extent</strong> <var class="def-var-arguments">proc        next-handler [#:current-frame] [#:vm]</var><a class="copiable-link" href='#index-trap_002dinstructions_002din_002ddynamic_002dextent'> &para;</a></span></dt>
+<dd><p>A trap that calls <var class="var">next-handler</var> for all retired instructions within
+the dynamic extent of a call to <var class="var">proc</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-trap_002dcalls_002dto_002dprocedure"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">trap-calls-to-procedure</strong> <var class="def-var-arguments">proc        apply-handler return-handler [#:vm]</var><a class="copiable-link" href='#index-trap_002dcalls_002dto_002dprocedure'> &para;</a></span></dt>
+<dd><p>A trap that calls <var class="var">apply-handler</var> whenever <var class="var">proc</var> is applied,
+and <var class="var">return-handler</var> when it returns, but with an additional
+argument, the call depth.
+</p>
+<p>That is to say, the handlers will get two arguments: the frame in
+question, and the call depth (a non-negative integer).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-trap_002dmatching_002dinstructions"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">trap-matching-instructions</strong> <var class="def-var-arguments">frame-pred handler [#:vm]</var><a class="copiable-link" href='#index-trap_002dmatching_002dinstructions'> &para;</a></span></dt>
+<dd><p>A trap that calls <var class="var">frame-pred</var> at every instruction, and if
+<var class="var">frame-pred</var> returns a true value, calls <var class="var">handler</var> on the
+frame.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Tracing-Traps.html">Tracing Traps</a>, Previous: <a href="Trap-Interface.html">Trap Interface</a>, Up: <a href="Traps.html">Traps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

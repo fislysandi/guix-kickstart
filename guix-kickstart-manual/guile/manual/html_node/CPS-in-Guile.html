@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>CPS in Guile (Guile Reference Manual)</title>
+
+<meta name="description" content="CPS in Guile (Guile Reference Manual)">
+<meta name="keywords" content="CPS in Guile (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Continuation_002dPassing-Style.html" rel="up" title="Continuation-Passing Style">
+<link href="Building-CPS.html" rel="next" title="Building CPS">
+<link href="An-Introduction-to-CPS.html" rel="prev" title="An Introduction to CPS">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="CPS-in-Guile">
+<div class="nav-panel">
+<p>
+Next: <a href="Building-CPS.html" accesskey="n" rel="next">Building CPS</a>, Previous: <a href="An-Introduction-to-CPS.html" accesskey="p" rel="prev">An Introduction to CPS</a>, Up: <a href="Continuation_002dPassing-Style.html" accesskey="u" rel="up">Continuation-Passing Style</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="CPS-in-Guile-1">9.4.4.2 CPS in Guile</h4>
+
+<a class="index-entry-id" id="index-continuation_002c-CPS"></a>
+<p>Guile&rsquo;s CPS language is composed of <em class="dfn">continuations</em>.  A continuation
+is a labelled program point.  If you are used to traditional compilers,
+think of a continuation as a trivial basic block.  A program is a
+&ldquo;soup&rdquo; of continuations, represented as a map from labels to
+continuations.
+</p>
+<a class="index-entry-id" id="index-term_002c-CPS"></a>
+<a class="index-entry-id" id="index-expression_002c-CPS"></a>
+<p>Like basic blocks, each continuation belongs to only one function.  Some
+continuations are special, like the continuation corresponding to a
+function&rsquo;s entry point, or the continuation that represents the tail of
+a function.  Others contain a <em class="dfn">term</em>.  A term contains an
+<em class="dfn">expression</em>, which evaluates to zero or more values.  The term also
+records the continuation to which it will pass its values.  Some terms,
+like conditional branches, may continue to one of a number of
+continuations.
+</p>
+<p>Continuation labels are small integers.  This makes it easy to sort them
+and to group them into sets.  Whenever a term refers to a continuation,
+it does so by name, simply recording the label of the continuation.
+Continuation labels are unique among the set of labels in a program.
+</p>
+<p>Variables are also named by small integers.  Variable names are unique
+among the set of variables in a program.
+</p>
+<p>For example, a simple continuation that receives two values and adds
+them together can be matched like this, using the <code class="code">match</code> form from
+<code class="code">(ice-9 match)</code>:
+</p>
+<div class="example smallexample">
+<pre class="example-preformatted">(match cont
+  (($ $kargs (x-name y-name) (x-var y-var)
+      ($ $continue k src ($ $primcall '+ #f (x-var y-var))))
+   (format #t &quot;Add ~a and ~a and pass the result to label ~a&quot;
+           x-var y-var k)))
+</pre></div>
+
+<p>Here we see the most common kind of continuation, <code class="code">$kargs</code>, which
+binds some number of values to variables and then evaluates a term.
+</p>
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0024kargs"><span class="category-def">CPS Continuation: </span><span><strong class="def-name">$kargs</strong> <var class="def-var-arguments">names vars term</var><a class="copiable-link" href='#index-_0024kargs'> &para;</a></span></dt>
+<dd><p>Bind the incoming values to the variables <var class="var">vars</var>, with original
+names <var class="var">names</var>, and then evaluate <var class="var">term</var>.
+</p></dd></dl>
+
+<p>The <var class="var">names</var> of a <code class="code">$kargs</code> are just for debugging, and will end
+up residualized in the object file for use by the debugger.
+</p>
+<p>The <var class="var">term</var> in a <code class="code">$kargs</code> is always a <code class="code">$continue</code>, which
+evaluates an expression and continues to a continuation.
+</p>
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0024continue"><span class="category-def">CPS Term: </span><span><strong class="def-name">$continue</strong> <var class="def-var-arguments">k src exp</var><a class="copiable-link" href='#index-_0024continue'> &para;</a></span></dt>
+<dd><p>Evaluate the expression <var class="var">exp</var> and pass the resulting values (if any)
+to the continuation labelled <var class="var">k</var>.  The source information associated
+with the expression may be found in <var class="var">src</var>, which is either an alist
+as in <code class="code">source-properties</code> or is <code class="code">#f</code> if there is no associated
+source.
+</p></dd></dl>
+
+<p>There are a number of expression kinds.  Above you see an example of
+<code class="code">$primcall</code>.
+</p>
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0024primcall"><span class="category-def">CPS Expression: </span><span><strong class="def-name">$primcall</strong> <var class="def-var-arguments">name param args</var><a class="copiable-link" href='#index-_0024primcall'> &para;</a></span></dt>
+<dd><p>Perform the primitive operation identified by <code class="code">name</code>, a well-known
+symbol, passing it the arguments <var class="var">args</var>, and pass all resulting
+values to the continuation.
+</p>
+<p><var class="var">param</var> is a constant parameter whose interpretation is up to the
+primcall in question.  Usually it&rsquo;s <code class="code">#f</code> but for a primcall that
+might need some compile-time constant information &ndash; such as
+<code class="code">add/immediate</code>, which adds a constant number to a value &ndash; the
+parameter holds this information.
+</p>
+<p>The set of available primitives includes many primitives known to
+Tree-IL and then some more; see the source code for details.  Note that
+some Tree-IL primcalls need to be converted to a sequence of lower-level
+CPS primcalls.  Again, see <code class="code">(language tree-il compile-cps)</code> for
+full details.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-dominate_002c-CPS"></a>
+<p>The variables that are used by <code class="code">$primcall</code>, or indeed by any
+expression, must be defined before the expression is evaluated.  An
+equivalent way of saying this is that predecessor <code class="code">$kargs</code>
+continuation(s) that bind the variables(s) used by the expression must
+<em class="dfn">dominate</em> the continuation that uses the expression: definitions
+dominate uses.  This condition is trivially satisfied in our example
+above, but in general to determine the set of variables that are in
+&ldquo;scope&rdquo; for a given term, you need to do a flow analysis to see what
+continuations dominate a term.  The variables that are in scope are
+those variables defined by the continuations that dominate a term.
+</p>
+<p>Here is an inventory of the kinds of expressions in Guile&rsquo;s CPS
+language, besides <code class="code">$primcall</code> which has already been described.
+Recall that all expressions are wrapped in a <code class="code">$continue</code> term which
+specifies their continuation.
+</p>
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0024const"><span class="category-def">CPS Expression: </span><span><strong class="def-name">$const</strong> <var class="def-var-arguments">val</var><a class="copiable-link" href='#index-_0024const'> &para;</a></span></dt>
+<dd><p>Continue with the constant value <var class="var">val</var>.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0024prim"><span class="category-def">CPS Expression: </span><span><strong class="def-name">$prim</strong> <var class="def-var-arguments">name</var><a class="copiable-link" href='#index-_0024prim'> &para;</a></span></dt>
+<dd><p>Continue with the procedure that implements the primitive operation
+named by <var class="var">name</var>.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0024call"><span class="category-def">CPS Expression: </span><span><strong class="def-name">$call</strong> <var class="def-var-arguments">proc args</var><a class="copiable-link" href='#index-_0024call'> &para;</a></span></dt>
+<dd><p>Call <var class="var">proc</var> with the arguments <var class="var">args</var>, and pass all values to
+the continuation.  <var class="var">proc</var> and the elements of the <var class="var">args</var> list
+should all be variable names.  The continuation identified by the term&rsquo;s
+<var class="var">k</var> should be a <code class="code">$kreceive</code> or a <code class="code">$ktail</code> instance.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0024values"><span class="category-def">CPS Expression: </span><span><strong class="def-name">$values</strong> <var class="def-var-arguments">args</var><a class="copiable-link" href='#index-_0024values'> &para;</a></span></dt>
+<dd><p>Pass the values named by the list <var class="var">args</var> to the continuation.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0024prompt"><span class="category-def">CPS Expression: </span><span><strong class="def-name">$prompt</strong> <var class="def-var-arguments">escape? tag handler</var><a class="copiable-link" href='#index-_0024prompt'> &para;</a></span></dt>
+</dl>
+
+<a class="index-entry-id" id="index-higher_002dorder-CPS"></a>
+<a class="index-entry-id" id="index-CPS_002c-higher_002dorder"></a>
+<a class="index-entry-id" id="index-first_002dorder-CPS"></a>
+<a class="index-entry-id" id="index-CPS_002c-first_002dorder"></a>
+<p>There are two sub-languages of CPS, <em class="dfn">higher-order CPS</em> and
+<em class="dfn">first-order CPS</em>.  The difference is that in higher-order CPS,
+there are <code class="code">$fun</code> and <code class="code">$rec</code> expressions that bind functions or
+mutually-recursive functions in the implicit scope of their use sites.
+Guile transforms higher-order CPS into first-order CPS by <em class="dfn">closure
+conversion</em>, which chooses representations for all closures and which
+arranges to access free variables through the implicit closure parameter
+that is passed to every function call.
+</p>
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0024fun"><span class="category-def">CPS Expression: </span><span><strong class="def-name">$fun</strong> <var class="def-var-arguments">body</var><a class="copiable-link" href='#index-_0024fun'> &para;</a></span></dt>
+<dd><p>Continue with a procedure.  <var class="var">body</var> names the entry point of the
+function, which should be a <code class="code">$kfun</code>.  This expression kind is only
+valid in higher-order CPS, which is the CPS language before closure
+conversion.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0024rec"><span class="category-def">CPS Expression: </span><span><strong class="def-name">$rec</strong> <var class="def-var-arguments">names vars funs</var><a class="copiable-link" href='#index-_0024rec'> &para;</a></span></dt>
+<dd><p>Continue with a set of mutually recursive procedures denoted by
+<var class="var">names</var>, <var class="var">vars</var>, and <var class="var">funs</var>.  <var class="var">names</var> is a list of
+symbols, <var class="var">vars</var> is a list of variable names (unique integers), and
+<var class="var">funs</var> is a list of <code class="code">$fun</code> values.  Note that the <code class="code">$kargs</code>
+continuation should also define <var class="var">names</var>/<var class="var">vars</var> bindings.
+</p></dd></dl>
+
+<p>The contification pass will attempt to transform the functions declared
+in a <code class="code">$rec</code> into local continuations.  Any remaining <code class="code">$fun</code>
+instances are later removed by the closure conversion pass.  If the
+function has no free variables, it gets allocated as a constant.
+</p>
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0024const_002dfun"><span class="category-def">CPS Expression: </span><span><strong class="def-name">$const-fun</strong> <var class="def-var-arguments">label</var><a class="copiable-link" href='#index-_0024const_002dfun'> &para;</a></span></dt>
+<dd><p>A constant which is a function whose entry point is <var class="var">label</var>.  As a
+constant, instances of <code class="code">$const-fun</code> with the same <var class="var">label</var> will
+not allocate; the space for the function is allocated as part of the
+compilation unit.
+</p>
+<p>In practice, <code class="code">$const-fun</code> expressions are reified by CPS-conversion
+for functions whose call sites are not all visible within the
+compilation unit and which have no free variables.  This expression kind
+is part of first-order CPS.
+</p></dd></dl>
+
+<p>Otherwise, if the closure has free variables, it will be allocated at
+its definition site via an <code class="code">allocate-words</code> primcall and its free
+variables initialized there.  The code pointer in the closure is
+initialized from a <code class="code">$code</code> expression.
+</p>
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0024code"><span class="category-def">CPS Expression: </span><span><strong class="def-name">$code</strong> <var class="def-var-arguments">label</var><a class="copiable-link" href='#index-_0024code'> &para;</a></span></dt>
+<dd><p>Continue with the value of <var class="var">label</var>, which should denote some
+<code class="code">$kfun</code> continuation in the program.  Used when initializing the
+code pointer of closure objects.
+</p></dd></dl>
+
+<p>However, If the closure can be proven to never escape its scope then
+other lighter-weight representations can be chosen.  Additionally, if
+all call sites are known, closure conversion will hard-wire the calls by
+lowering <code class="code">$call</code> to <code class="code">$callk</code>.
+</p>
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0024callk"><span class="category-def">CPS Expression: </span><span><strong class="def-name">$callk</strong> <var class="def-var-arguments">label proc args</var><a class="copiable-link" href='#index-_0024callk'> &para;</a></span></dt>
+<dd><p>Like <code class="code">$call</code>, but for the case where the call target is known to be
+in the same compilation unit.  <var class="var">label</var> should denote some
+<code class="code">$kfun</code> continuation in the program.  In this case the <var class="var">proc</var>
+is simply an additional argument, since it is not used to determine the
+call target at run-time.
+</p></dd></dl>
+
+<p>To summarize: a <code class="code">$continue</code> is a CPS term that continues to a
+single label.  But there are other kinds of CPS terms that can continue
+to a different number of labels: <code class="code">$branch</code>, <code class="code">$switch</code>,
+<code class="code">$throw</code>, and <code class="code">$prompt</code>.
+</p>
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0024branch"><span class="category-def">CPS Term: </span><span><strong class="def-name">$branch</strong> <var class="def-var-arguments">kf kt src op param args</var><a class="copiable-link" href='#index-_0024branch'> &para;</a></span></dt>
+<dd><p>Evaluate the branching primcall <var class="var">op</var>, with arguments <var class="var">args</var> and
+constant parameter <var class="var">param</var>, and continue to <var class="var">kt</var> with zero
+values if the test is true.  Otherwise continue to <var class="var">kf</var>.
+</p>
+<p>The <code class="code">$branch</code> term is like a <code class="code">$continue</code> term with a
+<code class="code">$primcall</code> expression, except that instead of binding a value and
+continuing to a single label, the result of the test is not bound but
+instead used to choose the continuation label.
+</p>
+<p>The set of operations (corresponding to <var class="var">op</var> values) that are valid
+in a <var class="var">$branch</var> is limited.  In the general case, bind the result of
+a test expression to a variable, and then make a <code class="code">$branch</code> on a
+<code class="code">true?</code> op referencing that variable.  The optimizer should inline
+the branch if possible.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0024switch"><span class="category-def">CPS Term: </span><span><strong class="def-name">$switch</strong> <var class="def-var-arguments">kf kt* src arg</var><a class="copiable-link" href='#index-_0024switch'> &para;</a></span></dt>
+<dd><p>Continue to a label in the list <var class="var">k*</var> according to the index argument
+<var class="var">arg</var>, or to the default continuation <var class="var">kf</var> if <var class="var">arg</var> is
+greater than or equal to the length <var class="var">k*</var>.  The index variable
+<var class="var">arg</var> is an unboxed, unsigned 64-bit value.
+</p>
+<p>The <code class="code">$switch</code> term is like C&rsquo;s <code class="code">switch</code> statement.  The
+compiler to CPS can generate a <code class="code">$switch</code> term directly, if the
+source language has such a concept, or it can rely on the CPS optimizer
+to turn appropriate chains of <code class="code">$branch</code> statements to
+<code class="code">$switch</code> instances, which is what the Scheme compiler does.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0024throw"><span class="category-def">CPS Term: </span><span><strong class="def-name">$throw</strong> <var class="def-var-arguments">src op param args</var><a class="copiable-link" href='#index-_0024throw'> &para;</a></span></dt>
+<dd><p>Throw a non-resumable exception.  Throw terms do not continue at all.
+The usual value of <var class="var">op</var> is <code class="code">throw</code>, with two arguments
+<var class="var">key</var> and <var class="var">args</var>.  There are also some specific primcalls that
+compile to the VM <code class="code">throw/value</code> and <code class="code">throw/value+data</code>
+instructions; see the code for full details.
+</p>
+<p>The advantage of having <code class="code">$throw</code> as a term is that, because it does
+not continue, this allows the optimizer to gather more information from
+type predicates.  For example, if the predicate is <code class="code">char?</code> and the
+<var class="var">kf</var> continues to a throw, the set of labels dominated by <var class="var">kt</var>
+is larger than if the throw notationally continued to some label that
+would never be reached by the throw.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0024prompt-1"><span class="category-def">CPS Term: </span><span><strong class="def-name">$prompt</strong> <var class="def-var-arguments">k kh src escape? tag</var><a class="copiable-link" href='#index-_0024prompt-1'> &para;</a></span></dt>
+<dd><p>Push a prompt on the stack identified by the variable name <var class="var">tag</var>,
+which may be escape-only if <var class="var">escape?</var> is true, and continue to
+<var class="var">kh</var> with zero values.  If the body aborts to this prompt, control
+will proceed at the continuation labelled <var class="var">kh</var>, which should be a
+<code class="code">$kreceive</code> continuation.  Prompts are later popped by
+<code class="code">pop-prompt</code> primcalls.
+</p></dd></dl>
+
+<p>At this point we have described terms, expressions, and the most common
+kind of continuation, <code class="code">$kargs</code>.  <code class="code">$kargs</code> is used when the
+predecessors of the continuation can be instructed to pass the values
+where the continuation wants them.  For example, if a <code class="code">$kargs</code>
+continuation <var class="var">k</var> binds a variable <var class="var">v</var>, and the compiler decides
+to allocate <var class="var">v</var> to slot 6, all predecessors of <var class="var">k</var> should put
+the value for <var class="var">v</var> in slot 6 before jumping to <var class="var">k</var>.  One
+situation in which this isn&rsquo;t possible is receiving values from function
+calls.  Guile has a calling convention for functions which currently
+places return values on the stack.  A continuation of a call must check
+that the number of values returned from a function matches the expected
+number of values, and then must shuffle or collect those values to named
+variables.  <code class="code">$kreceive</code> denotes this kind of continuation.
+</p>
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0024kreceive"><span class="category-def">CPS Continuation: </span><span><strong class="def-name">$kreceive</strong> <var class="def-var-arguments">arity k</var><a class="copiable-link" href='#index-_0024kreceive'> &para;</a></span></dt>
+<dd><p>Receive values on the stack.  Parse them according to <var class="var">arity</var>, and
+then proceed with the parsed values to the <code class="code">$kargs</code> continuation
+labelled <var class="var">k</var>.  As a limitation specific to <code class="code">$kreceive</code>,
+<var class="var">arity</var> may only contain required and rest arguments.
+</p></dd></dl>
+
+<p><code class="code">$arity</code> is a helper data structure used by <code class="code">$kreceive</code> and
+also by <code class="code">$kclause</code>, described below.
+</p>
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0024arity"><span class="category-def">CPS Data: </span><span><strong class="def-name">$arity</strong> <var class="def-var-arguments">req opt rest kw allow-other-keys?</var><a class="copiable-link" href='#index-_0024arity'> &para;</a></span></dt>
+<dd><p>A data type declaring an arity.  <var class="var">req</var> and <var class="var">opt</var> are lists of
+source names of required and optional arguments, respectively.
+<var class="var">rest</var> is either the source name of the rest variable, or <code class="code">#f</code>
+if this arity does not accept additional values.  <var class="var">kw</var> is a list of
+the form <code class="code">((<var class="var">keyword</var> <var class="var">name</var> <var class="var">var</var>) ...)</code>, describing
+the keyword arguments.  <var class="var">allow-other-keys?</var> is true if other keyword
+arguments are allowed and false otherwise.
+</p>
+<p>Note that all of these names with the exception of the <var class="var">var</var>s in the
+<var class="var">kw</var> list are source names, not unique variable names.
+</p></dd></dl>
+
+<p>Additionally, there are three specific kinds of continuations that are
+only used in function entries.
+</p>
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0024kfun"><span class="category-def">CPS Continuation: </span><span><strong class="def-name">$kfun</strong> <var class="def-var-arguments">src meta self tail clause</var><a class="copiable-link" href='#index-_0024kfun'> &para;</a></span></dt>
+<dd><p>Declare a function entry.  <var class="var">src</var> is the source information for the
+procedure declaration, and <var class="var">meta</var> is the metadata alist as described
+above in Tree-IL&rsquo;s <code class="code">&lt;lambda&gt;</code>.  <var class="var">self</var> is a variable bound to
+the procedure being called, and which may be used for self-references.
+<var class="var">tail</var> is the label of the <code class="code">$ktail</code> for this function,
+corresponding to the function&rsquo;s tail continuation.  <var class="var">clause</var> is the
+label of the first <code class="code">$kclause</code> for the first <code class="code">case-lambda</code>
+clause in the function, or otherwise <code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0024ktail"><span class="category-def">CPS Continuation: </span><span><strong class="def-name">$ktail</strong><a class="copiable-link" href='#index-_0024ktail'> &para;</a></span></dt>
+<dd><p>A tail continuation.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0024kclause"><span class="category-def">CPS Continuation: </span><span><strong class="def-name">$kclause</strong> <var class="def-var-arguments">arity cont alternate</var><a class="copiable-link" href='#index-_0024kclause'> &para;</a></span></dt>
+<dd><p>A clause of a function with a given arity.  Applications of a function
+with a compatible set of actual arguments will continue to the
+continuation labelled <var class="var">cont</var>, a <code class="code">$kargs</code> instance representing
+the clause body.  If the arguments are incompatible, control proceeds to
+<var class="var">alternate</var>, which is a <code class="code">$kclause</code> for the next clause, or
+<code class="code">#f</code> if there is no next clause.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Building-CPS.html">Building CPS</a>, Previous: <a href="An-Introduction-to-CPS.html">An Introduction to CPS</a>, Up: <a href="Continuation_002dPassing-Style.html">Continuation-Passing Style</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>About Expressions (Guile Reference Manual)</title>
+
+<meta name="description" content="About Expressions (Guile Reference Manual)">
+<meta name="keywords" content="About Expressions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Hello-Scheme_0021.html" rel="up" title="Hello Scheme!">
+<link href="About-Closure.html" rel="next" title="About Closure">
+<link href="About-Procedures.html" rel="prev" title="About Procedures">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="About-Expressions">
+<div class="nav-panel">
+<p>
+Next: <a href="About-Closure.html" accesskey="n" rel="next">The Concept of Closure</a>, Previous: <a href="About-Procedures.html" accesskey="p" rel="prev">The Representation and Use of Procedures</a>, Up: <a href="Hello-Scheme_0021.html" accesskey="u" rel="up">Hello Scheme!</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Expressions-and-Evaluation">3.3 Expressions and Evaluation</h3>
+
+<p>So far, we have met expressions that <em class="emph">do</em> things, such as the
+<code class="code">define</code> expressions that create and initialize new variables, and
+we have also talked about expressions that have <em class="emph">values</em>, for
+example the value of the procedure invocation expression:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(string-append &quot;/home&quot; &quot;/&quot; &quot;andrew&quot;)
+</pre></div>
+
+<p>but we haven&rsquo;t yet been precise about what causes an expression like
+this procedure invocation to be reduced to its &ldquo;value&rdquo;, or how the
+processing of such expressions relates to the execution of a Scheme
+program as a whole.
+</p>
+<p>This section clarifies what we mean by an expression&rsquo;s value, by
+introducing the idea of <em class="dfn">evaluation</em>.  It discusses the side effects
+that evaluation can have, explains how each of the various types of
+Scheme expression is evaluated, and describes the behaviour and use of
+the Guile REPL as a mechanism for exploring evaluation.  The section
+concludes with a very brief summary of Scheme&rsquo;s common syntactic
+expressions.
+</p>
+
+
+<ul class="mini-toc">
+<li><a href="Evaluating.html" accesskey="1">Evaluating Expressions and Executing Programs</a></li>
+<li><a href="Tail-Calls.html" accesskey="2">Tail calls</a></li>
+<li><a href="The-REPL.html" accesskey="3">Using the Guile REPL</a></li>
+<li><a href="Syntax-Summary.html" accesskey="4">Summary of Common Syntax</a></li>
+</ul>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Hash Table Examples (Guile Reference Manual)</title>
+
+<meta name="description" content="Hash Table Examples (Guile Reference Manual)">
+<meta name="keywords" content="Hash Table Examples (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Hash-Tables.html" rel="up" title="Hash Tables">
+<link href="Hash-Table-Reference.html" rel="next" title="Hash Table Reference">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Hash-Table-Examples">
+<div class="nav-panel">
+<p>
+Next: <a href="Hash-Table-Reference.html" accesskey="n" rel="next">Hash Table Reference</a>, Up: <a href="Hash-Tables.html" accesskey="u" rel="up">Hash Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Hash-Table-Examples-1">6.6.22.1 Hash Table Examples</h4>
+
+<p>For demonstration purposes, this section gives a few usage examples of
+some hash table procedures, together with some explanation what they do.
+</p>
+<p>First we start by creating a new hash table with 31 slots, and
+populate it with two key/value pairs.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define h (make-hash-table 31))
+
+;; This is an opaque object
+h
+&rArr;
+#&lt;hash-table 0/31&gt;
+
+;; Inserting into a hash table can be done with hashq-set!
+(hashq-set! h 'foo &quot;bar&quot;)
+&rArr;
+&quot;bar&quot;
+
+(hashq-set! h 'braz &quot;zonk&quot;)
+&rArr;
+&quot;zonk&quot;
+
+;; Or with hash-create-handle!
+(hashq-create-handle! h 'frob #f)
+&rArr;
+(frob . #f)
+</pre></div>
+
+<p>You can get the value for a given key with the procedure
+<code class="code">hashq-ref</code>, but the problem with this procedure is that you
+cannot reliably determine whether a key does exists in the table.  The
+reason is that the procedure returns <code class="code">#f</code> if the key is not in
+the table, but it will return the same value if the key is in the
+table and just happens to have the value <code class="code">#f</code>, as you can see in
+the following examples.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(hashq-ref h 'foo)
+&rArr;
+&quot;bar&quot;
+
+(hashq-ref h 'frob)
+&rArr;
+#f
+
+(hashq-ref h 'not-there)
+&rArr;
+#f
+</pre></div>
+
+<p>It is often better is to use the procedure <code class="code">hashq-get-handle</code>,
+which makes a distinction between the two cases.  Just like <code class="code">assq</code>,
+this procedure returns a key/value-pair on success, and <code class="code">#f</code> if the
+key is not found.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(hashq-get-handle h 'foo)
+&rArr;
+(foo . &quot;bar&quot;)
+
+(hashq-get-handle h 'not-there)
+&rArr;
+#f
+</pre></div>
+
+<p>Interesting results can be computed by using <code class="code">hash-fold</code> to work
+through each element.  This example will count the total number of
+elements:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(hash-fold (lambda (key value seed) (+ 1 seed)) 0 h)
+&rArr;
+3
+</pre></div>
+
+<p>The same thing can be done with the procedure <code class="code">hash-count</code>, which
+can also count the number of elements matching a particular predicate.
+For example, count the number of elements with string values:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(hash-count (lambda (key value) (string? value)) h)
+&rArr;
+2
+</pre></div>
+
+<p>Counting all the elements is a simple task using <code class="code">const</code>:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(hash-count (const #t) h)
+&rArr;
+3
+</pre></div>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Hash-Table-Reference.html">Hash Table Reference</a>, Up: <a href="Hash-Tables.html">Hash Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

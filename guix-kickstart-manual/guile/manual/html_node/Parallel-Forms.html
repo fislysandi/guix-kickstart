@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Parallel Forms (Guile Reference Manual)</title>
+
+<meta name="description" content="Parallel Forms (Guile Reference Manual)">
+<meta name="keywords" content="Parallel Forms (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Scheduling.html" rel="up" title="Scheduling">
+<link href="Futures.html" rel="prev" title="Futures">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Parallel-Forms">
+<div class="nav-panel">
+<p>
+Previous: <a href="Futures.html" accesskey="p" rel="prev">Futures</a>, Up: <a href="Scheduling.html" accesskey="u" rel="up">Threads, Mutexes, Asyncs and Dynamic Roots</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Parallel-forms">6.22.8 Parallel forms</h4>
+<a class="index-entry-id" id="index-parallel-forms"></a>
+
+<p>The functions described in this section are available from
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 threads))
+</pre></div>
+
+<p>They provide high-level parallel constructs.  The following functions
+are implemented in terms of futures (see <a class="pxref" href="Futures.html">Futures</a>).  Thus they are
+relatively cheap as they re-use existing threads, and portable, since
+they automatically use one thread per available CPU core.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-parallel"><span class="category-def">syntax: </span><span><strong class="def-name">parallel</strong> <var class="def-var-arguments">expr &hellip;</var><a class="copiable-link" href='#index-parallel'> &para;</a></span></dt>
+<dd><p>Evaluate each <var class="var">expr</var> expression in parallel, each in its own thread.
+Return the results of <var class="var">n</var> expressions as a set of <var class="var">n</var> multiple
+values (see <a class="pxref" href="Multiple-Values.html">Returning and Accepting Multiple Values</a>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-letpar"><span class="category-def">syntax: </span><span><strong class="def-name">letpar</strong> <var class="def-var-arguments">((var expr) &hellip;) body1 body2 &hellip;</var><a class="copiable-link" href='#index-letpar'> &para;</a></span></dt>
+<dd><p>Evaluate each <var class="var">expr</var> in parallel, each in its own thread, then bind
+the results to the corresponding <var class="var">var</var> variables, and then evaluate
+<var class="var">body1</var> <var class="var">body2</var> <small class="enddots">...</small>
+</p>
+<p><code class="code">letpar</code> is like <code class="code">let</code> (see <a class="pxref" href="Local-Bindings.html">Local Variable Bindings</a>), but all the
+expressions for the bindings are evaluated in parallel.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-par_002dmap"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">par-map</strong> <var class="def-var-arguments">proc lst1 lst2 &hellip;</var><a class="copiable-link" href='#index-par_002dmap'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-par_002dfor_002deach"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">par-for-each</strong> <var class="def-var-arguments">proc lst1 lst2 &hellip;</var><a class="copiable-link" href='#index-par_002dfor_002deach'> &para;</a></span></dt>
+<dd><p>Call <var class="var">proc</var> on the elements of the given lists.  <code class="code">par-map</code>
+returns a list comprising the return values from <var class="var">proc</var>.
+<code class="code">par-for-each</code> returns an unspecified value, but waits for all
+calls to complete.
+</p>
+<p>The <var class="var">proc</var> calls are <code class="code">(<var class="var">proc</var> <var class="var">elem1</var> <var class="var">elem2</var>
+&hellip;)</code>, where each <var class="var">elem</var> is from the corresponding <var class="var">lst</var> .
+Each <var class="var">lst</var> must be the same length.  The calls are potentially made
+in parallel, depending on the number of CPU cores available.
+</p>
+<p>These functions are like <code class="code">map</code> and <code class="code">for-each</code> (see <a class="pxref" href="List-Mapping.html">List Mapping</a>), but make their <var class="var">proc</var> calls in parallel.
+</p></dd></dl>
+
+<p>Unlike those above, the functions described below take a number of
+threads as an argument.  This makes them inherently non-portable since
+the specified number of threads may differ from the number of available
+CPU cores as returned by <code class="code">current-processor-count</code>
+(see <a class="pxref" href="Processes.html">Processes</a>).  In addition, these functions create the specified
+number of threads when they are called and terminate them upon
+completion, which makes them quite expensive.
+</p>
+<p>Therefore, they should be avoided.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-n_002dpar_002dmap"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">n-par-map</strong> <var class="def-var-arguments">n proc lst1 lst2 &hellip;</var><a class="copiable-link" href='#index-n_002dpar_002dmap'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-n_002dpar_002dfor_002deach"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">n-par-for-each</strong> <var class="def-var-arguments">n proc lst1 lst2 &hellip;</var><a class="copiable-link" href='#index-n_002dpar_002dfor_002deach'> &para;</a></span></dt>
+<dd><p>Call <var class="var">proc</var> on the elements of the given lists, in the same way as
+<code class="code">par-map</code> and <code class="code">par-for-each</code> above, but use no more than
+<var class="var">n</var> threads at any one time.  The order in which calls are
+initiated within that threads limit is unspecified.
+</p>
+<p>These functions are good for controlling resource consumption if
+<var class="var">proc</var> calls might be costly, or if there are many to be made.  On
+a dual-CPU system for instance <em class="math"><var class="var">n</var>=4</em> might be enough to
+keep the CPUs utilized, and not consume too much memory.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-n_002dfor_002deach_002dpar_002dmap"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">n-for-each-par-map</strong> <var class="def-var-arguments">n sproc pproc lst1 lst2 &hellip;</var><a class="copiable-link" href='#index-n_002dfor_002deach_002dpar_002dmap'> &para;</a></span></dt>
+<dd><p>Apply <var class="var">pproc</var> to the elements of the given lists, and apply
+<var class="var">sproc</var> to each result returned by <var class="var">pproc</var>.  The final return
+value is unspecified, but all calls will have been completed before
+returning.
+</p>
+<p>The calls made are <code class="code">(<var class="var">sproc</var> (<var class="var">pproc</var> <var class="var">elem1</var> &hellip;
+<var class="var">elemN</var>))</code>, where each <var class="var">elem</var> is from the corresponding
+<var class="var">lst</var>.  Each <var class="var">lst</var> must have the same number of elements.
+</p>
+<p>The <var class="var">pproc</var> calls are made in parallel, in separate threads.  No more
+than <var class="var">n</var> threads are used at any one time.  The order in which
+<var class="var">pproc</var> calls are initiated within that limit is unspecified.
+</p>
+<p>The <var class="var">sproc</var> calls are made serially, in list element order, one at
+a time.  <var class="var">pproc</var> calls on later elements may execute in parallel
+with the <var class="var">sproc</var> calls.  Exactly which thread makes each
+<var class="var">sproc</var> call is unspecified.
+</p>
+<p>This function is designed for individual calculations that can be done
+in parallel, but with results needing to be handled serially, for
+instance to write them to a file.  The <var class="var">n</var> limit on threads
+controls system resource usage when there are many calculations or
+when they might be costly.
+</p>
+<p>It will be seen that <code class="code">n-for-each-par-map</code> is like a combination
+of <code class="code">n-par-map</code> and <code class="code">for-each</code>,
+</p>
+<div class="example">
+<pre class="example-preformatted">(for-each sproc (n-par-map n pproc lst1 ... lstN))
+</pre></div>
+
+<p>But the actual implementation is more efficient since each <var class="var">sproc</var>
+call, in turn, can be initiated once the relevant <var class="var">pproc</var> call has
+completed, it doesn&rsquo;t need to wait for all to finish.
+</p></dd></dl>
+
+
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Futures.html">Futures</a>, Up: <a href="Scheduling.html">Threads, Mutexes, Asyncs and Dynamic Roots</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

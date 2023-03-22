@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Network Databases (Guile Reference Manual)</title>
+
+<meta name="description" content="Network Databases (Guile Reference Manual)">
+<meta name="keywords" content="Network Databases (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Networking.html" rel="up" title="Networking">
+<link href="Network-Socket-Address.html" rel="next" title="Network Socket Address">
+<link href="Network-Address-Conversion.html" rel="prev" title="Network Address Conversion">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Network-Databases">
+<div class="nav-panel">
+<p>
+Next: <a href="Network-Socket-Address.html" accesskey="n" rel="next">Network Socket Address</a>, Previous: <a href="Network-Address-Conversion.html" accesskey="p" rel="prev">Network Address Conversion</a>, Up: <a href="Networking.html" accesskey="u" rel="up">Networking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Network-Databases-1">7.2.11.2 Network Databases</h4>
+<a class="index-entry-id" id="index-network-database"></a>
+
+<p>This section describes procedures which query various network databases.
+Care should be taken when using the database routines since they are not
+reentrant.
+</p>
+<h4 class="subsubheading" id="getaddrinfo"><code class="code">getaddrinfo</code></h4>
+
+<a class="index-entry-id" id="index-addrinfo-object-type"></a>
+<a class="index-entry-id" id="index-host-name-lookup"></a>
+<a class="index-entry-id" id="index-service-name-lookup"></a>
+
+<p>The <code class="code">getaddrinfo</code> procedure maps host and service names to socket addresses
+and associated information in a protocol-independent way.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-getaddrinfo"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getaddrinfo</strong> <var class="def-var-arguments">name service [hint_flags [hint_family [hint_socktype [hint_protocol]]]]</var><a class="copiable-link" href='#index-getaddrinfo'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgetaddrinfo"><span class="category-def">C Function: </span><span><strong class="def-name">scm_getaddrinfo</strong> <var class="def-var-arguments">(name, service, hint_flags, hint_family, hint_socktype, hint_protocol)</var><a class="copiable-link" href='#index-scm_005fgetaddrinfo'> &para;</a></span></dt>
+<dd><p>Return a list of <code class="code">addrinfo</code> structures containing
+a socket address and associated information for host <var class="var">name</var>
+and/or <var class="var">service</var> to be used in creating a socket with
+which to address the specified service.
+</p>
+<div class="example">
+<pre class="example-preformatted">(let* ((ai (car (getaddrinfo &quot;www.gnu.org&quot; &quot;http&quot;)))
+       (s  (socket (addrinfo:fam ai) (addrinfo:socktype ai)
+                   (addrinfo:protocol ai))))
+  (connect s (addrinfo:addr ai))
+  s)
+</pre></div>
+
+<p>When <var class="var">service</var> is omitted or is <code class="code">#f</code>, return
+network-level addresses for <var class="var">name</var>.  When <var class="var">name</var>
+is <code class="code">#f</code> <var class="var">service</var> must be provided and service
+locations local to the caller are returned.
+</p>
+<p>Additional hints can be provided.  When specified,
+<var class="var">hint_flags</var> should be a bitwise-or of zero or more
+constants among the following:
+</p>
+<dl class="table">
+<dt><code class="code">AI_PASSIVE</code></dt>
+<dd><p>Socket address is intended for <code class="code">bind</code>.
+</p>
+</dd>
+<dt><code class="code">AI_CANONNAME</code></dt>
+<dd><p>Request for canonical host name, available via
+<code class="code">addrinfo:canonname</code>.  This makes sense mainly when
+DNS lookups are involved.
+</p>
+</dd>
+<dt><code class="code">AI_NUMERICHOST</code></dt>
+<dd><p>Specifies that <var class="var">name</var> is a numeric host address string
+(e.g., <code class="code">&quot;127.0.0.1&quot;</code>), meaning that name resolution
+will not be used.
+</p>
+</dd>
+<dt><code class="code">AI_NUMERICSERV</code></dt>
+<dd><p>Likewise, specifies that <var class="var">service</var> is a numeric port
+string (e.g., <code class="code">&quot;80&quot;</code>).
+</p>
+</dd>
+<dt><code class="code">AI_ADDRCONFIG</code></dt>
+<dd><p>Return only addresses configured on the local system  It is
+highly recommended to provide this flag when the returned
+socket addresses are to be used to make connections;
+otherwise, some of the returned addresses could be unreachable
+or use a protocol that is not supported.
+</p>
+</dd>
+<dt><code class="code">AI_V4MAPPED</code></dt>
+<dd><p>When looking up IPv6 addresses, return mapped IPv4 addresses if
+there is no IPv6 address available at all.
+</p>
+</dd>
+<dt><code class="code">AI_ALL</code></dt>
+<dd><p>If this flag is set along with <code class="code">AI_V4MAPPED</code> when looking up IPv6
+addresses, return all IPv6 addresses as well as all IPv4 addresses, the latter
+mapped to IPv6 format.
+</p></dd>
+</dl>
+
+<p>When given, <var class="var">hint_family</var> should specify the requested
+address family, e.g., <code class="code">AF_INET6</code>.  Similarly,
+<var class="var">hint_socktype</var> should specify the requested socket type
+(e.g., <code class="code">SOCK_DGRAM</code>), and <var class="var">hint_protocol</var> should
+specify the requested protocol (its value is interpreted
+as in calls to <code class="code">socket</code>).
+</p>
+<p>On error, an exception with key <code class="code">getaddrinfo-error</code> is
+thrown, with an error code (an integer) as its argument:
+</p>
+<div class="example">
+<pre class="example-preformatted">(catch 'getaddrinfo-error
+  (lambda ()
+    (getaddrinfo &quot;www.gnu.org&quot; &quot;gopher&quot;))
+  (lambda (key errcode)
+    (cond ((= errcode EAI_SERVICE)
+	   (display &quot;doesn't know about Gopher!\n&quot;))
+	  ((= errcode EAI_NONAME)
+	   (display &quot;www.gnu.org not found\\n&quot;))
+	  (else
+	   (format #t &quot;something wrong: ~a\n&quot;
+		   (gai-strerror errcode))))))
+</pre></div>
+
+<p>Error codes are:
+</p>
+<dl class="table">
+<dt><code class="code">EAI_AGAIN</code></dt>
+<dd><p>The name or service could not be resolved at this time. Future
+attempts may succeed.
+</p>
+</dd>
+<dt><code class="code">EAI_BADFLAGS</code></dt>
+<dd><p><var class="var">hint_flags</var> contains an invalid value.
+</p>
+</dd>
+<dt><code class="code">EAI_FAIL</code></dt>
+<dd><p>A non-recoverable error occurred when attempting to
+resolve the name.
+</p>
+</dd>
+<dt><code class="code">EAI_FAMILY</code></dt>
+<dd><p><var class="var">hint_family</var> was not recognized.
+</p>
+</dd>
+<dt><code class="code">EAI_NONAME</code></dt>
+<dd><p>Either <var class="var">name</var> does not resolve for the supplied parameters,
+or neither <var class="var">name</var> nor <var class="var">service</var> were supplied.
+</p>
+</dd>
+<dt><code class="code">EAI_NODATA</code></dt>
+<dd><p>This non-POSIX error code can be returned on some systems (GNU
+and Darwin, at least), for example when <var class="var">name</var> is known
+but requests that were made turned out no data.  Error handling
+code should be prepared to handle it when it is defined.
+</p>
+</dd>
+<dt><code class="code">EAI_SERVICE</code></dt>
+<dd><p><var class="var">service</var> was not recognized for the specified socket type.
+</p>
+</dd>
+<dt><code class="code">EAI_SOCKTYPE</code></dt>
+<dd><p><var class="var">hint_socktype</var> was not recognized.
+</p>
+</dd>
+<dt><code class="code">EAI_SYSTEM</code></dt>
+<dd><p>A system error occurred.  In C, the error code can be found in
+<code class="code">errno</code>; this value is not accessible from Scheme, but in
+practice it provides little information about the actual error
+cause.
+</p></dd>
+</dl>
+
+<p>Users are encouraged to read the
+<a class="url" href="http://www.opengroup.org/onlinepubs/9699919799/functions/getaddrinfo.html">&quot;POSIX specification</a> for more details.
+</p></dd></dl>
+
+<p>The following procedures take an <code class="code">addrinfo</code> object as returned by
+<code class="code">getaddrinfo</code>:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-addrinfo_003aflags"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">addrinfo:flags</strong> <var class="def-var-arguments">ai</var><a class="copiable-link" href='#index-addrinfo_003aflags'> &para;</a></span></dt>
+<dd><p>Return flags for <var class="var">ai</var> as a bitwise or of <code class="code">AI_</code> values (see above).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-addrinfo_003afam"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">addrinfo:fam</strong> <var class="def-var-arguments">ai</var><a class="copiable-link" href='#index-addrinfo_003afam'> &para;</a></span></dt>
+<dd><p>Return the address family of <var class="var">ai</var> (a <code class="code">AF_</code> value).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-addrinfo_003asocktype"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">addrinfo:socktype</strong> <var class="def-var-arguments">ai</var><a class="copiable-link" href='#index-addrinfo_003asocktype'> &para;</a></span></dt>
+<dd><p>Return the socket type for <var class="var">ai</var> (a <code class="code">SOCK_</code> value).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-addrinfo_003aprotocol"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">addrinfo:protocol</strong> <var class="def-var-arguments">ai</var><a class="copiable-link" href='#index-addrinfo_003aprotocol'> &para;</a></span></dt>
+<dd><p>Return the protocol of <var class="var">ai</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-addrinfo_003aaddr"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">addrinfo:addr</strong> <var class="def-var-arguments">ai</var><a class="copiable-link" href='#index-addrinfo_003aaddr'> &para;</a></span></dt>
+<dd><p>Return the socket address associated with <var class="var">ai</var> as a <code class="code">sockaddr</code>
+object (see <a class="pxref" href="Network-Socket-Address.html">Network Socket Address</a>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-addrinfo_003acanonname"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">addrinfo:canonname</strong> <var class="def-var-arguments">ai</var><a class="copiable-link" href='#index-addrinfo_003acanonname'> &para;</a></span></dt>
+<dd><p>Return a string for the canonical name associated with <var class="var">ai</var> if
+the <code class="code">AI_CANONNAME</code> flag was supplied.
+</p></dd></dl>
+
+<h4 class="subsubheading" id="The-Host-Database">The Host Database</h4>
+<a class="index-entry-id" id="index-_002fetc_002fhosts"></a>
+<a class="index-entry-id" id="index-network-database-1"></a>
+
+<p>A <em class="dfn">host object</em> is a structure that represents what is known about a
+network host, and is the usual way of representing a system&rsquo;s network
+identity inside software.
+</p>
+<p>The following functions accept a host object and return a selected
+component:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-hostent_003aname"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">hostent:name</strong> <var class="def-var-arguments">host</var><a class="copiable-link" href='#index-hostent_003aname'> &para;</a></span></dt>
+<dd><p>The &ldquo;official&rdquo; hostname for <var class="var">host</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-hostent_003aaliases"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">hostent:aliases</strong> <var class="def-var-arguments">host</var><a class="copiable-link" href='#index-hostent_003aaliases'> &para;</a></span></dt>
+<dd><p>A list of aliases for <var class="var">host</var>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-hostent_003aaddrtype"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">hostent:addrtype</strong> <var class="def-var-arguments">host</var><a class="copiable-link" href='#index-hostent_003aaddrtype'> &para;</a></span></dt>
+<dd><p>The host address type, one of the <code class="code">AF</code> constants, such as
+<code class="code">AF_INET</code> or <code class="code">AF_INET6</code>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-hostent_003alength"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">hostent:length</strong> <var class="def-var-arguments">host</var><a class="copiable-link" href='#index-hostent_003alength'> &para;</a></span></dt>
+<dd><p>The length of each address for <var class="var">host</var>, in bytes.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-hostent_003aaddr_002dlist"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">hostent:addr-list</strong> <var class="def-var-arguments">host</var><a class="copiable-link" href='#index-hostent_003aaddr_002dlist'> &para;</a></span></dt>
+<dd><p>The list of network addresses associated with <var class="var">host</var>.  For
+<code class="code">AF_INET</code> these are integer IPv4 address (see <a class="pxref" href="Network-Address-Conversion.html">Network Address Conversion</a>).
+</p></dd></dl>
+
+<p>The following procedures can be used to search the host database.  However,
+<code class="code">getaddrinfo</code> should be preferred over them since it&rsquo;s more generic and
+thread-safe.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-gethost"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">gethost</strong> <var class="def-var-arguments">[host]</var><a class="copiable-link" href='#index-gethost'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-gethostbyname"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">gethostbyname</strong> <var class="def-var-arguments">hostname</var><a class="copiable-link" href='#index-gethostbyname'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-gethostbyaddr"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">gethostbyaddr</strong> <var class="def-var-arguments">address</var><a class="copiable-link" href='#index-gethostbyaddr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgethost"><span class="category-def">C Function: </span><span><strong class="def-name">scm_gethost</strong> <var class="def-var-arguments">(host)</var><a class="copiable-link" href='#index-scm_005fgethost'> &para;</a></span></dt>
+<dd><p>Look up a host by name or address, returning a host object.  The
+<code class="code">gethost</code> procedure will accept either a string name or an integer
+address; if given no arguments, it behaves like <code class="code">gethostent</code> (see
+below).  If a name or address is supplied but the address can not be
+found, an error will be thrown to one of the keys:
+<code class="code">host-not-found</code>, <code class="code">try-again</code>, <code class="code">no-recovery</code> or
+<code class="code">no-data</code>, corresponding to the equivalent <code class="code">h_error</code> values.
+Unusual conditions may result in errors thrown to the
+<code class="code">system-error</code> or <code class="code">misc_error</code> keys.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(gethost &quot;www.gnu.org&quot;)
+&rArr; #(&quot;www.gnu.org&quot; () 2 4 (3353880842))
+
+(gethostbyname &quot;www.emacs.org&quot;)
+&rArr; #(&quot;emacs.org&quot; (&quot;www.emacs.org&quot;) 2 4 (1073448978))
+</pre></div>
+</dd></dl>
+
+<p>The following procedures may be used to step through the host
+database from beginning to end.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-sethostent"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sethostent</strong> <var class="def-var-arguments">[stayopen]</var><a class="copiable-link" href='#index-sethostent'> &para;</a></span></dt>
+<dd><p>Initialize an internal stream from which host objects may be read.  This
+procedure must be called before any calls to <code class="code">gethostent</code>, and may
+also be called afterward to reset the host entry stream.  If
+<var class="var">stayopen</var> is supplied and is not <code class="code">#f</code>, the database is not
+closed by subsequent <code class="code">gethostbyname</code> or <code class="code">gethostbyaddr</code> calls,
+possibly giving an efficiency gain.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-gethostent"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">gethostent</strong><a class="copiable-link" href='#index-gethostent'> &para;</a></span></dt>
+<dd><p>Return the next host object from the host database, or <code class="code">#f</code> if
+there are no more hosts to be found (or an error has been encountered).
+This procedure may not be used before <code class="code">sethostent</code> has been called.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-endhostent"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">endhostent</strong><a class="copiable-link" href='#index-endhostent'> &para;</a></span></dt>
+<dd><p>Close the stream used by <code class="code">gethostent</code>.  The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-sethost"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sethost</strong> <var class="def-var-arguments">[stayopen]</var><a class="copiable-link" href='#index-sethost'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsethost"><span class="category-def">C Function: </span><span><strong class="def-name">scm_sethost</strong> <var class="def-var-arguments">(stayopen)</var><a class="copiable-link" href='#index-scm_005fsethost'> &para;</a></span></dt>
+<dd><p>If <var class="var">stayopen</var> is omitted, this is equivalent to <code class="code">endhostent</code>.
+Otherwise it is equivalent to <code class="code">sethostent stayopen</code>.
+</p></dd></dl>
+
+<h4 class="subsubheading" id="The-Network-Database">The Network Database</h4>
+<a class="index-entry-id" id="index-network-database-2"></a>
+
+<p>The following functions accept an object representing a network
+and return a selected component:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-netent_003aname"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">netent:name</strong> <var class="def-var-arguments">net</var><a class="copiable-link" href='#index-netent_003aname'> &para;</a></span></dt>
+<dd><p>The &ldquo;official&rdquo; network name.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-netent_003aaliases"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">netent:aliases</strong> <var class="def-var-arguments">net</var><a class="copiable-link" href='#index-netent_003aaliases'> &para;</a></span></dt>
+<dd><p>A list of aliases for the network.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-netent_003aaddrtype"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">netent:addrtype</strong> <var class="def-var-arguments">net</var><a class="copiable-link" href='#index-netent_003aaddrtype'> &para;</a></span></dt>
+<dd><p>The type of the network number.  Currently, this returns only
+<code class="code">AF_INET</code>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-netent_003anet"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">netent:net</strong> <var class="def-var-arguments">net</var><a class="copiable-link" href='#index-netent_003anet'> &para;</a></span></dt>
+<dd><p>The network number.
+</p></dd></dl>
+
+<p>The following procedures are used to search the network database:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-getnet"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getnet</strong> <var class="def-var-arguments">[net]</var><a class="copiable-link" href='#index-getnet'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-getnetbyname"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getnetbyname</strong> <var class="def-var-arguments">net-name</var><a class="copiable-link" href='#index-getnetbyname'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-getnetbyaddr"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getnetbyaddr</strong> <var class="def-var-arguments">net-number</var><a class="copiable-link" href='#index-getnetbyaddr'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgetnet"><span class="category-def">C Function: </span><span><strong class="def-name">scm_getnet</strong> <var class="def-var-arguments">(net)</var><a class="copiable-link" href='#index-scm_005fgetnet'> &para;</a></span></dt>
+<dd><p>Look up a network by name or net number in the network database.  The
+<var class="var">net-name</var> argument must be a string, and the <var class="var">net-number</var>
+argument must be an integer.  <code class="code">getnet</code> will accept either type of
+argument, behaving like <code class="code">getnetent</code> (see below) if no arguments are
+given.
+</p></dd></dl>
+
+<p>The following procedures may be used to step through the network
+database from beginning to end.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-setnetent"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">setnetent</strong> <var class="def-var-arguments">[stayopen]</var><a class="copiable-link" href='#index-setnetent'> &para;</a></span></dt>
+<dd><p>Initialize an internal stream from which network objects may be read.  This
+procedure must be called before any calls to <code class="code">getnetent</code>, and may
+also be called afterward to reset the net entry stream.  If
+<var class="var">stayopen</var> is supplied and is not <code class="code">#f</code>, the database is not
+closed by subsequent <code class="code">getnetbyname</code> or <code class="code">getnetbyaddr</code> calls,
+possibly giving an efficiency gain.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getnetent"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getnetent</strong><a class="copiable-link" href='#index-getnetent'> &para;</a></span></dt>
+<dd><p>Return the next entry from the network database.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-endnetent"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">endnetent</strong><a class="copiable-link" href='#index-endnetent'> &para;</a></span></dt>
+<dd><p>Close the stream used by <code class="code">getnetent</code>.  The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-setnet"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">setnet</strong> <var class="def-var-arguments">[stayopen]</var><a class="copiable-link" href='#index-setnet'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsetnet"><span class="category-def">C Function: </span><span><strong class="def-name">scm_setnet</strong> <var class="def-var-arguments">(stayopen)</var><a class="copiable-link" href='#index-scm_005fsetnet'> &para;</a></span></dt>
+<dd><p>If <var class="var">stayopen</var> is omitted, this is equivalent to <code class="code">endnetent</code>.
+Otherwise it is equivalent to <code class="code">setnetent stayopen</code>.
+</p></dd></dl>
+
+<h4 class="subsubheading" id="The-Protocol-Database">The Protocol Database</h4>
+<a class="index-entry-id" id="index-_002fetc_002fprotocols"></a>
+<a class="index-entry-id" id="index-protocols"></a>
+<a class="index-entry-id" id="index-network-protocols"></a>
+
+<p>The following functions accept an object representing a protocol
+and return a selected component:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-protoent_003aname"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">protoent:name</strong> <var class="def-var-arguments">protocol</var><a class="copiable-link" href='#index-protoent_003aname'> &para;</a></span></dt>
+<dd><p>The &ldquo;official&rdquo; protocol name.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-protoent_003aaliases"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">protoent:aliases</strong> <var class="def-var-arguments">protocol</var><a class="copiable-link" href='#index-protoent_003aaliases'> &para;</a></span></dt>
+<dd><p>A list of aliases for the protocol.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-protoent_003aproto"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">protoent:proto</strong> <var class="def-var-arguments">protocol</var><a class="copiable-link" href='#index-protoent_003aproto'> &para;</a></span></dt>
+<dd><p>The protocol number.
+</p></dd></dl>
+
+<p>The following procedures are used to search the protocol database:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-getproto"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getproto</strong> <var class="def-var-arguments">[protocol]</var><a class="copiable-link" href='#index-getproto'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-getprotobyname"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getprotobyname</strong> <var class="def-var-arguments">name</var><a class="copiable-link" href='#index-getprotobyname'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-getprotobynumber"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getprotobynumber</strong> <var class="def-var-arguments">number</var><a class="copiable-link" href='#index-getprotobynumber'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgetproto"><span class="category-def">C Function: </span><span><strong class="def-name">scm_getproto</strong> <var class="def-var-arguments">(protocol)</var><a class="copiable-link" href='#index-scm_005fgetproto'> &para;</a></span></dt>
+<dd><p>Look up a network protocol by name or by number.  <code class="code">getprotobyname</code>
+takes a string argument, and <code class="code">getprotobynumber</code> takes an integer
+argument.  <code class="code">getproto</code> will accept either type, behaving like
+<code class="code">getprotoent</code> (see below) if no arguments are supplied.
+</p></dd></dl>
+
+<p>The following procedures may be used to step through the protocol
+database from beginning to end.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-setprotoent"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">setprotoent</strong> <var class="def-var-arguments">[stayopen]</var><a class="copiable-link" href='#index-setprotoent'> &para;</a></span></dt>
+<dd><p>Initialize an internal stream from which protocol objects may be read.  This
+procedure must be called before any calls to <code class="code">getprotoent</code>, and may
+also be called afterward to reset the protocol entry stream.  If
+<var class="var">stayopen</var> is supplied and is not <code class="code">#f</code>, the database is not
+closed by subsequent <code class="code">getprotobyname</code> or <code class="code">getprotobynumber</code> calls,
+possibly giving an efficiency gain.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getprotoent"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getprotoent</strong><a class="copiable-link" href='#index-getprotoent'> &para;</a></span></dt>
+<dd><p>Return the next entry from the protocol database.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-endprotoent"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">endprotoent</strong><a class="copiable-link" href='#index-endprotoent'> &para;</a></span></dt>
+<dd><p>Close the stream used by <code class="code">getprotoent</code>.  The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-setproto"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">setproto</strong> <var class="def-var-arguments">[stayopen]</var><a class="copiable-link" href='#index-setproto'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsetproto"><span class="category-def">C Function: </span><span><strong class="def-name">scm_setproto</strong> <var class="def-var-arguments">(stayopen)</var><a class="copiable-link" href='#index-scm_005fsetproto'> &para;</a></span></dt>
+<dd><p>If <var class="var">stayopen</var> is omitted, this is equivalent to <code class="code">endprotoent</code>.
+Otherwise it is equivalent to <code class="code">setprotoent stayopen</code>.
+</p></dd></dl>
+
+<h4 class="subsubheading" id="The-Service-Database">The Service Database</h4>
+<a class="index-entry-id" id="index-_002fetc_002fservices"></a>
+<a class="index-entry-id" id="index-services"></a>
+<a class="index-entry-id" id="index-network-services"></a>
+
+<p>The following functions accept an object representing a service
+and return a selected component:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-servent_003aname"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">servent:name</strong> <var class="def-var-arguments">serv</var><a class="copiable-link" href='#index-servent_003aname'> &para;</a></span></dt>
+<dd><p>The &ldquo;official&rdquo; name of the network service.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-servent_003aaliases"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">servent:aliases</strong> <var class="def-var-arguments">serv</var><a class="copiable-link" href='#index-servent_003aaliases'> &para;</a></span></dt>
+<dd><p>A list of aliases for the network service.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-servent_003aport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">servent:port</strong> <var class="def-var-arguments">serv</var><a class="copiable-link" href='#index-servent_003aport'> &para;</a></span></dt>
+<dd><p>The Internet port used by the service.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-servent_003aproto"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">servent:proto</strong> <var class="def-var-arguments">serv</var><a class="copiable-link" href='#index-servent_003aproto'> &para;</a></span></dt>
+<dd><p>The protocol used by the service.  A service may be listed many times
+in the database under different protocol names.
+</p></dd></dl>
+
+<p>The following procedures are used to search the service database:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-getserv"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getserv</strong> <var class="def-var-arguments">[name [protocol]]</var><a class="copiable-link" href='#index-getserv'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-getservbyname"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getservbyname</strong> <var class="def-var-arguments">name protocol</var><a class="copiable-link" href='#index-getservbyname'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-getservbyport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getservbyport</strong> <var class="def-var-arguments">port protocol</var><a class="copiable-link" href='#index-getservbyport'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgetserv"><span class="category-def">C Function: </span><span><strong class="def-name">scm_getserv</strong> <var class="def-var-arguments">(name, protocol)</var><a class="copiable-link" href='#index-scm_005fgetserv'> &para;</a></span></dt>
+<dd><p>Look up a network service by name or by service number, and return a
+network service object.  The <var class="var">protocol</var> argument specifies the name
+of the desired protocol; if the protocol found in the network service
+database does not match this name, a system error is signalled.
+</p>
+<p>The <code class="code">getserv</code> procedure will take either a service name or number
+as its first argument; if given no arguments, it behaves like
+<code class="code">getservent</code> (see below).
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(getserv &quot;imap&quot; &quot;tcp&quot;)
+&rArr; #(&quot;imap2&quot; (&quot;imap&quot;) 143 &quot;tcp&quot;)
+
+(getservbyport 88 &quot;udp&quot;)
+&rArr; #(&quot;kerberos&quot; (&quot;kerberos5&quot; &quot;krb5&quot;) 88 &quot;udp&quot;)
+</pre></div>
+</dd></dl>
+
+<p>The following procedures may be used to step through the service
+database from beginning to end.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-setservent"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">setservent</strong> <var class="def-var-arguments">[stayopen]</var><a class="copiable-link" href='#index-setservent'> &para;</a></span></dt>
+<dd><p>Initialize an internal stream from which service objects may be read.  This
+procedure must be called before any calls to <code class="code">getservent</code>, and may
+also be called afterward to reset the service entry stream.  If
+<var class="var">stayopen</var> is supplied and is not <code class="code">#f</code>, the database is not
+closed by subsequent <code class="code">getservbyname</code> or <code class="code">getservbyport</code> calls,
+possibly giving an efficiency gain.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-getservent"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">getservent</strong><a class="copiable-link" href='#index-getservent'> &para;</a></span></dt>
+<dd><p>Return the next entry from the services database.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-endservent"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">endservent</strong><a class="copiable-link" href='#index-endservent'> &para;</a></span></dt>
+<dd><p>Close the stream used by <code class="code">getservent</code>.  The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-setserv"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">setserv</strong> <var class="def-var-arguments">[stayopen]</var><a class="copiable-link" href='#index-setserv'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsetserv"><span class="category-def">C Function: </span><span><strong class="def-name">scm_setserv</strong> <var class="def-var-arguments">(stayopen)</var><a class="copiable-link" href='#index-scm_005fsetserv'> &para;</a></span></dt>
+<dd><p>If <var class="var">stayopen</var> is omitted, this is equivalent to <code class="code">endservent</code>.
+Otherwise it is equivalent to <code class="code">setservent stayopen</code>.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Network-Socket-Address.html">Network Socket Address</a>, Previous: <a href="Network-Address-Conversion.html">Network Address Conversion</a>, Up: <a href="Networking.html">Networking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Object File Format (Guile Reference Manual)</title>
+
+<meta name="description" content="Object File Format (Guile Reference Manual)">
+<meta name="keywords" content="Object File Format (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="A-Virtual-Machine-for-Guile.html" rel="up" title="A Virtual Machine for Guile">
+<link href="Instruction-Set.html" rel="next" title="Instruction Set">
+<link href="VM-Programs.html" rel="prev" title="VM Programs">
+<style type="text/css">
+<!--
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Object-File-Format">
+<div class="nav-panel">
+<p>
+Next: <a href="Instruction-Set.html" accesskey="n" rel="next">Instruction Set</a>, Previous: <a href="VM-Programs.html" accesskey="p" rel="prev">Compiled Procedures are VM Programs</a>, Up: <a href="A-Virtual-Machine-for-Guile.html" accesskey="u" rel="up">A Virtual Machine for Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Object-File-Format-1">9.3.6 Object File Format</h4>
+
+<p>To compile a file to disk, we need a format in which to write the
+compiled code to disk, and later load it into Guile.  A good <em class="dfn">object
+file format</em> has a number of characteristics:
+</p>
+<ul class="itemize mark-bullet">
+<li>Above all else, it should be very cheap to load a compiled file.
+</li><li>It should be possible to statically allocate constants in the
+file.  For example, a bytevector literal in source code can be emitted
+directly into the object file.
+</li><li>The compiled file should enable maximum code and data sharing
+between different processes.
+</li><li>The compiled file should contain debugging information, such as
+line numbers, but that information should be separated from the code
+itself.  It should be possible to strip debugging information if space
+is tight.
+</li></ul>
+
+<p>These characteristics are not specific to Scheme.  Indeed, mainstream
+languages like C and C++ have solved this issue many times in the past.
+Guile builds on their work by adopting ELF, the object file format of
+GNU and other Unix-like systems, as its object file format.  Although
+Guile uses ELF on all platforms, we do not use platform support for ELF.
+Guile implements its own linker and loader.  The advantage of using ELF
+is not sharing code, but sharing ideas.  ELF is simply a well-designed
+object file format.
+</p>
+<p>An ELF file has two meta-tables describing its contents.  The first
+meta-table is for the loader, and is called the <em class="dfn">program table</em> or
+sometimes the <em class="dfn">segment table</em>.  The program table divides the file
+into big chunks that should be treated differently by the loader.
+Mostly the difference between these <em class="dfn">segments</em> is their
+permissions.
+</p>
+<p>Typically all segments of an ELF file are marked as read-only, except
+that part that represents modifiable static data or static data that
+needs load-time initialization.  Loading an ELF file is as simple as
+mmapping the thing into memory with read-only permissions, then using
+the segment table to mark a small sub-region of the file as writable.
+This writable section is typically added to the root set of the garbage
+collector as well.
+</p>
+<p>One ELF segment is marked as &ldquo;dynamic&rdquo;, meaning that it has data of
+interest to the loader.  Guile uses this segment to record the Guile
+version corresponding to this file.  There is also an entry in the
+dynamic segment that points to the address of an initialization thunk
+that is run to perform any needed link-time initialization.  (This is
+like dynamic relocations for normal ELF shared objects, except that we
+compile the relocations as a procedure instead of having the loader
+interpret a table of relocations.)  Finally, the dynamic segment marks
+the location of the &ldquo;entry thunk&rdquo; of the object file.  This thunk is
+returned to the caller of <code class="code">load-thunk-from-memory</code> or
+<code class="code">load-thunk-from-file</code>.  When called, it will execute the &ldquo;body&rdquo;
+of the compiled expression.
+</p>
+<p>The other meta-table in an ELF file is the <em class="dfn">section table</em>.  Whereas
+the program table divides an ELF file into big chunks for the loader,
+the section table specifies small sections for use by introspective
+tools like debuggers or the like.  One segment (program table entry)
+typically contains many sections.  There may be sections outside of any
+segment, as well.
+</p>
+<p>Typical sections in a Guile <code class="code">.go</code> file include:
+</p>
+<dl class="table">
+<dt><code class="code">.rtl-text</code></dt>
+<dd><p>Bytecode.
+</p></dd>
+<dt><code class="code">.data</code></dt>
+<dd><p>Data that needs initialization, or which may be modified at runtime.
+</p></dd>
+<dt><code class="code">.rodata</code></dt>
+<dd><p>Statically allocated data that needs no run-time initialization, and
+which therefore can be shared between processes.
+</p></dd>
+<dt><code class="code">.dynamic</code></dt>
+<dd><p>The dynamic section, discussed above.
+</p></dd>
+<dt><code class="code">.symtab</code></dt>
+<dt><code class="code">.strtab</code></dt>
+<dd><p>A table mapping addresses in the <code class="code">.rtl-text</code> to procedure names.
+<code class="code">.strtab</code> is used by <code class="code">.symtab</code>.
+</p></dd>
+<dt><code class="code">.guile.procprops</code></dt>
+<dt><code class="code">.guile.arities</code></dt>
+<dt><code class="code">.guile.arities.strtab</code></dt>
+<dt><code class="code">.guile.docstrs</code></dt>
+<dt><code class="code">.guile.docstrs.strtab</code></dt>
+<dd><p>Side tables of procedure properties, arities, and docstrings.
+</p></dd>
+<dt><code class="code">.guile.docstrs.strtab</code></dt>
+<dd><p>Side table of frame maps, describing the set of live slots for ever
+return point in the program text, and whether those slots are pointers
+are not.  Used by the garbage collector.
+</p></dd>
+<dt><code class="code">.debug_info</code></dt>
+<dt><code class="code">.debug_abbrev</code></dt>
+<dt><code class="code">.debug_str</code></dt>
+<dt><code class="code">.debug_loc</code></dt>
+<dt><code class="code">.debug_line</code></dt>
+<dd><p>Debugging information, in DWARF format.  See the DWARF specification,
+for more information.
+</p></dd>
+<dt><code class="code">.shstrtab</code></dt>
+<dd><p>Section name string table.
+</p></dd>
+</dl>
+
+<p>For more information, see <a class="uref" href="http://linux.die.net/man/5/elf">the
+elf(5) man page</a>.  See <a class="uref" href="http://dwarfstd.org/">the DWARF
+specification</a> for more on the DWARF debugging format.  Or if you are an
+adventurous explorer, try running <code class="code">readelf</code> or <code class="code">objdump</code> on
+compiled <code class="code">.go</code> files.  It&rsquo;s good times!
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Instruction-Set.html">Instruction Set</a>, Previous: <a href="VM-Programs.html">Compiled Procedures are VM Programs</a>, Up: <a href="A-Virtual-Machine-for-Guile.html">A Virtual Machine for Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

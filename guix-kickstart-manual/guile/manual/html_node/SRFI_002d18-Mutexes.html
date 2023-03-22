@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-18 Mutexes (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-18 Mutexes (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-18 Mutexes (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI_002d18.html" rel="up" title="SRFI-18">
+<link href="SRFI_002d18-Condition-variables.html" rel="next" title="SRFI-18 Condition variables">
+<link href="SRFI_002d18-Threads.html" rel="prev" title="SRFI-18 Threads">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="SRFI_002d18-Mutexes">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d18-Condition-variables.html" accesskey="n" rel="next">SRFI-18 Condition variables</a>, Previous: <a href="SRFI_002d18-Threads.html" accesskey="p" rel="prev">SRFI-18 Threads</a>, Up: <a href="SRFI_002d18.html" accesskey="u" rel="up">SRFI-18 - Multithreading support</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="SRFI_002d18-Mutexes-1">7.5.15.2 SRFI-18 Mutexes</h4>
+
+<p>SRFI-18 mutexes are disjoint from Guile&rsquo;s primitive mutexes.
+See <a class="xref" href="Mutexes-and-Condition-Variables.html">Mutexes and Condition Variables</a>, for more on Guile&rsquo;s primitive
+facility.
+</p>
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-make_002dmutex-1"><span class="category-def">Function: </span><span><strong class="def-name">make-mutex</strong> <var class="def-var-arguments">[name]</var><a class="copiable-link" href='#index-make_002dmutex-1'> &para;</a></span></dt>
+<dd><p>Returns a new mutex, optionally assigning it the object name <var class="var">name</var>,
+which may be any Scheme object.  The returned mutex will be created with
+the configuration described above.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-mutex_002dname"><span class="category-def">Function: </span><span><strong class="def-name">mutex-name</strong> <var class="def-var-arguments">mutex</var><a class="copiable-link" href='#index-mutex_002dname'> &para;</a></span></dt>
+<dd><p>Returns the name assigned to <var class="var">mutex</var> at the time of its creation, or
+<code class="code">#f</code> if it was not given a name.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-mutex_002dspecific"><span class="category-def">Function: </span><span><strong class="def-name">mutex-specific</strong> <var class="def-var-arguments">mutex</var><a class="copiable-link" href='#index-mutex_002dspecific'> &para;</a></span></dt>
+<dd><p>Return the &ldquo;object-specific&rdquo; property of <var class="var">mutex</var>, or <code class="code">#f</code> if
+none is set.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-mutex_002dspecific_002dset_0021"><span class="category-def">Function: </span><span><strong class="def-name">mutex-specific-set!</strong> <var class="def-var-arguments">mutex obj</var><a class="copiable-link" href='#index-mutex_002dspecific_002dset_0021'> &para;</a></span></dt>
+<dd><p>Set the &ldquo;object-specific&rdquo; property of <var class="var">mutex</var>.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-mutex_002dstate"><span class="category-def">Function: </span><span><strong class="def-name">mutex-state</strong> <var class="def-var-arguments">mutex</var><a class="copiable-link" href='#index-mutex_002dstate'> &para;</a></span></dt>
+<dd><p>Returns information about the state of <var class="var">mutex</var>.  Possible values 
+are:
+</p><ul class="itemize mark-bullet">
+<li>thread <var class="var">t</var>: the mutex is in the locked/owned state and thread
+<var class="var">t</var> is the owner of the mutex
+</li><li>symbol <code class="code">not-owned</code>: the mutex is in the locked/not-owned state
+</li><li>symbol <code class="code">abandoned</code>: the mutex is in the unlocked/abandoned state
+</li><li>symbol <code class="code">not-abandoned</code>: the mutex is in the 
+unlocked/not-abandoned state 
+</li></ul>
+</dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-mutex_002dlock_0021"><span class="category-def">Function: </span><span><strong class="def-name">mutex-lock!</strong> <var class="def-var-arguments">mutex [timeout [thread]]</var><a class="copiable-link" href='#index-mutex_002dlock_0021'> &para;</a></span></dt>
+<dd><p>Lock <var class="var">mutex</var>, optionally specifying a time object <var class="var">timeout</var>
+after which to abort the lock attempt and a thread <var class="var">thread</var> giving
+a new owner for <var class="var">mutex</var> different than the current thread.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-mutex_002dunlock_0021"><span class="category-def">Function: </span><span><strong class="def-name">mutex-unlock!</strong> <var class="def-var-arguments">mutex [condition-variable [timeout]]</var><a class="copiable-link" href='#index-mutex_002dunlock_0021'> &para;</a></span></dt>
+<dd><p>Unlock <var class="var">mutex</var>, optionally specifying a condition variable
+<var class="var">condition-variable</var> on which to wait, either indefinitely or,
+optionally, until the time object <var class="var">timeout</var> has passed, to be
+signalled.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d18-Condition-variables.html">SRFI-18 Condition variables</a>, Previous: <a href="SRFI_002d18-Threads.html">SRFI-18 Threads</a>, Up: <a href="SRFI_002d18.html">SRFI-18 - Multithreading support</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

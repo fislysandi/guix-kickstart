@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Transfer Codings (Guile Reference Manual)</title>
+
+<meta name="description" content="Transfer Codings (Guile Reference Manual)">
+<meta name="keywords" content="Transfer Codings (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Web.html" rel="up" title="Web">
+<link href="Requests.html" rel="next" title="Requests">
+<link href="HTTP-Headers.html" rel="prev" title="HTTP Headers">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Transfer-Codings">
+<div class="nav-panel">
+<p>
+Next: <a href="Requests.html" accesskey="n" rel="next">HTTP Requests</a>, Previous: <a href="HTTP-Headers.html" accesskey="p" rel="prev">HTTP Headers</a>, Up: <a href="Web.html" accesskey="u" rel="up"><abbr class="acronym">HTTP</abbr>, the Web, and All That</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Transfer-Codings-1">7.3.5 Transfer Codings</h4>
+
+<p>HTTP 1.1 allows for various transfer codings to be applied to message
+bodies. These include various types of compression, and HTTP chunked
+encoding. Currently, only chunked encoding is supported by guile.
+</p>
+<p>Chunked coding is an optional coding that may be applied to message
+bodies, to allow messages whose length is not known beforehand to be
+returned. Such messages can be split into chunks, terminated by a final
+zero length chunk.
+</p>
+<p>In order to make dealing with encodings more simple, guile provides
+procedures to create ports that &ldquo;wrap&rdquo; existing ports, applying
+transformations transparently under the hood.
+</p>
+<p>These procedures are in the <code class="code">(web http)</code> module.
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (web http))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dchunked_002dinput_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-chunked-input-port</strong> <var class="def-var-arguments">port [#:keep-alive?=#f]</var><a class="copiable-link" href='#index-make_002dchunked_002dinput_002dport'> &para;</a></span></dt>
+<dd><p>Returns a new port, that transparently reads and decodes chunk-encoded
+data from <var class="var">port</var>. If no more chunk-encoded data is available, it
+returns the end-of-file object. When the port is closed, <var class="var">port</var> will
+also be closed, unless <var class="var">keep-alive?</var> is true.
+</p>
+<p>If the chunked input ends prematurely, a
+<code class="code">&amp;chunked-input-ended-promaturely</code> exception will be raised.
+</p></dd></dl>
+
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 rdelim))
+
+(define s &quot;5\r\nFirst\r\nA\r\n line\n Sec\r\n8\r\nond line\r\n0\r\n&quot;)
+(define p (make-chunked-input-port (open-input-string s)))
+(read-line s)
+&rArr; &quot;First line&quot;
+(read-line s)
+&rArr; &quot;Second line&quot;
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dchunked_002doutput_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-chunked-output-port</strong> <var class="def-var-arguments">port [#:keep-alive?=#f]</var><a class="copiable-link" href='#index-make_002dchunked_002doutput_002dport'> &para;</a></span></dt>
+<dd><p>Returns a new port, which transparently encodes data as chunk-encoded
+before writing it to <var class="var">port</var>. Whenever a write occurs on this port,
+it buffers it, until the port is flushed, at which point it writes a
+chunk containing all the data written so far. When the port is closed,
+the data remaining is written to <var class="var">port</var>, as is the terminating zero
+chunk. It also causes <var class="var">port</var> to be closed, unless <var class="var">keep-alive?</var>
+is true.
+</p>
+<p>Note. Forcing a chunked output port when there is no data is buffered
+does not write a zero chunk, as this would cause the data to be
+interpreted incorrectly by the client.
+</p></dd></dl>
+
+<div class="example">
+<pre class="example-preformatted">(call-with-output-string
+  (lambda (out)
+    (define out* (make-chunked-output-port out #:keep-alive? #t))
+    (display &quot;first chunk&quot; out*)
+    (force-output out*)
+    (force-output out*) ; note this does not write a zero chunk
+    (display &quot;second chunk&quot; out*)
+    (close-port out*)))
+&rArr; &quot;b\r\nfirst chunk\r\nc\r\nsecond chunk\r\n0\r\n&quot;
+</pre></div>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Requests.html">HTTP Requests</a>, Previous: <a href="HTTP-Headers.html">HTTP Headers</a>, Up: <a href="Web.html"><abbr class="acronym">HTTP</abbr>, the Web, and All That</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

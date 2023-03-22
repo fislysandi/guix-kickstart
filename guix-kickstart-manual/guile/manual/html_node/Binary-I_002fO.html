@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Binary I/O (Guile Reference Manual)</title>
+
+<meta name="description" content="Binary I/O (Guile Reference Manual)">
+<meta name="keywords" content="Binary I/O (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Input-and-Output.html" rel="up" title="Input and Output">
+<link href="Encoding.html" rel="next" title="Encoding">
+<link href="Ports.html" rel="prev" title="Ports">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Binary-I_002fO">
+<div class="nav-panel">
+<p>
+Next: <a href="Encoding.html" accesskey="n" rel="next">Encoding</a>, Previous: <a href="Ports.html" accesskey="p" rel="prev">Ports</a>, Up: <a href="Input-and-Output.html" accesskey="u" rel="up">Input and Output</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Binary-I_002fO-1">6.12.2 Binary I/O</h4>
+
+<p>Guile&rsquo;s ports are fundamentally binary in nature: at the lowest level,
+they work on bytes.  This section describes Guile&rsquo;s core binary I/O
+operations.  See <a class="xref" href="Textual-I_002fO.html">Textual I/O</a>, for input and output of strings and
+characters.
+</p>
+<p>To use these routines, first include the binary I/O module:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 binary-ports))
+</pre></div>
+
+<p>Note that although this module&rsquo;s name suggests that binary ports are
+some different kind of port, that&rsquo;s not the case: all ports in Guile are
+both binary and textual ports.
+</p>
+<a class="index-entry-id" id="index-binary-input"></a>
+<a class="anchor" id="x_002dget_002du8"></a><dl class="first-deffn">
+<dt class="deffn" id="index-get_002du8"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-u8</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-get_002du8'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fget_005fu8"><span class="category-def">C Function: </span><span><strong class="def-name">scm_get_u8</strong> <var class="def-var-arguments">(port)</var><a class="copiable-link" href='#index-scm_005fget_005fu8'> &para;</a></span></dt>
+<dd><p>Return an octet read from <var class="var">port</var>, an input port, blocking as
+necessary, or the end-of-file object.
+</p></dd></dl>
+
+<a class="anchor" id="x_002dlookahead_002du8"></a><dl class="first-deffn">
+<dt class="deffn" id="index-lookahead_002du8"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">lookahead-u8</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-lookahead_002du8'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flookahead_005fu8"><span class="category-def">C Function: </span><span><strong class="def-name">scm_lookahead_u8</strong> <var class="def-var-arguments">(port)</var><a class="copiable-link" href='#index-scm_005flookahead_005fu8'> &para;</a></span></dt>
+<dd><p>Like <code class="code">get-u8</code> but does not update <var class="var">port</var>&rsquo;s position to point
+past the octet.
+</p></dd></dl>
+
+<p>The end-of-file object is unlike any other kind of object: it&rsquo;s not a
+pair, a symbol, or anything else.  To check if a value is the
+end-of-file object, use the <code class="code">eof-object?</code> predicate.
+</p>
+<a class="index-entry-id" id="index-eof_002dobject_003f-4"></a>
+<a class="index-entry-id" id="index-End-of-file-object"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-eof_002dobject_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">eof-object?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-eof_002dobject_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005feof_005fobject_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_eof_object_p</strong> <var class="def-var-arguments">(x)</var><a class="copiable-link" href='#index-scm_005feof_005fobject_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">x</var> is an end-of-file object, or <code class="code">#f</code>
+otherwise.
+</p></dd></dl>
+
+<p>Note that unlike other procedures in this module, <code class="code">eof-object?</code> is
+defined in the default environment.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-get_002dbytevector_002dn"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-bytevector-n</strong> <var class="def-var-arguments">port count</var><a class="copiable-link" href='#index-get_002dbytevector_002dn'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fget_005fbytevector_005fn"><span class="category-def">C Function: </span><span><strong class="def-name">scm_get_bytevector_n</strong> <var class="def-var-arguments">(port, count)</var><a class="copiable-link" href='#index-scm_005fget_005fbytevector_005fn'> &para;</a></span></dt>
+<dd><p>Read <var class="var">count</var> octets from <var class="var">port</var>, blocking as necessary and
+return a bytevector containing the octets read.  If fewer bytes are
+available, a bytevector smaller than <var class="var">count</var> is returned.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-get_002dbytevector_002dn_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-bytevector-n!</strong> <var class="def-var-arguments">port bv start count</var><a class="copiable-link" href='#index-get_002dbytevector_002dn_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fget_005fbytevector_005fn_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_get_bytevector_n_x</strong> <var class="def-var-arguments">(port, bv, start, count)</var><a class="copiable-link" href='#index-scm_005fget_005fbytevector_005fn_005fx'> &para;</a></span></dt>
+<dd><p>Read <var class="var">count</var> bytes from <var class="var">port</var> and store them in <var class="var">bv</var>
+starting at index <var class="var">start</var>.  Return either the number of bytes
+actually read or the end-of-file object.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-get_002dbytevector_002dsome"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-bytevector-some</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-get_002dbytevector_002dsome'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fget_005fbytevector_005fsome"><span class="category-def">C Function: </span><span><strong class="def-name">scm_get_bytevector_some</strong> <var class="def-var-arguments">(port)</var><a class="copiable-link" href='#index-scm_005fget_005fbytevector_005fsome'> &para;</a></span></dt>
+<dd><p>Read from <var class="var">port</var>, blocking as necessary, until bytes are available
+or an end-of-file is reached.  Return either the end-of-file object or a
+new bytevector containing some of the available bytes (at least one),
+and update the port position to point just past these bytes.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-get_002dbytevector_002dsome_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-bytevector-some!</strong> <var class="def-var-arguments">port bv start count</var><a class="copiable-link" href='#index-get_002dbytevector_002dsome_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fget_005fbytevector_005fsome_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_get_bytevector_some_x</strong> <var class="def-var-arguments">(port, bv, start, count)</var><a class="copiable-link" href='#index-scm_005fget_005fbytevector_005fsome_005fx'> &para;</a></span></dt>
+<dd><p>Read up to <var class="var">count</var> bytes from <var class="var">port</var>, blocking as necessary
+until at least one byte is available or an end-of-file is reached.
+Store them in <var class="var">bv</var> starting at index <var class="var">start</var>.  Return the number
+of bytes actually read, or an end-of-file object.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-get_002dbytevector_002dall"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-bytevector-all</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-get_002dbytevector_002dall'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fget_005fbytevector_005fall"><span class="category-def">C Function: </span><span><strong class="def-name">scm_get_bytevector_all</strong> <var class="def-var-arguments">(port)</var><a class="copiable-link" href='#index-scm_005fget_005fbytevector_005fall'> &para;</a></span></dt>
+<dd><p>Read from <var class="var">port</var>, blocking as necessary, until the end-of-file is
+reached.  Return either a new bytevector containing the data read or the
+end-of-file object (if no data were available).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-unget_002dbytevector"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">unget-bytevector</strong> <var class="def-var-arguments">port bv [start [count]]</var><a class="copiable-link" href='#index-unget_002dbytevector'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005funget_005fbytevector"><span class="category-def">C Function: </span><span><strong class="def-name">scm_unget_bytevector</strong> <var class="def-var-arguments">(port, bv, start, count)</var><a class="copiable-link" href='#index-scm_005funget_005fbytevector'> &para;</a></span></dt>
+<dd><p>Place the contents of <var class="var">bv</var> in <var class="var">port</var>, optionally starting at
+index <var class="var">start</var> and limiting to <var class="var">count</var> octets, so that its bytes
+will be read from left-to-right as the next bytes from <var class="var">port</var> during
+subsequent read operations.  If called multiple times, the unread bytes
+will be read again in last-in first-out order.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-binary-output"></a>
+<p>To perform binary output on a port, use <code class="code">put-u8</code> or
+<code class="code">put-bytevector</code>.
+</p>
+<a class="anchor" id="x_002dput_002du8"></a><dl class="first-deffn">
+<dt class="deffn" id="index-put_002du8"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">put-u8</strong> <var class="def-var-arguments">port octet</var><a class="copiable-link" href='#index-put_002du8'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fput_005fu8"><span class="category-def">C Function: </span><span><strong class="def-name">scm_put_u8</strong> <var class="def-var-arguments">(port, octet)</var><a class="copiable-link" href='#index-scm_005fput_005fu8'> &para;</a></span></dt>
+<dd><p>Write <var class="var">octet</var>, an integer in the 0&ndash;255 range, to <var class="var">port</var>, a
+binary output port.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-put_002dbytevector"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">put-bytevector</strong> <var class="def-var-arguments">port bv [start [count]]</var><a class="copiable-link" href='#index-put_002dbytevector'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fput_005fbytevector"><span class="category-def">C Function: </span><span><strong class="def-name">scm_put_bytevector</strong> <var class="def-var-arguments">(port, bv, start, count)</var><a class="copiable-link" href='#index-scm_005fput_005fbytevector'> &para;</a></span></dt>
+<dd><p>Write the contents of <var class="var">bv</var> to <var class="var">port</var>, optionally starting at
+index <var class="var">start</var> and limiting to <var class="var">count</var> octets.
+</p></dd></dl>
+
+<h4 class="subsubheading" id="Binary-I_002fO-in-R7RS">Binary I/O in R7RS</h4>
+
+<p><a class="ref" href="R7RS-Standard-Libraries.html">R7RS</a> defines the following binary I/O
+procedures.  Access them with
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (scheme base))
+</pre></div>
+
+<a class="anchor" id="x_002dopen_002doutput_002dbytevector"></a><dl class="first-deffn">
+<dt class="deffn" id="index-open_002doutput_002dbytevector"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-output-bytevector</strong><a class="copiable-link" href='#index-open_002doutput_002dbytevector'> &para;</a></span></dt>
+<dd><p>Returns a binary output port that will accumulate bytes
+for retrieval by <a class="ref" href="#x_002dget_002doutput_002dbytevector"><code class="code">get-output-bytevector</code></a>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-write_002du8"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">write-u8</strong> <var class="def-var-arguments">byte [out]</var><a class="copiable-link" href='#index-write_002du8'> &para;</a></span></dt>
+<dd><p>Writes <var class="var">byte</var> to the given binary output port <var class="var">out</var> and returns
+an unspecified value.  <var class="var">out</var> defaults to <code class="code">(current-output-port)</code>.
+</p>
+<p>See also <a class="ref" href="#x_002dput_002du8"><code class="code">put-u8</code></a>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-read_002du8"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read-u8</strong> <var class="def-var-arguments">[in]</var><a class="copiable-link" href='#index-read_002du8'> &para;</a></span></dt>
+<dd><p>Returns the next byte available from the binary input port <var class="var">in</var>,
+updating the port to point to the following byte.  If no more bytes are
+available, an end-of-file object is returned.  <var class="var">in</var> defaults to
+<code class="code">(current-input-port)</code>.
+</p>
+<p>See also <a class="ref" href="#x_002dget_002du8"><code class="code">get-u8</code></a>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-peek_002du8"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">peek-u8</strong> <var class="def-var-arguments">[in]</var><a class="copiable-link" href='#index-peek_002du8'> &para;</a></span></dt>
+<dd><p>Returns the next byte available from the binary input port <var class="var">in</var>,
+but without updating the port to point to the following
+byte.  If no more bytes are available, an end-of-file object
+is returned.  <var class="var">in</var> defaults to <code class="code">(current-input-port)</code>.
+</p>
+<p>See also <a class="ref" href="#x_002dlookahead_002du8"><code class="code">lookahead-u8</code></a>.
+</p></dd></dl>
+
+<a class="anchor" id="x_002dget_002doutput_002dbytevector"></a><dl class="first-deffn">
+<dt class="deffn" id="index-get_002doutput_002dbytevector"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-output-bytevector</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-get_002doutput_002dbytevector'> &para;</a></span></dt>
+<dd><p>Returns a bytevector consisting of the bytes that have been output to
+<var class="var">port</var> so far in the order they were output.  It is an error if
+<var class="var">port</var> was not created with
+<a class="ref" href="#x_002dopen_002doutput_002dbytevector"><code class="code">open-output-bytevector</code></a>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define out (open-output-bytevector))
+(write-u8 1 out)
+(write-u8 2 out)
+(write-u8 3 out)
+(get-output-bytevector out) &rArr; #vu8(1 2 3)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-open_002dinput_002dbytevector"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-input-bytevector</strong> <var class="def-var-arguments">bv</var><a class="copiable-link" href='#index-open_002dinput_002dbytevector'> &para;</a></span></dt>
+<dd><p>Takes a bytevector <var class="var">bv</var> and returns a binary input port that
+delivers bytes from <var class="var">bv</var>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define in (open-input-bytevector #vu8(1 2 3)))
+(read-u8 in) &rArr; 1
+(peek-u8 in) &rArr; 2
+(read-u8 in) &rArr; 2
+(read-u8 in) &rArr; 3
+(read-u8 in) &rArr; #&lt;eof&gt;
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-read_002dbytevector_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read-bytevector!</strong> <var class="def-var-arguments">bv [port [start [end]]]</var><a class="copiable-link" href='#index-read_002dbytevector_0021'> &para;</a></span></dt>
+<dd><p>Reads the next <var class="var">end</var> - <var class="var">start</var> bytes, or as many as are
+available before the end of file, from the binary input port into the
+bytevector <var class="var">bv</var> in left-to-right order beginning at the <var class="var">start</var>
+position.  If <var class="var">end</var> is not supplied, reads until the end of <var class="var">bv</var>
+has been reached.  If <var class="var">start</var> is not supplied, reads beginning at
+position 0.
+</p>
+<p>Returns the number of bytes read.  If no bytes are available, an
+end-of-file object is returned.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define in (open-input-bytevector #vu8(1 2 3)))
+(define bv (make-bytevector 5 0))
+(read-bytevector! bv in 1 3) &rArr; 2
+bv &rArr; #vu8(0 1 2 0 0 0)
+</pre></div>
+
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-read_002dbytevector"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read-bytevector</strong> <var class="def-var-arguments">k in</var><a class="copiable-link" href='#index-read_002dbytevector'> &para;</a></span></dt>
+<dd><p>Reads the next <var class="var">k</var> bytes, or as many as are available before the end
+of file if that is less than <var class="var">k</var>, from the binary input port
+<var class="var">in</var> into a newly allocated bytevector in left-to-right order, and
+returns the bytevector.  If no bytes are available before the end of
+file, an end-of-file object is returned.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define bv #vu8(1 2 3))
+(read-bytevector 2 (open-input-bytevector bv)) &rArr; #vu8(1 2)
+(read-bytevector 10 (open-input-bytevector bv)) &rArr; #vu8(1 2 3)
+</pre></div>
+
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-write_002dbytevector"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">write-bytevector</strong> <var class="def-var-arguments">bv [port [start [end]]]</var><a class="copiable-link" href='#index-write_002dbytevector'> &para;</a></span></dt>
+<dd><p>Writes the bytes of bytevector <var class="var">bv</var> from <var class="var">start</var> to <var class="var">end</var> in
+left-to-right order to the binary output <var class="var">port</var>.  <var class="var">start</var>
+defaults to 0 and <var class="var">end</var> defaults to the length of <var class="var">bv</var>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define out (open-output-bytevector))
+(write-bytevector #vu8(0 1 2 3 4) out 2 4)
+(get-output-bytevector out) &rArr; #vu8(2 3)
+</pre></div>
+
+</dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Encoding.html">Encoding</a>, Previous: <a href="Ports.html">Ports</a>, Up: <a href="Input-and-Output.html">Input and Output</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

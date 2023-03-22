@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-55 (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-55 (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-55 (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI-Support.html" rel="up" title="SRFI Support">
+<link href="SRFI_002d60.html" rel="next" title="SRFI-60">
+<link href="SRFI_002d46.html" rel="prev" title="SRFI-46">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="SRFI_002d55">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d60.html" accesskey="n" rel="next">SRFI-60 - Integers as Bits</a>, Previous: <a href="SRFI_002d46.html" accesskey="p" rel="prev">SRFI-46 Basic syntax-rules Extensions</a>, Up: <a href="SRFI-Support.html" accesskey="u" rel="up">SRFI Support Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="SRFI_002d55-_002d-Requiring-Features">7.5.33 SRFI-55 - Requiring Features</h4>
+<a class="index-entry-id" id="index-SRFI_002d55"></a>
+
+<p>SRFI-55 provides <code class="code">require-extension</code> which is a portable
+mechanism to load selected SRFI modules.  This is implemented in the
+Guile core, there&rsquo;s no module needed to get SRFI-55 itself.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-require_002dextension"><span class="category-def">library syntax: </span><span><strong class="def-name">require-extension</strong> <var class="def-var-arguments">clause1 clause2 &hellip;</var><a class="copiable-link" href='#index-require_002dextension'> &para;</a></span></dt>
+<dd><p>Require the features of <var class="var">clause1</var> <var class="var">clause2</var> &hellip;  , throwing
+an error if any are unavailable.
+</p>
+<p>A <var class="var">clause</var> is of the form <code class="code">(<var class="var">identifier</var> arg...)</code>.  The
+only <var class="var">identifier</var> currently supported is <code class="code">srfi</code> and the
+arguments are SRFI numbers.  For example to get SRFI-1 and SRFI-6,
+</p>
+<div class="example">
+<pre class="example-preformatted">(require-extension (srfi 1 6))
+</pre></div>
+
+<p><code class="code">require-extension</code> can only be used at the top-level.
+</p>
+<p>A Guile-specific program can simply <code class="code">use-modules</code> to load SRFIs
+not already in the core, <code class="code">require-extension</code> is for programs
+designed to be portable to other Scheme implementations.
+</p></dd></dl>
+
+
+</div>
+
+
+
+</body>
+</html>

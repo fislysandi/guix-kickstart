@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>sxml ssax input-parse (Guile Reference Manual)</title>
+
+<meta name="description" content="sxml ssax input-parse (Guile Reference Manual)">
+<meta name="keywords" content="sxml ssax input-parse (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SXML.html" rel="up" title="SXML">
+<link href="sxml-apply_002dtemplates.html" rel="next" title="sxml apply-templates">
+<link href="SXPath.html" rel="prev" title="SXPath">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="sxml-ssax-input_002dparse">
+<div class="nav-panel">
+<p>
+Next: <a href="sxml-apply_002dtemplates.html" accesskey="n" rel="next">(sxml apply-templates)</a>, Previous: <a href="SXPath.html" accesskey="p" rel="prev">SXPath</a>, Up: <a href="SXML.html" accesskey="u" rel="up">SXML</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="g_t_0028sxml-ssax-input_002dparse_0029">7.21.7 (sxml ssax input-parse)</h4>
+<ul class="mini-toc">
+<li><a href="#Overview-3" accesskey="1">Overview</a></li>
+<li><a href="#Usage-3" accesskey="2">Usage</a></li>
+</ul>
+<div class="subsubsection-level-extent" id="Overview-3">
+<h4 class="subsubsection">7.21.7.1 Overview</h4>
+<p>A simple lexer.
+</p>
+<p>The procedures in this module surprisingly often suffice to parse an
+input stream.  They either skip, or build and return tokens, according to
+inclusion or delimiting semantics.  The list of characters to expect,
+include, or to break at may vary from one invocation of a function to
+another.  This allows the functions to easily parse even
+context-sensitive languages.
+</p>
+<p>EOF is generally frowned on, and thrown up upon if encountered.
+Exceptions are mentioned specifically.  The list of expected characters
+(characters to skip until, or break-characters) may include an EOF
+&quot;character&quot;, which is to be coded as the symbol, <code class="code">*eof*</code>.
+</p>
+<p>The input stream to parse is specified as a <em class="dfn">port</em>, which is usually
+the last (and optional) argument.  It defaults to the current input port
+if omitted.
+</p>
+<p>If the parser encounters an error, it will throw an exception to the key
+<code class="code">parser-error</code>.  The arguments will be of the form <code class="code">(<var class="var">port</var>
+<var class="var">message</var> <var class="var">specialising-msg</var>*)</code>.
+</p>
+<p>The first argument is a port, which typically points to the offending
+character or its neighborhood.  You can then use <code class="code">port-column</code> and
+<code class="code">port-line</code> to query the current position.  <var class="var">message</var> is the
+description of the error.  Other arguments supply more details about the
+problem.
+</p>
+</div>
+<div class="subsubsection-level-extent" id="Usage-3">
+<h4 class="subsubsection">7.21.7.2 Usage</h4>
+<dl class="first-deffn">
+<dt class="deffn" id="index-peek_002dnext_002dchar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">peek-next-char</strong> <var class="def-var-arguments">[port]</var><a class="copiable-link" href='#index-peek_002dnext_002dchar'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-assert_002dcurr_002dchar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">assert-curr-char</strong> <var class="def-var-arguments">expected-chars comment [port]</var><a class="copiable-link" href='#index-assert_002dcurr_002dchar'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-skip_002duntil"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">skip-until</strong> <var class="def-var-arguments">arg [port]</var><a class="copiable-link" href='#index-skip_002duntil'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-skip_002dwhile"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">skip-while</strong> <var class="def-var-arguments">skip-chars [port]</var><a class="copiable-link" href='#index-skip_002dwhile'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-next_002dtoken"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">next-token</strong> <var class="def-var-arguments">prefix-skipped-chars break-chars [comment] [port]</var><a class="copiable-link" href='#index-next_002dtoken'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-next_002dtoken_002dof"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">next-token-of</strong> <var class="def-var-arguments">incl-list/pred [port]</var><a class="copiable-link" href='#index-next_002dtoken_002dof'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-read_002dtext_002dline"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read-text-line</strong> <var class="def-var-arguments">[port]</var><a class="copiable-link" href='#index-read_002dtext_002dline'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-read_002dstring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read-string</strong> <var class="def-var-arguments">n [port]</var><a class="copiable-link" href='#index-read_002dstring'> &para;</a></span></dt>
+</dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-find_002dstring_002dfrom_002dport_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">find-string-from-port?</strong> <var class="def-var-arguments">_ _ . _</var><a class="copiable-link" href='#index-find_002dstring_002dfrom_002dport_003f'> &para;</a></span></dt>
+<dd><p>Looks for <var class="var">str</var> in <var class="var">&lt;input-port&gt;</var>, optionally within the first
+<var class="var">max-no-char</var> characters.
+</p></dd></dl>
+
+</div>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="sxml-apply_002dtemplates.html">(sxml apply-templates)</a>, Previous: <a href="SXPath.html">SXPath</a>, Up: <a href="SXML.html">SXML</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Arrays as arrays of arrays (Guile Reference Manual)</title>
+
+<meta name="description" content="Arrays as arrays of arrays (Guile Reference Manual)">
+<meta name="keywords" content="Arrays as arrays of arrays (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Arrays.html" rel="up" title="Arrays">
+<link href="Accessing-Arrays-from-C.html" rel="next" title="Accessing Arrays from C">
+<link href="Shared-Arrays.html" rel="prev" title="Shared Arrays">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Arrays-as-arrays-of-arrays">
+<div class="nav-panel">
+<p>
+Next: <a href="Accessing-Arrays-from-C.html" accesskey="n" rel="next">Accessing Arrays from C</a>, Previous: <a href="Shared-Arrays.html" accesskey="p" rel="prev">Shared Arrays</a>, Up: <a href="Arrays.html" accesskey="u" rel="up">Arrays</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Arrays-as-arrays-of-arrays-1">6.6.13.4 Arrays as arrays of arrays</h4>
+
+<a class="index-entry-id" id="index-array-cell"></a>
+
+<p>One can see an array of rank <em class="math">n</em> (an
+<em class="math">n</em>-array) as an array of lower rank where the elements are
+themselves arrays (&lsquo;cells&rsquo;).
+</p>
+<a class="index-entry-id" id="index-array-frame"></a>
+<a class="index-entry-id" id="index-frame-rank"></a>
+
+<p>We speak of the first <em class="math">n-k</em> dimensions of the array as the
+<em class="math">n-k</em>-&lsquo;frame&rsquo; of the array, while the last <em class="math">k</em> dimensions are
+the dimensions of the <em class="math">k</em>-&lsquo;cells&rsquo;. For example, a 3-array can be
+seen as a 2-array of vectors (1-arrays) or as a 1-array of matrices
+(2-arrays). In each case, the vectors or matrices are the 1-cells or
+2-cells of the array. This terminology originates in the J language.
+</p>
+<a class="index-entry-id" id="index-array-slice"></a>
+<a class="index-entry-id" id="index-prefix-slice"></a>
+
+<p>The more vague concept of a &lsquo;slice&rsquo; refers to a subset of the array
+where some indices are fixed and others are left free. As a Guile data
+object, a cell is the same as a &lsquo;prefix slice&rsquo; (the first <em class="math">n-k</em>
+indices into the original array are fixed), except that a 0-cell is not
+a shared array of the original array, but a 0-slice (where all the
+indices into the original array are fixed) is.
+</p>
+<a class="index-entry-id" id="index-enclosed-array"></a>
+
+<p>Before version&nbsp;2.0<!-- /@w -->, Guile had a feature called &lsquo;enclosed arrays&rsquo; to
+create special &lsquo;array of arrays&rsquo; objects. The functions in this section
+do not need special types; instead, the frame rank is stated in each
+function call, either implicitly or explicitly.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-array_002dcell_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-cell-ref</strong> <var class="def-var-arguments">array idx &hellip;</var><a class="copiable-link" href='#index-array_002dcell_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005farray_005fcell_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_array_cell_ref</strong> <var class="def-var-arguments">(array, idxlist)</var><a class="copiable-link" href='#index-scm_005farray_005fcell_005fref'> &para;</a></span></dt>
+<dd><p>If the length of <var class="var">idxlist</var> equals the rank <em class="math">n</em> of <var class="var">array</var>,
+return the element at <code class="code">(idx &hellip;)</code>, just like <code class="code">(array-ref
+array idx &hellip;)</code>. If, however, the length <em class="math">k</em> of <var class="var">idxlist</var>
+is smaller than <em class="math">n</em>, then return the <em class="math">(n-k)</em>-cell of
+<var class="var">array</var> given by <var class="var">idxlist</var>, as a shared array.
+</p>
+<p>For example:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(array-cell-ref #2((a b) (c d)) 0) &rArr; #(a b)
+(array-cell-ref #2((a b) (c d)) 1) &rArr; #(c d)
+(array-cell-ref #2((a b) (c d)) 1 1) &rArr; d
+(array-cell-ref #2((a b) (c d))) &rArr; #2((a b) (c d))
+</pre></div>
+
+<p><code class="code">(apply array-cell-ref array indices)</code> is equivalent to
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(let ((len (length indices)))
+  (if (= (array-rank a) len)
+    (apply array-ref a indices)
+    (apply make-shared-array a
+           (lambda t (append indices t))
+           (drop (array-dimensions a) len))))
+</pre></div>
+
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-array_002dslice"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-slice</strong> <var class="def-var-arguments">array idx &hellip;</var><a class="copiable-link" href='#index-array_002dslice'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005farray_005fslice"><span class="category-def">C Function: </span><span><strong class="def-name">scm_array_slice</strong> <var class="def-var-arguments">(array, idxlist)</var><a class="copiable-link" href='#index-scm_005farray_005fslice'> &para;</a></span></dt>
+<dd><p>Like <code class="code">(array-cell-ref array idx &hellip;)</code>, but return a 0-rank
+shared array into <var class="var">ARRAY</var> if the length of <var class="var">idxlist</var> matches the
+rank of <var class="var">array</var>. This can be useful when using <var class="var">ARRAY</var> as a
+place to write to.
+</p>
+<p>Compare:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(array-cell-ref #2((a b) (c d)) 1 1) &rArr; d
+(array-slice #2((a b) (c d)) 1 1) &rArr; #0(d)
+(define a (make-array 'a 2 2))
+(array-fill! (array-slice a 1 1) 'b)
+a &rArr; #2((a a) (a b)).
+(array-fill! (array-cell-ref a 1 1) 'b) &rArr; error: not an array
+</pre></div>
+
+<p><code class="code">(apply array-slice array indices)</code> is equivalent to
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(apply make-shared-array a
+  (lambda t (append indices t))
+  (drop (array-dimensions a) (length indices)))
+</pre></div>
+</dd></dl>
+
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-array_002dcell_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-cell-set!</strong> <var class="def-var-arguments">array x idx &hellip;</var><a class="copiable-link" href='#index-array_002dcell_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005farray_005fcell_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_array_cell_set_x</strong> <var class="def-var-arguments">(array, x, idxlist)</var><a class="copiable-link" href='#index-scm_005farray_005fcell_005fset_005fx'> &para;</a></span></dt>
+<dd><p>If the length of <var class="var">idxlist</var> equals the rank <em class="math">n</em> of
+<var class="var">array</var>, set the element at <code class="code">(idx &hellip;)</code> of <var class="var">array</var> to
+<var class="var">x</var>, just like <code class="code">(array-set! array x idx &hellip;)</code>. If,
+however, the length <em class="math">k</em> of <var class="var">idxlist</var> is smaller than
+<em class="math">n</em>, then copy the <em class="math">(n-k)</em>-rank array <var class="var">x</var>
+into the <em class="math">(n-k)</em>-cell of <var class="var">array</var> given by
+<var class="var">idxlist</var>. In this case, the last <em class="math">(n-k)</em> dimensions of
+<var class="var">array</var> and the dimensions of <var class="var">x</var> must match exactly.
+</p>
+<p>This function returns the modified <var class="var">array</var>.
+</p>
+<p>For example:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(array-cell-set! (make-array 'a 2 2) b 1 1)
+  &rArr; #2((a a) (a b))
+(array-cell-set! (make-array 'a 2 2) #(x y) 1)
+  &rArr; #2((a a) (x y))
+</pre></div>
+
+<p>Note that <code class="code">array-cell-set!</code> will expect elements, not arrays, when
+the destination has rank 0. Use <code class="code">array-slice</code> for the opposite
+behavior.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(array-cell-set! (make-array 'a 2 2) #0(b) 1 1)
+  &rArr; #2((a a) (a #0(b)))
+(let ((a (make-array 'a 2 2)))
+  (array-copy! #0(b) (array-slice a 1 1)) a)
+  &rArr; #2((a a) (a b))
+</pre></div>
+
+<p><code class="code">(apply array-cell-set! array x indices)</code> is equivalent to
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(let ((len (length indices)))
+  (if (= (array-rank array) len)
+    (apply array-set! array x indices)
+    (array-copy! x (apply array-cell-ref array indices)))
+  array)
+</pre></div>
+
+</dd></dl>
+
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-array_002dslice_002dfor_002deach"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-slice-for-each</strong> <var class="def-var-arguments">frame-rank op x &hellip;</var><a class="copiable-link" href='#index-array_002dslice_002dfor_002deach'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005farray_005fslice_005ffor_005feach"><span class="category-def">C Function: </span><span><strong class="def-name">scm_array_slice_for_each</strong> <var class="def-var-arguments">(array, frame_rank, op, xlist)</var><a class="copiable-link" href='#index-scm_005farray_005fslice_005ffor_005feach'> &para;</a></span></dt>
+<dd><p>Each <var class="var">x</var> must be an array of rank ≥ <var class="var">frame-rank</var>, and
+the first <var class="var">frame-rank</var> dimensions of each <var class="var">x</var> must all be the
+same. <var class="var">array-slice-for-each</var> calls <var class="var">op</var> with each set of
+(rank(<var class="var">x</var>) - <var class="var">frame-rank</var>)-cells from <var class="var">x</var>, in unspecified order.
+</p>
+<p><var class="var">array-slice-for-each</var> allows you to loop over cells of any rank
+without having to carry an index list or construct shared arrays
+manually. The slices passed to <var class="var">op</var> are always shared arrays of
+<var class="var">X</var>, even if they are of rank 0, so it is possible to write to them.
+</p>
+<p>This function returns an unspecified value.
+</p>
+<p>For example, to sort the rows of rank-2 array <code class="code">a</code>:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(array-slice-for-each 1 (lambda (x) (sort! x &lt;)) a)
+</pre></div>
+
+<p>As another example, let <code class="code">a</code> be a rank-2 array where each row is a
+2-element vector <em class="math">(x,y)</em>.  Let&rsquo;s compute the arguments of these
+vectors and store them in rank-1 array <code class="code">b</code>.
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(array-slice-for-each 1
+  (lambda (a b)
+    (array-set! b (atan (array-ref a 1) (array-ref a 0))))
+  a b)
+</pre></div>
+
+<p><code class="code">(apply array-slice-for-each frame-rank op x)</code> is equivalent to
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(let ((frame (take (array-dimensions (car x)) frank)))
+  (unless (every (lambda (x)
+                   (equal? frame (take (array-dimensions x) frank)))
+                 (cdr x))
+    (error))
+  (array-index-map!
+    (apply make-shared-array (make-array #t) (const '()) frame)
+    (lambda i (apply op (map (lambda (x) (apply array-slice x i)) x)))))
+</pre></div>
+
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-array_002dslice_002dfor_002deach_002din_002dorder"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-slice-for-each-in-order</strong> <var class="def-var-arguments">frame-rank op x &hellip;</var><a class="copiable-link" href='#index-array_002dslice_002dfor_002deach_002din_002dorder'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005farray_005fslice_005ffor_005feach_005fin_005forder"><span class="category-def">C Function: </span><span><strong class="def-name">scm_array_slice_for_each_in_order</strong> <var class="def-var-arguments">(array, frame_rank, op, xlist)</var><a class="copiable-link" href='#index-scm_005farray_005fslice_005ffor_005feach_005fin_005forder'> &para;</a></span></dt>
+<dd><p>Same as <code class="code">array-slice-for-each</code>, but the arguments are traversed
+sequentially and in row-major order.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Accessing-Arrays-from-C.html">Accessing Arrays from C</a>, Previous: <a href="Shared-Arrays.html">Shared Arrays</a>, Up: <a href="Arrays.html">Arrays</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

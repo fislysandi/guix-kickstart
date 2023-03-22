@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>lambda* and define* (Guile Reference Manual)</title>
+
+<meta name="description" content="lambda* and define* (Guile Reference Manual)">
+<meta name="keywords" content="lambda* and define* (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Optional-Arguments.html" rel="up" title="Optional Arguments">
+<link href="ice_002d9-optargs.html" rel="next" title="ice-9 optargs">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="lambda_002a-and-define_002a">
+<div class="nav-panel">
+<p>
+Next: <a href="ice_002d9-optargs.html" accesskey="n" rel="next">(ice-9 optargs)</a>, Up: <a href="Optional-Arguments.html" accesskey="u" rel="up">Optional Arguments</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="lambda_002a-and-define_002a_002e">6.7.4.1 lambda* and define*.</h4>
+
+<p><code class="code">lambda*</code> is like <code class="code">lambda</code>, except with some extensions to
+allow optional and keyword arguments.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-lambda_002a"><span class="category-def">library syntax: </span><span><strong class="def-name">lambda*</strong> <var class="def-var-arguments">([var&hellip;] <br>                         [#:optional vardef&hellip;] <br>                         [#:key  vardef&hellip; [#:allow-other-keys]] <br>                         [#:rest var | . var]) <br>                         body1 body2 &hellip;</var><a class="copiable-link" href='#index-lambda_002a'> &para;</a></span></dt>
+<dd><br>
+<p>Create a procedure which takes optional and/or keyword arguments
+specified with <code class="code">#:optional</code> and <code class="code">#:key</code>.  For example,
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(lambda* (a b #:optional c d . e) '())
+</pre></div>
+
+<p>is a procedure with fixed arguments <var class="var">a</var> and <var class="var">b</var>, optional
+arguments <var class="var">c</var> and <var class="var">d</var>, and rest argument <var class="var">e</var>.  If the
+optional arguments are omitted in a call, the variables for them are
+bound to <code class="code">#f</code>.
+</p>
+<a class="index-entry-id" id="index-define_002a"></a>
+<p>Likewise, <code class="code">define*</code> is syntactic sugar for defining procedures
+using <code class="code">lambda*</code>.
+</p>
+<p><code class="code">lambda*</code> can also make procedures with keyword arguments. For
+example, a procedure defined like this:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define* (sir-yes-sir #:key action how-high)
+  (list action how-high))
+</pre></div>
+
+<p>can be called as <code class="code">(sir-yes-sir #:action 'jump)</code>,
+<code class="code">(sir-yes-sir #:how-high 13)</code>, <code class="code">(sir-yes-sir #:action
+'lay-down #:how-high 0)</code>, or just <code class="code">(sir-yes-sir)</code>. Whichever
+arguments are given as keywords are bound to values (and those not
+given are <code class="code">#f</code>).
+</p>
+<p>Optional and keyword arguments can also have default values to take
+when not present in a call, by giving a two-element list of variable
+name and expression.  For example in
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define* (frob foo #:optional (bar 42) #:key (baz 73))
+  (list foo bar baz))
+</pre></div>
+
+<p><var class="var">foo</var> is a fixed argument, <var class="var">bar</var> is an optional argument with
+default value 42, and baz is a keyword argument with default value 73.
+Default value expressions are not evaluated unless they are needed,
+and until the procedure is called.
+</p>
+<p>Normally it&rsquo;s an error if a call has keywords other than those
+specified by <code class="code">#:key</code>, but adding <code class="code">#:allow-other-keys</code> to the
+definition (after the keyword argument declarations) will ignore
+unknown keywords.
+</p>
+<p>If a call has a keyword given twice, the last value is used.  For
+example,
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define* (flips #:key (heads 0) (tails 0))
+  (display (list heads tails)))
+
+(flips #:heads 37 #:tails 42 #:heads 99)
+-| (99 42)
+</pre></div>
+
+<p><code class="code">#:rest</code> is a synonym for the dotted syntax rest argument.  The
+argument lists <code class="code">(a . b)</code> and <code class="code">(a #:rest b)</code> are equivalent
+in all respects.  This is provided for more similarity to DSSSL,
+MIT-Scheme and Kawa among others, as well as for refugees from other
+Lisp dialects.
+</p>
+<p>When <code class="code">#:key</code> is used together with a rest argument, the keyword
+parameters in a call all remain in the rest list.  This is the same as
+Common Lisp.  For example,
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">((lambda* (#:key (x 0) #:allow-other-keys #:rest r)
+   (display r))
+ #:x 123 #:y 456)
+-| (#:x 123 #:y 456)
+</pre></div>
+
+<p><code class="code">#:optional</code> and <code class="code">#:key</code> establish their bindings
+successively, from left to right. This means default expressions can
+refer back to prior parameters, for example
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(lambda* (start #:optional (end (+ 10 start)))
+  (do ((i start (1+ i)))
+      ((&gt; i end))
+    (display i)))
+</pre></div>
+
+<p>The exception to this left-to-right scoping rule is the rest argument.
+If there is a rest argument, it is bound after the optional arguments,
+but before the keyword arguments.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="ice_002d9-optargs.html">(ice-9 optargs)</a>, Up: <a href="Optional-Arguments.html">Optional Arguments</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Stack Overflow (Guile Reference Manual)</title>
+
+<meta name="description" content="Stack Overflow (Guile Reference Manual)">
+<meta name="keywords" content="Stack Overflow (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Programmatic-Error-Handling.html" rel="up" title="Programmatic Error Handling">
+<link href="Debug-Options.html" rel="next" title="Debug Options">
+<link href="Standard-Error-Handling.html" rel="prev" title="Standard Error Handling">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Stack-Overflow">
+<div class="nav-panel">
+<p>
+Next: <a href="Debug-Options.html" accesskey="n" rel="next">Debug options</a>, Previous: <a href="Standard-Error-Handling.html" accesskey="p" rel="prev">call-with-error-handling</a>, Up: <a href="Programmatic-Error-Handling.html" accesskey="u" rel="up">Programmatic Error Handling</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Stack-Overflow-1">6.26.3.4 Stack Overflow</h4>
+
+<a class="index-entry-id" id="index-overflow_002c-stack"></a>
+<a class="index-entry-id" id="index-stack-overflow"></a>
+<p>Every time a Scheme program makes a call that is not in tail position,
+it pushes a new frame onto the stack.  Returning a value from a function
+pops the top frame off the stack.  Stack frames take up memory, and as
+nobody has an infinite amount of memory, deep recursion could cause
+Guile to run out of memory.  Running out of stack memory is called
+<em class="dfn">stack overflow</em>.
+</p>
+<h4 class="subsubheading" id="Stack-Limits">Stack Limits</h4>
+
+<p>Most languages have a terrible stack overflow story.  For example, in C,
+if you use too much stack, your program will exhibit &ldquo;undefined
+behavior&rdquo;, which if you are lucky means that it will crash.  It&rsquo;s
+especially bad in C, as you neither know ahead of time how much stack
+your functions use, nor the stack limit imposed by the user&rsquo;s system,
+and the stack limit is often quite small relative to the total memory
+size.
+</p>
+<p>Managed languages like Python have a better error story, as they are
+defined to raise an exception on stack overflow &ndash; but like C, Python
+and most dynamic languages still have a fixed stack size limit that is
+usually much smaller than the heap.
+</p>
+<p>Arbitrary stack limits would have an unfortunate effect on Guile
+programs.  For example, the following implementation of the inner loop
+of <code class="code">map</code> is clean and elegant:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (map f l)
+  (if (pair? l)
+      (cons (f (car l))
+            (map f (cdr l)))
+      '()))
+</pre></div>
+
+<p>However, if there were a stack limit, that would limit the size of lists
+that can be processed with this <code class="code">map</code>.  Eventually, you would have
+to rewrite it to use iteration with an accumulator:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (map f l)
+  (let lp ((l l) (out '()))
+    (if (pair? l)
+        (lp (cdr l) (cons (f (car l)) out))
+        (reverse out))))
+</pre></div>
+
+<p>This second version is sadly not as clear, and it also allocates more
+heap memory (once to build the list in reverse, and then again to
+reverse the list).  You would be tempted to use the destructive
+<code class="code">reverse!</code> to save memory and time, but then your code would not be
+continuation-safe &ndash; if <var class="var">f</var> returned again after the map had
+finished, it would see an <var class="var">out</var> list that had already been
+reversed.  The recursive <code class="code">map</code> has none of these problems.
+</p>
+<p>Guile has no stack limit for Scheme code.  When a thread makes its first
+Guile call, a small stack is allocated &ndash; just one page of memory.
+Whenever that memory limit would be reached, Guile arranges to grow the
+stack by a factor of two.  When garbage collection happens, Guile
+arranges to return the unused part of the stack to the operating system,
+but without causing the stack to shrink.  In this way, the stack can
+grow to consume up to all memory available to the Guile process, and
+when the recursive computation eventually finishes, that stack memory is
+returned to the system.
+</p>
+<h4 class="subsubheading" id="Exceptional-Situations">Exceptional Situations</h4>
+
+<p>Of course, it&rsquo;s still possible to run out of stack memory.  The most
+common cause of this is program bugs that cause unbounded recursion, as
+in:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (faulty-map f l)
+  (if (pair? l)
+      (cons (f (car l)) (faulty-map f l))
+      '()))
+</pre></div>
+
+<p>Did you spot the bug?  The recursive call to <code class="code">faulty-map</code> recursed
+on <var class="var">l</var>, not <code class="code">(cdr <var class="var">l</var>)</code>.  Running this program would cause
+Guile to use up all memory in your system, and eventually Guile would
+fail to grow the stack.  At that point you have a problem: Guile needs
+to raise an exception to unwind the stack and return memory to the
+system, but the user might have exception handlers in place
+(see <a class="pxref" href="Raising-and-Handling-Exceptions.html">Raising and Handling Exceptions</a>) that want to run before the
+stack is unwound, and we don&rsquo;t have any stack in which to run them.
+</p>
+<p>Therefore in this case, Guile raises an unwind-only exception that does
+not run pre-unwind handlers.  Because this is such an odd case, Guile
+prints out a message on the console, in case the user was expecting to
+be able to get a backtrace from any pre-unwind handler.
+</p>
+<h4 class="subsubheading" id="Runaway-Recursion">Runaway Recursion</h4>
+
+<p>Still, this failure mode is not so nice.  If you are running an
+environment in which you are interactively building a program while it
+is running, such as at a REPL, you might want to impose an artificial
+stack limit on the part of your program that you are building to detect
+accidental runaway recursion.  For that purpose, there is
+<code class="code">call-with-stack-overflow-handler</code>, from <code class="code">(system vm vm)</code>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-module (system vm vm))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-call_002dwith_002dstack_002doverflow_002dhandler"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call-with-stack-overflow-handler</strong> <var class="def-var-arguments">limit thunk handler</var><a class="copiable-link" href='#index-call_002dwith_002dstack_002doverflow_002dhandler'> &para;</a></span></dt>
+<dd><p>Call <var class="var">thunk</var> in an environment in which the stack limit has been
+reduced to <var class="var">limit</var> additional words.  If the limit is reached,
+<var class="var">handler</var> (a thunk) will be invoked in the dynamic environment of
+the error.  For the extent of the call to <var class="var">handler</var>, the stack limit
+and handler are restored to the values that were in place when
+<code class="code">call-with-stack-overflow-handler</code> was called.
+</p>
+<p>Usually, <var class="var">handler</var> should raise an exception or abort to an outer
+prompt.  However if <var class="var">handler</var> does return, it should return a number
+of additional words of stack space to allow to the inner environment.
+</p></dd></dl>
+
+<p>A stack overflow handler may only ever &ldquo;credit&rdquo; the inner thunk with
+stack space that was available when the handler was instated.  When
+Guile first starts, there is no stack limit in place, so the outer
+handler may allow the inner thunk an arbitrary amount of space, but any
+nested stack overflow handler will not be able to consume more than its
+limit.
+</p>
+<p>Unlike the unwind-only exception that is thrown if Guile is unable to
+grow its stack, any exception thrown by a stack overflow handler might
+invoke pre-unwind handlers.  Indeed, the stack overflow handler is
+itself a pre-unwind handler of sorts.  If the code imposing the stack
+limit wants to protect itself against malicious pre-unwind handlers from
+the inner thunk, it should abort to a prompt of its own making instead
+of throwing an exception that might be caught by the inner thunk.
+</p>
+<h4 class="subsubheading" id="C-Stack-Usage">C Stack Usage</h4>
+
+<p>It is also possible for Guile to run out of space on the C stack.  If
+you call a primitive procedure which then calls a Scheme procedure in a
+loop, you will consume C stack space.  Guile tries to detect excessive
+consumption of C stack space, throwing an error when you have hit 80% of
+the process&rsquo; available stack (as allocated by the operating system), or
+160 kilowords in the absence of a strict limit.
+</p>
+<p>For example, looping through <code class="code">call-with-vm</code>, a primitive that calls
+a thunk, gives us the following:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">scheme@(guile-user)&gt; (use-modules (system vm vm))
+scheme@(guile-user)&gt; (let lp () (call-with-vm lp))
+ERROR: Stack overflow
+</pre></div>
+
+<p>Unfortunately, that&rsquo;s all the information we get.  Overrunning the C
+stack will throw an unwind-only exception, because it&rsquo;s not safe to
+do very much when you are close to the C stack limit.
+</p>
+<p>If you get an error like this, you can either try rewriting your code to
+use less stack space, or increase the maximum stack size.  To increase
+the maximum stack size, use <code class="code">debug-set!</code>, for example:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(debug-set! stack 200000)
+</pre></div>
+
+<p>The next section describes <code class="code">debug-set!</code> more thoroughly.  Of course
+the best thing is to have your code operate without so much resource
+consumption by avoiding loops through C trampolines.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Debug-Options.html">Debug options</a>, Previous: <a href="Standard-Error-Handling.html">call-with-error-handling</a>, Up: <a href="Programmatic-Error-Handling.html">Programmatic Error Handling</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-18 Condition variables (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-18 Condition variables (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-18 Condition variables (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI_002d18.html" rel="up" title="SRFI-18">
+<link href="SRFI_002d18-Time.html" rel="next" title="SRFI-18 Time">
+<link href="SRFI_002d18-Mutexes.html" rel="prev" title="SRFI-18 Mutexes">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="SRFI_002d18-Condition-variables">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d18-Time.html" accesskey="n" rel="next">SRFI-18 Time</a>, Previous: <a href="SRFI_002d18-Mutexes.html" accesskey="p" rel="prev">SRFI-18 Mutexes</a>, Up: <a href="SRFI_002d18.html" accesskey="u" rel="up">SRFI-18 - Multithreading support</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="SRFI_002d18-Condition-variables-1">7.5.15.3 SRFI-18 Condition variables</h4>
+
+<p>SRFI-18 does not specify a &ldquo;wait&rdquo; function for condition variables.
+Waiting on a condition variable can be simulated using the SRFI-18
+<code class="code">mutex-unlock!</code> function described in the previous section.
+</p>
+<p>SRFI-18 condition variables are disjoint from Guile&rsquo;s primitive
+condition variables.  See <a class="xref" href="Mutexes-and-Condition-Variables.html">Mutexes and Condition Variables</a>, for more
+on Guile&rsquo;s primitive facility.
+</p>
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-condition_002dvariable_003f-1"><span class="category-def">Function: </span><span><strong class="def-name">condition-variable?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-condition_002dvariable_003f-1'> &para;</a></span></dt>
+<dd><p>Returns <code class="code">#t</code> if <var class="var">obj</var> is a condition variable, <code class="code">#f</code>
+otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-make_002dcondition_002dvariable-1"><span class="category-def">Function: </span><span><strong class="def-name">make-condition-variable</strong> <var class="def-var-arguments">[name]</var><a class="copiable-link" href='#index-make_002dcondition_002dvariable-1'> &para;</a></span></dt>
+<dd><p>Returns a new condition variable, optionally assigning it the object
+name <var class="var">name</var>, which may be any Scheme object.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-condition_002dvariable_002dname"><span class="category-def">Function: </span><span><strong class="def-name">condition-variable-name</strong> <var class="def-var-arguments">condition-variable</var><a class="copiable-link" href='#index-condition_002dvariable_002dname'> &para;</a></span></dt>
+<dd><p>Returns the name assigned to <var class="var">condition-variable</var> at the time of its
+creation, or <code class="code">#f</code> if it was not given a name.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-condition_002dvariable_002dspecific"><span class="category-def">Function: </span><span><strong class="def-name">condition-variable-specific</strong> <var class="def-var-arguments">condition-variable</var><a class="copiable-link" href='#index-condition_002dvariable_002dspecific'> &para;</a></span></dt>
+<dd><p>Return the &ldquo;object-specific&rdquo; property of <var class="var">condition-variable</var>, or
+<code class="code">#f</code> if none is set.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-condition_002dvariable_002dspecific_002dset_0021"><span class="category-def">Function: </span><span><strong class="def-name">condition-variable-specific-set!</strong> <var class="def-var-arguments">condition-variable obj</var><a class="copiable-link" href='#index-condition_002dvariable_002dspecific_002dset_0021'> &para;</a></span></dt>
+<dd><p>Set the &ldquo;object-specific&rdquo; property of <var class="var">condition-variable</var>.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-condition_002dvariable_002dsignal_0021"><span class="category-def">Function: </span><span><strong class="def-name">condition-variable-signal!</strong> <var class="def-var-arguments">condition-variable</var><a class="copiable-link" href='#index-condition_002dvariable_002dsignal_0021'> &para;</a></span></dt>
+<dt class="deffnx defunx-alias-deffnx def-cmd-deffn" id="index-condition_002dvariable_002dbroadcast_0021"><span class="category-def">Function: </span><span><strong class="def-name">condition-variable-broadcast!</strong> <var class="def-var-arguments">condition-variable</var><a class="copiable-link" href='#index-condition_002dvariable_002dbroadcast_0021'> &para;</a></span></dt>
+<dd><p>Wake up one thread that is waiting for <var class="var">condition-variable</var>, in
+the case of <code class="code">condition-variable-signal!</code>, or all threads waiting
+for it, in the case of <code class="code">condition-variable-broadcast!</code>.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d18-Time.html">SRFI-18 Time</a>, Previous: <a href="SRFI_002d18-Mutexes.html">SRFI-18 Mutexes</a>, Up: <a href="SRFI_002d18.html">SRFI-18 - Multithreading support</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

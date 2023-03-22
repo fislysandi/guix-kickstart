@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Interactive Debugging (Guile Reference Manual)</title>
+
+<meta name="description" content="Interactive Debugging (Guile Reference Manual)">
+<meta name="keywords" content="Interactive Debugging (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Using-Guile-Interactively.html" rel="up" title="Using Guile Interactively">
+<link href="Error-Handling.html" rel="prev" title="Error Handling">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+kbd.kbd {font-style: oblique}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Interactive-Debugging">
+<div class="nav-panel">
+<p>
+Previous: <a href="Error-Handling.html" accesskey="p" rel="prev">Error Handling</a>, Up: <a href="Using-Guile-Interactively.html" accesskey="u" rel="up">Using Guile Interactively</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Interactive-Debugging-1">4.4.6 Interactive Debugging</h4>
+
+<p>A recursive debugging REPL exposes a number of other meta-commands that
+inspect the state of the computation at the time of the error. These
+commands allow you to
+</p>
+<ul class="itemize mark-bullet">
+<li>display the Scheme call stack at the point where the error occurred;
+
+</li><li>move up and down the call stack, to see in detail the expression being
+evaluated, or the procedure being applied, in each <em class="dfn">frame</em>; and
+
+</li><li>examine the values of variables and expressions in the context of each
+frame.
+</li></ul>
+
+<p>See <a class="xref" href="Debug-Commands.html">Debug Commands</a>, for documentation of the individual
+commands. This section aims to give more of a walkthrough of a typical
+debugging session.
+</p>
+<p>First, we&rsquo;re going to need a good error. Let&rsquo;s try to macroexpand the
+expression <code class="code">(unquote foo)</code>, outside of a <code class="code">quasiquote</code> form,
+and see how the macroexpander reports this error.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">scheme@(guile-user)&gt; (macroexpand '(unquote foo))
+ERROR: In procedure macroexpand:
+ERROR: unquote: expression not valid outside of quasiquote in (unquote foo)
+Entering a new prompt.  Type `,bt' for a backtrace or `,q' to continue.
+scheme@(guile-user) [1]&gt;
+</pre></div>
+
+<p>The <code class="code">backtrace</code> command, which can also be invoked as <code class="code">bt</code>,
+displays the call stack (aka backtrace) at the point where the debugger
+was entered:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">scheme@(guile-user) [1]&gt; ,bt
+In ice-9/psyntax.scm:
+  1130:21  3 (chi-top (unquote foo) () ((top)) e (eval) (hygiene #))
+  1071:30  2 (syntax-type (unquote foo) () ((top)) #f #f (# #) #f)
+  1368:28  1 (chi-macro #&lt;procedure de9360 at ice-9/psyntax.scm...&gt; ...)
+In unknown file:
+           0 (scm-error syntax-error macroexpand &quot;~a: ~a in ~a&quot; # #f)
+</pre></div>
+
+<p>A call stack consists of a sequence of stack <em class="dfn">frames</em>, with each
+frame describing one procedure which is waiting to do something with the
+values returned by another. Here we see that there are four frames on
+the stack.
+</p>
+<p>Note that <code class="code">macroexpand</code> is not on the stack &ndash; it must have made a
+tail call to <code class="code">chi-top</code>, as indeed we would find if we searched
+<code class="code">ice-9/psyntax.scm</code> for its definition.
+</p>
+<p>When you enter the debugger, the innermost frame is selected, which
+means that the commands for getting information about the &ldquo;current&rdquo;
+frame, or for evaluating expressions in the context of the current
+frame, will do so by default with respect to the innermost frame.  To
+select a different frame, so that these operations will apply to it
+instead, use the <code class="code">up</code>, <code class="code">down</code> and <code class="code">frame</code> commands like
+this:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">scheme@(guile-user) [1]&gt; ,up
+In ice-9/psyntax.scm:
+  1368:28  1 (chi-macro #&lt;procedure de9360 at ice-9/psyntax.scm...&gt; ...)
+scheme@(guile-user) [1]&gt; ,frame 3
+In ice-9/psyntax.scm:
+  1130:21  3 (chi-top (unquote foo) () ((top)) e (eval) (hygiene #))
+scheme@(guile-user) [1]&gt; ,down
+In ice-9/psyntax.scm:
+  1071:30  2 (syntax-type (unquote foo) () ((top)) #f #f (# #) #f)
+</pre></div>
+
+<p>Perhaps we&rsquo;re interested in what&rsquo;s going on in frame 2, so we take a
+look at its local variables:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">scheme@(guile-user) [1]&gt; ,locals
+  Local variables:
+  $1 = e = (unquote foo)
+  $2 = r = ()
+  $3 = w = ((top))
+  $4 = s = #f
+  $5 = rib = #f
+  $6 = mod = (hygiene guile-user)
+  $7 = for-car? = #f
+  $8 = first = unquote
+  $9 = ftype = macro
+  $10 = fval = #&lt;procedure de9360 at ice-9/psyntax.scm:2817:2 (x)&gt;
+  $11 = fe = unquote
+  $12 = fw = ((top))
+  $13 = fs = #f
+  $14 = fmod = (hygiene guile-user)
+</pre></div>
+
+<p>All of the values are accessible by their value-history names
+(<code class="code">$<var class="var">n</var></code>):
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">scheme@(guile-user) [1]&gt; $10
+$15 = #&lt;procedure de9360 at ice-9/psyntax.scm:2817:2 (x)&gt;
+</pre></div>
+
+<p>We can even invoke the procedure at the REPL directly:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">scheme@(guile-user) [1]&gt; ($10 'not-going-to-work)
+ERROR: In procedure macroexpand:
+ERROR: source expression failed to match any pattern in not-going-to-work
+Entering a new prompt.  Type `,bt' for a backtrace or `,q' to continue.
+</pre></div>
+
+<p>Well at this point we&rsquo;ve caused an error within an error. Let&rsquo;s just
+quit back to the top level:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">scheme@(guile-user) [2]&gt; ,q
+scheme@(guile-user) [1]&gt; ,q
+scheme@(guile-user)&gt; 
+</pre></div>
+
+<p>Finally, as a word to the wise: hackers close their REPL prompts with
+<kbd class="kbd">C-d</kbd>.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Error-Handling.html">Error Handling</a>, Up: <a href="Using-Guile-Interactively.html">Using Guile Interactively</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

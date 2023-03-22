@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Representing Strings as Bytes (Guile Reference Manual)</title>
+
+<meta name="description" content="Representing Strings as Bytes (Guile Reference Manual)">
+<meta name="keywords" content="Representing Strings as Bytes (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Strings.html" rel="up" title="Strings">
+<link href="Conversion-to_002ffrom-C.html" rel="next" title="Conversion to/from C">
+<link href="Miscellaneous-String-Operations.html" rel="prev" title="Miscellaneous String Operations">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Representing-Strings-as-Bytes">
+<div class="nav-panel">
+<p>
+Next: <a href="Conversion-to_002ffrom-C.html" accesskey="n" rel="next">Conversion to/from C</a>, Previous: <a href="Miscellaneous-String-Operations.html" accesskey="p" rel="prev">Miscellaneous String Operations</a>, Up: <a href="Strings.html" accesskey="u" rel="up">Strings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Representing-Strings-as-Bytes-1">6.6.5.13 Representing Strings as Bytes</h4>
+
+<p>Out in the cold world outside of Guile, not all strings are treated in
+the same way.  Out there there are only bytes, and there are many ways
+of representing a strings (sequences of characters) as binary data
+(sequences of bytes).
+</p>
+<p>As a user, usually you don&rsquo;t have to think about this very much.  When
+you type on your keyboard, your system encodes your keystrokes as bytes
+according to the locale that you have configured on your computer.
+Guile uses the locale to decode those bytes back into characters &ndash;
+hopefully the same characters that you typed in.
+</p>
+<p>All is not so clear when dealing with a system with multiple users, such
+as a web server.  Your web server might get a request from one user for
+data encoded in the ISO-8859-1 character set, and then another request
+from a different user for UTF-8 data.
+</p>
+<a class="index-entry-id" id="index-iconv"></a>
+<a class="index-entry-id" id="index-character-encoding"></a>
+<p>Guile provides an <em class="dfn">iconv</em> module for converting between strings and
+sequences of bytes.  See <a class="xref" href="Bytevectors.html">Bytevectors</a>, for more on how Guile
+represents raw byte sequences.  This module gets its name from the
+common <small class="sc">UNIX</small> command of the same name.
+</p>
+<p>Note that often it is sufficient to just read and write strings from
+ports instead of using these functions.  To do this, specify the port
+encoding using <code class="code">set-port-encoding!</code>.  See <a class="xref" href="Ports.html">Ports</a>, for more on
+ports and character encodings.
+</p>
+<p>Unlike the rest of the procedures in this section, you have to load the
+<code class="code">iconv</code> module before having access to these procedures:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 iconv))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002d_003ebytevector"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-&gt;bytevector</strong> <var class="def-var-arguments">string encoding [conversion-strategy]</var><a class="copiable-link" href='#index-string_002d_003ebytevector'> &para;</a></span></dt>
+<dd><p>Encode <var class="var">string</var> as a sequence of bytes.
+</p>
+<p>The string will be encoded in the character set specified by the
+<var class="var">encoding</var> string.  If the string has characters that cannot be
+represented in the encoding, by default this procedure raises an
+<code class="code">encoding-error</code>.  Pass a <var class="var">conversion-strategy</var> argument to
+specify other behaviors.
+</p>
+<p>The return value is a bytevector.  See <a class="xref" href="Bytevectors.html">Bytevectors</a>, for more on
+bytevectors.  See <a class="xref" href="Ports.html">Ports</a>, for more on character encodings and
+conversion strategies.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bytevector_002d_003estring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-&gt;string</strong> <var class="def-var-arguments">bytevector encoding [conversion-strategy]</var><a class="copiable-link" href='#index-bytevector_002d_003estring'> &para;</a></span></dt>
+<dd><p>Decode <var class="var">bytevector</var> into a string.
+</p>
+<p>The bytes will be decoded from the character set by the <var class="var">encoding</var>
+string.  If the bytes do not form a valid encoding, by default this
+procedure raises an <code class="code">decoding-error</code>.  As with
+<code class="code">string-&gt;bytevector</code>, pass the optional <var class="var">conversion-strategy</var>
+argument to modify this behavior.  See <a class="xref" href="Ports.html">Ports</a>, for more on character
+encodings and conversion strategies.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-call_002dwith_002doutput_002dencoded_002dstring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call-with-output-encoded-string</strong> <var class="def-var-arguments">encoding proc [conversion-strategy]</var><a class="copiable-link" href='#index-call_002dwith_002doutput_002dencoded_002dstring'> &para;</a></span></dt>
+<dd><p>Like <code class="code">call-with-output-string</code>, but instead of returning a string,
+returns a encoding of the string according to <var class="var">encoding</var>, as a
+bytevector.  This procedure can be more efficient than collecting a
+string and then converting it via <code class="code">string-&gt;bytevector</code>.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Conversion-to_002ffrom-C.html">Conversion to/from C</a>, Previous: <a href="Miscellaneous-String-Operations.html">Miscellaneous String Operations</a>, Up: <a href="Strings.html">Strings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

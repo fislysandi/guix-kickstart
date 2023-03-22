@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Internal Macros (Guile Reference Manual)</title>
+
+<meta name="description" content="Internal Macros (Guile Reference Manual)">
+<meta name="keywords" content="Internal Macros (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Macros.html" rel="up" title="Macros">
+<link href="Hygiene-and-the-Top_002dLevel.html" rel="prev" title="Hygiene and the Top-Level">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Internal-Macros">
+<div class="nav-panel">
+<p>
+Previous: <a href="Hygiene-and-the-Top_002dLevel.html" accesskey="p" rel="prev">Hygiene and the Top-Level</a>, Up: <a href="Macros.html" accesskey="u" rel="up">Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Internal-Macros-1">6.8.11 Internal Macros</h4>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dsyntax_002dtransformer"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-syntax-transformer</strong> <var class="def-var-arguments">name type binding</var><a class="copiable-link" href='#index-make_002dsyntax_002dtransformer'> &para;</a></span></dt>
+<dd><p>Construct a syntax transformer object. This is part of Guile&rsquo;s low-level support
+for syntax-case.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-macro_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">macro?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-macro_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmacro_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_macro_p</strong> <var class="def-var-arguments">(obj)</var><a class="copiable-link" href='#index-scm_005fmacro_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is a syntax transformer, or <code class="code">#f</code>
+otherwise.
+</p>
+<p>Note that it&rsquo;s a bit difficult to actually get a macro as a first-class object;
+simply naming it (like <code class="code">case</code>) will produce a syntax error. But it is
+possible to get these objects using <code class="code">module-ref</code>:
+</p>
+<div class="example">
+<pre class="example-preformatted">(macro? (module-ref (current-module) 'case))
+&rArr; #t
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-macro_002dtype"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">macro-type</strong> <var class="def-var-arguments">m</var><a class="copiable-link" href='#index-macro_002dtype'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmacro_005ftype"><span class="category-def">C Function: </span><span><strong class="def-name">scm_macro_type</strong> <var class="def-var-arguments">(m)</var><a class="copiable-link" href='#index-scm_005fmacro_005ftype'> &para;</a></span></dt>
+<dd><p>Return the <var class="var">type</var> that was given when <var class="var">m</var> was constructed, via
+<code class="code">make-syntax-transformer</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-macro_002dname"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">macro-name</strong> <var class="def-var-arguments">m</var><a class="copiable-link" href='#index-macro_002dname'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmacro_005fname"><span class="category-def">C Function: </span><span><strong class="def-name">scm_macro_name</strong> <var class="def-var-arguments">(m)</var><a class="copiable-link" href='#index-scm_005fmacro_005fname'> &para;</a></span></dt>
+<dd><p>Return the name of the macro <var class="var">m</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-macro_002dbinding"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">macro-binding</strong> <var class="def-var-arguments">m</var><a class="copiable-link" href='#index-macro_002dbinding'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmacro_005fbinding"><span class="category-def">C Function: </span><span><strong class="def-name">scm_macro_binding</strong> <var class="def-var-arguments">(m)</var><a class="copiable-link" href='#index-scm_005fmacro_005fbinding'> &para;</a></span></dt>
+<dd><p>Return the binding of the macro <var class="var">m</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-macro_002dtransformer"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">macro-transformer</strong> <var class="def-var-arguments">m</var><a class="copiable-link" href='#index-macro_002dtransformer'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmacro_005ftransformer"><span class="category-def">C Function: </span><span><strong class="def-name">scm_macro_transformer</strong> <var class="def-var-arguments">(m)</var><a class="copiable-link" href='#index-scm_005fmacro_005ftransformer'> &para;</a></span></dt>
+<dd><p>Return the transformer of the macro <var class="var">m</var>. This will return a procedure, for
+which one may ask the docstring. That&rsquo;s the whole reason this section is
+documented. Actually a part of the result of <code class="code">macro-binding</code>.
+</p></dd></dl>
+
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Hygiene-and-the-Top_002dLevel.html">Hygiene and the Top-Level</a>, Up: <a href="Macros.html">Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

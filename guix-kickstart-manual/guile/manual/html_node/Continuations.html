@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Continuations (Guile Reference Manual)</title>
+
+<meta name="description" content="Continuations (Guile Reference Manual)">
+<meta name="keywords" content="Continuations (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Control-Mechanisms.html" rel="up" title="Control Mechanisms">
+<link href="Multiple-Values.html" rel="next" title="Multiple Values">
+<link href="Prompts.html" rel="prev" title="Prompts">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Continuations">
+<div class="nav-panel">
+<p>
+Next: <a href="Multiple-Values.html" accesskey="n" rel="next">Returning and Accepting Multiple Values</a>, Previous: <a href="Prompts.html" accesskey="p" rel="prev">Prompts</a>, Up: <a href="Control-Mechanisms.html" accesskey="u" rel="up">Controlling the Flow of Program Execution</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Continuations-1">6.11.6 Continuations</h4>
+<a class="index-entry-id" id="index-continuations"></a>
+
+<p>A &ldquo;continuation&rdquo; is the code that will execute when a given function
+or expression returns.  For example, consider
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (foo)
+  (display &quot;hello\n&quot;)
+  (display (bar)) (newline)
+  (exit))
+</pre></div>
+
+<p>The continuation from the call to <code class="code">bar</code> comprises a
+<code class="code">display</code> of the value returned, a <code class="code">newline</code> and an
+<code class="code">exit</code>.  This can be expressed as a function of one argument.
+</p>
+<div class="example">
+<pre class="example-preformatted">(lambda (r)
+  (display r) (newline)
+  (exit))
+</pre></div>
+
+<p>In Scheme, continuations are represented as special procedures just
+like this.  The special property is that when a continuation is called
+it abandons the current program location and jumps directly to that
+represented by the continuation.
+</p>
+<p>A continuation is like a dynamic label, capturing at run-time a point
+in program execution, including all the nested calls that have lead to
+it (or rather the code that will execute when those calls return).
+</p>
+<p>Continuations are created with the following functions.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-call_002dwith_002dcurrent_002dcontinuation"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call-with-current-continuation</strong> <var class="def-var-arguments">proc</var><a class="copiable-link" href='#index-call_002dwith_002dcurrent_002dcontinuation'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-call_002fcc"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call/cc</strong> <var class="def-var-arguments">proc</var><a class="copiable-link" href='#index-call_002fcc'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-call_002dwith_002dcurrent_002dcontinuation-2"></a>
+<p>Capture the current continuation and call <code class="code">(<var class="var">proc</var>
+<var class="var">cont</var>)</code> with it.  The return value is the value returned by
+<var class="var">proc</var>, or when <code class="code">(<var class="var">cont</var> <var class="var">value</var>)</code> is later invoked,
+the return is the <var class="var">value</var> passed.
+</p>
+<p>Normally <var class="var">cont</var> should be called with one argument, but when the
+location resumed is expecting multiple values (see <a class="pxref" href="Multiple-Values.html">Returning and Accepting Multiple Values</a>) then they should be passed as multiple arguments, for
+instance <code class="code">(<var class="var">cont</var> <var class="var">x</var> <var class="var">y</var> <var class="var">z</var>)</code>.
+</p>
+<p><var class="var">cont</var> may only be used from the same side of a continuation
+barrier as it was created (see <a class="pxref" href="Continuation-Barriers.html">Continuation Barriers</a>), and in a
+multi-threaded program only from the thread in which it was created.
+</p>
+<p>The call to <var class="var">proc</var> is not part of the continuation captured, it runs
+only when the continuation is created.  Often a program will want to
+store <var class="var">cont</var> somewhere for later use; this can be done in
+<var class="var">proc</var>.
+</p>
+<p>The <code class="code">call</code> in the name <code class="code">call-with-current-continuation</code>
+refers to the way a call to <var class="var">proc</var> gives the newly created
+continuation.  It&rsquo;s not related to the way a call is used later to
+invoke that continuation.
+</p>
+<p><code class="code">call/cc</code> is an alias for <code class="code">call-with-current-continuation</code>.
+This is in common use since the latter is rather long.
+</p></dd></dl>
+
+<br>
+<p>Here is a simple example,
+</p>
+<div class="example">
+<pre class="example-preformatted">(define kont #f)
+(format #t &quot;the return is ~a\n&quot;
+        (call/cc (lambda (k)
+                   (set! kont k)
+                   1)))
+&rArr; the return is 1
+
+(kont 2)
+&rArr; the return is 2
+</pre></div>
+
+<p><code class="code">call/cc</code> captures a continuation in which the value returned is
+going to be displayed by <code class="code">format</code>.  The <code class="code">lambda</code> stores this
+in <code class="code">kont</code> and gives an initial return <code class="code">1</code> which is
+displayed.  The later invocation of <code class="code">kont</code> resumes the captured
+point, but this time returning <code class="code">2</code>, which is displayed.
+</p>
+<p>When Guile is run interactively, a call to <code class="code">format</code> like this has
+an implicit return back to the read-eval-print loop.  <code class="code">call/cc</code>
+captures that like any other return, which is why interactively
+<code class="code">kont</code> will come back to read more input.
+</p>
+<br>
+<p>C programmers may note that <code class="code">call/cc</code> is like <code class="code">setjmp</code> in
+the way it records at runtime a point in program execution.  A call to
+a continuation is like a <code class="code">longjmp</code> in that it abandons the
+present location and goes to the recorded one.  Like <code class="code">longjmp</code>,
+the value passed to the continuation is the value returned by
+<code class="code">call/cc</code> on resuming there.  However <code class="code">longjmp</code> can only go
+up the program stack, but the continuation mechanism can go anywhere.
+</p>
+<p>When a continuation is invoked, <code class="code">call/cc</code> and subsequent code
+effectively &ldquo;returns&rdquo; a second time.  It can be confusing to imagine
+a function returning more times than it was called.  It may help
+instead to think of it being stealthily re-entered and then program
+flow going on as normal.
+</p>
+<p><code class="code">dynamic-wind</code> (see <a class="pxref" href="Dynamic-Wind.html">Dynamic Wind</a>) can be used to ensure setup
+and cleanup code is run when a program locus is resumed or abandoned
+through the continuation mechanism.
+</p>
+<br>
+<p>Continuations are a powerful mechanism, and can be used to implement
+almost any sort of control structure, such as loops, coroutines, or
+exception handlers.
+</p>
+<p>However the implementation of continuations in Guile is not as
+efficient as one might hope, because Guile is designed to cooperate
+with programs written in other languages, such as C, which do not know
+about continuations.  Basically continuations are captured by a block
+copy of the stack, and resumed by copying back.
+</p>
+<p>For this reason, continuations captured by <code class="code">call/cc</code> should be used only
+when there is no other simple way to achieve the desired result, or when the
+elegance of the continuation mechanism outweighs the need for performance.
+</p>
+<p>Escapes upwards from loops or nested functions are generally best
+handled with prompts (see <a class="pxref" href="Prompts.html">Prompts</a>).  Coroutines can be
+efficiently implemented with cooperating threads (a thread holds a
+full program stack but doesn&rsquo;t copy it around the way continuations
+do).
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Multiple-Values.html">Returning and Accepting Multiple Values</a>, Previous: <a href="Prompts.html">Prompts</a>, Up: <a href="Control-Mechanisms.html">Controlling the Flow of Program Execution</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

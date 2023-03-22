@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Retrieving Alist Entries (Guile Reference Manual)</title>
+
+<meta name="description" content="Retrieving Alist Entries (Guile Reference Manual)">
+<meta name="keywords" content="Retrieving Alist Entries (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Association-Lists.html" rel="up" title="Association Lists">
+<link href="Removing-Alist-Entries.html" rel="next" title="Removing Alist Entries">
+<link href="Adding-or-Setting-Alist-Entries.html" rel="prev" title="Adding or Setting Alist Entries">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Retrieving-Alist-Entries">
+<div class="nav-panel">
+<p>
+Next: <a href="Removing-Alist-Entries.html" accesskey="n" rel="next">Removing Alist Entries</a>, Previous: <a href="Adding-or-Setting-Alist-Entries.html" accesskey="p" rel="prev">Adding or Setting Alist Entries</a>, Up: <a href="Association-Lists.html" accesskey="u" rel="up">Association Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Retrieving-Alist-Entries-1">6.6.20.3 Retrieving Alist Entries</h4>
+<a class="index-entry-id" id="index-assq-2"></a>
+<a class="index-entry-id" id="index-assv-2"></a>
+<a class="index-entry-id" id="index-assoc-3"></a>
+
+<p><code class="code">assq</code>, <code class="code">assv</code> and <code class="code">assoc</code> find the entry in an alist
+for a given key, and return the <code class="code">(<var class="var">key</var> . <var class="var">value</var>)</code> pair.
+<code class="code">assq-ref</code>, <code class="code">assv-ref</code> and <code class="code">assoc-ref</code> do a similar
+lookup, but return just the <var class="var">value</var>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-assq"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">assq</strong> <var class="def-var-arguments">key alist</var><a class="copiable-link" href='#index-assq'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-assv"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">assv</strong> <var class="def-var-arguments">key alist</var><a class="copiable-link" href='#index-assv'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-assoc"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">assoc</strong> <var class="def-var-arguments">key alist</var><a class="copiable-link" href='#index-assoc'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fassq"><span class="category-def">C Function: </span><span><strong class="def-name">scm_assq</strong> <var class="def-var-arguments">(key, alist)</var><a class="copiable-link" href='#index-scm_005fassq'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fassv"><span class="category-def">C Function: </span><span><strong class="def-name">scm_assv</strong> <var class="def-var-arguments">(key, alist)</var><a class="copiable-link" href='#index-scm_005fassv'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fassoc"><span class="category-def">C Function: </span><span><strong class="def-name">scm_assoc</strong> <var class="def-var-arguments">(key, alist)</var><a class="copiable-link" href='#index-scm_005fassoc'> &para;</a></span></dt>
+<dd><p>Return the first entry in <var class="var">alist</var> with the given <var class="var">key</var>.  The
+return is the pair <code class="code">(KEY . VALUE)</code> from <var class="var">alist</var>.  If there&rsquo;s
+no matching entry the return is <code class="code">#f</code>.
+</p>
+<p><code class="code">assq</code> compares keys with <code class="code">eq?</code>, <code class="code">assv</code> uses
+<code class="code">eqv?</code> and <code class="code">assoc</code> uses <code class="code">equal?</code>.  See also SRFI-1
+which has an extended <code class="code">assoc</code> (<a class="ref" href="SRFI_002d1-Association-Lists.html">Association Lists</a>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-assq_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">assq-ref</strong> <var class="def-var-arguments">alist key</var><a class="copiable-link" href='#index-assq_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-assv_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">assv-ref</strong> <var class="def-var-arguments">alist key</var><a class="copiable-link" href='#index-assv_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-assoc_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">assoc-ref</strong> <var class="def-var-arguments">alist key</var><a class="copiable-link" href='#index-assoc_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fassq_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_assq_ref</strong> <var class="def-var-arguments">(alist, key)</var><a class="copiable-link" href='#index-scm_005fassq_005fref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fassv_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_assv_ref</strong> <var class="def-var-arguments">(alist, key)</var><a class="copiable-link" href='#index-scm_005fassv_005fref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fassoc_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_assoc_ref</strong> <var class="def-var-arguments">(alist, key)</var><a class="copiable-link" href='#index-scm_005fassoc_005fref'> &para;</a></span></dt>
+<dd><p>Return the value from the first entry in <var class="var">alist</var> with the given
+<var class="var">key</var>, or <code class="code">#f</code> if there&rsquo;s no such entry.
+</p>
+<p><code class="code">assq-ref</code> compares keys with <code class="code">eq?</code>, <code class="code">assv-ref</code> uses
+<code class="code">eqv?</code> and <code class="code">assoc-ref</code> uses <code class="code">equal?</code>.
+</p>
+<p>Notice these functions have the <var class="var">key</var> argument last, like other
+<code class="code">-ref</code> functions, but this is opposite to what <code class="code">assq</code>
+etc above use.
+</p>
+<p>When the return is <code class="code">#f</code> it can be either <var class="var">key</var> not found, or
+an entry which happens to have value <code class="code">#f</code> in the <code class="code">cdr</code>.  Use
+<code class="code">assq</code> etc above if you need to differentiate these cases.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Removing-Alist-Entries.html">Removing Alist Entries</a>, Previous: <a href="Adding-or-Setting-Alist-Entries.html">Adding or Setting Alist Entries</a>, Up: <a href="Association-Lists.html">Association Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

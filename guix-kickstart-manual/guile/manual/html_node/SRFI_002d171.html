@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-171 (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-171 (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-171 (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI-Support.html" rel="up" title="SRFI Support">
+<link href="SRFI_002d111.html" rel="prev" title="SRFI-111">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="SRFI_002d171">
+<div class="nav-panel">
+<p>
+Previous: <a href="SRFI_002d111.html" accesskey="p" rel="prev">SRFI-111 Boxes.</a>, Up: <a href="SRFI-Support.html" accesskey="u" rel="up">SRFI Support Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Transducers">7.5.46 Transducers</h4>
+<a class="index-entry-id" id="index-SRFI_002d171"></a>
+<a class="index-entry-id" id="index-transducers"></a>
+
+<p>Some of the most common operations used in the Scheme language are those
+transforming lists: map, filter, take and so on.  They work well, are well
+understood, and are used daily by most Scheme programmers.  They are however not
+general because they only work on lists, and they do not compose very well
+since combining N of them builds <code class="code">(- N 1)</code> intermediate lists.
+</p>
+<p>Transducers are oblivious to what kind of process they are used in, and
+are composable without building intermediate collections.  This means we
+can create a transducer that squares all odd numbers:
+</p>
+<div class="example">
+<pre class="example-preformatted">(compose (tfilter odd?) (tmap (lambda (x) (* x x))))
+</pre></div>
+
+<p>and reuse it with lists, vectors, or in just about any context where
+data flows in one direction.  We could use it as a processing step for
+asynchronous channels, with an event framework as a pre-processing step,
+or even in lazy contexts where you pass a lazy collection and a
+transducer to a function and get a new lazy collection back.
+</p>
+<p>The traditional Scheme approach of having collection-specific procedures
+is not changed.  We instead specify a general form of transformations
+that complement these procedures. The benefits are obvious: a clear,
+well-understood way of describing common transformations in a way that
+is faster than just chaining the collection-specific counterparts.  For
+guile in particular this means a lot better GC performance.
+</p>
+<p>Notice however that <code class="code">(compose &hellip;)</code> composes transducers
+left-to-right, due to how transducers are initiated.
+</p>
+
+<ul class="mini-toc">
+<li><a href="SRFI_002d171-General-Discussion.html" accesskey="1">SRFI-171 General Discussion</a></li>
+<li><a href="SRFI_002d171-Applying-Transducers.html" accesskey="2">Applying Transducers</a></li>
+<li><a href="SRFI_002d171-Reducers.html" accesskey="3">Reducers</a></li>
+<li><a href="SRFI_002d171-Transducers.html" accesskey="4">Transducers</a></li>
+<li><a href="SRFI_002d171-Helpers.html" accesskey="5">Helper functions for writing transducers</a></li>
+</ul>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="SRFI_002d111.html">SRFI-111 Boxes.</a>, Up: <a href="SRFI-Support.html">SRFI Support Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

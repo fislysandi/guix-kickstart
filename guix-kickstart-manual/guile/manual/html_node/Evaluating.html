@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Evaluating (Guile Reference Manual)</title>
+
+<meta name="description" content="Evaluating (Guile Reference Manual)">
+<meta name="keywords" content="Evaluating (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="About-Expressions.html" rel="up" title="About Expressions">
+<link href="Tail-Calls.html" rel="next" title="Tail Calls">
+<style type="text/css">
+<!--
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Evaluating">
+<div class="nav-panel">
+<p>
+Next: <a href="Tail-Calls.html" accesskey="n" rel="next">Tail calls</a>, Up: <a href="About-Expressions.html" accesskey="u" rel="up">Expressions and Evaluation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Evaluating-Expressions-and-Executing-Programs">3.3.1 Evaluating Expressions and Executing Programs</h4>
+
+<p>In Scheme, the process of executing an expression is known as
+<em class="dfn">evaluation</em>.  Evaluation has two kinds of result:
+</p>
+<ul class="itemize mark-bullet">
+<li>the <em class="dfn">value</em> of the evaluated expression
+
+</li><li>the <em class="dfn">side effects</em> of the evaluation, which consist of any effects of
+evaluating the expression that are not represented by the value.
+</li></ul>
+
+<p>Of the expressions that we have met so far, <code class="code">define</code> and
+<code class="code">set!</code> expressions have side effects &mdash; the creation or
+modification of a variable &mdash; but no value; <code class="code">lambda</code> expressions
+have values &mdash; the newly constructed procedures &mdash; but no side
+effects; and procedure invocation expressions, in general, have either
+values, or side effects, or both.
+</p>
+<p>It is tempting to try to define more intuitively what we mean by
+&ldquo;value&rdquo; and &ldquo;side effects&rdquo;, and what the difference between them is.
+In general, though, this is extremely difficult.  It is also
+unnecessary; instead, we can quite happily define the behaviour of a
+Scheme program by specifying how Scheme executes a program as a whole,
+and then by describing the value and side effects of evaluation for each
+type of expression individually.
+</p>
+<p>So, some<a class="footnote" id="DOCF1" href="#FOOT1"><sup>1</sup></a> definitions&hellip;
+</p>
+<ul class="itemize mark-bullet">
+<li>A Scheme program consists of a sequence of expressions.
+
+</li><li>A Scheme interpreter executes the program by evaluating these
+expressions in order, one by one.
+
+</li><li>An expression can be
+
+<ul class="itemize mark-bullet">
+<li>a piece of literal data, such as a number <code class="code">2.3</code> or a string
+<code class="code">&quot;Hello world!&quot;</code>
+</li><li>a variable name
+</li><li>a procedure invocation expression
+</li><li>one of Scheme&rsquo;s special syntactic expressions.
+</li></ul>
+</li></ul>
+
+<p>The following subsections describe how each of these types of expression
+is evaluated.
+</p>
+
+<ul class="mini-toc">
+<li><a href="Eval-Literal.html" accesskey="1">Evaluating Literal Data</a></li>
+<li><a href="Eval-Variable.html" accesskey="2">Evaluating a Variable Reference</a></li>
+<li><a href="Eval-Procedure.html" accesskey="3">Evaluating a Procedure Invocation Expression</a></li>
+<li><a href="Eval-Special.html" accesskey="4">Evaluating Special Syntactic Expressions</a></li>
+</ul>
+</div>
+<div class="footnotes-segment">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5 class="footnote-body-heading"><a id="FOOT1" href="#DOCF1">(1)</a></h5>
+<p>These definitions are approximate.  For the whole
+and detailed truth, see <a data-manual="r5rs" href="../r5rs_html/Formal-syntax-and-semantics.html#Formal-syntax-and-semantics">R5RS
+syntax</a> in <cite class="cite">The Revised(5) Report on the Algorithmic Language
+Scheme</cite>.</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Tail-Calls.html">Tail calls</a>, Up: <a href="About-Expressions.html">Expressions and Evaluation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

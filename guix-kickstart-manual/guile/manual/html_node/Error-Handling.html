@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Error Handling (Guile Reference Manual)</title>
+
+<meta name="description" content="Error Handling (Guile Reference Manual)">
+<meta name="keywords" content="Error Handling (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Using-Guile-Interactively.html" rel="up" title="Using Guile Interactively">
+<link href="Interactive-Debugging.html" rel="next" title="Interactive Debugging">
+<link href="REPL-Commands.html" rel="prev" title="REPL Commands">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+kbd.kbd {font-style: oblique}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Error-Handling">
+<div class="nav-panel">
+<p>
+Next: <a href="Interactive-Debugging.html" accesskey="n" rel="next">Interactive Debugging</a>, Previous: <a href="REPL-Commands.html" accesskey="p" rel="prev">REPL Commands</a>, Up: <a href="Using-Guile-Interactively.html" accesskey="u" rel="up">Using Guile Interactively</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Error-Handling-1">4.4.5 Error Handling</h4>
+
+<p>When code being evaluated from the REPL hits an error, Guile enters a
+new prompt, allowing you to inspect the context of the error.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">scheme@(guile-user)&gt; (map string-append '(&quot;a&quot; &quot;b&quot;) '(&quot;c&quot; #\d))
+ERROR: In procedure string-append:
+ERROR: Wrong type (expecting string): #\d
+Entering a new prompt.  Type `,bt' for a backtrace or `,q' to continue.
+scheme@(guile-user) [1]&gt;
+</pre></div>
+
+<p>The new prompt runs inside the old one, in the dynamic context of the
+error.  It is a recursive REPL, augmented with a reified representation
+of the stack, ready for debugging.
+</p>
+<p><code class="code">,backtrace</code> (abbreviated <code class="code">,bt</code>) displays the Scheme call
+stack at the point where the error occurred:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">scheme@(guile-user) [1]&gt; ,bt
+           1 (map #&lt;procedure string-append _&gt; (&quot;a&quot; &quot;b&quot;) (&quot;c&quot; #\d))
+           0 (string-append &quot;b&quot; #\d)
+</pre></div>
+
+<p>In the above example, the backtrace doesn&rsquo;t have much source
+information, as <code class="code">map</code> and <code class="code">string-append</code> are both
+primitives. But in the general case, the space on the left of the
+backtrace indicates the line and column in which a given procedure calls
+another.
+</p>
+<p>You can exit a recursive REPL in the same way that you exit any REPL:
+via &lsquo;<samp class="samp">(quit)</samp>&rsquo;, &lsquo;<samp class="samp">,quit</samp>&rsquo; (abbreviated &lsquo;<samp class="samp">,q</samp>&rsquo;), or
+<kbd class="kbd">C-d</kbd>, among other options.
+</p>
+
+</div>
+
+
+
+</body>
+</html>

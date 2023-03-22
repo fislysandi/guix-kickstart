@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Code Coverage (Guile Reference Manual)</title>
+
+<meta name="description" content="Code Coverage (Guile Reference Manual)">
+<meta name="keywords" content="Code Coverage (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="API-Reference.html" rel="up" title="API Reference">
+<link href="Debugging.html" rel="prev" title="Debugging">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Code-Coverage">
+<div class="nav-panel">
+<p>
+Previous: <a href="Debugging.html" accesskey="p" rel="prev">Debugging Infrastructure</a>, Up: <a href="API-Reference.html" accesskey="u" rel="up">API Reference</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Code-Coverage-Reports">6.27 Code Coverage Reports</h3>
+
+<a class="index-entry-id" id="index-code-coverage"></a>
+<a class="index-entry-id" id="index-coverage"></a>
+<p>When writing a test suite for a program or library, it is desirable to know what
+part of the code is <em class="dfn">covered</em> by the test suite.  The <code class="code">(system vm
+coverage)</code> module provides tools to gather code coverage data and to present
+them, as detailed below.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-with_002dcode_002dcoverage"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">with-code-coverage</strong> <var class="def-var-arguments">thunk</var><a class="copiable-link" href='#index-with_002dcode_002dcoverage'> &para;</a></span></dt>
+<dd><p>Run <var class="var">thunk</var>, a zero-argument procedure, while instrumenting Guile&rsquo;s
+virtual machine to collect code coverage data.  Return code coverage
+data and the values returned by <var class="var">thunk</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-coverage_002ddata_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">coverage-data?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-coverage_002ddata_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is a <em class="dfn">coverage data</em> object as returned by
+<code class="code">with-code-coverage</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-coverage_002ddata_002d_003elcov"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">coverage-data-&gt;lcov</strong> <var class="def-var-arguments">data port #:key modules</var><a class="copiable-link" href='#index-coverage_002ddata_002d_003elcov'> &para;</a></span></dt>
+<dd><p>Traverse code coverage information <var class="var">data</var>, as obtained with
+<code class="code">with-code-coverage</code>, and write coverage information to port in the
+<code class="code">.info</code> format used by <a class="url" href="http://ltp.sourceforge.net/coverage/lcov.php">LCOV</a>.  The report will include all of <var class="var">modules</var> (or, by default, all the
+currently loaded modules) even if their code was not executed.
+</p>
+<p>The generated data can be fed to LCOV&rsquo;s <code class="command">genhtml</code> command to produce an
+HTML report, which aids coverage data visualization.
+</p></dd></dl>
+
+<p>Here&rsquo;s an example use:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (system vm coverage)
+             (system vm vm))
+
+(call-with-values (lambda ()
+                    (with-code-coverage
+                      (lambda ()
+                        (do-something-tricky))))
+  (lambda (data result)
+    (let ((port (open-output-file &quot;lcov.info&quot;)))
+      (coverage-data-&gt;lcov data port)
+      (close port))))
+</pre></div>
+
+<p>In addition, the module provides low-level procedures that would make it
+possible to write other user interfaces to the coverage data.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-instrumented_002dsource_002dfiles"><span class="category-def">Scheme Procedures: </span><span><strong class="def-name">instrumented-source-files</strong> <var class="def-var-arguments">data</var><a class="copiable-link" href='#index-instrumented_002dsource_002dfiles'> &para;</a></span></dt>
+<dd><p>Return the list of &ldquo;instrumented&rdquo; source files, i.e., source files whose
+code was loaded at the time <var class="var">data</var> was collected.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-line_002dexecution_002dcounts"><span class="category-def">Scheme Procedures: </span><span><strong class="def-name">line-execution-counts</strong> <var class="def-var-arguments">data file</var><a class="copiable-link" href='#index-line_002dexecution_002dcounts'> &para;</a></span></dt>
+<dd><p>Return a list of line number/execution count pairs for <var class="var">file</var>, or
+<code class="code">#f</code> if <var class="var">file</var> is not among the files covered by <var class="var">data</var>.  This
+includes lines with zero count.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-instrumented_002fexecuted_002dlines"><span class="category-def">Scheme Procedures: </span><span><strong class="def-name">instrumented/executed-lines</strong> <var class="def-var-arguments">data file</var><a class="copiable-link" href='#index-instrumented_002fexecuted_002dlines'> &para;</a></span></dt>
+<dd><p>Return the number of instrumented and the number of executed source lines
+in <var class="var">file</var> according to <var class="var">data</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-procedure_002dexecution_002dcount"><span class="category-def">Scheme Procedures: </span><span><strong class="def-name">procedure-execution-count</strong> <var class="def-var-arguments">data proc</var><a class="copiable-link" href='#index-procedure_002dexecution_002dcount'> &para;</a></span></dt>
+<dd><p>Return the number of times <var class="var">proc</var>&rsquo;s code was executed, according to
+<var class="var">data</var>, or <code class="code">#f</code> if <var class="var">proc</var> was not executed.  When <var class="var">proc</var>
+is a closure, the number of times its code was executed is returned, not
+the number of times this code associated with this particular closure was
+executed.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Debugging.html">Debugging Infrastructure</a>, Up: <a href="API-Reference.html">API Reference</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

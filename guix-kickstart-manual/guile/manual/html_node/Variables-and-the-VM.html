@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Variables and the VM (Guile Reference Manual)</title>
+
+<meta name="description" content="Variables and the VM (Guile Reference Manual)">
+<meta name="keywords" content="Variables and the VM (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="A-Virtual-Machine-for-Guile.html" rel="up" title="A Virtual Machine for Guile">
+<link href="VM-Programs.html" rel="next" title="VM Programs">
+<link href="Stack-Layout.html" rel="prev" title="Stack Layout">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Variables-and-the-VM">
+<div class="nav-panel">
+<p>
+Next: <a href="VM-Programs.html" accesskey="n" rel="next">Compiled Procedures are VM Programs</a>, Previous: <a href="Stack-Layout.html" accesskey="p" rel="prev">Stack Layout</a>, Up: <a href="A-Virtual-Machine-for-Guile.html" accesskey="u" rel="up">A Virtual Machine for Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Variables-and-the-VM-1">9.3.4 Variables and the VM</h4>
+
+<p>Consider the following Scheme code as an example:
+</p>
+<div class="example">
+<pre class="example-preformatted">  (define (foo a)
+    (lambda (b) (vector foo a b)))
+</pre></div>
+
+<p>Within the lambda expression, <code class="code">foo</code> is a top-level variable,
+<code class="code">a</code> is a lexically captured variable, and <code class="code">b</code> is a local
+variable.
+</p>
+<p>Another way to refer to <code class="code">a</code> and <code class="code">b</code> is to say that <code class="code">a</code> is
+a &ldquo;free&rdquo; variable, since it is not defined within the lambda, and
+<code class="code">b</code> is a &ldquo;bound&rdquo; variable. These are the terms used in the
+<em class="dfn">lambda calculus</em>, a mathematical notation for describing functions.
+The lambda calculus is useful because it is a language in which to
+reason precisely about functions and variables.  It is especially good
+at describing scope relations, and it is for that reason that we mention
+it here.
+</p>
+<p>Guile allocates all variables on the stack. When a lexically enclosed
+procedure with free variables&mdash;a <em class="dfn">closure</em>&mdash;is created, it copies
+those variables into its free variable vector. References to free
+variables are then redirected through the free variable vector.
+</p>
+<p>If a variable is ever <code class="code">set!</code>, however, it will need to be
+heap-allocated instead of stack-allocated, so that different closures
+that capture the same variable can see the same value. Also, this
+allows continuations to capture a reference to the variable, instead
+of to its value at one point in time. For these reasons, <code class="code">set!</code>
+variables are allocated in &ldquo;boxes&rdquo;&mdash;actually, in variable cells.
+See <a class="xref" href="Variables.html">Variables</a>, for more information. References to <code class="code">set!</code>
+variables are indirected through the boxes.
+</p>
+<p>Thus perhaps counterintuitively, what would seem &ldquo;closer to the
+metal&rdquo;, viz <code class="code">set!</code>, actually forces an extra memory allocation and
+indirection.  Sometimes Guile&rsquo;s optimizer can remove this allocation,
+but not always.
+</p>
+<p>Going back to our example, <code class="code">b</code> may be allocated on the stack, as
+it is never mutated.
+</p>
+<p><code class="code">a</code> may also be allocated on the stack, as it too is never
+mutated. Within the enclosed lambda, its value will be copied into
+(and referenced from) the free variables vector.
+</p>
+<p><code class="code">foo</code> is a top-level variable, because <code class="code">foo</code> is not
+lexically bound in this example.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="VM-Programs.html">Compiled Procedures are VM Programs</a>, Previous: <a href="Stack-Layout.html">Stack Layout</a>, Up: <a href="A-Virtual-Machine-for-Guile.html">A Virtual Machine for Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>R7RS Standard Libraries (Guile Reference Manual)</title>
+
+<meta name="description" content="R7RS Standard Libraries (Guile Reference Manual)">
+<meta name="keywords" content="R7RS Standard Libraries (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="R7RS-Support.html" rel="up" title="R7RS Support">
+<link href="R7RS-Incompatibilities.html" rel="prev" title="R7RS Incompatibilities">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="R7RS-Standard-Libraries">
+<div class="nav-panel">
+<p>
+Previous: <a href="R7RS-Incompatibilities.html" accesskey="p" rel="prev">Incompatibilities with the R7RS</a>, Up: <a href="R7RS-Support.html" accesskey="u" rel="up">R7RS Support</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="R7RS-Standard-Libraries-1">7.7.2 R7RS Standard Libraries</h4>
+
+<p>The R7RS organizes the definitions from R5RS into modules, and also adds
+a few new definitions.
+</p>
+<p>We do not attempt to document these libraries fully here, as unlike
+R6RS, there are few new definitions in R7RS relative to R5RS.  Most of
+their functionality is already in Guile&rsquo;s standard environment.  Again,
+the expectation is that most Guile users will use the well-known and
+well-documented Guile modules; these R7RS libraries are mostly useful to
+users who want to port their code to other R7RS systems.
+</p>
+<p>As a brief overview, we note that the libraries defined by the R7RS are
+as follows:
+</p>
+<dl class="table">
+<dt><code class="code">(scheme base)</code></dt>
+<dd><p>The core functions, mostly corresponding to R5RS minus the elements
+listed separately below, but plus SRFI-34 error handling
+(see <a class="pxref" href="SRFI_002d34.html">SRFI-34 - Exception handling for programs</a>), bytevectors and bytevector ports
+(see <a class="pxref" href="Bytevectors.html">Bytevectors</a>), and some miscellaneous other new procedures.
+</p></dd>
+<dt><code class="code">(scheme case-lambda)</code></dt>
+<dd><p><code class="code">case-lambda</code>.
+</p></dd>
+<dt><code class="code">(scheme char)</code></dt>
+<dd><p>Converting strings and characters to upper or lower case, predicates for
+if a characer is numeric, and so on.
+</p></dd>
+<dt><code class="code">(scheme complex)</code></dt>
+<dd><p>Constructors and accessors for complex numbers.
+</p></dd>
+<dt><code class="code">(scheme cxr)</code></dt>
+<dd><p><code class="code">cddr</code>, <code class="code">cadadr</code>, and all that.
+</p></dd>
+<dt><code class="code">(scheme eval)</code></dt>
+<dd><p><code class="code">eval</code>, but also an <code class="code">environment</code> routine allowing a user to
+specify an environment using a module import set.
+</p></dd>
+<dt><code class="code">(scheme file)</code></dt>
+<dd><p><code class="code">call-with-input-file</code> and so on.
+</p></dd>
+<dt><code class="code">(scheme inexact)</code></dt>
+<dd><p>Routines that operate on inexact numbers: <code class="code">sin</code>, <code class="code">finite?</code>,
+and so on.
+</p></dd>
+<dt><code class="code">(scheme lazy)</code></dt>
+<dd><p>Promises.
+</p></dd>
+<dt><code class="code">(scheme load)</code></dt>
+<dd><p>The <code class="code">load</code> procedure.
+</p></dd>
+<dt><code class="code">(scheme process-context)</code></dt>
+<dd><p>Environment variables.  See <a class="xref" href="SRFI_002d98.html">SRFI-98 Accessing environment variables.</a>.  Also, <code class="code">commmand-line</code>,
+<code class="code">emergency-exit</code> (like Guile&rsquo;s <code class="code">primitive-_exit</code>), and
+<code class="code">exit</code>.
+</p></dd>
+<dt><code class="code">(scheme r5rs)</code></dt>
+<dd><p>The precise set of bindings exported by <code class="code">r5rs</code>, but without
+<code class="code">transcript-off</code> / <code class="code">transcript-on</code>, and also with the
+auxiliary syntax definitions like <code class="code">_</code> or <code class="code">else</code>.  See <a class="xref" href="Syntax-Rules.html">Syntax-rules Macros</a>, for more on auxiliary syntax.
+</p></dd>
+<dt><code class="code">(scheme read)</code></dt>
+<dd><p>The <code class="code">read</code> procedure.
+</p></dd>
+<dt><code class="code">(scheme repl)</code></dt>
+<dd><p>The <code class="code">interaction-environment</code> procedure.
+</p></dd>
+<dt><code class="code">(scheme time)</code></dt>
+<dd><p><code class="code">current-second</code>, as well as <code class="code">current-jiffy</code> and
+<code class="code">jiffies-per-second</code>.  Guile uses the term &ldquo;internal time unit&rdquo;
+for what R7RS calls &ldquo;jiffies&rdquo;.
+</p></dd>
+<dt><code class="code">(scheme write)</code></dt>
+<dd><p><code class="code">display</code>, <code class="code">write</code>, as well as <code class="code">write-shared</code> and
+<code class="code">write-simple</code>.
+</p></dd>
+</dl>
+
+<p>For complete documentation, we advise the interested user to consult the
+R7RS directly (see <a data-manual="r7rs" href="../r7rs_html/R7RS.html#R7RS">R7RS</a> in <cite class="cite">The Revised^7 Report on the
+Algorithmic Language Scheme</cite>).
+</p>
+
+
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="R7RS-Incompatibilities.html">Incompatibilities with the R7RS</a>, Up: <a href="R7RS-Support.html">R7RS Support</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

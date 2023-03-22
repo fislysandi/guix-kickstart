@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Comparison Instructions (Guile Reference Manual)</title>
+
+<meta name="description" content="Comparison Instructions (Guile Reference Manual)">
+<meta name="keywords" content="Comparison Instructions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Instruction-Set.html" rel="up" title="Instruction Set">
+<link href="Branch-Instructions.html" rel="next" title="Branch Instructions">
+<link href="Floating_002dPoint-Arithmetic-Instructions.html" rel="prev" title="Floating-Point Arithmetic Instructions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Comparison-Instructions">
+<div class="nav-panel">
+<p>
+Next: <a href="Branch-Instructions.html" accesskey="n" rel="next">Branch Instructions</a>, Previous: <a href="Floating_002dPoint-Arithmetic-Instructions.html" accesskey="p" rel="prev">Floating-Point Arithmetic Instructions</a>, Up: <a href="Instruction-Set.html" accesskey="u" rel="up">Instruction Set</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Comparison-Instructions-1">9.3.7.14 Comparison Instructions</h4>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-u64_003d_003f"><span class="category-def">Instruction: </span><span><strong class="def-name">u64=?</strong> <code class="def-code-arguments">s12:<var class="var">a</var> s12:<var class="var">b</var></code><a class="copiable-link" href='#index-u64_003d_003f'> &para;</a></span></dt>
+<dd><p>Set the comparison result to <var class="var">EQUAL</var> if the <code class="code">u64</code> values
+<var class="var">a</var> and <var class="var">b</var> are the same, or <code class="code">NONE</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-u64_003c_003f"><span class="category-def">Instruction: </span><span><strong class="def-name">u64&lt;?</strong> <code class="def-code-arguments">s12:<var class="var">a</var> s12:<var class="var">b</var></code><a class="copiable-link" href='#index-u64_003c_003f'> &para;</a></span></dt>
+<dd><p>Set the comparison result to <code class="code">LESS_THAN</code> if the <code class="code">u64</code> value
+<var class="var">a</var> is less than the <code class="code">u64</code> value <var class="var">b</var> are the same, or
+<code class="code">NONE</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-s64_003c_003f"><span class="category-def">Instruction: </span><span><strong class="def-name">s64&lt;?</strong> <code class="def-code-arguments">s12:<var class="var">a</var> s12:<var class="var">b</var></code><a class="copiable-link" href='#index-s64_003c_003f'> &para;</a></span></dt>
+<dd><p>Set the comparison result to <code class="code">LESS_THAN</code> if the <code class="code">s64</code> value
+<var class="var">a</var> is less than the <code class="code">s64</code> value <var class="var">b</var> are the same, or
+<code class="code">NONE</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-s64_002dimm_003d_003f"><span class="category-def">Instruction: </span><span><strong class="def-name">s64-imm=?</strong> <code class="def-code-arguments">s12:<var class="var">a</var> z12:<var class="var">b</var></code><a class="copiable-link" href='#index-s64_002dimm_003d_003f'> &para;</a></span></dt>
+<dd><p>Set the comparison result to <var class="var">EQUAL</var> if the <code class="code">s64</code> value <var class="var">a</var>
+is equal to the immediate <code class="code">s64</code> value <var class="var">b</var>, or <code class="code">NONE</code>
+otherwise.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-u64_002dimm_003c_003f"><span class="category-def">Instruction: </span><span><strong class="def-name">u64-imm&lt;?</strong> <code class="def-code-arguments">s12:<var class="var">a</var> c12:<var class="var">b</var></code><a class="copiable-link" href='#index-u64_002dimm_003c_003f'> &para;</a></span></dt>
+<dd><p>Set the comparison result to <code class="code">LESS_THAN</code> if the <code class="code">u64</code> value
+<var class="var">a</var> is less than the immediate <code class="code">u64</code> value <var class="var">b</var>, or
+<code class="code">NONE</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-imm_002du64_003c_003f"><span class="category-def">Instruction: </span><span><strong class="def-name">imm-u64&lt;?</strong> <code class="def-code-arguments">s12:<var class="var">a</var> s12:<var class="var">b</var></code><a class="copiable-link" href='#index-imm_002du64_003c_003f'> &para;</a></span></dt>
+<dd><p>Set the comparison result to <code class="code">LESS_THAN</code> if the <code class="code">u64</code>
+immediate <var class="var">b</var> is less than the <code class="code">u64</code> value <var class="var">a</var>, or
+<code class="code">NONE</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-s64_002dimm_003c_003f"><span class="category-def">Instruction: </span><span><strong class="def-name">s64-imm&lt;?</strong> <code class="def-code-arguments">s12:<var class="var">a</var> z12:<var class="var">b</var></code><a class="copiable-link" href='#index-s64_002dimm_003c_003f'> &para;</a></span></dt>
+<dd><p>Set the comparison result to <code class="code">LESS_THAN</code> if the <code class="code">s64</code> value
+<var class="var">a</var> is less than the immediate <code class="code">s64</code> value <var class="var">b</var>, or
+<code class="code">NONE</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-imm_002ds64_003c_003f"><span class="category-def">Instruction: </span><span><strong class="def-name">imm-s64&lt;?</strong> <code class="def-code-arguments">s12:<var class="var">a</var> z12:<var class="var">b</var></code><a class="copiable-link" href='#index-imm_002ds64_003c_003f'> &para;</a></span></dt>
+<dd><p>Set the comparison result to <code class="code">LESS_THAN</code> if the <code class="code">s64</code>
+immediate <var class="var">b</var> is less than the <code class="code">s64</code> value <var class="var">a</var>, or
+<code class="code">NONE</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-f64_003d_003f"><span class="category-def">Instruction: </span><span><strong class="def-name">f64=?</strong> <code class="def-code-arguments">s12:<var class="var">a</var> s12:<var class="var">b</var></code><a class="copiable-link" href='#index-f64_003d_003f'> &para;</a></span></dt>
+<dd><p>Set the comparison result to <var class="var">EQUAL</var> if the f64 value <var class="var">a</var> is
+equal to the f64 value <var class="var">b</var>, or <code class="code">NONE</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-f64_003c_003f"><span class="category-def">Instruction: </span><span><strong class="def-name">f64&lt;?</strong> <code class="def-code-arguments">s12:<var class="var">a</var> s12:<var class="var">b</var></code><a class="copiable-link" href='#index-f64_003c_003f'> &para;</a></span></dt>
+<dd><p>Set the comparison result to <code class="code">LESS_THAN</code> if the f64 value <var class="var">a</var>
+is less than the f64 value <var class="var">b</var>, <code class="code">NONE</code> if <var class="var">a</var> is greater
+than or equal to <var class="var">b</var>, or <code class="code">INVALID</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-_003d_003f"><span class="category-def">Instruction: </span><span><strong class="def-name">=?</strong> <code class="def-code-arguments">s12:<var class="var">a</var> s12:<var class="var">b</var></code><a class="copiable-link" href='#index-_003d_003f'> &para;</a></span></dt>
+<dd><p>Set the comparison result to <var class="var">EQUAL</var> if the SCM values <var class="var">a</var> and
+<var class="var">b</var> are numerically equal, in the sense of the Scheme <code class="code">=</code>
+operator.  Set to <code class="code">NONE</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-heap_002dnumbers_002dequal_003f"><span class="category-def">Instruction: </span><span><strong class="def-name">heap-numbers-equal?</strong> <code class="def-code-arguments">s12:<var class="var">a</var> s12:<var class="var">b</var></code><a class="copiable-link" href='#index-heap_002dnumbers_002dequal_003f'> &para;</a></span></dt>
+<dd><p>Set the comparison result to <var class="var">EQUAL</var> if the SCM values <var class="var">a</var> and
+<var class="var">b</var> are numerically equal, in the sense of Scheme <code class="code">=</code>.  Set to
+<code class="code">NONE</code> otherwise.  It is known that both <var class="var">a</var> and <var class="var">b</var> are
+heap numbers.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-_003c_003f"><span class="category-def">Instruction: </span><span><strong class="def-name">&lt;?</strong> <code class="def-code-arguments">s12:<var class="var">a</var> s12:<var class="var">b</var></code><a class="copiable-link" href='#index-_003c_003f'> &para;</a></span></dt>
+<dd><p>Set the comparison result to <code class="code">LESS_THAN</code> if the SCM value <var class="var">a</var>
+is less than the SCM value <var class="var">b</var>, <code class="code">NONE</code> if <var class="var">a</var> is greater
+than or equal to <var class="var">b</var>, or <code class="code">INVALID</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-immediate_002dtag_003d_003f"><span class="category-def">Instruction: </span><span><strong class="def-name">immediate-tag=?</strong> <code class="def-code-arguments">s24:<var class="var">obj</var> c16:<var class="var">mask</var> c16:<var class="var">tag</var></code><a class="copiable-link" href='#index-immediate_002dtag_003d_003f'> &para;</a></span></dt>
+<dd><p>Set the comparison result to <var class="var">EQUAL</var> if the result of a bitwise
+<code class="code">and</code> between the bits of <code class="code">scm</code> value <var class="var">a</var> and the
+immediate <var class="var">mask</var> is <var class="var">tag</var>, or <code class="code">NONE</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-heap_002dtag_003d_003f"><span class="category-def">Instruction: </span><span><strong class="def-name">heap-tag=?</strong> <code class="def-code-arguments">s24:<var class="var">obj</var> c16:<var class="var">mask</var> c16:<var class="var">tag</var></code><a class="copiable-link" href='#index-heap_002dtag_003d_003f'> &para;</a></span></dt>
+<dd><p>Set the comparison result to <var class="var">EQUAL</var> if the result of a bitwise
+<code class="code">and</code> between the first word of <code class="code">scm</code> value <var class="var">a</var> and the
+immediate <var class="var">mask</var> is <var class="var">tag</var>, or <code class="code">NONE</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-eq_003f-2"><span class="category-def">Instruction: </span><span><strong class="def-name">eq?</strong> <code class="def-code-arguments">s12:<var class="var">a</var> s12:<var class="var">b</var></code><a class="copiable-link" href='#index-eq_003f-2'> &para;</a></span></dt>
+<dd><p>Set the comparison result to <var class="var">EQUAL</var> if the SCM values <var class="var">a</var> and
+<var class="var">b</var> are <code class="code">eq?</code>, or <code class="code">NONE</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-eq_002dimmediate_003f"><span class="category-def">Instruction: </span><span><strong class="def-name">eq-immediate?</strong> <code class="def-code-arguments">s8:<var class="var">a</var> zi16:<var class="var">b</var></code><a class="copiable-link" href='#index-eq_002dimmediate_003f'> &para;</a></span></dt>
+<dd><p>Set the comparison result to <var class="var">EQUAL</var> if the SCM value <var class="var">a</var> is
+equal to the immediate SCM value <var class="var">b</var> (sign-extended), or <code class="code">NONE</code>
+otherwise.
+</p></dd></dl>
+
+<p>There are a set of macro-instructions for <code class="code">immediate-tag=?</code> and
+<code class="code">heap-tag=?</code> as well that abstract away the precise type tag
+values.  See <a class="xref" href="The-SCM-Type-in-Guile.html">The SCM Type in Guile</a>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-fixnum_003f-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">fixnum?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-fixnum_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-heap_002dobject_003f"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">heap-object?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-heap_002dobject_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-char_003f-2"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">char?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-char_003f-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-eq_002dfalse_003f"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">eq-false?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-eq_002dfalse_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-eq_002dnil_003f"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">eq-nil?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-eq_002dnil_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-eq_002dnull_003f"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">eq-null?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-eq_002dnull_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-eq_002dtrue_003f"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">eq-true?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-eq_002dtrue_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-unspecified_003f"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">unspecified?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-unspecified_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-undefined_003f"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">undefined?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-undefined_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-eof_002dobject_003f-3"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">eof-object?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-eof_002dobject_003f-3'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-null_003f-2"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">null?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-null_003f-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-false_003f"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">false?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-false_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-nil_003f-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">nil?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-nil_003f-1'> &para;</a></span></dt>
+<dd><p>Emit a <code class="code">immediate-tag=?</code> instruction that will set the comparison
+result to <code class="code">EQUAL</code> if <var class="var">x</var> would pass the corresponding predicate
+(e.g. <code class="code">null?</code>), or <code class="code">NONE</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-pair_003f-2"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">pair?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-pair_003f-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-struct_003f-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">struct?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-struct_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-symbol_003f-2"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">symbol?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-symbol_003f-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-variable_003f-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">variable?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-variable_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-vector_003f-3"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">vector?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-vector_003f-3'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-immutable_002dvector_003f"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">immutable-vector?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-immutable_002dvector_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-mutable_002dvector_003f"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">mutable-vector?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-mutable_002dvector_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-weak_002dvector_003f-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">weak-vector?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-weak_002dvector_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_003f-2"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">string?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-string_003f-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-heap_002dnumber_003f"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">heap-number?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-heap_002dnumber_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-hash_002dtable_003f-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">hash-table?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-hash_002dtable_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-pointer_003f-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">pointer?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-pointer_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-fluid_003f-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">fluid?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-fluid_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-stringbuf_003f"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">stringbuf?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-stringbuf_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-dynamic_002dstate_003f-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">dynamic-state?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-dynamic_002dstate_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-frame_003f-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">frame?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-frame_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-keyword_003f-2"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">keyword?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-keyword_003f-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-atomic_002dbox_003f-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">atomic-box?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-atomic_002dbox_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-syntax_003f"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">syntax?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-syntax_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-program_003f-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">program?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-program_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-vm_002dcontinuation_003f"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">vm-continuation?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-vm_002dcontinuation_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bytevector_003f-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">bytevector?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-bytevector_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-weak_002dset_003f"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">weak-set?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-weak_002dset_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-weak_002dtable_003f"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">weak-table?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-weak_002dtable_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-array_003f-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">array?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-array_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bitvector_003f-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">bitvector?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-bitvector_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-smob_003f"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">smob?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-smob_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-port_003f-2"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">port?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-port_003f-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-bignum_003f"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">bignum?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-bignum_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-flonum_003f-1"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">flonum?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-flonum_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-compnum_003f"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">compnum?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-compnum_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-fracnum_003f"><span class="category-def">Macro Instruction: </span><span><strong class="def-name">fracnum?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-fracnum_003f'> &para;</a></span></dt>
+<dd><p>Emit a <code class="code">heap-tag=?</code> instruction that will set the comparison result
+to <code class="code">EQUAL</code> if <var class="var">x</var> would pass the corresponding predicate
+(e.g. <code class="code">null?</code>), or <code class="code">NONE</code> otherwise.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Branch-Instructions.html">Branch Instructions</a>, Previous: <a href="Floating_002dPoint-Arithmetic-Instructions.html">Floating-Point Arithmetic Instructions</a>, Up: <a href="Instruction-Set.html">Instruction Set</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

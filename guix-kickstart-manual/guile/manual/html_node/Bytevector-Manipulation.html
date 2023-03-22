@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Bytevector Manipulation (Guile Reference Manual)</title>
+
+<meta name="description" content="Bytevector Manipulation (Guile Reference Manual)">
+<meta name="keywords" content="Bytevector Manipulation (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Bytevectors.html" rel="up" title="Bytevectors">
+<link href="Bytevectors-as-Integers.html" rel="next" title="Bytevectors as Integers">
+<link href="Bytevector-Endianness.html" rel="prev" title="Bytevector Endianness">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Bytevector-Manipulation">
+<div class="nav-panel">
+<p>
+Next: <a href="Bytevectors-as-Integers.html" accesskey="n" rel="next">Interpreting Bytevector Contents as Integers</a>, Previous: <a href="Bytevector-Endianness.html" accesskey="p" rel="prev">Endianness</a>, Up: <a href="Bytevectors.html" accesskey="u" rel="up">Bytevectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Manipulating-Bytevectors">6.6.12.2 Manipulating Bytevectors</h4>
+
+<p>Bytevectors can be created, copied, and analyzed with the following
+procedures and C functions.
+</p>
+<a class="anchor" id="x_002dmake_002dbytevector"></a><dl class="first-deffn">
+<dt class="deffn" id="index-make_002dbytevector"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-bytevector</strong> <var class="def-var-arguments">len [fill]</var><a class="copiable-link" href='#index-make_002dbytevector'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmake_005fbytevector"><span class="category-def">C Function: </span><span><strong class="def-name">scm_make_bytevector</strong> <var class="def-var-arguments">(len, fill)</var><a class="copiable-link" href='#index-scm_005fmake_005fbytevector'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fc_005fmake_005fbytevector"><span class="category-def">C Function: </span><span><strong class="def-name">scm_c_make_bytevector</strong> <var class="def-var-arguments">(size_t len)</var><a class="copiable-link" href='#index-scm_005fc_005fmake_005fbytevector'> &para;</a></span></dt>
+<dd><p>Return a new bytevector of <var class="var">len</var> bytes.  Optionally, if <var class="var">fill</var>
+is given, fill it with <var class="var">fill</var>; <var class="var">fill</var> must be in the range
+[-128,255].
+</p></dd></dl>
+
+<a class="anchor" id="x_002dbytevector_003f"></a><dl class="first-deffn">
+<dt class="deffn" id="index-bytevector_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-bytevector_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_p</strong> <var class="def-var-arguments">(obj)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fp'> &para;</a></span></dt>
+<dd><p>Return true if <var class="var">obj</var> is a bytevector.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fis_005fbytevector"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_is_bytevector</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-scm_005fis_005fbytevector'> &para;</a></span></dt>
+<dd><p>Equivalent to <code class="code">scm_is_true (scm_bytevector_p (obj))</code>.
+</p></dd></dl>
+
+<a class="anchor" id="x_002dbytevector_002dlength"></a><dl class="first-deffn">
+<dt class="deffn" id="index-bytevector_002dlength"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-length</strong> <var class="def-var-arguments">bv</var><a class="copiable-link" href='#index-bytevector_002dlength'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005flength"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_length</strong> <var class="def-var-arguments">(bv)</var><a class="copiable-link" href='#index-scm_005fbytevector_005flength'> &para;</a></span></dt>
+<dd><p>Return the length in bytes of bytevector <var class="var">bv</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fbytevector_005flength"><span class="category-def">C Function: </span><span><code class="def-type">size_t</code> <strong class="def-name">scm_c_bytevector_length</strong> <code class="def-code-arguments">(SCM bv)</code><a class="copiable-link" href='#index-scm_005fc_005fbytevector_005flength'> &para;</a></span></dt>
+<dd><p>Likewise, return the length in bytes of bytevector <var class="var">bv</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bytevector_003d_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector=?</strong> <var class="def-var-arguments">bv1 bv2</var><a class="copiable-link" href='#index-bytevector_003d_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005feq_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_eq_p</strong> <var class="def-var-arguments">(bv1, bv2)</var><a class="copiable-link" href='#index-scm_005fbytevector_005feq_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">bv1</var> equals <var class="var">bv2</var>&mdash;i.e., if they have the same
+length and contents.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bytevector_002dfill_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-fill!</strong> <var class="def-var-arguments">bv fill [start [end]]</var><a class="copiable-link" href='#index-bytevector_002dfill_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005ffill_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_fill_x</strong> <var class="def-var-arguments">(bv, fill)</var><a class="copiable-link" href='#index-scm_005fbytevector_005ffill_005fx'> &para;</a></span></dt>
+<dd><p>Fill positions [<var class="var">start</var> ... <var class="var">end</var>) of bytevector <var class="var">bv</var> with
+byte <var class="var">fill</var>.  <var class="var">start</var> defaults to 0 and <var class="var">end</var> defaults to the
+length of <var class="var">bv</var>.<a class="footnote" id="DOCF11" href="#FOOT11"><sup>11</sup></a>
+</p></dd></dl>
+
+<a class="anchor" id="x_002dr6_003abytevector_002dcopy_0021"></a><dl class="first-deffn">
+<dt class="deffn" id="index-bytevector_002dcopy_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-copy!</strong> <var class="def-var-arguments">source source-start target target-start len</var><a class="copiable-link" href='#index-bytevector_002dcopy_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fcopy_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_copy_x</strong> <var class="def-var-arguments">(source, source_start, target, target_start, len)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fcopy_005fx'> &para;</a></span></dt>
+<dd><p>Copy <var class="var">len</var> bytes from <var class="var">source</var> into <var class="var">target</var>, starting
+reading from <var class="var">source-start</var> (an index index within <var class="var">source</var>)
+and writing at <var class="var">target-start</var>.
+</p>
+<p>It is permitted for the <var class="var">source</var> and <var class="var">target</var> regions to
+overlap.  In that case, copying takes place as if the source is first
+copied into a temporary bytevector and then into the destination.
+</p></dd></dl>
+
+<a class="anchor" id="x_002dr6_003abytevector_002dcopy"></a><dl class="first-deffn">
+<dt class="deffn" id="index-bytevector_002dcopy"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-copy</strong> <var class="def-var-arguments">bv</var><a class="copiable-link" href='#index-bytevector_002dcopy'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbytevector_005fcopy"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bytevector_copy</strong> <var class="def-var-arguments">(bv)</var><a class="copiable-link" href='#index-scm_005fbytevector_005fcopy'> &para;</a></span></dt>
+<dd><p>Return a newly allocated copy of <var class="var">bv</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fbytevector_005fref"><span class="category-def">C Function: </span><span><code class="def-type">scm_t_uint8</code> <strong class="def-name">scm_c_bytevector_ref</strong> <code class="def-code-arguments">(SCM bv, size_t index)</code><a class="copiable-link" href='#index-scm_005fc_005fbytevector_005fref'> &para;</a></span></dt>
+<dd><p>Return the byte at <var class="var">index</var> in bytevector <var class="var">bv</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fbytevector_005fset_005fx"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_c_bytevector_set_x</strong> <code class="def-code-arguments">(SCM bv, size_t index, scm_t_uint8 value)</code><a class="copiable-link" href='#index-scm_005fc_005fbytevector_005fset_005fx'> &para;</a></span></dt>
+<dd><p>Set the byte at <var class="var">index</var> in <var class="var">bv</var> to <var class="var">value</var>.
+</p></dd></dl>
+
+<p>Low-level C macros are available.  They do not perform any
+type-checking; as such they should be used with care.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fBYTEVECTOR_005fLENGTH"><span class="category-def">C Macro: </span><span><code class="def-type">size_t</code> <strong class="def-name">SCM_BYTEVECTOR_LENGTH</strong> <code class="def-code-arguments">(bv)</code><a class="copiable-link" href='#index-SCM_005fBYTEVECTOR_005fLENGTH'> &para;</a></span></dt>
+<dd><p>Return the length in bytes of bytevector <var class="var">bv</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fBYTEVECTOR_005fCONTENTS"><span class="category-def">C Macro: </span><span><code class="def-type">signed char *</code> <strong class="def-name">SCM_BYTEVECTOR_CONTENTS</strong> <code class="def-code-arguments">(bv)</code><a class="copiable-link" href='#index-SCM_005fBYTEVECTOR_005fCONTENTS'> &para;</a></span></dt>
+<dd><p>Return a pointer to the contents of bytevector <var class="var">bv</var>.
+</p></dd></dl>
+
+
+</div>
+<div class="footnotes-segment">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5 class="footnote-body-heading"><a id="FOOT11" href="#DOCF11">(11)</a></h5>
+<p>R6RS only defines <code class="code">(bytevector-fill! bv
+fill)</code>.  Arguments <var class="var">start</var> and <var class="var">end</var> are a Guile extension
+(cf. <a class="ref" href="Vector-Accessors.html#x_002dvector_002dfill_0021"><code class="code">vector-fill!</code></a>,
+<a class="ref" href="String-Modification.html#x_002dstring_002dfill_0021"><code class="code">string-fill!</code></a>).</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Bytevectors-as-Integers.html">Interpreting Bytevector Contents as Integers</a>, Previous: <a href="Bytevector-Endianness.html">Endianness</a>, Up: <a href="Bytevectors.html">Bytevectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

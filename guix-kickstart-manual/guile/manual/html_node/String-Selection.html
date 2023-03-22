@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>String Selection (Guile Reference Manual)</title>
+
+<meta name="description" content="String Selection (Guile Reference Manual)">
+<meta name="keywords" content="String Selection (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Strings.html" rel="up" title="Strings">
+<link href="String-Modification.html" rel="next" title="String Modification">
+<link href="List_002fString-Conversion.html" rel="prev" title="List/String Conversion">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="String-Selection">
+<div class="nav-panel">
+<p>
+Next: <a href="String-Modification.html" accesskey="n" rel="next">String Modification</a>, Previous: <a href="List_002fString-Conversion.html" accesskey="p" rel="prev">List/String conversion</a>, Up: <a href="Strings.html" accesskey="u" rel="up">Strings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="String-Selection-1">6.6.5.5 String Selection</h4>
+
+<p>Portions of strings can be extracted by these procedures.
+<code class="code">string-ref</code> delivers individual characters whereas
+<code class="code">substring</code> can be used to extract substrings from longer strings.
+</p>
+<a class="index-entry-id" id="index-string_002dlength-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dlength"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-length</strong> <var class="def-var-arguments">string</var><a class="copiable-link" href='#index-string_002dlength'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005flength"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_length</strong> <var class="def-var-arguments">(string)</var><a class="copiable-link" href='#index-scm_005fstring_005flength'> &para;</a></span></dt>
+<dd><p>Return the number of characters in <var class="var">string</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fstring_005flength"><span class="category-def">C Function: </span><span><code class="def-type">size_t</code> <strong class="def-name">scm_c_string_length</strong> <code class="def-code-arguments">(SCM str)</code><a class="copiable-link" href='#index-scm_005fc_005fstring_005flength'> &para;</a></span></dt>
+<dd><p>Return the number of characters in <var class="var">str</var> as a <code class="code">size_t</code>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-string_002dref-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-ref</strong> <var class="def-var-arguments">str k</var><a class="copiable-link" href='#index-string_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_ref</strong> <var class="def-var-arguments">(str, k)</var><a class="copiable-link" href='#index-scm_005fstring_005fref'> &para;</a></span></dt>
+<dd><p>Return character <var class="var">k</var> of <var class="var">str</var> using zero-origin
+indexing. <var class="var">k</var> must be a valid index of <var class="var">str</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fstring_005fref"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_c_string_ref</strong> <code class="def-code-arguments">(SCM str, size_t k)</code><a class="copiable-link" href='#index-scm_005fc_005fstring_005fref'> &para;</a></span></dt>
+<dd><p>Return character <var class="var">k</var> of <var class="var">str</var> using zero-origin
+indexing. <var class="var">k</var> must be a valid index of <var class="var">str</var>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-string_002dcopy-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dcopy"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-copy</strong> <var class="def-var-arguments">str [start [end]]</var><a class="copiable-link" href='#index-string_002dcopy'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsubstring_005fcopy"><span class="category-def">C Function: </span><span><strong class="def-name">scm_substring_copy</strong> <var class="def-var-arguments">(str, start, end)</var><a class="copiable-link" href='#index-scm_005fsubstring_005fcopy'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fcopy"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_copy</strong> <var class="def-var-arguments">(str)</var><a class="copiable-link" href='#index-scm_005fstring_005fcopy'> &para;</a></span></dt>
+<dd><p>Return a copy of the given string <var class="var">str</var>.
+</p>
+<p>The returned string shares storage with <var class="var">str</var> initially, but it is
+copied as soon as one of the two strings is modified.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-substring-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-substring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">substring</strong> <var class="def-var-arguments">str start [end]</var><a class="copiable-link" href='#index-substring'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsubstring"><span class="category-def">C Function: </span><span><strong class="def-name">scm_substring</strong> <var class="def-var-arguments">(str, start, end)</var><a class="copiable-link" href='#index-scm_005fsubstring'> &para;</a></span></dt>
+<dd><p>Return a new string formed from the characters
+of <var class="var">str</var> beginning with index <var class="var">start</var> (inclusive) and
+ending with index <var class="var">end</var> (exclusive).
+<var class="var">str</var> must be a string, <var class="var">start</var> and <var class="var">end</var> must be
+exact integers satisfying:
+</p>
+<p>0 &lt;= <var class="var">start</var> &lt;= <var class="var">end</var> &lt;= <code class="code">(string-length <var class="var">str</var>)</code>.
+</p>
+<p>The returned string shares storage with <var class="var">str</var> initially, but it is
+copied as soon as one of the two strings is modified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-substring_002fshared"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">substring/shared</strong> <var class="def-var-arguments">str start [end]</var><a class="copiable-link" href='#index-substring_002fshared'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsubstring_005fshared"><span class="category-def">C Function: </span><span><strong class="def-name">scm_substring_shared</strong> <var class="def-var-arguments">(str, start, end)</var><a class="copiable-link" href='#index-scm_005fsubstring_005fshared'> &para;</a></span></dt>
+<dd><p>Like <code class="code">substring</code>, but the strings continue to share their storage
+even if they are modified.  Thus, modifications to <var class="var">str</var> show up
+in the new string, and vice versa.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-substring_002fcopy"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">substring/copy</strong> <var class="def-var-arguments">str start [end]</var><a class="copiable-link" href='#index-substring_002fcopy'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsubstring_005fcopy-1"><span class="category-def">C Function: </span><span><strong class="def-name">scm_substring_copy</strong> <var class="def-var-arguments">(str, start, end)</var><a class="copiable-link" href='#index-scm_005fsubstring_005fcopy-1'> &para;</a></span></dt>
+<dd><p>Like <code class="code">substring</code>, but the storage for the new string is copied
+immediately.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-substring_002fread_002donly"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">substring/read-only</strong> <var class="def-var-arguments">str start [end]</var><a class="copiable-link" href='#index-substring_002fread_002donly'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsubstring_005fread_005fonly"><span class="category-def">C Function: </span><span><strong class="def-name">scm_substring_read_only</strong> <var class="def-var-arguments">(str, start, end)</var><a class="copiable-link" href='#index-scm_005fsubstring_005fread_005fonly'> &para;</a></span></dt>
+<dd><p>Like <code class="code">substring</code>, but the resulting string can not be modified.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fsubstring"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_c_substring</strong> <code class="def-code-arguments">(SCM str, size_t start, size_t end)</code><a class="copiable-link" href='#index-scm_005fc_005fsubstring'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fc_005fsubstring_005fshared"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_c_substring_shared</strong> <code class="def-code-arguments">(SCM str, size_t start, size_t end)</code><a class="copiable-link" href='#index-scm_005fc_005fsubstring_005fshared'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fc_005fsubstring_005fcopy"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_c_substring_copy</strong> <code class="def-code-arguments">(SCM str, size_t start, size_t end)</code><a class="copiable-link" href='#index-scm_005fc_005fsubstring_005fcopy'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fc_005fsubstring_005fread_005fonly"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_c_substring_read_only</strong> <code class="def-code-arguments">(SCM str, size_t start, size_t end)</code><a class="copiable-link" href='#index-scm_005fc_005fsubstring_005fread_005fonly'> &para;</a></span></dt>
+<dd><p>Like <code class="code">scm_substring</code>, etc. but the bounds are given as a <code class="code">size_t</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dtake"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-take</strong> <var class="def-var-arguments">s n</var><a class="copiable-link" href='#index-string_002dtake'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005ftake"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_take</strong> <var class="def-var-arguments">(s, n)</var><a class="copiable-link" href='#index-scm_005fstring_005ftake'> &para;</a></span></dt>
+<dd><p>Return the <var class="var">n</var> first characters of <var class="var">s</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002ddrop"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-drop</strong> <var class="def-var-arguments">s n</var><a class="copiable-link" href='#index-string_002ddrop'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fdrop"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_drop</strong> <var class="def-var-arguments">(s, n)</var><a class="copiable-link" href='#index-scm_005fstring_005fdrop'> &para;</a></span></dt>
+<dd><p>Return all but the first <var class="var">n</var> characters of <var class="var">s</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dtake_002dright"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-take-right</strong> <var class="def-var-arguments">s n</var><a class="copiable-link" href='#index-string_002dtake_002dright'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005ftake_005fright"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_take_right</strong> <var class="def-var-arguments">(s, n)</var><a class="copiable-link" href='#index-scm_005fstring_005ftake_005fright'> &para;</a></span></dt>
+<dd><p>Return the <var class="var">n</var> last characters of <var class="var">s</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002ddrop_002dright"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-drop-right</strong> <var class="def-var-arguments">s n</var><a class="copiable-link" href='#index-string_002ddrop_002dright'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fdrop_005fright"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_drop_right</strong> <var class="def-var-arguments">(s, n)</var><a class="copiable-link" href='#index-scm_005fstring_005fdrop_005fright'> &para;</a></span></dt>
+<dd><p>Return all but the last <var class="var">n</var> characters of <var class="var">s</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dpad"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-pad</strong> <var class="def-var-arguments">s len [chr [start [end]]]</var><a class="copiable-link" href='#index-string_002dpad'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_002dpad_002dright"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-pad-right</strong> <var class="def-var-arguments">s len [chr [start [end]]]</var><a class="copiable-link" href='#index-string_002dpad_002dright'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fpad"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_pad</strong> <var class="def-var-arguments">(s, len, chr, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005fpad'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fpad_005fright"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_pad_right</strong> <var class="def-var-arguments">(s, len, chr, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005fpad_005fright'> &para;</a></span></dt>
+<dd><p>Take characters <var class="var">start</var> to <var class="var">end</var> from the string <var class="var">s</var> and
+either pad with <var class="var">chr</var> or truncate them to give <var class="var">len</var>
+characters.
+</p>
+<p><code class="code">string-pad</code> pads or truncates on the left, so for example
+</p>
+<div class="example">
+<pre class="example-preformatted">(string-pad &quot;x&quot; 3)     &rArr; &quot;  x&quot;
+(string-pad &quot;abcde&quot; 3) &rArr; &quot;cde&quot;
+</pre></div>
+
+<p><code class="code">string-pad-right</code> pads or truncates on the right, so for example
+</p>
+<div class="example">
+<pre class="example-preformatted">(string-pad-right &quot;x&quot; 3)     &rArr; &quot;x  &quot;
+(string-pad-right &quot;abcde&quot; 3) &rArr; &quot;abc&quot;
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dtrim"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-trim</strong> <var class="def-var-arguments">s [char_pred [start [end]]]</var><a class="copiable-link" href='#index-string_002dtrim'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_002dtrim_002dright"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-trim-right</strong> <var class="def-var-arguments">s [char_pred [start [end]]]</var><a class="copiable-link" href='#index-string_002dtrim_002dright'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_002dtrim_002dboth"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-trim-both</strong> <var class="def-var-arguments">s [char_pred [start [end]]]</var><a class="copiable-link" href='#index-string_002dtrim_002dboth'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005ftrim"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_trim</strong> <var class="def-var-arguments">(s, char_pred, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005ftrim'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005ftrim_005fright"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_trim_right</strong> <var class="def-var-arguments">(s, char_pred, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005ftrim_005fright'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005ftrim_005fboth"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_trim_both</strong> <var class="def-var-arguments">(s, char_pred, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005ftrim_005fboth'> &para;</a></span></dt>
+<dd><p>Trim occurrences of <var class="var">char_pred</var> from the ends of <var class="var">s</var>.
+</p>
+<p><code class="code">string-trim</code> trims <var class="var">char_pred</var> characters from the left
+(start) of the string, <code class="code">string-trim-right</code> trims them from the
+right (end) of the string, <code class="code">string-trim-both</code> trims from both
+ends.
+</p>
+<p><var class="var">char_pred</var> can be a character, a character set, or a predicate
+procedure to call on each character.  If <var class="var">char_pred</var> is not given
+the default is whitespace as per <code class="code">char-set:whitespace</code>
+(see <a class="pxref" href="Standard-Character-Sets.html">Standard Character Sets</a>).
+</p>
+<div class="example">
+<pre class="example-preformatted">(string-trim &quot; x &quot;)              &rArr; &quot;x &quot;
+(string-trim-right &quot;banana&quot; #\a) &rArr; &quot;banan&quot;
+(string-trim-both &quot;.,xy:;&quot; char-set:punctuation)
+                  &rArr; &quot;xy&quot;
+(string-trim-both &quot;xyzzy&quot; (lambda (c)
+                             (or (eqv? c #\x)
+                                 (eqv? c #\y))))
+                  &rArr; &quot;zz&quot;
+</pre></div>
+</dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="String-Modification.html">String Modification</a>, Previous: <a href="List_002fString-Conversion.html">List/String conversion</a>, Up: <a href="Strings.html">Strings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

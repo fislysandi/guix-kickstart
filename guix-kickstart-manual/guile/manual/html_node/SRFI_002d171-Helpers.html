@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-171 Helpers (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-171 Helpers (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-171 Helpers (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI_002d171.html" rel="up" title="SRFI-171">
+<link href="SRFI_002d171-Transducers.html" rel="prev" title="SRFI-171 Transducers">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="SRFI_002d171-Helpers">
+<div class="nav-panel">
+<p>
+Previous: <a href="SRFI_002d171-Transducers.html" accesskey="p" rel="prev">Transducers</a>, Up: <a href="SRFI_002d171.html" accesskey="u" rel="up">Transducers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Helper-functions-for-writing-transducers">7.5.46.5 Helper functions for writing transducers</h4>
+<a class="index-entry-id" id="index-transducers-helpers"></a>
+
+<p>These functions are in the <code class="code">(srfi srfi-171 meta)</code> module and are only
+usable when you want to write your own transducers.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-reduced"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">reduced</strong> <var class="def-var-arguments">value</var><a class="copiable-link" href='#index-reduced'> &para;</a></span></dt>
+<dd><p>Wraps a value in a <code class="code">&lt;reduced&gt;</code> container, signalling that the
+reduction should stop.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-reduced_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">reduced?</strong> <var class="def-var-arguments">value</var><a class="copiable-link" href='#index-reduced_003f'> &para;</a></span></dt>
+<dd><p>Returns #t if value is a <code class="code">&lt;reduced&gt;</code> record.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-unreduce"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">unreduce</strong> <var class="def-var-arguments">reduced-container</var><a class="copiable-link" href='#index-unreduce'> &para;</a></span></dt>
+<dd><p>Returns the value in reduced-container.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ensure_002dreduced"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ensure-reduced</strong> <var class="def-var-arguments">value</var><a class="copiable-link" href='#index-ensure_002dreduced'> &para;</a></span></dt>
+<dd><p>Wraps value in a <code class="code">&lt;reduced&gt;</code> container if it is not already reduced.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-preserving_002dreduced"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">preserving-reduced</strong> <var class="def-var-arguments">reducer</var><a class="copiable-link" href='#index-preserving_002dreduced'> &para;</a></span></dt>
+<dd><p>Wraps <code class="code">reducer</code> in another reducer that encapsulates any returned
+reduced value in another reduced container.  This is useful in places
+where you re-use a reducer with [collection]-reduce.  If the reducer
+returns a reduced value, [collection]-reduce unwraps it.  Unless handled,
+this leads to the reduction continuing.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-list_002dreduce"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list-reduce</strong> <var class="def-var-arguments">f identity lst</var><a class="copiable-link" href='#index-list_002dreduce'> &para;</a></span></dt>
+<dd><p>The reducing function used internally by <code class="code">list-transduce</code>.  <var class="var">f</var>
+is a reducer as returned by a transducer.  <var class="var">identity</var> is the
+identity (sometimes called &quot;seed&quot;) of the reduction.  <var class="var">lst</var> is a
+list.  If <var class="var">f</var> returns a reduced value, the reduction stops
+immediately and the unreduced value is returned.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dreduce"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-reduce</strong> <var class="def-var-arguments">f identity vec</var><a class="copiable-link" href='#index-vector_002dreduce'> &para;</a></span></dt>
+<dd><p>The vector version of list-reduce.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dreduce"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-reduce</strong> <var class="def-var-arguments">f identity str</var><a class="copiable-link" href='#index-string_002dreduce'> &para;</a></span></dt>
+<dd><p>The string version of list-reduce.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bytevector_002du8_002dreduce"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bytevector-u8-reduce</strong> <var class="def-var-arguments">f identity bv</var><a class="copiable-link" href='#index-bytevector_002du8_002dreduce'> &para;</a></span></dt>
+<dd><p>The bytevector-u8 version of list-reduce.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-port_002dreduce"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">port-reduce</strong> <var class="def-var-arguments">f identity reader port</var><a class="copiable-link" href='#index-port_002dreduce'> &para;</a></span></dt>
+<dd><p>The port version of list-reduce.  It reduces over port using reader
+until reader returns the EOF object.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-generator_002dreduce"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">generator-reduce</strong> <var class="def-var-arguments">f identity gen</var><a class="copiable-link" href='#index-generator_002dreduce'> &para;</a></span></dt>
+<dd><p>The generator version of list-reduce.  It reduces over <code class="code">gen</code> until
+it returns the EOF object
+</p></dd></dl>
+
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="SRFI_002d171-Transducers.html">Transducers</a>, Up: <a href="SRFI_002d171.html">Transducers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

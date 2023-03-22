@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Time (Guile Reference Manual)</title>
+
+<meta name="description" content="Time (Guile Reference Manual)">
+<meta name="keywords" content="Time (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="POSIX.html" rel="up" title="POSIX">
+<link href="Runtime-Environment.html" rel="next" title="Runtime Environment">
+<link href="User-Information.html" rel="prev" title="User Information">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Time">
+<div class="nav-panel">
+<p>
+Next: <a href="Runtime-Environment.html" accesskey="n" rel="next">Runtime Environment</a>, Previous: <a href="User-Information.html" accesskey="p" rel="prev">User Information</a>, Up: <a href="POSIX.html" accesskey="u" rel="up"><abbr class="acronym">POSIX</abbr> System Calls and Networking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Time-1">7.2.5 Time</h4>
+<a class="index-entry-id" id="index-time"></a>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-current_002dtime"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">current-time</strong><a class="copiable-link" href='#index-current_002dtime'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcurrent_005ftime"><span class="category-def">C Function: </span><span><strong class="def-name">scm_current_time</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fcurrent_005ftime'> &para;</a></span></dt>
+<dd><p>Return the number of seconds since 1970-01-01 00:00:00 <abbr class="acronym">UTC</abbr>,
+excluding leap seconds.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-gettimeofday"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">gettimeofday</strong><a class="copiable-link" href='#index-gettimeofday'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgettimeofday"><span class="category-def">C Function: </span><span><strong class="def-name">scm_gettimeofday</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fgettimeofday'> &para;</a></span></dt>
+<dd><p>Return a pair containing the number of seconds and microseconds
+since 1970-01-01 00:00:00 <abbr class="acronym">UTC</abbr>, excluding leap seconds.  Note:
+whether true microsecond resolution is available depends on the
+operating system.
+</p></dd></dl>
+
+<p>The following procedures either accept an object representing a broken down
+time and return a selected component, or accept an object representing
+a broken down time and a value and set the component to the value.
+The numbers in parentheses give the usual range.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-tm_003asec"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tm:sec</strong> <var class="def-var-arguments">tm</var><a class="copiable-link" href='#index-tm_003asec'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-set_002dtm_003asec"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-tm:sec</strong> <var class="def-var-arguments">tm val</var><a class="copiable-link" href='#index-set_002dtm_003asec'> &para;</a></span></dt>
+<dd><p>Seconds (0-59).
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-tm_003amin"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tm:min</strong> <var class="def-var-arguments">tm</var><a class="copiable-link" href='#index-tm_003amin'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-set_002dtm_003amin"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-tm:min</strong> <var class="def-var-arguments">tm val</var><a class="copiable-link" href='#index-set_002dtm_003amin'> &para;</a></span></dt>
+<dd><p>Minutes (0-59).
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-tm_003ahour"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tm:hour</strong> <var class="def-var-arguments">tm</var><a class="copiable-link" href='#index-tm_003ahour'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-set_002dtm_003ahour"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-tm:hour</strong> <var class="def-var-arguments">tm val</var><a class="copiable-link" href='#index-set_002dtm_003ahour'> &para;</a></span></dt>
+<dd><p>Hours (0-23).
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-tm_003amday"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tm:mday</strong> <var class="def-var-arguments">tm</var><a class="copiable-link" href='#index-tm_003amday'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-set_002dtm_003amday"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-tm:mday</strong> <var class="def-var-arguments">tm val</var><a class="copiable-link" href='#index-set_002dtm_003amday'> &para;</a></span></dt>
+<dd><p>Day of the month (1-31).
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-tm_003amon"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tm:mon</strong> <var class="def-var-arguments">tm</var><a class="copiable-link" href='#index-tm_003amon'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-set_002dtm_003amon"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-tm:mon</strong> <var class="def-var-arguments">tm val</var><a class="copiable-link" href='#index-set_002dtm_003amon'> &para;</a></span></dt>
+<dd><p>Month (0-11).
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-tm_003ayear"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tm:year</strong> <var class="def-var-arguments">tm</var><a class="copiable-link" href='#index-tm_003ayear'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-set_002dtm_003ayear"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-tm:year</strong> <var class="def-var-arguments">tm val</var><a class="copiable-link" href='#index-set_002dtm_003ayear'> &para;</a></span></dt>
+<dd><p>Year (70-), the year minus 1900.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-tm_003awday"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tm:wday</strong> <var class="def-var-arguments">tm</var><a class="copiable-link" href='#index-tm_003awday'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-set_002dtm_003awday"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-tm:wday</strong> <var class="def-var-arguments">tm val</var><a class="copiable-link" href='#index-set_002dtm_003awday'> &para;</a></span></dt>
+<dd><p>Day of the week (0-6) with Sunday represented as 0.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-tm_003ayday"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tm:yday</strong> <var class="def-var-arguments">tm</var><a class="copiable-link" href='#index-tm_003ayday'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-set_002dtm_003ayday"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-tm:yday</strong> <var class="def-var-arguments">tm val</var><a class="copiable-link" href='#index-set_002dtm_003ayday'> &para;</a></span></dt>
+<dd><p>Day of the year (0-364, 365 in leap years).
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-tm_003aisdst"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tm:isdst</strong> <var class="def-var-arguments">tm</var><a class="copiable-link" href='#index-tm_003aisdst'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-set_002dtm_003aisdst"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-tm:isdst</strong> <var class="def-var-arguments">tm val</var><a class="copiable-link" href='#index-set_002dtm_003aisdst'> &para;</a></span></dt>
+<dd><p>Daylight saving indicator (0 for &ldquo;no&rdquo;, greater than 0 for &ldquo;yes&rdquo;, less than
+0 for &ldquo;unknown&rdquo;).
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-tm_003agmtoff"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tm:gmtoff</strong> <var class="def-var-arguments">tm</var><a class="copiable-link" href='#index-tm_003agmtoff'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-set_002dtm_003agmtoff"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-tm:gmtoff</strong> <var class="def-var-arguments">tm val</var><a class="copiable-link" href='#index-set_002dtm_003agmtoff'> &para;</a></span></dt>
+<dd><p>Time zone offset in seconds west of <abbr class="acronym">UTC</abbr> (-46800 to 43200).
+For example on East coast USA (zone &lsquo;<samp class="samp">EST+5</samp>&rsquo;) this would be 18000
+(ie. <em class="math">5*60*60</em>) in winter, or 14400
+(ie. <em class="math">4*60*60</em>) during daylight savings.
+</p>
+<p>Note <code class="code">tm:gmtoff</code> is not the same as <code class="code">tm_gmtoff</code> in the C
+<code class="code">tm</code> structure.  <code class="code">tm_gmtoff</code> is seconds east and hence the
+negative of the value here.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-tm_003azone"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tm:zone</strong> <var class="def-var-arguments">tm</var><a class="copiable-link" href='#index-tm_003azone'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-set_002dtm_003azone"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-tm:zone</strong> <var class="def-var-arguments">tm val</var><a class="copiable-link" href='#index-set_002dtm_003azone'> &para;</a></span></dt>
+<dd><p>Time zone label (a string), not necessarily unique.
+</p></dd></dl>
+<br>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-localtime"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">localtime</strong> <var class="def-var-arguments">time [zone]</var><a class="copiable-link" href='#index-localtime'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flocaltime"><span class="category-def">C Function: </span><span><strong class="def-name">scm_localtime</strong> <var class="def-var-arguments">(time, zone)</var><a class="copiable-link" href='#index-scm_005flocaltime'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-local-time"></a>
+<p>Return an object representing the broken down components of
+<var class="var">time</var>, an integer like the one returned by
+<code class="code">current-time</code>.  The time zone for the calculation is
+optionally specified by <var class="var">zone</var> (a string), otherwise the
+<code class="env">TZ</code> environment variable or the system default is used.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-gmtime"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">gmtime</strong> <var class="def-var-arguments">time</var><a class="copiable-link" href='#index-gmtime'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fgmtime"><span class="category-def">C Function: </span><span><strong class="def-name">scm_gmtime</strong> <var class="def-var-arguments">(time)</var><a class="copiable-link" href='#index-scm_005fgmtime'> &para;</a></span></dt>
+<dd><p>Return an object representing the broken down components of
+<var class="var">time</var>, an integer like the one returned by
+<code class="code">current-time</code>.  The values are calculated for <abbr class="acronym">UTC</abbr>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-mktime"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">mktime</strong> <var class="def-var-arguments">sbd-time [zone]</var><a class="copiable-link" href='#index-mktime'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmktime"><span class="category-def">C Function: </span><span><strong class="def-name">scm_mktime</strong> <var class="def-var-arguments">(sbd_time, zone)</var><a class="copiable-link" href='#index-scm_005fmktime'> &para;</a></span></dt>
+<dd><p>For a broken down time object <var class="var">sbd-time</var>, return a pair the
+<code class="code">car</code> of which is an integer time like <code class="code">current-time</code>, and
+the <code class="code">cdr</code> of which is a new broken down time with normalized
+fields.
+</p>
+<p><var class="var">zone</var> is a timezone string, or the default is the <code class="env">TZ</code>
+environment variable or the system default (see <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/TZ-Variable.html#TZ-Variable">Specifying the Time Zone with <code class="env">TZ</code></a> in <cite class="cite">GNU C Library Reference
+Manual</cite>).  <var class="var">sbd-time</var> is taken to be in that <var class="var">zone</var>.
+</p>
+<p>The following fields of <var class="var">sbd-time</var> are used: <code class="code">tm:year</code>,
+<code class="code">tm:mon</code>, <code class="code">tm:mday</code>, <code class="code">tm:hour</code>, <code class="code">tm:min</code>,
+<code class="code">tm:sec</code>, <code class="code">tm:isdst</code>.  The values can be outside their usual
+ranges.  For example <code class="code">tm:hour</code> normally goes up to 23, but a
+value say 33 would mean 9 the following day.
+</p>
+<p><code class="code">tm:isdst</code> in <var class="var">sbd-time</var> says whether the time given is with
+daylight savings or not.  This is ignored if <var class="var">zone</var> doesn&rsquo;t have
+any daylight savings adjustment amount.
+</p>
+<p>The broken down time in the return normalizes the values of
+<var class="var">sbd-time</var> by bringing them into their usual ranges, and using the
+actual daylight savings rule for that time in <var class="var">zone</var> (which may
+differ from what <var class="var">sbd-time</var> had).  The easiest way to think of
+this is that <var class="var">sbd-time</var> plus <var class="var">zone</var> converts to the integer
+UTC time, then a <code class="code">localtime</code> is applied to get the normal
+presentation of that time, in <var class="var">zone</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-tzset"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tzset</strong><a class="copiable-link" href='#index-tzset'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005ftzset"><span class="category-def">C Function: </span><span><strong class="def-name">scm_tzset</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005ftzset'> &para;</a></span></dt>
+<dd><p>Initialize the timezone from the <code class="env">TZ</code> environment variable
+or the system default.  It&rsquo;s not usually necessary to call this procedure
+since it&rsquo;s done automatically by other procedures that depend on the
+timezone.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-strftime"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">strftime</strong> <var class="def-var-arguments">format tm</var><a class="copiable-link" href='#index-strftime'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstrftime"><span class="category-def">C Function: </span><span><strong class="def-name">scm_strftime</strong> <var class="def-var-arguments">(format, tm)</var><a class="copiable-link" href='#index-scm_005fstrftime'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-time-formatting"></a>
+<p>Return a string which is broken-down time structure <var class="var">tm</var> formatted
+according to the given <var class="var">format</var> string.
+</p>
+<p><var class="var">format</var> contains field specifications introduced by a &lsquo;<samp class="samp">%</samp>&rsquo;
+character.  See <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/Formatting-Calendar-Time.html#Formatting-Calendar-Time">Formatting Calendar Time</a> in <cite class="cite">The GNU C
+Library Reference Manual</cite>, or &lsquo;<samp class="samp">man 3 strftime</samp>&rsquo;, for the available
+formatting.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(strftime &quot;%c&quot; (localtime (current-time)))
+&rArr; &quot;Mon Mar 11 20:17:43 2002&quot;
+</pre></div>
+
+<p>If <code class="code">setlocale</code> has been called (see <a class="pxref" href="Locales.html">Locales</a>), month and day
+names are from the current locale and in the locale character set.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-strptime"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">strptime</strong> <var class="def-var-arguments">format string</var><a class="copiable-link" href='#index-strptime'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstrptime"><span class="category-def">C Function: </span><span><strong class="def-name">scm_strptime</strong> <var class="def-var-arguments">(format, string)</var><a class="copiable-link" href='#index-scm_005fstrptime'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-time-parsing"></a>
+<p>Performs the reverse action to <code class="code">strftime</code>, parsing
+<var class="var">string</var> according to the specification supplied in
+<var class="var">format</var>.  The interpretation of month and day names is
+dependent on the current locale.  The value returned is a pair.
+The <abbr class="acronym">CAR</abbr> has an object with time components
+in the form returned by <code class="code">localtime</code> or <code class="code">gmtime</code>,
+but the time zone components
+are not usefully set.
+The <abbr class="acronym">CDR</abbr> reports the number of characters from <var class="var">string</var>
+which were used for the conversion.
+</p></dd></dl>
+
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-internal_002dtime_002dunits_002dper_002dsecond"><span class="category-def">Variable: </span><span><strong class="def-name">internal-time-units-per-second</strong><a class="copiable-link" href='#index-internal_002dtime_002dunits_002dper_002dsecond'> &para;</a></span></dt>
+<dd><p>The value of this variable is the number of time units per second
+reported by the following procedures.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-times"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">times</strong><a class="copiable-link" href='#index-times'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005ftimes"><span class="category-def">C Function: </span><span><strong class="def-name">scm_times</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005ftimes'> &para;</a></span></dt>
+<dd><p>Return an object with information about real and processor
+time.  The following procedures accept such an object as an
+argument and return a selected component:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-tms_003aclock"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tms:clock</strong> <var class="def-var-arguments">tms</var><a class="copiable-link" href='#index-tms_003aclock'> &para;</a></span></dt>
+<dd><p>The current real time, expressed as time units relative to an
+arbitrary base.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-tms_003autime"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tms:utime</strong> <var class="def-var-arguments">tms</var><a class="copiable-link" href='#index-tms_003autime'> &para;</a></span></dt>
+<dd><p>The CPU time units used by the calling process.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-tms_003astime"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tms:stime</strong> <var class="def-var-arguments">tms</var><a class="copiable-link" href='#index-tms_003astime'> &para;</a></span></dt>
+<dd><p>The CPU time units used by the system on behalf of the calling
+process.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-tms_003acutime"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tms:cutime</strong> <var class="def-var-arguments">tms</var><a class="copiable-link" href='#index-tms_003acutime'> &para;</a></span></dt>
+<dd><p>The CPU time units used by terminated child processes of the
+calling process, whose status has been collected (e.g., using
+<code class="code">waitpid</code>).
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-tms_003acstime"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tms:cstime</strong> <var class="def-var-arguments">tms</var><a class="copiable-link" href='#index-tms_003acstime'> &para;</a></span></dt>
+<dd><p>Similarly, the CPU times units used by the system on behalf of
+terminated child processes.
+</p></dd></dl>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-get_002dinternal_002dreal_002dtime"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-internal-real-time</strong><a class="copiable-link" href='#index-get_002dinternal_002dreal_002dtime'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fget_005finternal_005freal_005ftime"><span class="category-def">C Function: </span><span><strong class="def-name">scm_get_internal_real_time</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fget_005finternal_005freal_005ftime'> &para;</a></span></dt>
+<dd><p>Return the number of time units since the interpreter was
+started.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-get_002dinternal_002drun_002dtime"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-internal-run-time</strong><a class="copiable-link" href='#index-get_002dinternal_002drun_002dtime'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fget_005finternal_005frun_005ftime"><span class="category-def">C Function: </span><span><strong class="def-name">scm_get_internal_run_time</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fget_005finternal_005frun_005ftime'> &para;</a></span></dt>
+<dd><p>Return the number of time units of processor time used by the
+interpreter.  Both <em class="emph">system</em> and <em class="emph">user</em> time are
+included but subprocesses are not.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Runtime-Environment.html">Runtime Environment</a>, Previous: <a href="User-Information.html">User Information</a>, Up: <a href="POSIX.html"><abbr class="acronym">POSIX</abbr> System Calls and Networking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

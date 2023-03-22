@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>rnrs lists (Guile Reference Manual)</title>
+
+<meta name="description" content="rnrs lists (Guile Reference Manual)">
+<meta name="keywords" content="rnrs lists (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="R6RS-Standard-Libraries.html" rel="up" title="R6RS Standard Libraries">
+<link href="rnrs-sorting.html" rel="next" title="rnrs sorting">
+<link href="rnrs-bytevectors.html" rel="prev" title="rnrs bytevectors">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="rnrs-lists">
+<div class="nav-panel">
+<p>
+Next: <a href="rnrs-sorting.html" accesskey="n" rel="next">rnrs sorting</a>, Previous: <a href="rnrs-bytevectors.html" accesskey="p" rel="prev">rnrs bytevectors</a>, Up: <a href="R6RS-Standard-Libraries.html" accesskey="u" rel="up">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="rnrs-lists-1">7.6.2.5 rnrs lists</h4>
+
+<p>The <code class="code">(rnrs lists (6))</code> library provides procedures additional
+procedures for working with lists.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-find-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">find</strong> <var class="def-var-arguments">proc list</var><a class="copiable-link" href='#index-find-1'> &para;</a></span></dt>
+<dd><p>This procedure is identical to the one defined in Guile&rsquo;s SRFI-1
+implementation.  See <a class="xref" href="SRFI_002d1-Searching.html">Searching</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-for_002dall"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">for-all</strong> <var class="def-var-arguments">proc list1 list2 ...</var><a class="copiable-link" href='#index-for_002dall'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-exists"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exists</strong> <var class="def-var-arguments">proc list1 list2 ...</var><a class="copiable-link" href='#index-exists'> &para;</a></span></dt>
+<dd>
+<p>The <code class="code">for-all</code> procedure is identical to the <code class="code">every</code> procedure
+defined by SRFI-1; the <code class="code">exists</code> procedure is identical to SRFI-1&rsquo;s 
+<code class="code">any</code>.  See <a class="xref" href="SRFI_002d1-Searching.html">Searching</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-filter-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">filter</strong> <var class="def-var-arguments">proc list</var><a class="copiable-link" href='#index-filter-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-partition-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">partition</strong> <var class="def-var-arguments">proc list</var><a class="copiable-link" href='#index-partition-1'> &para;</a></span></dt>
+<dd><p>These procedures are identical to the ones provided by SRFI-1.  
+See <a class="xref" href="List-Modification.html">List Modification</a>, for a description of <code class="code">filter</code>;
+See <a class="xref" href="SRFI_002d1-Filtering-and-Partitioning.html">Filtering and Partitioning</a>, for <code class="code">partition</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-fold_002dright-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fold-right</strong> <var class="def-var-arguments">combine nil list1 list2 &hellip;</var><a class="copiable-link" href='#index-fold_002dright-1'> &para;</a></span></dt>
+<dd><p>This procedure is identical the <code class="code">fold-right</code> procedure provided by
+SRFI-1.  See <a class="xref" href="SRFI_002d1-Fold-and-Map.html">Fold, Unfold &amp; Map</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-fold_002dleft"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fold-left</strong> <var class="def-var-arguments">combine nil list1 list2 &hellip;</var><a class="copiable-link" href='#index-fold_002dleft'> &para;</a></span></dt>
+<dd><p>This procedure is like <code class="code">fold</code> from SRFI-1, but <var class="var">combine</var> is
+called with the seed as the first argument.  See <a class="xref" href="SRFI_002d1-Fold-and-Map.html">Fold, Unfold &amp; Map</a>,
+for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-remp"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">remp</strong> <var class="def-var-arguments">proc list</var><a class="copiable-link" href='#index-remp'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-remove-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">remove</strong> <var class="def-var-arguments">obj list</var><a class="copiable-link" href='#index-remove-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-remv"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">remv</strong> <var class="def-var-arguments">obj list</var><a class="copiable-link" href='#index-remv'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-remq"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">remq</strong> <var class="def-var-arguments">obj list</var><a class="copiable-link" href='#index-remq'> &para;</a></span></dt>
+<dd><p><code class="code">remove</code>, <code class="code">remv</code>, and <code class="code">remq</code> are identical to the
+<code class="code">delete</code>, <code class="code">delv</code>, and <code class="code">delq</code> procedures provided by
+Guile&rsquo;s core library, (see <a class="pxref" href="List-Modification.html">List Modification</a>).  <code class="code">remp</code> is
+identical to the alternate <code class="code">remove</code> procedure provided by SRFI-1;
+See <a class="xref" href="SRFI_002d1-Deleting.html">Deleting</a>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-memp"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">memp</strong> <var class="def-var-arguments">proc list</var><a class="copiable-link" href='#index-memp'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-member-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">member</strong> <var class="def-var-arguments">obj list</var><a class="copiable-link" href='#index-member-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-memv-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">memv</strong> <var class="def-var-arguments">obj list</var><a class="copiable-link" href='#index-memv-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-memq-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">memq</strong> <var class="def-var-arguments">obj list</var><a class="copiable-link" href='#index-memq-1'> &para;</a></span></dt>
+<dd><p><code class="code">member</code>, <code class="code">memv</code>, and <code class="code">memq</code> are identical to the 
+procedures provided by Guile&rsquo;s core library; See <a class="xref" href="List-Searching.html">List Searching</a>, 
+for their documentation.  <code class="code">memp</code> uses the specified predicate
+function <code class="code">proc</code> to test elements of the list <var class="var">list</var>&mdash;it 
+behaves similarly to <code class="code">find</code>, except that it returns the first 
+sublist of <var class="var">list</var> whose <code class="code">car</code> satisfies <var class="var">proc</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-assp"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">assp</strong> <var class="def-var-arguments">proc alist</var><a class="copiable-link" href='#index-assp'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-assoc-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">assoc</strong> <var class="def-var-arguments">obj alist</var><a class="copiable-link" href='#index-assoc-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-assv-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">assv</strong> <var class="def-var-arguments">obj alist</var><a class="copiable-link" href='#index-assv-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-assq-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">assq</strong> <var class="def-var-arguments">obj alist</var><a class="copiable-link" href='#index-assq-1'> &para;</a></span></dt>
+<dd><p><code class="code">assoc</code>, <code class="code">assv</code>, and <code class="code">assq</code> are identical to the 
+procedures provided by Guile&rsquo;s core library; 
+See <a class="xref" href="Alist-Key-Equality.html">Alist Key Equality</a>, for their documentation.  <code class="code">assp</code> uses
+the specified predicate function <code class="code">proc</code> to test keys in the
+association list <var class="var">alist</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-cons_002a-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cons*</strong> <var class="def-var-arguments">obj1 ... obj</var><a class="copiable-link" href='#index-cons_002a-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cons_002a-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cons*</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-cons_002a-2'> &para;</a></span></dt>
+<dd><p>This procedure is identical to the one exported by Guile&rsquo;s core
+library.  See <a class="xref" href="List-Constructors.html">List Constructors</a>, for documentation.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="rnrs-sorting.html">rnrs sorting</a>, Previous: <a href="rnrs-bytevectors.html">rnrs bytevectors</a>, Up: <a href="R6RS-Standard-Libraries.html">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

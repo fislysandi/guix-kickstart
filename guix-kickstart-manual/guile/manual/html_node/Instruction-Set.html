@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Instruction Set (Guile Reference Manual)</title>
+
+<meta name="description" content="Instruction Set (Guile Reference Manual)">
+<meta name="keywords" content="Instruction Set (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="A-Virtual-Machine-for-Guile.html" rel="up" title="A Virtual Machine for Guile">
+<link href="Just_002dIn_002dTime-Native-Code.html" rel="next" title="Just-In-Time Native Code">
+<link href="Object-File-Format.html" rel="prev" title="Object File Format">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Instruction-Set">
+<div class="nav-panel">
+<p>
+Next: <a href="Just_002dIn_002dTime-Native-Code.html" accesskey="n" rel="next">Just-In-Time Native Code</a>, Previous: <a href="Object-File-Format.html" accesskey="p" rel="prev">Object File Format</a>, Up: <a href="A-Virtual-Machine-for-Guile.html" accesskey="u" rel="up">A Virtual Machine for Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Instruction-Set-1">9.3.7 Instruction Set</h4>
+
+<p>There are currently about 150 instructions in Guile&rsquo;s virtual machine.
+These instructions represent atomic units of a program&rsquo;s execution.
+Ideally, they perform one task without conditional branches, then
+dispatch to the next instruction in the stream.
+</p>
+<p>Instructions themselves are composed of 1 or more 32-bit units.  The low
+8 bits of the first word indicate the opcode, and the rest of
+instruction describe the operands.  There are a number of different ways
+operands can be encoded.
+</p>
+<dl class="table">
+<dt><code class="code">s<var class="var">n</var></code></dt>
+<dd><p>An unsigned <var class="var">n</var>-bit integer, indicating the <code class="code">sp</code>-relative index
+of a local variable.
+</p></dd>
+<dt><code class="code">f<var class="var">n</var></code></dt>
+<dd><p>An unsigned <var class="var">n</var>-bit integer, indicating the <code class="code">fp</code>-relative index
+of a local variable.  Used when a continuation accepts a variable number
+of values, to shuffle received values into known locations in the
+frame.
+</p></dd>
+<dt><code class="code">c<var class="var">n</var></code></dt>
+<dd><p>An unsigned <var class="var">n</var>-bit integer, indicating a constant value.
+</p></dd>
+<dt><code class="code">l24</code></dt>
+<dd><p>An offset from the current <code class="code">ip</code>, in 32-bit units, as a signed
+24-bit value.  Indicates a bytecode address, for a relative jump.
+</p></dd>
+<dt><code class="code">zi16</code></dt>
+<dt><code class="code">i16</code></dt>
+<dt><code class="code">i32</code></dt>
+<dd><p>An immediate Scheme value (see <a class="pxref" href="Immediate-Objects.html">Immediate Objects</a>), encoded directly
+in 16 or 32 bits.  <code class="code">zi16</code> is sign-extended; the others are
+zero-extended.
+</p></dd>
+<dt><code class="code">a32</code></dt>
+<dt><code class="code">b32</code></dt>
+<dd><p>An immediate Scheme value, encoded as a pair of 32-bit words.
+<code class="code">a32</code> and <code class="code">b32</code> values always go together on the same opcode,
+and indicate the high and low bits, respectively.  Normally only used on
+64-bit systems.
+</p></dd>
+<dt><code class="code">n32</code></dt>
+<dd><p>A statically allocated non-immediate.  The address of the non-immediate
+is encoded as a signed 32-bit integer, and indicates a relative offset
+in 32-bit units.  Think of it as <code class="code">SCM x = ip + offset</code>.
+</p></dd>
+<dt><code class="code">r32</code></dt>
+<dd><p>Indirect scheme value, like <code class="code">n32</code> but indirected.  Think of it as
+<code class="code">SCM *x = ip + offset</code>.
+</p></dd>
+<dt><code class="code">l32</code></dt>
+<dt><code class="code">lo32</code></dt>
+<dd><p>An ip-relative address, as a signed 32-bit integer.  Could indicate a
+bytecode address, as in <code class="code">make-closure</code>, or a non-immediate address,
+as with <code class="code">static-patch!</code>.
+</p>
+<p><code class="code">l32</code> and <code class="code">lo32</code> are the same from the perspective of the
+virtual machine.  The difference is that an assembler might want to
+allow an <code class="code">lo32</code> address to be specified as a label and then some
+number of words offset from that label, for example when patching a
+field of a statically allocated object.
+</p></dd>
+<dt><code class="code">v32:x8-l24</code></dt>
+<dd><p>Almost all VM instructions have a fixed size.  The <code class="code">jtable</code>
+instruction used to perform optimized <code class="code">case</code> branches is an
+exception, which uses a <code class="code">v32</code> trailing word to indicate the number
+of additional words in the instruction, which themselves are encoded as
+<code class="code">x8-l24</code> values.
+</p></dd>
+<dt><code class="code">b1</code></dt>
+<dd><p>A boolean value: 1 for true, otherwise 0.
+</p></dd>
+<dt><code class="code">x<var class="var">n</var></code></dt>
+<dd><p>An ignored sequence of <var class="var">n</var> bits.
+</p></dd>
+</dl>
+
+<p>An instruction is specified by giving its name, then describing its
+operands.  The operands are packed by 32-bit words, with earlier
+operands occupying the lower bits.
+</p>
+<p>For example, consider the following instruction specification:
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-call"><span class="category-def">Instruction: </span><span><strong class="def-name">call</strong> <code class="def-code-arguments">f24:<var class="var">proc</var> x8:<var class="var">_</var> c24:<var class="var">nlocals</var></code><a class="copiable-link" href='#index-call'> &para;</a></span></dt>
+</dl>
+
+<p>The first word in the instruction will start with the 8-bit value
+corresponding to the <var class="var">call</var> opcode in the low bits, followed by
+<var class="var">proc</var> as a 24-bit value.  The second word starts with 8 dead bits,
+followed by the index as a 24-bit immediate value.
+</p>
+<p>For instructions with operands that encode references to the stack, the
+interpretation of those stack values is up to the instruction itself.
+Most instructions expect their operands to be tagged SCM values
+(<code class="code">scm</code> representation), but some instructions expect unboxed
+integers (<code class="code">u64</code> and <code class="code">s64</code> representations) or floating-point
+numbers (<code class="code">f64</code> representation).  It is assumed that the bits for a
+<code class="code">u64</code> value are the same as those for an <code class="code">s64</code> value, and that
+<code class="code">s64</code> values are stored in two&rsquo;s complement.
+</p>
+<p>Instructions have static types:  they must receive their operands in the
+format they expect.  It&rsquo;s up to the compiler to ensure this is the case.
+</p>
+<p>Unless otherwise mentioned, all operands and results are in the
+<code class="code">scm</code> representation.
+</p>
+
+
+<ul class="mini-toc">
+<li><a href="Call-and-Return-Instructions.html" accesskey="1">Call and Return Instructions</a></li>
+<li><a href="Function-Prologue-Instructions.html" accesskey="2">Function Prologue Instructions</a></li>
+<li><a href="Shuffling-Instructions.html" accesskey="3">Shuffling Instructions</a></li>
+<li><a href="Trampoline-Instructions.html" accesskey="4">Trampoline Instructions</a></li>
+<li><a href="Non_002dLocal-Control-Flow-Instructions.html" accesskey="5">Non-Local Control Flow Instructions</a></li>
+<li><a href="Instrumentation-Instructions.html" accesskey="6">Instrumentation Instructions</a></li>
+<li><a href="Intrinsic-Call-Instructions.html" accesskey="7">Intrinsic Call Instructions</a></li>
+<li><a href="Constant-Instructions.html" accesskey="8">Constant Instructions</a></li>
+<li><a href="Memory-Access-Instructions.html" accesskey="9">Memory Access Instructions</a></li>
+<li><a href="Atomic-Memory-Access-Instructions.html">Atomic Memory Access Instructions</a></li>
+<li><a href="Tagging-and-Untagging-Instructions.html">Tagging and Untagging Instructions</a></li>
+<li><a href="Integer-Arithmetic-Instructions.html">Integer Arithmetic Instructions</a></li>
+<li><a href="Floating_002dPoint-Arithmetic-Instructions.html">Floating-Point Arithmetic Instructions</a></li>
+<li><a href="Comparison-Instructions.html">Comparison Instructions</a></li>
+<li><a href="Branch-Instructions.html">Branch Instructions</a></li>
+<li><a href="Raw-Memory-Access-Instructions.html">Raw Memory Access Instructions</a></li>
+</ul>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Just_002dIn_002dTime-Native-Code.html">Just-In-Time Native Code</a>, Previous: <a href="Object-File-Format.html">Object File Format</a>, Up: <a href="A-Virtual-Machine-for-Guile.html">A Virtual Machine for Guile</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Sloppy Alist Functions (Guile Reference Manual)</title>
+
+<meta name="description" content="Sloppy Alist Functions (Guile Reference Manual)">
+<meta name="keywords" content="Sloppy Alist Functions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Association-Lists.html" rel="up" title="Association Lists">
+<link href="Alist-Example.html" rel="next" title="Alist Example">
+<link href="Removing-Alist-Entries.html" rel="prev" title="Removing Alist Entries">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Sloppy-Alist-Functions">
+<div class="nav-panel">
+<p>
+Next: <a href="Alist-Example.html" accesskey="n" rel="next">Alist Example</a>, Previous: <a href="Removing-Alist-Entries.html" accesskey="p" rel="prev">Removing Alist Entries</a>, Up: <a href="Association-Lists.html" accesskey="u" rel="up">Association Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Sloppy-Alist-Functions-1">6.6.20.5 Sloppy Alist Functions</h4>
+
+<p><code class="code">sloppy-assq</code>, <code class="code">sloppy-assv</code> and <code class="code">sloppy-assoc</code> behave
+like the corresponding non-<code class="code">sloppy-</code> procedures, except that they
+return <code class="code">#f</code> when the specified association list is not well-formed,
+where the non-<code class="code">sloppy-</code> versions would signal an error.
+</p>
+<p>Specifically, there are two conditions for which the non-<code class="code">sloppy-</code>
+procedures signal an error, which the <code class="code">sloppy-</code> procedures handle
+instead by returning <code class="code">#f</code>.  Firstly, if the specified alist as a
+whole is not a proper list:
+</p>
+<div class="example">
+<pre class="example-preformatted">(assoc &quot;mary&quot; '((1 . 2) (&quot;key&quot; . &quot;door&quot;) . &quot;open sesame&quot;))
+&rArr;
+ERROR: In procedure assoc in expression (assoc &quot;mary&quot; (quote #)):
+ERROR: Wrong type argument in position 2 (expecting
+   association list): ((1 . 2) (&quot;key&quot; . &quot;door&quot;) . &quot;open sesame&quot;)
+
+(sloppy-assoc &quot;mary&quot; '((1 . 2) (&quot;key&quot; . &quot;door&quot;) . &quot;open sesame&quot;))
+&rArr;
+#f
+</pre></div>
+
+<p>Secondly, if one of the entries in the specified alist is not a pair:
+</p>
+<div class="example">
+<pre class="example-preformatted">(assoc 2 '((1 . 1) 2 (3 . 9)))
+&rArr;
+ERROR: In procedure assoc in expression (assoc 2 (quote #)):
+ERROR: Wrong type argument in position 2 (expecting
+   association list): ((1 . 1) 2 (3 . 9))
+
+(sloppy-assoc 2 '((1 . 1) 2 (3 . 9)))
+&rArr;
+#f
+</pre></div>
+
+<p>Unless you are explicitly working with badly formed association lists,
+it is much safer to use the non-<code class="code">sloppy-</code> procedures, because they
+help to highlight coding and data errors that the <code class="code">sloppy-</code>
+versions would silently cover up.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-sloppy_002dassq"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sloppy-assq</strong> <var class="def-var-arguments">key alist</var><a class="copiable-link" href='#index-sloppy_002dassq'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsloppy_005fassq"><span class="category-def">C Function: </span><span><strong class="def-name">scm_sloppy_assq</strong> <var class="def-var-arguments">(key, alist)</var><a class="copiable-link" href='#index-scm_005fsloppy_005fassq'> &para;</a></span></dt>
+<dd><p>Behaves like <code class="code">assq</code> but does not do any error checking.
+Recommended only for use in Guile internals.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-sloppy_002dassv"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sloppy-assv</strong> <var class="def-var-arguments">key alist</var><a class="copiable-link" href='#index-sloppy_002dassv'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsloppy_005fassv"><span class="category-def">C Function: </span><span><strong class="def-name">scm_sloppy_assv</strong> <var class="def-var-arguments">(key, alist)</var><a class="copiable-link" href='#index-scm_005fsloppy_005fassv'> &para;</a></span></dt>
+<dd><p>Behaves like <code class="code">assv</code> but does not do any error checking.
+Recommended only for use in Guile internals.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-sloppy_002dassoc"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sloppy-assoc</strong> <var class="def-var-arguments">key alist</var><a class="copiable-link" href='#index-sloppy_002dassoc'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsloppy_005fassoc"><span class="category-def">C Function: </span><span><strong class="def-name">scm_sloppy_assoc</strong> <var class="def-var-arguments">(key, alist)</var><a class="copiable-link" href='#index-scm_005fsloppy_005fassoc'> &para;</a></span></dt>
+<dd><p>Behaves like <code class="code">assoc</code> but does not do any error checking.
+Recommended only for use in Guile internals.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Alist-Example.html">Alist Example</a>, Previous: <a href="Removing-Alist-Entries.html">Removing Alist Entries</a>, Up: <a href="Association-Lists.html">Association Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

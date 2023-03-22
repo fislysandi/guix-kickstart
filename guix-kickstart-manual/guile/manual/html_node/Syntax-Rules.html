@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Syntax Rules (Guile Reference Manual)</title>
+
+<meta name="description" content="Syntax Rules (Guile Reference Manual)">
+<meta name="keywords" content="Syntax Rules (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Macros.html" rel="up" title="Macros">
+<link href="Syntax-Case.html" rel="next" title="Syntax Case">
+<link href="Defining-Macros.html" rel="prev" title="Defining Macros">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Syntax-Rules">
+<div class="nav-panel">
+<p>
+Next: <a href="Syntax-Case.html" accesskey="n" rel="next">Support for the <code class="code">syntax-case</code> System</a>, Previous: <a href="Defining-Macros.html" accesskey="p" rel="prev">Defining Macros</a>, Up: <a href="Macros.html" accesskey="u" rel="up">Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Syntax_002drules-Macros">6.8.2 Syntax-rules Macros</h4>
+
+<p><code class="code">syntax-rules</code> macros are simple, pattern-driven syntax transformers, with
+a beauty worthy of Scheme.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-syntax_002drules"><span class="category-def">Syntax: </span><span><strong class="def-name">syntax-rules</strong> <var class="def-var-arguments">literals (pattern template) &hellip;</var><a class="copiable-link" href='#index-syntax_002drules'> &para;</a></span></dt>
+<dd><p>Create a syntax transformer that will rewrite an expression using the rules
+embodied in the <var class="var">pattern</var> and <var class="var">template</var> clauses.
+</p></dd></dl>
+
+<p>A <code class="code">syntax-rules</code> macro consists of three parts: the literals (if any), the
+patterns, and as many templates as there are patterns.
+</p>
+<p>When the syntax expander sees the invocation of a <code class="code">syntax-rules</code> macro, it
+matches the expression against the patterns, in order, and rewrites the
+expression using the template from the first matching pattern. If no pattern
+matches, a syntax error is signalled.
+</p>
+<ul class="mini-toc">
+<li><a href="#Patterns" accesskey="1">Patterns</a></li>
+<li><a href="#Hygiene" accesskey="2">Hygiene</a></li>
+<li><a href="#Shorthands" accesskey="3">Shorthands</a></li>
+<li><a href="#Reporting-Syntax-Errors-in-Macros" accesskey="4">Reporting Syntax Errors in Macros</a></li>
+<li><a href="#Specifying-a-Custom-Ellipsis-Identifier" accesskey="5">Specifying a Custom Ellipsis Identifier</a></li>
+<li><a href="#Further-Information" accesskey="6">Further Information</a></li>
+</ul>
+<div class="subsubsection-level-extent" id="Patterns">
+<h4 class="subsubsection">6.8.2.1 Patterns</h4>
+
+<p>We have already seen some examples of patterns in the previous section:
+<code class="code">(unless condition exp ...)</code>, <code class="code">(my-or exp)</code>, and so on. A pattern is
+structured like the expression that it is to match. It can have nested structure
+as well, like <code class="code">(let ((var val) ...) exp exp* ...)</code>. Broadly speaking,
+patterns are made of lists, improper lists, vectors, identifiers, and datums.
+Users can match a sequence of patterns using the ellipsis (<code class="code">...</code>).
+</p>
+<p>Identifiers in a pattern are called <em class="dfn">literals</em> if they are present in the
+<code class="code">syntax-rules</code> literals list, and <em class="dfn">pattern variables</em> otherwise. When
+building up the macro output, the expander replaces instances of a pattern
+variable in the template with the matched subexpression.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-syntax kwote
+  (syntax-rules ()
+    ((kwote exp)
+     (quote exp))))
+(kwote (foo . bar))
+&rArr; (foo . bar)
+</pre></div>
+
+<p>An improper list of patterns matches as rest arguments do:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-syntax let1
+  (syntax-rules ()
+    ((_ (var val) . exps)
+     (let ((var val)) . exps))))
+</pre></div>
+
+<p>However this definition of <code class="code">let1</code> probably isn&rsquo;t what you want, as the tail
+pattern <var class="var">exps</var> will match non-lists, like <code class="code">(let1 (foo 'bar) . baz)</code>. So
+often instead of using improper lists as patterns, ellipsized patterns are
+better. Instances of a pattern variable in the template must be followed by an
+ellipsis.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-syntax let1
+  (syntax-rules ()
+    ((_ (var val) exp ...)
+     (let ((var val)) exp ...))))
+</pre></div>
+
+<p>This <code class="code">let1</code> probably still doesn&rsquo;t do what we want, because the body
+matches sequences of zero expressions, like <code class="code">(let1 (foo 'bar))</code>. In this
+case we need to assert we have at least one body expression. A common idiom for
+this is to name the ellipsized pattern variable with an asterisk:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-syntax let1
+  (syntax-rules ()
+    ((_ (var val) exp exp* ...)
+     (let ((var val)) exp exp* ...))))
+</pre></div>
+
+<p>A vector of patterns matches a vector whose contents match the patterns,
+including ellipsizing and tail patterns.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-syntax letv
+  (syntax-rules ()
+    ((_ #((var val) ...) exp exp* ...)
+     (let ((var val) ...) exp exp* ...))))
+(letv #((foo 'bar)) foo)
+&rArr; bar
+</pre></div>
+
+<p>Literals are used to match specific datums in an expression, like the use of
+<code class="code">=&gt;</code> and <code class="code">else</code> in <code class="code">cond</code> expressions.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-syntax cond1
+  (syntax-rules (=&gt; else)
+    ((cond1 test =&gt; fun)
+     (let ((exp test))
+       (if exp (fun exp) #f)))
+    ((cond1 test exp exp* ...)
+     (if test (begin exp exp* ...)))
+    ((cond1 else exp exp* ...)
+     (begin exp exp* ...))))
+
+(define (square x) (* x x))
+(cond1 10 =&gt; square)
+&rArr; 100
+(let ((=&gt; #t))
+  (cond1 10 =&gt; square))
+&rArr; #&lt;procedure square (x)&gt;
+</pre></div>
+
+<p>A literal matches an input expression if the input expression is an identifier
+with the same name as the literal, and both are unbound<a class="footnote" id="DOCF14" href="#FOOT14"><sup>14</sup></a>.
+</p>
+<a class="index-entry-id" id="index-auxiliary-syntax"></a>
+<a class="index-entry-id" id="index-syntax_002c-auxiliary"></a>
+<p>Although literals can be unbound, usually they are bound to allow them
+to be imported, exported, and renamed.  See <a class="xref" href="Modules.html">Modules</a>, for more
+information on imports and exports.  In Guile there are a few standard
+auxiliary syntax definitions, as specified by R6RS and R7RS:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-else"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">else</strong><a class="copiable-link" href='#index-else'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_003d_003e"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">=&gt;</strong><a class="copiable-link" href='#index-_003d_003e'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_005f"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">_</strong><a class="copiable-link" href='#index-_005f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_002e_002e_002e"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">...</strong><a class="copiable-link" href='#index-_002e_002e_002e'> &para;</a></span></dt>
+<dd><p>Auxiliary syntax definitions.
+</p>
+<p>These are defined as if with a macro that never matches, e.g.:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-syntax else (syntax-rules ()))
+</pre></div>
+</dd></dl>
+
+<p>If a pattern is not a list, vector, or an identifier, it matches as a literal,
+with <code class="code">equal?</code>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-syntax define-matcher-macro
+  (syntax-rules ()
+    ((_ name lit)
+     (define-syntax name
+       (syntax-rules ()
+        ((_ lit) #t)
+        ((_ else) #f))))))
+
+(define-matcher-macro is-literal-foo? &quot;foo&quot;)
+
+(is-literal-foo? &quot;foo&quot;)
+&rArr; #t
+(is-literal-foo? &quot;bar&quot;)
+&rArr; #f
+(let ((foo &quot;foo&quot;))
+  (is-literal-foo? foo))
+&rArr; #f
+</pre></div>
+
+<p>The last example indicates that matching happens at expansion-time, not
+at run-time.
+</p>
+<p>Syntax-rules macros are always used as <code class="code">(<var class="var">macro</var> . <var class="var">args</var>)</code>, and
+the <var class="var">macro</var> will always be a symbol. Correspondingly, a <code class="code">syntax-rules</code>
+pattern must be a list (proper or improper), and the first pattern in that list
+must be an identifier. Incidentally it can be any identifier &ndash; it doesn&rsquo;t have
+to actually be the name of the macro. Thus the following three are equivalent:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-syntax when
+  (syntax-rules ()
+    ((when c e ...)
+     (if c (begin e ...)))))
+
+(define-syntax when
+  (syntax-rules ()
+    ((_ c e ...)
+     (if c (begin e ...)))))
+
+(define-syntax when
+  (syntax-rules ()
+    ((something-else-entirely c e ...)
+     (if c (begin e ...)))))
+</pre></div>
+
+<p>For clarity, use one of the first two variants. Also note that since the pattern
+variable will always match the macro itself (e.g., <code class="code">cond1</code>), it is actually
+left unbound in the template.
+</p>
+</div>
+<div class="subsubsection-level-extent" id="Hygiene">
+<h4 class="subsubsection">6.8.2.2 Hygiene</h4>
+
+<p><code class="code">syntax-rules</code> macros have a magical property: they preserve referential
+transparency. When you read a macro definition, any free bindings in that macro
+are resolved relative to the macro definition; and when you read a macro
+instantiation, all free bindings in that expression are resolved relative to the
+expression.
+</p>
+<p>This property is sometimes known as <em class="dfn">hygiene</em>, and it does aid in code
+cleanliness. In your macro definitions, you can feel free to introduce temporary
+variables, without worrying about inadvertently introducing bindings into the
+macro expansion.
+</p>
+<p>Consider the definition of <code class="code">my-or</code> from the previous section:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-syntax my-or
+  (syntax-rules ()
+    ((my-or)
+     #t)
+    ((my-or exp)
+     exp)
+    ((my-or exp rest ...)
+     (let ((t exp))
+       (if t
+           t
+           (my-or rest ...))))))
+</pre></div>
+
+<p>A naive expansion of <code class="code">(let ((t #t)) (my-or #f t))</code> would yield:
+</p>
+<div class="example">
+<pre class="example-preformatted">(let ((t #t))
+  (let ((t #f))
+    (if t t t)))
+&rArr; #f
+</pre></div>
+
+<p>Which clearly is not what we want. Somehow the <code class="code">t</code> in the definition is
+distinct from the <code class="code">t</code> at the site of use; and it is indeed this distinction
+that is maintained by the syntax expander, when expanding hygienic macros.
+</p>
+<p>This discussion is mostly relevant in the context of traditional Lisp macros
+(see <a class="pxref" href="Defmacros.html">Lisp-style Macro Definitions</a>), which do not preserve referential transparency. Hygiene
+adds to the expressive power of Scheme.
+</p>
+</div>
+<div class="subsubsection-level-extent" id="Shorthands">
+<h4 class="subsubsection">6.8.2.3 Shorthands</h4>
+
+<p>One often ends up writing simple one-clause <code class="code">syntax-rules</code> macros.
+There is a convenient shorthand for this idiom, in the form of
+<code class="code">define-syntax-rule</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-define_002dsyntax_002drule"><span class="category-def">Syntax: </span><span><strong class="def-name">define-syntax-rule</strong> <var class="def-var-arguments">(keyword . pattern) [docstring] template</var><a class="copiable-link" href='#index-define_002dsyntax_002drule'> &para;</a></span></dt>
+<dd><p>Define <var class="var">keyword</var> as a new <code class="code">syntax-rules</code> macro with one clause.
+</p></dd></dl>
+
+<p>Cast into this form, our <code class="code">when</code> example is significantly shorter:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-syntax-rule (when c e ...)
+  (if c (begin e ...)))
+</pre></div>
+
+</div>
+<div class="subsubsection-level-extent" id="Reporting-Syntax-Errors-in-Macros">
+<h4 class="subsubsection">6.8.2.4 Reporting Syntax Errors in Macros</h4>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-syntax_002derror"><span class="category-def">Syntax: </span><span><strong class="def-name">syntax-error</strong> <var class="def-var-arguments">message [arg ...]</var><a class="copiable-link" href='#index-syntax_002derror'> &para;</a></span></dt>
+<dd><p>Report an error at macro-expansion time.  <var class="var">message</var> must be a string
+literal, and the optional <var class="var">arg</var> operands can be arbitrary expressions
+providing additional information.
+</p></dd></dl>
+
+<p><code class="code">syntax-error</code> is intended to be used within <code class="code">syntax-rules</code>
+templates.  For example:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-syntax simple-let
+  (syntax-rules ()
+    ((_ (head ... ((x . y) val) . tail)
+        body1 body2 ...)
+     (syntax-error
+      &quot;expected an identifier but got&quot;
+      (x . y)))
+    ((_ ((name val) ...) body1 body2 ...)
+     ((lambda (name ...) body1 body2 ...)
+      val ...))))
+</pre></div>
+
+</div>
+<div class="subsubsection-level-extent" id="Specifying-a-Custom-Ellipsis-Identifier">
+<h4 class="subsubsection">6.8.2.5 Specifying a Custom Ellipsis Identifier</h4>
+
+<p>When writing macros that generate macro definitions, it is convenient to
+use a different ellipsis identifier at each level.  Guile allows the
+desired ellipsis identifier to be specified as the first operand to
+<code class="code">syntax-rules</code>, as specified by SRFI-46 and R7RS.  For example:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-syntax define-quotation-macros
+  (syntax-rules ()
+    ((_ (macro-name head-symbol) ...)
+     (begin (define-syntax macro-name
+              (syntax-rules ::: ()
+                ((_ x :::)
+                 (quote (head-symbol x :::)))))
+            ...))))
+(define-quotation-macros (quote-a a) (quote-b b) (quote-c c))
+(quote-a 1 2 3) &rArr; (a 1 2 3)
+</pre></div>
+
+</div>
+<div class="subsubsection-level-extent" id="Further-Information">
+<h4 class="subsubsection">6.8.2.6 Further Information</h4>
+
+<p>For a formal definition of <code class="code">syntax-rules</code> and its pattern language, see
+See <a data-manual="r5rs" href="../r5rs_html/Macros.html#Macros">Macros</a> in <cite class="cite">Revised(5) Report on the Algorithmic Language
+Scheme</cite>.
+</p>
+<p><code class="code">syntax-rules</code> macros are simple and clean, but do they have limitations.
+They do not lend themselves to expressive error messages: patterns either match
+or they don&rsquo;t. Their ability to generate code is limited to template-driven
+expansion; often one needs to define a number of helper macros to get real work
+done. Sometimes one wants to introduce a binding into the lexical context of the
+generated code; this is impossible with <code class="code">syntax-rules</code>. Relatedly, they
+cannot programmatically generate identifiers.
+</p>
+<p>The solution to all of these problems is to use <code class="code">syntax-case</code> if you need
+its features. But if for some reason you&rsquo;re stuck with <code class="code">syntax-rules</code>, you
+might enjoy Joe Marshall&rsquo;s
+<a class="uref" href="http://sites.google.com/site/evalapply/eccentric.txt"><code class="code">syntax-rules</code>
+Primer for the Merely Eccentric</a>.
+</p>
+</div>
+</div>
+<div class="footnotes-segment">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5 class="footnote-body-heading"><a id="FOOT14" href="#DOCF14">(14)</a></h5>
+<p>Language
+lawyers probably see the need here for use of <code class="code">literal-identifier=?</code> rather
+than <code class="code">free-identifier=?</code>, and would probably be correct. Patches
+accepted.</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Syntax-Case.html">Support for the <code class="code">syntax-case</code> System</a>, Previous: <a href="Defining-Macros.html">Defining Macros</a>, Up: <a href="Macros.html">Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

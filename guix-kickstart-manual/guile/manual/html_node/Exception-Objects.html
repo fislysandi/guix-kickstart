@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Exception Objects (Guile Reference Manual)</title>
+
+<meta name="description" content="Exception Objects (Guile Reference Manual)">
+<meta name="keywords" content="Exception Objects (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Exceptions.html" rel="up" title="Exceptions">
+<link href="Raising-and-Handling-Exceptions.html" rel="next" title="Raising and Handling Exceptions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Exception-Objects">
+<div class="nav-panel">
+<p>
+Next: <a href="Raising-and-Handling-Exceptions.html" accesskey="n" rel="next">Raising and Handling Exceptions</a>, Up: <a href="Exceptions.html" accesskey="u" rel="up">Exceptions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Exception-Objects-1">6.11.8.1 Exception Objects</h4>
+
+<p>When Guile encounters an exceptional situation, it raises an exception,
+where the exception is an object that describes the exceptional
+situation.  Exception objects are structured data, built on the record
+facility (see <a class="pxref" href="Records.html">Records</a>).
+</p>
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0026exception"><span class="category-def">Exception Type: </span><span><strong class="def-name">&amp;exception</strong><a class="copiable-link" href='#index-_0026exception'> &para;</a></span></dt>
+<dd><p>The base exception type.  All exception objects are composed of
+instances of subtypes of <code class="code">&amp;exception</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-exception_002dtype_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exception-type?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-exception_002dtype_003f'> &para;</a></span></dt>
+<dd><p>Return true if <var class="var">obj</var> is an exception type.
+</p></dd></dl>
+
+<p>Exception types exist in a hierarchy.  New exception types can be
+defined using <code class="code">make-exception-type</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dexception_002dtype"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-exception-type</strong> <var class="def-var-arguments">id parent field-names</var><a class="copiable-link" href='#index-make_002dexception_002dtype'> &para;</a></span></dt>
+<dd><p>Return a new exception type named <var class="var">id</var>, inheriting from
+<var class="var">parent</var>, and with the fields whose names are listed in
+<var class="var">field-names</var>.  <var class="var">field-names</var> must be a list of symbols and must
+not contain names already used by <var class="var">parent</var> or one of its supertypes.
+</p></dd></dl>
+
+<p>Exception type objects are record type objects, and as such, one can use
+<code class="code">record-constructor</code> on an exception type to get its constructor.
+The constructor will take as many arguments as the exception has fields
+(including supertypes).  See <a class="xref" href="Records.html">Records</a>.
+</p>
+<p>However, <code class="code">record-predicate</code> and <code class="code">record-accessor</code> aren&rsquo;t
+usually what you want to use as exception type predicates and field
+accessors.  The reason is, instances of exception types can be composed
+into <em class="dfn">compound exceptions</em>.  Exception accessors should pick out the
+specific component of a compound exception, and then access the field on
+that specific component.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dexception"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-exception</strong> <var class="def-var-arguments">exceptions &hellip;</var><a class="copiable-link" href='#index-make_002dexception'> &para;</a></span></dt>
+<dd><p>Return an exception object composed of <var class="var">exceptions</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-exception_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exception?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-exception_003f'> &para;</a></span></dt>
+<dd><p>Return true if <var class="var">obj</var> is an exception object.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-exception_002dpredicate"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exception-predicate</strong> <var class="def-var-arguments">type</var><a class="copiable-link" href='#index-exception_002dpredicate'> &para;</a></span></dt>
+<dd><p>Return a procedure that will return true if its argument is a simple
+exception that is an instance of <var class="var">type</var>, or a compound exception
+composed of such an instance.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-exception_002daccessor"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exception-accessor</strong> <var class="def-var-arguments">rtd proc</var><a class="copiable-link" href='#index-exception_002daccessor'> &para;</a></span></dt>
+<dd><p>Return a procedure that will tail-call <var class="var">proc</var> on an instance of the
+exception type <var class="var">rtd</var>, or on the component of a compound exception
+that is an instance of <var class="var">rtd</var>.
+</p></dd></dl>
+
+<p>Compound exceptions are useful to separately express the different
+aspects of a situation.  For example, compound exceptions allow a
+programmer to say that &ldquo;this situation is a programming error, and also
+here&rsquo;s a useful message to show to the user, and here are some relevant
+objects that can give more information about the error&rdquo;.  This error
+could be composed of instances of the <code class="code">&amp;programming-error</code>,
+<code class="code">&amp;message</code>, and <code class="code">&amp;irritants</code> exception types.
+</p>
+<p>The subtyping relationship in exceptions is useful to let
+different-but-similar situations to be treated the same; for example
+there are many varieties of programming errors (for example,
+divide-by-zero or type mismatches), but perhaps there are common ways
+that the user would like to handle them all, and that common way might
+be different than how one might handle an error originating outside the
+program (for example, a file-not-found error).
+</p>
+<p>The standard exception hierarchy in Guile takes its cues from R6RS,
+though the names of some of the types are different.  See <a class="xref" href="rnrs-exceptions.html">rnrs exceptions</a>, for more details.
+</p>
+<p>To have access to Guile&rsquo;s exception type hierarchy, import the
+<code class="code">(ice-9 exceptions)</code> module:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 exceptions))
+</pre></div>
+
+<p>The following diagram gives an overview of the standard exception type
+hierarchy.
+</p>
+<div class="example">
+<pre class="example-preformatted">&amp;exception
+|- &amp;warning
+|- &amp;message
+|- &amp;irritants
+|- &amp;origin
+\- &amp;error
+   |- &amp;external-error
+   \- &amp;programming-error
+      |- &amp;assertion-failure
+      |- &amp;non-continuable
+      |- &amp;implementation-restriction
+      |- &amp;lexical
+      |- &amp;syntax
+      \- &amp;undefined-variable
+</pre></div>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0026warning-1"><span class="category-def">Exception Type: </span><span><strong class="def-name">&amp;warning</strong><a class="copiable-link" href='#index-_0026warning-1'> &para;</a></span></dt>
+<dd><p>An exception type denoting warnings.  These are usually raised using
+<code class="code">#:continuable? #t</code>; see the <code class="code">raise-exception</code> documentation
+for more.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dwarning"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-warning</strong><a class="copiable-link" href='#index-make_002dwarning'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-warning_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">warning?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-warning_003f'> &para;</a></span></dt>
+<dd><p>Constructor and predicate for <code class="code">&amp;warning</code> exception objects.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0026message-1"><span class="category-def">Exception Type: </span><span><strong class="def-name">&amp;message</strong> <var class="def-var-arguments">message</var><a class="copiable-link" href='#index-_0026message-1'> &para;</a></span></dt>
+<dd><p>An exception type that provides a message to display to the user.
+Usually used as a component of a compound exception.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dexception_002dwith_002dmessage"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-exception-with-message</strong> <var class="def-var-arguments">message</var><a class="copiable-link" href='#index-make_002dexception_002dwith_002dmessage'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-exception_002dwith_002dmessage_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exception-with-message?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-exception_002dwith_002dmessage_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-exception_002dmessage"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exception-message</strong> <var class="def-var-arguments">exn</var><a class="copiable-link" href='#index-exception_002dmessage'> &para;</a></span></dt>
+<dd><p>Constructor, predicate, and accessor for <code class="code">&amp;message</code> exception
+objects.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0026irritants-1"><span class="category-def">Exception Type: </span><span><strong class="def-name">&amp;irritants</strong> <var class="def-var-arguments">irritants</var><a class="copiable-link" href='#index-_0026irritants-1'> &para;</a></span></dt>
+<dd><p>An exception type that provides a list of objects that were unexpected
+in some way.  Usually used as a component of a compound exception.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dexception_002dwith_002dirritants"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-exception-with-irritants</strong> <var class="def-var-arguments">irritants</var><a class="copiable-link" href='#index-make_002dexception_002dwith_002dirritants'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-exception_002dwith_002dirritants_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exception-with-irritants?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-exception_002dwith_002dirritants_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-exception_002dirritants"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exception-irritants</strong> <var class="def-var-arguments">exn</var><a class="copiable-link" href='#index-exception_002dirritants'> &para;</a></span></dt>
+<dd><p>Constructor, predicate, and accessor for <code class="code">&amp;irritants</code> exception
+objects.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0026origin"><span class="category-def">Exception Type: </span><span><strong class="def-name">&amp;origin</strong> <var class="def-var-arguments">origin</var><a class="copiable-link" href='#index-_0026origin'> &para;</a></span></dt>
+<dd><p>An exception type that indicates the origin of an exception, typically
+expressed as a procedure name, as a symbol.  Usually used as a component
+of a compound exception.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dexception_002dwith_002dorigin"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-exception-with-origin</strong> <var class="def-var-arguments">origin</var><a class="copiable-link" href='#index-make_002dexception_002dwith_002dorigin'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-exception_002dwith_002dorigin_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exception-with-origin?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-exception_002dwith_002dorigin_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-exception_002dorigin"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exception-origin</strong> <var class="def-var-arguments">exn</var><a class="copiable-link" href='#index-exception_002dorigin'> &para;</a></span></dt>
+<dd><p>Constructor, predicate, and accessor for <code class="code">&amp;origin</code> exception
+objects.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0026error-1"><span class="category-def">Exception Type: </span><span><strong class="def-name">&amp;error</strong><a class="copiable-link" href='#index-_0026error-1'> &para;</a></span></dt>
+<dd><p>An exception type denoting errors: situations that are not just
+exceptional, but wrong.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002derror"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-error</strong><a class="copiable-link" href='#index-make_002derror'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-error_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">error?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-error_003f'> &para;</a></span></dt>
+<dd><p>Constructor and predicate for <code class="code">&amp;error</code> exception objects.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0026external_002derror"><span class="category-def">Exception Type: </span><span><strong class="def-name">&amp;external-error</strong><a class="copiable-link" href='#index-_0026external_002derror'> &para;</a></span></dt>
+<dd><p>An exception type denoting errors that proceed from the interaction of
+the program with the world, for example a &ldquo;file not found&rdquo; error.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dexternal_002derror"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-external-error</strong><a class="copiable-link" href='#index-make_002dexternal_002derror'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-external_002derror_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">external-error?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-external_002derror_003f'> &para;</a></span></dt>
+<dd><p>Constructor and predicate for <code class="code">&amp;external-error</code> exception objects.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0026programming_002derror"><span class="category-def">Exception Type: </span><span><strong class="def-name">&amp;programming-error</strong><a class="copiable-link" href='#index-_0026programming_002derror'> &para;</a></span></dt>
+<dd><p>An exception type denoting errors that proceed from inside a program:
+type mismatches and so on.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dprogramming_002derror"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-programming-error</strong><a class="copiable-link" href='#index-make_002dprogramming_002derror'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-programming_002derror_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">programming-error?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-programming_002derror_003f'> &para;</a></span></dt>
+<dd><p>Constructor and predicate for <code class="code">&amp;programming-error</code> exception
+objects.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0026non_002dcontinuable-1"><span class="category-def">Exception Type: </span><span><strong class="def-name">&amp;non-continuable</strong><a class="copiable-link" href='#index-_0026non_002dcontinuable-1'> &para;</a></span></dt>
+<dd><p>An exception type denoting errors that proceed from inside a program:
+type mismatches and so on.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dnon_002dcontinuable_002derror"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-non-continuable-error</strong><a class="copiable-link" href='#index-make_002dnon_002dcontinuable_002derror'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-non_002dcontinuable_002derror_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">non-continuable-error?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-non_002dcontinuable_002derror_003f'> &para;</a></span></dt>
+<dd><p>Constructor and predicate for <code class="code">&amp;non-continuable</code> exception objects.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0026lexical-1"><span class="category-def">Exception Type: </span><span><strong class="def-name">&amp;lexical</strong><a class="copiable-link" href='#index-_0026lexical-1'> &para;</a></span></dt>
+<dd><p>An exception type denoting lexical errors, for example unbalanced
+parentheses.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dlexical_002derror"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-lexical-error</strong><a class="copiable-link" href='#index-make_002dlexical_002derror'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-lexical_002derror_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">lexical-error?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-lexical_002derror_003f'> &para;</a></span></dt>
+<dd><p>Constructor and predicate for <code class="code">&amp;lexical</code> exception objects.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0026syntax-1"><span class="category-def">Exception Type: </span><span><strong class="def-name">&amp;syntax</strong> <var class="def-var-arguments">form subform</var><a class="copiable-link" href='#index-_0026syntax-1'> &para;</a></span></dt>
+<dd><p>An exception type denoting syntax errors, for example a <code class="code">cond</code>
+expression with invalid syntax.  The <var class="var">form</var> field indicates the form
+containing the error, and <var class="var">subform</var> indicates the unexpected
+subcomponent, or <code class="code">#f</code> if unavailable.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dsyntax_002derror"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-syntax-error</strong> <var class="def-var-arguments">form subform</var><a class="copiable-link" href='#index-make_002dsyntax_002derror'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-syntax_002derror_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">syntax-error?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-syntax_002derror_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-syntax_002derror_002dform"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">syntax-error-form</strong> <var class="def-var-arguments">exn</var><a class="copiable-link" href='#index-syntax_002derror_002dform'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-syntax_002derror_002dsubform"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">syntax-error-subform</strong> <var class="def-var-arguments">exn</var><a class="copiable-link" href='#index-syntax_002derror_002dsubform'> &para;</a></span></dt>
+<dd><p>Constructor, predicate, and accessors for <code class="code">&amp;syntax</code> exception
+objects.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-_0026undefined_002dvariable"><span class="category-def">Exception Type: </span><span><strong class="def-name">&amp;undefined-variable</strong><a class="copiable-link" href='#index-_0026undefined_002dvariable'> &para;</a></span></dt>
+<dd><p>An exception type denoting undefined variables.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dundefine_002dvariable_002derror"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-undefine-variable-error</strong><a class="copiable-link" href='#index-make_002dundefine_002dvariable_002derror'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-undefined_002dvariable_002derror_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">undefined-variable-error?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-undefined_002dvariable_002derror_003f'> &para;</a></span></dt>
+<dd><p>Constructor and predicate for <code class="code">&amp;undefined-variable</code> exception
+objects.
+</p></dd></dl>
+
+<p>Incidentally, the <code class="code">(ice-9 exceptions)</code> module also includes a
+<code class="code">define-exception-type</code> macro that can be used to conveniently add
+new exception types to the hierarchy.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-define_002dexception_002dtype"><span class="category-def">Syntax: </span><span><strong class="def-name">define-exception-type</strong> <var class="def-var-arguments">name parent        constructor predicate        (field accessor) &hellip;</var><a class="copiable-link" href='#index-define_002dexception_002dtype'> &para;</a></span></dt>
+<dd><p>Define <var class="var">name</var> to be a new exception type, inheriting from
+<var class="var">parent</var>.  Define <var class="var">constructor</var> and <var class="var">predicate</var> to be the
+exception constructor and predicate, respectively, and define an
+<var class="var">accessor</var> for each <var class="var">field</var>.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Raising-and-Handling-Exceptions.html">Raising and Handling Exceptions</a>, Up: <a href="Exceptions.html">Exceptions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

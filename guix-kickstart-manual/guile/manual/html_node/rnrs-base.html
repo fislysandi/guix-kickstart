@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>rnrs base (Guile Reference Manual)</title>
+
+<meta name="description" content="rnrs base (Guile Reference Manual)">
+<meta name="keywords" content="rnrs base (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="R6RS-Standard-Libraries.html" rel="up" title="R6RS Standard Libraries">
+<link href="rnrs-unicode.html" rel="next" title="rnrs unicode">
+<link href="Library-Usage.html" rel="prev" title="Library Usage">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="rnrs-base">
+<div class="nav-panel">
+<p>
+Next: <a href="rnrs-unicode.html" accesskey="n" rel="next">rnrs unicode</a>, Previous: <a href="Library-Usage.html" accesskey="p" rel="prev">Library Usage</a>, Up: <a href="R6RS-Standard-Libraries.html" accesskey="u" rel="up">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="rnrs-base-1">7.6.2.2 rnrs base</h4>
+
+<p>The <code class="code">(rnrs base (6))</code> library exports the procedures and syntactic
+forms described in the main section of the Report 
+(see <a data-manual="r6rs" href="../r6rs_html/Base-library.html#Base-library">R6RS Base library</a> in <cite class="cite">The Revised^6 Report on the Algorithmic Language Scheme</cite>).  They are
+grouped below by the existing manual sections to which they correspond.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-boolean_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">boolean?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-boolean_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-not-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">not</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-not-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Booleans.html">Booleans</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-symbol_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">symbol?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-symbol_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-symbol_002d_003estring-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">symbol-&gt;string</strong> <var class="def-var-arguments">sym</var><a class="copiable-link" href='#index-symbol_002d_003estring-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_002d_003esymbol-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-&gt;symbol</strong> <var class="def-var-arguments">str</var><a class="copiable-link" href='#index-string_002d_003esymbol-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Symbol-Primitives.html">Operations Related to Symbols</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-char_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-char_003d_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char=?</strong><a class="copiable-link" href='#index-char_003d_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-char_003c_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char&lt;?</strong><a class="copiable-link" href='#index-char_003c_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-char_003e_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char&gt;?</strong><a class="copiable-link" href='#index-char_003e_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-char_003c_003d_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char&lt;=?</strong><a class="copiable-link" href='#index-char_003c_003d_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-char_003e_003d_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char&gt;=?</strong><a class="copiable-link" href='#index-char_003e_003d_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-integer_002d_003echar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">integer-&gt;char</strong> <var class="def-var-arguments">n</var><a class="copiable-link" href='#index-integer_002d_003echar-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-char_002d_003einteger-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-&gt;integer</strong> <var class="def-var-arguments">chr</var><a class="copiable-link" href='#index-char_002d_003einteger-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Characters.html">Characters</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-list_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-list_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-null_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">null?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-null_003f-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="List-Predicates.html">List Predicates</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-pair_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">pair?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-pair_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cons-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cons</strong> <var class="def-var-arguments">x y</var><a class="copiable-link" href='#index-cons-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-car-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">car</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-car-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cdr-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cdr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cdr-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-caar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">caar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-caar-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cadr-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cadr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cadr-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cdar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cdar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cdar-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cddr-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cddr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cddr-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-caaar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">caaar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-caaar-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-caadr-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">caadr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-caadr-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cadar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cadar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cadar-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cdaar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cdaar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cdaar-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-caddr-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">caddr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-caddr-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cdadr-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cdadr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cdadr-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cddar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cddar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cddar-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cdddr-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cdddr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cdddr-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-caaaar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">caaaar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-caaaar-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-caaadr-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">caaadr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-caaadr-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-caadar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">caadar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-caadar-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cadaar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cadaar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cadaar-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cdaaar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cdaaar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cdaaar-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cddaar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cddaar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cddaar-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cdadar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cdadar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cdadar-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cdaadr-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cdaadr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cdaadr-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cadadr-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cadadr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cadadr-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-caaddr-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">caaddr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-caaddr-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-caddar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">caddar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-caddar-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cadddr-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cadddr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cadddr-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cdaddr-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cdaddr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cdaddr-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cddadr-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cddadr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cddadr-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cdddar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cdddar</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cdddar-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cddddr-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cddddr</strong> <var class="def-var-arguments">pair</var><a class="copiable-link" href='#index-cddddr-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Pairs.html">Pairs</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-number_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">number?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-number_003f-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Numerical-Tower.html">Scheme&rsquo;s Numerical &ldquo;Tower&rdquo;</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-string_003f-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="String-Predicates.html">String Predicates</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-procedure_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">procedure?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-procedure_003f-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Procedure-Properties.html">Procedure Properties and Meta-information</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-define-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">define</strong> <var class="def-var-arguments">name value</var><a class="copiable-link" href='#index-define-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-set_0021"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">set!</strong> <var class="def-var-arguments">variable-name value</var><a class="copiable-link" href='#index-set_0021'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Definition.html">Defining and Setting Variables</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-define_002dsyntax-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">define-syntax</strong> <var class="def-var-arguments">keyword expression</var><a class="copiable-link" href='#index-define_002dsyntax-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-let_002dsyntax-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">let-syntax</strong> <var class="def-var-arguments">((keyword transformer) &hellip;) exp1 exp2 &hellip;</var><a class="copiable-link" href='#index-let_002dsyntax-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-letrec_002dsyntax-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">letrec-syntax</strong> <var class="def-var-arguments">((keyword transformer) &hellip;) exp1 exp2 &hellip;</var><a class="copiable-link" href='#index-letrec_002dsyntax-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Defining-Macros.html">Defining Macros</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-identifier_002dsyntax-2"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">identifier-syntax</strong> <var class="def-var-arguments">exp</var><a class="copiable-link" href='#index-identifier_002dsyntax-2'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Identifier-Macros.html">Identifier Macros</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-syntax_002drules-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">syntax-rules</strong> <var class="def-var-arguments">literals (pattern template) ...</var><a class="copiable-link" href='#index-syntax_002drules-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Syntax-Rules.html">Syntax-rules Macros</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-lambda-2"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">lambda</strong> <var class="def-var-arguments">formals body</var><a class="copiable-link" href='#index-lambda-2'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Lambda.html">Lambda: Basic Procedure Creation</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-let-2"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">let</strong> <var class="def-var-arguments">bindings body</var><a class="copiable-link" href='#index-let-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-let_002a-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">let*</strong> <var class="def-var-arguments">bindings body</var><a class="copiable-link" href='#index-let_002a-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-letrec-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">letrec</strong> <var class="def-var-arguments">bindings body</var><a class="copiable-link" href='#index-letrec-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-letrec_002a-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">letrec*</strong> <var class="def-var-arguments">bindings body</var><a class="copiable-link" href='#index-letrec_002a-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Local-Bindings.html">Local Variable Bindings</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-let_002dvalues-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">let-values</strong> <var class="def-var-arguments">bindings body</var><a class="copiable-link" href='#index-let_002dvalues-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-let_002a_002dvalues-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">let*-values</strong> <var class="def-var-arguments">bindings body</var><a class="copiable-link" href='#index-let_002a_002dvalues-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="SRFI_002d11.html">SRFI-11 - let-values</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-begin-2"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">begin</strong> <var class="def-var-arguments">expr1 expr2 ...</var><a class="copiable-link" href='#index-begin-2'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="begin.html">Sequencing and Splicing</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-quote-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">quote</strong> <var class="def-var-arguments">expr</var><a class="copiable-link" href='#index-quote-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-quasiquote-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">quasiquote</strong> <var class="def-var-arguments">expr</var><a class="copiable-link" href='#index-quasiquote-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-unquote-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">unquote</strong> <var class="def-var-arguments">expr</var><a class="copiable-link" href='#index-unquote-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-unquote_002dsplicing-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">unquote-splicing</strong> <var class="def-var-arguments">expr</var><a class="copiable-link" href='#index-unquote_002dsplicing-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Expression-Syntax.html">Expression Syntax</a>, for documentation.
+</p></dd></dl>
+	 
+<dl class="first-deffn">
+<dt class="deffn" id="index-if-2"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">if</strong> <var class="def-var-arguments">test consequence [alternate]</var><a class="copiable-link" href='#index-if-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cond-2"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">cond</strong> <var class="def-var-arguments">clause1 clause2 ...</var><a class="copiable-link" href='#index-cond-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-case-2"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">case</strong> <var class="def-var-arguments">key clause1 clause2 ...</var><a class="copiable-link" href='#index-case-2'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Conditionals.html">Simple Conditional Evaluation</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-and-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">and</strong> <var class="def-var-arguments">expr ...</var><a class="copiable-link" href='#index-and-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-or-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">or</strong> <var class="def-var-arguments">expr ...</var><a class="copiable-link" href='#index-or-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="and-or.html">Conditional Evaluation of a Sequence of Expressions</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-eq_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">eq?</strong> <var class="def-var-arguments">x y</var><a class="copiable-link" href='#index-eq_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-eqv_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">eqv?</strong> <var class="def-var-arguments">x y</var><a class="copiable-link" href='#index-eqv_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-equal_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">equal?</strong> <var class="def-var-arguments">x y</var><a class="copiable-link" href='#index-equal_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-symbol_003d_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">symbol=?</strong> <var class="def-var-arguments">symbol1 symbol2 ...</var><a class="copiable-link" href='#index-symbol_003d_003f'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Equality.html">Equality</a>, for documentation.
+</p>
+<p><code class="code">symbol=?</code> is identical to <code class="code">eq?</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-complex_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">complex?</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-complex_003f-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Complex-Numbers.html">Complex Numbers</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-real_002dpart-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">real-part</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-real_002dpart-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-imag_002dpart-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">imag-part</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-imag_002dpart-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002drectangular-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-rectangular</strong> <var class="def-var-arguments">real_part imaginary_part</var><a class="copiable-link" href='#index-make_002drectangular-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002dpolar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-polar</strong> <var class="def-var-arguments">x y</var><a class="copiable-link" href='#index-make_002dpolar-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-magnitude-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">magnitude</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-magnitude-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-angle-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">angle</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-angle-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Complex.html">Complex Number Operations</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-sqrt-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sqrt</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-sqrt-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-exp-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exp</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-exp-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-expt-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">expt</strong> <var class="def-var-arguments">z1 z2</var><a class="copiable-link" href='#index-expt-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-log-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">log</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-log-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-sin-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sin</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-sin-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-cos-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cos</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-cos-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-tan-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tan</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-tan-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-asin-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">asin</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-asin-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-acos-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">acos</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-acos-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-atan-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">atan</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-atan-2'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Scientific.html">Scientific Functions</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-real_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">real?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-real_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-rational_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">rational?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-rational_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-numerator-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">numerator</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-numerator-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-denominator-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">denominator</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-denominator-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-rationalize-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">rationalize</strong> <var class="def-var-arguments">x eps</var><a class="copiable-link" href='#index-rationalize-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Reals-and-Rationals.html">Real and Rational Numbers</a>, for documentation.
+</p></dd></dl>
+	 
+<dl class="first-deffn">
+<dt class="deffn" id="index-exact_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exact?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-exact_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-inexact_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">inexact?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-inexact_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-exact"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exact</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-exact'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-inexact"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">inexact</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-inexact'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Exactness.html">Exact and Inexact Numbers</a>, for documentation.  The <code class="code">exact</code> and 
+<code class="code">inexact</code> procedures are identical to the <code class="code">inexact-&gt;exact</code> and
+<code class="code">exact-&gt;inexact</code> procedures provided by Guile&rsquo;s code library.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-integer_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">integer?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-integer_003f-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Integers.html">Integers</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-odd_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">odd?</strong> <var class="def-var-arguments">n</var><a class="copiable-link" href='#index-odd_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-even_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">even?</strong> <var class="def-var-arguments">n</var><a class="copiable-link" href='#index-even_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-gcd-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">gcd</strong> <var class="def-var-arguments">x ...</var><a class="copiable-link" href='#index-gcd-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-lcm-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">lcm</strong> <var class="def-var-arguments">x ...</var><a class="copiable-link" href='#index-lcm-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-exact_002dinteger_002dsqrt-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exact-integer-sqrt</strong> <var class="def-var-arguments">k</var><a class="copiable-link" href='#index-exact_002dinteger_002dsqrt-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Integer-Operations.html">Operations on Integer Values</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_003d-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">=</strong><a class="copiable-link" href='#index-_003d-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_003c-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">&lt;</strong><a class="copiable-link" href='#index-_003c-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_003e-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">&gt;</strong><a class="copiable-link" href='#index-_003e-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_003c_003d-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">&lt;=</strong><a class="copiable-link" href='#index-_003c_003d-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_003e_003d-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">&gt;=</strong><a class="copiable-link" href='#index-_003e_003d-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-zero_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">zero?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-zero_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-positive_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">positive?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-positive_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-negative_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">negative?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-negative_003f-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Comparison.html">Comparison Predicates</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-for_002deach-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">for-each</strong> <var class="def-var-arguments">f lst1 lst2 ...</var><a class="copiable-link" href='#index-for_002deach-2'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="SRFI_002d1-Fold-and-Map.html">Fold, Unfold &amp; Map</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-list-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list</strong> <var class="def-var-arguments">elem &hellip;</var><a class="copiable-link" href='#index-list-2'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="List-Constructors.html">List Constructors</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-length-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">length</strong> <var class="def-var-arguments">lst</var><a class="copiable-link" href='#index-length-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-list_002dref-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list-ref</strong> <var class="def-var-arguments">lst k</var><a class="copiable-link" href='#index-list_002dref-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-list_002dtail-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list-tail</strong> <var class="def-var-arguments">lst k</var><a class="copiable-link" href='#index-list_002dtail-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="List-Selection.html">List Selection</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-append-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">append</strong> <var class="def-var-arguments">lst &hellip; obj</var><a class="copiable-link" href='#index-append-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-append-3"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">append</strong><a class="copiable-link" href='#index-append-3'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-reverse-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">reverse</strong> <var class="def-var-arguments">lst</var><a class="copiable-link" href='#index-reverse-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Append_002fReverse.html">Append and Reverse</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-number_002d_003estring-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">number-&gt;string</strong> <var class="def-var-arguments">n [radix]</var><a class="copiable-link" href='#index-number_002d_003estring-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_002d_003enumber-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-&gt;number</strong> <var class="def-var-arguments">str [radix]</var><a class="copiable-link" href='#index-string_002d_003enumber-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Conversion.html">Converting Numbers To and From Strings</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string</strong> <var class="def-var-arguments">char ...</var><a class="copiable-link" href='#index-string-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002dstring-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-string</strong> <var class="def-var-arguments">k [chr]</var><a class="copiable-link" href='#index-make_002dstring-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-list_002d_003estring-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list-&gt;string</strong> <var class="def-var-arguments">lst</var><a class="copiable-link" href='#index-list_002d_003estring-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="String-Constructors.html">String Constructors</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002d_003elist-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-&gt;list</strong> <var class="def-var-arguments">str [start [end]]</var><a class="copiable-link" href='#index-string_002d_003elist-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="List_002fString-Conversion.html">List/String conversion</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dlength-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-length</strong> <var class="def-var-arguments">str</var><a class="copiable-link" href='#index-string_002dlength-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_002dref-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-ref</strong> <var class="def-var-arguments">str k</var><a class="copiable-link" href='#index-string_002dref-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_002dcopy-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-copy</strong> <var class="def-var-arguments">str [start [end]]</var><a class="copiable-link" href='#index-string_002dcopy-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-substring-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">substring</strong> <var class="def-var-arguments">str start [end]</var><a class="copiable-link" href='#index-substring-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="String-Selection.html">String Selection</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_003d_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string=?</strong> <var class="def-var-arguments">s1 s2 s3 &hellip;</var><a class="copiable-link" href='#index-string_003d_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_003c_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string&lt;?</strong> <var class="def-var-arguments">s1 s2 s3 &hellip;</var><a class="copiable-link" href='#index-string_003c_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_003e_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string&gt;?</strong> <var class="def-var-arguments">s1 s2 s3 &hellip;</var><a class="copiable-link" href='#index-string_003e_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_003c_003d_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string&lt;=?</strong> <var class="def-var-arguments">s1 s2 s3 &hellip;</var><a class="copiable-link" href='#index-string_003c_003d_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-string_003e_003d_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string&gt;=?</strong> <var class="def-var-arguments">s1 s2 s3 &hellip;</var><a class="copiable-link" href='#index-string_003e_003d_003f-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="String-Comparison.html">String Comparison</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dappend-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-append</strong> <var class="def-var-arguments">arg &hellip;</var><a class="copiable-link" href='#index-string_002dappend-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Reversing-and-Appending-Strings.html">Reversing and Appending Strings</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dfor_002deach-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-for-each</strong> <var class="def-var-arguments">proc s [start [end]]</var><a class="copiable-link" href='#index-string_002dfor_002deach-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Mapping-Folding-and-Unfolding.html">Mapping, Folding, and Unfolding</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_002b-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">+</strong> <var class="def-var-arguments">z1 ...</var><a class="copiable-link" href='#index-_002b-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_002d-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">-</strong> <var class="def-var-arguments">z1 z2 ...</var><a class="copiable-link" href='#index-_002d-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_002a-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">*</strong> <var class="def-var-arguments">z1 ...</var><a class="copiable-link" href='#index-_002a-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-_002f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">/</strong> <var class="def-var-arguments">z1 z2 ...</var><a class="copiable-link" href='#index-_002f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-max-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">max</strong> <var class="def-var-arguments">x1 x2 ...</var><a class="copiable-link" href='#index-max-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-min-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">min</strong> <var class="def-var-arguments">x1 x2 ...</var><a class="copiable-link" href='#index-min-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-abs-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">abs</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-abs-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-truncate-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">truncate</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-truncate-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-floor-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">floor</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-floor-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-ceiling-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ceiling</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-ceiling-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-round-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">round</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-round-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Arithmetic.html">Arithmetic Functions</a>, for documentation.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-div-2"></a>
+<a class="index-entry-id" id="index-mod-2"></a>
+<a class="index-entry-id" id="index-div_002dand_002dmod-1"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-div"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">div</strong> <var class="def-var-arguments">x y</var><a class="copiable-link" href='#index-div'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-mod"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">mod</strong> <var class="def-var-arguments">x y</var><a class="copiable-link" href='#index-mod'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-div_002dand_002dmod"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">div-and-mod</strong> <var class="def-var-arguments">x y</var><a class="copiable-link" href='#index-div_002dand_002dmod'> &para;</a></span></dt>
+<dd><p>These procedures accept two real numbers <var class="var">x</var> and <var class="var">y</var>, where the
+divisor <var class="var">y</var> must be non-zero.  <code class="code">div</code> returns the integer <var class="var">q</var>
+and <code class="code">mod</code> returns the real number <var class="var">r</var> such that
+<em class="math"><var class="var">x</var> = <var class="var">q</var>*<var class="var">y</var> + <var class="var">r</var></em> and <em class="math">0 &lt;= <var class="var">r</var> &lt; abs(<var class="var">y</var>)</em>.
+<code class="code">div-and-mod</code> returns both <var class="var">q</var> and <var class="var">r</var>, and is more
+efficient than computing each separately.  Note that when <em class="math"><var class="var">y</var> &gt; 0</em>,
+<code class="code">div</code> returns <em class="math">floor(<var class="var">x</var>/<var class="var">y</var>)</em>, otherwise
+it returns <em class="math">ceiling(<var class="var">x</var>/<var class="var">y</var>)</em>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(div 123 10) &rArr; 12
+(mod 123 10) &rArr; 3
+(div-and-mod 123 10) &rArr; 12 and 3
+(div-and-mod 123 -10) &rArr; -12 and 3
+(div-and-mod -123 10) &rArr; -13 and 7
+(div-and-mod -123 -10) &rArr; 13 and 7
+(div-and-mod -123.2 -63.5) &rArr; 2.0 and 3.8
+(div-and-mod 16/3 -10/7) &rArr; -3 and 22/21
+</pre></div>
+</dd></dl>
+
+<a class="index-entry-id" id="index-div0-1"></a>
+<a class="index-entry-id" id="index-mod0-1"></a>
+<a class="index-entry-id" id="index-div0_002dand_002dmod0-1"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-div0"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">div0</strong> <var class="def-var-arguments">x y</var><a class="copiable-link" href='#index-div0'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-mod0"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">mod0</strong> <var class="def-var-arguments">x y</var><a class="copiable-link" href='#index-mod0'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-div0_002dand_002dmod0"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">div0-and-mod0</strong> <var class="def-var-arguments">x y</var><a class="copiable-link" href='#index-div0_002dand_002dmod0'> &para;</a></span></dt>
+<dd><p>These procedures accept two real numbers <var class="var">x</var> and <var class="var">y</var>, where the
+divisor <var class="var">y</var> must be non-zero.  <code class="code">div0</code> returns the
+integer <var class="var">q</var> and <code class="code">mod0</code> returns the real number
+<var class="var">r</var> such that <em class="math"><var class="var">x</var> = <var class="var">q</var>*<var class="var">y</var> + <var class="var">r</var></em> and
+<em class="math">-abs(<var class="var">y</var>/2) &lt;= <var class="var">r</var> &lt; abs(<var class="var">y</var>/2)</em>.  <code class="code">div0-and-mod0</code>
+returns both <var class="var">q</var> and <var class="var">r</var>, and is more efficient than computing
+each separately.
+</p>
+<p>Note that <code class="code">div0</code> returns <em class="math"><var class="var">x</var>/<var class="var">y</var></em> rounded to the
+nearest integer.  When <em class="math"><var class="var">x</var>/<var class="var">y</var></em> lies exactly half-way
+between two integers, the tie is broken according to the sign of
+<var class="var">y</var>.  If <em class="math"><var class="var">y</var> &gt; 0</em>, ties are rounded toward positive
+infinity, otherwise they are rounded toward negative infinity.
+This is a consequence of the requirement that
+<em class="math">-abs(<var class="var">y</var>/2) &lt;= <var class="var">r</var> &lt; abs(<var class="var">y</var>/2)</em>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(div0 123 10) &rArr; 12
+(mod0 123 10) &rArr; 3
+(div0-and-mod0 123 10) &rArr; 12 and 3
+(div0-and-mod0 123 -10) &rArr; -12 and 3
+(div0-and-mod0 -123 10) &rArr; -12 and -3
+(div0-and-mod0 -123 -10) &rArr; 12 and -3
+(div0-and-mod0 -123.2 -63.5) &rArr; 2.0 and 3.8
+(div0-and-mod0 16/3 -10/7) &rArr; -4 and -8/21
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-real_002dvalued_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">real-valued?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-real_002dvalued_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-rational_002dvalued_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">rational-valued?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-rational_002dvalued_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-integer_002dvalued_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">integer-valued?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-integer_002dvalued_003f'> &para;</a></span></dt>
+<dd><p>These procedures return <code class="code">#t</code> if and only if their arguments can,
+respectively, be coerced to a real, rational, or integer value without a
+loss of numerical precision. 
+</p>
+<p><code class="code">real-valued?</code> will return <code class="code">#t</code> for complex numbers whose 
+imaginary parts are zero.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-nan_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">nan?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-nan_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-infinite_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">infinite?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-infinite_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-finite_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">finite?</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-finite_003f-1'> &para;</a></span></dt>
+<dd><p><code class="code">nan?</code> returns <code class="code">#t</code> if <var class="var">x</var> is a NaN value, <code class="code">#f</code>
+otherwise.  <code class="code">infinite?</code> returns <code class="code">#t</code> if <var class="var">x</var> is an infinite
+value, <code class="code">#f</code> otherwise.  <code class="code">finite?</code> returns <code class="code">#t</code> if <var class="var">x</var>
+is neither infinite nor a NaN value, otherwise it returns <code class="code">#f</code>.
+Every real number satisfies exactly one of these predicates.  An
+exception is raised if <var class="var">x</var> is not real.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-assert"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">assert</strong> <var class="def-var-arguments">expr</var><a class="copiable-link" href='#index-assert'> &para;</a></span></dt>
+<dd><p>Raises an <code class="code">&amp;assertion</code> condition if <var class="var">expr</var> evaluates to 
+<code class="code">#f</code>; otherwise evaluates to the value of <var class="var">expr</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-error-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">error</strong> <var class="def-var-arguments">who message irritant1 ...</var><a class="copiable-link" href='#index-error-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-assertion_002dviolation"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">assertion-violation</strong> <var class="def-var-arguments">who message irritant1 ...</var><a class="copiable-link" href='#index-assertion_002dviolation'> &para;</a></span></dt>
+<dd><p>These procedures raise compound conditions based on their arguments:
+If <var class="var">who</var> is not <code class="code">#f</code>, the condition will include a <code class="code">&amp;who</code>
+condition whose <code class="code">who</code> field is set to <var class="var">who</var>; a <code class="code">&amp;message</code>
+condition will be included with a <code class="code">message</code> field equal to 
+<var class="var">message</var>; an <code class="code">&amp;irritants</code> condition will be included with its
+<code class="code">irritants</code> list given by <code class="code">irritant1 ...</code>.
+</p>
+<p><code class="code">error</code> produces a compound condition with the simple conditions
+described above, as well as an <code class="code">&amp;error</code> condition;
+<code class="code">assertion-violation</code> produces one that includes an 
+<code class="code">&amp;assertion</code> condition.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dmap-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-map</strong> <var class="def-var-arguments">proc v</var><a class="copiable-link" href='#index-vector_002dmap-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-vector_002dfor_002deach-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-for-each</strong> <var class="def-var-arguments">proc v</var><a class="copiable-link" href='#index-vector_002dfor_002deach-1'> &para;</a></span></dt>
+<dd><p>These procedures implement the <code class="code">map</code> and <code class="code">for-each</code> contracts
+over vectors.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector</strong> <var class="def-var-arguments">arg &hellip;</var><a class="copiable-link" href='#index-vector-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-vector_003f-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-vector_003f-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002dvector-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-vector</strong> <var class="def-var-arguments">len</var><a class="copiable-link" href='#index-make_002dvector-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002dvector-3"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-vector</strong> <var class="def-var-arguments">len fill</var><a class="copiable-link" href='#index-make_002dvector-3'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-list_002d_003evector-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list-&gt;vector</strong> <var class="def-var-arguments">l</var><a class="copiable-link" href='#index-list_002d_003evector-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-vector_002d_003elist-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-&gt;list</strong> <var class="def-var-arguments">v</var><a class="copiable-link" href='#index-vector_002d_003elist-2'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Vector-Creation.html">Dynamic Vector Creation and Validation</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dlength-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-length</strong> <var class="def-var-arguments">vector</var><a class="copiable-link" href='#index-vector_002dlength-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-vector_002dref-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-ref</strong> <var class="def-var-arguments">vector k</var><a class="copiable-link" href='#index-vector_002dref-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-vector_002dset_0021-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-set!</strong> <var class="def-var-arguments">vector k obj</var><a class="copiable-link" href='#index-vector_002dset_0021-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-vector_002dfill_0021-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-fill!</strong> <var class="def-var-arguments">v fill</var><a class="copiable-link" href='#index-vector_002dfill_0021-2'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Vector-Accessors.html">Accessing and Modifying Vector Contents</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-call_002dwith_002dcurrent_002dcontinuation-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call-with-current-continuation</strong> <var class="def-var-arguments">proc</var><a class="copiable-link" href='#index-call_002dwith_002dcurrent_002dcontinuation-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-call_002fcc-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call/cc</strong> <var class="def-var-arguments">proc</var><a class="copiable-link" href='#index-call_002fcc-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Continuations.html">Continuations</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-values-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">values</strong> <var class="def-var-arguments">arg &hellip;</var><a class="copiable-link" href='#index-values-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-call_002dwith_002dvalues-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call-with-values</strong> <var class="def-var-arguments">producer consumer</var><a class="copiable-link" href='#index-call_002dwith_002dvalues-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Multiple-Values.html">Returning and Accepting Multiple Values</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-dynamic_002dwind-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">dynamic-wind</strong> <var class="def-var-arguments">in_guard thunk out_guard</var><a class="copiable-link" href='#index-dynamic_002dwind-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Dynamic-Wind.html">Dynamic Wind</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-apply-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">apply</strong> <var class="def-var-arguments">proc arg &hellip; arglst</var><a class="copiable-link" href='#index-apply-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Fly-Evaluation.html">Procedures for On the Fly Evaluation</a>, for documentation.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="rnrs-unicode.html">rnrs unicode</a>, Previous: <a href="Library-Usage.html">Library Usage</a>, Up: <a href="R6RS-Standard-Libraries.html">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

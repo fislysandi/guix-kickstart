@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-1 Predicates (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-1 Predicates (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-1 Predicates (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI_002d1.html" rel="up" title="SRFI-1">
+<link href="SRFI_002d1-Selectors.html" rel="next" title="SRFI-1 Selectors">
+<link href="SRFI_002d1-Constructors.html" rel="prev" title="SRFI-1 Constructors">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="SRFI_002d1-Predicates">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d1-Selectors.html" accesskey="n" rel="next">Selectors</a>, Previous: <a href="SRFI_002d1-Constructors.html" accesskey="p" rel="prev">Constructors</a>, Up: <a href="SRFI_002d1.html" accesskey="u" rel="up">SRFI-1 - List library</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Predicates">7.5.3.2 Predicates</h4>
+<a class="index-entry-id" id="index-list-predicate"></a>
+
+
+<p>The procedures in this section test specific properties of lists.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-proper_002dlist_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">proper-list?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-proper_002dlist_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is a proper list, or <code class="code">#f</code>
+otherwise.  This is the same as the core <code class="code">list?</code> (see <a class="pxref" href="List-Predicates.html">List Predicates</a>).
+</p>
+<p>A proper list is a list which ends with the empty list <code class="code">()</code> in
+the usual way.  The empty list <code class="code">()</code> itself is a proper list too.
+</p>
+<div class="example">
+<pre class="example-preformatted">(proper-list? '(1 2 3))  &rArr; #t
+(proper-list? '())       &rArr; #t
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-circular_002dlist_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">circular-list?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-circular_002dlist_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is a circular list, or <code class="code">#f</code>
+otherwise.
+</p>
+<p>A circular list is a list where at some point the <code class="code">cdr</code> refers
+back to a previous pair in the list (either the start or some later
+point), so that following the <code class="code">cdr</code>s takes you around in a
+circle, with no end.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define x (list 1 2 3 4))
+(set-cdr! (last-pair x) (cddr x))
+x &rArr; (1 2 3 4 3 4 3 4 ...)
+(circular-list? x)  &rArr; #t
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-dotted_002dlist_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">dotted-list?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-dotted_002dlist_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is a dotted list, or <code class="code">#f</code>
+otherwise.
+</p>
+<p>A dotted list is a list where the <code class="code">cdr</code> of the last pair is not
+the empty list <code class="code">()</code>.  Any non-pair <var class="var">obj</var> is also considered a
+dotted list, with length zero.
+</p>
+<div class="example">
+<pre class="example-preformatted">(dotted-list? '(1 2 . 3))  &rArr; #t
+(dotted-list? 99)          &rArr; #t
+</pre></div>
+</dd></dl>
+
+<p>It will be noted that any Scheme object passes exactly one of the
+above three tests <code class="code">proper-list?</code>, <code class="code">circular-list?</code> and
+<code class="code">dotted-list?</code>.  Non-lists are <code class="code">dotted-list?</code>, finite lists
+are either <code class="code">proper-list?</code> or <code class="code">dotted-list?</code>, and infinite
+lists are <code class="code">circular-list?</code>.
+</p>
+<br>
+<dl class="first-deffn">
+<dt class="deffn" id="index-null_002dlist_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">null-list?</strong> <var class="def-var-arguments">lst</var><a class="copiable-link" href='#index-null_002dlist_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">lst</var> is the empty list <code class="code">()</code>, <code class="code">#f</code>
+otherwise.  If something else than a proper or circular list is passed
+as <var class="var">lst</var>, an error is signalled.  This procedure is recommended
+for checking for the end of a list in contexts where dotted lists are
+not allowed.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-not_002dpair_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">not-pair?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-not_002dpair_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> is <var class="var">obj</var> is not a pair, <code class="code">#f</code> otherwise.
+This is shorthand notation <code class="code">(not (pair? <var class="var">obj</var>))</code> and is
+supposed to be used for end-of-list checking in contexts where dotted
+lists are allowed.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-list_003d"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">list=</strong> <var class="def-var-arguments">elt= list1 &hellip;</var><a class="copiable-link" href='#index-list_003d'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if all argument lists are equal, <code class="code">#f</code> otherwise.
+List equality is determined by testing whether all lists have the same
+length and the corresponding elements are equal in the sense of the
+equality predicate <var class="var">elt=</var>.  If no or only one list is given,
+<code class="code">#t</code> is returned.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d1-Selectors.html">Selectors</a>, Previous: <a href="SRFI_002d1-Constructors.html">Constructors</a>, Up: <a href="SRFI_002d1.html">SRFI-1 - List library</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

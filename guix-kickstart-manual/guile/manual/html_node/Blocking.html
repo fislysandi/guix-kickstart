@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Blocking (Guile Reference Manual)</title>
+
+<meta name="description" content="Blocking (Guile Reference Manual)">
+<meta name="keywords" content="Blocking (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Scheduling.html" rel="up" title="Scheduling">
+<link href="Futures.html" rel="next" title="Futures">
+<link href="Mutexes-and-Condition-Variables.html" rel="prev" title="Mutexes and Condition Variables">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Blocking">
+<div class="nav-panel">
+<p>
+Next: <a href="Futures.html" accesskey="n" rel="next">Futures</a>, Previous: <a href="Mutexes-and-Condition-Variables.html" accesskey="p" rel="prev">Mutexes and Condition Variables</a>, Up: <a href="Scheduling.html" accesskey="u" rel="up">Threads, Mutexes, Asyncs and Dynamic Roots</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Blocking-in-Guile-Mode">6.22.6 Blocking in Guile Mode</h4>
+
+<p>Up to Guile version 1.8, a thread blocked in guile mode would prevent
+the garbage collector from running.  Thus threads had to explicitly
+leave guile mode with <code class="code">scm_without_guile ()</code> before making a
+potentially blocking call such as a mutex lock, a <code class="code">select ()</code>
+system call, etc.  The following functions could be used to temporarily
+leave guile mode or to perform some common blocking operations in a
+supported way.
+</p>
+<p>Starting from Guile 2.0, blocked threads no longer hinder garbage
+collection.  Thus, the functions below are not needed anymore.  They can
+still be used to inform the GC that a thread is about to block, giving
+it a (small) optimization opportunity for &ldquo;stop the world&rdquo; garbage
+collections, should they occur while the thread is blocked.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fwithout_005fguile"><span class="category-def">C Function: </span><span><code class="def-type">void *</code> <strong class="def-name">scm_without_guile</strong> <code class="def-code-arguments">(void *(*func) (void *), void *data)</code><a class="copiable-link" href='#index-scm_005fwithout_005fguile'> &para;</a></span></dt>
+<dd><p>Leave guile mode, call <var class="var">func</var> on <var class="var">data</var>, enter guile mode and
+return the result of calling <var class="var">func</var>.
+</p>
+<p>While a thread has left guile mode, it must not call any libguile
+functions except <code class="code">scm_with_guile</code> or <code class="code">scm_without_guile</code> and
+must not use any libguile macros.  Also, local variables of type
+<code class="code">SCM</code> that are allocated while not in guile mode are not
+protected from the garbage collector.
+</p>
+<p>When used from non-guile mode, calling <code class="code">scm_without_guile</code> is
+still allowed: it simply calls <var class="var">func</var>.  In that way, you can leave
+guile mode without having to know whether the current thread is in
+guile mode or not.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fpthread_005fmutex_005flock"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_pthread_mutex_lock</strong> <code class="def-code-arguments">(pthread_mutex_t *mutex)</code><a class="copiable-link" href='#index-scm_005fpthread_005fmutex_005flock'> &para;</a></span></dt>
+<dd><p>Like <code class="code">pthread_mutex_lock</code>, but leaves guile mode while waiting for
+the mutex.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fpthread_005fcond_005fwait"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_pthread_cond_wait</strong> <code class="def-code-arguments">(pthread_cond_t *cond, pthread_mutex_t *mutex)</code><a class="copiable-link" href='#index-scm_005fpthread_005fcond_005fwait'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fpthread_005fcond_005ftimedwait"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_pthread_cond_timedwait</strong> <code class="def-code-arguments">(pthread_cond_t *cond, pthread_mutex_t *mutex, struct timespec *abstime)</code><a class="copiable-link" href='#index-scm_005fpthread_005fcond_005ftimedwait'> &para;</a></span></dt>
+<dd><p>Like <code class="code">pthread_cond_wait</code> and <code class="code">pthread_cond_timedwait</code>, but
+leaves guile mode while waiting for the condition variable.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fstd_005fselect"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_std_select</strong> <code class="def-code-arguments">(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout)</code><a class="copiable-link" href='#index-scm_005fstd_005fselect'> &para;</a></span></dt>
+<dd><p>Like <code class="code">select</code> but leaves guile mode while waiting.  Also, the
+delivery of an async causes this function to be interrupted with error
+code <code class="code">EINTR</code>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fstd_005fsleep"><span class="category-def">C Function: </span><span><code class="def-type">unsigned int</code> <strong class="def-name">scm_std_sleep</strong> <code class="def-code-arguments">(unsigned int seconds)</code><a class="copiable-link" href='#index-scm_005fstd_005fsleep'> &para;</a></span></dt>
+<dd><p>Like <code class="code">sleep</code>, but leaves guile mode while sleeping.  Also, the
+delivery of an async causes this function to be interrupted.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fstd_005fusleep"><span class="category-def">C Function: </span><span><code class="def-type">unsigned long</code> <strong class="def-name">scm_std_usleep</strong> <code class="def-code-arguments">(unsigned long usecs)</code><a class="copiable-link" href='#index-scm_005fstd_005fusleep'> &para;</a></span></dt>
+<dd><p>Like <code class="code">usleep</code>, but leaves guile mode while sleeping.  Also, the
+delivery of an async causes this function to be interrupted.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Futures.html">Futures</a>, Previous: <a href="Mutexes-and-Condition-Variables.html">Mutexes and Condition Variables</a>, Up: <a href="Scheduling.html">Threads, Mutexes, Asyncs and Dynamic Roots</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

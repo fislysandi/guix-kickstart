@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Delayed Evaluation (Guile Reference Manual)</title>
+
+<meta name="description" content="Delayed Evaluation (Guile Reference Manual)">
+<meta name="keywords" content="Delayed Evaluation (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Read_002fLoad_002fEval_002fCompile.html" rel="up" title="Read/Load/Eval/Compile">
+<link href="Local-Evaluation.html" rel="next" title="Local Evaluation">
+<link href="Character-Encoding-of-Source-Files.html" rel="prev" title="Character Encoding of Source Files">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Delayed-Evaluation">
+<div class="nav-panel">
+<p>
+Next: <a href="Local-Evaluation.html" accesskey="n" rel="next">Local Evaluation</a>, Previous: <a href="Character-Encoding-of-Source-Files.html" accesskey="p" rel="prev">Character Encoding of Source Files</a>, Up: <a href="Read_002fLoad_002fEval_002fCompile.html" accesskey="u" rel="up">Reading and Evaluating Scheme Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Delayed-Evaluation-1">6.16.10 Delayed Evaluation</h4>
+<a class="index-entry-id" id="index-delayed-evaluation"></a>
+<a class="index-entry-id" id="index-promises"></a>
+
+<p>Promises are a convenient way to defer a calculation until its result
+is actually needed, and to run such a calculation only once.  Also
+see <a class="pxref" href="SRFI_002d45.html">SRFI-45 - Primitives for Expressing Iterative Lazy Algorithms</a>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-delay"><span class="category-def">syntax: </span><span><strong class="def-name">delay</strong> <var class="def-var-arguments">expr</var><a class="copiable-link" href='#index-delay'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-delay-3"></a>
+<p>Return a promise object which holds the given <var class="var">expr</var> expression,
+ready to be evaluated by a later <code class="code">force</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-promise_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">promise?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-promise_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fpromise_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_promise_p</strong> <var class="def-var-arguments">(obj)</var><a class="copiable-link" href='#index-scm_005fpromise_005fp'> &para;</a></span></dt>
+<dd><p>Return true if <var class="var">obj</var> is a promise.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-force-3"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-force"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">force</strong> <var class="def-var-arguments">p</var><a class="copiable-link" href='#index-force'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fforce"><span class="category-def">C Function: </span><span><strong class="def-name">scm_force</strong> <var class="def-var-arguments">(p)</var><a class="copiable-link" href='#index-scm_005fforce'> &para;</a></span></dt>
+<dd><p>Return the value obtained from evaluating the <var class="var">expr</var> in the given
+promise <var class="var">p</var>.  If <var class="var">p</var> has previously been forced then its
+<var class="var">expr</var> is not evaluated again, instead the value obtained at that
+time is simply returned.
+</p>
+<p>During a <code class="code">force</code>, an <var class="var">expr</var> can call <code class="code">force</code> again on
+its own promise, resulting in a recursive evaluation of that
+<var class="var">expr</var>.  The first evaluation to return gives the value for the
+promise.  Higher evaluations run to completion in the normal way, but
+their results are ignored, <code class="code">force</code> always returns the first
+value.
+</p></dd></dl>
+
+
+</div>
+
+
+
+</body>
+</html>

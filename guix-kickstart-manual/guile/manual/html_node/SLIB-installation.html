@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SLIB installation (Guile Reference Manual)</title>
+
+<meta name="description" content="SLIB installation (Guile Reference Manual)">
+<meta name="keywords" content="SLIB installation (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SLIB.html" rel="up" title="SLIB">
+<link href="JACAL.html" rel="next" title="JACAL">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="SLIB-installation">
+<div class="nav-panel">
+<p>
+Next: <a href="JACAL.html" accesskey="n" rel="next">JACAL</a>, Up: <a href="SLIB.html" accesskey="u" rel="up">SLIB</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="SLIB-installation-1">7.1.1 SLIB installation</h4>
+
+<p>The following procedure works, e.g., with SLIB version 3a3
+(see <a data-manual="slib" href="../slib_html/Installation.html#Installation">SLIB installation</a> in <cite class="cite">The SLIB Portable Scheme
+Library</cite>):
+</p>
+<ol class="enumerate">
+<li> Unpack SLIB and install it using <code class="code">make install</code> from its directory.
+By default, this will install SLIB in <samp class="file">/usr/local/lib/slib/</samp>.
+Running <code class="code">make install-info</code> installs its documentation, by default
+under <samp class="file">/usr/local/info/</samp>.
+
+</li><li> Define the <code class="code">SCHEME_LIBRARY_PATH</code> environment variable:
+
+<div class="example">
+<pre class="example-preformatted">$ SCHEME_LIBRARY_PATH=/usr/local/lib/slib/
+$ export SCHEME_LIBRARY_PATH
+</pre></div>
+
+<p>Alternatively, you can create a symlink in the Guile directory to SLIB,
+e.g.:
+</p>
+<div class="example">
+<pre class="example-preformatted">ln -s /usr/local/lib/slib /usr/local/share/guile/3.0/slib
+</pre></div>
+
+</li><li> Use Guile to create the catalog file, e.g.,:
+
+<div class="example">
+<pre class="example-preformatted"># guile
+guile&gt; (use-modules (ice-9 slib))
+guile&gt; (require 'new-catalog)
+guile&gt; (quit)
+</pre></div>
+
+<p>The catalog data should now be in
+<samp class="file">/usr/local/share/guile/3.0/slibcat</samp>.
+</p>
+<p>If instead you get an error such as:
+</p>
+<div class="example">
+<pre class="example-preformatted">Unbound variable: scheme-implementation-type
+</pre></div>
+
+<p>then a solution is to get a newer version of Guile,
+or to modify <samp class="file">ice-9/slib.scm</samp> to use <code class="code">define-public</code> for the
+offending variables.
+</p>
+</li></ol>
+
+</div>
+
+
+
+</body>
+</html>

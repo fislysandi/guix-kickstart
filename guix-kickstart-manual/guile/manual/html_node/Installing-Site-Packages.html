@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Installing Site Packages (Guile Reference Manual)</title>
+
+<meta name="description" content="Installing Site Packages (Guile Reference Manual)">
+<meta name="keywords" content="Installing Site Packages (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Programming-in-Scheme.html" rel="up" title="Programming in Scheme">
+<link href="Distributing-Guile-Code.html" rel="next" title="Distributing Guile Code">
+<link href="Using-Guile-Tools.html" rel="prev" title="Using Guile Tools">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Installing-Site-Packages">
+<div class="nav-panel">
+<p>
+Next: <a href="Distributing-Guile-Code.html" accesskey="n" rel="next">Distributing Guile Code</a>, Previous: <a href="Using-Guile-Tools.html" accesskey="p" rel="prev">Using Guile Tools</a>, Up: <a href="Programming-in-Scheme.html" accesskey="u" rel="up">Programming in Scheme</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Installing-Site-Packages-1">4.7 Installing Site Packages</h3>
+
+<a class="index-entry-id" id="index-site"></a>
+<a class="index-entry-id" id="index-site-path"></a>
+<a class="index-entry-id" id="index-load-path"></a>
+<a class="index-entry-id" id="index-_0025site_002ddir"></a>
+<a class="index-entry-id" id="index-_0025site_002dccache_002ddir"></a>
+
+<p>At some point, you will probably want to share your code with other
+people.  To do so effectively, it is important to follow a set of common
+conventions, to make it easy for the user to install and use your
+package.
+</p>
+<p>The first thing to do is to install your Scheme files where Guile can
+find them.  When Guile goes to find a Scheme file, it will search a
+<em class="dfn">load path</em> to find the file: first in Guile&rsquo;s own path, then in
+paths for <em class="dfn">site packages</em>.  A site package is any Scheme code that
+is installed and not part of Guile itself.  See <a class="xref" href="Load-Paths.html">Load Paths</a>, for more
+on load paths.
+</p>
+<p>There are several site paths, for historical reasons, but the one that
+should generally be used can be obtained by invoking the
+<code class="code">%site-dir</code> procedure.  See <a class="xref" href="Build-Config.html">Configuration, Build and Installation</a>.  If Guile
+3.0 is installed on your system in <code class="code">/usr/</code>,
+then <code class="code">(%site-dir)</code> will be
+<code class="code">/usr/share/guile/site/3.0</code>.  Scheme files
+should be installed there.
+</p>
+<p>If you do not install compiled <code class="code">.go</code> files, Guile will compile your
+modules and programs when they are first used, and cache them in the
+user&rsquo;s home directory.  See <a class="xref" href="Compilation.html">Compiling Scheme Code</a>, for more on
+auto-compilation.  However, it is better to compile the files before
+they are installed, and to just copy the files to a place that Guile can
+find them.
+</p>
+<p>As with Scheme files, Guile searches a path to find compiled <code class="code">.go</code>
+files, the <code class="code">%load-compiled-path</code>.  By default, this path has two
+entries: a path for Guile&rsquo;s files, and a path for site packages.  You
+should install your <code class="code">.go</code> files into the latter directory, whose
+value is returned by invoking the <code class="code">%site-ccache-dir</code> procedure.  As
+in the previous example, if Guile 3.0 is installed
+on your system in <code class="code">/usr/</code>, then <code class="code">(%site-ccache-dir)</code> site
+packages will be
+<code class="code">/usr/lib/guile/3.0/site-ccache</code>.
+</p>
+<p>Note that a <code class="code">.go</code> file will only be loaded in preference to a
+<code class="code">.scm</code> file if it is newer.  For that reason, you should install
+your Scheme files first, and your compiled files second.  See <a class="xref" href="Load-Paths.html">Load Paths</a>, for more on the loading process.
+</p>
+<p>Finally, although this section is only about Scheme, sometimes you need
+to install C extensions too.  Shared libraries should be installed in
+the <em class="dfn">extensions dir</em>.  This value can be had from the build config
+(see <a class="pxref" href="Build-Config.html">Configuration, Build and Installation</a>).  Again, if Guile 3.0 is
+installed on your system in <code class="code">/usr/</code>, then the extensions dir will
+be <code class="code">/usr/lib/guile/3.0/extensions</code>.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Distributing-Guile-Code.html">Distributing Guile Code</a>, Previous: <a href="Using-Guile-Tools.html">Using Guile Tools</a>, Up: <a href="Programming-in-Scheme.html">Programming in Scheme</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Faster Integers (Guile Reference Manual)</title>
+
+<meta name="description" content="Faster Integers (Guile Reference Manual)">
+<meta name="keywords" content="Faster Integers (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Data-Representation.html" rel="up" title="Data Representation">
+<link href="Cheaper-Pairs.html" rel="next" title="Cheaper Pairs">
+<link href="A-Simple-Representation.html" rel="prev" title="A Simple Representation">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Faster-Integers">
+<div class="nav-panel">
+<p>
+Next: <a href="Cheaper-Pairs.html" accesskey="n" rel="next">Cheaper Pairs</a>, Previous: <a href="A-Simple-Representation.html" accesskey="p" rel="prev">A Simple Representation</a>, Up: <a href="Data-Representation.html" accesskey="u" rel="up">Data Representation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Faster-Integers-1">9.2.2 Faster Integers</h4>
+
+<p>Unfortunately, the above representation has a serious disadvantage.  In
+order to return an integer, an expression must allocate a <code class="code">struct
+value</code>, initialize it to represent that integer, and return a pointer to
+it.  Furthermore, fetching an integer&rsquo;s value requires a memory
+reference, which is much slower than a register reference on most
+processors.  Since integers are extremely common, this representation is
+too costly, in both time and space.  Integers should be very cheap to
+create and manipulate.
+</p>
+<p>One possible solution comes from the observation that, on many
+architectures, heap-allocated data (i.e., what you get when you call
+<code class="code">malloc</code>) must be aligned on an eight-byte boundary. (Whether or
+not the machine actually requires it, we can write our own allocator for
+<code class="code">struct value</code> objects that assures this is true.) In this case,
+the lower three bits of the structure&rsquo;s address are known to be zero.
+</p>
+<p>This gives us the room we need to provide an improved representation
+for integers.  We make the following rules:
+</p><ul class="itemize mark-bullet">
+<li>If the lower three bits of an <code class="code">SCM</code> value are zero, then the SCM
+value is a pointer to a <code class="code">struct value</code>, and everything proceeds as
+before.
+</li><li>Otherwise, the <code class="code">SCM</code> value represents an integer, whose value
+appears in its upper bits.
+</li></ul>
+
+<p>Here is C code implementing this convention:
+</p><div class="example">
+<pre class="example-preformatted">enum type { pair, string, vector, ... };
+
+typedef struct value *SCM;
+
+struct value {
+  enum type type;
+  union {
+    struct { SCM car, cdr; } pair;
+    struct { int length; char *elts; } string;
+    struct { int length; SCM  *elts; } vector;
+    ...
+  } value;
+};
+
+#define POINTER_P(x) (((int) (x) &amp; 7) == 0)
+#define INTEGER_P(x) (! POINTER_P (x))
+
+#define GET_INTEGER(x)  ((int) (x) &gt;&gt; 3)
+#define MAKE_INTEGER(x) ((SCM) (((x) &lt;&lt; 3) | 1))
+</pre></div>
+
+<p>Notice that <code class="code">integer</code> no longer appears as an element of <code class="code">enum
+type</code>, and the union has lost its <code class="code">integer</code> member.  Instead, we
+use the <code class="code">POINTER_P</code> and <code class="code">INTEGER_P</code> macros to make a coarse
+classification of values into integers and non-integers, and do further
+type testing as before.
+</p>
+<p>Here&rsquo;s how we would answer the questions posed above (again, assume
+<var class="var">x</var> is an <code class="code">SCM</code> value):
+</p><ul class="itemize mark-bullet">
+<li>To test if <var class="var">x</var> is an integer, we can write <code class="code">INTEGER_P (<var class="var">x</var>)</code>.
+</li><li>To find its value, we can write <code class="code">GET_INTEGER (<var class="var">x</var>)</code>.
+</li><li>To test if <var class="var">x</var> is a vector, we can write:
+<div class="example">
+<pre class="example-preformatted">  <code class="code">POINTER_P (<var class="var">x</var>) &amp;&amp; <var class="var">x</var>-&gt;type == vector</code>
+</pre></div>
+<p>Given the new representation, we must make sure <var class="var">x</var> is truly a
+  pointer before we dereference it to determine its complete type.
+</p></li><li>If we know <var class="var">x</var> is a vector, we can write
+  <code class="code"><var class="var">x</var>-&gt;value.vector.elts[0]</code> to refer to its first element, as
+  before.
+</li><li>If we know <var class="var">x</var> is a pair, we can write
+  <code class="code"><var class="var">x</var>-&gt;value.pair.car</code> to extract its car, just as before.
+</li></ul>
+
+<p>This representation allows us to operate more efficiently on integers
+than the first.  For example, if <var class="var">x</var> and <var class="var">y</var> are known to be
+integers, we can compute their sum as follows:
+</p><div class="example">
+<pre class="example-preformatted">MAKE_INTEGER (GET_INTEGER (<var class="var">x</var>) + GET_INTEGER (<var class="var">y</var>))
+</pre></div>
+<p>Now, integer math requires no allocation or memory references. Most real
+Scheme systems actually implement addition and other operations using an
+even more efficient algorithm, but this essay isn&rsquo;t about
+bit-twiddling. (Hint: how do you decide when to overflow to a bignum?
+How would you do it in assembly?)
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Cheaper-Pairs.html">Cheaper Pairs</a>, Previous: <a href="A-Simple-Representation.html">A Simple Representation</a>, Up: <a href="Data-Representation.html">Data Representation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

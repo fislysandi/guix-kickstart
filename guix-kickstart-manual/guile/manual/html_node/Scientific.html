@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Scientific (Guile Reference Manual)</title>
+
+<meta name="description" content="Scientific (Guile Reference Manual)">
+<meta name="keywords" content="Scientific (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Numbers.html" rel="up" title="Numbers">
+<link href="Bitwise-Operations.html" rel="next" title="Bitwise Operations">
+<link href="Arithmetic.html" rel="prev" title="Arithmetic">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Scientific">
+<div class="nav-panel">
+<p>
+Next: <a href="Bitwise-Operations.html" accesskey="n" rel="next">Bitwise Operations</a>, Previous: <a href="Arithmetic.html" accesskey="p" rel="prev">Arithmetic Functions</a>, Up: <a href="Numbers.html" accesskey="u" rel="up">Numerical data types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Scientific-Functions">6.6.2.12 Scientific Functions</h4>
+
+<p>The following procedures accept any kind of number as arguments,
+including complex numbers.
+</p>
+<a class="index-entry-id" id="index-sqrt-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-sqrt"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sqrt</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-sqrt'> &para;</a></span></dt>
+<dd><p>Return the square root of <var class="var">z</var>.  Of the two possible roots
+(positive and negative), the one with a positive real part is
+returned, or if that&rsquo;s zero then a positive imaginary part.  Thus,
+</p>
+<div class="example">
+<pre class="example-preformatted">(sqrt 9.0)       &rArr; 3.0
+(sqrt -9.0)      &rArr; 0.0+3.0i
+(sqrt 1.0+1.0i)  &rArr; 1.09868411346781+0.455089860562227i
+(sqrt -1.0-1.0i) &rArr; 0.455089860562227-1.09868411346781i
+</pre></div>
+</dd></dl>
+
+<a class="index-entry-id" id="index-expt-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-expt"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">expt</strong> <var class="def-var-arguments">z1 z2</var><a class="copiable-link" href='#index-expt'> &para;</a></span></dt>
+<dd><p>Return <var class="var">z1</var> raised to the power of <var class="var">z2</var>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-sin-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-sin"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sin</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-sin'> &para;</a></span></dt>
+<dd><p>Return the sine of <var class="var">z</var>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-cos-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-cos"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cos</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-cos'> &para;</a></span></dt>
+<dd><p>Return the cosine of <var class="var">z</var>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-tan-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-tan"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tan</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-tan'> &para;</a></span></dt>
+<dd><p>Return the tangent of <var class="var">z</var>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-asin-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-asin"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">asin</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-asin'> &para;</a></span></dt>
+<dd><p>Return the arcsine of <var class="var">z</var>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-acos-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-acos"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">acos</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-acos'> &para;</a></span></dt>
+<dd><p>Return the arccosine of <var class="var">z</var>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-atan-3"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-atan"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">atan</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-atan'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-atan-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">atan</strong> <var class="def-var-arguments">y x</var><a class="copiable-link" href='#index-atan-1'> &para;</a></span></dt>
+<dd><p>Return the arctangent of <var class="var">z</var>, or of <em class="math"><var class="var">y</var>/<var class="var">x</var></em>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-exp-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-exp"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exp</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-exp'> &para;</a></span></dt>
+<dd><p>Return e to the power of <var class="var">z</var>, where e is the base of natural
+logarithms (2.71828&hellip;).
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-log-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-log"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">log</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-log'> &para;</a></span></dt>
+<dd><p>Return the natural logarithm of <var class="var">z</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-log10"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">log10</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-log10'> &para;</a></span></dt>
+<dd><p>Return the base 10 logarithm of <var class="var">z</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-sinh"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sinh</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-sinh'> &para;</a></span></dt>
+<dd><p>Return the hyperbolic sine of <var class="var">z</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-cosh"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">cosh</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-cosh'> &para;</a></span></dt>
+<dd><p>Return the hyperbolic cosine of <var class="var">z</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-tanh"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tanh</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-tanh'> &para;</a></span></dt>
+<dd><p>Return the hyperbolic tangent of <var class="var">z</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-asinh"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">asinh</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-asinh'> &para;</a></span></dt>
+<dd><p>Return the hyperbolic arcsine of <var class="var">z</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-acosh"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">acosh</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-acosh'> &para;</a></span></dt>
+<dd><p>Return the hyperbolic arccosine of <var class="var">z</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-atanh"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">atanh</strong> <var class="def-var-arguments">z</var><a class="copiable-link" href='#index-atanh'> &para;</a></span></dt>
+<dd><p>Return the hyperbolic arctangent of <var class="var">z</var>.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Bitwise-Operations.html">Bitwise Operations</a>, Previous: <a href="Arithmetic.html">Arithmetic Functions</a>, Up: <a href="Numbers.html">Numerical data types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

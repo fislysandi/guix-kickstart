@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Latent Typing (Guile Reference Manual)</title>
+
+<meta name="description" content="Latent Typing (Guile Reference Manual)">
+<meta name="keywords" content="Latent Typing (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="About-Data.html" rel="up" title="About Data">
+<link href="Values-and-Variables.html" rel="next" title="Values and Variables">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Latent-Typing">
+<div class="nav-panel">
+<p>
+Next: <a href="Values-and-Variables.html" accesskey="n" rel="next">Values and Variables</a>, Up: <a href="About-Data.html" accesskey="u" rel="up">Data Types, Values and Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Latent-Typing-1">3.1.1 Latent Typing</h4>
+
+<p>The term <em class="dfn">latent typing</em> is used to describe a computer language,
+such as Scheme, for which you cannot, <em class="emph">in general</em>, simply look at
+a program&rsquo;s source code and determine what type of data will be
+associated with a particular variable, or with the result of a
+particular expression.
+</p>
+<p>Sometimes, of course, you <em class="emph">can</em> tell from the code what the type of
+an expression will be.  If you have a line in your program that sets the
+variable <code class="code">x</code> to the numeric value 1, you can be certain that,
+immediately after that line has executed (and in the absence of multiple
+threads), <code class="code">x</code> has the numeric value 1.  Or if you write a procedure
+that is designed to concatenate two strings, it is likely that the rest
+of your application will always invoke this procedure with two string
+parameters, and quite probable that the procedure would go wrong in some
+way if it was ever invoked with parameters that were not both strings.
+</p>
+<p>Nevertheless, the point is that there is nothing in Scheme which
+requires the procedure parameters always to be strings, or <code class="code">x</code>
+always to hold a numeric value, and there is no way of declaring in your
+program that such constraints should always be obeyed.  In the same
+vein, there is no way to declare the expected type of a procedure&rsquo;s
+return value.
+</p>
+<p>Instead, the types of variables and expressions are only known &ndash; in
+general &ndash; at run time.  If you <em class="emph">need</em> to check at some point that
+a value has the expected type, Scheme provides run time procedures that
+you can invoke to do so.  But equally, it can be perfectly valid for two
+separate invocations of the same procedure to specify arguments with
+different types, and to return values with different types.
+</p>
+<p>The next subsection explains what this means in practice, for the ways
+that Scheme programs use data types, values and variables.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Values-and-Variables.html">Values and Variables</a>, Up: <a href="About-Data.html">Data Types, Values and Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>More Foreign Functions (Guile Reference Manual)</title>
+
+<meta name="description" content="More Foreign Functions (Guile Reference Manual)">
+<meta name="keywords" content="More Foreign Functions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Foreign-Function-Interface.html" rel="up" title="Foreign Function Interface">
+<link href="Foreign-Structs.html" rel="prev" title="Foreign Structs">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="More-Foreign-Functions">
+<div class="nav-panel">
+<p>
+Previous: <a href="Foreign-Structs.html" accesskey="p" rel="prev">Foreign Structs</a>, Up: <a href="Foreign-Function-Interface.html" accesskey="u" rel="up">Foreign Function Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="More-Foreign-Functions-1">6.19.8 More Foreign Functions</h4>
+
+<p>It is possible to pass pointers to foreign functions, and to return them
+as well.  In that case the type of the argument or return value should
+be the symbol <code class="code">*</code>, indicating a pointer. For example, the following
+code makes <code class="code">memcpy</code> available to Scheme:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (system foreign))
+(define memcpy
+  (foreign-library-function #f &quot;memcpy&quot;
+                            #:return-type '*
+                            #:arg-types (list '* '* size_t)))
+</pre></div>
+
+<p>To invoke <code class="code">memcpy</code>, one must pass it foreign pointers:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (rnrs bytevectors))
+
+(define src-bits
+  (u8-list-&gt;bytevector '(0 1 2 3 4 5 6 7)))
+(define src
+  (bytevector-&gt;pointer src-bits))
+(define dest
+  (bytevector-&gt;pointer (make-bytevector 16 0)))
+
+(memcpy dest src (bytevector-length src-bits))
+
+(bytevector-&gt;u8-list (pointer-&gt;bytevector dest 16))
+&rArr; (0 1 2 3 4 5 6 7 0 0 0 0 0 0 0 0)
+</pre></div>
+
+<p>One may also pass structs as values, passing structs as foreign
+pointers. See <a class="xref" href="Foreign-Structs.html">Foreign Structs</a>, for more information on how to express
+struct types and struct values.
+</p>
+<p>&ldquo;Out&rdquo; arguments are passed as foreign pointers. The memory pointed to
+by the foreign pointer is mutated in place.
+</p>
+<div class="example">
+<pre class="example-preformatted">;; struct timeval {
+;;      time_t      tv_sec;     /* seconds */
+;;      suseconds_t tv_usec;    /* microseconds */
+;; };
+;; assuming fields are of type &quot;long&quot;
+
+(define gettimeofday
+  (let ((f (foreign-library-function #f &quot;gettimeofday&quot;
+                                     #:return-type int
+                                     #:arg-types (list '* '*)))
+        (tv-type (list long long)))
+    (lambda ()
+      (let* ((timeval (make-c-struct tv-type (list 0 0)))
+             (ret (f timeval %null-pointer)))
+        (if (zero? ret)
+            (apply values (parse-c-struct timeval tv-type))
+            (error &quot;gettimeofday returned an error&quot; ret))))))
+
+(gettimeofday)    
+&rArr; 1270587589
+&rArr; 499553
+</pre></div>
+
+<p>As you can see, this interface to foreign functions is at a very low,
+somewhat dangerous level<a class="footnote" id="DOCF21" href="#FOOT21"><sup>21</sup></a>.
+</p>
+<a class="index-entry-id" id="index-callbacks"></a>
+<p>The FFI can also work in the opposite direction: making Scheme
+procedures callable from C.  This makes it possible to use Scheme
+procedures as &ldquo;callbacks&rdquo; expected by C function.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-procedure_002d_003epointer"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">procedure-&gt;pointer</strong> <var class="def-var-arguments">return-type proc arg-types</var><a class="copiable-link" href='#index-procedure_002d_003epointer'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fprocedure_005fto_005fpointer"><span class="category-def">C Function: </span><span><strong class="def-name">scm_procedure_to_pointer</strong> <var class="def-var-arguments">(return_type, proc, arg_types)</var><a class="copiable-link" href='#index-scm_005fprocedure_005fto_005fpointer'> &para;</a></span></dt>
+<dd><p>Return a pointer to a C function of type <var class="var">return-type</var>
+taking arguments of types <var class="var">arg-types</var> (a list) and
+behaving as a proxy to procedure <var class="var">proc</var>.  Thus
+<var class="var">proc</var>&rsquo;s arity, supported argument types, and return
+type should match <var class="var">return-type</var> and <var class="var">arg-types</var>.
+</p></dd></dl>
+
+<p>As an example, here&rsquo;s how the C library&rsquo;s <code class="code">qsort</code> array sorting
+function can be made accessible to Scheme (see <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/Array-Sort-Function.html#Array-Sort-Function"><code class="code">qsort</code></a> in <cite class="cite">The GNU C Library Reference Manual</cite>):
+</p>
+<div class="example">
+<pre class="example-preformatted">(define qsort!
+  (let ((qsort (foreign-library-function
+                #f &quot;qsort&quot; #:arg-types (list '* size_t size_t '*))))
+    (lambda (bv compare)
+      ;; Sort bytevector BV in-place according to comparison
+      ;; procedure COMPARE.
+      (let ((ptr (procedure-&gt;pointer int
+                                     (lambda (x y)
+                                       ;; X and Y are pointers so,
+                                       ;; for convenience, dereference
+                                       ;; them before calling COMPARE.
+                                       (compare (dereference-uint8* x)
+                                                (dereference-uint8* y)))
+                                     (list '* '*))))
+        (qsort (bytevector-&gt;pointer bv)
+               (bytevector-length bv) 1 ;; we're sorting bytes
+               ptr)))))
+
+(define (dereference-uint8* ptr)
+  ;; Helper function: dereference the byte pointed to by PTR.
+  (let ((b (pointer-&gt;bytevector ptr 1)))
+    (bytevector-u8-ref b 0)))
+
+(define bv
+  ;; An unsorted array of bytes.
+  (u8-list-&gt;bytevector '(7 1 127 3 5 4 77 2 9 0)))
+
+;; Sort BV.
+(qsort! bv (lambda (x y) (- x y)))
+
+;; Let's see what the sorted array looks like:
+(bytevector-&gt;u8-list bv)
+&rArr; (0 1 2 3 4 5 7 9 77 127)
+</pre></div>
+
+<p>And voil&agrave;!
+</p>
+<p>Note that <code class="code">procedure-&gt;pointer</code> is not supported (and not defined)
+on a few exotic architectures.  Thus, user code may need to check
+<code class="code">(defined? 'procedure-&gt;pointer)</code>.  Nevertheless, it is available on
+many architectures, including (as of libffi 3.0.9) x86, ia64, SPARC,
+PowerPC, ARM, and MIPS, to name a few.
+</p>
+
+</div>
+<div class="footnotes-segment">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5 class="footnote-body-heading"><a id="FOOT21" href="#DOCF21">(21)</a></h5>
+<p>A contribution to Guile in the form of
+a high-level FFI would be most welcome.</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Foreign-Structs.html">Foreign Structs</a>, Up: <a href="Foreign-Function-Interface.html">Foreign Function Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

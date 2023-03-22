@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>String Predicates (Guile Reference Manual)</title>
+
+<meta name="description" content="String Predicates (Guile Reference Manual)">
+<meta name="keywords" content="String Predicates (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Strings.html" rel="up" title="Strings">
+<link href="String-Constructors.html" rel="next" title="String Constructors">
+<link href="String-Syntax.html" rel="prev" title="String Syntax">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="String-Predicates">
+<div class="nav-panel">
+<p>
+Next: <a href="String-Constructors.html" accesskey="n" rel="next">String Constructors</a>, Previous: <a href="String-Syntax.html" accesskey="p" rel="prev">String Read Syntax</a>, Up: <a href="Strings.html" accesskey="u" rel="up">Strings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="String-Predicates-1">6.6.5.2 String Predicates</h4>
+
+<p>The following procedures can be used to check whether a given string
+fulfills some specified property.
+</p>
+<a class="index-entry-id" id="index-string_003f-3"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-string_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_p</strong> <var class="def-var-arguments">(obj)</var><a class="copiable-link" href='#index-scm_005fstring_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is a string, else <code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fis_005fstring"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_is_string</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-scm_005fis_005fstring'> &para;</a></span></dt>
+<dd><p>Returns <code class="code">1</code> if <var class="var">obj</var> is a string, <code class="code">0</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dnull_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-null?</strong> <var class="def-var-arguments">str</var><a class="copiable-link" href='#index-string_002dnull_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fnull_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_null_p</strong> <var class="def-var-arguments">(str)</var><a class="copiable-link" href='#index-scm_005fstring_005fnull_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">str</var>&rsquo;s length is zero, and
+<code class="code">#f</code> otherwise.
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(string-null? &quot;&quot;)  &rArr; #t
+y                    &rArr; &quot;foo&quot;
+(string-null? y)     &rArr; #f
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dany"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-any</strong> <var class="def-var-arguments">char_pred s [start [end]]</var><a class="copiable-link" href='#index-string_002dany'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fany"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_any</strong> <var class="def-var-arguments">(char_pred, s, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005fany'> &para;</a></span></dt>
+<dd><p>Check if <var class="var">char_pred</var> is true for any character in string <var class="var">s</var>.
+</p>
+<p><var class="var">char_pred</var> can be a character to check for any equal to that, or
+a character set (see <a class="pxref" href="Character-Sets.html">Character Sets</a>) to check for any in that set,
+or a predicate procedure to call.
+</p>
+<p>For a procedure, calls <code class="code">(<var class="var">char_pred</var> c)</code> are made
+successively on the characters from <var class="var">start</var> to <var class="var">end</var>.  If
+<var class="var">char_pred</var> returns true (ie. non-<code class="code">#f</code>), <code class="code">string-any</code>
+stops and that return value is the return from <code class="code">string-any</code>.  The
+call on the last character (ie. at <em class="math"><var class="var">end</var>-1</em>), if that
+point is reached, is a tail call.
+</p>
+<p>If there are no characters in <var class="var">s</var> (ie. <var class="var">start</var> equals
+<var class="var">end</var>) then the return is <code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002devery"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-every</strong> <var class="def-var-arguments">char_pred s [start [end]]</var><a class="copiable-link" href='#index-string_002devery'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fevery"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_every</strong> <var class="def-var-arguments">(char_pred, s, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005fevery'> &para;</a></span></dt>
+<dd><p>Check if <var class="var">char_pred</var> is true for every character in string
+<var class="var">s</var>.
+</p>
+<p><var class="var">char_pred</var> can be a character to check for every character equal
+to that, or a character set (see <a class="pxref" href="Character-Sets.html">Character Sets</a>) to check for
+every character being in that set, or a predicate procedure to call.
+</p>
+<p>For a procedure, calls <code class="code">(<var class="var">char_pred</var> c)</code> are made
+successively on the characters from <var class="var">start</var> to <var class="var">end</var>.  If
+<var class="var">char_pred</var> returns <code class="code">#f</code>, <code class="code">string-every</code> stops and
+returns <code class="code">#f</code>.  The call on the last character (ie. at
+<em class="math"><var class="var">end</var>-1</em>), if that point is reached, is a tail call and the
+return from that call is the return from <code class="code">string-every</code>.
+</p>
+<p>If there are no characters in <var class="var">s</var> (ie. <var class="var">start</var> equals
+<var class="var">end</var>) then the return is <code class="code">#t</code>.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="String-Constructors.html">String Constructors</a>, Previous: <a href="String-Syntax.html">String Read Syntax</a>, Up: <a href="Strings.html">Strings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

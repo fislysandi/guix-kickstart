@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>REPL Servers (Guile Reference Manual)</title>
+
+<meta name="description" content="REPL Servers (Guile Reference Manual)">
+<meta name="keywords" content="REPL Servers (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Read_002fLoad_002fEval_002fCompile.html" rel="up" title="Read/Load/Eval/Compile">
+<link href="Cooperative-REPL-Servers.html" rel="next" title="Cooperative REPL Servers">
+<link href="Sandboxed-Evaluation.html" rel="prev" title="Sandboxed Evaluation">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="REPL-Servers">
+<div class="nav-panel">
+<p>
+Next: <a href="Cooperative-REPL-Servers.html" accesskey="n" rel="next">Cooperative REPL Servers</a>, Previous: <a href="Sandboxed-Evaluation.html" accesskey="p" rel="prev">Sandboxed Evaluation</a>, Up: <a href="Read_002fLoad_002fEval_002fCompile.html" accesskey="u" rel="up">Reading and Evaluating Scheme Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="REPL-Servers-1">6.16.14 REPL Servers</h4>
+
+<a class="index-entry-id" id="index-REPL-server"></a>
+
+<p>The procedures in this section are provided by
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(use-modules (system repl server))
+</pre></div>
+
+<p>When an application is written in Guile, it is often convenient to
+allow the user to be able to interact with it by evaluating Scheme
+expressions in a REPL.
+</p>
+<p>The procedures of this module allow you to spawn a <em class="dfn">REPL server</em>,
+which permits interaction over a local or TCP connection.  Guile itself
+uses them internally to implement the <samp class="option">--listen</samp> switch,
+<a class="ref" href="Command_002dline-Options.html">Command-line Options</a>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dtcp_002dserver_002dsocket"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-tcp-server-socket</strong> <var class="def-var-arguments">[#:host=#f]                           [#:addr] [#:port=37146]</var><a class="copiable-link" href='#index-make_002dtcp_002dserver_002dsocket'> &para;</a></span></dt>
+<dd><p>Return a stream socket bound to a given address <var class="var">addr</var> and port
+number <var class="var">port</var>. If the <var class="var">host</var> is given, and <var class="var">addr</var> is not,
+then the <var class="var">host</var> string is converted to an address.  If neither is
+given, we use the loopback address.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dunix_002ddomain_002dserver_002dsocket"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-unix-domain-server-socket</strong> <var class="def-var-arguments">[#:path=&quot;/tmp/guile-socket&quot;]</var><a class="copiable-link" href='#index-make_002dunix_002ddomain_002dserver_002dsocket'> &para;</a></span></dt>
+<dd><p>Return a UNIX domain socket, bound to a given <var class="var">path</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-run_002dserver"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">run-server</strong> <var class="def-var-arguments">[server-socket]</var><a class="copiable-link" href='#index-run_002dserver'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-spawn_002dserver"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">spawn-server</strong> <var class="def-var-arguments">[server-socket]</var><a class="copiable-link" href='#index-spawn_002dserver'> &para;</a></span></dt>
+<dd><p>Create and run a REPL, making it available over the given
+<var class="var">server-socket</var>.  If <var class="var">server-socket</var> is not provided, it
+defaults to the socket created by calling <code class="code">make-tcp-server-socket</code>
+with no arguments.
+</p>
+<p><code class="code">run-server</code> runs the server in the current thread, whereas
+<code class="code">spawn-server</code> runs the server in a new thread.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stop_002dserver_002dand_002dclients_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stop-server-and-clients!</strong><a class="copiable-link" href='#index-stop_002dserver_002dand_002dclients_0021'> &para;</a></span></dt>
+<dd><p>Closes the connection on all running server sockets.
+</p>
+<p>Please note that in the current implementation, the REPL threads are
+cancelled without unwinding their stacks.  If any of them are holding
+mutexes or are within a critical section, the results are unspecified.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Cooperative-REPL-Servers.html">Cooperative REPL Servers</a>, Previous: <a href="Sandboxed-Evaluation.html">Sandboxed Evaluation</a>, Up: <a href="Read_002fLoad_002fEval_002fCompile.html">Reading and Evaluating Scheme Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

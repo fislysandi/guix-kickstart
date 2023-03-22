@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Command Line Handling (Guile Reference Manual)</title>
+
+<meta name="description" content="Command Line Handling (Guile Reference Manual)">
+<meta name="keywords" content="Command Line Handling (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Guile-Scripting.html" rel="up" title="Guile Scripting">
+<link href="Scripting-Examples.html" rel="next" title="Scripting Examples">
+<link href="The-Meta-Switch.html" rel="prev" title="The Meta Switch">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Command-Line-Handling">
+<div class="nav-panel">
+<p>
+Next: <a href="Scripting-Examples.html" accesskey="n" rel="next">Scripting Examples</a>, Previous: <a href="The-Meta-Switch.html" accesskey="p" rel="prev">The Meta Switch</a>, Up: <a href="Guile-Scripting.html" accesskey="u" rel="up">Guile Scripting</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Command-Line-Handling-1">4.3.3 Command Line Handling</h4>
+
+
+<p>The ability to accept and handle command line arguments is very
+important when writing Guile scripts to solve particular problems, such
+as extracting information from text files or interfacing with existing
+command line applications.  This chapter describes how Guile makes
+command line arguments available to a Guile script, and the utilities
+that Guile provides to help with the processing of command line
+arguments.
+</p>
+<p>When a Guile script is invoked, Guile makes the command line arguments
+accessible via the procedure <code class="code">command-line</code>, which returns the
+arguments as a list of strings.
+</p>
+<p>For example, if the script
+</p>
+<div class="example">
+<pre class="example-preformatted">#! /usr/local/bin/guile -s
+!#
+(write (command-line))
+(newline)
+</pre></div>
+
+<p>is saved in a file <samp class="file">cmdline-test.scm</samp> and invoked using the command
+line <code class="code">./cmdline-test.scm bar.txt -o foo -frumple grob</code>, the output
+is
+</p>
+<div class="example">
+<pre class="example-preformatted">(&quot;./cmdline-test.scm&quot; &quot;bar.txt&quot; &quot;-o&quot; &quot;foo&quot; &quot;-frumple&quot; &quot;grob&quot;)
+</pre></div>
+
+<p>If the script invocation includes a <code class="code">-e</code> option, specifying a
+procedure to call after loading the script, Guile will call that
+procedure with <code class="code">(command-line)</code> as its argument.  So a script that
+uses <code class="code">-e</code> doesn&rsquo;t need to refer explicitly to <code class="code">command-line</code>
+in its code.  For example, the script above would have identical
+behaviour if it was written instead like this:
+</p>
+<div class="example">
+<pre class="example-preformatted">#! /usr/local/bin/guile \
+-e main -s
+!#
+(define (main args)
+  (write args)
+  (newline))
+</pre></div>
+
+<p>(Note the use of the meta switch <code class="code">\</code> so that the script invocation
+can include more than one Guile option: See <a class="xref" href="The-Meta-Switch.html">The Meta Switch</a>.)
+</p>
+<p>These scripts use the <code class="code">#!</code> POSIX convention so that they can be
+executed using their own file names directly, as in the example command
+line <code class="code">./cmdline-test.scm bar.txt -o foo -frumple grob</code>.  But they
+can also be executed by typing out the implied Guile command line in
+full, as in:
+</p>
+<div class="example">
+<pre class="example-preformatted">$ guile -s ./cmdline-test.scm bar.txt -o foo -frumple grob
+</pre></div>
+
+<p>or
+</p>
+<div class="example">
+<pre class="example-preformatted">$ guile -e main -s ./cmdline-test2.scm bar.txt -o foo -frumple grob
+</pre></div>
+
+<p>Even when a script is invoked using this longer form, the arguments that
+the script receives are the same as if it had been invoked using the
+short form.  Guile ensures that the <code class="code">(command-line)</code> or <code class="code">-e</code>
+arguments are independent of how the script is invoked, by stripping off
+the arguments that Guile itself processes.
+</p>
+<p>A script is free to parse and handle its command line arguments in any
+way that it chooses.  Where the set of possible options and arguments is
+complex, however, it can get tricky to extract all the options, check
+the validity of given arguments, and so on.  This task can be greatly
+simplified by taking advantage of the module <code class="code">(ice-9 getopt-long)</code>,
+which is distributed with Guile, See <a class="xref" href="getopt_002dlong.html">The (ice-9 getopt-long) Module</a>.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Scripting-Examples.html">Scripting Examples</a>, Previous: <a href="The-Meta-Switch.html">The Meta Switch</a>, Up: <a href="Guile-Scripting.html">Guile Scripting</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

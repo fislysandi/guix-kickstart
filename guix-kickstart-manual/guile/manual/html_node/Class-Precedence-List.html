@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Class Precedence List (Guile Reference Manual)</title>
+
+<meta name="description" content="Class Precedence List (Guile Reference Manual)">
+<meta name="keywords" content="Class Precedence List (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Inheritance.html" rel="up" title="Inheritance">
+<link href="Sorting-Methods.html" rel="next" title="Sorting Methods">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Class-Precedence-List">
+<div class="nav-panel">
+<p>
+Next: <a href="Sorting-Methods.html" accesskey="n" rel="next">Sorting Methods</a>, Up: <a href="Inheritance.html" accesskey="u" rel="up">Inheritance</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Class-Precedence-List-1">8.7.1 Class Precedence List</h4>
+
+<p>What happens when a class inherits from two or more superclasses that
+have a slot with the same name but incompatible definitions &mdash; for
+example, different init values or slot allocations?  We need a rule for
+deciding which slot definition the derived class ends up with, and this
+rule is provided by the class&rsquo;s <em class="dfn">Class Precedence
+List</em>.<a class="footnote" id="DOCF34" href="#FOOT34"><sup>34</sup></a>
+</p>
+<p>Another problem arises when invoking a generic function, and there is
+more than one method that could apply to the call arguments.  Here we
+need a way of ordering the applicable methods, so that Guile knows which
+method to use first, which to use next if that method calls
+<code class="code">next-method</code>, and so on.  One of the ingredients for this ordering
+is determining, for each given call argument, which of the specializing
+classes, from each applicable method&rsquo;s definition, is the most specific
+for that argument; and here again the class precedence list helps.
+</p>
+<p>If inheritance was restricted such that each class could only have one
+superclass &mdash; which is known as <em class="dfn">single</em> inheritance &mdash; class
+ordering would be easy.  The rule would be simply that a subclass is
+considered more specific than its superclass.
+</p>
+<p>With multiple inheritance, ordering is less obvious, and we have to
+impose an arbitrary rule to determine precedence. Suppose we have
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-class X ()
+   (x #:init-value 1))
+
+(define-class Y ()
+   (x #:init-value 2))
+
+(define-class Z (X Y)
+   (&hellip;))
+</pre></div>
+
+<p>Clearly the <code class="code">Z</code> class is more specific than <code class="code">X</code> or <code class="code">Y</code>,
+for instances of <code class="code">Z</code>.  But which is more specific out of <code class="code">X</code>
+and <code class="code">Y</code> &mdash; and hence, for the definitions above, which
+<code class="code">#:init-value</code> will take effect when creating an instance of
+<code class="code">Z</code>?  The rule in GOOPS is that the superclasses listed earlier
+are more specific than those listed later.  Hence <code class="code">X</code> is more
+specific than <code class="code">Y</code>, and the <code class="code">#:init-value</code> for slot <code class="code">x</code> in
+instances of <code class="code">Z</code> will be 1.
+</p>
+<p>Hence there is a linear ordering for a class and all its
+superclasses, from most specific to least specific, and this ordering is
+called the Class Precedence List of the class.
+</p>
+<p>In fact the rules above are not quite enough to always determine a
+unique order, but they give an idea of how things work.  For example,
+for the <code class="code">F</code> class shown in <a class="ref" href="Inheritance.html#fig_003ahier">Figure 8.2</a>, the class precedence
+list is
+</p>
+<div class="example">
+<pre class="example-preformatted">(f d e a c b &lt;object&gt; &lt;top&gt;)
+</pre></div>
+
+<p>In cases where there is any ambiguity (like this one), it is a bad idea
+for programmers to rely on exactly what the order is.  If the order for
+some superclasses is important, it can be expressed directly in the
+class definition.
+</p>
+<p>The precedence list of a class can be obtained by calling
+<code class="code">class-precedence-list</code>.  This function returns a ordered list
+whose first element is the most specific class.  For instance:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(class-precedence-list B) &rArr; (#&lt;&lt;class&gt; B 401b97c8&gt; 
+                                     #&lt;&lt;class&gt; &lt;object&gt; 401e4a10&gt; 
+                                     #&lt;&lt;class&gt; &lt;top&gt; 4026a9d8&gt;)
+</pre></div>
+
+<p>Or for a more immediately readable result:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(map class-name (class-precedence-list B)) &rArr; (B &lt;object&gt; &lt;top&gt;) 
+</pre></div>
+
+
+</div>
+<div class="footnotes-segment">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5 class="footnote-body-heading"><a id="FOOT34" href="#DOCF34">(34)</a></h5>
+<p>This section is an adaptation of material from Jeff
+Dalton&rsquo;s (J.Dalton@ed.ac.uk) <cite class="cite">Brief introduction to CLOS</cite></p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Sorting-Methods.html">Sorting Methods</a>, Up: <a href="Inheritance.html">Inheritance</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

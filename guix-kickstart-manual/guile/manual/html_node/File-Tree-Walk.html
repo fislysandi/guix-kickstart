@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>File Tree Walk (Guile Reference Manual)</title>
+
+<meta name="description" content="File Tree Walk (Guile Reference Manual)">
+<meta name="keywords" content="File Tree Walk (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Guile-Modules.html" rel="up" title="Guile Modules">
+<link href="Queues.html" rel="next" title="Queues">
+<link href="Formatted-Output.html" rel="prev" title="Formatted Output">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="File-Tree-Walk">
+<div class="nav-panel">
+<p>
+Next: <a href="Queues.html" accesskey="n" rel="next">Queues</a>, Previous: <a href="Formatted-Output.html" accesskey="p" rel="prev">Formatted Output</a>, Up: <a href="Guile-Modules.html" accesskey="u" rel="up">Guile Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="File-Tree-Walk-1">7.12 File Tree Walk</h3>
+<a class="index-entry-id" id="index-file-tree-walk"></a>
+
+<a class="index-entry-id" id="index-file-system-traversal"></a>
+<a class="index-entry-id" id="index-directory-traversal"></a>
+
+<p>The functions in this section traverse a tree of files and
+directories.  They come in two flavors: the first one is a high-level
+functional interface, and the second one is similar to the C <code class="code">ftw</code>
+and <code class="code">nftw</code> routines (see <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/Working-with-Directory-Trees.html#Working-with-Directory-Trees">Working with Directory Trees</a> in <cite class="cite">GNU C Library Reference Manual</cite>).
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 ftw))
+</pre></div>
+<br>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-file_002dsystem_002dtree"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">file-system-tree</strong> <var class="def-var-arguments">file-name [enter? [stat]]</var><a class="copiable-link" href='#index-file_002dsystem_002dtree'> &para;</a></span></dt>
+<dd><p>Return a tree of the form <code class="code">(<var class="var">file-name</var> <var class="var">stat</var>
+<var class="var">children</var> ...)</code> where <var class="var">stat</var> is the result of <code class="code">(<var class="var">stat</var>
+<var class="var">file-name</var>)</code> and <var class="var">children</var> are similar structures for each
+file contained in <var class="var">file-name</var> when it designates a directory.
+</p>
+<p>The optional <var class="var">enter?</var> predicate is invoked as <code class="code">(<var class="var">enter?</var>
+<var class="var">name</var> <var class="var">stat</var>)</code> and should return true to allow recursion into
+directory <var class="var">name</var>; the default value is a procedure that always
+returns <code class="code">#t</code>.  When a directory does not match <var class="var">enter?</var>, it
+nonetheless appears in the resulting tree, only with zero children.
+</p>
+<p>The <var class="var">stat</var> argument is optional and defaults to <code class="code">lstat</code>, as for
+<code class="code">file-system-fold</code> (see below.)
+</p>
+<p>The example below shows how to obtain a hierarchical listing of the
+files under the <samp class="file">module/language</samp> directory in the Guile source
+tree, discarding their <code class="code">stat</code> info:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 match))
+
+(define remove-stat
+  ;; Remove the `stat' object the `file-system-tree' provides
+  ;; for each file in the tree.
+  (match-lambda
+    ((name stat)              ; flat file
+     name)
+    ((name stat children ...) ; directory
+     (list name (map remove-stat children)))))
+
+(let ((dir (string-append (assq-ref %guile-build-info 'top_srcdir)
+                          &quot;/module/language&quot;)))
+  (remove-stat (file-system-tree dir)))
+
+&rArr;
+(&quot;language&quot;
+ ((&quot;value&quot; (&quot;spec.go&quot; &quot;spec.scm&quot;))
+  (&quot;scheme&quot;
+   (&quot;spec.go&quot;
+    &quot;spec.scm&quot;
+    &quot;compile-tree-il.scm&quot;
+    &quot;decompile-tree-il.scm&quot;
+    &quot;decompile-tree-il.go&quot;
+    &quot;compile-tree-il.go&quot;))
+  (&quot;tree-il&quot;
+   (&quot;spec.go&quot;
+    &quot;fix-letrec.go&quot;
+    &quot;inline.go&quot;
+    &quot;fix-letrec.scm&quot;
+    &quot;compile-glil.go&quot;
+    &quot;spec.scm&quot;
+    &quot;optimize.scm&quot;
+    &quot;primitives.scm&quot;
+    &hellip;))
+  &hellip;))
+</pre></div>
+</dd></dl>
+
+<a class="index-entry-id" id="index-file-system-combinator"></a>
+
+<p>It is often desirable to process directories entries directly, rather
+than building up a tree of entries in memory, like
+<code class="code">file-system-tree</code> does.  The following procedure, a
+<em class="dfn">combinator</em>, is designed to allow directory entries to be processed
+directly as a directory tree is traversed; in fact,
+<code class="code">file-system-tree</code> is implemented in terms of it.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-file_002dsystem_002dfold"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">file-system-fold</strong> <var class="def-var-arguments">enter? leaf down up skip error init file-name [stat]</var><a class="copiable-link" href='#index-file_002dsystem_002dfold'> &para;</a></span></dt>
+<dd><p>Traverse the directory at <var class="var">file-name</var>, recursively, and return the
+result of the successive applications of the <var class="var">leaf</var>, <var class="var">down</var>,
+<var class="var">up</var>, and <var class="var">skip</var> procedures as described below.
+</p>
+<p>Enter sub-directories only when <code class="code">(<var class="var">enter?</var> <var class="var">path</var>
+<var class="var">stat</var> <var class="var">result</var>)</code> returns true.  When a sub-directory is
+entered, call <code class="code">(<var class="var">down</var> <var class="var">path</var> <var class="var">stat</var> <var class="var">result</var>)</code>,
+where <var class="var">path</var> is the path of the sub-directory and <var class="var">stat</var> the
+result of <code class="code">(false-if-exception (<var class="var">stat</var> <var class="var">path</var>))</code>; when it is
+left, call <code class="code">(<var class="var">up</var> <var class="var">path</var> <var class="var">stat</var> <var class="var">result</var>)</code>.
+</p>
+<p>For each file in a directory, call <code class="code">(<var class="var">leaf</var> <var class="var">path</var>
+<var class="var">stat</var> <var class="var">result</var>)</code>.
+</p>
+<p>When <var class="var">enter?</var> returns <code class="code">#f</code>, or when an unreadable directory is
+encountered, call <code class="code">(<var class="var">skip</var> <var class="var">path</var> <var class="var">stat</var>
+<var class="var">result</var>)</code>.
+</p>
+<p>When <var class="var">file-name</var> names a flat file, <code class="code">(<var class="var">leaf</var> <var class="var">path</var>
+<var class="var">stat</var> <var class="var">init</var>)</code> is returned.
+</p>
+<p>When an <code class="code">opendir</code> or <var class="var">stat</var> call fails, call <code class="code">(<var class="var">error</var>
+<var class="var">path</var> <var class="var">stat</var> <var class="var">errno</var> <var class="var">result</var>)</code>, with <var class="var">errno</var> being
+the operating system error number that was raised&mdash;e.g.,
+<code class="code">EACCES</code>&mdash;and <var class="var">stat</var> either <code class="code">#f</code> or the result of the
+<var class="var">stat</var> call for that entry, when available.
+</p>
+<p>The special <samp class="file">.</samp> and <samp class="file">..</samp> entries are not passed to these
+procedures.  The <var class="var">path</var> argument to the procedures is a full file
+name&mdash;e.g., <code class="code">&quot;../foo/bar/gnu&quot;</code>; if <var class="var">file-name</var> is an absolute
+file name, then <var class="var">path</var> is also an absolute file name.  Files and
+directories, as identified by their device/inode number pair, are
+traversed only once.
+</p>
+<p>The optional <var class="var">stat</var> argument defaults to <code class="code">lstat</code>, which means
+that symbolic links are not followed; the <code class="code">stat</code> procedure can be
+used instead when symbolic links are to be followed (see <a class="pxref" href="File-System.html">stat</a>).
+</p>
+<p>The example below illustrates the use of <code class="code">file-system-fold</code>:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (total-file-size file-name)
+  &quot;Return the size in bytes of the files under FILE-NAME (similar
+to `du --apparent-size' with GNU Coreutils.)&quot;
+
+  (define (enter? name stat result)
+    ;; Skip version control directories.
+    (not (member (basename name) '(&quot;.git&quot; &quot;.svn&quot; &quot;CVS&quot;))))
+  (define (leaf name stat result)
+    ;; Return RESULT plus the size of the file at NAME.
+    (+ result (stat:size stat)))
+
+  ;; Count zero bytes for directories.
+  (define (down name stat result) result)
+  (define (up name stat result) result)
+
+  ;; Likewise for skipped directories.
+  (define (skip name stat result) result)
+
+  ;; Ignore unreadable files/directories but warn the user.
+  (define (error name stat errno result)
+    (format (current-error-port) &quot;warning: ~a: ~a~%&quot;
+            name (strerror errno))
+    result)
+
+  (file-system-fold enter? leaf down up skip error
+                           0  ; initial counter is zero bytes
+                           file-name))
+
+(total-file-size &quot;.&quot;)
+&rArr; 8217554
+
+(total-file-size &quot;/dev/null&quot;)
+&rArr; 0
+</pre></div>
+</dd></dl>
+
+<p>The alternative C-like functions are described below.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-scandir"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">scandir</strong> <var class="def-var-arguments">name [select? [entry&lt;?]]</var><a class="copiable-link" href='#index-scandir'> &para;</a></span></dt>
+<dd><p>Return the list of the names of files contained in directory <var class="var">name</var>
+that match predicate <var class="var">select?</var> (by default, all files).  The
+returned list of file names is sorted according to <var class="var">entry&lt;?</var>, which
+defaults to <code class="code">string-locale&lt;?</code> such that file names are sorted in
+the locale&rsquo;s alphabetical order (see <a class="pxref" href="Text-Collation.html">Text Collation</a>).  Return
+<code class="code">#f</code> when <var class="var">name</var> is unreadable or is not a directory.
+</p>
+<p>This procedure is modeled after the C library function of the same name
+(see <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/Scanning-Directory-Content.html#Scanning-Directory-Content">Scanning Directory Content</a> in <cite class="cite">GNU C Library Reference
+Manual</cite>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ftw"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ftw</strong> <var class="def-var-arguments">startname proc [&rsquo;hash-size n]</var><a class="copiable-link" href='#index-ftw'> &para;</a></span></dt>
+<dd><p>Walk the file system tree descending from <var class="var">startname</var>, calling
+<var class="var">proc</var> for each file and directory.
+</p>
+<p>Hard links and symbolic links are followed.  A file or directory is
+reported to <var class="var">proc</var> only once, and skipped if seen again in another
+place.  One consequence of this is that <code class="code">ftw</code> is safe against
+circularly linked directory structures.
+</p>
+<p>Each <var class="var">proc</var> call is <code class="code">(<var class="var">proc</var> filename statinfo flag)</code> and
+it should return <code class="code">#t</code> to continue, or any other value to stop.
+</p>
+<p><var class="var">filename</var> is the item visited, being <var class="var">startname</var> plus a
+further path and the name of the item.  <var class="var">statinfo</var> is the return
+from <code class="code">stat</code> (see <a class="pxref" href="File-System.html">File System</a>) on <var class="var">filename</var>.  <var class="var">flag</var>
+is one of the following symbols,
+</p>
+<dl class="table">
+<dt><code class="code">regular</code></dt>
+<dd><p><var class="var">filename</var> is a file, this includes special files like devices,
+named pipes, etc.
+</p>
+</dd>
+<dt><code class="code">directory</code></dt>
+<dd><p><var class="var">filename</var> is a directory.
+</p>
+</dd>
+<dt><code class="code">invalid-stat</code></dt>
+<dd><p>An error occurred when calling <code class="code">stat</code>, so nothing is known.
+<var class="var">statinfo</var> is <code class="code">#f</code> in this case.
+</p>
+</dd>
+<dt><code class="code">directory-not-readable</code></dt>
+<dd><p><var class="var">filename</var> is a directory, but one which cannot be read and hence
+won&rsquo;t be recursed into.
+</p>
+</dd>
+<dt><code class="code">symlink</code></dt>
+<dd><p><var class="var">filename</var> is a dangling symbolic link.  Symbolic links are
+normally followed and their target reported, the link itself is
+reported if the target does not exist.
+</p></dd>
+</dl>
+
+<p>The return value from <code class="code">ftw</code> is <code class="code">#t</code> if it ran to completion,
+or otherwise the non-<code class="code">#t</code> value from <var class="var">proc</var> which caused the
+stop.
+</p>
+<p>Optional argument symbol <code class="code">hash-size</code> and an integer can be given
+to set the size of the hash table used to track items already visited.
+(see <a class="pxref" href="Hash-Table-Reference.html">Hash Table Reference</a>)
+</p>
+<p>In the current implementation, returning non-<code class="code">#t</code> from <var class="var">proc</var>
+is the only valid way to terminate <code class="code">ftw</code>.  <var class="var">proc</var> must not
+use <code class="code">throw</code> or similar to escape.
+</p></dd></dl>
+
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-nftw"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">nftw</strong> <var class="def-var-arguments">startname proc [&rsquo;chdir] [&rsquo;depth] [&rsquo;hash-size n] [&rsquo;mount] [&rsquo;physical]</var><a class="copiable-link" href='#index-nftw'> &para;</a></span></dt>
+<dd><p>Walk the file system tree starting at <var class="var">startname</var>, calling
+<var class="var">proc</var> for each file and directory.  <code class="code">nftw</code> has extra
+features over the basic <code class="code">ftw</code> described above.
+</p>
+<p>Like <code class="code">ftw</code>, hard links and symbolic links are followed.  A file
+or directory is reported to <var class="var">proc</var> only once, and skipped if seen
+again in another place.  One consequence of this is that <code class="code">nftw</code>
+is safe against circular linked directory structures.
+</p>
+<p>Each <var class="var">proc</var> call is <code class="code">(<var class="var">proc</var> filename statinfo flag
+base level)</code> and it should return <code class="code">#t</code> to continue, or any
+other value to stop.
+</p>
+<p><var class="var">filename</var> is the item visited, being <var class="var">startname</var> plus a
+further path and the name of the item.  <var class="var">statinfo</var> is the return
+from <code class="code">stat</code> on <var class="var">filename</var> (see <a class="pxref" href="File-System.html">File System</a>).  <var class="var">base</var>
+is an integer offset into <var class="var">filename</var> which is where the basename
+for this item begins.  <var class="var">level</var> is an integer giving the directory
+nesting level, starting from 0 for the contents of <var class="var">startname</var> (or
+that item itself if it&rsquo;s a file).  <var class="var">flag</var> is one of the following
+symbols,
+</p>
+<dl class="table">
+<dt><code class="code">regular</code></dt>
+<dd><p><var class="var">filename</var> is a file, including special files like devices, named
+pipes, etc.
+</p>
+</dd>
+<dt><code class="code">directory</code></dt>
+<dd><p><var class="var">filename</var> is a directory.
+</p>
+</dd>
+<dt><code class="code">directory-processed</code></dt>
+<dd><p><var class="var">filename</var> is a directory, and its contents have all been visited.
+This flag is given instead of <code class="code">directory</code> when the <code class="code">depth</code>
+option below is used.
+</p>
+</dd>
+<dt><code class="code">invalid-stat</code></dt>
+<dd><p>An error occurred when applying <code class="code">stat</code> to <var class="var">filename</var>, so
+nothing is known about it.  <var class="var">statinfo</var> is <code class="code">#f</code> in this case.
+</p>
+</dd>
+<dt><code class="code">directory-not-readable</code></dt>
+<dd><p><var class="var">filename</var> is a directory, but one which cannot be read and hence
+won&rsquo;t be recursed into.
+</p>
+</dd>
+<dt><code class="code">stale-symlink</code></dt>
+<dd><p><var class="var">filename</var> is a dangling symbolic link.  Links are normally
+followed and their target reported, the link itself is reported if its
+target does not exist.
+</p>
+</dd>
+<dt><code class="code">symlink</code></dt>
+<dd><p>When the <code class="code">physical</code> option described below is used, this
+indicates <var class="var">filename</var> is a symbolic link whose target exists (and
+is not being followed).
+</p></dd>
+</dl>
+
+<p>The following optional arguments can be given to modify the way
+<code class="code">nftw</code> works.  Each is passed as a symbol (and <code class="code">hash-size</code>
+takes a following integer value).
+</p>
+<dl class="table">
+<dt><code class="code">chdir</code></dt>
+<dd><p>Change to the directory containing the item before calling <var class="var">proc</var>.
+When <code class="code">nftw</code> returns the original current directory is restored.
+</p>
+<p>Under this option, generally the <var class="var">base</var> parameter to each
+<var class="var">proc</var> call should be used to pick out the base part of the
+<var class="var">filename</var>.  The <var class="var">filename</var> is still a path but with a changed
+directory it won&rsquo;t be valid (unless the <var class="var">startname</var> directory was
+absolute).
+</p>
+</dd>
+<dt><code class="code">depth</code></dt>
+<dd><p>Visit files &ldquo;depth first&rdquo;, meaning <var class="var">proc</var> is called for the
+contents of each directory before it&rsquo;s called for the directory
+itself.  Normally a directory is reported first, then its contents.
+</p>
+<p>Under this option, the <var class="var">flag</var> to <var class="var">proc</var> for a directory is
+<code class="code">directory-processed</code> instead of <code class="code">directory</code>.
+</p>
+</dd>
+<dt><code class="code">hash-size <var class="var">n</var></code></dt>
+<dd><p>Set the size of the hash table used to track items already visited.
+(see <a class="pxref" href="Hash-Table-Reference.html">Hash Table Reference</a>)
+</p>
+</dd>
+<dt><code class="code">mount</code></dt>
+<dd><p>Don&rsquo;t cross a mount point, meaning only visit items on the same
+file system as <var class="var">startname</var> (ie. the same <code class="code">stat:dev</code>).
+</p>
+</dd>
+<dt><code class="code">physical</code></dt>
+<dd><p>Don&rsquo;t follow symbolic links, instead report them to <var class="var">proc</var> as
+<code class="code">symlink</code>.  Dangling links (those whose target doesn&rsquo;t exist) are
+still reported as <code class="code">stale-symlink</code>.
+</p></dd>
+</dl>
+
+<p>The return value from <code class="code">nftw</code> is <code class="code">#t</code> if it ran to
+completion, or otherwise the non-<code class="code">#t</code> value from <var class="var">proc</var> which
+caused the stop.
+</p>
+<p>In the current implementation, returning non-<code class="code">#t</code> from <var class="var">proc</var>
+is the only valid way to terminate <code class="code">ftw</code>.  <var class="var">proc</var> must not
+use <code class="code">throw</code> or similar to escape.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Queues.html">Queues</a>, Previous: <a href="Formatted-Output.html">Formatted Output</a>, Up: <a href="Guile-Modules.html">Guile Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

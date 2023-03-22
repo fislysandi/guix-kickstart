@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-27 Random Sources (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-27 Random Sources (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-27 Random Sources (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI_002d27.html" rel="up" title="SRFI-27">
+<link href="SRFI_002d27-Random-Number-Generators.html" rel="next" title="SRFI-27 Random Number Generators">
+<link href="SRFI_002d27-Default-Random-Source.html" rel="prev" title="SRFI-27 Default Random Source">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="SRFI_002d27-Random-Sources">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d27-Random-Number-Generators.html" accesskey="n" rel="next">Obtaining random number generator procedures</a>, Previous: <a href="SRFI_002d27-Default-Random-Source.html" accesskey="p" rel="prev">The Default Random Source</a>, Up: <a href="SRFI_002d27.html" accesskey="u" rel="up">SRFI-27 - Sources of Random Bits</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Random-Sources">7.5.19.2 Random Sources</h4>
+<a class="index-entry-id" id="index-SRFI_002d27-2"></a>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-make_002drandom_002dsource"><span class="category-def">Function: </span><span><strong class="def-name">make-random-source</strong><a class="copiable-link" href='#index-make_002drandom_002dsource'> &para;</a></span></dt>
+<dd><p>Create a new random source.  The stream of random numbers obtained from
+each random source created by this procedure will be identical, unless
+its state is changed by one of the procedures below.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-random_002dsource_003f"><span class="category-def">Function: </span><span><strong class="def-name">random-source?</strong> <var class="def-var-arguments">object</var><a class="copiable-link" href='#index-random_002dsource_003f'> &para;</a></span></dt>
+<dd><p>Tests whether <var class="var">object</var> is a random source.  Random sources are a
+disjoint type.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-random_002dsource_002drandomize_0021"><span class="category-def">Function: </span><span><strong class="def-name">random-source-randomize!</strong> <var class="def-var-arguments">source</var><a class="copiable-link" href='#index-random_002dsource_002drandomize_0021'> &para;</a></span></dt>
+<dd><p>Attempt to set the state of the random source to a truly random value.
+The current implementation uses a seed based on the current system time.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-random_002dsource_002dpseudo_002drandomize_0021"><span class="category-def">Function: </span><span><strong class="def-name">random-source-pseudo-randomize!</strong> <var class="def-var-arguments">source i j</var><a class="copiable-link" href='#index-random_002dsource_002dpseudo_002drandomize_0021'> &para;</a></span></dt>
+<dd><p>Changes the state of the random source s into the initial state of the
+(<var class="var">i</var>, <var class="var">j</var>)-th independent random source, where <var class="var">i</var> and
+<var class="var">j</var> are non-negative integers.  This procedure provides a mechanism
+to obtain a large number of independent random sources (usually all
+derived from the same backbone generator), indexed by two integers. In
+contrast to <code class="code">random-source-randomize!</code>, this procedure is entirely
+deterministic.
+</p></dd></dl>
+
+<p>The state associated with a random state can be obtained an reinstated
+with the following procedures:
+</p>
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-random_002dsource_002dstate_002dref"><span class="category-def">Function: </span><span><strong class="def-name">random-source-state-ref</strong> <var class="def-var-arguments">source</var><a class="copiable-link" href='#index-random_002dsource_002dstate_002dref'> &para;</a></span></dt>
+<dt class="deffnx defunx-alias-deffnx def-cmd-deffn" id="index-random_002dsource_002dstate_002dset_0021"><span class="category-def">Function: </span><span><strong class="def-name">random-source-state-set!</strong> <var class="def-var-arguments">source state</var><a class="copiable-link" href='#index-random_002dsource_002dstate_002dset_0021'> &para;</a></span></dt>
+<dd><p>Get and set the state of a random source.  No assumptions should be made
+about the nature of the state object, besides it having an external
+representation (i.e. it can be passed to <code class="code">write</code> and subsequently
+<code class="code">read</code> back).
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d27-Random-Number-Generators.html">Obtaining random number generator procedures</a>, Previous: <a href="SRFI_002d27-Default-Random-Source.html">The Default Random Source</a>, Up: <a href="SRFI_002d27.html">SRFI-27 - Sources of Random Bits</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

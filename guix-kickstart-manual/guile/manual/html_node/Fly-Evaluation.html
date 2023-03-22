@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Fly Evaluation (Guile Reference Manual)</title>
+
+<meta name="description" content="Fly Evaluation (Guile Reference Manual)">
+<meta name="keywords" content="Fly Evaluation (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Read_002fLoad_002fEval_002fCompile.html" rel="up" title="Read/Load/Eval/Compile">
+<link href="Compilation.html" rel="next" title="Compilation">
+<link href="Scheme-Write.html" rel="prev" title="Scheme Write">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Fly-Evaluation">
+<div class="nav-panel">
+<p>
+Next: <a href="Compilation.html" accesskey="n" rel="next">Compiling Scheme Code</a>, Previous: <a href="Scheme-Write.html" accesskey="p" rel="prev">Writing Scheme Values</a>, Up: <a href="Read_002fLoad_002fEval_002fCompile.html" accesskey="u" rel="up">Reading and Evaluating Scheme Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Procedures-for-On-the-Fly-Evaluation">6.16.5 Procedures for On the Fly Evaluation</h4>
+
+<p>Scheme has the lovely property that its expressions may be represented
+as data.  The <code class="code">eval</code> procedure takes a Scheme datum and evaluates
+it as code.
+</p>
+<a class="index-entry-id" id="index-eval-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-eval"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">eval</strong> <var class="def-var-arguments">exp module_or_state</var><a class="copiable-link" href='#index-eval'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005feval"><span class="category-def">C Function: </span><span><strong class="def-name">scm_eval</strong> <var class="def-var-arguments">(exp, module_or_state)</var><a class="copiable-link" href='#index-scm_005feval'> &para;</a></span></dt>
+<dd><p>Evaluate <var class="var">exp</var>, a list representing a Scheme expression,
+in the top-level environment specified by <var class="var">module_or_state</var>.
+While <var class="var">exp</var> is evaluated (using <code class="code">primitive-eval</code>),
+<var class="var">module_or_state</var> is made the current module.  The current module
+is reset to its previous value when <code class="code">eval</code> returns.
+XXX - dynamic states.
+Example: (eval &rsquo;(+ 1 2) (interaction-environment))
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-interaction_002denvironment-1"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-interaction_002denvironment"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">interaction-environment</strong><a class="copiable-link" href='#index-interaction_002denvironment'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005finteraction_005fenvironment"><span class="category-def">C Function: </span><span><strong class="def-name">scm_interaction_environment</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005finteraction_005fenvironment'> &para;</a></span></dt>
+<dd><p>Return a specifier for the environment that contains
+implementation&ndash;defined bindings, typically a superset of those
+listed in the report.  The intent is that this procedure will
+return the environment in which the implementation would
+evaluate expressions dynamically typed by the user.
+</p></dd></dl>
+
+<p>See <a class="xref" href="Environments.html">Environments</a>, for other environments.
+</p>
+<p>One does not always receive code as Scheme data, of course, and this is
+especially the case for Guile&rsquo;s other language implementations
+(see <a class="pxref" href="Other-Languages.html">Support for Other Languages</a>).  For the case in which all you have is a
+string, we have <code class="code">eval-string</code>.  There is a legacy version of this
+procedure in the default environment, but you really want the one from
+<code class="code">(ice-9 eval-string)</code>, so load it up:
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 eval-string))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-eval_002dstring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">eval-string</strong> <var class="def-var-arguments">string [#:module=#f] [#:file=#f]                           [#:line=#f] [#:column=#f]                           [#:lang=(current-language)]                           [#:compile?=#f]</var><a class="copiable-link" href='#index-eval_002dstring'> &para;</a></span></dt>
+<dd><p>Parse <var class="var">string</var> according to the current language, normally Scheme.
+Evaluate or compile the expressions it contains, in order, returning the
+last expression.
+</p>
+<p>If the <var class="var">module</var> keyword argument is set, save a module excursion
+(see <a class="pxref" href="Module-System-Reflection.html">Module System Reflection</a>) and set the current module to
+<var class="var">module</var> before evaluation.
+</p>
+<p>The <var class="var">file</var>, <var class="var">line</var>, and <var class="var">column</var> keyword arguments can be
+used to indicate that the source string begins at a particular source
+location.
+</p>
+<p>Finally, <var class="var">lang</var> is a language, defaulting to the current language,
+and the expression is compiled if <var class="var">compile?</var> is true or there is no
+evaluator for the given language.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-scm_005feval_005fstring"><span class="category-def">C Function: </span><span><strong class="def-name">scm_eval_string</strong> <var class="def-var-arguments">(string)</var><a class="copiable-link" href='#index-scm_005feval_005fstring'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005feval_005fstring_005fin_005fmodule"><span class="category-def">C Function: </span><span><strong class="def-name">scm_eval_string_in_module</strong> <var class="def-var-arguments">(string, module)</var><a class="copiable-link" href='#index-scm_005feval_005fstring_005fin_005fmodule'> &para;</a></span></dt>
+<dd><p>These C bindings call <code class="code">eval-string</code> from <code class="code">(ice-9
+eval-string)</code>, evaluating within <var class="var">module</var> or the current module.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005feval_005fstring"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_c_eval_string</strong> <code class="def-code-arguments">(const char *string)</code><a class="copiable-link" href='#index-scm_005fc_005feval_005fstring'> &para;</a></span></dt>
+<dd><p><code class="code">scm_eval_string</code>, but taking a C string in locale encoding instead
+of an <code class="code">SCM</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-apply"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">apply</strong> <var class="def-var-arguments">proc arg &hellip; arglst</var><a class="copiable-link" href='#index-apply'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fapply_005f0"><span class="category-def">C Function: </span><span><strong class="def-name">scm_apply_0</strong> <var class="def-var-arguments">(proc, arglst)</var><a class="copiable-link" href='#index-scm_005fapply_005f0'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fapply_005f1"><span class="category-def">C Function: </span><span><strong class="def-name">scm_apply_1</strong> <var class="def-var-arguments">(proc, arg1, arglst)</var><a class="copiable-link" href='#index-scm_005fapply_005f1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fapply_005f2"><span class="category-def">C Function: </span><span><strong class="def-name">scm_apply_2</strong> <var class="def-var-arguments">(proc, arg1, arg2, arglst)</var><a class="copiable-link" href='#index-scm_005fapply_005f2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fapply_005f3"><span class="category-def">C Function: </span><span><strong class="def-name">scm_apply_3</strong> <var class="def-var-arguments">(proc, arg1, arg2, arg3, arglst)</var><a class="copiable-link" href='#index-scm_005fapply_005f3'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fapply"><span class="category-def">C Function: </span><span><strong class="def-name">scm_apply</strong> <var class="def-var-arguments">(proc, arg, rest)</var><a class="copiable-link" href='#index-scm_005fapply'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-apply-2"></a>
+<p>Call <var class="var">proc</var> with arguments <var class="var">arg</var> &hellip; and the
+elements of the <var class="var">arglst</var> list.
+</p>
+<p><code class="code">scm_apply</code> takes parameters corresponding to a Scheme level
+<code class="code">(lambda (proc arg1 . rest) ...)</code>.  So <var class="var">arg1</var> and all but the
+last element of the <var class="var">rest</var> list make up <var class="var">arg</var> &hellip;, and the
+last element of <var class="var">rest</var> is the <var class="var">arglst</var> list.  Or if <var class="var">rest</var>
+is the empty list <code class="code">SCM_EOL</code> then there&rsquo;s no <var class="var">arg</var> &hellip;, and
+(<var class="var">arg1</var>) is the <var class="var">arglst</var>.
+</p>
+<p><var class="var">arglst</var> is not modified, but the <var class="var">rest</var> list passed to
+<code class="code">scm_apply</code> is modified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-scm_005fcall_005f0"><span class="category-def">C Function: </span><span><strong class="def-name">scm_call_0</strong> <var class="def-var-arguments">(proc)</var><a class="copiable-link" href='#index-scm_005fcall_005f0'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcall_005f1"><span class="category-def">C Function: </span><span><strong class="def-name">scm_call_1</strong> <var class="def-var-arguments">(proc, arg1)</var><a class="copiable-link" href='#index-scm_005fcall_005f1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcall_005f2"><span class="category-def">C Function: </span><span><strong class="def-name">scm_call_2</strong> <var class="def-var-arguments">(proc, arg1, arg2)</var><a class="copiable-link" href='#index-scm_005fcall_005f2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcall_005f3"><span class="category-def">C Function: </span><span><strong class="def-name">scm_call_3</strong> <var class="def-var-arguments">(proc, arg1, arg2, arg3)</var><a class="copiable-link" href='#index-scm_005fcall_005f3'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcall_005f4"><span class="category-def">C Function: </span><span><strong class="def-name">scm_call_4</strong> <var class="def-var-arguments">(proc, arg1, arg2, arg3, arg4)</var><a class="copiable-link" href='#index-scm_005fcall_005f4'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcall_005f5"><span class="category-def">C Function: </span><span><strong class="def-name">scm_call_5</strong> <var class="def-var-arguments">(proc, arg1, arg2, arg3, arg4, arg5)</var><a class="copiable-link" href='#index-scm_005fcall_005f5'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcall_005f6"><span class="category-def">C Function: </span><span><strong class="def-name">scm_call_6</strong> <var class="def-var-arguments">(proc, arg1, arg2, arg3, arg4, arg5, arg6)</var><a class="copiable-link" href='#index-scm_005fcall_005f6'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcall_005f7"><span class="category-def">C Function: </span><span><strong class="def-name">scm_call_7</strong> <var class="def-var-arguments">(proc, arg1, arg2, arg3, arg4, arg5, arg6, arg7)</var><a class="copiable-link" href='#index-scm_005fcall_005f7'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcall_005f8"><span class="category-def">C Function: </span><span><strong class="def-name">scm_call_8</strong> <var class="def-var-arguments">(proc, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)</var><a class="copiable-link" href='#index-scm_005fcall_005f8'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcall_005f9"><span class="category-def">C Function: </span><span><strong class="def-name">scm_call_9</strong> <var class="def-var-arguments">(proc, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)</var><a class="copiable-link" href='#index-scm_005fcall_005f9'> &para;</a></span></dt>
+<dd><p>Call <var class="var">proc</var> with the given arguments.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-scm_005fcall"><span class="category-def">C Function: </span><span><strong class="def-name">scm_call</strong> <var class="def-var-arguments">(proc, ...)</var><a class="copiable-link" href='#index-scm_005fcall'> &para;</a></span></dt>
+<dd><p>Call <var class="var">proc</var> with any number of arguments.  The argument list must be
+terminated by <code class="code">SCM_UNDEFINED</code>.  For example:
+</p>
+<div class="example">
+<pre class="example-preformatted">scm_call (scm_c_public_ref (&quot;guile&quot;, &quot;+&quot;),
+          scm_from_int (1),
+          scm_from_int (2),
+          SCM_UNDEFINED);
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-scm_005fcall_005fn"><span class="category-def">C Function: </span><span><strong class="def-name">scm_call_n</strong> <var class="def-var-arguments">(proc, argv, nargs)</var><a class="copiable-link" href='#index-scm_005fcall_005fn'> &para;</a></span></dt>
+<dd><p>Call <var class="var">proc</var> with the array of arguments <var class="var">argv</var>, as a
+<code class="code">SCM*</code>.  The length of the arguments should be passed in
+<var class="var">nargs</var>, as a <code class="code">size_t</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-primitive_002deval"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">primitive-eval</strong> <var class="def-var-arguments">exp</var><a class="copiable-link" href='#index-primitive_002deval'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fprimitive_005feval"><span class="category-def">C Function: </span><span><strong class="def-name">scm_primitive_eval</strong> <var class="def-var-arguments">(exp)</var><a class="copiable-link" href='#index-scm_005fprimitive_005feval'> &para;</a></span></dt>
+<dd><p>Evaluate <var class="var">exp</var> in the top-level environment specified by
+the current module.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Compilation.html">Compiling Scheme Code</a>, Previous: <a href="Scheme-Write.html">Writing Scheme Values</a>, Up: <a href="Read_002fLoad_002fEval_002fCompile.html">Reading and Evaluating Scheme Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>List Searching (Guile Reference Manual)</title>
+
+<meta name="description" content="List Searching (Guile Reference Manual)">
+<meta name="keywords" content="List Searching (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Lists.html" rel="up" title="Lists">
+<link href="List-Mapping.html" rel="next" title="List Mapping">
+<link href="List-Modification.html" rel="prev" title="List Modification">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="List-Searching">
+<div class="nav-panel">
+<p>
+Next: <a href="List-Mapping.html" accesskey="n" rel="next">List Mapping</a>, Previous: <a href="List-Modification.html" accesskey="p" rel="prev">List Modification</a>, Up: <a href="Lists.html" accesskey="u" rel="up">Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="List-Searching-1">6.6.9.7 List Searching</h4>
+
+<p>The following procedures search lists for particular elements.  They use
+different comparison predicates for comparing list elements with the
+object to be searched.  When they fail, they return <code class="code">#f</code>, otherwise
+they return the sublist whose car is equal to the search object, where
+equality depends on the equality predicate used.
+</p>
+<a class="index-entry-id" id="index-memq-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-memq"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">memq</strong> <var class="def-var-arguments">x lst</var><a class="copiable-link" href='#index-memq'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmemq"><span class="category-def">C Function: </span><span><strong class="def-name">scm_memq</strong> <var class="def-var-arguments">(x, lst)</var><a class="copiable-link" href='#index-scm_005fmemq'> &para;</a></span></dt>
+<dd><p>Return the first sublist of <var class="var">lst</var> whose car is <code class="code">eq?</code>
+to <var class="var">x</var> where the sublists of <var class="var">lst</var> are the non-empty
+lists returned by <code class="code">(list-tail <var class="var">lst</var> <var class="var">k</var>)</code> for
+<var class="var">k</var> less than the length of <var class="var">lst</var>.  If <var class="var">x</var> does not
+occur in <var class="var">lst</var>, then <code class="code">#f</code> (not the empty list) is
+returned.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-memv-2"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-memv"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">memv</strong> <var class="def-var-arguments">x lst</var><a class="copiable-link" href='#index-memv'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmemv"><span class="category-def">C Function: </span><span><strong class="def-name">scm_memv</strong> <var class="def-var-arguments">(x, lst)</var><a class="copiable-link" href='#index-scm_005fmemv'> &para;</a></span></dt>
+<dd><p>Return the first sublist of <var class="var">lst</var> whose car is <code class="code">eqv?</code>
+to <var class="var">x</var> where the sublists of <var class="var">lst</var> are the non-empty
+lists returned by <code class="code">(list-tail <var class="var">lst</var> <var class="var">k</var>)</code> for
+<var class="var">k</var> less than the length of <var class="var">lst</var>.  If <var class="var">x</var> does not
+occur in <var class="var">lst</var>, then <code class="code">#f</code> (not the empty list) is
+returned.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-member-3"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-member"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">member</strong> <var class="def-var-arguments">x lst</var><a class="copiable-link" href='#index-member'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmember"><span class="category-def">C Function: </span><span><strong class="def-name">scm_member</strong> <var class="def-var-arguments">(x, lst)</var><a class="copiable-link" href='#index-scm_005fmember'> &para;</a></span></dt>
+<dd><p>Return the first sublist of <var class="var">lst</var> whose car is
+<code class="code">equal?</code> to <var class="var">x</var> where the sublists of <var class="var">lst</var> are
+the non-empty lists returned by <code class="code">(list-tail <var class="var">lst</var>
+<var class="var">k</var>)</code> for <var class="var">k</var> less than the length of <var class="var">lst</var>.  If
+<var class="var">x</var> does not occur in <var class="var">lst</var>, then <code class="code">#f</code> (not the
+empty list) is returned.
+</p>
+<p>See also SRFI-1 which has an extended <code class="code">member</code> function
+(<a class="ref" href="SRFI_002d1-Searching.html">Searching</a>).
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="List-Mapping.html">List Mapping</a>, Previous: <a href="List-Modification.html">List Modification</a>, Up: <a href="Lists.html">Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

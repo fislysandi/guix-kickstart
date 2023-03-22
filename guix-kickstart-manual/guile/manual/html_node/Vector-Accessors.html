@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Vector Accessors (Guile Reference Manual)</title>
+
+<meta name="description" content="Vector Accessors (Guile Reference Manual)">
+<meta name="keywords" content="Vector Accessors (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Vectors.html" rel="up" title="Vectors">
+<link href="Vector-Accessing-from-C.html" rel="next" title="Vector Accessing from C">
+<link href="Vector-Creation.html" rel="prev" title="Vector Creation">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Vector-Accessors">
+<div class="nav-panel">
+<p>
+Next: <a href="Vector-Accessing-from-C.html" accesskey="n" rel="next">Vector Accessing from C</a>, Previous: <a href="Vector-Creation.html" accesskey="p" rel="prev">Dynamic Vector Creation and Validation</a>, Up: <a href="Vectors.html" accesskey="u" rel="up">Vectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Accessing-and-Modifying-Vector-Contents">6.6.10.3 Accessing and Modifying Vector Contents</h4>
+
+<p><code class="code">vector-length</code> and <code class="code">vector-ref</code> return information about a
+given vector, respectively its size and the elements that are contained
+in the vector.
+</p>
+<a class="index-entry-id" id="index-vector_002dlength-3"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dlength"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-length</strong> <var class="def-var-arguments">vector</var><a class="copiable-link" href='#index-vector_002dlength'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fvector_005flength"><span class="category-def">C Function: </span><span><strong class="def-name">scm_vector_length</strong> <var class="def-var-arguments">(vector)</var><a class="copiable-link" href='#index-scm_005fvector_005flength'> &para;</a></span></dt>
+<dd><p>Return the number of elements in <var class="var">vector</var> as an exact integer.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fvector_005flength"><span class="category-def">C Function: </span><span><code class="def-type">size_t</code> <strong class="def-name">scm_c_vector_length</strong> <code class="def-code-arguments">(SCM vec)</code><a class="copiable-link" href='#index-scm_005fc_005fvector_005flength'> &para;</a></span></dt>
+<dd><p>Return the number of elements in <var class="var">vec</var> as a <code class="code">size_t</code>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-vector_002dref-3"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-ref</strong> <var class="def-var-arguments">vec k</var><a class="copiable-link" href='#index-vector_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fvector_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_vector_ref</strong> <var class="def-var-arguments">(vec, k)</var><a class="copiable-link" href='#index-scm_005fvector_005fref'> &para;</a></span></dt>
+<dd><p>Return the contents of position <var class="var">k</var> of <var class="var">vec</var>.
+<var class="var">k</var> must be a valid index of <var class="var">vec</var>.
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(vector-ref #(1 1 2 3 5 8 13 21) 5) &rArr; 8
+(vector-ref #(1 1 2 3 5 8 13 21)
+    (let ((i (round (* 2 (acos -1)))))
+      (if (inexact? i)
+        (inexact-&gt;exact i)
+           i))) &rArr; 13
+</pre></div>
+</dd></dl>
+
+<a class="anchor" id="x_002dscm_005fc_005fvector_005fref"></a><dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fvector_005fref"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_c_vector_ref</strong> <code class="def-code-arguments">(SCM vec, size_t k)</code><a class="copiable-link" href='#index-scm_005fc_005fvector_005fref'> &para;</a></span></dt>
+<dd><p>Return the contents of position <var class="var">k</var> (a <code class="code">size_t</code>) of
+<var class="var">vec</var>.
+</p></dd></dl>
+
+<p>A vector created by one of the dynamic vector constructor procedures
+(see <a class="pxref" href="Vector-Creation.html">Dynamic Vector Creation and Validation</a>) can be modified using the following
+procedures.
+</p>
+<p><em class="emph">NOTE:</em> According to R5RS, it is an error to use any of these
+procedures on a literally read vector, because such vectors should be
+considered as constants.  Currently, however, Guile does not detect this
+error.
+</p>
+<a class="index-entry-id" id="index-vector_002dset_0021-3"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-set!</strong> <var class="def-var-arguments">vec k obj</var><a class="copiable-link" href='#index-vector_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fvector_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_vector_set_x</strong> <var class="def-var-arguments">(vec, k, obj)</var><a class="copiable-link" href='#index-scm_005fvector_005fset_005fx'> &para;</a></span></dt>
+<dd><p>Store <var class="var">obj</var> in position <var class="var">k</var> of <var class="var">vec</var>.
+<var class="var">k</var> must be a valid index of <var class="var">vec</var>.
+The value returned by &lsquo;<samp class="samp">vector-set!</samp>&rsquo; is unspecified.
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(let ((vec (vector 0 '(2 2 2 2) &quot;Anna&quot;)))
+  (vector-set! vec 1 '(&quot;Sue&quot; &quot;Sue&quot;))
+  vec) &rArr;  #(0 (&quot;Sue&quot; &quot;Sue&quot;) &quot;Anna&quot;)
+</pre></div>
+</dd></dl>
+
+<a class="anchor" id="x_002dscm_005fc_005fvector_005fset_005fx"></a><dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fvector_005fset_005fx"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_c_vector_set_x</strong> <code class="def-code-arguments">(SCM vec, size_t k, SCM obj)</code><a class="copiable-link" href='#index-scm_005fc_005fvector_005fset_005fx'> &para;</a></span></dt>
+<dd><p>Store <var class="var">obj</var> in position <var class="var">k</var> (a <code class="code">size_t</code>) of <var class="var">vec</var>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-vector_002dfill_0021-3"></a>
+<a class="anchor" id="x_002dvector_002dfill_0021"></a><dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dfill_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-fill!</strong> <var class="def-var-arguments">vec fill [start [end]]</var><a class="copiable-link" href='#index-vector_002dfill_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fvector_005ffill_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_vector_fill_x</strong> <var class="def-var-arguments">(vec, fill)</var><a class="copiable-link" href='#index-scm_005fvector_005ffill_005fx'> &para;</a></span></dt>
+<dd><p>Store <var class="var">fill</var> in every position of <var class="var">vec</var> in the range
+[<var class="var">start</var> ... <var class="var">end</var>). <var class="var">start</var> defaults to 0 and <var class="var">end</var>
+defaults to the length of <var class="var">vec</var>.
+</p>
+<p>The value returned by <code class="code">vector-fill!</code> is unspecified.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-vector_002dcopy-2"></a>
+<a class="anchor" id="x_002dvector_002dcopy"></a><dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dcopy"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-copy</strong> <var class="def-var-arguments">vec [start [end]]</var><a class="copiable-link" href='#index-vector_002dcopy'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fvector_005fcopy"><span class="category-def">C Function: </span><span><strong class="def-name">scm_vector_copy</strong> <var class="def-var-arguments">(vec)</var><a class="copiable-link" href='#index-scm_005fvector_005fcopy'> &para;</a></span></dt>
+<dd><p>Returns a freshly allocated vector containing the elements of <var class="var">vec</var>
+in the range [<var class="var">start</var> ... <var class="var">end</var>). <var class="var">start</var> defaults to 0 and
+<var class="var">end</var> defaults to the length of <var class="var">vec</var>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-vector_002dcopy_0021-2"></a>
+<a class="anchor" id="x_002dvector_002dcopy_0021"></a><dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dcopy_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-copy!</strong> <var class="def-var-arguments">dst at src [start [end]]</var><a class="copiable-link" href='#index-vector_002dcopy_0021'> &para;</a></span></dt>
+<dd><p>Copy the block of elements from vector <var class="var">src</var> in the range
+[<var class="var">start</var> ... <var class="var">end</var>) into vector <var class="var">dst</var>, starting at position
+<var class="var">at</var>. <var class="var">at</var> and <var class="var">start</var> default to 0 and <var class="var">end</var> defaults
+to the length of <var class="var">src</var>.
+</p>
+<p>It is an error for <var class="var">dst</var> to have a length less than <var class="var">at</var> +
+(<var class="var">end</var> - <var class="var">start</var>).  
+</p>
+<p>The order in which elements are copied is unspecified, except that if the
+source and destination overlap, copying takes place as if the source is
+first copied into a temporary vector and then into the destination.
+</p>
+<p>The value returned by <code class="code">vector-copy!</code> is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dmove_002dleft_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-move-left!</strong> <var class="def-var-arguments">vec1 start1 end1 vec2 start2</var><a class="copiable-link" href='#index-vector_002dmove_002dleft_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fvector_005fmove_005fleft_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_vector_move_left_x</strong> <var class="def-var-arguments">(vec1, start1, end1, vec2, start2)</var><a class="copiable-link" href='#index-scm_005fvector_005fmove_005fleft_005fx'> &para;</a></span></dt>
+<dd><p>Copy elements from <var class="var">vec1</var>, positions <var class="var">start1</var> to <var class="var">end1</var>,
+to <var class="var">vec2</var> starting at position <var class="var">start2</var>.  <var class="var">start1</var> and
+<var class="var">start2</var> are inclusive indices; <var class="var">end1</var> is exclusive.
+</p>
+<p><code class="code">vector-move-left!</code> copies elements in leftmost order.
+Therefore, in the case where <var class="var">vec1</var> and <var class="var">vec2</var> refer to the
+same vector, <code class="code">vector-move-left!</code> is usually appropriate when
+<var class="var">start1</var> is greater than <var class="var">start2</var>.
+</p>
+<p>The value returned by <code class="code">vector-move-left!</code> is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-vector_002dmove_002dright_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">vector-move-right!</strong> <var class="def-var-arguments">vec1 start1 end1 vec2 start2</var><a class="copiable-link" href='#index-vector_002dmove_002dright_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fvector_005fmove_005fright_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_vector_move_right_x</strong> <var class="def-var-arguments">(vec1, start1, end1, vec2, start2)</var><a class="copiable-link" href='#index-scm_005fvector_005fmove_005fright_005fx'> &para;</a></span></dt>
+<dd><p>Copy elements from <var class="var">vec1</var>, positions <var class="var">start1</var> to <var class="var">end1</var>,
+to <var class="var">vec2</var> starting at position <var class="var">start2</var>.  <var class="var">start1</var> and
+<var class="var">start2</var> are inclusive indices; <var class="var">end1</var> is exclusive.
+</p>
+<p><code class="code">vector-move-right!</code> copies elements in rightmost order.
+Therefore, in the case where <var class="var">vec1</var> and <var class="var">vec2</var> refer to the
+same vector, <code class="code">vector-move-right!</code> is usually appropriate when
+<var class="var">start1</var> is less than <var class="var">start2</var>.
+</p>
+<p>The value returned by <code class="code">vector-move-right!</code> is unspecified.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Vector-Accessing-from-C.html">Vector Accessing from C</a>, Previous: <a href="Vector-Creation.html">Dynamic Vector Creation and Validation</a>, Up: <a href="Vectors.html">Vectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

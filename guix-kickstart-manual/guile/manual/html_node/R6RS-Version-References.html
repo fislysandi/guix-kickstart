@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>R6RS Version References (Guile Reference Manual)</title>
+
+<meta name="description" content="R6RS Version References (Guile Reference Manual)">
+<meta name="keywords" content="R6RS Version References (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Modules.html" rel="up" title="Modules">
+<link href="R6RS-Libraries.html" rel="next" title="R6RS Libraries">
+<link href="Modules-and-the-File-System.html" rel="prev" title="Modules and the File System">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="R6RS-Version-References">
+<div class="nav-panel">
+<p>
+Next: <a href="R6RS-Libraries.html" accesskey="n" rel="next">R6RS Libraries</a>, Previous: <a href="Modules-and-the-File-System.html" accesskey="p" rel="prev">Modules and the File System</a>, Up: <a href="Modules.html" accesskey="u" rel="up">Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="R6RS-Version-References-1">6.18.5 R6RS Version References</h4>
+
+<p>Guile&rsquo;s module system includes support for locating modules based on
+a declared version specifier of the same form as the one described in
+R6RS (see <a data-manual="r6rs" href="../r6rs_html/Library-form.html#Library-form">R6RS Library Form</a> in <cite class="cite">The Revised^6 
+Report on the Algorithmic Language Scheme</cite>).  By using the 
+<code class="code">#:version</code> keyword in a <code class="code">define-module</code> form, a module may
+specify a version as a list of zero or more exact, nonnegative integers.
+</p>
+<p>This version can then be used to locate the module during the module
+search process.  Client modules and callers of the <code class="code">use-modules</code> 
+function may specify constraints on the versions of target modules by
+providing a <em class="dfn">version reference</em>, which has one of the following
+forms:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted"> (<var class="var">sub-version-reference</var> ...)
+ (and <var class="var">version-reference</var> ...)
+ (or <var class="var">version-reference</var> ...)
+ (not <var class="var">version-reference</var>)
+</pre></div>
+
+<p>in which <var class="var">sub-version-reference</var> is in turn one of:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted"> (<var class="var">sub-version</var>)
+ (&gt;= <var class="var">sub-version</var>)
+ (&lt;= <var class="var">sub-version</var>)
+ (and <var class="var">sub-version-reference</var> ...)
+ (or <var class="var">sub-version-reference</var> ...)
+ (not <var class="var">sub-version-reference</var>)
+</pre></div>
+
+<p>in which <var class="var">sub-version</var> is an exact, nonnegative integer as above. A
+version reference matches a declared module version if each element of
+the version reference matches a corresponding element of the module 
+version, according to the following rules:
+</p>
+<ul class="itemize mark-bullet">
+<li>The <code class="code">and</code> sub-form matches a version or version element if every 
+element in the tail of the sub-form matches the specified version or 
+version element.
+
+</li><li>The <code class="code">or</code> sub-form matches a version or version element if any 
+element in the tail of the sub-form matches the specified version or
+version element.
+
+</li><li>The <code class="code">not</code> sub-form matches a version or version element if the tail
+of the sub-form does not match the version or version element.  
+
+</li><li>The <code class="code">&gt;=</code> sub-form matches a version element if the element is 
+greater than or equal to the <var class="var">sub-version</var> in the tail of the 
+sub-form.
+
+</li><li>The <code class="code">&lt;=</code> sub-form matches a version element if the version is less
+than or equal to the <var class="var">sub-version</var> in the tail of the sub-form.
+
+</li><li>A <var class="var">sub-version</var> matches a version element if one is <var class="var">eqv?</var> to
+the other.
+</li></ul>
+
+<p>For example, a module declared as:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted"> (define-module (mylib mymodule) #:version (1 2 0))
+</pre></div>
+
+<p>would be successfully loaded by any of the following <code class="code">use-modules</code>
+expressions:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted"> (use-modules ((mylib mymodule) #:version (1 2 (&gt;= 0))))
+ (use-modules ((mylib mymodule) #:version (or (1 2 0) (1 2 1))))
+ (use-modules ((mylib mymodule) #:version ((and (&gt;= 1) (not 2)) 2 0)))
+</pre></div>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="R6RS-Libraries.html">R6RS Libraries</a>, Previous: <a href="Modules-and-the-File-System.html">Modules and the File System</a>, Up: <a href="Modules.html">Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

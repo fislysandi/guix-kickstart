@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Asyncs (Guile Reference Manual)</title>
+
+<meta name="description" content="Asyncs (Guile Reference Manual)">
+<meta name="keywords" content="Asyncs (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Scheduling.html" rel="up" title="Scheduling">
+<link href="Atomics.html" rel="next" title="Atomics">
+<link href="Thread-Local-Variables.html" rel="prev" title="Thread Local Variables">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Asyncs">
+<div class="nav-panel">
+<p>
+Next: <a href="Atomics.html" accesskey="n" rel="next">Atomics</a>, Previous: <a href="Thread-Local-Variables.html" accesskey="p" rel="prev">Thread-Local Variables</a>, Up: <a href="Scheduling.html" accesskey="u" rel="up">Threads, Mutexes, Asyncs and Dynamic Roots</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Asynchronous-Interrupts">6.22.3 Asynchronous Interrupts</h4>
+
+<a class="index-entry-id" id="index-asyncs"></a>
+<a class="index-entry-id" id="index-asynchronous-interrupts"></a>
+<a class="index-entry-id" id="index-interrupts"></a>
+
+<p>Every Guile thread can be interrupted.  Threads running Guile code will
+periodically check if there are pending interrupts and run them if
+necessary.  To interrupt a thread, call <code class="code">system-async-mark</code> on that
+thread.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-system_002dasync_002dmark"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">system-async-mark</strong> <var class="def-var-arguments">proc [thread]</var><a class="copiable-link" href='#index-system_002dasync_002dmark'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsystem_005fasync_005fmark"><span class="category-def">C Function: </span><span><strong class="def-name">scm_system_async_mark</strong> <var class="def-var-arguments">(proc)</var><a class="copiable-link" href='#index-scm_005fsystem_005fasync_005fmark'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsystem_005fasync_005fmark_005ffor_005fthread"><span class="category-def">C Function: </span><span><strong class="def-name">scm_system_async_mark_for_thread</strong> <var class="def-var-arguments">(proc, thread)</var><a class="copiable-link" href='#index-scm_005fsystem_005fasync_005fmark_005ffor_005fthread'> &para;</a></span></dt>
+<dd><p>Enqueue <var class="var">proc</var> (a procedure with zero arguments) for future
+execution in <var class="var">thread</var>.  When <var class="var">proc</var> has already been enqueued
+for <var class="var">thread</var> but has not been executed yet, this call has no effect.
+When <var class="var">thread</var> is omitted, the thread that called
+<code class="code">system-async-mark</code> is used.
+</p></dd></dl>
+
+<p>Note that <code class="code">scm_system_async_mark_for_thread</code> is not
+&ldquo;async-signal-safe&rdquo; and so cannot be called from a C signal handler.
+(Indeed in general, <code class="code">libguile</code> functions are not safe to call from
+C signal handlers.)
+</p>
+<p>Though an interrupt procedure can have any side effect permitted to
+Guile code, asynchronous interrupts are generally used either for
+profiling or for prematurely cancelling a computation.  The former case
+is mostly transparent to the program being run, by design, but the
+latter case can introduce bugs.  Like finalizers (see <a class="pxref" href="Foreign-Object-Memory-Management.html">Foreign Object Memory Management</a>), asynchronous interrupts introduce concurrency in a
+program.  An asyncronous interrupt can run in the middle of some
+mutex-protected operation, for example, and potentially corrupt the
+program&rsquo;s state.
+</p>
+<p>If some bit of Guile code needs to temporarily inhibit interrupts, it
+can use <code class="code">call-with-blocked-asyncs</code>.  This function works by
+temporarily increasing the <em class="emph">async blocking level</em> of the current
+thread while a given procedure is running.  The blocking level starts
+out at zero, and whenever a safe point is reached, a blocking level
+greater than zero will prevent the execution of queued asyncs.
+</p>
+<p>Analogously, the procedure <code class="code">call-with-unblocked-asyncs</code> will
+temporarily decrease the blocking level of the current thread.  You
+can use it when you want to disable asyncs by default and only allow
+them temporarily.
+</p>
+<p>In addition to the C versions of <code class="code">call-with-blocked-asyncs</code> and
+<code class="code">call-with-unblocked-asyncs</code>, C code can use
+<code class="code">scm_dynwind_block_asyncs</code> and <code class="code">scm_dynwind_unblock_asyncs</code>
+inside a <em class="dfn">dynamic context</em> (see <a class="pxref" href="Dynamic-Wind.html">Dynamic Wind</a>) to block or
+unblock asyncs temporarily.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-call_002dwith_002dblocked_002dasyncs"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call-with-blocked-asyncs</strong> <var class="def-var-arguments">proc</var><a class="copiable-link" href='#index-call_002dwith_002dblocked_002dasyncs'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcall_005fwith_005fblocked_005fasyncs"><span class="category-def">C Function: </span><span><strong class="def-name">scm_call_with_blocked_asyncs</strong> <var class="def-var-arguments">(proc)</var><a class="copiable-link" href='#index-scm_005fcall_005fwith_005fblocked_005fasyncs'> &para;</a></span></dt>
+<dd><p>Call <var class="var">proc</var> and block the execution of asyncs by one level for the
+current thread while it is running.  Return the value returned by
+<var class="var">proc</var>.  For the first two variants, call <var class="var">proc</var> with no
+arguments; for the third, call it with <var class="var">data</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fcall_005fwith_005fblocked_005fasyncs"><span class="category-def">C Function: </span><span><code class="def-type">void *</code> <strong class="def-name">scm_c_call_with_blocked_asyncs</strong> <code class="def-code-arguments">(void * (*proc) (void *data), void *data)</code><a class="copiable-link" href='#index-scm_005fc_005fcall_005fwith_005fblocked_005fasyncs'> &para;</a></span></dt>
+<dd><p>The same but with a C function <var class="var">proc</var> instead of a Scheme thunk.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-call_002dwith_002dunblocked_002dasyncs"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call-with-unblocked-asyncs</strong> <var class="def-var-arguments">proc</var><a class="copiable-link" href='#index-call_002dwith_002dunblocked_002dasyncs'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcall_005fwith_005funblocked_005fasyncs"><span class="category-def">C Function: </span><span><strong class="def-name">scm_call_with_unblocked_asyncs</strong> <var class="def-var-arguments">(proc)</var><a class="copiable-link" href='#index-scm_005fcall_005fwith_005funblocked_005fasyncs'> &para;</a></span></dt>
+<dd><p>Call <var class="var">proc</var> and unblock the execution of asyncs by one level for the
+current thread while it is running.  Return the value returned by
+<var class="var">proc</var>.  For the first two variants, call <var class="var">proc</var> with no
+arguments; for the third, call it with <var class="var">data</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fcall_005fwith_005funblocked_005fasyncs"><span class="category-def">C Function: </span><span><code class="def-type">void *</code> <strong class="def-name">scm_c_call_with_unblocked_asyncs</strong> <code class="def-code-arguments">(void *(*proc) (void *data), void *data)</code><a class="copiable-link" href='#index-scm_005fc_005fcall_005fwith_005funblocked_005fasyncs'> &para;</a></span></dt>
+<dd><p>The same but with a C function <var class="var">proc</var> instead of a Scheme thunk.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fdynwind_005fblock_005fasyncs"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_dynwind_block_asyncs</strong> <code class="def-code-arguments">()</code><a class="copiable-link" href='#index-scm_005fdynwind_005fblock_005fasyncs'> &para;</a></span></dt>
+<dd><p>During the current dynwind context, increase the blocking of asyncs by
+one level.  This function must be used inside a pair of calls to
+<code class="code">scm_dynwind_begin</code> and <code class="code">scm_dynwind_end</code> (see <a class="pxref" href="Dynamic-Wind.html">Dynamic Wind</a>).
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fdynwind_005funblock_005fasyncs"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_dynwind_unblock_asyncs</strong> <code class="def-code-arguments">()</code><a class="copiable-link" href='#index-scm_005fdynwind_005funblock_005fasyncs'> &para;</a></span></dt>
+<dd><p>During the current dynwind context, decrease the blocking of asyncs by
+one level.  This function must be used inside a pair of calls to
+<code class="code">scm_dynwind_begin</code> and <code class="code">scm_dynwind_end</code> (see <a class="pxref" href="Dynamic-Wind.html">Dynamic Wind</a>).
+</p></dd></dl>
+
+<p>Sometimes you want to interrupt a thread that might be waiting for
+something to happen, for example on a file descriptor or a condition
+variable.  In that case you can inform Guile of how to interrupt that
+wait using the following procedures:
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fprepare_005fto_005fwait_005fon_005ffd"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_c_prepare_to_wait_on_fd</strong> <code class="def-code-arguments">(int fd)</code><a class="copiable-link" href='#index-scm_005fc_005fprepare_005fto_005fwait_005fon_005ffd'> &para;</a></span></dt>
+<dd><p>Inform Guile that the current thread is about to sleep, and that if an
+asynchronous interrupt is signalled on this thread, Guile should wake up
+the thread by writing a zero byte to <var class="var">fd</var>.  Returns zero if the
+prepare succeeded, or nonzero if the thread already has a pending async
+and that it should avoid waiting.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fprepare_005fto_005fwait_005fon_005fcond"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_c_prepare_to_wait_on_cond</strong> <code class="def-code-arguments">(scm_i_pthread_mutex_t *mutex, scm_i_pthread_cond_t *cond)</code><a class="copiable-link" href='#index-scm_005fc_005fprepare_005fto_005fwait_005fon_005fcond'> &para;</a></span></dt>
+<dd><p>Inform Guile that the current thread is about to sleep, and that if an
+asynchronous interrupt is signalled on this thread, Guile should wake up
+the thread by acquiring <var class="var">mutex</var> and signalling <var class="var">cond</var>.  The
+caller must already hold <var class="var">mutex</var> and only drop it as part of the
+<code class="code">pthread_cond_wait</code> call.  Returns zero if the prepare succeeded,
+or nonzero if the thread already has a pending async and that it should
+avoid waiting.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fwait_005ffinished"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_c_wait_finished</strong> <code class="def-code-arguments">(void)</code><a class="copiable-link" href='#index-scm_005fc_005fwait_005ffinished'> &para;</a></span></dt>
+<dd><p>Inform Guile that the current thread has finished waiting, and that
+asynchronous interrupts no longer need any special wakeup action; the
+current thread will periodically poll its internal queue instead.
+</p></dd></dl>
+
+<p>Guile&rsquo;s own interface to <code class="code">sleep</code>, <code class="code">wait-condition-variable</code>,
+<code class="code">select</code>, and so on all call the above routines as appropriate.
+</p>
+<p>Finally, note that threads can also be interrupted via POSIX signals.
+See <a class="xref" href="Signals.html">Signals</a>.  As an implementation detail, signal handlers will
+effectively call <code class="code">system-async-mark</code> in a signal-safe way,
+eventually running the signal handler using the same async mechanism.
+In this way you can temporarily inhibit signal handlers from running
+using the above interfaces.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Atomics.html">Atomics</a>, Previous: <a href="Thread-Local-Variables.html">Thread-Local Variables</a>, Up: <a href="Scheduling.html">Threads, Mutexes, Asyncs and Dynamic Roots</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

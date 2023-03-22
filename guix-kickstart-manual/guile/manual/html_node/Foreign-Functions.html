@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Foreign Functions (Guile Reference Manual)</title>
+
+<meta name="description" content="Foreign Functions (Guile Reference Manual)">
+<meta name="keywords" content="Foreign Functions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Foreign-Function-Interface.html" rel="up" title="Foreign Function Interface">
+<link href="Void-Pointers-and-Byte-Access.html" rel="next" title="Void Pointers and Byte Access">
+<link href="Foreign-Types.html" rel="prev" title="Foreign Types">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Foreign-Functions">
+<div class="nav-panel">
+<p>
+Next: <a href="Void-Pointers-and-Byte-Access.html" accesskey="n" rel="next">Void Pointers and Byte Access</a>, Previous: <a href="Foreign-Types.html" accesskey="p" rel="prev">Foreign Types</a>, Up: <a href="Foreign-Function-Interface.html" accesskey="u" rel="up">Foreign Function Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Foreign-Functions-1">6.19.5 Foreign Functions</h4>
+
+<p>The most natural thing to do with a dynamic library is to grovel around
+in it for a function pointer: a <em class="dfn">foreign function</em>.  Load the
+<code class="code">(system foreign)</code> module to use these Scheme interfaces.
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (system foreign))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-pointer_002d_003eprocedure"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">pointer-&gt;procedure</strong> <var class="def-var-arguments">return_type func_ptr arg_types                                              [#:return-errno?=#f]</var><a class="copiable-link" href='#index-pointer_002d_003eprocedure'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fpointer_005fto_005fprocedure"><span class="category-def">C Function: </span><span><strong class="def-name">scm_pointer_to_procedure</strong> <var class="def-var-arguments">(return_type, func_ptr, arg_types)</var><a class="copiable-link" href='#index-scm_005fpointer_005fto_005fprocedure'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fpointer_005fto_005fprocedure_005fwith_005ferrno"><span class="category-def">C Function: </span><span><strong class="def-name">scm_pointer_to_procedure_with_errno</strong> <var class="def-var-arguments">(return_type, func_ptr, arg_types)</var><a class="copiable-link" href='#index-scm_005fpointer_005fto_005fprocedure_005fwith_005ferrno'> &para;</a></span></dt>
+<dd>
+<p>Make a foreign function.
+</p>
+<p>Given the foreign void pointer <var class="var">func_ptr</var>, its argument and
+return types <var class="var">arg_types</var> and <var class="var">return_type</var>, return a
+procedure that will pass arguments to the foreign function
+and return appropriate values.
+</p>
+<p><var class="var">arg_types</var> should be a list of foreign types.
+<code class="code">return_type</code> should be a foreign type. See <a class="xref" href="Foreign-Types.html">Foreign Types</a>, for
+more information on foreign types.
+</p>
+<p>If <var class="var">return-errno?</var> is true, or when calling
+<code class="code">scm_pointer_to_procedure_with_errno</code>, the returned procedure will
+return two values, with <code class="code">errno</code> as the second value.
+</p></dd></dl>
+
+<p>Finally, in <code class="code">(system foreign-library)</code> there is a convenient
+wrapper function, joining together <code class="code">foreign-libary-pointer</code> and
+<code class="code">procedure-&gt;pointer</code>:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-foreign_002dlibrary_002dfunction"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">foreign-library-function</strong> <var class="def-var-arguments">lib name        [#:return-type=void] [#:arg-types=&rsquo;()] [#:return-errno?=#f]</var><a class="copiable-link" href='#index-foreign_002dlibrary_002dfunction'> &para;</a></span></dt>
+<dd><p>Load the address of <var class="var">name</var> from <var class="var">lib</var>, and treat it as a
+function taking arguments <var class="var">arg-types</var> and returning
+<var class="var">return-type</var>, optionally also with errno.
+</p>
+<p>An invocation of <code class="code">foreign-library-function</code> is entirely equivalent
+to:
+</p><div class="example">
+<pre class="example-preformatted">(pointer-&gt;procedure <var class="var">return-type</var>
+                    (foreign-library-pointer <var class="var">lib</var> <var class="var">name</var>)
+                    <var class="var">arg-types</var>
+                    #:return-errno? <var class="var">return-errno?</var>).
+</pre></div>
+</dd></dl>
+
+<p>Pulling all this together, here is a better definition of <code class="code">(math
+bessel)</code>:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define-module (math bessel)
+  #:use-module (system foreign)
+  #:use-module (system foreign-library)
+  #:export (j0))
+
+(define j0
+  (foreign-library-function &quot;libm&quot; &quot;j0&quot;
+                            #:return-type double
+                            #:arg-types (list double)))
+</pre></div>
+
+<p>That&rsquo;s it! No C at all.
+</p>
+<p>Before going on to more detailed examples, the next two sections discuss
+how to deal with data that is more complex than, say, <code class="code">int8</code>.
+See <a class="xref" href="More-Foreign-Functions.html">More Foreign Functions</a>, to continue with foreign function examples.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Void-Pointers-and-Byte-Access.html">Void Pointers and Byte Access</a>, Previous: <a href="Foreign-Types.html">Foreign Types</a>, Up: <a href="Foreign-Function-Interface.html">Foreign Function Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

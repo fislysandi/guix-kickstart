@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Bitwise Operations (Guile Reference Manual)</title>
+
+<meta name="description" content="Bitwise Operations (Guile Reference Manual)">
+<meta name="keywords" content="Bitwise Operations (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Numbers.html" rel="up" title="Numbers">
+<link href="Random.html" rel="next" title="Random">
+<link href="Scientific.html" rel="prev" title="Scientific">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Bitwise-Operations">
+<div class="nav-panel">
+<p>
+Next: <a href="Random.html" accesskey="n" rel="next">Random Number Generation</a>, Previous: <a href="Scientific.html" accesskey="p" rel="prev">Scientific Functions</a>, Up: <a href="Numbers.html" accesskey="u" rel="up">Numerical data types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Bitwise-Operations-1">6.6.2.13 Bitwise Operations</h4>
+
+<p>For the following bitwise functions, negative numbers are treated as
+infinite precision twos-complements.  For instance <em class="math">-6</em> is bits
+<em class="math">&hellip;111010</em>, with infinitely many ones on the left.  It can
+be seen that adding 6 (binary 110) to such a bit pattern gives all
+zeros.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-logand"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">logand</strong> <var class="def-var-arguments">n1 n2 &hellip;</var><a class="copiable-link" href='#index-logand'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flogand"><span class="category-def">C Function: </span><span><strong class="def-name">scm_logand</strong> <var class="def-var-arguments">(n1, n2)</var><a class="copiable-link" href='#index-scm_005flogand'> &para;</a></span></dt>
+<dd><p>Return the bitwise <small class="sc">AND</small> of the integer arguments.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(logand) &rArr; -1
+(logand 7) &rArr; 7
+(logand #b111 #b011 #b001) &rArr; 1
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-logior"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">logior</strong> <var class="def-var-arguments">n1 n2 &hellip;</var><a class="copiable-link" href='#index-logior'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flogior"><span class="category-def">C Function: </span><span><strong class="def-name">scm_logior</strong> <var class="def-var-arguments">(n1, n2)</var><a class="copiable-link" href='#index-scm_005flogior'> &para;</a></span></dt>
+<dd><p>Return the bitwise <small class="sc">OR</small> of the integer arguments.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(logior) &rArr; 0
+(logior 7) &rArr; 7
+(logior #b000 #b001 #b011) &rArr; 3
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-logxor"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">logxor</strong> <var class="def-var-arguments">n1 n2 &hellip;</var><a class="copiable-link" href='#index-logxor'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005floxor"><span class="category-def">C Function: </span><span><strong class="def-name">scm_loxor</strong> <var class="def-var-arguments">(n1, n2)</var><a class="copiable-link" href='#index-scm_005floxor'> &para;</a></span></dt>
+<dd><p>Return the bitwise <small class="sc">XOR</small> of the integer arguments.  A bit is
+set in the result if it is set in an odd number of arguments.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(logxor) &rArr; 0
+(logxor 7) &rArr; 7
+(logxor #b000 #b001 #b011) &rArr; 2
+(logxor #b000 #b001 #b011 #b011) &rArr; 1
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-lognot"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">lognot</strong> <var class="def-var-arguments">n</var><a class="copiable-link" href='#index-lognot'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flognot"><span class="category-def">C Function: </span><span><strong class="def-name">scm_lognot</strong> <var class="def-var-arguments">(n)</var><a class="copiable-link" href='#index-scm_005flognot'> &para;</a></span></dt>
+<dd><p>Return the integer which is the ones-complement of the integer
+argument, ie. each 0 bit is changed to 1 and each 1 bit to 0.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(number-&gt;string (lognot #b10000000) 2)
+   &rArr; &quot;-10000001&quot;
+(number-&gt;string (lognot #b0) 2)
+   &rArr; &quot;-1&quot;
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-logtest"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">logtest</strong> <var class="def-var-arguments">j k</var><a class="copiable-link" href='#index-logtest'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flogtest"><span class="category-def">C Function: </span><span><strong class="def-name">scm_logtest</strong> <var class="def-var-arguments">(j, k)</var><a class="copiable-link" href='#index-scm_005flogtest'> &para;</a></span></dt>
+<dd><p>Test whether <var class="var">j</var> and <var class="var">k</var> have any 1 bits in common.  This is
+equivalent to <code class="code">(not (zero? (logand j k)))</code>, but without actually
+calculating the <code class="code">logand</code>, just testing for non-zero.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(logtest #b0100 #b1011) &rArr; #f
+(logtest #b0100 #b0111) &rArr; #t
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-logbit_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">logbit?</strong> <var class="def-var-arguments">index j</var><a class="copiable-link" href='#index-logbit_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flogbit_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_logbit_p</strong> <var class="def-var-arguments">(index, j)</var><a class="copiable-link" href='#index-scm_005flogbit_005fp'> &para;</a></span></dt>
+<dd><p>Test whether bit number <var class="var">index</var> in <var class="var">j</var> is set.  <var class="var">index</var>
+starts from 0 for the least significant bit.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(logbit? 0 #b1101) &rArr; #t
+(logbit? 1 #b1101) &rArr; #f
+(logbit? 2 #b1101) &rArr; #t
+(logbit? 3 #b1101) &rArr; #t
+(logbit? 4 #b1101) &rArr; #f
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ash"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ash</strong> <var class="def-var-arguments">n count</var><a class="copiable-link" href='#index-ash'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fash"><span class="category-def">C Function: </span><span><strong class="def-name">scm_ash</strong> <var class="def-var-arguments">(n, count)</var><a class="copiable-link" href='#index-scm_005fash'> &para;</a></span></dt>
+<dd><p>Return <em class="math">floor(n * 2^{count})</em>.
+<var class="var">n</var> and <var class="var">count</var> must be exact integers.
+</p>
+<p>With <var class="var">n</var> viewed as an infinite-precision twos-complement
+integer, <code class="code">ash</code> means a left shift introducing zero bits
+when <var class="var">count</var> is positive, or a right shift dropping bits
+when <var class="var">count</var> is negative.  This is an &ldquo;arithmetic&rdquo; shift.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(number-&gt;string (ash #b1 3) 2)     &rArr; &quot;1000&quot;
+(number-&gt;string (ash #b1010 -1) 2) &rArr; &quot;101&quot;
+
+;; -23 is bits ...11101001, -6 is bits ...111010
+(ash -23 -2) &rArr; -6
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-round_002dash"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">round-ash</strong> <var class="def-var-arguments">n count</var><a class="copiable-link" href='#index-round_002dash'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fround_005fash"><span class="category-def">C Function: </span><span><strong class="def-name">scm_round_ash</strong> <var class="def-var-arguments">(n, count)</var><a class="copiable-link" href='#index-scm_005fround_005fash'> &para;</a></span></dt>
+<dd><p>Return <em class="math">round(n * 2^count)</em>.
+<var class="var">n</var> and <var class="var">count</var> must be exact integers.
+</p>
+<p>With <var class="var">n</var> viewed as an infinite-precision twos-complement
+integer, <code class="code">round-ash</code> means a left shift introducing zero
+bits when <var class="var">count</var> is positive, or a right shift rounding
+to the nearest integer (with ties going to the nearest even
+integer) when <var class="var">count</var> is negative.  This is a rounded
+&ldquo;arithmetic&rdquo; shift.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(number-&gt;string (round-ash #b1 3) 2)     &rArr; \&quot;1000\&quot;
+(number-&gt;string (round-ash #b1010 -1) 2) &rArr; \&quot;101\&quot;
+(number-&gt;string (round-ash #b1010 -2) 2) &rArr; \&quot;10\&quot;
+(number-&gt;string (round-ash #b1011 -2) 2) &rArr; \&quot;11\&quot;
+(number-&gt;string (round-ash #b1101 -2) 2) &rArr; \&quot;11\&quot;
+(number-&gt;string (round-ash #b1110 -2) 2) &rArr; \&quot;100\&quot;
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-logcount"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">logcount</strong> <var class="def-var-arguments">n</var><a class="copiable-link" href='#index-logcount'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flogcount"><span class="category-def">C Function: </span><span><strong class="def-name">scm_logcount</strong> <var class="def-var-arguments">(n)</var><a class="copiable-link" href='#index-scm_005flogcount'> &para;</a></span></dt>
+<dd><p>Return the number of bits in integer <var class="var">n</var>.  If <var class="var">n</var> is
+positive, the 1-bits in its binary representation are counted.
+If negative, the 0-bits in its two&rsquo;s-complement binary
+representation are counted.  If zero, 0 is returned.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(logcount #b10101010)
+   &rArr; 4
+(logcount 0)
+   &rArr; 0
+(logcount -2)
+   &rArr; 1
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-integer_002dlength"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">integer-length</strong> <var class="def-var-arguments">n</var><a class="copiable-link" href='#index-integer_002dlength'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005finteger_005flength"><span class="category-def">C Function: </span><span><strong class="def-name">scm_integer_length</strong> <var class="def-var-arguments">(n)</var><a class="copiable-link" href='#index-scm_005finteger_005flength'> &para;</a></span></dt>
+<dd><p>Return the number of bits necessary to represent <var class="var">n</var>.
+</p>
+<p>For positive <var class="var">n</var> this is how many bits to the most significant one
+bit.  For negative <var class="var">n</var> it&rsquo;s how many bits to the most significant
+zero bit in twos complement form.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(integer-length #b10101010) &rArr; 8
+(integer-length #b1111)     &rArr; 4
+(integer-length 0)          &rArr; 0
+(integer-length -1)         &rArr; 0
+(integer-length -256)       &rArr; 8
+(integer-length -257)       &rArr; 9
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-integer_002dexpt"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">integer-expt</strong> <var class="def-var-arguments">n k</var><a class="copiable-link" href='#index-integer_002dexpt'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005finteger_005fexpt"><span class="category-def">C Function: </span><span><strong class="def-name">scm_integer_expt</strong> <var class="def-var-arguments">(n, k)</var><a class="copiable-link" href='#index-scm_005finteger_005fexpt'> &para;</a></span></dt>
+<dd><p>Return <var class="var">n</var> raised to the power <var class="var">k</var>.  <var class="var">k</var> must be an exact
+integer, <var class="var">n</var> can be any number.
+</p>
+<p>Negative <var class="var">k</var> is supported, and results in <em class="math">1/n^abs(k)</em>
+in the usual way.  <em class="math"><var class="var">n</var>^0</em> is 1, as usual, and that includes
+<em class="math">0^0</em> is 1.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(integer-expt 2 5)   &rArr; 32
+(integer-expt -3 3)  &rArr; -27
+(integer-expt 5 -3)  &rArr; 1/125
+(integer-expt 0 0)   &rArr; 1
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-bit_002dextract"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">bit-extract</strong> <var class="def-var-arguments">n start end</var><a class="copiable-link" href='#index-bit_002dextract'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbit_005fextract"><span class="category-def">C Function: </span><span><strong class="def-name">scm_bit_extract</strong> <var class="def-var-arguments">(n, start, end)</var><a class="copiable-link" href='#index-scm_005fbit_005fextract'> &para;</a></span></dt>
+<dd><p>Return the integer composed of the <var class="var">start</var> (inclusive)
+through <var class="var">end</var> (exclusive) bits of <var class="var">n</var>.  The
+<var class="var">start</var>th bit becomes the 0-th bit in the result.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(number-&gt;string (bit-extract #b1101101010 0 4) 2)
+   &rArr; &quot;1010&quot;
+(number-&gt;string (bit-extract #b1101101010 4 9) 2)
+   &rArr; &quot;10110&quot;
+</pre></div>
+</dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Random.html">Random Number Generation</a>, Previous: <a href="Scientific.html">Scientific Functions</a>, Up: <a href="Numbers.html">Numerical data types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

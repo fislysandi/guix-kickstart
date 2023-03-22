@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-35 (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-35 (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-35 (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI-Support.html" rel="up" title="SRFI Support">
+<link href="SRFI_002d37.html" rel="next" title="SRFI-37">
+<link href="SRFI_002d34.html" rel="prev" title="SRFI-34">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="SRFI_002d35">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d37.html" accesskey="n" rel="next">SRFI-37 - args-fold</a>, Previous: <a href="SRFI_002d34.html" accesskey="p" rel="prev">SRFI-34 - Exception handling for programs</a>, Up: <a href="SRFI-Support.html" accesskey="u" rel="up">SRFI Support Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="SRFI_002d35-_002d-Conditions">7.5.24 SRFI-35 - Conditions</h4>
+
+<a class="index-entry-id" id="index-SRFI_002d35"></a>
+<a class="index-entry-id" id="index-conditions"></a>
+<a class="index-entry-id" id="index-exceptions"></a>
+
+<p><a class="uref" href="http://srfi.schemers.org/srfi-35/srfi-35.html">SRFI-35</a> defines
+<em class="dfn">conditions</em>, a data structure akin to records designed to convey
+information about exceptional conditions between parts of a program.  It
+is normally used in conjunction with SRFI-34&rsquo;s <code class="code">raise</code>:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(raise (condition (&amp;message
+                    (message &quot;An error occurred&quot;))))
+</pre></div>
+
+<p>Users can define <em class="dfn">condition types</em> containing arbitrary information.
+Condition types may inherit from one another.  This allows the part of
+the program that handles (or &ldquo;catches&rdquo;) conditions to get accurate
+information about the exceptional condition that arose.
+</p>
+<p>SRFI-35 conditions are made available using:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(use-modules (srfi srfi-35))
+</pre></div>
+
+<p>The procedures available to manipulate condition types are the
+following:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dcondition_002dtype"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-condition-type</strong> <var class="def-var-arguments">id parent field-names</var><a class="copiable-link" href='#index-make_002dcondition_002dtype'> &para;</a></span></dt>
+<dd><p>Return a new condition type named <var class="var">id</var>, inheriting from
+<var class="var">parent</var>, and with the fields whose names are listed in
+<var class="var">field-names</var>.  <var class="var">field-names</var> must be a list of symbols and must
+not contain names already used by <var class="var">parent</var> or one of its supertypes.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-condition_002dtype_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">condition-type?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-condition_002dtype_003f'> &para;</a></span></dt>
+<dd><p>Return true if <var class="var">obj</var> is a condition type.
+</p></dd></dl>
+
+<p>Conditions can be created and accessed with the following procedures:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dcondition"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-condition</strong> <var class="def-var-arguments">type . field+value</var><a class="copiable-link" href='#index-make_002dcondition'> &para;</a></span></dt>
+<dd><p>Return a new condition of type <var class="var">type</var> with fields initialized as
+specified by <var class="var">field+value</var>, a sequence of field names (symbols) and
+values as in the following example:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(let ((&amp;ct (make-condition-type 'foo &amp;condition '(a b c))))
+  (make-condition &amp;ct 'a 1 'b 2 'c 3))
+</pre></div>
+
+<p>Note that all fields of <var class="var">type</var> and its supertypes must be specified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dcompound_002dcondition"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-compound-condition</strong> <var class="def-var-arguments">condition1 condition2 &hellip;</var><a class="copiable-link" href='#index-make_002dcompound_002dcondition'> &para;</a></span></dt>
+<dd><p>Return a new compound condition composed of <var class="var">condition1</var>
+<var class="var">condition2</var> <small class="enddots">...</small>.  The returned condition has the type of
+each condition of condition1 condition2 &hellip; (per
+<code class="code">condition-has-type?</code>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-condition_002dhas_002dtype_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">condition-has-type?</strong> <var class="def-var-arguments">c type</var><a class="copiable-link" href='#index-condition_002dhas_002dtype_003f'> &para;</a></span></dt>
+<dd><p>Return true if condition <var class="var">c</var> has type <var class="var">type</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-condition_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">condition-ref</strong> <var class="def-var-arguments">c field-name</var><a class="copiable-link" href='#index-condition_002dref'> &para;</a></span></dt>
+<dd><p>Return the value of the field named <var class="var">field-name</var> from condition <var class="var">c</var>.
+</p>
+<p>If <var class="var">c</var> is a compound condition and several underlying condition
+types contain a field named <var class="var">field-name</var>, then the value of the
+first such field is returned, using the order in which conditions were
+passed to <code class="code">make-compound-condition</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-extract_002dcondition"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">extract-condition</strong> <var class="def-var-arguments">c type</var><a class="copiable-link" href='#index-extract_002dcondition'> &para;</a></span></dt>
+<dd><p>Return a condition of condition type <var class="var">type</var> with the field values
+specified by <var class="var">c</var>.
+</p>
+<p>If <var class="var">c</var> is a compound condition, extract the field values from the
+subcondition belonging to <var class="var">type</var> that appeared first in the call to
+<code class="code">make-compound-condition</code> that created the condition.
+</p></dd></dl>
+
+<p>Convenience macros are also available to create condition types and
+conditions.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-define_002dcondition_002dtype"><span class="category-def">library syntax: </span><span><strong class="def-name">define-condition-type</strong> <var class="def-var-arguments">type supertype predicate field-spec...</var><a class="copiable-link" href='#index-define_002dcondition_002dtype'> &para;</a></span></dt>
+<dd><p>Define a new condition type named <var class="var">type</var> that inherits from
+<var class="var">supertype</var>.  In addition, bind <var class="var">predicate</var> to a type predicate
+that returns true when passed a condition of type <var class="var">type</var> or any of
+its subtypes.  <var class="var">field-spec</var> must have the form <code class="code">(field
+accessor)</code> where <var class="var">field</var> is the name of field of <var class="var">type</var> and
+<var class="var">accessor</var> is the name of a procedure to access field <var class="var">field</var> in
+conditions of type <var class="var">type</var>.
+</p>
+<p>The example below defines condition type <code class="code">&amp;foo</code>, inheriting from
+<code class="code">&amp;condition</code> with fields <code class="code">a</code>, <code class="code">b</code> and <code class="code">c</code>:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define-condition-type &amp;foo &amp;condition
+  foo-condition?
+  (a  foo-a)
+  (b  foo-b)
+  (c  foo-c))
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-condition"><span class="category-def">library syntax: </span><span><strong class="def-name">condition</strong> <var class="def-var-arguments">type-field-binding1 type-field-binding2 &hellip;</var><a class="copiable-link" href='#index-condition'> &para;</a></span></dt>
+<dd><p>Return a new condition or compound condition, initialized according to
+<var class="var">type-field-binding1</var> <var class="var">type-field-binding2</var> <small class="enddots">...</small>.  Each
+<var class="var">type-field-binding</var> must have the form <code class="code">(type
+field-specs...)</code>, where <var class="var">type</var> is the name of a variable bound to a
+condition type; each <var class="var">field-spec</var> must have the form
+<code class="code">(field-name value)</code> where <var class="var">field-name</var> is a symbol denoting
+the field being initialized to <var class="var">value</var>.  As for
+<code class="code">make-condition</code>, all fields must be specified.
+</p>
+<p>The following example returns a simple condition:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(condition (&amp;message (message &quot;An error occurred&quot;)))
+</pre></div>
+
+<p>The one below returns a compound condition:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(condition (&amp;message (message &quot;An error occurred&quot;))
+           (&amp;serious))
+</pre></div>
+</dd></dl>
+
+<p>Finally, SRFI-35 defines a several standard condition types.
+</p>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-_0026condition-1"><span class="category-def">Variable: </span><span><strong class="def-name">&amp;condition</strong><a class="copiable-link" href='#index-_0026condition-1'> &para;</a></span></dt>
+<dd><p>This condition type is the root of all condition types.  It has no
+fields.
+</p></dd></dl>
+
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-_0026message-2"><span class="category-def">Variable: </span><span><strong class="def-name">&amp;message</strong><a class="copiable-link" href='#index-_0026message-2'> &para;</a></span></dt>
+<dd><p>A condition type that carries a message describing the nature of the
+condition to humans.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-message_002dcondition_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">message-condition?</strong> <var class="def-var-arguments">c</var><a class="copiable-link" href='#index-message_002dcondition_003f'> &para;</a></span></dt>
+<dd><p>Return true if <var class="var">c</var> is of type <code class="code">&amp;message</code> or one of its
+subtypes.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-condition_002dmessage"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">condition-message</strong> <var class="def-var-arguments">c</var><a class="copiable-link" href='#index-condition_002dmessage'> &para;</a></span></dt>
+<dd><p>Return the message associated with message condition <var class="var">c</var>.
+</p></dd></dl>
+
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-_0026serious-1"><span class="category-def">Variable: </span><span><strong class="def-name">&amp;serious</strong><a class="copiable-link" href='#index-_0026serious-1'> &para;</a></span></dt>
+<dd><p>This type describes conditions serious enough that they cannot safely be
+ignored.  It has no fields.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-serious_002dcondition_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">serious-condition?</strong> <var class="def-var-arguments">c</var><a class="copiable-link" href='#index-serious_002dcondition_003f'> &para;</a></span></dt>
+<dd><p>Return true if <var class="var">c</var> is of type <code class="code">&amp;serious</code> or one of its
+subtypes.
+</p></dd></dl>
+
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-_0026error-2"><span class="category-def">Variable: </span><span><strong class="def-name">&amp;error</strong><a class="copiable-link" href='#index-_0026error-2'> &para;</a></span></dt>
+<dd><p>This condition describes errors, typically caused by something that has
+gone wrong in the interaction of the program with the external world or
+the user.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-error_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">error?</strong> <var class="def-var-arguments">c</var><a class="copiable-link" href='#index-error_003f-1'> &para;</a></span></dt>
+<dd><p>Return true if <var class="var">c</var> is of type <code class="code">&amp;error</code> or one of its subtypes.
+</p></dd></dl>
+
+<p>As an implementation note, condition objects in Guile are the same as
+&ldquo;exception objects&rdquo;.  See <a class="xref" href="Exception-Objects.html">Exception Objects</a>.  The
+<code class="code">&amp;condition</code>, <code class="code">&amp;serious</code>, and <code class="code">&amp;error</code> condition types
+are known in core Guile as <code class="code">&amp;exception</code>, <code class="code">&amp;error</code>, and
+<code class="code">&amp;external-error</code>, respectively.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d37.html">SRFI-37 - args-fold</a>, Previous: <a href="SRFI_002d34.html">SRFI-34 - Exception handling for programs</a>, Up: <a href="SRFI-Support.html">SRFI Support Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

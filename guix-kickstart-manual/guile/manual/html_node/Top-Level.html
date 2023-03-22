@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Top Level (Guile Reference Manual)</title>
+
+<meta name="description" content="Top Level (Guile Reference Manual)">
+<meta name="keywords" content="Top Level (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Binding-Constructs.html" rel="up" title="Binding Constructs">
+<link href="Local-Bindings.html" rel="next" title="Local Bindings">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Top-Level">
+<div class="nav-panel">
+<p>
+Next: <a href="Local-Bindings.html" accesskey="n" rel="next">Local Variable Bindings</a>, Up: <a href="Binding-Constructs.html" accesskey="u" rel="up">Definitions and Variable Bindings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Top-Level-Variable-Definitions">6.10.1 Top Level Variable Definitions</h4>
+
+<a class="index-entry-id" id="index-variable-definition"></a>
+
+<p>At the top level of a program (i.e., not nested within any other
+expression), a definition of the form
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define a <var class="var">value</var>)
+</pre></div>
+
+<p>defines a variable called <code class="code">a</code> and sets it to the value <var class="var">value</var>.
+</p>
+<p>If the variable already exists in the current module, because it has
+already been created by a previous <code class="code">define</code> expression with the
+same name, its value is simply changed to the new <var class="var">value</var>.  In this
+case, then, the above form is completely equivalent to
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(set! a <var class="var">value</var>)
+</pre></div>
+
+<p>This equivalence means that <code class="code">define</code> can be used interchangeably
+with <code class="code">set!</code> to change the value of variables at the top level of
+the REPL or a Scheme source file.  It is useful during interactive
+development when reloading a Scheme file that you have modified, because
+it allows the <code class="code">define</code> expressions in that file to work as expected
+both the first time that the file is loaded and on subsequent occasions.
+</p>
+<p>Note, though, that <code class="code">define</code> and <code class="code">set!</code> are not always
+equivalent.  For example, a <code class="code">set!</code> is not allowed if the named
+variable does not already exist, and the two expressions can behave
+differently in the case where there are imported variables visible from
+another module.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-define"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">define</strong> <var class="def-var-arguments">name value</var><a class="copiable-link" href='#index-define'> &para;</a></span></dt>
+<dd><p>Create a top level variable named <var class="var">name</var> with value <var class="var">value</var>.
+If the named variable already exists, just change its value.  The return
+value of a <code class="code">define</code> expression is unspecified.
+</p></dd></dl>
+
+<p>The C API equivalents of <code class="code">define</code> are <code class="code">scm_define</code> and
+<code class="code">scm_c_define</code>, which differ from each other in whether the
+variable name is specified as a <code class="code">SCM</code> symbol or as a
+null-terminated C string.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-scm_005fdefine"><span class="category-def">C Function: </span><span><strong class="def-name">scm_define</strong> <var class="def-var-arguments">(sym, value)</var><a class="copiable-link" href='#index-scm_005fdefine'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fc_005fdefine"><span class="category-def">C Function: </span><span><strong class="def-name">scm_c_define</strong> <var class="def-var-arguments">(const char *name, value)</var><a class="copiable-link" href='#index-scm_005fc_005fdefine'> &para;</a></span></dt>
+<dd><p>C equivalents of <code class="code">define</code>, with variable name specified either by
+<var class="var">sym</var>, a symbol, or by <var class="var">name</var>, a null-terminated C string.  Both
+variants return the new or preexisting variable object.
+</p></dd></dl>
+
+<p><code class="code">define</code> (when it occurs at top level), <code class="code">scm_define</code> and
+<code class="code">scm_c_define</code> all create or set the value of a variable in the top
+level environment of the current module.  If there was not already a
+variable with the specified name belonging to the current module, but a
+similarly named variable from another module was visible through having
+been imported, the newly created variable in the current module will
+shadow the imported variable, such that the imported variable is no
+longer visible.
+</p>
+<p>Attention: Scheme definitions inside local binding constructs
+(see <a class="pxref" href="Local-Bindings.html">Local Variable Bindings</a>) act differently (see <a class="pxref" href="Internal-Definitions.html">Internal definitions</a>).
+</p>
+<p>Many people end up in a development style of adding and changing
+definitions at runtime, building out their program without restarting
+it.  (You can do this using <code class="code">reload-module</code>, the <code class="code">reload</code> REPL
+command, the <code class="code">load</code> procedure, or even just pasting code into a
+REPL.)  If you are one of these people, you will find that sometimes
+there are some variables that you <em class="emph">don&rsquo;t</em> want to redefine all the
+time.  For these, use <code class="code">define-once</code>.
+</p>
+<a class="index-entry-id" id="index-defvar"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-define_002donce"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">define-once</strong> <var class="def-var-arguments">name value</var><a class="copiable-link" href='#index-define_002donce'> &para;</a></span></dt>
+<dd><p>Create a top level variable named <var class="var">name</var> with value <var class="var">value</var>, but
+only if <var class="var">name</var> is not already bound in the current module.
+</p></dd></dl>
+
+<p>Old Lispers probably know <code class="code">define-once</code> under its Lisp name,
+<code class="code">defvar</code>.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Local-Bindings.html">Local Variable Bindings</a>, Up: <a href="Binding-Constructs.html">Definitions and Variable Bindings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

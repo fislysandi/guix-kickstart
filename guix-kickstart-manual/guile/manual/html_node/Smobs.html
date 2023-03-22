@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Smobs (Guile Reference Manual)</title>
+
+<meta name="description" content="Smobs (Guile Reference Manual)">
+<meta name="keywords" content="Smobs (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="API-Reference.html" rel="up" title="API Reference">
+<link href="Scheduling.html" rel="next" title="Scheduling">
+<link href="Foreign-Objects.html" rel="prev" title="Foreign Objects">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Smobs">
+<div class="nav-panel">
+<p>
+Next: <a href="Scheduling.html" accesskey="n" rel="next">Threads, Mutexes, Asyncs and Dynamic Roots</a>, Previous: <a href="Foreign-Objects.html" accesskey="p" rel="prev">Foreign Objects</a>, Up: <a href="API-Reference.html" accesskey="u" rel="up">API Reference</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Smobs-1">6.21 Smobs</h3>
+
+<a class="index-entry-id" id="index-smob"></a>
+
+<p>A <em class="dfn">smob</em> is a &ldquo;small object&rdquo;.  Before foreign objects were
+introduced in Guile 2.0.12 (see <a class="pxref" href="Foreign-Objects.html">Foreign Objects</a>), smobs were the
+preferred way to for C code to define new kinds of Scheme objects.  With
+the exception of the so-called &ldquo;applicable SMOBs&rdquo; discussed below,
+smobs are now a legacy interface and are headed for eventual
+deprecation.  See <a class="xref" href="Deprecation.html">Deprecation</a>.  New code should use the foreign
+object interface.
+</p>
+<p>This section contains reference information related to defining and
+working with smobs.  For a tutorial-like introduction to smobs, see
+&ldquo;Defining New Types (Smobs)&rdquo; in previous versions of this manual.
+</p>
+<dl class="first-deftypefn first-deftypefun-alias-first-deftypefn">
+<dt class="deftypefn deftypefun-alias-deftypefn" id="index-scm_005fmake_005fsmob_005ftype"><span class="category-def">Function: </span><span><code class="def-type">scm_t_bits</code> <strong class="def-name">scm_make_smob_type</strong> <code class="def-code-arguments">(const char *name, size_t size)</code><a class="copiable-link" href='#index-scm_005fmake_005fsmob_005ftype'> &para;</a></span></dt>
+<dd><p>This function adds a new smob type, named <var class="var">name</var>, with instance size
+<var class="var">size</var>, to the system.  The return value is a tag that is used in
+creating instances of the type.
+</p>
+<p>If <var class="var">size</var> is 0, the default <em class="emph">free</em> function will do nothing.
+</p>
+<p>If <var class="var">size</var> is not 0, the default <em class="emph">free</em> function will
+deallocate the memory block pointed to by <code class="code">SCM_SMOB_DATA</code> with
+<code class="code">scm_gc_free</code>.  The <var class="var">what</var> parameter in the call to
+<code class="code">scm_gc_free</code> will be <var class="var">name</var>.
+</p>
+<p>Default values are provided for the <em class="emph">mark</em>, <em class="emph">free</em>,
+<em class="emph">print</em>, and <em class="emph">equalp</em> functions.  If you want to customize any
+of these functions, the call to <code class="code">scm_make_smob_type</code> should be
+immediately followed by calls to one or several of
+<code class="code">scm_set_smob_mark</code>, <code class="code">scm_set_smob_free</code>,
+<code class="code">scm_set_smob_print</code>, and/or <code class="code">scm_set_smob_equalp</code>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-finalizer-2"></a>
+<a class="index-entry-id" id="index-finalization-2"></a>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fset_005fsmob_005ffree"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_set_smob_free</strong> <code class="def-code-arguments">(scm_t_bits tc, size_t (*free) (SCM obj))</code><a class="copiable-link" href='#index-scm_005fset_005fsmob_005ffree'> &para;</a></span></dt>
+<dd><p>This function sets the smob freeing procedure (sometimes referred to as
+a <em class="dfn">finalizer</em>) for the smob type specified by the tag
+<var class="var">tc</var>. <var class="var">tc</var> is the tag returned by <code class="code">scm_make_smob_type</code>.
+</p>
+<p>The <var class="var">free</var> procedure must deallocate all resources that are
+directly associated with the smob instance <var class="var">obj</var>.  It must assume
+that all <code class="code">SCM</code> values that it references have already been freed
+and are thus invalid.
+</p>
+<p>It must also not call any libguile function or macro except
+<code class="code">scm_gc_free</code>, <code class="code">SCM_SMOB_FLAGS</code>, <code class="code">SCM_SMOB_DATA</code>,
+<code class="code">SCM_SMOB_DATA_2</code>, and <code class="code">SCM_SMOB_DATA_3</code>.
+</p>
+<p>The <var class="var">free</var> procedure must return 0.
+</p>
+<p>Note that defining a freeing procedure is not necessary if the resources
+associated with <var class="var">obj</var> consists only of memory allocated with
+<code class="code">scm_gc_malloc</code> or <code class="code">scm_gc_malloc_pointerless</code> because this
+memory is automatically reclaimed by the garbage collector when it is no
+longer needed (see <a class="pxref" href="Memory-Blocks.html"><code class="code">scm_gc_malloc</code></a>).
+</p></dd></dl>
+
+<p>Smob free functions must be thread-safe.  See <a class="xref" href="Foreign-Object-Memory-Management.html">Foreign Object Memory Management</a>, for a discussion on finalizers and concurrency.  If you are
+embedding Guile in an application that is not thread-safe, and you
+define smob types that need finalization, you might want to disable
+automatic finalization, and arrange to call
+<code class="code">scm_manually_run_finalizers ()</code> yourself.  See <a class="xref" href="Foreign-Objects.html">Foreign Objects</a>.
+</p>
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fset_005fsmob_005fmark"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_set_smob_mark</strong> <code class="def-code-arguments">(scm_t_bits tc, SCM (*mark) (SCM obj))</code><a class="copiable-link" href='#index-scm_005fset_005fsmob_005fmark'> &para;</a></span></dt>
+<dd><p>This function sets the smob marking procedure for the smob type specified by
+the tag <var class="var">tc</var>. <var class="var">tc</var> is the tag returned by <code class="code">scm_make_smob_type</code>.
+</p>
+<p>Defining a marking procedure is almost always the wrong thing to do.  It
+is much, much preferable to allocate smob data with the
+<code class="code">scm_gc_malloc</code> and <code class="code">scm_gc_malloc_pointerless</code> functions, and
+allow the GC to trace pointers automatically.
+</p>
+<p>Any mark procedures you see currently almost surely date from the time
+of Guile 1.8, before the switch to the Boehm-Demers-Weiser collector.
+Such smob implementations should be changed to just use
+<code class="code">scm_gc_malloc</code> and friends, and to lose their mark function.
+</p>
+<p>If you decide to keep the mark function, note that it may be called on
+objects that are on the free list.  Please read and digest the comments
+from the BDW GC&rsquo;s <code class="code">gc/gc_mark.h</code> header.
+</p>
+<p>The <var class="var">mark</var> procedure must cause <code class="code">scm_gc_mark</code> to be called
+for every <code class="code">SCM</code> value that is directly referenced by the smob
+instance <var class="var">obj</var>.  One of these <code class="code">SCM</code> values can be returned
+from the procedure and Guile will call <code class="code">scm_gc_mark</code> for it.
+This can be used to avoid deep recursions for smob instances that form
+a list.
+</p>
+<p>It must not call any libguile function or macro except
+<code class="code">scm_gc_mark</code>, <code class="code">SCM_SMOB_FLAGS</code>, <code class="code">SCM_SMOB_DATA</code>,
+<code class="code">SCM_SMOB_DATA_2</code>, and <code class="code">SCM_SMOB_DATA_3</code>.
+</p></dd></dl>
+
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fset_005fsmob_005fprint"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_set_smob_print</strong> <code class="def-code-arguments">(scm_t_bits tc, int (*print) (SCM obj, SCM port, scm_print_state* pstate))</code><a class="copiable-link" href='#index-scm_005fset_005fsmob_005fprint'> &para;</a></span></dt>
+<dd><p>This function sets the smob printing procedure for the smob type
+specified by the tag <var class="var">tc</var>. <var class="var">tc</var> is the tag returned by
+<code class="code">scm_make_smob_type</code>.
+</p>
+<p>The <var class="var">print</var> procedure should output a textual representation of
+the smob instance <var class="var">obj</var> to <var class="var">port</var>, using information in
+<var class="var">pstate</var>.
+</p>
+<p>The textual representation should be of the form <code class="code">#&lt;name ...&gt;</code>.
+This ensures that <code class="code">read</code> will not interpret it as some other
+Scheme value.
+</p>
+<p>It is often best to ignore <var class="var">pstate</var> and just print to <var class="var">port</var>
+with <code class="code">scm_display</code>, <code class="code">scm_write</code>, <code class="code">scm_simple_format</code>,
+and <code class="code">scm_puts</code>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fset_005fsmob_005fequalp"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_set_smob_equalp</strong> <code class="def-code-arguments">(scm_t_bits tc, SCM (*equalp) (SCM obj1, SCM obj2))</code><a class="copiable-link" href='#index-scm_005fset_005fsmob_005fequalp'> &para;</a></span></dt>
+<dd><p>This function sets the smob equality-testing predicate for the smob
+type specified by the tag <var class="var">tc</var>. <var class="var">tc</var> is the tag returned by
+<code class="code">scm_make_smob_type</code>.
+</p>
+<p>The <var class="var">equalp</var> procedure should return <code class="code">SCM_BOOL_T</code> when
+<var class="var">obj1</var> is <code class="code">equal?</code> to <var class="var">obj2</var>.  Else it should return
+<code class="code">SCM_BOOL_F</code>.  Both <var class="var">obj1</var> and <var class="var">obj2</var> are instances of the
+smob type <var class="var">tc</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fassert_005fsmob_005ftype"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_assert_smob_type</strong> <code class="def-code-arguments">(scm_t_bits tag, SCM val)</code><a class="copiable-link" href='#index-scm_005fassert_005fsmob_005ftype'> &para;</a></span></dt>
+<dd><p>When <var class="var">val</var> is a smob of the type indicated by <var class="var">tag</var>, do nothing.
+Else, signal an error.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fSMOB_005fPREDICATE"><span class="category-def">C Macro: </span><span><code class="def-type">int</code> <strong class="def-name">SCM_SMOB_PREDICATE</strong> <code class="def-code-arguments">(scm_t_bits tag, SCM exp)</code><a class="copiable-link" href='#index-SCM_005fSMOB_005fPREDICATE'> &para;</a></span></dt>
+<dd><p>Return true if <var class="var">exp</var> is a smob instance of the type indicated by
+<var class="var">tag</var>, or false otherwise.  The expression <var class="var">exp</var> can be
+evaluated more than once, so it shouldn&rsquo;t contain any side effects.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fnew_005fsmob"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_new_smob</strong> <code class="def-code-arguments">(scm_t_bits tag, void *data)</code><a class="copiable-link" href='#index-scm_005fnew_005fsmob'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005fnew_005fdouble_005fsmob"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_new_double_smob</strong> <code class="def-code-arguments">(scm_t_bits tag, void *data, void *data2, void *data3)</code><a class="copiable-link" href='#index-scm_005fnew_005fdouble_005fsmob'> &para;</a></span></dt>
+<dd><p>Make a new smob of the type with tag <var class="var">tag</var> and smob data <var class="var">data</var>,
+<var class="var">data2</var>, and <var class="var">data3</var>, as appropriate.
+</p>
+<p>The <var class="var">tag</var> is what has been returned by <code class="code">scm_make_smob_type</code>.
+The initial values <var class="var">data</var>, <var class="var">data2</var>, and <var class="var">data3</var> are of
+type <code class="code">scm_t_bits</code>; when you want to use them for <code class="code">SCM</code>
+values, these values need to be converted to a <code class="code">scm_t_bits</code> first
+by using <code class="code">SCM_UNPACK</code>.
+</p>
+<p>The flags of the smob instance start out as zero.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fSMOB_005fFLAGS"><span class="category-def">C Macro: </span><span><code class="def-type">scm_t_bits</code> <strong class="def-name">SCM_SMOB_FLAGS</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-SCM_005fSMOB_005fFLAGS'> &para;</a></span></dt>
+<dd><p>Return the 16 extra bits of the smob <var class="var">obj</var>.  No meaning is
+predefined for these bits, you can use them freely.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fSET_005fSMOB_005fFLAGS"><span class="category-def">C Macro: </span><span><code class="def-type">scm_t_bits</code> <strong class="def-name">SCM_SET_SMOB_FLAGS</strong> <code class="def-code-arguments">(SCM obj, scm_t_bits flags)</code><a class="copiable-link" href='#index-SCM_005fSET_005fSMOB_005fFLAGS'> &para;</a></span></dt>
+<dd><p>Set the 16 extra bits of the smob <var class="var">obj</var> to <var class="var">flags</var>.  No
+meaning is predefined for these bits, you can use them freely.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fSMOB_005fDATA"><span class="category-def">C Macro: </span><span><code class="def-type">scm_t_bits</code> <strong class="def-name">SCM_SMOB_DATA</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-SCM_005fSMOB_005fDATA'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fSMOB_005fDATA_005f2"><span class="category-def">C Macro: </span><span><code class="def-type">scm_t_bits</code> <strong class="def-name">SCM_SMOB_DATA_2</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-SCM_005fSMOB_005fDATA_005f2'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fSMOB_005fDATA_005f3"><span class="category-def">C Macro: </span><span><code class="def-type">scm_t_bits</code> <strong class="def-name">SCM_SMOB_DATA_3</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-SCM_005fSMOB_005fDATA_005f3'> &para;</a></span></dt>
+<dd><p>Return the first (second, third) immediate word of the smob <var class="var">obj</var>
+as a <code class="code">scm_t_bits</code> value.  When the word contains a <code class="code">SCM</code>
+value, use <code class="code">SCM_SMOB_OBJECT</code> (etc.) instead.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fSET_005fSMOB_005fDATA"><span class="category-def">C Macro: </span><span><code class="def-type">void</code> <strong class="def-name">SCM_SET_SMOB_DATA</strong> <code class="def-code-arguments">(SCM obj, scm_t_bits val)</code><a class="copiable-link" href='#index-SCM_005fSET_005fSMOB_005fDATA'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fSET_005fSMOB_005fDATA_005f2"><span class="category-def">C Macro: </span><span><code class="def-type">void</code> <strong class="def-name">SCM_SET_SMOB_DATA_2</strong> <code class="def-code-arguments">(SCM obj, scm_t_bits val)</code><a class="copiable-link" href='#index-SCM_005fSET_005fSMOB_005fDATA_005f2'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fSET_005fSMOB_005fDATA_005f3"><span class="category-def">C Macro: </span><span><code class="def-type">void</code> <strong class="def-name">SCM_SET_SMOB_DATA_3</strong> <code class="def-code-arguments">(SCM obj, scm_t_bits val)</code><a class="copiable-link" href='#index-SCM_005fSET_005fSMOB_005fDATA_005f3'> &para;</a></span></dt>
+<dd><p>Set the first (second, third) immediate word of the smob <var class="var">obj</var> to
+<var class="var">val</var>.  When the word should be set to a <code class="code">SCM</code> value, use
+<code class="code">SCM_SMOB_SET_OBJECT</code> (etc.) instead.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fSMOB_005fOBJECT"><span class="category-def">C Macro: </span><span><code class="def-type">SCM</code> <strong class="def-name">SCM_SMOB_OBJECT</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-SCM_005fSMOB_005fOBJECT'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fSMOB_005fOBJECT_005f2"><span class="category-def">C Macro: </span><span><code class="def-type">SCM</code> <strong class="def-name">SCM_SMOB_OBJECT_2</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-SCM_005fSMOB_005fOBJECT_005f2'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fSMOB_005fOBJECT_005f3"><span class="category-def">C Macro: </span><span><code class="def-type">SCM</code> <strong class="def-name">SCM_SMOB_OBJECT_3</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-SCM_005fSMOB_005fOBJECT_005f3'> &para;</a></span></dt>
+<dd><p>Return the first (second, third) immediate word of the smob <var class="var">obj</var>
+as a <code class="code">SCM</code> value.  When the word contains a <code class="code">scm_t_bits</code>
+value, use <code class="code">SCM_SMOB_DATA</code> (etc.) instead.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fSET_005fSMOB_005fOBJECT"><span class="category-def">C Macro: </span><span><code class="def-type">void</code> <strong class="def-name">SCM_SET_SMOB_OBJECT</strong> <code class="def-code-arguments">(SCM obj, SCM val)</code><a class="copiable-link" href='#index-SCM_005fSET_005fSMOB_005fOBJECT'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fSET_005fSMOB_005fOBJECT_005f2"><span class="category-def">C Macro: </span><span><code class="def-type">void</code> <strong class="def-name">SCM_SET_SMOB_OBJECT_2</strong> <code class="def-code-arguments">(SCM obj, SCM val)</code><a class="copiable-link" href='#index-SCM_005fSET_005fSMOB_005fOBJECT_005f2'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fSET_005fSMOB_005fOBJECT_005f3"><span class="category-def">C Macro: </span><span><code class="def-type">void</code> <strong class="def-name">SCM_SET_SMOB_OBJECT_3</strong> <code class="def-code-arguments">(SCM obj, SCM val)</code><a class="copiable-link" href='#index-SCM_005fSET_005fSMOB_005fOBJECT_005f3'> &para;</a></span></dt>
+<dd><p>Set the first (second, third) immediate word of the smob <var class="var">obj</var> to
+<var class="var">val</var>.  When the word should be set to a <code class="code">scm_t_bits</code> value, use
+<code class="code">SCM_SMOB_SET_DATA</code> (etc.) instead.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-SCM_005fSMOB_005fOBJECT_005fLOC"><span class="category-def">C Macro: </span><span><code class="def-type">SCM *</code> <strong class="def-name">SCM_SMOB_OBJECT_LOC</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-SCM_005fSMOB_005fOBJECT_005fLOC'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fSMOB_005fOBJECT_005f2_005fLOC"><span class="category-def">C Macro: </span><span><code class="def-type">SCM *</code> <strong class="def-name">SCM_SMOB_OBJECT_2_LOC</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-SCM_005fSMOB_005fOBJECT_005f2_005fLOC'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-SCM_005fSMOB_005fOBJECT_005f3_005fLOC"><span class="category-def">C Macro: </span><span><code class="def-type">SCM *</code> <strong class="def-name">SCM_SMOB_OBJECT_3_LOC</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-SCM_005fSMOB_005fOBJECT_005f3_005fLOC'> &para;</a></span></dt>
+<dd><p>Return a pointer to the first (second, third) immediate word of the
+smob <var class="var">obj</var>.  Note that this is a pointer to <code class="code">SCM</code>.  If you
+need to work with <code class="code">scm_t_bits</code> values, use <code class="code">SCM_PACK</code> and
+<code class="code">SCM_UNPACK</code>, as appropriate.
+</p></dd></dl>
+
+<dl class="first-deftypefn first-deftypefun-alias-first-deftypefn">
+<dt class="deftypefn deftypefun-alias-deftypefn" id="index-scm_005fmarkcdr"><span class="category-def">Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_markcdr</strong> <code class="def-code-arguments">(SCM <var class="var">x</var>)</code><a class="copiable-link" href='#index-scm_005fmarkcdr'> &para;</a></span></dt>
+<dd><p>Mark the references in the smob <var class="var">x</var>, assuming that <var class="var">x</var>&rsquo;s first
+data word contains an ordinary Scheme object, and <var class="var">x</var> refers to no
+other objects.  This function simply returns <var class="var">x</var>&rsquo;s first data word.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Scheduling.html">Threads, Mutexes, Asyncs and Dynamic Roots</a>, Previous: <a href="Foreign-Objects.html">Foreign Objects</a>, Up: <a href="API-Reference.html">API Reference</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

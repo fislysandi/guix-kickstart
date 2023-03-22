@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>URIs (Guile Reference Manual)</title>
+
+<meta name="description" content="URIs (Guile Reference Manual)">
+<meta name="keywords" content="URIs (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Web.html" rel="up" title="Web">
+<link href="HTTP.html" rel="next" title="HTTP">
+<link href="Types-and-the-Web.html" rel="prev" title="Types and the Web">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="URIs">
+<div class="nav-panel">
+<p>
+Next: <a href="HTTP.html" accesskey="n" rel="next">The Hyper-Text Transfer Protocol</a>, Previous: <a href="Types-and-the-Web.html" accesskey="p" rel="prev">Types and the Web</a>, Up: <a href="Web.html" accesskey="u" rel="up"><abbr class="acronym">HTTP</abbr>, the Web, and All That</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Universal-Resource-Identifiers">7.3.2 Universal Resource Identifiers</h4>
+
+<p>Guile provides a standard data type for Universal Resource Identifiers
+(URIs), as defined in RFC 3986.
+</p>
+<p>The generic URI syntax is as follows:
+</p>
+<div class="example">
+<pre class="example-preformatted">URI-reference := [scheme &quot;:&quot;] [&quot;//&quot; [userinfo &quot;@&quot;] host [&quot;:&quot; port]] path \
+                 [ &quot;?&quot; query ] [ &quot;#&quot; fragment ]
+</pre></div>
+
+<p>For example, in the URI, &lsquo;<code class="indicateurl">http://www.gnu.org/help/</code>&rsquo;, the
+scheme is <code class="code">http</code>, the host is <code class="code">www.gnu.org</code>, the path is
+<code class="code">/help/</code>, and there is no userinfo, port, query, or fragment.
+</p>
+<p>Userinfo is something of an abstraction, as some legacy URI schemes
+allowed userinfo of the form <code class="code"><var class="var">username</var>:<var class="var">passwd</var></code>.  But
+since passwords do not belong in URIs, the RFC does not want to condone
+this practice, so it calls anything before the <code class="code">@</code> sign
+<em class="dfn">userinfo</em>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (web uri))
+</pre></div>
+
+<p>The following procedures can be found in the <code class="code">(web uri)</code>
+module. Load it into your Guile, using a form like the above, to have
+access to them.
+</p>
+<p>The most common way to build a URI from Scheme is with the
+<code class="code">build-uri</code> function.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-build_002duri"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">build-uri</strong> <var class="def-var-arguments">scheme        [#:userinfo=<code class="code">#f</code>] [#:host=<code class="code">#f</code>] [#:port=<code class="code">#f</code>]        [#:path=<code class="code">&quot;&quot;</code>] [#:query=<code class="code">#f</code>] [#:fragment=<code class="code">#f</code>]        [#:validate?=<code class="code">#t</code>]</var><a class="copiable-link" href='#index-build_002duri'> &para;</a></span></dt>
+<dd><p>Construct a URI.  <var class="var">scheme</var> should be a symbol, <var class="var">port</var> either a
+positive, exact integer or <code class="code">#f</code>, and the rest of the fields are
+either strings or <code class="code">#f</code>.  If <var class="var">validate?</var> is true, also run some
+consistency checks to make sure that the constructed URI is valid.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-uri_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">uri?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-uri_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is a URI.
+</p></dd></dl>
+
+<p>Guile, URIs are represented as URI records, with a number of associated
+accessors.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-uri_002dscheme"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">uri-scheme</strong> <var class="def-var-arguments">uri</var><a class="copiable-link" href='#index-uri_002dscheme'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-uri_002duserinfo"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">uri-userinfo</strong> <var class="def-var-arguments">uri</var><a class="copiable-link" href='#index-uri_002duserinfo'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-uri_002dhost"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">uri-host</strong> <var class="def-var-arguments">uri</var><a class="copiable-link" href='#index-uri_002dhost'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-uri_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">uri-port</strong> <var class="def-var-arguments">uri</var><a class="copiable-link" href='#index-uri_002dport'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-uri_002dpath"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">uri-path</strong> <var class="def-var-arguments">uri</var><a class="copiable-link" href='#index-uri_002dpath'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-uri_002dquery"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">uri-query</strong> <var class="def-var-arguments">uri</var><a class="copiable-link" href='#index-uri_002dquery'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-uri_002dfragment"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">uri-fragment</strong> <var class="def-var-arguments">uri</var><a class="copiable-link" href='#index-uri_002dfragment'> &para;</a></span></dt>
+<dd><p>Field accessors for the URI record type.  The URI scheme will be a
+symbol, or <code class="code">#f</code> if the object is a relative-ref (see below).  The
+port will be either a positive, exact integer or <code class="code">#f</code>, and the rest
+of the fields will be either strings or <code class="code">#f</code> if not present.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002d_003euri"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-&gt;uri</strong> <var class="def-var-arguments">string</var><a class="copiable-link" href='#index-string_002d_003euri'> &para;</a></span></dt>
+<dd><p>Parse <var class="var">string</var> into a URI object.  Return <code class="code">#f</code> if the string
+could not be parsed.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-uri_002d_003estring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">uri-&gt;string</strong> <var class="def-var-arguments">uri [#:include-fragment?=<code class="code">#t</code>]</var><a class="copiable-link" href='#index-uri_002d_003estring'> &para;</a></span></dt>
+<dd><p>Serialize <var class="var">uri</var> to a string.  If the URI has a port that is the
+default port for its scheme, the port is not included in the
+serialization.  If <var class="var">include-fragment?</var> is given as false, the
+resulting string will omit the fragment (if any).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-declare_002ddefault_002dport_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">declare-default-port!</strong> <var class="def-var-arguments">scheme port</var><a class="copiable-link" href='#index-declare_002ddefault_002dport_0021'> &para;</a></span></dt>
+<dd><p>Declare a default port for the given URI scheme.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-uri_002ddecode"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">uri-decode</strong> <var class="def-var-arguments">str [#:encoding=<code class="code">&quot;utf-8&quot;</code>] [#:decode-plus-to-space? #t]</var><a class="copiable-link" href='#index-uri_002ddecode'> &para;</a></span></dt>
+<dd><p>Percent-decode the given <var class="var">str</var>, according to <var class="var">encoding</var>, which
+should be the name of a character encoding.
+</p>
+<p>Note that this function should not generally be applied to a full URI
+string. For paths, use <code class="code">split-and-decode-uri-path</code> instead. For
+query strings, split the query on <code class="code">&amp;</code> and <code class="code">=</code> boundaries, and
+decode the components separately.
+</p>
+<p>Note also that percent-encoded strings encode <em class="emph">bytes</em>, not
+characters.  There is no guarantee that a given byte sequence is a valid
+string encoding. Therefore this routine may signal an error if the
+decoded bytes are not valid for the given encoding. Pass <code class="code">#f</code> for
+<var class="var">encoding</var> if you want decoded bytes as a bytevector directly.
+See <a class="xref" href="Ports.html"><code class="code">set-port-encoding!</code></a>, for more information on
+character encodings.
+</p>
+<p>If <var class="var">decode-plus-to-space?</var> is true, which is the default, also
+replace instances of the plus character &lsquo;<samp class="samp">+</samp>&rsquo; with a space character.
+This is needed when parsing <code class="code">application/x-www-form-urlencoded</code>
+data.
+</p>
+<p>Returns a string of the decoded characters, or a bytevector if
+<var class="var">encoding</var> was <code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-uri_002dencode"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">uri-encode</strong> <var class="def-var-arguments">str [#:encoding=<code class="code">&quot;utf-8&quot;</code>] [#:unescaped-chars]</var><a class="copiable-link" href='#index-uri_002dencode'> &para;</a></span></dt>
+<dd><p>Percent-encode any character not in the character set,
+<var class="var">unescaped-chars</var>.
+</p>
+<p>The default character set includes alphanumerics from ASCII, as well as
+the special characters &lsquo;<samp class="samp">-</samp>&rsquo;, &lsquo;<samp class="samp">.</samp>&rsquo;, &lsquo;<samp class="samp">_</samp>&rsquo;, and &lsquo;<samp class="samp">~</samp>&rsquo;.  Any
+other character will be percent-encoded, by writing out the character to
+a bytevector within the given <var class="var">encoding</var>, then encoding each byte as
+<code class="code">%<var class="var">HH</var></code>, where <var class="var">HH</var> is the hexadecimal representation of
+the byte.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-split_002dand_002ddecode_002duri_002dpath"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">split-and-decode-uri-path</strong> <var class="def-var-arguments">path</var><a class="copiable-link" href='#index-split_002dand_002ddecode_002duri_002dpath'> &para;</a></span></dt>
+<dd><p>Split <var class="var">path</var> into its components, and decode each component,
+removing empty components.
+</p>
+<p>For example, <code class="code">&quot;/foo/bar%20baz/&quot;</code> decodes to the two-element list,
+<code class="code">(&quot;foo&quot; &quot;bar baz&quot;)</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-encode_002dand_002djoin_002duri_002dpath"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">encode-and-join-uri-path</strong> <var class="def-var-arguments">parts</var><a class="copiable-link" href='#index-encode_002dand_002djoin_002duri_002dpath'> &para;</a></span></dt>
+<dd><p>URI-encode each element of <var class="var">parts</var>, which should be a list of
+strings, and join the parts together with <code class="code">/</code> as a delimiter.
+</p>
+<p>For example, the list <code class="code">(&quot;scrambled eggs&quot; &quot;biscuits&amp;gravy&quot;)</code> encodes
+as <code class="code">&quot;scrambled%20eggs/biscuits%26gravy&quot;</code>.
+</p></dd></dl>
+
+<h4 class="subsubheading" id="Subtypes-of-URI">Subtypes of URI</h4>
+
+<p>As we noted above, not all URI objects have a scheme.  You might have
+noted in the &ldquo;generic URI syntax&rdquo; example that the left-hand side of
+that grammar definition was URI-reference, not URI.  A
+<em class="dfn">URI-reference</em> is a generalization of a URI where the scheme is
+optional.  If no scheme is specified, it is taken to be relative to some
+other related URI.  A common use of URI references is when you want to
+be vague regarding the choice of HTTP or HTTPS &ndash; serving a web page
+referring to <code class="code">/foo.css</code> will use HTTPS if loaded over HTTPS, or
+HTTP otherwise.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-build_002duri_002dreference"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">build-uri-reference</strong> <var class="def-var-arguments">[#:scheme=<code class="code">#f</code>]       [#:userinfo=<code class="code">#f</code>] [#:host=<code class="code">#f</code>] [#:port=<code class="code">#f</code>]        [#:path=<code class="code">&quot;&quot;</code>] [#:query=<code class="code">#f</code>] [#:fragment=<code class="code">#f</code>]        [#:validate?=<code class="code">#t</code>]</var><a class="copiable-link" href='#index-build_002duri_002dreference'> &para;</a></span></dt>
+<dd><p>Like <code class="code">build-uri</code>, but with an optional scheme.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-uri_002dreference_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">uri-reference?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-uri_002dreference_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is a URI-reference.  This is the most
+general URI predicate, as it includes not only full URIs that have
+schemes (those that match <code class="code">uri?</code>) but also URIs without schemes.
+</p></dd></dl>
+
+<p>It&rsquo;s also possible to build a <em class="dfn">relative-ref</em>: a URI-reference that
+explicitly lacks a scheme.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-build_002drelative_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">build-relative-ref</strong> <var class="def-var-arguments">[#:userinfo=<code class="code">#f</code>] [#:host=<code class="code">#f</code>] [#:port=<code class="code">#f</code>]        [#:path=<code class="code">&quot;&quot;</code>] [#:query=<code class="code">#f</code>] [#:fragment=<code class="code">#f</code>]        [#:validate?=<code class="code">#t</code>]</var><a class="copiable-link" href='#index-build_002drelative_002dref'> &para;</a></span></dt>
+<dd><p>Like <code class="code">build-uri</code>, but with no scheme.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-relative_002dref_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">relative-ref?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-relative_002dref_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is a &ldquo;relative-ref&rdquo;: a URI-reference
+that has no scheme.  Every URI-reference will either match <code class="code">uri?</code>
+or <code class="code">relative-ref?</code> (but not both).
+</p></dd></dl>
+
+<p>In case it&rsquo;s not clear from the above, the most general of these URI
+types is the URI-reference, with <code class="code">build-uri-reference</code> as the most
+general constructor.  <code class="code">build-uri</code> and <code class="code">build-relative-ref</code>
+enforce enforce specific restrictions on the URI-reference.  The most
+generic URI parser is then <code class="code">string-&gt;uri-reference</code>, and there is
+also a parser for when you know that you want a relative-ref.
+</p>
+<p>Note that <code class="code">uri?</code> will only return <code class="code">#t</code> for URI objects that
+have schemes; that is, it rejects relative-refs.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002d_003euri_002dreference"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-&gt;uri-reference</strong> <var class="def-var-arguments">string</var><a class="copiable-link" href='#index-string_002d_003euri_002dreference'> &para;</a></span></dt>
+<dd><p>Parse <var class="var">string</var> into a URI object, while not requiring a scheme.
+Return <code class="code">#f</code> if the string could not be parsed.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002d_003erelative_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-&gt;relative-ref</strong> <var class="def-var-arguments">string</var><a class="copiable-link" href='#index-string_002d_003erelative_002dref'> &para;</a></span></dt>
+<dd><p>Parse <var class="var">string</var> into a URI object, while asserting that no scheme is
+present.  Return <code class="code">#f</code> if the string could not be parsed.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="HTTP.html">The Hyper-Text Transfer Protocol</a>, Previous: <a href="Types-and-the-Web.html">Types and the Web</a>, Up: <a href="Web.html"><abbr class="acronym">HTTP</abbr>, the Web, and All That</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

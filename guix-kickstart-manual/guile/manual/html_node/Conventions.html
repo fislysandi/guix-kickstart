@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Conventions (Guile Reference Manual)</title>
+
+<meta name="description" content="Conventions (Guile Reference Manual)">
+<meta name="keywords" content="Conventions (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="POSIX.html" rel="up" title="POSIX">
+<link href="Ports-and-File-Descriptors.html" rel="next" title="Ports and File Descriptors">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Conventions">
+<div class="nav-panel">
+<p>
+Next: <a href="Ports-and-File-Descriptors.html" accesskey="n" rel="next">Ports and File Descriptors</a>, Up: <a href="POSIX.html" accesskey="u" rel="up"><abbr class="acronym">POSIX</abbr> System Calls and Networking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="POSIX-Interface-Conventions">7.2.1 <abbr class="acronym">POSIX</abbr> Interface Conventions</h4>
+
+<p>These interfaces provide access to operating system facilities.
+They provide a simple wrapping around the underlying C interfaces
+to make usage from Scheme more convenient.  They are also used
+to implement the Guile port of scsh (see <a class="pxref" href="The-Scheme-shell-_0028scsh_0029.html">The Scheme shell (scsh)</a>).
+</p>
+<p>Generally there is a single procedure for each corresponding Unix
+facility.  There are some exceptions, such as procedures implemented for
+speed and convenience in Scheme with no primitive Unix equivalent,
+e.g. <code class="code">copy-file</code>.
+</p>
+<p>The interfaces are intended as far as possible to be portable across
+different versions of Unix.  In some cases procedures which can&rsquo;t be
+implemented on particular systems may become no-ops, or perform limited
+actions.  In other cases they may throw errors.
+</p>
+<p>General naming conventions are as follows:
+</p>
+<ul class="itemize mark-bullet">
+<li>The Scheme name is often identical to the name of the underlying Unix
+facility.
+</li><li>Underscores in Unix procedure names are converted to hyphens.
+</li><li>Procedures which destructively modify Scheme data have exclamation
+marks appended, e.g., <code class="code">recv!</code>.
+</li><li>Predicates (returning only <code class="code">#t</code> or <code class="code">#f</code>) have question marks
+appended, e.g., <code class="code">access?</code>.
+</li><li>Some names are changed to avoid conflict with dissimilar interfaces
+defined by scsh, e.g., <code class="code">primitive-fork</code>.
+</li><li>Unix preprocessor names such as <code class="code">EPERM</code> or <code class="code">R_OK</code> are converted
+to Scheme variables of the same name (underscores are not replaced
+with hyphens).
+</li></ul>
+
+<p>Unexpected conditions are generally handled by raising exceptions.
+There are a few procedures which return a special value if they don&rsquo;t
+succeed, e.g., <code class="code">getenv</code> returns <code class="code">#f</code> if it the requested
+string is not found in the environment.  These cases are noted in
+the documentation.
+</p>
+<p>For ways to deal with exceptions, see <a class="ref" href="Exceptions.html">Exceptions</a>.
+</p>
+<a class="index-entry-id" id="index-errno"></a>
+<p>Errors which the C library would report by returning a null pointer or
+through some other means are reported by raising a <code class="code">system-error</code>
+exception with <code class="code">scm-error</code> (see <a class="pxref" href="Error-Reporting.html">Procedures for Signaling Errors</a>).  The
+<var class="var">data</var> parameter is a list containing the Unix <code class="code">errno</code> value
+(an integer).  For example,
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (my-handler key func fmt fmtargs data)
+  (display key) (newline)
+  (display func) (newline)
+  (apply format #t fmt fmtargs) (newline)
+  (display data) (newline))
+
+(catch 'system-error
+  (lambda () (dup2 -123 -456))
+  my-handler)
+
+-|
+system-error
+dup2
+Bad file descriptor
+(9)
+</pre></div>
+
+
+<br>
+<dl class="first-deffn first-defun-alias-first-deffn">
+<dt class="deffn defun-alias-deffn" id="index-system_002derror_002derrno"><span class="category-def">Function: </span><span><strong class="def-name">system-error-errno</strong> <var class="def-var-arguments">arglist</var><a class="copiable-link" href='#index-system_002derror_002derrno'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-errno-1"></a>
+<p>Return the <code class="code">errno</code> value from a list which is the arguments to an
+exception handler.  If the exception is not a <code class="code">system-error</code>,
+then the return is <code class="code">#f</code>.  For example,
+</p>
+<div class="example">
+<pre class="example-preformatted">(catch
+ 'system-error
+ (lambda ()
+   (mkdir &quot;/this-ought-to-fail-if-I'm-not-root&quot;))
+ (lambda stuff
+   (let ((errno (system-error-errno stuff)))
+     (cond
+      ((= errno EACCES)
+       (display &quot;You're not allowed to do that.&quot;))
+      ((= errno EEXIST)
+       (display &quot;Already exists.&quot;))
+      (#t
+       (display (strerror errno))))
+     (newline))))
+</pre></div>
+</dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Ports-and-File-Descriptors.html">Ports and File Descriptors</a>, Up: <a href="POSIX.html"><abbr class="acronym">POSIX</abbr> System Calls and Networking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

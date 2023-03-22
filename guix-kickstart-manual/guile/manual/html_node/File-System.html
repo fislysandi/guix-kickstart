@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>File System (Guile Reference Manual)</title>
+
+<meta name="description" content="File System (Guile Reference Manual)">
+<meta name="keywords" content="File System (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="POSIX.html" rel="up" title="POSIX">
+<link href="User-Information.html" rel="next" title="User Information">
+<link href="Ports-and-File-Descriptors.html" rel="prev" title="Ports and File Descriptors">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="File-System">
+<div class="nav-panel">
+<p>
+Next: <a href="User-Information.html" accesskey="n" rel="next">User Information</a>, Previous: <a href="Ports-and-File-Descriptors.html" accesskey="p" rel="prev">Ports and File Descriptors</a>, Up: <a href="POSIX.html" accesskey="u" rel="up"><abbr class="acronym">POSIX</abbr> System Calls and Networking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="File-System-1">7.2.3 File System</h4>
+<a class="index-entry-id" id="index-file-system"></a>
+
+<p>These procedures allow querying and setting file system attributes
+(such as owner,
+permissions, sizes and types of files); deleting, copying, renaming and
+linking files; creating and removing directories and querying their
+contents; syncing the file system and creating special files.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-access_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">access?</strong> <var class="def-var-arguments">path how</var><a class="copiable-link" href='#index-access_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005faccess"><span class="category-def">C Function: </span><span><strong class="def-name">scm_access</strong> <var class="def-var-arguments">(path, how)</var><a class="copiable-link" href='#index-scm_005faccess'> &para;</a></span></dt>
+<dd><p>Test accessibility of a file under the real UID and GID of the calling
+process.  The return is <code class="code">#t</code> if <var class="var">path</var> exists and the
+permissions requested by <var class="var">how</var> are all allowed, or <code class="code">#f</code> if
+not.
+</p>
+<p><var class="var">how</var> is an integer which is one of the following values, or a
+bitwise-OR (<code class="code">logior</code>) of multiple values.
+</p>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-R_005fOK"><span class="category-def">Variable: </span><span><strong class="def-name">R_OK</strong><a class="copiable-link" href='#index-R_005fOK'> &para;</a></span></dt>
+<dd><p>Test for read permission.
+</p></dd></dl>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-W_005fOK"><span class="category-def">Variable: </span><span><strong class="def-name">W_OK</strong><a class="copiable-link" href='#index-W_005fOK'> &para;</a></span></dt>
+<dd><p>Test for write permission.
+</p></dd></dl>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-X_005fOK"><span class="category-def">Variable: </span><span><strong class="def-name">X_OK</strong><a class="copiable-link" href='#index-X_005fOK'> &para;</a></span></dt>
+<dd><p>Test for execute permission.
+</p></dd></dl>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-F_005fOK"><span class="category-def">Variable: </span><span><strong class="def-name">F_OK</strong><a class="copiable-link" href='#index-F_005fOK'> &para;</a></span></dt>
+<dd><p>Test for existence of the file.  This is implied by each of the other
+tests, so there&rsquo;s no need to combine it with them.
+</p></dd></dl>
+
+<p>It&rsquo;s important to note that <code class="code">access?</code> does not simply indicate
+what will happen on attempting to read or write a file.  In normal
+circumstances it does, but in a set-UID or set-GID program it doesn&rsquo;t
+because <code class="code">access?</code> tests the real ID, whereas an open or execute
+attempt uses the effective ID.
+</p>
+<p>A program which will never run set-UID/GID can ignore the difference
+between real and effective IDs, but for maximum generality, especially
+in library functions, it&rsquo;s best not to use <code class="code">access?</code> to predict
+the result of an open or execute, instead simply attempt that and
+catch any exception.
+</p>
+<p>The main use for <code class="code">access?</code> is to let a set-UID/GID program
+determine what the invoking user would have been allowed to do,
+without the greater (or perhaps lesser) privileges afforded by the
+effective ID.  For more on this, see <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/Testing-File-Access.html#Testing-File-Access">Testing File Access</a> in <cite class="cite">The GNU C Library Reference Manual</cite>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-fstat"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-stat"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stat</strong> <var class="def-var-arguments">object [exception-on-error?]</var><a class="copiable-link" href='#index-stat'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstat"><span class="category-def">C Function: </span><span><strong class="def-name">scm_stat</strong> <var class="def-var-arguments">(object, exception_on_error)</var><a class="copiable-link" href='#index-scm_005fstat'> &para;</a></span></dt>
+<dd><p>Return an object containing various information about the file
+determined by <var class="var">object</var>.  <var class="var">object</var> can be a string containing
+a file name or a port or integer file descriptor which is open
+on a file (in which case <code class="code">fstat</code> is used as the underlying
+system call).
+</p>
+<p>If the optional <var class="var">exception_on_error</var> argument is true, which
+is the default, an exception will be raised if the underlying
+system call returns an error, for example if the file is not
+found or is not readable. Otherwise, an error will cause
+<code class="code">stat</code> to return <code class="code">#f</code>.
+</p>
+<p>The object returned by <code class="code">stat</code> can be passed as a single
+parameter to the following procedures, all of which return
+integers:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-stat_003adev"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stat:dev</strong> <var class="def-var-arguments">st</var><a class="copiable-link" href='#index-stat_003adev'> &para;</a></span></dt>
+<dd><p>The device number containing the file.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-stat_003aino"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stat:ino</strong> <var class="def-var-arguments">st</var><a class="copiable-link" href='#index-stat_003aino'> &para;</a></span></dt>
+<dd><p>The file serial number, which distinguishes this file from all
+other files on the same device.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-stat_003amode"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stat:mode</strong> <var class="def-var-arguments">st</var><a class="copiable-link" href='#index-stat_003amode'> &para;</a></span></dt>
+<dd><p>The mode of the file.  This is an integer which incorporates file type
+information and file permission bits.  See also <code class="code">stat:type</code> and
+<code class="code">stat:perms</code> below.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-stat_003anlink"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stat:nlink</strong> <var class="def-var-arguments">st</var><a class="copiable-link" href='#index-stat_003anlink'> &para;</a></span></dt>
+<dd><p>The number of hard links to the file.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-stat_003auid"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stat:uid</strong> <var class="def-var-arguments">st</var><a class="copiable-link" href='#index-stat_003auid'> &para;</a></span></dt>
+<dd><p>The user ID of the file&rsquo;s owner.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-stat_003agid"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stat:gid</strong> <var class="def-var-arguments">st</var><a class="copiable-link" href='#index-stat_003agid'> &para;</a></span></dt>
+<dd><p>The group ID of the file.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-stat_003ardev"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stat:rdev</strong> <var class="def-var-arguments">st</var><a class="copiable-link" href='#index-stat_003ardev'> &para;</a></span></dt>
+<dd><p>Device ID; this entry is defined only for character or block special
+files.  On some systems this field is not available at all, in which
+case <code class="code">stat:rdev</code> returns <code class="code">#f</code>.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-stat_003asize"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stat:size</strong> <var class="def-var-arguments">st</var><a class="copiable-link" href='#index-stat_003asize'> &para;</a></span></dt>
+<dd><p>The size of a regular file in bytes.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-stat_003aatime"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stat:atime</strong> <var class="def-var-arguments">st</var><a class="copiable-link" href='#index-stat_003aatime'> &para;</a></span></dt>
+<dd><p>The last access time for the file, in seconds.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-stat_003amtime"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stat:mtime</strong> <var class="def-var-arguments">st</var><a class="copiable-link" href='#index-stat_003amtime'> &para;</a></span></dt>
+<dd><p>The last modification time for the file, in seconds.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-stat_003actime"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stat:ctime</strong> <var class="def-var-arguments">st</var><a class="copiable-link" href='#index-stat_003actime'> &para;</a></span></dt>
+<dd><p>The last modification time for the attributes of the file, in seconds.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-stat_003aatimensec"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stat:atimensec</strong> <var class="def-var-arguments">st</var><a class="copiable-link" href='#index-stat_003aatimensec'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-stat_003amtimensec"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stat:mtimensec</strong> <var class="def-var-arguments">st</var><a class="copiable-link" href='#index-stat_003amtimensec'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-stat_003actimensec"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stat:ctimensec</strong> <var class="def-var-arguments">st</var><a class="copiable-link" href='#index-stat_003actimensec'> &para;</a></span></dt>
+<dd><p>The fractional part of a file&rsquo;s access, modification, or attribute modification
+time, in nanoseconds. Nanosecond timestamps are only available on some operating
+systems and file systems. If Guile cannot retrieve nanosecond-level timestamps
+for a file, these fields will be set to 0.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-stat_003ablksize"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stat:blksize</strong> <var class="def-var-arguments">st</var><a class="copiable-link" href='#index-stat_003ablksize'> &para;</a></span></dt>
+<dd><p>The optimal block size for reading or writing the file, in bytes.  On
+some systems this field is not available, in which case
+<code class="code">stat:blksize</code> returns a sensible suggested block size.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-stat_003ablocks"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stat:blocks</strong> <var class="def-var-arguments">st</var><a class="copiable-link" href='#index-stat_003ablocks'> &para;</a></span></dt>
+<dd><p>The amount of disk space that the file occupies measured in units of
+512 byte blocks.  On some systems this field is not available, in
+which case <code class="code">stat:blocks</code> returns <code class="code">#f</code>.
+</p></dd></dl>
+
+<p>In addition, the following procedures return the information
+from <code class="code">stat:mode</code> in a more convenient form:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-stat_003atype"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stat:type</strong> <var class="def-var-arguments">st</var><a class="copiable-link" href='#index-stat_003atype'> &para;</a></span></dt>
+<dd><p>A symbol representing the type of file.  Possible values are
+&lsquo;<samp class="samp">regular</samp>&rsquo;, &lsquo;<samp class="samp">directory</samp>&rsquo;, &lsquo;<samp class="samp">symlink</samp>&rsquo;,
+&lsquo;<samp class="samp">block-special</samp>&rsquo;, &lsquo;<samp class="samp">char-special</samp>&rsquo;, &lsquo;<samp class="samp">fifo</samp>&rsquo;, &lsquo;<samp class="samp">socket</samp>&rsquo;,
+and &lsquo;<samp class="samp">unknown</samp>&rsquo;.
+</p></dd></dl>
+<dl class="first-deffn">
+<dt class="deffn" id="index-stat_003aperms"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stat:perms</strong> <var class="def-var-arguments">st</var><a class="copiable-link" href='#index-stat_003aperms'> &para;</a></span></dt>
+<dd><p>An integer representing the access permission bits.
+</p></dd></dl>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-lstat"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">lstat</strong> <var class="def-var-arguments">path</var><a class="copiable-link" href='#index-lstat'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flstat"><span class="category-def">C Function: </span><span><strong class="def-name">scm_lstat</strong> <var class="def-var-arguments">(path)</var><a class="copiable-link" href='#index-scm_005flstat'> &para;</a></span></dt>
+<dd><p>Similar to <code class="code">stat</code>, but does not follow symbolic links, i.e.,
+it will return information about a symbolic link itself, not the
+file it points to.  <var class="var">path</var> must be a string.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-statat"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">statat</strong> <var class="def-var-arguments">dir filename [flags]</var><a class="copiable-link" href='#index-statat'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstatat"><span class="category-def">C Function: </span><span><strong class="def-name">scm_statat</strong> <var class="def-var-arguments">dir filename flags</var><a class="copiable-link" href='#index-scm_005fstatat'> &para;</a></span></dt>
+<dd><p>Like <code class="code">stat</code>, but resolve <var class="var">filename</var> relative to the directory
+referred to by the file port <var class="var">dir</var> instead.  The optional argument
+<var class="var">flags</var> argument can be <code class="code">AT_SYMLINK_NOFOLLOW</code>, in which case
+<var class="var">filename</var> will not be dereferenced even if it is a symbolic link.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-readlink"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">readlink</strong> <var class="def-var-arguments">path</var><a class="copiable-link" href='#index-readlink'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005freadlink"><span class="category-def">C Function: </span><span><strong class="def-name">scm_readlink</strong> <var class="def-var-arguments">(path)</var><a class="copiable-link" href='#index-scm_005freadlink'> &para;</a></span></dt>
+<dd><p>Return the value of the symbolic link named by <var class="var">path</var> (a string, or
+a port if supported by the system), i.e., the file that the link points
+to.
+</p>
+<p>To read a symbolic link represented by a port, the symbolic link must
+have been opened with the <code class="code">O_NOFOLLOW</code> and <code class="code">O_PATH</code> flags.
+<code class="code">(provided? 'readlink-port)</code> reports whether ports are supported.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-fchown"></a>
+<a class="index-entry-id" id="index-lchown"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-chown"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">chown</strong> <var class="def-var-arguments">object owner group</var><a class="copiable-link" href='#index-chown'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchown"><span class="category-def">C Function: </span><span><strong class="def-name">scm_chown</strong> <var class="def-var-arguments">(object, owner, group)</var><a class="copiable-link" href='#index-scm_005fchown'> &para;</a></span></dt>
+<dd><p>Change the ownership and group of the file referred to by <var class="var">object</var>
+to the integer values <var class="var">owner</var> and <var class="var">group</var>.  <var class="var">object</var> can
+be a string containing a file name or, if the platform supports
+<code class="code">fchown</code> (see <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/File-Owner.html#File-Owner">File Owner</a> in <cite class="cite">The GNU C Library Reference
+Manual</cite>), a port or integer file descriptor which is open on the file.
+The return value is unspecified.
+</p>
+<p>If <var class="var">object</var> is a symbolic link, either the
+ownership of the link or the ownership of the referenced file will be
+changed depending on the operating system (lchown is
+unsupported at present).  If <var class="var">owner</var> or <var class="var">group</var> is specified
+as <code class="code">-1</code>, then that ID is not changed.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-fchownat"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-chownat"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">chownat</strong> <var class="def-var-arguments">dir name owner group [flags]</var><a class="copiable-link" href='#index-chownat'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchownat"><span class="category-def">C Function: </span><span><strong class="def-name">scm_chownat</strong> <var class="def-var-arguments">(dir, name, owner, group, flags)</var><a class="copiable-link" href='#index-scm_005fchownat'> &para;</a></span></dt>
+<dd><p>Like <code class="code">chown</code>, but modify the owner and/or group of
+the file named <var class="var">name</var> in the directory referred to
+by the file port <var class="var">dir</var> instead.  The optional argument
+<var class="var">flags</var> is a bitmask.  If <code class="code">AT_SYMLINK_NOFOLLOW</code> is
+present, then <var class="var">name</var> will not be dereferenced if it is a
+symbolic link.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-fchmod"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-chmod"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">chmod</strong> <var class="def-var-arguments">object mode</var><a class="copiable-link" href='#index-chmod'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchmod"><span class="category-def">C Function: </span><span><strong class="def-name">scm_chmod</strong> <var class="def-var-arguments">(object, mode)</var><a class="copiable-link" href='#index-scm_005fchmod'> &para;</a></span></dt>
+<dd><p>Changes the permissions of the file referred to by <var class="var">object</var>.
+<var class="var">object</var> can be a string containing a file name or a port or integer file
+descriptor which is open on a file (in which case <code class="code">fchmod</code> is used
+as the underlying system call).
+<var class="var">mode</var> specifies
+the new permissions as a decimal number, e.g., <code class="code">(chmod &quot;foo&quot; #o755)</code>.
+The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-utime"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">utime</strong> <var class="def-var-arguments">object [actime [modtime [actimens [modtimens [flags]]]]]</var><a class="copiable-link" href='#index-utime'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005futime"><span class="category-def">C Function: </span><span><strong class="def-name">scm_utime</strong> <var class="def-var-arguments">(object, actime, modtime, actimens, modtimens, flags)</var><a class="copiable-link" href='#index-scm_005futime'> &para;</a></span></dt>
+<dd><p><code class="code">utime</code> sets the access and modification times for the
+file named by <var class="var">object</var>.  If <var class="var">actime</var> or <var class="var">modtime</var> is
+not supplied, then the current time is used.  <var class="var">actime</var> and
+<var class="var">modtime</var> must be integer time values as returned by the
+<code class="code">current-time</code> procedure.
+</p>
+<p><var class="var">object</var> must be a file name or a port (if supported by the system).
+</p>
+<p>The optional <var class="var">actimens</var> and <var class="var">modtimens</var> are nanoseconds
+to add <var class="var">actime</var> and <var class="var">modtime</var>. Nanosecond precision is
+only supported on some combinations of file systems and operating
+systems.
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(utime &quot;foo&quot; (- (current-time) 3600))
+</pre></div>
+<p>will set the access time to one hour in the past and the
+modification time to the current time.
+</p>
+<a class="index-entry-id" id="index-AT_005fSYMLINK_005fNOFOLLOW"></a>
+<p>Last, <var class="var">flags</var> may be either <code class="code">0</code> or the
+<code class="code">AT_SYMLINK_NOFOLLOW</code> constant, to set the time of
+<var class="var">object</var> even if it is a symbolic link.
+</p></dd></dl>
+
+<p>On GNU/Linux systems, at least when using the Linux kernel 5.10.46,
+if <var class="var">object</var> is a port, it may not be a symbolic link,
+even if <code class="code">AT_SYMLINK_NOFOLLOW</code> is set.  This is either a bug
+in Linux or Guile&rsquo;s wrappers.  The exact cause is unclear.
+</p>
+<a class="index-entry-id" id="index-unlink"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-delete_002dfile"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">delete-file</strong> <var class="def-var-arguments">str</var><a class="copiable-link" href='#index-delete_002dfile'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fdelete_005ffile"><span class="category-def">C Function: </span><span><strong class="def-name">scm_delete_file</strong> <var class="def-var-arguments">(str)</var><a class="copiable-link" href='#index-scm_005fdelete_005ffile'> &para;</a></span></dt>
+<dd><p>Deletes (or &ldquo;unlinks&rdquo;) the file whose path is specified by
+<var class="var">str</var>.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-unlinkat"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-delete_002dfile_002dat"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">delete-file-at</strong> <var class="def-var-arguments">dir str [flags]</var><a class="copiable-link" href='#index-delete_002dfile_002dat'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fdelete_005ffile_005fat"><span class="category-def">C Function: </span><span><strong class="def-name">scm_delete_file_at</strong> <var class="def-var-arguments">(dir, str, flags)</var><a class="copiable-link" href='#index-scm_005fdelete_005ffile_005fat'> &para;</a></span></dt>
+<dd><p>Like <code class="code">unlink</code>, but resolve <var class="var">str</var> relative to the
+directory referred to by the file port <var class="var">dir</var> instead.
+</p>
+<p>The optional <var class="var">flags</var> argument can be <code class="code">AT_REMOVEDIR</code>,
+in which case <code class="code">delete-file-at</code> will act like <code class="code">rmdir</code> instead
+of <code class="code">delete-file</code>.  Why doesn&rsquo;t POSIX have a <code class="code">rmdirat</code> function
+for this instead?  No idea!
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-copy_002dfile"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">copy-file</strong> <var class="def-var-arguments">oldfile newfile</var><a class="copiable-link" href='#index-copy_002dfile'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcopy_005ffile"><span class="category-def">C Function: </span><span><strong class="def-name">scm_copy_file</strong> <var class="def-var-arguments">(oldfile, newfile)</var><a class="copiable-link" href='#index-scm_005fcopy_005ffile'> &para;</a></span></dt>
+<dd><p>Copy the file specified by <var class="var">oldfile</var> to <var class="var">newfile</var>.
+The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-sendfile"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sendfile</strong> <var class="def-var-arguments">out in count [offset]</var><a class="copiable-link" href='#index-sendfile'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsendfile"><span class="category-def">C Function: </span><span><strong class="def-name">scm_sendfile</strong> <var class="def-var-arguments">(out, in, count, offset)</var><a class="copiable-link" href='#index-scm_005fsendfile'> &para;</a></span></dt>
+<dd><p>Send <var class="var">count</var> bytes from <var class="var">in</var> to <var class="var">out</var>, both of which
+must be either open file ports or file descriptors.  When
+<var class="var">offset</var> is omitted, start reading from <var class="var">in</var>&rsquo;s current
+position; otherwise, start reading at <var class="var">offset</var>.  Return
+the number of bytes actually sent.
+</p>
+<p>When <var class="var">in</var> is a port, it is often preferable to specify <var class="var">offset</var>,
+because <var class="var">in</var>&rsquo;s offset as a port may be different from the offset of
+its underlying file descriptor.
+</p>
+<p>On systems that support it, such as GNU/Linux, this procedure uses the
+<code class="code">sendfile</code> libc function, which usually corresponds to a system
+call.  This is faster than doing a series of <code class="code">read</code> and
+<code class="code">write</code> system calls.  A typical application is to send a file over
+a socket.
+</p>
+<p>In some cases, the <code class="code">sendfile</code> libc function may return
+<code class="code">EINVAL</code> or <code class="code">ENOSYS</code>.  In that case, Guile&rsquo;s <code class="code">sendfile</code>
+procedure automatically falls back to doing a series of <code class="code">read</code> and
+<code class="code">write</code> calls.
+</p>
+<p>In other cases, the libc function may send fewer bytes than
+<var class="var">count</var>&mdash;for instance because <var class="var">out</var> is a slow or limited
+device, such as a pipe.  When that happens, Guile&rsquo;s <code class="code">sendfile</code>
+automatically retries until exactly <var class="var">count</var> bytes were sent or an
+error occurs.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-rename"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-rename_002dfile"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">rename-file</strong> <var class="def-var-arguments">oldname newname</var><a class="copiable-link" href='#index-rename_002dfile'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005frename"><span class="category-def">C Function: </span><span><strong class="def-name">scm_rename</strong> <var class="def-var-arguments">(oldname, newname)</var><a class="copiable-link" href='#index-scm_005frename'> &para;</a></span></dt>
+<dd><p>Renames the file specified by <var class="var">oldname</var> to <var class="var">newname</var>.
+The return value is unspecified.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-renameat"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-rename_002dfile_002dat"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">rename-file-at</strong> <var class="def-var-arguments">olddir oldname newdir newname</var><a class="copiable-link" href='#index-rename_002dfile_002dat'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005frenameat"><span class="category-def">C Function: </span><span><strong class="def-name">scm_renameat</strong> <var class="def-var-arguments">(olddir, oldname, newdir, newname)</var><a class="copiable-link" href='#index-scm_005frenameat'> &para;</a></span></dt>
+<dd><p>Like <code class="code">rename-file</code>, but when <var class="var">olddir</var> or <var class="var">newdir</var> is true,
+resolve <var class="var">oldname</var> or <var class="var">newname</var> relative to the directory
+specified by the file port <var class="var">olddir</var> or <var class="var">newdir</var> instead of the
+current working directory.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-link"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">link</strong> <var class="def-var-arguments">oldpath newpath</var><a class="copiable-link" href='#index-link'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flink"><span class="category-def">C Function: </span><span><strong class="def-name">scm_link</strong> <var class="def-var-arguments">(oldpath, newpath)</var><a class="copiable-link" href='#index-scm_005flink'> &para;</a></span></dt>
+<dd><p>Creates a new name <var class="var">newpath</var> in the file system for the
+file named by <var class="var">oldpath</var>.  If <var class="var">oldpath</var> is a symbolic
+link, the link may or may not be followed depending on the
+system.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-symlink"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">symlink</strong> <var class="def-var-arguments">oldpath newpath</var><a class="copiable-link" href='#index-symlink'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsymlink"><span class="category-def">C Function: </span><span><strong class="def-name">scm_symlink</strong> <var class="def-var-arguments">(oldpath, newpath)</var><a class="copiable-link" href='#index-scm_005fsymlink'> &para;</a></span></dt>
+<dd><p>Create a symbolic link named <var class="var">newpath</var> with the value (i.e., pointing to)
+<var class="var">oldpath</var>.  The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-symlinkat"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">symlinkat</strong> <var class="def-var-arguments">dir oldpath newpath</var><a class="copiable-link" href='#index-symlinkat'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsymlinkat"><span class="category-def">C Function: </span><span><strong class="def-name">scm_symlinkat</strong> <var class="def-var-arguments">(dir, oldpath, newpath)</var><a class="copiable-link" href='#index-scm_005fsymlinkat'> &para;</a></span></dt>
+<dd><p>Like <code class="code">symlink</code>, but resolve <var class="var">newpath</var> relative to
+the directory referred to by the file port <var class="var">dir</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-mkdir"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">mkdir</strong> <var class="def-var-arguments">path [mode]</var><a class="copiable-link" href='#index-mkdir'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmkdir"><span class="category-def">C Function: </span><span><strong class="def-name">scm_mkdir</strong> <var class="def-var-arguments">(path, mode)</var><a class="copiable-link" href='#index-scm_005fmkdir'> &para;</a></span></dt>
+<dd><p>Create a new directory named by <var class="var">path</var>.  If <var class="var">mode</var> is omitted
+then the permissions of the directory are set to <code class="code">#o777</code>
+masked with the current umask (see <a class="pxref" href="Processes.html"><code class="code">umask</code></a>).
+Otherwise they are set to the value specified with <var class="var">mode</var>
+masked with the current umask.
+The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-mkdirat"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">mkdirat</strong> <var class="def-var-arguments">dir path [mode]</var><a class="copiable-link" href='#index-mkdirat'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmkdirat"><span class="category-def">C Function: </span><span><strong class="def-name">scm_mkdirat</strong> <var class="def-var-arguments">(dir, path, mode)</var><a class="copiable-link" href='#index-scm_005fmkdirat'> &para;</a></span></dt>
+<dd><p>Like <code class="code">mkdir</code>, but resolve <var class="var">path</var> relative to the directory
+referred to by the file port <var class="var">dir</var> instead.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-rmdir"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">rmdir</strong> <var class="def-var-arguments">path</var><a class="copiable-link" href='#index-rmdir'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005frmdir"><span class="category-def">C Function: </span><span><strong class="def-name">scm_rmdir</strong> <var class="def-var-arguments">(path)</var><a class="copiable-link" href='#index-scm_005frmdir'> &para;</a></span></dt>
+<dd><p>Remove the existing directory named by <var class="var">path</var>.  The directory must
+be empty for this to succeed.  The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-opendir"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">opendir</strong> <var class="def-var-arguments">dirname</var><a class="copiable-link" href='#index-opendir'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fopendir"><span class="category-def">C Function: </span><span><strong class="def-name">scm_opendir</strong> <var class="def-var-arguments">(dirname)</var><a class="copiable-link" href='#index-scm_005fopendir'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-directory-contents"></a>
+<p>Open the directory specified by <var class="var">dirname</var> and return a directory
+stream.
+</p>
+<p>Before using this and the procedures below, make sure to see the
+higher-level procedures for directory traversal that are available
+(see <a class="pxref" href="File-Tree-Walk.html">File Tree Walk</a>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-directory_002dstream_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">directory-stream?</strong> <var class="def-var-arguments">object</var><a class="copiable-link" href='#index-directory_002dstream_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fdirectory_005fstream_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_directory_stream_p</strong> <var class="def-var-arguments">(object)</var><a class="copiable-link" href='#index-scm_005fdirectory_005fstream_005fp'> &para;</a></span></dt>
+<dd><p>Return a boolean indicating whether <var class="var">object</var> is a directory
+stream as returned by <code class="code">opendir</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-readdir"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">readdir</strong> <var class="def-var-arguments">stream</var><a class="copiable-link" href='#index-readdir'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005freaddir"><span class="category-def">C Function: </span><span><strong class="def-name">scm_readdir</strong> <var class="def-var-arguments">(stream)</var><a class="copiable-link" href='#index-scm_005freaddir'> &para;</a></span></dt>
+<dd><p>Return (as a string) the next directory entry from the directory stream
+<var class="var">stream</var>.  If there is no remaining entry to be read then the
+end of file object is returned.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-rewinddir"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">rewinddir</strong> <var class="def-var-arguments">stream</var><a class="copiable-link" href='#index-rewinddir'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005frewinddir"><span class="category-def">C Function: </span><span><strong class="def-name">scm_rewinddir</strong> <var class="def-var-arguments">(stream)</var><a class="copiable-link" href='#index-scm_005frewinddir'> &para;</a></span></dt>
+<dd><p>Reset the directory port <var class="var">stream</var> so that the next call to
+<code class="code">readdir</code> will return the first directory entry.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-closedir"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">closedir</strong> <var class="def-var-arguments">stream</var><a class="copiable-link" href='#index-closedir'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fclosedir"><span class="category-def">C Function: </span><span><strong class="def-name">scm_closedir</strong> <var class="def-var-arguments">(stream)</var><a class="copiable-link" href='#index-scm_005fclosedir'> &para;</a></span></dt>
+<dd><p>Close the directory stream <var class="var">stream</var>.
+The return value is unspecified.
+</p></dd></dl>
+
+<p>Here is an example showing how to display all the entries in a
+directory:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define dir (opendir &quot;/usr/lib&quot;))
+(do ((entry (readdir dir) (readdir dir)))
+    ((eof-object? entry))
+  (display entry)(newline))
+(closedir dir)
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-sync"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">sync</strong><a class="copiable-link" href='#index-sync'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsync"><span class="category-def">C Function: </span><span><strong class="def-name">scm_sync</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fsync'> &para;</a></span></dt>
+<dd><p>Flush the operating system disk buffers.
+The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-mknod"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">mknod</strong> <var class="def-var-arguments">path type perms dev</var><a class="copiable-link" href='#index-mknod'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmknod"><span class="category-def">C Function: </span><span><strong class="def-name">scm_mknod</strong> <var class="def-var-arguments">(path, type, perms, dev)</var><a class="copiable-link" href='#index-scm_005fmknod'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-device-file"></a>
+<p>Creates a new special file, such as a file corresponding to a device.
+<var class="var">path</var> specifies the name of the file.  <var class="var">type</var> should be one
+of the following symbols: &lsquo;<samp class="samp">regular</samp>&rsquo;, &lsquo;<samp class="samp">directory</samp>&rsquo;,
+&lsquo;<samp class="samp">symlink</samp>&rsquo;, &lsquo;<samp class="samp">block-special</samp>&rsquo;, &lsquo;<samp class="samp">char-special</samp>&rsquo;,
+&lsquo;<samp class="samp">fifo</samp>&rsquo;, or &lsquo;<samp class="samp">socket</samp>&rsquo;.  <var class="var">perms</var> (an integer) specifies the
+file permissions.  <var class="var">dev</var> (an integer) specifies which device the
+special file refers to.  Its exact interpretation depends on the kind
+of special file being created.
+</p>
+<p>E.g.,
+</p><div class="example lisp">
+<pre class="lisp-preformatted">(mknod &quot;/dev/fd0&quot; 'block-special #o660 (+ (* 2 256) 2))
+</pre></div>
+
+<p>The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-tmpnam"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tmpnam</strong><a class="copiable-link" href='#index-tmpnam'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005ftmpnam"><span class="category-def">C Function: </span><span><strong class="def-name">scm_tmpnam</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005ftmpnam'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-temporary-file"></a>
+<p>Return an auto-generated name of a temporary file, a file which
+doesn&rsquo;t already exist.  The name includes a path, it&rsquo;s usually in
+<samp class="file">/tmp</samp> but that&rsquo;s system dependent.
+</p>
+<p>Care must be taken when using <code class="code">tmpnam</code>.  In between choosing the
+name and creating the file another program might use that name, or an
+attacker might even make it a symlink pointing at something important
+and causing you to overwrite that.
+</p>
+<p>The safe way is to create the file using <code class="code">open</code> with
+<code class="code">O_EXCL</code> to avoid any overwriting.  A loop can try again with
+another name if the file exists (error <code class="code">EEXIST</code>).
+<code class="code">mkstemp</code> below does that.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-mkstemp"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">mkstemp</strong> <var class="def-var-arguments">tmpl [mode]</var><a class="copiable-link" href='#index-mkstemp'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-temporary-file-1"></a>
+<p>Create a new unique file in the file system and return a new buffered
+port open for reading and writing to the file.
+</p>
+<p><var class="var">tmpl</var> is a string specifying where the file should be created: it
+must end with &lsquo;<samp class="samp">XXXXXX</samp>&rsquo;.  The name of the newly created file will be
+the same as <var class="var">tmpl</var>, but with those &lsquo;<samp class="samp">X</samp>&rsquo;s changed, and can be
+determined by calling <code class="code">port-filename</code> on the returned port.
+</p>
+<p>Note that the newly created file is not deleted automatically by Guile;
+probably the caller should arrange to call <code class="code">delete-file</code> when the
+file is no longer needed.
+</p>
+<p>POSIX doesn&rsquo;t specify the permissions mode of the file.  On GNU and most
+systems it&rsquo;s <code class="code">#o600</code>; an application can use <code class="code">chmod</code> to relax
+that if desired.  For example <code class="code">#o666</code> less <code class="code">umask</code>, which is
+usual for ordinary file creation,
+</p>
+<div class="example">
+<pre class="example-preformatted">(let ((port (mkstemp &quot;/tmp/myfile-XXXXXX&quot;)))
+  (chmod port (logand #o666 (lognot (umask))))
+  ...)
+</pre></div>
+
+<p>The optional <var class="var">mode</var> argument specifies a mode with which to open the
+new file, as a string in the same format that <code class="code">open-file</code> takes.
+It defaults to <code class="code">&quot;w+&quot;</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-tmpfile"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tmpfile</strong><a class="copiable-link" href='#index-tmpfile'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005ftmpfile"><span class="category-def">C Function: </span><span><strong class="def-name">scm_tmpfile</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005ftmpfile'> &para;</a></span></dt>
+<dd><p>Return an input/output port to a unique temporary file
+named using the path prefix <code class="code">P_tmpdir</code> defined in
+<samp class="file">stdio.h</samp>.
+The file is automatically deleted when the port is closed
+or the program terminates.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-mkdtemp"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">mkdtemp</strong> <var class="def-var-arguments">tmpl</var><a class="copiable-link" href='#index-mkdtemp'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmkdtemp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_mkdtemp</strong> <var class="def-var-arguments">(tmpl)</var><a class="copiable-link" href='#index-scm_005fmkdtemp'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-temporary-directory"></a>
+<p>Create a new directory named in accordance with the template string
+<var class="var">tmpl</var>.
+</p>
+<p><var class="var">tmpl</var> is a string specifying the directory&rsquo;s name. The last six
+characters of <var class="var">tmpl</var> must be &lsquo;<samp class="samp">XXXXXX</samp>&rsquo;. Upon successful
+execution, the name of the new directory is returned which has the same
+form as <var class="var">tmpl</var> but with the &lsquo;<samp class="samp">XXXXXX</samp>&rsquo; characters modified to
+ensure the directory name is unique.
+</p>
+<p>The permissions of the directory created are OS dependent, but, are
+usually <code class="code">#o700</code>.
+</p>
+<p>An error may be thrown if the template has the wrong format or if the
+directory cannot be created.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-dirname"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">dirname</strong> <var class="def-var-arguments">filename</var><a class="copiable-link" href='#index-dirname'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fdirname"><span class="category-def">C Function: </span><span><strong class="def-name">scm_dirname</strong> <var class="def-var-arguments">(filename)</var><a class="copiable-link" href='#index-scm_005fdirname'> &para;</a></span></dt>
+<dd><p>Return the directory name component of the file name
+<var class="var">filename</var>. If <var class="var">filename</var> does not contain a directory
+component, <code class="code">.</code> is returned.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-basename"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">basename</strong> <var class="def-var-arguments">filename [suffix]</var><a class="copiable-link" href='#index-basename'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbasename"><span class="category-def">C Function: </span><span><strong class="def-name">scm_basename</strong> <var class="def-var-arguments">(filename, suffix)</var><a class="copiable-link" href='#index-scm_005fbasename'> &para;</a></span></dt>
+<dd><p>Return the base name of the file name <var class="var">filename</var>. The
+base name is the file name without any directory components.
+If <var class="var">suffix</var> is provided, and is equal to the end of
+<var class="var">basename</var>, it is removed also.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(basename &quot;/tmp/test.xml&quot; &quot;.xml&quot;)
+&rArr; &quot;test&quot;
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-canonicalize_002dpath"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">canonicalize-path</strong> <var class="def-var-arguments">path</var><a class="copiable-link" href='#index-canonicalize_002dpath'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcanonicalize_005fpath"><span class="category-def">C Function: </span><span><strong class="def-name">scm_canonicalize_path</strong> <var class="def-var-arguments">(path)</var><a class="copiable-link" href='#index-scm_005fcanonicalize_005fpath'> &para;</a></span></dt>
+<dd><p>Return the canonical (absolute) path of <var class="var">path</var>.
+A canonical path has no <code class="code">.</code> or <code class="code">..</code> components,
+nor any repeated path separators (<code class="code">/</code>) nor symlinks.
+</p>
+<p>Raises an error if any component of <var class="var">path</var> does not
+exist.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(canonicalize-path &quot;test.xml&quot;)
+&rArr; &quot;/tmp/test.xml&quot;
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-file_002dexists_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">file-exists?</strong> <var class="def-var-arguments">filename</var><a class="copiable-link" href='#index-file_002dexists_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if the file named <var class="var">filename</var> exists, <code class="code">#f</code> if
+not.
+</p></dd></dl>
+
+<a class="index-entry-id" id="index-file-name-separator"></a>
+<a class="index-entry-id" id="index-absolute-file-name"></a>
+
+<p>Many operating systems, such as GNU, use <code class="code">/</code> (forward slash) to
+separate the components of a file name; any file name starting with
+<code class="code">/</code> is considered an <em class="dfn">absolute file name</em>.  These conventions
+are specified by the POSIX Base Definitions, which refer to conforming
+file names as &ldquo;pathnames&rdquo;.  Some operating systems use a different
+convention; in particular, Windows uses <code class="code">\</code> (backslash) as the file
+name separator, and also has the notion of <em class="dfn">volume names</em> like
+<code class="code">C:\</code> for absolute file names.  The following procedures and
+variables provide support for portable file name manipulations.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-system_002dfile_002dname_002dconvention"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">system-file-name-convention</strong><a class="copiable-link" href='#index-system_002dfile_002dname_002dconvention'> &para;</a></span></dt>
+<dd><p>Return either <code class="code">posix</code> or <code class="code">windows</code>, depending on
+what kind of system this Guile is running on.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-file_002dname_002dseparator_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">file-name-separator?</strong> <var class="def-var-arguments">c</var><a class="copiable-link" href='#index-file_002dname_002dseparator_003f'> &para;</a></span></dt>
+<dd><p>Return true if character <var class="var">c</var> is a file name separator on the host
+platform.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-absolute_002dfile_002dname_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">absolute-file-name?</strong> <var class="def-var-arguments">file-name</var><a class="copiable-link" href='#index-absolute_002dfile_002dname_003f'> &para;</a></span></dt>
+<dd><p>Return true if <var class="var">file-name</var> denotes an absolute file name on the host
+platform.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-file_002dname_002dseparator_002dstring"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">file-name-separator-string</strong><a class="copiable-link" href='#index-file_002dname_002dseparator_002dstring'> &para;</a></span></dt>
+<dd><p>The preferred file name separator.
+</p>
+<p>Note that on MinGW builds for Windows, both <code class="code">/</code> and <code class="code">\</code> are
+valid separators.  Thus, programs should not assume that
+<code class="code">file-name-separator-string</code> is the <em class="emph">only</em> file name
+separator&mdash;e.g., when extracting the components of a file name.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="User-Information.html">User Information</a>, Previous: <a href="Ports-and-File-Descriptors.html">Ports and File Descriptors</a>, Up: <a href="POSIX.html"><abbr class="acronym">POSIX</abbr> System Calls and Networking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

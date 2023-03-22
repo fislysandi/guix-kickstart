@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>PEG Syntax Reference (Guile Reference Manual)</title>
+
+<meta name="description" content="PEG Syntax Reference (Guile Reference Manual)">
+<meta name="keywords" content="PEG Syntax Reference (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="PEG-Parsing.html" rel="up" title="PEG Parsing">
+<link href="PEG-API-Reference.html" rel="next" title="PEG API Reference">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="PEG-Syntax-Reference">
+<div class="nav-panel">
+<p>
+Next: <a href="PEG-API-Reference.html" accesskey="n" rel="next">PEG API Reference</a>, Up: <a href="PEG-Parsing.html" accesskey="u" rel="up">PEG Parsing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="PEG-Syntax-Reference-1">6.15.1 PEG Syntax Reference</h4>
+
+<h4 class="subsubheading" id="Normal-PEG-Syntax_003a">Normal PEG Syntax:</h4>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-sequence"><span class="category-def">PEG Pattern: </span><span><strong class="def-name">sequence</strong> <var class="def-var-arguments">a b</var><a class="copiable-link" href='#index-sequence'> &para;</a></span></dt>
+<dd><p>Parses <var class="var">a</var>.  If this succeeds, continues to parse <var class="var">b</var> from the
+end of the text parsed as <var class="var">a</var>.  Succeeds if both <var class="var">a</var> and
+<var class="var">b</var> succeed.
+</p>
+<p><code class="code">&quot;a b&quot;</code>
+</p>
+<p><code class="code">(and a b)</code>
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-ordered-choice"><span class="category-def">PEG Pattern: </span><span><strong class="def-name">ordered choice</strong> <var class="def-var-arguments">a b</var><a class="copiable-link" href='#index-ordered-choice'> &para;</a></span></dt>
+<dd><p>Parses <var class="var">a</var>.  If this fails, backtracks and parses <var class="var">b</var>.
+Succeeds if either <var class="var">a</var> or <var class="var">b</var> succeeds.
+</p>
+<p><code class="code">&quot;a/b&quot;</code>
+</p>
+<p><code class="code">(or a b)</code>
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-zero-or-more"><span class="category-def">PEG Pattern: </span><span><strong class="def-name">zero or more</strong> <var class="def-var-arguments">a</var><a class="copiable-link" href='#index-zero-or-more'> &para;</a></span></dt>
+<dd><p>Parses <var class="var">a</var> as many times in a row as it can, starting each <var class="var">a</var>
+at the end of the text parsed by the previous <var class="var">a</var>.  Always
+succeeds.
+</p>
+<p><code class="code">&quot;a*&quot;</code>
+</p>
+<p><code class="code">(* a)</code>
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-one-or-more"><span class="category-def">PEG Pattern: </span><span><strong class="def-name">one or more</strong> <var class="def-var-arguments">a</var><a class="copiable-link" href='#index-one-or-more'> &para;</a></span></dt>
+<dd><p>Parses <var class="var">a</var> as many times in a row as it can, starting each <var class="var">a</var>
+at the end of the text parsed by the previous <var class="var">a</var>.  Succeeds if at
+least one <var class="var">a</var> was parsed.
+</p>
+<p><code class="code">&quot;a+&quot;</code>
+</p>
+<p><code class="code">(+ a)</code>
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-optional"><span class="category-def">PEG Pattern: </span><span><strong class="def-name">optional</strong> <var class="def-var-arguments">a</var><a class="copiable-link" href='#index-optional'> &para;</a></span></dt>
+<dd><p>Tries to parse <var class="var">a</var>.  Succeeds if <var class="var">a</var> succeeds.
+</p>
+<p><code class="code">&quot;a?&quot;</code>
+</p>
+<p><code class="code">(? a)</code>
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-followed-by"><span class="category-def">PEG Pattern: </span><span><strong class="def-name">followed by</strong> <var class="def-var-arguments">a</var><a class="copiable-link" href='#index-followed-by'> &para;</a></span></dt>
+<dd><p>Makes sure it is possible to parse <var class="var">a</var>, but does not actually parse
+it.  Succeeds if <var class="var">a</var> would succeed.
+</p>
+<p><code class="code">&quot;&amp;a&quot;</code>
+</p>
+<p><code class="code">(followed-by a)</code>
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-not-followed-by"><span class="category-def">PEG Pattern: </span><span><strong class="def-name">not followed by</strong> <var class="def-var-arguments">a</var><a class="copiable-link" href='#index-not-followed-by'> &para;</a></span></dt>
+<dd><p>Makes sure it is impossible to parse <var class="var">a</var>, but does not actually
+parse it.  Succeeds if <var class="var">a</var> would fail.
+</p>
+<p><code class="code">&quot;!a&quot;</code>
+</p>
+<p><code class="code">(not-followed-by a)</code>
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-string-literal"><span class="category-def">PEG Pattern: </span><span><strong class="def-name">string literal</strong> <var class="def-var-arguments">&ldquo;abc&rdquo;</var><a class="copiable-link" href='#index-string-literal'> &para;</a></span></dt>
+<dd><p>Parses the string <var class="var">&quot;abc&quot;</var>.  Succeeds if that parsing succeeds.
+</p>
+<p><code class="code">&quot;'abc'&quot;</code>
+</p>
+<p><code class="code">&quot;abc&quot;</code>
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-any-character"><span class="category-def">PEG Pattern: </span><span><strong class="def-name">any character</strong><a class="copiable-link" href='#index-any-character'> &para;</a></span></dt>
+<dd><p>Parses any single character.  Succeeds unless there is no more text to
+be parsed.
+</p>
+<p><code class="code">&quot;.&quot;</code>
+</p>
+<p><code class="code">peg-any</code>
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-character-class"><span class="category-def">PEG Pattern: </span><span><strong class="def-name">character class</strong> <var class="def-var-arguments">a b</var><a class="copiable-link" href='#index-character-class'> &para;</a></span></dt>
+<dd><p>Alternative syntax for &ldquo;Ordered Choice <var class="var">a</var> <var class="var">b</var>&rdquo; if <var class="var">a</var> and
+<var class="var">b</var> are characters.
+</p>
+<p><code class="code">&quot;[ab]&quot;</code>
+</p>
+<p><code class="code">(or &quot;a&quot; &quot;b&quot;)</code>
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-range-of-characters"><span class="category-def">PEG Pattern: </span><span><strong class="def-name">range of characters</strong> <var class="def-var-arguments">a z</var><a class="copiable-link" href='#index-range-of-characters'> &para;</a></span></dt>
+<dd><p>Parses any character falling between <var class="var">a</var> and <var class="var">z</var>.
+</p>
+<p><code class="code">&quot;[a-z]&quot;</code>
+</p>
+<p><code class="code">(range #\a #\z)</code>
+</p></dd></dl>
+
+<p>Example:
+</p>
+<div class="example">
+<pre class="example-preformatted">&quot;(a !b / c &amp;d*) 'e'+&quot;
+</pre></div>
+
+<p>Would be:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(and
+ (or
+  (and a (not-followed-by b))
+  (and c (followed-by (* d))))
+ (+ &quot;e&quot;))
+</pre></div>
+
+<h4 class="subsubheading" id="Extended-Syntax">Extended Syntax</h4>
+
+<p>There is some extra syntax for S-expressions.
+</p>
+<dl class="first-deftp">
+<dt class="deftp" id="index-ignore"><span class="category-def">PEG Pattern: </span><span><strong class="def-name">ignore</strong> <var class="def-var-arguments">a</var><a class="copiable-link" href='#index-ignore'> &para;</a></span></dt>
+<dd><p>Ignore the text matching <var class="var">a</var>
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-capture"><span class="category-def">PEG Pattern: </span><span><strong class="def-name">capture</strong> <var class="def-var-arguments">a</var><a class="copiable-link" href='#index-capture'> &para;</a></span></dt>
+<dd><p>Capture the text matching <var class="var">a</var>.
+</p></dd></dl>
+
+<dl class="first-deftp">
+<dt class="deftp" id="index-peg"><span class="category-def">PEG Pattern: </span><span><strong class="def-name">peg</strong> <var class="def-var-arguments">a</var><a class="copiable-link" href='#index-peg'> &para;</a></span></dt>
+<dd><p>Embed the PEG pattern <var class="var">a</var> using string syntax.
+</p></dd></dl>
+
+<p>Example:
+</p>
+<div class="example">
+<pre class="example-preformatted">&quot;!a / 'b'&quot;
+</pre></div>
+
+<p>Is equivalent to
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(or (peg &quot;!a&quot;) &quot;b&quot;)
+</pre></div>
+
+<p>and
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(or (not-followed-by a) &quot;b&quot;)
+</pre></div>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="PEG-API-Reference.html">PEG API Reference</a>, Up: <a href="PEG-Parsing.html">PEG Parsing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

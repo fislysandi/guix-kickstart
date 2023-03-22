@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-41 Stream Primitives (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-41 Stream Primitives (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-41 Stream Primitives (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI_002d41.html" rel="up" title="SRFI-41">
+<link href="SRFI_002d41-Stream-Library.html" rel="next" title="SRFI-41 Stream Library">
+<link href="SRFI_002d41-Stream-Fundamentals.html" rel="prev" title="SRFI-41 Stream Fundamentals">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="SRFI_002d41-Stream-Primitives">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d41-Stream-Library.html" accesskey="n" rel="next">SRFI-41 Stream Library</a>, Previous: <a href="SRFI_002d41-Stream-Fundamentals.html" accesskey="p" rel="prev">SRFI-41 Stream Fundamentals</a>, Up: <a href="SRFI_002d41.html" accesskey="u" rel="up">SRFI-41 - Streams</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="SRFI_002d41-Stream-Primitives-1">7.5.28.2 SRFI-41 Stream Primitives</h4>
+
+<p>This library provides eight operators: constructors for
+<code class="code">stream-null</code> and <code class="code">stream-pair</code>s, type predicates for streams
+and the two kinds of streams, accessors for both fields of a
+<code class="code">stream-pair</code>, and a lambda that creates procedures that return
+streams.
+</p>
+<dl class="first-defvr">
+<dt class="defvr" id="index-stream_002dnull"><span class="category-def">Scheme Variable: </span><span><strong class="def-name">stream-null</strong><a class="copiable-link" href='#index-stream_002dnull'> &para;</a></span></dt>
+<dd><p>A promise that, when forced, is a single object, distinguishable from
+all other objects, that represents the null stream.  <code class="code">stream-null</code>
+is immutable and unique.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dcons"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">stream-cons</strong> <var class="def-var-arguments">object-expr stream-expr</var><a class="copiable-link" href='#index-stream_002dcons'> &para;</a></span></dt>
+<dd><p>Creates a newly-allocated stream containing a promise that, when forced,
+is a <code class="code">stream-pair</code> with <var class="var">object-expr</var> in its <code class="code">stream-car</code>
+and <var class="var">stream-expr</var> in its <code class="code">stream-cdr</code>.  Neither
+<var class="var">object-expr</var> nor <var class="var">stream-expr</var> is evaluated when
+<code class="code">stream-cons</code> is called.
+</p>
+<p>Once created, a <code class="code">stream-pair</code> is immutable; there is no
+<code class="code">stream-set-car!</code>  or <code class="code">stream-set-cdr!</code> that modifies an
+existing stream-pair.  There is no dotted-pair or improper stream as
+with lists.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream?</strong> <var class="def-var-arguments">object</var><a class="copiable-link" href='#index-stream_003f'> &para;</a></span></dt>
+<dd><p>Returns true if <var class="var">object</var> is a stream, otherwise returns false.  If
+<var class="var">object</var> is a stream, its promise will not be forced.  If
+<code class="code">(stream? obj)</code> returns true, then one of <code class="code">(stream-null? obj)</code>
+or <code class="code">(stream-pair? obj)</code> will return true and the other will return
+false.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dnull_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-null?</strong> <var class="def-var-arguments">object</var><a class="copiable-link" href='#index-stream_002dnull_003f'> &para;</a></span></dt>
+<dd><p>Returns true if <var class="var">object</var> is the distinguished null stream, otherwise
+returns false.  If <var class="var">object</var> is a stream, its promise will be forced.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dpair_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-pair?</strong> <var class="def-var-arguments">object</var><a class="copiable-link" href='#index-stream_002dpair_003f'> &para;</a></span></dt>
+<dd><p>Returns true if <var class="var">object</var> is a <code class="code">stream-pair</code> constructed by
+<code class="code">stream-cons</code>, otherwise returns false.  If <var class="var">object</var> is a
+stream, its promise will be forced.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dcar"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-car</strong> <var class="def-var-arguments">stream</var><a class="copiable-link" href='#index-stream_002dcar'> &para;</a></span></dt>
+<dd><p>Returns the object stored in the <code class="code">stream-car</code> of <var class="var">stream</var>.  An
+error is signalled if the argument is not a <code class="code">stream-pair</code>.  This
+causes the <var class="var">object-expr</var> passed to <code class="code">stream-cons</code> to be
+evaluated if it had not yet been; the value is cached in case it is
+needed again.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dcdr"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">stream-cdr</strong> <var class="def-var-arguments">stream</var><a class="copiable-link" href='#index-stream_002dcdr'> &para;</a></span></dt>
+<dd><p>Returns the stream stored in the <code class="code">stream-cdr</code> of <var class="var">stream</var>.  An
+error is signalled if the argument is not a <code class="code">stream-pair</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-stream_002dlambda"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">stream-lambda</strong> <var class="def-var-arguments">formals body &hellip;</var><a class="copiable-link" href='#index-stream_002dlambda'> &para;</a></span></dt>
+<dd><p>Creates a procedure that returns a promise to evaluate the <var class="var">body</var> of
+the procedure.  The last <var class="var">body</var> expression to be evaluated must
+yield a stream.  As with normal <code class="code">lambda</code>, <var class="var">formals</var> may be a
+single variable name, in which case all the formal arguments are
+collected into a single list, or a list of variable names, which may be
+null if there are no arguments, proper if there are an exact number of
+arguments, or dotted if a fixed number of arguments is to be followed by
+zero or more arguments collected into a list.  <var class="var">Body</var> must contain
+at least one expression, and may contain internal definitions preceding
+any expressions to be evaluated.
+</p></dd></dl>
+
+<div class="example">
+<pre class="example-preformatted">(define strm123
+  (stream-cons 1
+    (stream-cons 2
+      (stream-cons 3
+        stream-null))))
+
+(stream-car strm123) &rArr; 1
+(stream-car (stream-cdr strm123) &rArr; 2
+
+(stream-pair?
+  (stream-cdr
+    (stream-cons (/ 1 0) stream-null))) &rArr; #f
+
+(stream? (list 1 2 3)) &rArr; #f
+
+(define iter
+  (stream-lambda (f x)
+    (stream-cons x (iter f (f x)))))
+
+(define nats (iter (lambda (x) (+ x 1)) 0))
+
+(stream-car (stream-cdr nats)) &rArr; 1
+
+(define stream-add
+  (stream-lambda (s1 s2)
+    (stream-cons
+      (+ (stream-car s1) (stream-car s2))
+      (stream-add (stream-cdr s1)
+                  (stream-cdr s2)))))
+
+(define evens (stream-add nats nats))
+
+(stream-car evens) &rArr; 0
+(stream-car (stream-cdr evens)) &rArr; 2
+(stream-car (stream-cdr (stream-cdr evens))) &rArr; 4
+</pre></div>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d41-Stream-Library.html">SRFI-41 Stream Library</a>, Previous: <a href="SRFI_002d41-Stream-Fundamentals.html">SRFI-41 Stream Fundamentals</a>, Up: <a href="SRFI_002d41.html">SRFI-41 - Streams</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

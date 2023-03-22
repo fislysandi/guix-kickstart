@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Trap Interface (Guile Reference Manual)</title>
+
+<meta name="description" content="Trap Interface (Guile Reference Manual)">
+<meta name="keywords" content="Trap Interface (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Traps.html" rel="up" title="Traps">
+<link href="Low_002dLevel-Traps.html" rel="next" title="Low-Level Traps">
+<link href="VM-Hooks.html" rel="prev" title="VM Hooks">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Trap-Interface">
+<div class="nav-panel">
+<p>
+Next: <a href="Low_002dLevel-Traps.html" accesskey="n" rel="next">Low-Level Traps</a>, Previous: <a href="VM-Hooks.html" accesskey="p" rel="prev">VM Hooks</a>, Up: <a href="Traps.html" accesskey="u" rel="up">Traps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Trap-Interface-1">6.26.4.2 Trap Interface</h4>
+
+<p>The capabilities provided by hooks are great, but hooks alone rarely
+correspond to what users want to do.
+</p>
+<p>For example, if a user wants to break when and if control reaches a
+certain source location, how do you do it?  If you install a &ldquo;next&rdquo;
+hook, you get unacceptable overhead for the execution of the entire
+program. It would be possible to install an &ldquo;apply&rdquo; hook, then if the
+procedure encompasses those source locations, install a &ldquo;next&rdquo; hook,
+but already you&rsquo;re talking about one concept that might be implemented
+by a varying number of lower-level concepts.
+</p>
+<p>It&rsquo;s best to be clear about things and define one abstraction for all
+such conditions: the <em class="dfn">trap</em>.
+</p>
+<p>Considering the myriad capabilities offered by the hooks though, there
+is only a minimum of functionality shared by all traps. Guile&rsquo;s current
+take is to reduce this to the absolute minimum, and have the only
+standard interface of a trap be &ldquo;turn yourself on&rdquo; or &ldquo;turn yourself
+off&rdquo;.
+</p>
+<p>This interface sounds a bit strange, but it is useful to procedurally
+compose higher-level traps from lower-level building blocks. For
+example, Guile defines a trap that calls one handler when control enters
+a procedure, and another when control leaves the procedure. Given that
+trap, one can define a trap that adds to the next-hook only when within
+a given procedure. Building further, one can define a trap that fires
+when control reaches particular instructions within a procedure.
+</p>
+<p>Or of course you can stop at any of these intermediate levels. For
+example, one might only be interested in calls to a given procedure. But
+the point is that a simple enable/disable interface is all the
+commonality that exists between the various kinds of traps, and
+furthermore that such an interface serves to allow &ldquo;higher-level&rdquo;
+traps to be composed from more primitive ones.
+</p>
+<p>Specifically, a trap, in Guile, is a procedure. When a trap is created,
+by convention the trap is enabled; therefore, the procedure that is the
+trap will, when called, disable the trap, and return a procedure that
+will enable the trap, and so on.
+</p>
+<p>Trap procedures take one optional argument: the current frame. (A trap
+may want to add to different sets of hooks depending on the frame that
+is current at enable-time.)
+</p>
+<p>If this all sounds very complicated, it&rsquo;s because it is. Some of it is
+essential, but probably most of it is not. The advantage of using this
+minimal interface is that composability is more lexically apparent than
+when, for example, using a stateful interface based on GOOPS. But
+perhaps this reflects the cognitive limitations of the programmer who
+made the current interface more than anything else.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Low_002dLevel-Traps.html">Low-Level Traps</a>, Previous: <a href="VM-Hooks.html">VM Hooks</a>, Up: <a href="Traps.html">Traps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

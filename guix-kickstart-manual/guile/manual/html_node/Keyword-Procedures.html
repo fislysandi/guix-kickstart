@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Keyword Procedures (Guile Reference Manual)</title>
+
+<meta name="description" content="Keyword Procedures (Guile Reference Manual)">
+<meta name="keywords" content="Keyword Procedures (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Keywords.html" rel="up" title="Keywords">
+<link href="Keyword-Read-Syntax.html" rel="prev" title="Keyword Read Syntax">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Keyword-Procedures">
+<div class="nav-panel">
+<p>
+Previous: <a href="Keyword-Read-Syntax.html" accesskey="p" rel="prev">Keyword Read Syntax</a>, Up: <a href="Keywords.html" accesskey="u" rel="up">Keywords</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Keyword-Procedures-1">6.6.7.4 Keyword Procedures</h4>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-keyword_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">keyword?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-keyword_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fkeyword_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_keyword_p</strong> <var class="def-var-arguments">(obj)</var><a class="copiable-link" href='#index-scm_005fkeyword_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if the argument <var class="var">obj</var> is a keyword, else
+<code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-keyword_002d_003esymbol"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">keyword-&gt;symbol</strong> <var class="def-var-arguments">keyword</var><a class="copiable-link" href='#index-keyword_002d_003esymbol'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fkeyword_005fto_005fsymbol"><span class="category-def">C Function: </span><span><strong class="def-name">scm_keyword_to_symbol</strong> <var class="def-var-arguments">(keyword)</var><a class="copiable-link" href='#index-scm_005fkeyword_005fto_005fsymbol'> &para;</a></span></dt>
+<dd><p>Return the symbol with the same name as <var class="var">keyword</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-symbol_002d_003ekeyword"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">symbol-&gt;keyword</strong> <var class="def-var-arguments">symbol</var><a class="copiable-link" href='#index-symbol_002d_003ekeyword'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsymbol_005fto_005fkeyword"><span class="category-def">C Function: </span><span><strong class="def-name">scm_symbol_to_keyword</strong> <var class="def-var-arguments">(symbol)</var><a class="copiable-link" href='#index-scm_005fsymbol_005fto_005fkeyword'> &para;</a></span></dt>
+<dd><p>Return the keyword with the same name as <var class="var">symbol</var>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fis_005fkeyword"><span class="category-def">C Function: </span><span><code class="def-type">int</code> <strong class="def-name">scm_is_keyword</strong> <code class="def-code-arguments">(SCM obj)</code><a class="copiable-link" href='#index-scm_005fis_005fkeyword'> &para;</a></span></dt>
+<dd><p>Equivalent to <code class="code">scm_is_true (scm_keyword_p (<var class="var">obj</var>))</code>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005ffrom_005flocale_005fkeyword"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_locale_keyword</strong> <code class="def-code-arguments">(const char *name)</code><a class="copiable-link" href='#index-scm_005ffrom_005flocale_005fkeyword'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005flocale_005fkeywordn"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_locale_keywordn</strong> <code class="def-code-arguments">(const char *name, size_t len)</code><a class="copiable-link" href='#index-scm_005ffrom_005flocale_005fkeywordn'> &para;</a></span></dt>
+<dd><p>Equivalent to <code class="code">scm_symbol_to_keyword (scm_from_locale_symbol
+(<var class="var">name</var>))</code> and <code class="code">scm_symbol_to_keyword (scm_from_locale_symboln
+(<var class="var">name</var>, <var class="var">len</var>))</code>, respectively.
+</p>
+<p>Note that these functions should <em class="emph">not</em> be used when <var class="var">name</var> is a
+C string constant, because there is no guarantee that the current locale
+will match that of the execution character set, used for string and
+character constants.  Most modern C compilers use UTF-8 by default, so
+in such cases we recommend <code class="code">scm_from_utf8_keyword</code>.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005ffrom_005flatin1_005fkeyword"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_latin1_keyword</strong> <code class="def-code-arguments">(const char *name)</code><a class="copiable-link" href='#index-scm_005ffrom_005flatin1_005fkeyword'> &para;</a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn" id="index-scm_005ffrom_005futf8_005fkeyword"><span class="category-def">C Function: </span><span><code class="def-type">SCM</code> <strong class="def-name">scm_from_utf8_keyword</strong> <code class="def-code-arguments">(const char *name)</code><a class="copiable-link" href='#index-scm_005ffrom_005futf8_005fkeyword'> &para;</a></span></dt>
+<dd><p>Equivalent to <code class="code">scm_symbol_to_keyword (scm_from_latin1_symbol
+(<var class="var">name</var>))</code> and <code class="code">scm_symbol_to_keyword (scm_from_utf8_symbol
+(<var class="var">name</var>))</code>, respectively.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fc_005fbind_005fkeyword_005farguments"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_c_bind_keyword_arguments</strong> <code class="def-code-arguments">(const char *subr,                              SCM rest, scm_t_keyword_arguments_flags flags,                              SCM keyword1, SCM *argp1,                              &hellip;,                              SCM keywordN, SCM *argpN,                              <code class="code">SCM_UNDEFINED</code>)</code><a class="copiable-link" href='#index-scm_005fc_005fbind_005fkeyword_005farguments'> &para;</a></span></dt>
+<dd>
+<p>Extract the specified keyword arguments from <var class="var">rest</var>, which is not
+modified.  If the keyword argument <var class="var">keyword1</var> is present in
+<var class="var">rest</var> with an associated value, that value is stored in the
+variable pointed to by <var class="var">argp1</var>, otherwise the variable is left
+unchanged.  Similarly for the other keywords and argument pointers up to
+<var class="var">keywordN</var> and <var class="var">argpN</var>.  The argument list to
+<code class="code">scm_c_bind_keyword_arguments</code> must be terminated by
+<code class="code">SCM_UNDEFINED</code>.
+</p>
+<p>Note that since the variables pointed to by <var class="var">argp1</var> through
+<var class="var">argpN</var> are left unchanged if the associated keyword argument is not
+present, they should be initialized to their default values before
+calling <code class="code">scm_c_bind_keyword_arguments</code>.  Alternatively, you can
+initialize them to <code class="code">SCM_UNDEFINED</code> before the call, and then use
+<code class="code">SCM_UNBNDP</code> after the call to see which ones were provided.
+</p>
+<p>If an unrecognized keyword argument is present in <var class="var">rest</var> and
+<var class="var">flags</var> does not contain <code class="code">SCM_ALLOW_OTHER_KEYS</code>, or if
+non-keyword arguments are present and <var class="var">flags</var> does not contain
+<code class="code">SCM_ALLOW_NON_KEYWORD_ARGUMENTS</code>, an exception is raised.
+<var class="var">subr</var> should be the name of the procedure receiving the keyword
+arguments, for purposes of error reporting.
+</p>
+<p>For example:
+</p>
+<div class="example">
+<pre class="example-preformatted">SCM k_delimiter;
+SCM k_grammar;
+SCM sym_infix;
+
+SCM my_string_join (SCM strings, SCM rest)
+{
+  SCM delimiter = SCM_UNDEFINED;
+  SCM grammar   = sym_infix;
+
+  scm_c_bind_keyword_arguments (&quot;my-string-join&quot;, rest, 0,
+                                k_delimiter, &amp;delimiter,
+                                k_grammar, &amp;grammar,
+                                SCM_UNDEFINED);
+
+  if (SCM_UNBNDP (delimiter))
+    delimiter = scm_from_utf8_string (&quot; &quot;);
+
+  return scm_string_join (strings, delimiter, grammar);
+}
+
+void my_init ()
+{
+  k_delimiter = scm_from_utf8_keyword (&quot;delimiter&quot;);
+  k_grammar   = scm_from_utf8_keyword (&quot;grammar&quot;);
+  sym_infix   = scm_from_utf8_symbol  (&quot;infix&quot;);
+  scm_c_define_gsubr (&quot;my-string-join&quot;, 1, 0, 1, my_string_join);
+}
+</pre></div>
+</dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Keyword-Read-Syntax.html">Keyword Read Syntax</a>, Up: <a href="Keywords.html">Keywords</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

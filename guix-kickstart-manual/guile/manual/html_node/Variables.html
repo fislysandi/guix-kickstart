@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Variables (Guile Reference Manual)</title>
+
+<meta name="description" content="Variables (Guile Reference Manual)">
+<meta name="keywords" content="Variables (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Modules.html" rel="up" title="Modules">
+<link href="Module-System-Reflection.html" rel="next" title="Module System Reflection">
+<link href="R6RS-Libraries.html" rel="prev" title="R6RS Libraries">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Variables">
+<div class="nav-panel">
+<p>
+Next: <a href="Module-System-Reflection.html" accesskey="n" rel="next">Module System Reflection</a>, Previous: <a href="R6RS-Libraries.html" accesskey="p" rel="prev">R6RS Libraries</a>, Up: <a href="Modules.html" accesskey="u" rel="up">Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Variables-1">6.18.7 Variables</h4>
+<a class="index-entry-id" id="index-Variables"></a>
+
+<p>Each module has its own hash table, sometimes known as an <em class="dfn">obarray</em>,
+that maps the names defined in that module to their corresponding
+variable objects.
+</p>
+<p>A variable is a box-like object that can hold any Scheme value.  It is
+said to be <em class="dfn">undefined</em> if its box holds a special Scheme value that
+denotes undefined-ness (which is different from all other Scheme values,
+including for example <code class="code">#f</code>); otherwise the variable is
+<em class="dfn">defined</em>.
+</p>
+<p>On its own, a variable object is anonymous.  A variable is said to be
+<em class="dfn">bound</em> when it is associated with a name in some way, usually a
+symbol in a module obarray.  When this happens, the name is said to be
+bound to the variable, in that module.
+</p>
+<p>(That&rsquo;s the theory, anyway.  In practice, defined-ness and bound-ness
+sometimes get confused, because Lisp and Scheme implementations have
+often conflated &mdash; or deliberately drawn no distinction between &mdash; a
+name that is unbound and a name that is bound to a variable whose value
+is undefined.  We will try to be clear about the difference and explain
+any confusion where it is unavoidable.)
+</p>
+<p>Variables do not have a read syntax.  Most commonly they are created and
+bound implicitly by <code class="code">define</code> expressions: a top-level <code class="code">define</code>
+expression of the form
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define <var class="var">name</var> <var class="var">value</var>)
+</pre></div>
+
+<p>creates a variable with initial value <var class="var">value</var> and binds it to the
+name <var class="var">name</var> in the current module.  But they can also be created
+dynamically by calling one of the constructor procedures
+<code class="code">make-variable</code> and <code class="code">make-undefined-variable</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dundefined_002dvariable"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-undefined-variable</strong><a class="copiable-link" href='#index-make_002dundefined_002dvariable'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmake_005fundefined_005fvariable"><span class="category-def">C Function: </span><span><strong class="def-name">scm_make_undefined_variable</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fmake_005fundefined_005fvariable'> &para;</a></span></dt>
+<dd><p>Return a variable that is initially unbound.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dvariable"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-variable</strong> <var class="def-var-arguments">init</var><a class="copiable-link" href='#index-make_002dvariable'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmake_005fvariable"><span class="category-def">C Function: </span><span><strong class="def-name">scm_make_variable</strong> <var class="def-var-arguments">(init)</var><a class="copiable-link" href='#index-scm_005fmake_005fvariable'> &para;</a></span></dt>
+<dd><p>Return a variable initialized to value <var class="var">init</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-variable_002dbound_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">variable-bound?</strong> <var class="def-var-arguments">var</var><a class="copiable-link" href='#index-variable_002dbound_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fvariable_005fbound_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_variable_bound_p</strong> <var class="def-var-arguments">(var)</var><a class="copiable-link" href='#index-scm_005fvariable_005fbound_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">var</var> is bound to a value, or <code class="code">#f</code>
+otherwise.  Throws an error if <var class="var">var</var> is not a variable object.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-variable_002dref"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">variable-ref</strong> <var class="def-var-arguments">var</var><a class="copiable-link" href='#index-variable_002dref'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fvariable_005fref"><span class="category-def">C Function: </span><span><strong class="def-name">scm_variable_ref</strong> <var class="def-var-arguments">(var)</var><a class="copiable-link" href='#index-scm_005fvariable_005fref'> &para;</a></span></dt>
+<dd><p>Dereference <var class="var">var</var> and return its value.
+<var class="var">var</var> must be a variable object; see <code class="code">make-variable</code>
+and <code class="code">make-undefined-variable</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-variable_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">variable-set!</strong> <var class="def-var-arguments">var val</var><a class="copiable-link" href='#index-variable_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fvariable_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_variable_set_x</strong> <var class="def-var-arguments">(var, val)</var><a class="copiable-link" href='#index-scm_005fvariable_005fset_005fx'> &para;</a></span></dt>
+<dd><p>Set the value of the variable <var class="var">var</var> to <var class="var">val</var>.
+<var class="var">var</var> must be a variable object, <var class="var">val</var> can be any
+value. Return an unspecified value.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-variable_002dunset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">variable-unset!</strong> <var class="def-var-arguments">var</var><a class="copiable-link" href='#index-variable_002dunset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fvariable_005funset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_variable_unset_x</strong> <var class="def-var-arguments">(var)</var><a class="copiable-link" href='#index-scm_005fvariable_005funset_005fx'> &para;</a></span></dt>
+<dd><p>Unset the value of the variable <var class="var">var</var>, leaving <var class="var">var</var> unbound.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-variable_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">variable?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-variable_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fvariable_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_variable_p</strong> <var class="def-var-arguments">(obj)</var><a class="copiable-link" href='#index-scm_005fvariable_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is a variable object, else return
+<code class="code">#f</code>.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Module-System-Reflection.html">Module System Reflection</a>, Previous: <a href="R6RS-Libraries.html">R6RS Libraries</a>, Up: <a href="Modules.html">Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

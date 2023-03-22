@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Mutexes and Condition Variables (Guile Reference Manual)</title>
+
+<meta name="description" content="Mutexes and Condition Variables (Guile Reference Manual)">
+<meta name="keywords" content="Mutexes and Condition Variables (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Scheduling.html" rel="up" title="Scheduling">
+<link href="Blocking.html" rel="next" title="Blocking">
+<link href="Atomics.html" rel="prev" title="Atomics">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Mutexes-and-Condition-Variables">
+<div class="nav-panel">
+<p>
+Next: <a href="Blocking.html" accesskey="n" rel="next">Blocking in Guile Mode</a>, Previous: <a href="Atomics.html" accesskey="p" rel="prev">Atomics</a>, Up: <a href="Scheduling.html" accesskey="u" rel="up">Threads, Mutexes, Asyncs and Dynamic Roots</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Mutexes-and-Condition-Variables-1">6.22.5 Mutexes and Condition Variables</h4>
+<a class="index-entry-id" id="index-mutex"></a>
+<a class="index-entry-id" id="index-condition-variable"></a>
+
+<p>Mutexes are low-level primitives used to coordinate concurrent access to
+mutable data.  Short for &ldquo;mutual exclusion&rdquo;, the name &ldquo;mutex&rdquo;
+indicates that only one thread at a time can acquire access to data that
+is protected by a mutex &ndash; threads are excluded from accessing data at
+the same time.  If one thread has locked a mutex, then another thread
+attempting to lock that same mutex will wait until the first thread is
+done.
+</p>
+<p>Mutexes can be used to build robust multi-threaded programs that take
+advantage of multiple cores.  However, they provide very low-level
+functionality and are somewhat dangerous; usually you end up wanting to
+acquire multiple mutexes at the same time to perform a multi-object
+access, but this can easily lead to deadlocks if the program is not
+carefully written.  For example, if objects A and B are protected by
+associated mutexes M and N, respectively, then to access both of them
+then you need to acquire both mutexes.  But what if one thread acquires
+M first and then N, at the same time that another thread acquires N them
+M?  You can easily end up in a situation where one is waiting for the
+other.
+</p>
+<p>There&rsquo;s no easy way around this problem on the language level.  A
+function A that uses mutexes does not necessarily compose nicely with a
+function B that uses mutexes.  For this reason we suggest using atomic
+variables when you can (see <a class="pxref" href="Atomics.html">Atomics</a>), as they do not have this problem.
+</p>
+<p>Still, if you as a programmer are responsible for a whole system, then
+you can use mutexes as a primitive to provide safe concurrent
+abstractions to your users.  (For example, given all locks in a system,
+if you establish an order such that M is consistently acquired before N,
+you can avoid the &ldquo;deadly-embrace&rdquo; deadlock described above.  The
+problem is enumerating all mutexes and establishing this order from a
+system perspective.)  Guile gives you the low-level facilities to build
+such systems.
+</p>
+<p>In Guile there are additional considerations beyond the usual ones in
+other programming languages: non-local control flow and asynchronous
+interrupts.  What happens if you hold a mutex, but somehow you cause an
+exception to be thrown?  There is no one right answer.  You might want
+to keep the mutex locked to prevent any other code from ever entering
+that critical section again.  Or, your critical section might be fine if
+you unlock the mutex &ldquo;on the way out&rdquo;, via an exception handler or
+<code class="code">dynamic-wind</code>.  See <a class="xref" href="Exceptions.html">Exceptions</a>, and See <a class="xref" href="Dynamic-Wind.html">Dynamic Wind</a>.
+</p>
+<p>But if you arrange to unlock the mutex when leaving a dynamic extent via
+<code class="code">dynamic-wind</code>, what to do if control re-enters that dynamic extent
+via a continuation invocation?  Surely re-entering the dynamic extent
+without the lock is a bad idea, so there are two options on the table:
+either prevent re-entry via <code class="code">with-continuation-barrier</code> or similar,
+or reacquire the lock in the entry thunk of a <code class="code">dynamic-wind</code>.
+</p>
+<p>You might think that because you don&rsquo;t use continuations, that you don&rsquo;t
+have to think about this, and you might be right.  If you control the
+whole system, you can reason about continuation use globally.  Or, if
+you know all code that can be called in a dynamic extent, and none of
+that code can call continuations, then you don&rsquo;t have to worry about
+re-entry, and you might not have to worry about early exit either.
+</p>
+<p>However, do consider the possibility of asynchronous interrupts
+(see <a class="pxref" href="Asyncs.html">Asynchronous Interrupts</a>).  If the user interrupts your code interactively, that
+can cause an exception; or your thread might be cancelled, which does
+the same; or the user could be running your code under some pre-emptive
+system that periodically causes lightweight task switching.  (Guile does
+not currently include such a system, but it&rsquo;s possible to implement as a
+library.)  Probably you also want to defer asynchronous interrupt
+processing while you hold the mutex, and probably that also means that
+you should not hold the mutex for very long.
+</p>
+<p>All of these additional Guile-specific considerations mean that from a
+system perspective, you would do well to avoid these hazards if you can
+by not requiring mutexes.  Instead, work with immutable data that can be
+shared between threads without hazards, or use persistent data
+structures with atomic updates based on the atomic variable library
+(see <a class="pxref" href="Atomics.html">Atomics</a>).
+</p>
+<p>There are three types of mutexes in Guile: &ldquo;standard&rdquo;, &ldquo;recursive&rdquo;,
+and &ldquo;unowned&rdquo;.
+</p>
+<p>Calling <code class="code">make-mutex</code> with no arguments makes a standard mutex.  A
+standard mutex can only be locked once.  If you try to lock it again
+from the thread that locked it to begin with (the &quot;owner&quot; thread), it
+throws an error.  It can only be unlocked from the thread that locked it
+in the first place.
+</p>
+<p>Calling <code class="code">make-mutex</code> with the symbol <code class="code">recursive</code> as the
+argument, or calling <code class="code">make-recursive-mutex</code>, will give you a
+recursive mutex.  A recursive mutex can be locked multiple times by its
+owner.  It then has to be unlocked the corresponding number of times,
+and like standard mutexes can only be unlocked by the owner thread.
+</p>
+<p>Finally, calling <code class="code">make-mutex</code> with the symbol
+<code class="code">allow-external-unlock</code> creates an unowned mutex.  An unowned mutex
+is like a standard mutex, except that it can be unlocked by any thread.
+A corollary of this behavior is that a thread&rsquo;s attempt to lock a mutex
+that it already owns will block instead of signalling an error, as it
+could be that some other thread unlocks the mutex, allowing the owner
+thread to proceed.  This kind of mutex is a bit strange and is here for
+use by SRFI-18.
+</p>
+<p>The mutex procedures in Guile can operate on all three kinds of mutexes.
+</p>
+<p>To use these facilities, load the <code class="code">(ice-9 threads)</code> module.
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 threads))
+</pre></div>
+
+<br>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dmutex"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-mutex</strong> <var class="def-var-arguments">[kind]</var><a class="copiable-link" href='#index-make_002dmutex'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmake_005fmutex"><span class="category-def">C Function: </span><span><strong class="def-name">scm_make_mutex</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fmake_005fmutex'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmake_005fmutex_005fwith_005fkind"><span class="category-def">C Function: </span><span><strong class="def-name">scm_make_mutex_with_kind</strong> <var class="def-var-arguments">(SCM kind)</var><a class="copiable-link" href='#index-scm_005fmake_005fmutex_005fwith_005fkind'> &para;</a></span></dt>
+<dd><p>Return a new mutex.  It will be a standard non-recursive mutex, unless
+the <code class="code">recursive</code> symbol is passed as the optional <var class="var">kind</var>
+argument, in which case it will be recursive.  It&rsquo;s also possible to
+pass <code class="code">unowned</code> for semantics tailored to SRFI-18&rsquo;s use case; see
+above for details.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-mutex_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">mutex?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-mutex_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmutex_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_mutex_p</strong> <var class="def-var-arguments">(obj)</var><a class="copiable-link" href='#index-scm_005fmutex_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is a mutex; otherwise, return
+<code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002drecursive_002dmutex"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-recursive-mutex</strong><a class="copiable-link" href='#index-make_002drecursive_002dmutex'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmake_005frecursive_005fmutex"><span class="category-def">C Function: </span><span><strong class="def-name">scm_make_recursive_mutex</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fmake_005frecursive_005fmutex'> &para;</a></span></dt>
+<dd><p>Create a new recursive mutex.  It is initially unlocked.  Calling this
+function is equivalent to calling <code class="code">make-mutex</code> with the
+<code class="code">recursive</code> kind.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-lock_002dmutex"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">lock-mutex</strong> <var class="def-var-arguments">mutex [timeout]</var><a class="copiable-link" href='#index-lock_002dmutex'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005flock_005fmutex"><span class="category-def">C Function: </span><span><strong class="def-name">scm_lock_mutex</strong> <var class="def-var-arguments">(mutex)</var><a class="copiable-link" href='#index-scm_005flock_005fmutex'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005ftimed_005flock_005fmutex"><span class="category-def">C Function: </span><span><strong class="def-name">scm_timed_lock_mutex</strong> <var class="def-var-arguments">(mutex, timeout)</var><a class="copiable-link" href='#index-scm_005ftimed_005flock_005fmutex'> &para;</a></span></dt>
+<dd><p>Lock <var class="var">mutex</var> and return <code class="code">#t</code>.  If the mutex is already locked,
+then block and return only when <var class="var">mutex</var> has been acquired.
+</p>
+<p>When <var class="var">timeout</var> is given, it specifies a point in time where the
+waiting should be aborted.  It can be either an integer as returned
+by <code class="code">current-time</code> or a pair as returned by <code class="code">gettimeofday</code>.
+When the waiting is aborted, <code class="code">#f</code> is returned.
+</p>
+<p>For standard mutexes (<code class="code">make-mutex</code>), an error is signalled if the
+thread has itself already locked <var class="var">mutex</var>.
+</p>
+<p>For a recursive mutex (<code class="code">make-recursive-mutex</code>), if the thread has
+itself already locked <var class="var">mutex</var>, then a further <code class="code">lock-mutex</code>
+call increments the lock count.  An additional <code class="code">unlock-mutex</code>
+will be required to finally release.
+</p>
+<p>When an asynchronous interrupt (see <a class="pxref" href="Asyncs.html">Asynchronous Interrupts</a>) is scheduled for a
+thread blocked in <code class="code">lock-mutex</code>, Guile will interrupt the wait, run
+the interrupts, and then resume the wait.
+</p></dd></dl>
+
+<dl class="first-deftypefn">
+<dt class="deftypefn" id="index-scm_005fdynwind_005flock_005fmutex"><span class="category-def">C Function: </span><span><code class="def-type">void</code> <strong class="def-name">scm_dynwind_lock_mutex</strong> <code class="def-code-arguments">(SCM mutex)</code><a class="copiable-link" href='#index-scm_005fdynwind_005flock_005fmutex'> &para;</a></span></dt>
+<dd><p>Arrange for <var class="var">mutex</var> to be locked whenever the current dynwind
+context is entered and to be unlocked when it is exited.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-try_002dmutex"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">try-mutex</strong> <var class="def-var-arguments">mx</var><a class="copiable-link" href='#index-try_002dmutex'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005ftry_005fmutex"><span class="category-def">C Function: </span><span><strong class="def-name">scm_try_mutex</strong> <var class="def-var-arguments">(mx)</var><a class="copiable-link" href='#index-scm_005ftry_005fmutex'> &para;</a></span></dt>
+<dd><p>Try to lock <var class="var">mutex</var> and return <code class="code">#t</code> if successful, or <code class="code">#f</code>
+otherwise.  This is like calling <code class="code">lock-mutex</code> with an expired
+timeout.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-unlock_002dmutex"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">unlock-mutex</strong> <var class="def-var-arguments">mutex</var><a class="copiable-link" href='#index-unlock_002dmutex'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005funlock_005fmutex"><span class="category-def">C Function: </span><span><strong class="def-name">scm_unlock_mutex</strong> <var class="def-var-arguments">(mutex)</var><a class="copiable-link" href='#index-scm_005funlock_005fmutex'> &para;</a></span></dt>
+<dd><p>Unlock <var class="var">mutex</var>.  An error is signalled if <var class="var">mutex</var> is not locked.
+</p>
+<p>&ldquo;Standard&rdquo; and &ldquo;recursive&rdquo; mutexes can only be unlocked by the
+thread that locked them; Guile detects this situation and signals an
+error.  &ldquo;Unowned&rdquo; mutexes can be unlocked by any thread.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-mutex_002downer"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">mutex-owner</strong> <var class="def-var-arguments">mutex</var><a class="copiable-link" href='#index-mutex_002downer'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmutex_005fowner"><span class="category-def">C Function: </span><span><strong class="def-name">scm_mutex_owner</strong> <var class="def-var-arguments">(mutex)</var><a class="copiable-link" href='#index-scm_005fmutex_005fowner'> &para;</a></span></dt>
+<dd><p>Return the current owner of <var class="var">mutex</var>, in the form of a thread or
+<code class="code">#f</code> (indicating no owner).  Note that a mutex may be unowned but
+still locked.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-mutex_002dlevel"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">mutex-level</strong> <var class="def-var-arguments">mutex</var><a class="copiable-link" href='#index-mutex_002dlevel'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmutex_005flevel"><span class="category-def">C Function: </span><span><strong class="def-name">scm_mutex_level</strong> <var class="def-var-arguments">(mutex)</var><a class="copiable-link" href='#index-scm_005fmutex_005flevel'> &para;</a></span></dt>
+<dd><p>Return the current lock level of <var class="var">mutex</var>.  If <var class="var">mutex</var> is
+currently unlocked, this value will be 0; otherwise, it will be the
+number of times <var class="var">mutex</var> has been recursively locked by its current
+owner.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-mutex_002dlocked_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">mutex-locked?</strong> <var class="def-var-arguments">mutex</var><a class="copiable-link" href='#index-mutex_002dlocked_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmutex_005flocked_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_mutex_locked_p</strong> <var class="def-var-arguments">(mutex)</var><a class="copiable-link" href='#index-scm_005fmutex_005flocked_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">mutex</var> is locked, regardless of ownership;
+otherwise, return <code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dcondition_002dvariable"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-condition-variable</strong><a class="copiable-link" href='#index-make_002dcondition_002dvariable'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmake_005fcondition_005fvariable"><span class="category-def">C Function: </span><span><strong class="def-name">scm_make_condition_variable</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fmake_005fcondition_005fvariable'> &para;</a></span></dt>
+<dd><p>Return a new condition variable.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-condition_002dvariable_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">condition-variable?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-condition_002dvariable_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcondition_005fvariable_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_condition_variable_p</strong> <var class="def-var-arguments">(obj)</var><a class="copiable-link" href='#index-scm_005fcondition_005fvariable_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">obj</var> is a condition variable; otherwise,
+return <code class="code">#f</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-wait_002dcondition_002dvariable"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">wait-condition-variable</strong> <var class="def-var-arguments">condvar mutex [time]</var><a class="copiable-link" href='#index-wait_002dcondition_002dvariable'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fwait_005fcondition_005fvariable"><span class="category-def">C Function: </span><span><strong class="def-name">scm_wait_condition_variable</strong> <var class="def-var-arguments">(condvar, mutex, time)</var><a class="copiable-link" href='#index-scm_005fwait_005fcondition_005fvariable'> &para;</a></span></dt>
+<dd><p>Wait until <var class="var">condvar</var> has been signalled.  While waiting,
+<var class="var">mutex</var> is atomically unlocked (as with <code class="code">unlock-mutex</code>) and
+is locked again when this function returns.  When <var class="var">time</var> is given,
+it specifies a point in time where the waiting should be aborted.  It
+can be either a integer as returned by <code class="code">current-time</code> or a pair
+as returned by <code class="code">gettimeofday</code>.  When the waiting is aborted,
+<code class="code">#f</code> is returned.  When the condition variable has in fact been
+signalled, <code class="code">#t</code> is returned.  The mutex is re-locked in any case
+before <code class="code">wait-condition-variable</code> returns.
+</p>
+<p>When an async is activated for a thread that is blocked in a call to
+<code class="code">wait-condition-variable</code>, the waiting is interrupted, the mutex is
+locked, and the async is executed.  When the async returns, the mutex is
+unlocked again and the waiting is resumed.  When the thread block while
+re-acquiring the mutex, execution of asyncs is blocked.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-signal_002dcondition_002dvariable"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">signal-condition-variable</strong> <var class="def-var-arguments">condvar</var><a class="copiable-link" href='#index-signal_002dcondition_002dvariable'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsignal_005fcondition_005fvariable"><span class="category-def">C Function: </span><span><strong class="def-name">scm_signal_condition_variable</strong> <var class="def-var-arguments">(condvar)</var><a class="copiable-link" href='#index-scm_005fsignal_005fcondition_005fvariable'> &para;</a></span></dt>
+<dd><p>Wake up one thread that is waiting for <var class="var">condvar</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-broadcast_002dcondition_002dvariable"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">broadcast-condition-variable</strong> <var class="def-var-arguments">condvar</var><a class="copiable-link" href='#index-broadcast_002dcondition_002dvariable'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fbroadcast_005fcondition_005fvariable"><span class="category-def">C Function: </span><span><strong class="def-name">scm_broadcast_condition_variable</strong> <var class="def-var-arguments">(condvar)</var><a class="copiable-link" href='#index-scm_005fbroadcast_005fcondition_005fvariable'> &para;</a></span></dt>
+<dd><p>Wake up all threads that are waiting for <var class="var">condvar</var>.
+</p></dd></dl>
+
+<p>Guile also includes some higher-level abstractions for working with
+mutexes.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-with_002dmutex"><span class="category-def">macro: </span><span><strong class="def-name">with-mutex</strong> <var class="def-var-arguments">mutex body1 body2 &hellip;</var><a class="copiable-link" href='#index-with_002dmutex'> &para;</a></span></dt>
+<dd><p>Lock <var class="var">mutex</var>, evaluate the body <var class="var">body1</var> <var class="var">body2</var> &hellip;,
+then unlock <var class="var">mutex</var>.  The return value is that returned by the last
+body form.
+</p>
+<p>The lock, body and unlock form the branches of a <code class="code">dynamic-wind</code>
+(see <a class="pxref" href="Dynamic-Wind.html">Dynamic Wind</a>), so <var class="var">mutex</var> is automatically unlocked if an
+error or new continuation exits the body, and is re-locked if
+the body is re-entered by a captured continuation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-monitor"><span class="category-def">macro: </span><span><strong class="def-name">monitor</strong> <var class="def-var-arguments">body1 body2 &hellip;</var><a class="copiable-link" href='#index-monitor'> &para;</a></span></dt>
+<dd><p>Evaluate the body form <var class="var">body1</var> <var class="var">body2</var> &hellip; with a mutex
+locked so only one thread can execute that code at any one time.  The
+return value is the return from the last body form.
+</p>
+<p>Each <code class="code">monitor</code> form has its own private mutex and the locking and
+evaluation is as per <code class="code">with-mutex</code> above.  A standard mutex
+(<code class="code">make-mutex</code>) is used, which means the body must not
+recursively re-enter the <code class="code">monitor</code> form.
+</p>
+<p>The term &ldquo;monitor&rdquo; comes from operating system theory, where it
+means a particular bit of code managing access to some resource and
+which only ever executes on behalf of one process at any one time.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Blocking.html">Blocking in Guile Mode</a>, Previous: <a href="Atomics.html">Atomics</a>, Up: <a href="Scheduling.html">Threads, Mutexes, Asyncs and Dynamic Roots</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

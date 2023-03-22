@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>rnrs arithmetic flonums (Guile Reference Manual)</title>
+
+<meta name="description" content="rnrs arithmetic flonums (Guile Reference Manual)">
+<meta name="keywords" content="rnrs arithmetic flonums (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="R6RS-Standard-Libraries.html" rel="up" title="R6RS Standard Libraries">
+<link href="rnrs-arithmetic-bitwise.html" rel="next" title="rnrs arithmetic bitwise">
+<link href="rnrs-arithmetic-fixnums.html" rel="prev" title="rnrs arithmetic fixnums">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="rnrs-arithmetic-flonums">
+<div class="nav-panel">
+<p>
+Next: <a href="rnrs-arithmetic-bitwise.html" accesskey="n" rel="next">rnrs arithmetic bitwise</a>, Previous: <a href="rnrs-arithmetic-fixnums.html" accesskey="p" rel="prev">rnrs arithmetic fixnums</a>, Up: <a href="R6RS-Standard-Libraries.html" accesskey="u" rel="up">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="rnrs-arithmetic-flonums-1">7.6.2.22 rnrs arithmetic flonums</h4>
+
+<p>The <code class="code">(rnrs arithmetic flonums (6))</code> library provides procedures for
+performing arithmetic operations on inexact representations of real
+numbers, which R6RS refers to as <em class="dfn">flonums</em>.
+</p>
+<p>Unless otherwise specified, all of the procedures below take flonums as
+arguments, and will raise an <code class="code">&amp;assertion</code> condition if passed a 
+non-flonum argument.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-flonum_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flonum?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-flonum_003f'> &para;</a></span></dt>
+<dd><p>Returns <code class="code">#t</code> if <var class="var">obj</var> is a flonum, <code class="code">#f</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-real_002d_003eflonum"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">real-&gt;flonum</strong> <var class="def-var-arguments">x</var><a class="copiable-link" href='#index-real_002d_003eflonum'> &para;</a></span></dt>
+<dd><p>Returns the flonum that is numerically closest to the real number 
+<var class="var">x</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-fl_003d_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fl=?</strong> <var class="def-var-arguments">fl1 fl2 fl3 ...</var><a class="copiable-link" href='#index-fl_003d_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-fl_003c_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fl&lt;?</strong> <var class="def-var-arguments">fl1 fl2 fl3 ...</var><a class="copiable-link" href='#index-fl_003c_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-fl_003c_003d_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fl&lt;=?</strong> <var class="def-var-arguments">fl1 fl2 fl3 ...</var><a class="copiable-link" href='#index-fl_003c_003d_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-fl_003e_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fl&gt;?</strong> <var class="def-var-arguments">fl1 fl2 fl3 ...</var><a class="copiable-link" href='#index-fl_003e_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-fl_003e_003d_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fl&gt;=?</strong> <var class="def-var-arguments">fl1 fl2 fl3 ...</var><a class="copiable-link" href='#index-fl_003e_003d_003f'> &para;</a></span></dt>
+<dd><p>These procedures return <code class="code">#t</code> if their flonum arguments are
+(respectively): equal, monotonically increasing, monotonically
+decreasing, monotonically nondecreasing, or monotonically nonincreasing;
+<code class="code">#f</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-flinteger_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flinteger?</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-flinteger_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-flzero_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flzero?</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-flzero_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-flpositive_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flpositive?</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-flpositive_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-flnegative_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flnegative?</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-flnegative_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-flodd_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flodd?</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-flodd_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-fleven_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fleven?</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-fleven_003f'> &para;</a></span></dt>
+<dd><p>These numerical predicates return <code class="code">#t</code> if <var class="var">fl</var> is,
+respectively, an integer, zero, greater than zero, less than zero, odd,
+even, <code class="code">#f</code> otherwise.  In the case of <code class="code">flodd?</code> and 
+<code class="code">fleven?</code>, <var class="var">fl</var> must be an integer-valued flonum.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-flfinite_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flfinite?</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-flfinite_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-flinfinite_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flinfinite?</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-flinfinite_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-flnan_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flnan?</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-flnan_003f'> &para;</a></span></dt>
+<dd><p>These numerical predicates return <code class="code">#t</code> if <var class="var">fl</var> is, 
+respectively, not infinite, infinite, or a <code class="code">NaN</code> value.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-flmax"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flmax</strong> <var class="def-var-arguments">fl1 fl2 ...</var><a class="copiable-link" href='#index-flmax'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-flmin"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flmin</strong> <var class="def-var-arguments">fl1 fl2 ...</var><a class="copiable-link" href='#index-flmin'> &para;</a></span></dt>
+<dd><p>These procedures return the maximum or minimum of their arguments.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-fl_002b"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fl+</strong> <var class="def-var-arguments">fl1 ...</var><a class="copiable-link" href='#index-fl_002b'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-fl_002a"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fl*</strong> <var class="def-var-arguments">fl ...</var><a class="copiable-link" href='#index-fl_002a'> &para;</a></span></dt>
+<dd><p>These procedures return the sum or product of their arguments.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-fl_002d"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fl-</strong> <var class="def-var-arguments">fl1 fl2 ...</var><a class="copiable-link" href='#index-fl_002d'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-fl_002d-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fl-</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-fl_002d-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-fl_002f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fl/</strong> <var class="def-var-arguments">fl1 fl2 ...</var><a class="copiable-link" href='#index-fl_002f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-fl_002f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fl/</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-fl_002f-1'> &para;</a></span></dt>
+<dd><p>These procedures return, respectively, the difference or quotient of
+their arguments when called with two arguments; when called with a
+single argument, they return the additive or multiplicative inverse of
+<var class="var">fl</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-flabs"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flabs</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-flabs'> &para;</a></span></dt>
+<dd><p>Returns the absolute value of <var class="var">fl</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-fldiv_002dand_002dmod"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fldiv-and-mod</strong> <var class="def-var-arguments">fl1 fl2</var><a class="copiable-link" href='#index-fldiv_002dand_002dmod'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-fldiv"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fldiv</strong> <var class="def-var-arguments">fl1 fl2</var><a class="copiable-link" href='#index-fldiv'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-fldmod"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fldmod</strong> <var class="def-var-arguments">fl1 fl2</var><a class="copiable-link" href='#index-fldmod'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-fldiv0_002dand_002dmod0"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fldiv0-and-mod0</strong> <var class="def-var-arguments">fl1 fl2</var><a class="copiable-link" href='#index-fldiv0_002dand_002dmod0'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-fldiv0"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fldiv0</strong> <var class="def-var-arguments">fl1 fl2</var><a class="copiable-link" href='#index-fldiv0'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-flmod0"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flmod0</strong> <var class="def-var-arguments">fl1 fl2</var><a class="copiable-link" href='#index-flmod0'> &para;</a></span></dt>
+<dd><p>These procedures implement number-theoretic division on flonums;
+See <a data-manual="rnrs base" href="../rnrs%20base_html/index.html">(rnrs base)</a>, for a description for their semantics.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-flnumerator"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flnumerator</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-flnumerator'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-fldenominator"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fldenominator</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-fldenominator'> &para;</a></span></dt>
+<dd><p>These procedures return the numerator or denominator of <var class="var">fl</var> as a
+flonum.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-flfloor"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flfloor</strong> <var class="def-var-arguments">fl1</var><a class="copiable-link" href='#index-flfloor'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-flceiling"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flceiling</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-flceiling'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-fltruncate"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fltruncate</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-fltruncate'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-flround"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flround</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-flround'> &para;</a></span></dt>
+<dd><p>These procedures are identical to the <code class="code">floor</code>, <code class="code">ceiling</code>,
+<code class="code">truncate</code>, and <code class="code">round</code> procedures provided by Guile&rsquo;s core
+library.  See <a class="xref" href="Arithmetic.html">Arithmetic Functions</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-flexp"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flexp</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-flexp'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-fllog"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fllog</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-fllog'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-fllog-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fllog</strong> <var class="def-var-arguments">fl1 fl2</var><a class="copiable-link" href='#index-fllog-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-flsin"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flsin</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-flsin'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-flcos"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flcos</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-flcos'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-fltan"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fltan</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-fltan'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-flasin"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flasin</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-flasin'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-flacos"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flacos</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-flacos'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-flatan"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flatan</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-flatan'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-flatan-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flatan</strong> <var class="def-var-arguments">fl1 fl2</var><a class="copiable-link" href='#index-flatan-1'> &para;</a></span></dt>
+<dd><p>These procedures, which compute the usual transcendental functions, are
+the flonum variants of the procedures provided by the R6RS base library
+(see <a data-manual="rnrs base" href="../rnrs%20base_html/index.html">(rnrs base)</a>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-flsqrt"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flsqrt</strong> <var class="def-var-arguments">fl</var><a class="copiable-link" href='#index-flsqrt'> &para;</a></span></dt>
+<dd><p>Returns the square root of <var class="var">fl</var>.  If <var class="var">fl</var> is <code class="code">-0.0</code>, 
+<var class="var">-0.0</var> is returned; for other negative values, a <code class="code">NaN</code> value
+is returned.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-flexpt"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flexpt</strong> <var class="def-var-arguments">fl1 fl2</var><a class="copiable-link" href='#index-flexpt'> &para;</a></span></dt>
+<dd><p>Returns the value of <var class="var">fl1</var> raised to the power of <var class="var">fl2</var>.
+</p></dd></dl>
+
+<p>The following condition types are provided to allow Scheme 
+implementations that do not support infinities or <code class="code">NaN</code> values
+to indicate that a computation resulted in such a value.  Guile supports
+both of these, so these conditions will never be raised by Guile&rsquo;s 
+standard libraries implementation.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026no_002dinfinities"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;no-infinities</strong><a class="copiable-link" href='#index-_0026no_002dinfinities'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002dno_002dinfinities_002dviolation"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-no-infinities-violation</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-make_002dno_002dinfinities_002dviolation'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-no_002dinfinities_002dviolation_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">no-infinities-violation?</strong><a class="copiable-link" href='#index-no_002dinfinities_002dviolation_003f'> &para;</a></span></dt>
+<dd><p>A condition type indicating that a computation resulted in an infinite
+value on a Scheme implementation incapable of representing infinities.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0026no_002dnans"><span class="category-def">Condition Type: </span><span><strong class="def-name">&amp;no-nans</strong><a class="copiable-link" href='#index-_0026no_002dnans'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002dno_002dnans_002dviolation"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-no-nans-violation</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-make_002dno_002dnans_002dviolation'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-no_002dnans_002dviolation_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">no-nans-violation?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-no_002dnans_002dviolation_003f'> &para;</a></span></dt>
+<dd><p>A condition type indicating that a computation resulted in a <code class="code">NaN</code>
+value on a Scheme implementation incapable of representing <code class="code">NaN</code>s.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-fixnum_002d_003eflonum"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fixnum-&gt;flonum</strong> <var class="def-var-arguments">fx</var><a class="copiable-link" href='#index-fixnum_002d_003eflonum'> &para;</a></span></dt>
+<dd><p>Returns the flonum that is numerically closest to the fixnum <var class="var">fx</var>.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="rnrs-arithmetic-bitwise.html">rnrs arithmetic bitwise</a>, Previous: <a href="rnrs-arithmetic-fixnums.html">rnrs arithmetic fixnums</a>, Up: <a href="R6RS-Standard-Libraries.html">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

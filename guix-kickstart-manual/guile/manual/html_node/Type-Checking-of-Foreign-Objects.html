@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Type Checking of Foreign Objects (Guile Reference Manual)</title>
+
+<meta name="description" content="Type Checking of Foreign Objects (Guile Reference Manual)">
+<meta name="keywords" content="Type Checking of Foreign Objects (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Defining-New-Foreign-Object-Types.html" rel="up" title="Defining New Foreign Object Types">
+<link href="Foreign-Object-Memory-Management.html" rel="next" title="Foreign Object Memory Management">
+<link href="Creating-Foreign-Objects.html" rel="prev" title="Creating Foreign Objects">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Type-Checking-of-Foreign-Objects">
+<div class="nav-panel">
+<p>
+Next: <a href="Foreign-Object-Memory-Management.html" accesskey="n" rel="next">Foreign Object Memory Management</a>, Previous: <a href="Creating-Foreign-Objects.html" accesskey="p" rel="prev">Creating Foreign Objects</a>, Up: <a href="Defining-New-Foreign-Object-Types.html" accesskey="u" rel="up">Defining New Foreign Object Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Type-Checking-of-Foreign-Objects-1">5.5.3 Type Checking of Foreign Objects</h4>
+
+<p>Functions that operate on foreign objects should check that the passed
+<code class="code">SCM</code> value indeed is of the correct type before accessing its
+data.  They can do this with <code class="code">scm_assert_foreign_object_type</code>.
+</p>
+<p>For example, here is a simple function that operates on an image object,
+and checks the type of its argument.
+</p>
+<div class="example">
+<pre class="example-preformatted">SCM
+clear_image (SCM image_obj)
+{
+  int area;
+  struct image *image;
+
+  scm_assert_foreign_object_type (image_type, image_obj);
+
+  image = scm_foreign_object_ref (image_obj, 0);
+  area = image-&gt;width * image-&gt;height;
+  memset (image-&gt;pixels, 0, area);
+
+  /* Invoke the image's update function.  */
+  if (scm_is_true (image-&gt;update_func))
+    scm_call_0 (image-&gt;update_func);
+
+  return SCM_UNSPECIFIED;
+}
+</pre></div>
+
+
+</div>
+
+
+
+</body>
+</html>

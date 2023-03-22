@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>R7RS Incompatibilities (Guile Reference Manual)</title>
+
+<meta name="description" content="R7RS Incompatibilities (Guile Reference Manual)">
+<meta name="keywords" content="R7RS Incompatibilities (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="R7RS-Support.html" rel="up" title="R7RS Support">
+<link href="R7RS-Standard-Libraries.html" rel="next" title="R7RS Standard Libraries">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="R7RS-Incompatibilities">
+<div class="nav-panel">
+<p>
+Next: <a href="R7RS-Standard-Libraries.html" accesskey="n" rel="next">R7RS Standard Libraries</a>, Up: <a href="R7RS-Support.html" accesskey="u" rel="up">R7RS Support</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Incompatibilities-with-the-R7RS">7.7.1 Incompatibilities with the R7RS</h4>
+
+<p>As the R7RS is a much less ambitious standard than the R6RS
+(see <a class="pxref" href="Guile-and-Scheme.html">Guile and Scheme</a>), it is very easy for Guile to support.  As
+such, Guile is a fully conforming implementation of R7RS, with the
+exception of the occasional bug and a couple of unimplemented features:
+</p>
+<ul class="itemize mark-bullet">
+<li><a class="index-entry-id" id="index-datum-labels"></a>
+The R7RS specifies a syntax for reading circular data structures using
+<em class="dfn">datum labels</em>, such as <code class="code">#0=(1 2 3 . #0#)</code>.  Guile&rsquo;s reader
+does not support this syntax currently;
+<a class="url" href="https://bugs.gnu.org/38236">https://bugs.gnu.org/38236</a>.
+
+</li><li>As with R6RS, a number of lexical features of R7RS conflict with Guile&rsquo;s
+historical syntax.  In addition to <code class="code">r6rs-hex-escapes</code> and
+<code class="code">hungry-eol-escapes</code> (see <a class="pxref" href="R6RS-Incompatibilities.html">Incompatibilities with the R6RS</a>), the
+<code class="code">r7rs-symbols</code> reader feature needs to be explicitly enabled.
+</li></ul>
+
+<p>Guile exposes a procedure in the root module to choose R7RS defaults
+over Guile&rsquo;s historical defaults.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-install_002dr7rs_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">install-r7rs!</strong><a class="copiable-link" href='#index-install_002dr7rs_0021'> &para;</a></span></dt>
+<dd><p>Alter Guile&rsquo;s default settings to better conform to the R7RS.
+</p>
+<p>While Guile&rsquo;s defaults may evolve over time, the current changes that
+this procedure imposes are to add <code class="code">.sls</code> and <code class="code">.guile.sls</code> to
+the set of supported <code class="code">%load-extensions</code>, to better support R7RS
+conventions.  See <a class="xref" href="Load-Paths.html">Load Paths</a>.  <code class="code">install-r7rs!</code> will also enable
+the reader options mentioned above.
+</p></dd></dl>
+
+<p>Finally, note that the <code class="code">--r7rs</code> command-line argument will call
+<code class="code">install-r7rs!</code> before calling user code.  R7RS users probably want
+to pass this argument to their Guile.
+</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>HTTP (Guile Reference Manual)</title>
+
+<meta name="description" content="HTTP (Guile Reference Manual)">
+<meta name="keywords" content="HTTP (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Web.html" rel="up" title="Web">
+<link href="HTTP-Headers.html" rel="next" title="HTTP Headers">
+<link href="URIs.html" rel="prev" title="URIs">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="HTTP">
+<div class="nav-panel">
+<p>
+Next: <a href="HTTP-Headers.html" accesskey="n" rel="next">HTTP Headers</a>, Previous: <a href="URIs.html" accesskey="p" rel="prev">Universal Resource Identifiers</a>, Up: <a href="Web.html" accesskey="u" rel="up"><abbr class="acronym">HTTP</abbr>, the Web, and All That</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="The-Hyper_002dText-Transfer-Protocol">7.3.3 The Hyper-Text Transfer Protocol</h4>
+
+<p>The initial motivation for including web functionality in Guile, rather
+than rely on an external package, was to establish a standard base on
+which people can share code.  To that end, we continue the focus on data
+types by providing a number of low-level parsers and unparsers for
+elements of the HTTP protocol.
+</p>
+<p>If you are want to skip the low-level details for now and move on to web
+pages, see <a class="pxref" href="Web-Client.html">Web Client</a>, and see <a class="pxref" href="Web-Server.html">Web Server</a>.  Otherwise, load the
+HTTP module, and read on.
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (web http))
+</pre></div>
+
+<p>The focus of the <code class="code">(web http)</code> module is to parse and unparse
+standard HTTP headers, representing them to Guile as native data
+structures.  For example, a <code class="code">Date:</code> header will be represented as a
+SRFI-19 date record (see <a class="pxref" href="SRFI_002d19.html">SRFI-19 - Time/Date Library</a>), rather than as a string.
+</p>
+<p>Guile tries to follow RFCs fairly strictly&mdash;the road to perdition being
+paved with compatibility hacks&mdash;though some allowances are made for
+not-too-divergent texts.
+</p>
+<p>Header names are represented as lower-case symbols.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002d_003eheader"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-&gt;header</strong> <var class="def-var-arguments">name</var><a class="copiable-link" href='#index-string_002d_003eheader'> &para;</a></span></dt>
+<dd><p>Parse <var class="var">name</var> to a symbolic header name.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-header_002d_003estring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">header-&gt;string</strong> <var class="def-var-arguments">sym</var><a class="copiable-link" href='#index-header_002d_003estring'> &para;</a></span></dt>
+<dd><p>Return the string form for the header named <var class="var">sym</var>.
+</p></dd></dl>
+
+<p>For example:
+</p>
+<div class="example">
+<pre class="example-preformatted">(string-&gt;header &quot;Content-Length&quot;)
+&rArr; content-length
+(header-&gt;string 'content-length)
+&rArr; &quot;Content-Length&quot;
+
+(string-&gt;header &quot;FOO&quot;)
+&rArr; foo
+(header-&gt;string 'foo)
+&rArr; &quot;Foo&quot;
+</pre></div>
+
+<p>Guile keeps a registry of known headers, their string names, and some
+parsing and serialization procedures.  If a header is unknown, its
+string name is simply its symbol name in title-case.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-known_002dheader_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">known-header?</strong> <var class="def-var-arguments">sym</var><a class="copiable-link" href='#index-known_002dheader_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">sym</var> is a known header, with associated
+parsers and serialization procedures, or <code class="code">#f</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-header_002dparser"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">header-parser</strong> <var class="def-var-arguments">sym</var><a class="copiable-link" href='#index-header_002dparser'> &para;</a></span></dt>
+<dd><p>Return the value parser for headers named <var class="var">sym</var>.  The result is a
+procedure that takes one argument, a string, and returns the parsed
+value.  If the header isn&rsquo;t known to Guile, a default parser is returned
+that passes through the string unchanged.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-header_002dvalidator"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">header-validator</strong> <var class="def-var-arguments">sym</var><a class="copiable-link" href='#index-header_002dvalidator'> &para;</a></span></dt>
+<dd><p>Return a predicate which returns <code class="code">#t</code> if the given value is valid
+for headers named <var class="var">sym</var>.  The default validator for unknown headers
+is <code class="code">string?</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-header_002dwriter"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">header-writer</strong> <var class="def-var-arguments">sym</var><a class="copiable-link" href='#index-header_002dwriter'> &para;</a></span></dt>
+<dd><p>Return a procedure that writes values for headers named <var class="var">sym</var> to a
+port.  The resulting procedure takes two arguments: a value and a port.
+The default writer is <code class="code">display</code>.
+</p></dd></dl>
+
+<p>For more on the set of headers that Guile knows about out of the box,
+see <a class="pxref" href="HTTP-Headers.html">HTTP Headers</a>.  To add your own, use the <code class="code">declare-header!</code>
+procedure:
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-declare_002dheader_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">declare-header!</strong> <var class="def-var-arguments">name parser validator writer        [#:multiple?=<code class="code">#f</code>]</var><a class="copiable-link" href='#index-declare_002dheader_0021'> &para;</a></span></dt>
+<dd><p>Declare a parser, validator, and writer for a given header.
+</p></dd></dl>
+
+<p>For example, let&rsquo;s say you are running a web server behind some sort of
+proxy, and your proxy adds an <code class="code">X-Client-Address</code> header, indicating
+the IPv4 address of the original client.  You would like for the HTTP
+request record to parse out this header to a Scheme value, instead of
+leaving it as a string.  You could register this header with Guile&rsquo;s
+HTTP stack like this:
+</p>
+<div class="example">
+<pre class="example-preformatted">(declare-header! &quot;X-Client-Address&quot;
+  (lambda (str)
+    (inet-pton AF_INET str))
+  (lambda (ip)
+    (and (integer? ip) (exact? ip) (&lt;= 0 ip #xffffffff)))
+  (lambda (ip port)
+    (display (inet-ntop AF_INET ip) port)))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-declare_002dopaque_002dheader_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">declare-opaque-header!</strong> <var class="def-var-arguments">name</var><a class="copiable-link" href='#index-declare_002dopaque_002dheader_0021'> &para;</a></span></dt>
+<dd><p>A specialised version of <code class="code">declare-header!</code> for the case in which
+you want a header&rsquo;s value to be returned/written &ldquo;as-is&rdquo;.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-valid_002dheader_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">valid-header?</strong> <var class="def-var-arguments">sym val</var><a class="copiable-link" href='#index-valid_002dheader_003f'> &para;</a></span></dt>
+<dd><p>Return a true value if <var class="var">val</var> is a valid Scheme value for the header
+with name <var class="var">sym</var>, or <code class="code">#f</code> otherwise.
+</p></dd></dl>
+
+<p>Now that we have a generic interface for reading and writing headers, we
+do just that.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-read_002dheader"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read-header</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-read_002dheader'> &para;</a></span></dt>
+<dd><p>Read one HTTP header from <var class="var">port</var>. Return two values: the header
+name and the parsed Scheme value. May raise an exception if the header
+was known but the value was invalid.
+</p>
+<p>Returns the end-of-file object for both values if the end of the message
+body was reached (i.e., a blank line).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-parse_002dheader"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">parse-header</strong> <var class="def-var-arguments">name val</var><a class="copiable-link" href='#index-parse_002dheader'> &para;</a></span></dt>
+<dd><p>Parse <var class="var">val</var>, a string, with the parser for the header named
+<var class="var">name</var>.  Returns the parsed value.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-write_002dheader"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">write-header</strong> <var class="def-var-arguments">name val port</var><a class="copiable-link" href='#index-write_002dheader'> &para;</a></span></dt>
+<dd><p>Write the given header name and value to <var class="var">port</var>, using the writer
+from <code class="code">header-writer</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-read_002dheaders"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read-headers</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-read_002dheaders'> &para;</a></span></dt>
+<dd><p>Read the headers of an HTTP message from <var class="var">port</var>, returning them
+as an ordered alist.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-write_002dheaders"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">write-headers</strong> <var class="def-var-arguments">headers port</var><a class="copiable-link" href='#index-write_002dheaders'> &para;</a></span></dt>
+<dd><p>Write the given header alist to <var class="var">port</var>. Doesn&rsquo;t write the final
+&lsquo;<samp class="samp">\r\n</samp>&rsquo;, as the user might want to add another header.
+</p></dd></dl>
+
+<p>The <code class="code">(web http)</code> module also has some utility procedures to read
+and write request and response lines.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-parse_002dhttp_002dmethod"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">parse-http-method</strong> <var class="def-var-arguments">str [start] [end]</var><a class="copiable-link" href='#index-parse_002dhttp_002dmethod'> &para;</a></span></dt>
+<dd><p>Parse an HTTP method from <var class="var">str</var>. The result is an upper-case symbol,
+like <code class="code">GET</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-parse_002dhttp_002dversion"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">parse-http-version</strong> <var class="def-var-arguments">str [start] [end]</var><a class="copiable-link" href='#index-parse_002dhttp_002dversion'> &para;</a></span></dt>
+<dd><p>Parse an HTTP version from <var class="var">str</var>, returning it as a major&ndash;minor
+pair. For example, <code class="code">HTTP/1.1</code> parses as the pair of integers,
+<code class="code">(1 . 1)</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-parse_002drequest_002duri"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">parse-request-uri</strong> <var class="def-var-arguments">str [start] [end]</var><a class="copiable-link" href='#index-parse_002drequest_002duri'> &para;</a></span></dt>
+<dd><p>Parse a URI from an HTTP request line. Note that URIs in requests do not
+have to have a scheme or host name. The result is a URI object.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-read_002drequest_002dline"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read-request-line</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-read_002drequest_002dline'> &para;</a></span></dt>
+<dd><p>Read the first line of an HTTP request from <var class="var">port</var>, returning three
+values: the method, the URI, and the version.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-write_002drequest_002dline"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">write-request-line</strong> <var class="def-var-arguments">method uri version port</var><a class="copiable-link" href='#index-write_002drequest_002dline'> &para;</a></span></dt>
+<dd><p>Write the first line of an HTTP request to <var class="var">port</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-read_002dresponse_002dline"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read-response-line</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-read_002dresponse_002dline'> &para;</a></span></dt>
+<dd><p>Read the first line of an HTTP response from <var class="var">port</var>, returning three
+values: the HTTP version, the response code, and the &ldquo;reason phrase&rdquo;.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-write_002dresponse_002dline"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">write-response-line</strong> <var class="def-var-arguments">version code reason-phrase port</var><a class="copiable-link" href='#index-write_002dresponse_002dline'> &para;</a></span></dt>
+<dd><p>Write the first line of an HTTP response to <var class="var">port</var>.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="HTTP-Headers.html">HTTP Headers</a>, Previous: <a href="URIs.html">Universal Resource Identifiers</a>, Up: <a href="Web.html"><abbr class="acronym">HTTP</abbr>, the Web, and All That</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

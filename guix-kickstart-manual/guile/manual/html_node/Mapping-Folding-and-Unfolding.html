@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Mapping Folding and Unfolding (Guile Reference Manual)</title>
+
+<meta name="description" content="Mapping Folding and Unfolding (Guile Reference Manual)">
+<meta name="keywords" content="Mapping Folding and Unfolding (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Strings.html" rel="up" title="Strings">
+<link href="Miscellaneous-String-Operations.html" rel="next" title="Miscellaneous String Operations">
+<link href="Reversing-and-Appending-Strings.html" rel="prev" title="Reversing and Appending Strings">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Mapping-Folding-and-Unfolding">
+<div class="nav-panel">
+<p>
+Next: <a href="Miscellaneous-String-Operations.html" accesskey="n" rel="next">Miscellaneous String Operations</a>, Previous: <a href="Reversing-and-Appending-Strings.html" accesskey="p" rel="prev">Reversing and Appending Strings</a>, Up: <a href="Strings.html" accesskey="u" rel="up">Strings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Mapping_002c-Folding_002c-and-Unfolding">6.6.5.11 Mapping, Folding, and Unfolding</h4>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dmap"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-map</strong> <var class="def-var-arguments">proc s [start [end]]</var><a class="copiable-link" href='#index-string_002dmap'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fmap"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_map</strong> <var class="def-var-arguments">(proc, s, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005fmap'> &para;</a></span></dt>
+<dd><p><var class="var">proc</var> is a char-&gt;char procedure, it is mapped over
+<var class="var">s</var>.  The order in which the procedure is applied to the
+string elements is not specified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dmap_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-map!</strong> <var class="def-var-arguments">proc s [start [end]]</var><a class="copiable-link" href='#index-string_002dmap_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005fmap_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_map_x</strong> <var class="def-var-arguments">(proc, s, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005fmap_005fx'> &para;</a></span></dt>
+<dd><p><var class="var">proc</var> is a char-&gt;char procedure, it is mapped over
+<var class="var">s</var>.  The order in which the procedure is applied to the
+string elements is not specified.  The string <var class="var">s</var> is
+modified in-place, the return value is not specified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dfor_002deach"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-for-each</strong> <var class="def-var-arguments">proc s [start [end]]</var><a class="copiable-link" href='#index-string_002dfor_002deach'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005ffor_005feach"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_for_each</strong> <var class="def-var-arguments">(proc, s, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005ffor_005feach'> &para;</a></span></dt>
+<dd><p><var class="var">proc</var> is mapped over <var class="var">s</var> in left-to-right order.  The
+return value is not specified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dfor_002deach_002dindex"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-for-each-index</strong> <var class="def-var-arguments">proc s [start [end]]</var><a class="copiable-link" href='#index-string_002dfor_002deach_002dindex'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005ffor_005feach_005findex"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_for_each_index</strong> <var class="def-var-arguments">(proc, s, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005ffor_005feach_005findex'> &para;</a></span></dt>
+<dd><p>Call <code class="code">(<var class="var">proc</var> i)</code> for each index i in <var class="var">s</var>, from left to
+right.
+</p>
+<p>For example, to change characters to alternately upper and lower case,
+</p>
+<div class="example">
+<pre class="example-preformatted">(define str (string-copy &quot;studly&quot;))
+(string-for-each-index
+    (lambda (i)
+      (string-set! str i
+        ((if (even? i) char-upcase char-downcase)
+         (string-ref str i))))
+    str)
+str &rArr; &quot;StUdLy&quot;
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dfold"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-fold</strong> <var class="def-var-arguments">kons knil s [start [end]]</var><a class="copiable-link" href='#index-string_002dfold'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005ffold"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_fold</strong> <var class="def-var-arguments">(kons, knil, s, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005ffold'> &para;</a></span></dt>
+<dd><p>Fold <var class="var">kons</var> over the characters of <var class="var">s</var>, with <var class="var">knil</var>
+as the terminating element, from left to right.  <var class="var">kons</var>
+must expect two arguments: The actual character and the last
+result of <var class="var">kons</var>&rsquo; application.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dfold_002dright"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-fold-right</strong> <var class="def-var-arguments">kons knil s [start [end]]</var><a class="copiable-link" href='#index-string_002dfold_002dright'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005ffold_005fright"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_fold_right</strong> <var class="def-var-arguments">(kons, knil, s, start, end)</var><a class="copiable-link" href='#index-scm_005fstring_005ffold_005fright'> &para;</a></span></dt>
+<dd><p>Fold <var class="var">kons</var> over the characters of <var class="var">s</var>, with <var class="var">knil</var>
+as the terminating element, from right to left.  <var class="var">kons</var>
+must expect two arguments: The actual character and the last
+result of <var class="var">kons</var>&rsquo; application.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dunfold"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-unfold</strong> <var class="def-var-arguments">p f g seed [base [make_final]]</var><a class="copiable-link" href='#index-string_002dunfold'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005funfold"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_unfold</strong> <var class="def-var-arguments">(p, f, g, seed, base, make_final)</var><a class="copiable-link" href='#index-scm_005fstring_005funfold'> &para;</a></span></dt>
+<dd><ul class="itemize mark-bullet">
+<li><var class="var">g</var> is used to generate a series of <em class="emph">seed</em>
+values from the initial <var class="var">seed</var>: <var class="var">seed</var>, (<var class="var">g</var>
+<var class="var">seed</var>), (<var class="var">g</var>^2 <var class="var">seed</var>), (<var class="var">g</var>^3 <var class="var">seed</var>),
+&hellip;
+</li><li><var class="var">p</var> tells us when to stop &ndash; when it returns true
+when applied to one of these seed values.
+</li><li><var class="var">f</var> maps each seed value to the corresponding
+character in the result string.  These chars are assembled
+into the string in a left-to-right order.
+</li><li><var class="var">base</var> is the optional initial/leftmost portion
+of the constructed string; it default to the empty
+string.
+</li><li><var class="var">make_final</var> is applied to the terminal seed
+value (on which <var class="var">p</var> returns true) to produce
+the final/rightmost portion of the constructed string.
+The default is nothing extra.
+</li></ul>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-string_002dunfold_002dright"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">string-unfold-right</strong> <var class="def-var-arguments">p f g seed [base [make_final]]</var><a class="copiable-link" href='#index-string_002dunfold_002dright'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fstring_005funfold_005fright"><span class="category-def">C Function: </span><span><strong class="def-name">scm_string_unfold_right</strong> <var class="def-var-arguments">(p, f, g, seed, base, make_final)</var><a class="copiable-link" href='#index-scm_005fstring_005funfold_005fright'> &para;</a></span></dt>
+<dd><ul class="itemize mark-bullet">
+<li><var class="var">g</var> is used to generate a series of <em class="emph">seed</em>
+values from the initial <var class="var">seed</var>: <var class="var">seed</var>, (<var class="var">g</var>
+<var class="var">seed</var>), (<var class="var">g</var>^2 <var class="var">seed</var>), (<var class="var">g</var>^3 <var class="var">seed</var>),
+&hellip;
+</li><li><var class="var">p</var> tells us when to stop &ndash; when it returns true
+when applied to one of these seed values.
+</li><li><var class="var">f</var> maps each seed value to the corresponding
+character in the result string.  These chars are assembled
+into the string in a right-to-left order.
+</li><li><var class="var">base</var> is the optional initial/rightmost portion
+of the constructed string; it default to the empty
+string.
+</li><li><var class="var">make_final</var> is applied to the terminal seed
+value (on which <var class="var">p</var> returns true) to produce
+the final/leftmost portion of the constructed string.
+It defaults to <code class="code">(lambda (x) )</code>.
+</li></ul>
+</dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Miscellaneous-String-Operations.html">Miscellaneous String Operations</a>, Previous: <a href="Reversing-and-Appending-Strings.html">Reversing and Appending Strings</a>, Up: <a href="Strings.html">Strings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

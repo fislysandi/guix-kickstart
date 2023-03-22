@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Method Definition Internals (Guile Reference Manual)</title>
+
+<meta name="description" content="Method Definition Internals (Guile Reference Manual)">
+<meta name="keywords" content="Method Definition Internals (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="The-Metaobject-Protocol.html" rel="up" title="The Metaobject Protocol">
+<link href="Generic-Function-Internals.html" rel="next" title="Generic Function Internals">
+<link href="Method-Definition.html" rel="prev" title="Method Definition">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Method-Definition-Internals">
+<div class="nav-panel">
+<p>
+Next: <a href="Generic-Function-Internals.html" accesskey="n" rel="next">Generic Function Internals</a>, Previous: <a href="Method-Definition.html" accesskey="p" rel="prev">Method Definition</a>, Up: <a href="The-Metaobject-Protocol.html" accesskey="u" rel="up">The Metaobject Protocol</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Method-Definition-Internals-1">8.11.8 Method Definition Internals</h4>
+
+<p><code class="code">define-method</code>:
+</p>
+<ul class="itemize mark-bullet">
+<li>checks the form of the first parameter, and applies the following steps
+to the accessor&rsquo;s setter if it has the <code class="code">(setter &hellip;)</code> form
+
+</li><li>interpolates a call to <code class="code">define-generic</code> or <code class="code">define-accessor</code>
+if a generic function is not already defined with the supplied name
+
+</li><li>calls <code class="code">method</code> with the <var class="var">parameter</var>s and <var class="var">body</var>, to make a
+new method instance
+
+</li><li>calls <code class="code">add-method!</code> to add this method to the relevant generic
+function.
+</li></ul>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-method"><span class="category-def">syntax: </span><span><strong class="def-name">method</strong> <var class="def-var-arguments">(parameter &hellip;) body &hellip;</var><a class="copiable-link" href='#index-method'> &para;</a></span></dt>
+<dd><p>Make a method whose specializers are defined by the classes in
+<var class="var">parameter</var>s and whose procedure definition is constructed from the
+<var class="var">parameter</var> symbols and <var class="var">body</var> forms.
+</p>
+<p>The <var class="var">parameter</var> and <var class="var">body</var> parameters should be as for
+<code class="code">define-method</code> (see <a class="pxref" href="Methods-and-Generic-Functions.html">define-method</a>).
+</p></dd></dl>
+
+<p><code class="code">method</code>:
+</p>
+<ul class="itemize mark-bullet">
+<li>extracts formals and specializing classes from the <var class="var">parameter</var>s,
+defaulting the class for unspecialized parameters to <code class="code">&lt;top&gt;</code>
+
+</li><li>creates a closure using the formals and the <var class="var">body</var> forms
+
+</li><li>calls <code class="code">make</code> with metaclass <code class="code">&lt;method&gt;</code> and the specializers
+and closure using the <code class="code">#:specializers</code> and <code class="code">#:procedure</code>
+keywords.
+</li></ul>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dmethod"><span class="category-def">procedure: </span><span><strong class="def-name">make-method</strong> <var class="def-var-arguments">specializers procedure</var><a class="copiable-link" href='#index-make_002dmethod'> &para;</a></span></dt>
+<dd><p>Make a method using <var class="var">specializers</var> and <var class="var">procedure</var>.
+</p>
+<p><var class="var">specializers</var> should be a list of classes that specifies the
+parameter combinations to which this method will be applicable.
+</p>
+<p><var class="var">procedure</var> should be the closure that will applied to the generic
+function parameters when this method is invoked.
+</p></dd></dl>
+
+<p><code class="code">make-method</code> is a simple wrapper around <code class="code">make</code> with metaclass
+<code class="code">&lt;method&gt;</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-add_002dmethod_0021"><span class="category-def">generic: </span><span><strong class="def-name">add-method!</strong> <var class="def-var-arguments">target method</var><a class="copiable-link" href='#index-add_002dmethod_0021'> &para;</a></span></dt>
+<dd><p>Generic function for adding method <var class="var">method</var> to <var class="var">target</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-add_002dmethod_0021-1"><span class="category-def">method: </span><span><strong class="def-name">add-method!</strong> <var class="def-var-arguments">(generic &lt;generic&gt;) (method &lt;method&gt;)</var><a class="copiable-link" href='#index-add_002dmethod_0021-1'> &para;</a></span></dt>
+<dd><p>Add method <var class="var">method</var> to the generic function <var class="var">generic</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-add_002dmethod_0021-2"><span class="category-def">method: </span><span><strong class="def-name">add-method!</strong> <var class="def-var-arguments">(proc &lt;procedure&gt;) (method &lt;method&gt;)</var><a class="copiable-link" href='#index-add_002dmethod_0021-2'> &para;</a></span></dt>
+<dd><p>If <var class="var">proc</var> is a procedure with generic capability (see <a class="pxref" href="Extending-Primitives.html">generic-capability?</a>), upgrade it to a primitive generic
+and add <var class="var">method</var> to its generic function definition.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-add_002dmethod_0021-3"><span class="category-def">method: </span><span><strong class="def-name">add-method!</strong> <var class="def-var-arguments">(pg &lt;primitive-generic&gt;) (method &lt;method&gt;)</var><a class="copiable-link" href='#index-add_002dmethod_0021-3'> &para;</a></span></dt>
+<dd><p>Add method <var class="var">method</var> to the generic function definition of <var class="var">pg</var>.
+</p>
+<p>Implementation: <code class="code">(add-method! (primitive-generic-generic pg) method)</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-add_002dmethod_0021-4"><span class="category-def">method: </span><span><strong class="def-name">add-method!</strong> <var class="def-var-arguments">(whatever &lt;top&gt;) (method &lt;method&gt;)</var><a class="copiable-link" href='#index-add_002dmethod_0021-4'> &para;</a></span></dt>
+<dd><p>Raise an error indicating that <var class="var">whatever</var> is not a valid generic
+function.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Generic-Function-Internals.html">Generic Function Internals</a>, Previous: <a href="Method-Definition.html">Method Definition</a>, Up: <a href="The-Metaobject-Protocol.html">The Metaobject Protocol</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

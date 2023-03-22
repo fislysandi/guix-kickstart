@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Command Line Format (Guile Reference Manual)</title>
+
+<meta name="description" content="Command Line Format (Guile Reference Manual)">
+<meta name="keywords" content="Command Line Format (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="getopt_002dlong.html" rel="up" title="getopt-long">
+<link href="getopt_002dlong-Reference.html" rel="next" title="getopt-long Reference">
+<link href="Option-Specification.html" rel="prev" title="Option Specification">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Command-Line-Format">
+<div class="nav-panel">
+<p>
+Next: <a href="getopt_002dlong-Reference.html" accesskey="n" rel="next">Reference Documentation for <code class="code">getopt-long</code></a>, Previous: <a href="Option-Specification.html" accesskey="p" rel="prev">How to Write an Option Specification</a>, Up: <a href="getopt_002dlong.html" accesskey="u" rel="up">The (ice-9 getopt-long) Module</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Expected-Command-Line-Format">7.4.3 Expected Command Line Format</h4>
+
+<p>In order for <code class="code">getopt-long</code> to correctly parse a command line, that
+command line must conform to a standard set of rules for how command
+line options are specified.  This section explains what those rules
+are.
+</p>
+<p><code class="code">getopt-long</code> splits a given command line into several pieces.  All
+elements of the argument list are classified to be either options or
+normal arguments.  Options consist of two dashes and an option name
+(so-called <em class="dfn">long</em> options), or of one dash followed by a single
+letter (<em class="dfn">short</em> options).
+</p>
+<p>Options can behave as switches, when they are given without a value, or
+they can be used to pass a value to the program.  The value for an
+option may be specified using an equals sign, or else is simply the next
+word in the command line, so the following two invocations are
+equivalent:
+</p>
+<div class="example">
+<pre class="example-preformatted">$ ./foo.scm --output=bar.txt
+$ ./foo.scm --output bar.txt
+</pre></div>
+
+<p>Short options can be used instead of their long equivalents and can be
+grouped together after a single dash.  For example, the following
+commands are equivalent.
+</p>
+<div class="example">
+<pre class="example-preformatted">$ ./foo.scm --version --help
+$ ./foo.scm -v --help
+$ ./foo.scm -vh
+</pre></div>
+
+<p>If an option requires a value, it can only be grouped together with other
+short options if it is the last option in the group; the value is the
+next argument.  So, for example, with the following option
+specification &mdash;
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">((apples    (single-char #\a))
+ (blimps    (single-char #\b) (value #t))
+ (catalexis (single-char #\c) (value #t)))
+</pre></div>
+
+<p>&mdash; the following command lines would all be acceptable:
+</p>
+<div class="example">
+<pre class="example-preformatted">$ ./foo.scm -a -b bang -c couth
+$ ./foo.scm -ab bang -c couth
+$ ./foo.scm -ac couth -b bang
+</pre></div>
+
+<p>But the next command line is an error, because <code class="code">-b</code> is not the last
+option in its combination, and because a group of short options cannot
+include two options that both require values:
+</p>
+<div class="example">
+<pre class="example-preformatted">$ ./foo.scm -abc couth bang
+</pre></div>
+
+<p>If an option&rsquo;s value is optional, <code class="code">getopt-long</code> decides whether the
+option has a value by looking at what follows it in the argument list.
+If the next element is a string, and it does not appear to be an option
+itself, then that string is the option&rsquo;s value.
+</p>
+<p>If the option <code class="code">--</code> appears in the argument list, argument parsing
+stops there and subsequent arguments are returned as ordinary arguments,
+even if they resemble options.  So, with the command line
+</p>
+<div class="example">
+<pre class="example-preformatted">$ ./foo.scm --apples &quot;Granny Smith&quot; -- --blimp Goodyear
+</pre></div>
+
+<p><code class="code">getopt-long</code> will recognize the <code class="code">--apples</code> option as having
+the value &quot;Granny Smith&quot;, but will not treat <code class="code">--blimp</code> as an
+option.  The strings <code class="code">--blimp</code> and <code class="code">Goodyear</code> will be returned
+as ordinary argument strings.
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="getopt_002dlong-Reference.html">Reference Documentation for <code class="code">getopt-long</code></a>, Previous: <a href="Option-Specification.html">How to Write an Option Specification</a>, Up: <a href="getopt_002dlong.html">The (ice-9 getopt-long) Module</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

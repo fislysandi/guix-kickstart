@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>R6RS Libraries (Guile Reference Manual)</title>
+
+<meta name="description" content="R6RS Libraries (Guile Reference Manual)">
+<meta name="keywords" content="R6RS Libraries (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Modules.html" rel="up" title="Modules">
+<link href="Variables.html" rel="next" title="Variables">
+<link href="R6RS-Version-References.html" rel="prev" title="R6RS Version References">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="R6RS-Libraries">
+<div class="nav-panel">
+<p>
+Next: <a href="Variables.html" accesskey="n" rel="next">Variables</a>, Previous: <a href="R6RS-Version-References.html" accesskey="p" rel="prev">R6RS Version References</a>, Up: <a href="Modules.html" accesskey="u" rel="up">Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="R6RS-Libraries-1">6.18.6 R6RS Libraries</h4>
+
+<p>In addition to the API described in the previous sections, you also
+have the option to create modules using the portable <code class="code">library</code> form
+described in R6RS (see <a data-manual="r6rs" href="../r6rs_html/Library-form.html#Library-form">R6RS Library Form</a> in <cite class="cite">The
+Revised^6 Report on the Algorithmic Language Scheme</cite>), and to import 
+libraries created in this format by other programmers.  Guile&rsquo;s R6RS 
+library implementation takes advantage of the flexibility built into the
+module system by expanding the R6RS library form into a corresponding 
+Guile <code class="code">define-module</code> form that specifies equivalent import and 
+export requirements and includes the same body expressions.  The library
+expression:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">  (library (mylib (1 2))
+    (export mybinding)
+    (import (otherlib (3))))
+</pre></div>
+
+<p>is equivalent to the module definition:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">  (define-module (mylib)
+    #:version (1 2)
+    #:use-module ((otherlib) #:version (3))
+    #:export (mybinding))
+</pre></div>
+
+<p>Central to the mechanics of R6RS libraries is the concept of import
+and export <em class="dfn">levels</em>, which control the visibility of bindings at
+various phases of a library&rsquo;s lifecycle &mdash; macros necessary to 
+expand forms in the library&rsquo;s body need to be available at expand 
+time; variables used in the body of a procedure exported by the
+library must be available at runtime.  R6RS specifies the optional
+<code class="code">for</code> sub-form of an <em class="emph">import set</em> specification (see below)
+as a mechanism by which a library author can indicate that a
+particular library import should take place at a particular phase 
+with respect to the lifecycle of the importing library.  
+</p>
+<p>Guile&rsquo;s library implementation uses a technique called 
+<em class="dfn">implicit phasing</em> (first described by Abdulaziz Ghuloum and R. 
+Kent Dybvig), which allows the expander and compiler to automatically 
+determine the necessary visibility of a binding imported from another 
+library.  As such, the <code class="code">for</code> sub-form described below is ignored by
+Guile (but may be required by Schemes in which phasing is explicit).
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-library"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">library</strong> <var class="def-var-arguments">name (export export-spec ...) (import import-spec ...) body ...</var><a class="copiable-link" href='#index-library'> &para;</a></span></dt>
+<dd><p>Defines a new library with the specified name, exports, and imports,
+and evaluates the specified body expressions in this library&rsquo;s 
+environment.
+</p>
+<p>The library <var class="var">name</var> is a non-empty list of identifiers, optionally
+ending with a version specification of the form described above
+(see <a class="pxref" href="Creating-Guile-Modules.html">Creating Guile Modules</a>).
+</p>
+<p>Each <var class="var">export-spec</var> is the name of a variable defined or imported
+by the library, or must take the form 
+<code class="code">(rename (internal-name external-name) ...)</code>, where the 
+identifier <var class="var">internal-name</var> names a variable defined or imported 
+by the library and <var class="var">external-name</var> is the name by which the
+variable is seen by importing libraries.
+</p>
+<p>Each <var class="var">import-spec</var> must be either an <em class="dfn">import set</em> (see below)
+or must be of the form <code class="code">(for import-set import-level ...)</code>, 
+where each <var class="var">import-level</var> is one of:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">  run
+  expand
+  (meta <var class="var">level</var>)
+</pre></div>
+
+<p>where <var class="var">level</var> is an integer.  Note that since Guile does not
+require explicit phase specification, any <var class="var">import-set</var>s found 
+inside of <code class="code">for</code> sub-forms will be &ldquo;unwrapped&rdquo; during 
+expansion and processed as if they had been specified directly.
+</p>
+<p>Import sets in turn take one of the following forms:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">  <var class="var">library-reference</var>
+  (library <var class="var">library-reference</var>)
+  (only <var class="var">import-set</var> <var class="var">identifier</var> ...)
+  (except <var class="var">import-set</var> <var class="var">identifier</var> ...)
+  (prefix <var class="var">import-set</var> <var class="var">identifier</var>)
+  (rename <var class="var">import-set</var> (<var class="var">internal-identifier</var> <var class="var">external-identifier</var>) ...)
+</pre></div>
+
+<p>where <var class="var">library-reference</var> is a non-empty list of identifiers
+ending with an optional version reference (see <a class="pxref" href="R6RS-Version-References.html">R6RS Version References</a>), and the other sub-forms have the following semantics,
+defined recursively on nested <var class="var">import-set</var>s:
+</p>
+<ul class="itemize mark-bullet">
+<li>The <code class="code">library</code> sub-form is used to specify libraries for import
+whose names begin with the identifier &ldquo;library.&rdquo;
+
+</li><li>The <code class="code">only</code> sub-form imports only the specified <var class="var">identifier</var>s
+from the given <var class="var">import-set</var>.
+
+</li><li>The <code class="code">except</code> sub-form imports all of the bindings exported by 
+<var class="var">import-set</var> except for those that appear in the specified list
+of <var class="var">identifier</var>s.
+
+</li><li>The <code class="code">prefix</code> sub-form imports all of the bindings exported
+by <var class="var">import-set</var>, first prefixing them with the specified
+<var class="var">identifier</var>.
+
+</li><li>The <code class="code">rename</code> sub-form imports all of the identifiers exported
+by <var class="var">import-set</var>.  The binding for each <var class="var">internal-identifier</var>
+among these identifiers is made visible to the importing library as
+the corresponding <var class="var">external-identifier</var>; all other bindings are
+imported using the names provided by <var class="var">import-set</var>.
+
+</li></ul>
+
+<p>Note that because Guile translates R6RS libraries into module 
+definitions, an import specification may be used to declare a
+dependency on a native Guile module &mdash; although doing so may make 
+your libraries less portable to other Schemes.
+</p>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-import-1"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">import</strong> <var class="def-var-arguments">import-spec ...</var><a class="copiable-link" href='#index-import-1'> &para;</a></span></dt>
+<dd><p>Import into the current environment the libraries specified by the
+given import specifications, where each <var class="var">import-spec</var> takes the
+same form as in the <code class="code">library</code> form described above.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Variables.html">Variables</a>, Previous: <a href="R6RS-Version-References.html">R6RS Version References</a>, Up: <a href="Modules.html">Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

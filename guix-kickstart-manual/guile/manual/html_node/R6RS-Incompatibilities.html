@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>R6RS Incompatibilities (Guile Reference Manual)</title>
+
+<meta name="description" content="R6RS Incompatibilities (Guile Reference Manual)">
+<meta name="keywords" content="R6RS Incompatibilities (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="R6RS-Support.html" rel="up" title="R6RS Support">
+<link href="R6RS-Standard-Libraries.html" rel="next" title="R6RS Standard Libraries">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="R6RS-Incompatibilities">
+<div class="nav-panel">
+<p>
+Next: <a href="R6RS-Standard-Libraries.html" accesskey="n" rel="next">R6RS Standard Libraries</a>, Up: <a href="R6RS-Support.html" accesskey="u" rel="up">R6RS Support</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Incompatibilities-with-the-R6RS">7.6.1 Incompatibilities with the R6RS</h4>
+
+<p>There are some incompatibilities between Guile and the R6RS.  Some of 
+them are intentional, some of them are bugs, and some are simply 
+unimplemented features.  Please let the Guile developers know if you 
+find one that is not on this list.
+</p>
+<ul class="itemize mark-bullet">
+<li>The R6RS specifies many situations in which a conforming implementation
+must signal a specific error.  Guile doesn&rsquo;t really care about that too
+much&mdash;if a correct R6RS program would not hit that error, we don&rsquo;t 
+bother checking for it.
+
+</li><li>Multiple <code class="code">library</code> forms in one file are not yet supported.  This 
+is because the expansion of <code class="code">library</code> sets the current module, but
+does not restore it.  This is a bug.
+
+</li><li>R6RS unicode escapes within strings are disabled by default, because
+they conflict with Guile&rsquo;s already-existing escapes. The same is the
+case for R6RS treatment of escaped newlines in strings.
+
+<p>R6RS behavior can be turned on via a reader option. See <a class="xref" href="String-Syntax.html">String Read Syntax</a>, for more information.
+</p>
+</li><li>Guile does not yet support Unicode escapes in symbols, such as
+<code class="code">H\x65;llo</code> (the same as <code class="code">Hello</code>), or <code class="code">\x3BB;</code> (the same
+as <code class="code">λ</code>).
+
+</li><li>A <code class="code">set!</code> to a variable transformer may only expand to an 
+expression, not a definition&mdash;even if the original <code class="code">set!</code> 
+expression was in definition context.
+
+</li><li>Instead of using the algorithm detailed in chapter 10 of the R6RS,
+expansion of toplevel forms happens sequentially.
+
+<p>For example, while the expansion of the following set of toplevel
+definitions does the correct thing:
+</p>
+<div class="example">
+<pre class="example-preformatted">(begin
+ (define even?
+   (lambda (x)
+     (or (= x 0) (odd? (- x 1)))))
+ (define-syntax odd?
+   (syntax-rules ()
+     ((odd? x) (not (even? x)))))
+ (even? 10))
+&rArr; #t
+</pre></div>
+
+<p>The same definitions outside of the <code class="code">begin</code> wrapper do not:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define even?
+  (lambda (x)
+    (or (= x 0) (odd? (- x 1)))))
+(define-syntax odd?
+  (syntax-rules ()
+    ((odd? x) (not (even? x)))))
+(even? 10)
+&lt;unnamed port&gt;:4:18: In procedure even?:
+&lt;unnamed port&gt;:4:18: Wrong type to apply: #&lt;syntax-transformer odd?&gt;
+</pre></div>
+
+<p>This is because when expanding the right-hand-side of <code class="code">even?</code>, the
+reference to <code class="code">odd?</code> is not yet marked as a syntax transformer, so
+it is assumed to be a function.
+</p>
+<p>This bug will only affect top-level programs, not code in <code class="code">library</code>
+forms.  Fixing it for toplevel forms seems doable, but tricky to
+implement in a backward-compatible way. Suggestions and/or patches would
+be appreciated.
+</p>
+</li><li>The <code class="code">(rnrs io ports)</code> module is incomplete.  Work is
+ongoing to fix this.
+
+</li><li>Guile does not prevent use of textual I/O procedures on binary ports, or
+vice versa.  All ports in Guile support both binary and textual I/O.
+See <a class="xref" href="Encoding.html">Encoding</a>, for full details.
+
+</li><li>Guile&rsquo;s implementation of <code class="code">equal?</code> may fail to terminate when
+applied to arguments containing cycles.
+</li></ul>
+
+<p>Guile exposes a procedure in the root module to choose R6RS defaults
+over Guile&rsquo;s historical defaults.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-install_002dr6rs_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">install-r6rs!</strong><a class="copiable-link" href='#index-install_002dr6rs_0021'> &para;</a></span></dt>
+<dd><p>Alter Guile&rsquo;s default settings to better conform to the R6RS.
+</p>
+<p>While Guile&rsquo;s defaults may evolve over time, the current changes that
+this procedure imposes are to add <code class="code">.sls</code> and <code class="code">.guile.sls</code> to
+the set of supported <code class="code">%load-extensions</code>, to better support R6RS
+conventions.  See <a class="xref" href="Load-Paths.html">Load Paths</a>.  Also, enable R6RS unicode escapes in
+strings; see the discussion above.
+</p></dd></dl>
+
+<p>Finally, note that the <code class="code">--r6rs</code> command-line argument will call
+<code class="code">install-r6rs!</code> before calling user code.  R6RS users probably want
+to pass this argument to their Guile.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="R6RS-Standard-Libraries.html">R6RS Standard Libraries</a>, Up: <a href="R6RS-Support.html">R6RS Support</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Environments (Guile Reference Manual)</title>
+
+<meta name="description" content="Environments (Guile Reference Manual)">
+<meta name="keywords" content="Environments (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Modules.html" rel="up" title="Modules">
+<link href="provide-and-require.html" rel="prev" title="provide and require">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Environments">
+<div class="nav-panel">
+<p>
+Previous: <a href="provide-and-require.html" accesskey="p" rel="prev">provide and require</a>, Up: <a href="Modules.html" accesskey="u" rel="up">Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Environments-1">6.18.12 Environments</h4>
+<a class="index-entry-id" id="index-environment-1"></a>
+
+<p>Scheme, as defined in R5RS, does <em class="emph">not</em> have a full module system.
+However it does define the concept of a top-level <em class="dfn">environment</em>.
+Such an environment maps identifiers (symbols) to Scheme objects such
+as procedures and lists: <a class="ref" href="About-Closure.html">The Concept of Closure</a>.  In other words, it
+implements a set of <em class="dfn">bindings</em>.
+</p>
+<p>Environments in R5RS can be passed as the second argument to
+<code class="code">eval</code> (see <a class="pxref" href="Fly-Evaluation.html">Procedures for On the Fly Evaluation</a>).  Three procedures are defined to
+return environments: <code class="code">scheme-report-environment</code>,
+<code class="code">null-environment</code> and <code class="code">interaction-environment</code> (see <a class="pxref" href="Fly-Evaluation.html">Procedures for On the Fly Evaluation</a>).
+</p>
+<p>In addition, in Guile any module can be used as an R5RS environment,
+i.e., passed as the second argument to <code class="code">eval</code>.
+</p>
+<p>Note: the following two procedures are available only when the 
+<code class="code">(ice-9 r5rs)</code> module is loaded:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(use-modules (ice-9 r5rs))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-scheme_002dreport_002denvironment"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">scheme-report-environment</strong> <var class="def-var-arguments">version</var><a class="copiable-link" href='#index-scheme_002dreport_002denvironment'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-null_002denvironment"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">null-environment</strong> <var class="def-var-arguments">version</var><a class="copiable-link" href='#index-null_002denvironment'> &para;</a></span></dt>
+<dd><p><var class="var">version</var> must be the exact integer &lsquo;5&rsquo;, corresponding to revision
+5 of the Scheme report (the Revised^5 Report on Scheme).
+<code class="code">scheme-report-environment</code> returns a specifier for an
+environment that is empty except for all bindings defined in the
+report that are either required or both optional and supported by the
+implementation. <code class="code">null-environment</code> returns a specifier for an
+environment that is empty except for the (syntactic) bindings for all
+syntactic keywords defined in the report that are either required or
+both optional and supported by the implementation.
+</p>
+<p>Currently Guile does not support values of <var class="var">version</var> for other
+revisions of the report.
+</p>
+<p>The effect of assigning (through the use of <code class="code">eval</code>) a variable
+bound in a <code class="code">scheme-report-environment</code> (for example <code class="code">car</code>)
+is unspecified.  Currently the environments specified by
+<code class="code">scheme-report-environment</code> are not immutable in Guile.
+</p></dd></dl>
+
+
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="provide-and-require.html">provide and require</a>, Up: <a href="Modules.html">Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

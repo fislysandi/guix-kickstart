@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>rnrs io ports (Guile Reference Manual)</title>
+
+<meta name="description" content="rnrs io ports (Guile Reference Manual)">
+<meta name="keywords" content="rnrs io ports (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="R6RS-Standard-Libraries.html" rel="up" title="R6RS Standard Libraries">
+<link href="R6RS-File-Ports.html" rel="next" title="R6RS File Ports">
+<link href="R6RS-Transcoders.html" rel="prev" title="R6RS Transcoders">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="rnrs-io-ports">
+<div class="nav-panel">
+<p>
+Next: <a href="R6RS-File-Ports.html" accesskey="n" rel="next">R6RS File Ports</a>, Previous: <a href="R6RS-Transcoders.html" accesskey="p" rel="prev">Transcoders</a>, Up: <a href="R6RS-Standard-Libraries.html" accesskey="u" rel="up">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="rnrs-io-ports-1">7.6.2.16 rnrs io ports</h4>
+
+<a class="index-entry-id" id="index-R6RS-2"></a>
+<a class="index-entry-id" id="index-R6RS-ports"></a>
+<p>Guile&rsquo;s binary and textual port interface was heavily inspired by R6RS,
+so many R6RS port interfaces are documented elsewhere.  Note that R6RS
+ports are not disjoint from Guile&rsquo;s native ports, so Guile-specific
+procedures will work on ports created using the R6RS API, and vice
+versa.  Also note that in Guile, all ports are both textual and binary.
+See <a class="xref" href="Input-and-Output.html">Input and Output</a>, for more on Guile&rsquo;s core port API.  The R6RS
+ports module wraps Guile&rsquo;s I/O routines in a helper that will translate
+native Guile exceptions to R6RS conditions; See <a class="xref" href="R6RS-I_002fO-Conditions.html">I/O Conditions</a>,
+for more.  See <a class="xref" href="R6RS-File-Ports.html">R6RS File Ports</a>, for documentation on the R6RS file
+port interface.
+</p>
+<p><em class="emph">Note</em>: The implementation of this R6RS API is not complete yet.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-eof_002dobject_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">eof-object?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-eof_002dobject_003f-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Binary-I_002fO.html">Binary I/O</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-eof_002dobject"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">eof-object</strong><a class="copiable-link" href='#index-eof_002dobject'> &para;</a></span></dt>
+<dd><p>Return the end-of-file (EOF) object.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(eof-object? (eof-object))
+&rArr; #t
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-port_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">port?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-port_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-input_002dport_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">input-port?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-input_002dport_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-output_002dport_003f-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">output-port?</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-output_002dport_003f-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-call_002dwith_002dport-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">call-with-port</strong> <var class="def-var-arguments">port proc</var><a class="copiable-link" href='#index-call_002dwith_002dport-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Ports.html">Ports</a>, for documentation.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-port_002dtranscoder"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">port-transcoder</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-port_002dtranscoder'> &para;</a></span></dt>
+<dd><p>Return a transcoder associated with the encoding of <var class="var">port</var>.
+See <a class="xref" href="Encoding.html">Encoding</a>, and See <a class="xref" href="R6RS-Transcoders.html">Transcoders</a>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-binary_002dport_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">binary-port?</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-binary_002dport_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">port</var> appears to be a binary port, else return
+<code class="code">#f</code>.  Note that Guile does not currently distinguish between
+binary and textual ports, so this predicate is not a reliable indicator
+of whether the port was created as a binary port.  Currently, it returns
+<code class="code">#t</code> if and only if the port encoding is &ldquo;ISO-8859-1&rdquo;, because
+Guile uses this encoding when creating a binary port.  See <a class="xref" href="Encoding.html">Encoding</a>,
+for more details.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-textual_002dport_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">textual-port?</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-textual_002dport_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">port</var> appears to be a textual port, else return
+<code class="code">#f</code>.  Note that Guile does not currently distinguish between
+binary and textual ports, so this predicate is not a reliable indicator
+of whether the port was created as a textual port.  Currently, it always
+returns <code class="code">#t</code>, because all ports can be used for textual I/O in
+Guile.  See <a class="xref" href="Encoding.html">Encoding</a>, for more details.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-transcoded_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">transcoded-port</strong> <var class="def-var-arguments">binary-port transcoder</var><a class="copiable-link" href='#index-transcoded_002dport'> &para;</a></span></dt>
+<dd><p>The <code class="code">transcoded-port</code> procedure
+returns a new textual port with the specified <var class="var">transcoder</var>.
+Otherwise the new textual port&rsquo;s state is largely the same as
+that of <var class="var">binary-port</var>.
+If <var class="var">binary-port</var> is an input port, the new textual
+port will be an input port and
+will transcode the bytes that have not yet been read from
+<var class="var">binary-port</var>.
+If <var class="var">binary-port</var> is an output port, the new textual
+port will be an output port and
+will transcode output characters into bytes that are
+written to the byte sink represented by <var class="var">binary-port</var>.
+</p>
+<p>As a side effect, however, <code class="code">transcoded-port</code>
+closes <var class="var">binary-port</var> in
+a special way that allows the new textual port to continue to
+use the byte source or sink represented by <var class="var">binary-port</var>,
+even though <var class="var">binary-port</var> itself is closed and cannot
+be used by the input and output operations described in this
+chapter.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-port_002dposition"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">port-position</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-port_002dposition'> &para;</a></span></dt>
+<dd><p>Equivalent to <code class="code">(seek <var class="var">port</var> 0 SEEK_CUR)</code>.  See <a class="xref" href="Random-Access.html">Random Access</a>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-port_002dhas_002dport_002dposition_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">port-has-port-position?</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-port_002dhas_002dport_002dposition_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> is <var class="var">port</var> supports <code class="code">port-position</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-set_002dport_002dposition_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-port-position!</strong> <var class="def-var-arguments">port offset</var><a class="copiable-link" href='#index-set_002dport_002dposition_0021'> &para;</a></span></dt>
+<dd><p>Equivalent to <code class="code">(seek <var class="var">port</var> <var class="var">offset</var> SEEK_SET)</code>.
+See <a class="xref" href="Random-Access.html">Random Access</a>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-port_002dhas_002dset_002dport_002dposition_0021_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">port-has-set-port-position!?</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-port_002dhas_002dset_002dport_002dposition_0021_003f'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> is <var class="var">port</var> supports <code class="code">set-port-position!</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-port_002deof_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">port-eof?</strong> <var class="def-var-arguments">input-port</var><a class="copiable-link" href='#index-port_002deof_003f'> &para;</a></span></dt>
+<dd><p>Equivalent to <code class="code">(eof-object? (lookahead-u8 <var class="var">input-port</var>))</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-standard_002dinput_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">standard-input-port</strong><a class="copiable-link" href='#index-standard_002dinput_002dport'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-standard_002doutput_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">standard-output-port</strong><a class="copiable-link" href='#index-standard_002doutput_002dport'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-standard_002derror_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">standard-error-port</strong><a class="copiable-link" href='#index-standard_002derror_002dport'> &para;</a></span></dt>
+<dd><p>Returns a fresh binary input port connected to standard input, or a
+binary output port connected to the standard output or standard error,
+respectively.  Whether the port supports the <code class="code">port-position</code> and
+<code class="code">set-port-position!</code>  operations is implementation-dependent.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-current_002dinput_002dport-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">current-input-port</strong><a class="copiable-link" href='#index-current_002dinput_002dport-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-current_002doutput_002dport-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">current-output-port</strong><a class="copiable-link" href='#index-current_002doutput_002dport-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-current_002derror_002dport-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">current-error-port</strong><a class="copiable-link" href='#index-current_002derror_002dport-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Default-Ports.html">Default Ports for Input, Output and Errors</a>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-open_002dbytevector_002dinput_002dport-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-bytevector-input-port</strong> <var class="def-var-arguments">bv [transcoder]</var><a class="copiable-link" href='#index-open_002dbytevector_002dinput_002dport-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-open_002dbytevector_002doutput_002dport-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-bytevector-output-port</strong> <var class="def-var-arguments">[transcoder]</var><a class="copiable-link" href='#index-open_002dbytevector_002doutput_002dport-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Bytevector-Ports.html">Bytevector Ports</a>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dcustom_002dbinary_002dinput_002dport-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-custom-binary-input-port</strong> <var class="def-var-arguments">id read! get-position set-position! close</var><a class="copiable-link" href='#index-make_002dcustom_002dbinary_002dinput_002dport-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002dcustom_002dbinary_002doutput_002dport-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-custom-binary-output-port</strong> <var class="def-var-arguments">id write! get-position set-position! close</var><a class="copiable-link" href='#index-make_002dcustom_002dbinary_002doutput_002dport-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-make_002dcustom_002dbinary_002dinput_002foutput_002dport-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-custom-binary-input/output-port</strong> <var class="def-var-arguments">id read! write! get-position set-position! close</var><a class="copiable-link" href='#index-make_002dcustom_002dbinary_002dinput_002foutput_002dport-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Custom-Ports.html">Custom Ports</a>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-get_002du8-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-u8</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-get_002du8-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-lookahead_002du8-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">lookahead-u8</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-lookahead_002du8-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-get_002dbytevector_002dn-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-bytevector-n</strong> <var class="def-var-arguments">port count</var><a class="copiable-link" href='#index-get_002dbytevector_002dn-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-get_002dbytevector_002dn_0021-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-bytevector-n!</strong> <var class="def-var-arguments">port bv start count</var><a class="copiable-link" href='#index-get_002dbytevector_002dn_0021-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-get_002dbytevector_002dsome-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-bytevector-some</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-get_002dbytevector_002dsome-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-get_002dbytevector_002dall-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-bytevector-all</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-get_002dbytevector_002dall-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-put_002du8-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">put-u8</strong> <var class="def-var-arguments">port octet</var><a class="copiable-link" href='#index-put_002du8-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-put_002dbytevector-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">put-bytevector</strong> <var class="def-var-arguments">port bv [start [count]]</var><a class="copiable-link" href='#index-put_002dbytevector-1'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Binary-I_002fO.html">Binary I/O</a>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-get_002dchar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-char</strong> <var class="def-var-arguments">textual-input-port</var><a class="copiable-link" href='#index-get_002dchar-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-lookahead_002dchar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">lookahead-char</strong> <var class="def-var-arguments">textual-input-port</var><a class="copiable-link" href='#index-lookahead_002dchar-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-get_002dstring_002dn-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-string-n</strong> <var class="def-var-arguments">textual-input-port count</var><a class="copiable-link" href='#index-get_002dstring_002dn-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-get_002dstring_002dn_0021-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-string-n!</strong> <var class="def-var-arguments">textual-input-port string start count</var><a class="copiable-link" href='#index-get_002dstring_002dn_0021-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-get_002dstring_002dall-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-string-all</strong> <var class="def-var-arguments">textual-input-port</var><a class="copiable-link" href='#index-get_002dstring_002dall-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-get_002dline-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-line</strong> <var class="def-var-arguments">textual-input-port</var><a class="copiable-link" href='#index-get_002dline-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-put_002dchar-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">put-char</strong> <var class="def-var-arguments">port char</var><a class="copiable-link" href='#index-put_002dchar-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-put_002dstring-3"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">put-string</strong> <var class="def-var-arguments">port string [start [count]]</var><a class="copiable-link" href='#index-put_002dstring-3'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Textual-I_002fO.html">Textual I/O</a>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-get_002ddatum"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">get-datum</strong> <var class="def-var-arguments">textual-input-port count</var><a class="copiable-link" href='#index-get_002ddatum'> &para;</a></span></dt>
+<dd><p>Reads an external representation from <var class="var">textual-input-port</var> and returns the
+datum it represents.  The <code class="code">get-datum</code> procedure returns the next
+datum that can be parsed from the given <var class="var">textual-input-port</var>, updating
+<var class="var">textual-input-port</var> to point exactly past the end of the external
+representation of the object.
+</p>
+<p>Any <em class="emph">interlexeme space</em> (comment or whitespace, see <a class="pxref" href="Scheme-Syntax.html">Scheme Syntax: Standard and Guile Extensions</a>) in the input is first skipped.  If an end of file occurs after
+the interlexeme space, the end-of-file object is returned.
+</p>
+<p>If a character inconsistent with an external representation is
+encountered in the input, an exception with condition types
+<code class="code">&amp;lexical</code> and <code class="code">&amp;i/o-read</code> is raised.  Also, if the end of
+file is encountered after the beginning of an external representation,
+but the external representation is incomplete and therefore cannot be
+parsed, an exception with condition types <code class="code">&amp;lexical</code> and
+<code class="code">&amp;i/o-read</code> is raised.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-put_002ddatum"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">put-datum</strong> <var class="def-var-arguments">textual-output-port datum</var><a class="copiable-link" href='#index-put_002ddatum'> &para;</a></span></dt>
+<dd><p><var class="var">datum</var> should be a datum value.  The <code class="code">put-datum</code> procedure
+writes an external representation of <var class="var">datum</var> to
+<var class="var">textual-output-port</var>.  The specific external representation is
+implementation-dependent.  However, whenever possible, an implementation
+should produce a representation for which <code class="code">get-datum</code>, when reading
+the representation, will return an object equal (in the sense of
+<code class="code">equal?</code>) to <var class="var">datum</var>.
+</p>
+<blockquote class="quotation">
+<p><b class="b">Note:</b> Not all datums may allow producing an external representation for which
+  <code class="code">get-datum</code> will produce an object that is equal to the
+  original.  Specifically, NaNs contained in <var class="var">datum</var> may make
+  this impossible.
+</p></blockquote>
+
+<blockquote class="quotation">
+<p><b class="b">Note:</b> The <code class="code">put-datum</code> procedure merely writes the external
+  representation, but no trailing delimiter.  If <code class="code">put-datum</code> is
+  used to write several subsequent external representations to an
+  output port, care should be taken to delimit them properly so they can
+  be read back in by subsequent calls to <code class="code">get-datum</code>.
+</p></blockquote>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-flush_002doutput_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flush-output-port</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-flush_002doutput_002dport'> &para;</a></span></dt>
+<dd><p>See <a class="xref" href="Buffering.html">Buffering</a>, for documentation on <code class="code">force-output</code>.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="R6RS-File-Ports.html">R6RS File Ports</a>, Previous: <a href="R6RS-Transcoders.html">Transcoders</a>, Up: <a href="R6RS-Standard-Libraries.html">R6RS Standard Libraries</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

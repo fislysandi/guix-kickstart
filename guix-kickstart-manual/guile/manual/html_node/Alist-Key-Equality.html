@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Alist Key Equality (Guile Reference Manual)</title>
+
+<meta name="description" content="Alist Key Equality (Guile Reference Manual)">
+<meta name="keywords" content="Alist Key Equality (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Association-Lists.html" rel="up" title="Association Lists">
+<link href="Adding-or-Setting-Alist-Entries.html" rel="next" title="Adding or Setting Alist Entries">
+<style type="text/css">
+<!--
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Alist-Key-Equality">
+<div class="nav-panel">
+<p>
+Next: <a href="Adding-or-Setting-Alist-Entries.html" accesskey="n" rel="next">Adding or Setting Alist Entries</a>, Up: <a href="Association-Lists.html" accesskey="u" rel="up">Association Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Alist-Key-Equality-1">6.6.20.1 Alist Key Equality</h4>
+
+<p>All of Guile&rsquo;s dedicated association list procedures, apart from
+<code class="code">acons</code>, come in three flavours, depending on the level of equality
+that is required to decide whether an existing key in the association
+list is the same as the key that the procedure call uses to identify the
+required entry.
+</p>
+<ul class="itemize mark-bullet">
+<li>Procedures with <em class="dfn">assq</em> in their name use <code class="code">eq?</code> to determine key
+equality.
+
+</li><li>Procedures with <em class="dfn">assv</em> in their name use <code class="code">eqv?</code> to determine
+key equality.
+
+</li><li>Procedures with <em class="dfn">assoc</em> in their name use <code class="code">equal?</code> to
+determine key equality.
+</li></ul>
+
+<p><code class="code">acons</code> is an exception because it is used to build association
+lists which do not require their entries&rsquo; keys to be unique.
+</p>
+</div>
+
+
+
+</body>
+</html>

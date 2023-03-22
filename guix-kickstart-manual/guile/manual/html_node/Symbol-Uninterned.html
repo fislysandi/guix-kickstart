@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Symbol Uninterned (Guile Reference Manual)</title>
+
+<meta name="description" content="Symbol Uninterned (Guile Reference Manual)">
+<meta name="keywords" content="Symbol Uninterned (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Symbols.html" rel="up" title="Symbols">
+<link href="Symbol-Read-Syntax.html" rel="prev" title="Symbol Read Syntax">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Symbol-Uninterned">
+<div class="nav-panel">
+<p>
+Previous: <a href="Symbol-Read-Syntax.html" accesskey="p" rel="prev">Extended Read Syntax for Symbols</a>, Up: <a href="Symbols.html" accesskey="u" rel="up">Symbols</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Uninterned-Symbols">6.6.6.6 Uninterned Symbols</h4>
+
+<p>What makes symbols useful is that they are automatically kept unique.
+There are no two symbols that are distinct objects but have the same
+name.  But of course, there is no rule without exception.  In addition
+to the normal symbols that have been discussed up to now, you can also
+create special <em class="dfn">uninterned</em> symbols that behave slightly
+differently.
+</p>
+<p>To understand what is different about them and why they might be useful,
+we look at how normal symbols are actually kept unique.
+</p>
+<p>Whenever Guile wants to find the symbol with a specific name, for
+example during <code class="code">read</code> or when executing <code class="code">string-&gt;symbol</code>, it
+first looks into a table of all existing symbols to find out whether a
+symbol with the given name already exists.  When this is the case, Guile
+just returns that symbol.  When not, a new symbol with the name is
+created and entered into the table so that it can be found later.
+</p>
+<p>Sometimes you might want to create a symbol that is guaranteed &lsquo;fresh&rsquo;,
+i.e. a symbol that did not exist previously.  You might also want to
+somehow guarantee that no one else will ever unintentionally stumble
+across your symbol in the future.  These properties of a symbol are
+often needed when generating code during macro expansion.  When
+introducing new temporary variables, you want to guarantee that they
+don&rsquo;t conflict with variables in other people&rsquo;s code.
+</p>
+<p>The simplest way to arrange for this is to create a new symbol but
+not enter it into the global table of all symbols.  That way, no one
+will ever get access to your symbol by chance.  Symbols that are not in
+the table are called <em class="dfn">uninterned</em>.  Of course, symbols that
+<em class="emph">are</em> in the table are called <em class="dfn">interned</em>.
+</p>
+<p>You create new uninterned symbols with the function <code class="code">make-symbol</code>.
+You can test whether a symbol is interned or not with
+<code class="code">symbol-interned?</code>.
+</p>
+<p>Uninterned symbols break the rule that the name of a symbol uniquely
+identifies the symbol object.  Because of this, they can not be written
+out and read back in like interned symbols.  Currently, Guile has no
+support for reading uninterned symbols.  Note that the function
+<code class="code">gensym</code> does not return uninterned symbols for this reason.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dsymbol"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-symbol</strong> <var class="def-var-arguments">name</var><a class="copiable-link" href='#index-make_002dsymbol'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmake_005fsymbol"><span class="category-def">C Function: </span><span><strong class="def-name">scm_make_symbol</strong> <var class="def-var-arguments">(name)</var><a class="copiable-link" href='#index-scm_005fmake_005fsymbol'> &para;</a></span></dt>
+<dd><p>Return a new uninterned symbol with the name <var class="var">name</var>.  The returned
+symbol is guaranteed to be unique and future calls to
+<code class="code">string-&gt;symbol</code> will not return it.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-symbol_002dinterned_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">symbol-interned?</strong> <var class="def-var-arguments">symbol</var><a class="copiable-link" href='#index-symbol_002dinterned_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fsymbol_005finterned_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_symbol_interned_p</strong> <var class="def-var-arguments">(symbol)</var><a class="copiable-link" href='#index-scm_005fsymbol_005finterned_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if <var class="var">symbol</var> is interned, otherwise return
+<code class="code">#f</code>.
+</p></dd></dl>
+
+<p>For example:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define foo-1 (string-&gt;symbol &quot;foo&quot;))
+(define foo-2 (string-&gt;symbol &quot;foo&quot;))
+(define foo-3 (make-symbol &quot;foo&quot;))
+(define foo-4 (make-symbol &quot;foo&quot;))
+
+(eq? foo-1 foo-2)
+&rArr; #t
+; Two interned symbols with the same name are the same object,
+
+(eq? foo-1 foo-3)
+&rArr; #f
+; but a call to make-symbol with the same name returns a
+; distinct object.
+
+(eq? foo-3 foo-4)
+&rArr; #f
+; A call to make-symbol always returns a new object, even for
+; the same name.
+
+foo-3
+&rArr; #&lt;uninterned-symbol foo 8085290&gt;
+; Uninterned symbols print differently from interned symbols,
+
+(symbol? foo-3)
+&rArr; #t
+; but they are still symbols,
+
+(symbol-interned? foo-3)
+&rArr; #f
+; just not interned.
+</pre></div>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Symbol-Read-Syntax.html">Extended Read Syntax for Symbols</a>, Up: <a href="Symbols.html">Symbols</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

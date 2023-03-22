@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Scheme Read (Guile Reference Manual)</title>
+
+<meta name="description" content="Scheme Read (Guile Reference Manual)">
+<meta name="keywords" content="Scheme Read (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Read_002fLoad_002fEval_002fCompile.html" rel="up" title="Read/Load/Eval/Compile">
+<link href="Annotated-Scheme-Read.html" rel="next" title="Annotated Scheme Read">
+<link href="Scheme-Syntax.html" rel="prev" title="Scheme Syntax">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Scheme-Read">
+<div class="nav-panel">
+<p>
+Next: <a href="Annotated-Scheme-Read.html" accesskey="n" rel="next">Reading Scheme Code, For the Compiler</a>, Previous: <a href="Scheme-Syntax.html" accesskey="p" rel="prev">Scheme Syntax: Standard and Guile Extensions</a>, Up: <a href="Read_002fLoad_002fEval_002fCompile.html" accesskey="u" rel="up">Reading and Evaluating Scheme Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Reading-Scheme-Code">6.16.2 Reading Scheme Code</h4>
+
+<a class="index-entry-id" id="index-read-4"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-read-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read</strong> <var class="def-var-arguments">[port]</var><a class="copiable-link" href='#index-read-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fread"><span class="category-def">C Function: </span><span><strong class="def-name">scm_read</strong> <var class="def-var-arguments">(port)</var><a class="copiable-link" href='#index-scm_005fread'> &para;</a></span></dt>
+<dd><p>Read an s-expression from the input port <var class="var">port</var>, or from
+the current input port if <var class="var">port</var> is not specified.
+Any whitespace before the next token is discarded.
+</p></dd></dl>
+
+<p>The behaviour of Guile&rsquo;s Scheme reader can be modified by manipulating
+its read options.
+</p>
+<a class="index-entry-id" id="index-options-_002d-read"></a>
+<a class="index-entry-id" id="index-read-options"></a>
+<dl class="first-deffn">
+<dt class="deffn" id="index-read_002doptions"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read-options</strong> <var class="def-var-arguments">[setting]</var><a class="copiable-link" href='#index-read_002doptions'> &para;</a></span></dt>
+<dd><p>Display the current settings of the global read options.  If
+<var class="var">setting</var> is omitted, only a short form of the current read options
+is printed.  Otherwise if <var class="var">setting</var> is the symbol <code class="code">help</code>, a
+complete options description is displayed.
+</p></dd></dl>
+
+<p>The set of available options, and their default values, may be had by
+invoking <code class="code">read-options</code> at the prompt.
+</p>
+<div class="example smalllisp lisp">
+<pre class="lisp-preformatted">scheme@(guile-user)&gt; (read-options)
+(square-brackets keywords #f positions)
+scheme@(guile-user)&gt; (read-options 'help)
+positions         yes   Record positions of source code expressions.
+case-insensitive  no    Convert symbols to lower case.
+keywords          #f    Style of keyword recognition: #f, 'prefix or 'postfix.
+r6rs-hex-escapes  no    Use R6RS variable-length character and string hex escapes.
+square-brackets   yes   Treat `[' and `]' as parentheses, for R6RS compatibility.
+hungry-eol-escapes no   In strings, consume leading whitespace after an
+                        escaped end-of-line.
+curly-infix       no    Support SRFI-105 curly infix expressions.
+r7rs-symbols      no    Support R7RS |...| symbol notation.
+</pre></div>
+
+<p>Note that Guile also includes a preliminary mechanism for setting read
+options on a per-port basis.  For instance, the <code class="code">case-insensitive</code>
+read option is set (or unset) on the port when the reader encounters the
+<code class="code">#!fold-case</code> or <code class="code">#!no-fold-case</code> reader directives.
+Similarly, the <code class="code">#!curly-infix</code> reader directive sets the
+<code class="code">curly-infix</code> read option on the port, and
+<code class="code">#!curly-infix-and-bracket-lists</code> sets <code class="code">curly-infix</code> and
+unsets <code class="code">square-brackets</code> on the port (see <a class="pxref" href="SRFI_002d105.html">SRFI-105 Curly-infix expressions.</a>).  There is
+currently no other way to access or set the per-port read options.
+</p>
+<p>The boolean options may be toggled with <code class="code">read-enable</code> and
+<code class="code">read-disable</code>. The non-boolean <code class="code">keywords</code> option must be set
+using <code class="code">read-set!</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-read_002denable"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read-enable</strong> <var class="def-var-arguments">option-name</var><a class="copiable-link" href='#index-read_002denable'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-read_002ddisable"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">read-disable</strong> <var class="def-var-arguments">option-name</var><a class="copiable-link" href='#index-read_002ddisable'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-read_002dset_0021"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">read-set!</strong> <var class="def-var-arguments">option-name value</var><a class="copiable-link" href='#index-read_002dset_0021'> &para;</a></span></dt>
+<dd><p>Modify the read options.  <code class="code">read-enable</code> should be used with boolean
+options and switches them on, <code class="code">read-disable</code> switches them off.
+</p>
+<p><code class="code">read-set!</code> can be used to set an option to a specific value.  Due
+to historical oddities, it is a macro that expects an unquoted option
+name.
+</p></dd></dl>
+
+<p>For example, to make <code class="code">read</code> fold all symbols to their lower case
+(perhaps for compatibility with older Scheme code), you can enter:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(read-enable 'case-insensitive)
+</pre></div>
+
+<p>For more information on the effect of the <code class="code">r6rs-hex-escapes</code> and
+<code class="code">hungry-eol-escapes</code> options, see (see <a class="pxref" href="String-Syntax.html">String Read Syntax</a>).
+</p>
+<p>For more information on the <code class="code">r7rs-symbols</code> option, see
+(see <a class="pxref" href="Symbol-Read-Syntax.html">Extended Read Syntax for Symbols</a>).
+</p>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Annotated-Scheme-Read.html">Reading Scheme Code, For the Compiler</a>, Previous: <a href="Scheme-Syntax.html">Scheme Syntax: Standard and Guile Extensions</a>, Up: <a href="Read_002fLoad_002fEval_002fCompile.html">Reading and Evaluating Scheme Code</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

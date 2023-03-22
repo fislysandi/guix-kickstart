@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Throw and Catch (Guile Reference Manual)</title>
+
+<meta name="description" content="Throw and Catch (Guile Reference Manual)">
+<meta name="keywords" content="Throw and Catch (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Exceptions.html" rel="up" title="Exceptions">
+<link href="Exceptions-and-C.html" rel="next" title="Exceptions and C">
+<link href="Raising-and-Handling-Exceptions.html" rel="prev" title="Raising and Handling Exceptions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Throw-and-Catch">
+<div class="nav-panel">
+<p>
+Next: <a href="Exceptions-and-C.html" accesskey="n" rel="next">Exceptions and C</a>, Previous: <a href="Raising-and-Handling-Exceptions.html" accesskey="p" rel="prev">Raising and Handling Exceptions</a>, Up: <a href="Exceptions.html" accesskey="u" rel="up">Exceptions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Throw-and-Catch-1">6.11.8.3 Throw and Catch</h4>
+
+<p>Guile only adopted <code class="code">with-exception-handler</code> and
+<code class="code">raise-exception</code> as its primary exception-handling facility in
+2019.  Before then, exception handling was fundamentally based on three
+other primitives with a somewhat more complex interface:  <code class="code">catch</code>,
+<code class="code">with-throw-handler</code>, and <code class="code">throw</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-catch"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">catch</strong> <var class="def-var-arguments">key thunk handler [pre-unwind-handler]</var><a class="copiable-link" href='#index-catch'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcatch_005fwith_005fpre_005funwind_005fhandler"><span class="category-def">C Function: </span><span><strong class="def-name">scm_catch_with_pre_unwind_handler</strong> <var class="def-var-arguments">(key, thunk, handler, pre_unwind_handler)</var><a class="copiable-link" href='#index-scm_005fcatch_005fwith_005fpre_005funwind_005fhandler'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fcatch"><span class="category-def">C Function: </span><span><strong class="def-name">scm_catch</strong> <var class="def-var-arguments">(key, thunk, handler)</var><a class="copiable-link" href='#index-scm_005fcatch'> &para;</a></span></dt>
+<dd><p>Establish an exception handler during the dynamic extent of the call to
+<var class="var">thunk</var>.  <var class="var">key</var> is either <code class="code">#t</code>, indicating that all
+exceptions should be handled, or a symbol, restricting the exceptions
+handled to those having the <var class="var">key</var> as their <code class="code">exception-kind</code>.
+</p>
+<p>If <var class="var">thunk</var> executes normally, meaning without throwing any
+exceptions, the handler procedures are not called at all and the result
+of the <code class="code">thunk</code> call is the result of the <code class="code">catch</code>.  Otherwise
+if an exception is thrown that matches <var class="var">key</var>, <var class="var">handler</var> is
+called with the continuation of the <code class="code">catch</code> call.
+</p></dd></dl>
+
+<p>Given the discussion from the previous section, it is most precise and
+concise to specify what <code class="code">catch</code> does by expressing it in terms of
+<code class="code">with-exception-handler</code>.  Calling <code class="code">catch</code> with the three
+arguments is the same as:
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (catch key thunk handler)
+  (with-exception-handler
+   (lambda (exn)
+     (apply handler (exception-kind exn) (exception-args exn)))
+   thunk
+   #:unwind? #t
+   #:unwind-for-type key))
+</pre></div>
+
+<p>By invoking <code class="code">with-exception-handler</code> with <code class="code">#:unwind? #t</code>,
+<code class="code">catch</code> sets up an escape continuation that will be invoked in an
+exceptional situation before the handler is called.
+</p>
+<p>If <code class="code">catch</code> is called with four arguments, then the use of
+<var class="var">thunk</var> should be replaced with:
+</p>
+<div class="example">
+<pre class="example-preformatted">   (lambda ()
+     (with-throw-handler key thunk pre-unwind-handler))
+</pre></div>
+
+<p>As can be seen above, if a pre-unwind-handler is passed to <code class="code">catch</code>,
+it&rsquo;s like calling <code class="code">with-throw-handler</code> inside the body thunk.
+</p>
+<p><code class="code">with-throw-handler</code> is the second of the older primitives, and is
+used to be able to intercept an exception that is being thrown before
+the stack is unwound.  This could be to clean up some related state, to
+print a backtrace, or to pass information about the exception to a
+debugger, for example.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-with_002dthrow_002dhandler"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">with-throw-handler</strong> <var class="def-var-arguments">key thunk handler</var><a class="copiable-link" href='#index-with_002dthrow_002dhandler'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fwith_005fthrow_005fhandler"><span class="category-def">C Function: </span><span><strong class="def-name">scm_with_throw_handler</strong> <var class="def-var-arguments">(key, thunk, handler)</var><a class="copiable-link" href='#index-scm_005fwith_005fthrow_005fhandler'> &para;</a></span></dt>
+<dd><p>Add <var class="var">handler</var> to the dynamic context as a throw handler
+for key <var class="var">key</var>, then invoke <var class="var">thunk</var>.
+</p></dd></dl>
+
+<p>It&rsquo;s not possible to exactly express <code class="code">with-throw-handler</code> in terms
+of <code class="code">with-exception-handler</code>, but we can get close.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (with-throw-handler key thunk handler)
+  (with-exception-handler
+   (lambda (exn)
+     (when (or (eq? key #t) (eq? key (exception-kind exn)))
+       (apply handler (exception-kind exn) (exception-args exn)))
+     (raise-exception exn))
+   thunk))
+</pre></div>
+
+<p>As you can see, unlike in the case of <code class="code">catch</code>, the handler for
+<code class="code">with-throw-handler</code> is invoked within the continuation of
+<code class="code">raise-exception</code>, before unwinding the stack.  If the throw
+handler returns normally, the exception will be re-raised, to be handled
+by the next exception handler.
+</p>
+<p>The special wrinkle of <code class="code">with-throw-handler</code> that can&rsquo;t be shown
+above is that if invoking the handler causes a <code class="code">raise-exception</code>
+instead of completing normally, the exception is thrown in the
+<em class="emph">original</em> dynamic environment of the <code class="code">raise-exception</code>.  Any
+inner exception handler will get another shot at handling the exception.
+Here is an example to illustrate this behavior:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(catch 'a
+  (lambda ()
+    (with-throw-handler 'b
+      (lambda ()
+        (catch 'a
+          (lambda ()
+            (throw 'b))
+          inner-handler))
+      (lambda (key . args)
+        (throw 'a))))
+  outer-handler)
+</pre></div>
+
+<p>This code will call <code class="code">inner-handler</code> and then continue with the
+continuation of the inner <code class="code">catch</code>.
+</p>
+<p>Finally, we get to <code class="code">throw</code>, which is the older equivalent to
+<code class="code">raise-exception</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-throw"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">throw</strong> <var class="def-var-arguments">key arg &hellip;</var><a class="copiable-link" href='#index-throw'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fthrow"><span class="category-def">C Function: </span><span><strong class="def-name">scm_throw</strong> <var class="def-var-arguments">(key, args)</var><a class="copiable-link" href='#index-scm_005fthrow'> &para;</a></span></dt>
+<dd><p>Raise an exception with kind <var class="var">key</var> and arguments <var class="var">args</var>.
+<var class="var">key</var> is a symbol, denoting the &ldquo;kind&rdquo; of the exception.
+</p></dd></dl>
+
+<p>Again, we can specify what <code class="code">throw</code> does by expressing it in terms
+of <code class="code">raise-exception</code>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(define (throw key . args)
+  (raise-exception (make-exception-from-throw key args)))
+</pre></div>
+
+<p>At this point, we should mention the primitive that manage the
+relationship between structured exception objects <code class="code">throw</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dexception_002dfrom_002dthrow"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-exception-from-throw</strong> <var class="def-var-arguments">key args</var><a class="copiable-link" href='#index-make_002dexception_002dfrom_002dthrow'> &para;</a></span></dt>
+<dd><p>Create an exception object for the given <var class="var">key</var> and <var class="var">args</var> passed
+to <code class="code">throw</code>.  This may be a specific type of exception, for example
+<code class="code">&amp;programming-error</code>; Guile maintains a set of custom transformers
+for the various <var class="var">key</var> values that have been used historically.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-exception_002dkind"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exception-kind</strong> <var class="def-var-arguments">exn</var><a class="copiable-link" href='#index-exception_002dkind'> &para;</a></span></dt>
+<dd><p>If <var class="var">exn</var> is an exception created via
+<code class="code">make-exception-from-throw</code>, return the corresponding <var class="var">key</var> for
+the exception.  Otherwise, unless <var class="var">exn</var> is an exception of a type
+with a known mapping to <code class="code">throw</code>, return the symbol
+<code class="code">%exception</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-exception_002dargs"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">exception-args</strong> <var class="def-var-arguments">exn</var><a class="copiable-link" href='#index-exception_002dargs'> &para;</a></span></dt>
+<dd><p>If <var class="var">exn</var> is an exception created via
+<code class="code">make-exception-from-throw</code>, return the corresponding <var class="var">args</var>
+for the exception.  Otherwise, unless <var class="var">exn</var> is an exception of a
+type with a known mapping to <code class="code">throw</code>, return <code class="code">(list <var class="var">exn</var>)</code>.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Exceptions-and-C.html">Exceptions and C</a>, Previous: <a href="Raising-and-Handling-Exceptions.html">Raising and Handling Exceptions</a>, Up: <a href="Exceptions.html">Exceptions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

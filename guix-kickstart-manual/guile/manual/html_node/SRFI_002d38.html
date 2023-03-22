@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-38 (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-38 (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-38 (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI-Support.html" rel="up" title="SRFI Support">
+<link href="SRFI_002d39.html" rel="next" title="SRFI-39">
+<link href="SRFI_002d37.html" rel="prev" title="SRFI-37">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="SRFI_002d38">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d39.html" accesskey="n" rel="next">SRFI-39 - Parameters</a>, Previous: <a href="SRFI_002d37.html" accesskey="p" rel="prev">SRFI-37 - args-fold</a>, Up: <a href="SRFI-Support.html" accesskey="u" rel="up">SRFI Support Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="SRFI_002d38-_002d-External-Representation-for-Data-With-Shared-Structure">7.5.26 SRFI-38 - External Representation for Data With Shared Structure</h4>
+<a class="index-entry-id" id="index-SRFI_002d38"></a>
+
+<p>This subsection is based on
+<a class="uref" href="http://srfi.schemers.org/srfi-38/srfi-38.html">the specification
+of SRFI-38</a> written by Ray Dillinger.
+</p>
+
+
+
+
+<p>This SRFI creates an alternative external representation for data
+written and read using <code class="code">write-with-shared-structure</code> and
+<code class="code">read-with-shared-structure</code>.  It is identical to the grammar for
+external representation for data written and read with <code class="code">write</code> and
+<code class="code">read</code> given in section 7 of R5RS, except that the single
+production
+</p>
+<div class="example">
+<pre class="example-preformatted">&lt;datum&gt; --&gt; &lt;simple datum&gt; | &lt;compound datum&gt; 
+</pre></div>
+
+<p>is replaced by the following five productions:
+</p>
+<div class="example">
+<pre class="example-preformatted">&lt;datum&gt; --&gt; &lt;defining datum&gt; | &lt;nondefining datum&gt; | &lt;defined datum&gt;
+&lt;defining datum&gt; --&gt;  #&lt;indexnum&gt;=&lt;nondefining datum&gt;
+&lt;defined datum&gt; --&gt; #&lt;indexnum&gt;#
+&lt;nondefining datum&gt; --&gt; &lt;simple datum&gt; | &lt;compound datum&gt; 
+&lt;indexnum&gt; --&gt; &lt;digit 10&gt;+
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-write_002dwith_002dshared_002dstructure"><span class="category-def">Scheme procedure: </span><span><strong class="def-name">write-with-shared-structure</strong> <var class="def-var-arguments">obj</var><a class="copiable-link" href='#index-write_002dwith_002dshared_002dstructure'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-write_002dwith_002dshared_002dstructure-1"><span class="category-def">Scheme procedure: </span><span><strong class="def-name">write-with-shared-structure</strong> <var class="def-var-arguments">obj port</var><a class="copiable-link" href='#index-write_002dwith_002dshared_002dstructure-1'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-write_002dwith_002dshared_002dstructure-2"><span class="category-def">Scheme procedure: </span><span><strong class="def-name">write-with-shared-structure</strong> <var class="def-var-arguments">obj port optarg</var><a class="copiable-link" href='#index-write_002dwith_002dshared_002dstructure-2'> &para;</a></span></dt>
+<dd>
+<p>Writes an external representation of <var class="var">obj</var> to the given port.
+Strings that appear in the written representation are enclosed in
+doublequotes, and within those strings backslash and doublequote
+characters are escaped by backslashes.  Character objects are written
+using the <code class="code">#\</code> notation.
+</p>
+<p>Objects which denote locations rather than values (cons cells, vectors,
+and non-zero-length strings in R5RS scheme; also Guile&rsquo;s structs,
+bytevectors and ports and hash-tables), if they appear at more than one
+point in the data being written, are preceded by &lsquo;<samp class="samp">#<var class="var">N</var>=</samp>&rsquo; the
+first time they are written and replaced by &lsquo;<samp class="samp">#<var class="var">N</var>#</samp>&rsquo; all
+subsequent times they are written, where <var class="var">N</var> is a natural number
+used to identify that particular object.  If objects which denote
+locations occur only once in the structure, then
+<code class="code">write-with-shared-structure</code> must produce the same external
+representation for those objects as <code class="code">write</code>.
+</p>
+<p><code class="code">write-with-shared-structure</code> terminates in finite time and
+produces a finite representation when writing finite data.
+</p>
+<p><code class="code">write-with-shared-structure</code> returns an unspecified value. The
+<var class="var">port</var> argument may be omitted, in which case it defaults to the
+value returned by <code class="code">(current-output-port)</code>.  The <var class="var">optarg</var>
+argument may also be omitted.  If present, its effects on the output and
+return value are unspecified but <code class="code">write-with-shared-structure</code> must
+still write a representation that can be read by
+<code class="code">read-with-shared-structure</code>.  Some implementations may wish to use
+<var class="var">optarg</var> to specify formatting conventions, numeric radixes, or
+return values.  Guile&rsquo;s implementation ignores <var class="var">optarg</var>.
+</p>
+<p>For example, the code
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(begin (define a (cons 'val1 'val2))
+       (set-cdr! a a)
+       (write-with-shared-structure a))
+</pre></div>
+
+<p>should produce the output <code class="code">#1=(val1 . #1#)</code>.  This shows a cons
+cell whose <code class="code">cdr</code> contains itself.
+</p>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-read_002dwith_002dshared_002dstructure"><span class="category-def">Scheme procedure: </span><span><strong class="def-name">read-with-shared-structure</strong><a class="copiable-link" href='#index-read_002dwith_002dshared_002dstructure'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-read_002dwith_002dshared_002dstructure-1"><span class="category-def">Scheme procedure: </span><span><strong class="def-name">read-with-shared-structure</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-read_002dwith_002dshared_002dstructure-1'> &para;</a></span></dt>
+<dd>
+<p><code class="code">read-with-shared-structure</code> converts the external representations
+of Scheme objects produced by <code class="code">write-with-shared-structure</code> into
+Scheme objects.  That is, it is a parser for the nonterminal
+&lsquo;<samp class="samp">&lt;datum&gt;</samp>&rsquo; in the augmented external representation grammar defined
+above.  <code class="code">read-with-shared-structure</code> returns the next object
+parsable from the given input port, updating <var class="var">port</var> to point to the
+first character past the end of the external representation of the
+object.
+</p>
+<p>If an end-of-file is encountered in the input before any characters are
+found that can begin an object, then an end-of-file object is returned.
+The port remains open, and further attempts to read it (by
+<code class="code">read-with-shared-structure</code> or <code class="code">read</code> will also return an
+end-of-file object.  If an end of file is encountered after the
+beginning of an object&rsquo;s external representation, but the external
+representation is incomplete and therefore not parsable, an error is
+signalled.
+</p>
+<p>The <var class="var">port</var> argument may be omitted, in which case it defaults to the
+value returned by <code class="code">(current-input-port)</code>.  It is an error to read
+from a closed port.
+</p>
+</dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d39.html">SRFI-39 - Parameters</a>, Previous: <a href="SRFI_002d37.html">SRFI-37 - args-fold</a>, Up: <a href="SRFI-Support.html">SRFI Support Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

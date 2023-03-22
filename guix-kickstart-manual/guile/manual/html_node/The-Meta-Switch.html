@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>The Meta Switch (Guile Reference Manual)</title>
+
+<meta name="description" content="The Meta Switch (Guile Reference Manual)">
+<meta name="keywords" content="The Meta Switch (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Guile-Scripting.html" rel="up" title="Guile Scripting">
+<link href="Command-Line-Handling.html" rel="next" title="Command Line Handling">
+<link href="The-Top-of-a-Script-File.html" rel="prev" title="The Top of a Script File">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+ul.mark-bullet {list-style-type: disc}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="The-Meta-Switch">
+<div class="nav-panel">
+<p>
+Next: <a href="Command-Line-Handling.html" accesskey="n" rel="next">Command Line Handling</a>, Previous: <a href="The-Top-of-a-Script-File.html" accesskey="p" rel="prev">The Top of a Script File</a>, Up: <a href="Guile-Scripting.html" accesskey="u" rel="up">Guile Scripting</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="The-Meta-Switch-1">4.3.2 The Meta Switch</h4>
+
+<p>Guile&rsquo;s command-line switches allow the programmer to describe
+reasonably complicated actions in scripts.  Unfortunately, the POSIX
+script invocation mechanism only allows one argument to appear on the
+&lsquo;<samp class="samp">#!</samp>&rsquo; line after the path to the Guile executable, and imposes
+arbitrary limits on that argument&rsquo;s length.  Suppose you wrote a script
+starting like this:
+</p><div class="example">
+<pre class="example-preformatted">#!/usr/local/bin/guile -e main -s
+!#
+(define (main args)
+  (map (lambda (arg) (display arg) (display &quot; &quot;))
+       (cdr args))
+  (newline))
+</pre></div>
+<p>The intended meaning is clear: load the file, and then call <code class="code">main</code>
+on the command-line arguments.  However, the system will treat
+everything after the Guile path as a single argument &mdash; the string
+<code class="code">&quot;-e main -s&quot;</code> &mdash; which is not what we want.
+</p>
+<p>As a workaround, the meta switch <code class="code">\</code> allows the Guile programmer to
+specify an arbitrary number of options without patching the kernel.  If
+the first argument to Guile is <code class="code">\</code>, Guile will open the script file
+whose name follows the <code class="code">\</code>, parse arguments starting from the
+file&rsquo;s second line (according to rules described below), and substitute
+them for the <code class="code">\</code> switch.
+</p>
+<p>Working in concert with the meta switch, Guile treats the characters
+&lsquo;<samp class="samp">#!</samp>&rsquo; as the beginning of a comment which extends through the next
+line containing only the characters &lsquo;<samp class="samp">!#</samp>&rsquo;.  This sort of comment may
+appear anywhere in a Guile program, but it is most useful at the top of
+a file, meshing magically with the POSIX script invocation mechanism.
+</p>
+<p>Thus, consider a script named <samp class="file">/u/jimb/ekko</samp> which starts like this:
+</p><div class="example">
+<pre class="example-preformatted">#!/usr/local/bin/guile \
+-e main -s
+!#
+(define (main args)
+        (map (lambda (arg) (display arg) (display &quot; &quot;))
+             (cdr args))
+        (newline))
+</pre></div>
+
+<p>Suppose a user invokes this script as follows:
+</p><div class="example">
+<pre class="example-preformatted">$ /u/jimb/ekko a b c
+</pre></div>
+
+<p>Here&rsquo;s what happens:
+</p><ul class="itemize mark-bullet">
+<li>the operating system recognizes the &lsquo;<samp class="samp">#!</samp>&rsquo; token at the top of the
+file, and rewrites the command line to:
+<div class="example">
+<pre class="example-preformatted">/usr/local/bin/guile \ /u/jimb/ekko a b c
+</pre></div>
+<p>This is the usual behavior, prescribed by POSIX.
+</p>
+</li><li>When Guile sees the first two arguments, <code class="code">\ /u/jimb/ekko</code>, it opens
+<samp class="file">/u/jimb/ekko</samp>, parses the three arguments <code class="code">-e</code>, <code class="code">main</code>,
+and <code class="code">-s</code> from it, and substitutes them for the <code class="code">\</code> switch.
+Thus, Guile&rsquo;s command line now reads:
+<div class="example">
+<pre class="example-preformatted">/usr/local/bin/guile -e main -s /u/jimb/ekko a b c
+</pre></div>
+
+</li><li>Guile then processes these switches: it loads <samp class="file">/u/jimb/ekko</samp> as a
+file of Scheme code (treating the first three lines as a comment), and
+then performs the application <code class="code">(main &quot;/u/jimb/ekko&quot; &quot;a&quot; &quot;b&quot; &quot;c&quot;)</code>.
+
+</li></ul>
+
+
+<p>When Guile sees the meta switch <code class="code">\</code>, it parses command-line
+argument from the script file according to the following rules:
+</p><ul class="itemize mark-bullet">
+<li>Each space character terminates an argument.  This means that two
+spaces in a row introduce an argument <code class="code">&quot;&quot;</code>.
+
+</li><li>The tab character is not permitted (unless you quote it with the
+backslash character, as described below), to avoid confusion.
+
+</li><li>The newline character terminates the sequence of arguments, and will
+also terminate a final non-empty argument.  (However, a newline
+following a space will not introduce a final empty-string argument;
+it only terminates the argument list.)
+
+</li><li>The backslash character is the escape character.  It escapes backslash,
+space, tab, and newline.  The ANSI C escape sequences like <code class="code">\n</code> and
+<code class="code">\t</code> are also supported.  These produce argument constituents; the
+two-character combination <code class="code">\n</code> doesn&rsquo;t act like a terminating
+newline.  The escape sequence <code class="code">\<var class="var">NNN</var></code> for exactly three octal
+digits reads as the character whose ASCII code is <var class="var">NNN</var>.  As above,
+characters produced this way are argument constituents.  Backslash
+followed by other characters is not allowed.
+
+</li></ul>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Command-Line-Handling.html">Command Line Handling</a>, Previous: <a href="The-Top-of-a-Script-File.html">The Top of a Script File</a>, Up: <a href="Guile-Scripting.html">Guile Scripting</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

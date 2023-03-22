@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Adding or Setting Alist Entries (Guile Reference Manual)</title>
+
+<meta name="description" content="Adding or Setting Alist Entries (Guile Reference Manual)">
+<meta name="keywords" content="Adding or Setting Alist Entries (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Association-Lists.html" rel="up" title="Association Lists">
+<link href="Retrieving-Alist-Entries.html" rel="next" title="Retrieving Alist Entries">
+<link href="Alist-Key-Equality.html" rel="prev" title="Alist Key Equality">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Adding-or-Setting-Alist-Entries">
+<div class="nav-panel">
+<p>
+Next: <a href="Retrieving-Alist-Entries.html" accesskey="n" rel="next">Retrieving Alist Entries</a>, Previous: <a href="Alist-Key-Equality.html" accesskey="p" rel="prev">Alist Key Equality</a>, Up: <a href="Association-Lists.html" accesskey="u" rel="up">Association Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Adding-or-Setting-Alist-Entries-1">6.6.20.2 Adding or Setting Alist Entries</h4>
+
+<p><code class="code">acons</code> adds a new entry to an association list and returns the
+combined association list.  The combined alist is formed by consing the
+new entry onto the head of the alist specified in the <code class="code">acons</code>
+procedure call.  So the specified alist is not modified, but its
+contents become shared with the tail of the combined alist that
+<code class="code">acons</code> returns.
+</p>
+<p>In the most common usage of <code class="code">acons</code>, a variable holding the
+original association list is updated with the combined alist:
+</p>
+<div class="example">
+<pre class="example-preformatted">(set! address-list (acons name address address-list))
+</pre></div>
+
+<p>In such cases, it doesn&rsquo;t matter that the old and new values of
+<code class="code">address-list</code> share some of their contents, since the old value is
+usually no longer independently accessible.
+</p>
+<p>Note that <code class="code">acons</code> adds the specified new entry regardless of
+whether the alist may already contain entries with keys that are, in
+some sense, the same as that of the new entry.  Thus <code class="code">acons</code> is
+ideal for building alists where there is no concept of key uniqueness.
+</p>
+<div class="example">
+<pre class="example-preformatted">(set! task-list (acons 3 &quot;pay gas bill&quot; '()))
+task-list
+&rArr;
+((3 . &quot;pay gas bill&quot;))
+
+(set! task-list (acons 3 &quot;tidy bedroom&quot; task-list))
+task-list
+&rArr;
+((3 . &quot;tidy bedroom&quot;) (3 . &quot;pay gas bill&quot;))
+</pre></div>
+
+<p><code class="code">assq-set!</code>, <code class="code">assv-set!</code> and <code class="code">assoc-set!</code> are used to add
+or replace an entry in an association list where there <em class="emph">is</em> a
+concept of key uniqueness.  If the specified association list already
+contains an entry whose key is the same as that specified in the
+procedure call, the existing entry is replaced by the new one.
+Otherwise, the new entry is consed onto the head of the old association
+list to create the combined alist.  In all cases, these procedures
+return the combined alist.
+</p>
+<p><code class="code">assq-set!</code> and friends <em class="emph">may</em> destructively modify the
+structure of the old association list in such a way that an existing
+variable is correctly updated without having to <code class="code">set!</code> it to the
+value returned:
+</p>
+<div class="example">
+<pre class="example-preformatted">address-list
+&rArr;
+((&quot;mary&quot; . &quot;34 Elm Road&quot;) (&quot;james&quot; . &quot;16 Bow Street&quot;))
+
+(assoc-set! address-list &quot;james&quot; &quot;1a London Road&quot;)
+&rArr;
+((&quot;mary&quot; . &quot;34 Elm Road&quot;) (&quot;james&quot; . &quot;1a London Road&quot;))
+
+address-list
+&rArr;
+((&quot;mary&quot; . &quot;34 Elm Road&quot;) (&quot;james&quot; . &quot;1a London Road&quot;))
+</pre></div>
+
+<p>Or they may not:
+</p>
+<div class="example">
+<pre class="example-preformatted">(assoc-set! address-list &quot;bob&quot; &quot;11 Newington Avenue&quot;)
+&rArr;
+((&quot;bob&quot; . &quot;11 Newington Avenue&quot;) (&quot;mary&quot; . &quot;34 Elm Road&quot;)
+ (&quot;james&quot; . &quot;1a London Road&quot;))
+
+address-list
+&rArr;
+((&quot;mary&quot; . &quot;34 Elm Road&quot;) (&quot;james&quot; . &quot;1a London Road&quot;))
+</pre></div>
+
+<p>The only safe way to update an association list variable when adding or
+replacing an entry like this is to <code class="code">set!</code> the variable to the
+returned value:
+</p>
+<div class="example">
+<pre class="example-preformatted">(set! address-list
+      (assoc-set! address-list &quot;bob&quot; &quot;11 Newington Avenue&quot;))
+address-list
+&rArr;
+((&quot;bob&quot; . &quot;11 Newington Avenue&quot;) (&quot;mary&quot; . &quot;34 Elm Road&quot;)
+ (&quot;james&quot; . &quot;1a London Road&quot;))
+</pre></div>
+
+<p>Because of this slight inconvenience, you may find it more convenient to
+use hash tables to store dictionary data.  If your application will not
+be modifying the contents of an alist very often, this may not make much
+difference to you.
+</p>
+<p>If you need to keep the old value of an association list in a form
+independent from the list that results from modification by
+<code class="code">acons</code>, <code class="code">assq-set!</code>, <code class="code">assv-set!</code> or <code class="code">assoc-set!</code>,
+use <code class="code">list-copy</code> to copy the old association list before modifying
+it.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-acons"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">acons</strong> <var class="def-var-arguments">key value alist</var><a class="copiable-link" href='#index-acons'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005facons"><span class="category-def">C Function: </span><span><strong class="def-name">scm_acons</strong> <var class="def-var-arguments">(key, value, alist)</var><a class="copiable-link" href='#index-scm_005facons'> &para;</a></span></dt>
+<dd><p>Add a new key-value pair to <var class="var">alist</var>.  A new pair is
+created whose car is <var class="var">key</var> and whose cdr is <var class="var">value</var>, and the
+pair is consed onto <var class="var">alist</var>, and the new list is returned.  This
+function is <em class="emph">not</em> destructive; <var class="var">alist</var> is not modified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-assq_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">assq-set!</strong> <var class="def-var-arguments">alist key val</var><a class="copiable-link" href='#index-assq_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-assv_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">assv-set!</strong> <var class="def-var-arguments">alist key value</var><a class="copiable-link" href='#index-assv_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-assoc_002dset_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">assoc-set!</strong> <var class="def-var-arguments">alist key value</var><a class="copiable-link" href='#index-assoc_002dset_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fassq_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_assq_set_x</strong> <var class="def-var-arguments">(alist, key, val)</var><a class="copiable-link" href='#index-scm_005fassq_005fset_005fx'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fassv_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_assv_set_x</strong> <var class="def-var-arguments">(alist, key, val)</var><a class="copiable-link" href='#index-scm_005fassv_005fset_005fx'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fassoc_005fset_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_assoc_set_x</strong> <var class="def-var-arguments">(alist, key, val)</var><a class="copiable-link" href='#index-scm_005fassoc_005fset_005fx'> &para;</a></span></dt>
+<dd><p>Reassociate <var class="var">key</var> in <var class="var">alist</var> with <var class="var">value</var>: find any existing
+<var class="var">alist</var> entry for <var class="var">key</var> and associate it with the new
+<var class="var">value</var>.  If <var class="var">alist</var> does not contain an entry for <var class="var">key</var>,
+add a new one.  Return the (possibly new) alist.
+</p>
+<p>These functions do not attempt to verify the structure of <var class="var">alist</var>,
+and so may cause unusual results if passed an object that is not an
+association list.
+</p></dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Retrieving-Alist-Entries.html">Retrieving Alist Entries</a>, Previous: <a href="Alist-Key-Equality.html">Alist Key Equality</a>, Up: <a href="Association-Lists.html">Association Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

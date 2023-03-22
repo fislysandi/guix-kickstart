@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Scripting Examples (Guile Reference Manual)</title>
+
+<meta name="description" content="Scripting Examples (Guile Reference Manual)">
+<meta name="keywords" content="Scripting Examples (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Guile-Scripting.html" rel="up" title="Guile Scripting">
+<link href="Command-Line-Handling.html" rel="prev" title="Command Line Handling">
+<style type="text/css">
+<!--
+div.example {margin-left: 3.2em}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Scripting-Examples">
+<div class="nav-panel">
+<p>
+Previous: <a href="Command-Line-Handling.html" accesskey="p" rel="prev">Command Line Handling</a>, Up: <a href="Guile-Scripting.html" accesskey="u" rel="up">Guile Scripting</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Scripting-Examples-1">4.3.4 Scripting Examples</h4>
+
+<p>To start with, here are some examples of invoking Guile directly:
+</p>
+<dl class="table">
+<dt><code class="code">guile -- a b c</code></dt>
+<dd><p>Run Guile interactively; <code class="code">(command-line)</code> will return <br>
+<code class="code">(&quot;/usr/local/bin/guile&quot; &quot;a&quot; &quot;b&quot; &quot;c&quot;)</code>.
+</p>
+</dd>
+<dt><code class="code">guile -s /u/jimb/ex2 a b c</code></dt>
+<dd><p>Load the file <samp class="file">/u/jimb/ex2</samp>; <code class="code">(command-line)</code> will return <br>
+<code class="code">(&quot;/u/jimb/ex2&quot; &quot;a&quot; &quot;b&quot; &quot;c&quot;)</code>.
+</p>
+</dd>
+<dt><code class="code">guile -c '(write %load-path) (newline)'</code></dt>
+<dd><p>Write the value of the variable <code class="code">%load-path</code>, print a newline,
+and exit.
+</p>
+</dd>
+<dt><code class="code">guile -e main -s /u/jimb/ex4 foo</code></dt>
+<dd><p>Load the file <samp class="file">/u/jimb/ex4</samp>, and then call the function
+<code class="code">main</code>, passing it the list <code class="code">(&quot;/u/jimb/ex4&quot; &quot;foo&quot;)</code>.
+</p>
+</dd>
+<dt><code class="code">guile -e '(ex4)' -s /u/jimb/ex4.scm foo</code></dt>
+<dd><p>Load the file <samp class="file">/u/jimb/ex4.scm</samp>, and then call the function
+<code class="code">main</code> from the module &rsquo;(ex4)&rsquo;, passing it the list
+<code class="code">(&quot;/u/jimb/ex4&quot; &quot;foo&quot;)</code>.
+</p>
+</dd>
+<dt><code class="code">guile -l first -ds -l last -s script</code></dt>
+<dd><p>Load the files <samp class="file">first</samp>, <samp class="file">script</samp>, and <samp class="file">last</samp>, in that
+order.  The <code class="code">-ds</code> switch says when to process the <code class="code">-s</code>
+switch.  For a more motivated example, see the scripts below.
+</p>
+</dd>
+</dl>
+
+
+<p>Here is a very simple Guile script:
+</p><div class="example">
+<pre class="example-preformatted">#!/usr/local/bin/guile -s
+!#
+(display &quot;Hello, world!&quot;)
+(newline)
+</pre></div>
+<p>The first line marks the file as a Guile script.  When the user invokes
+it, the system runs <samp class="file">/usr/local/bin/guile</samp> to interpret the script,
+passing <code class="code">-s</code>, the script&rsquo;s filename, and any arguments given to the
+script as command-line arguments.  When Guile sees <code class="code">-s
+<var class="var">script</var></code>, it loads <var class="var">script</var>.  Thus, running this program
+produces the output:
+</p><div class="example">
+<pre class="example-preformatted">Hello, world!
+</pre></div>
+
+<p>Here is a script which prints the factorial of its argument:
+</p><div class="example">
+<pre class="example-preformatted">#!/usr/local/bin/guile -s
+!#
+(define (fact n)
+  (if (zero? n) 1
+    (* n (fact (- n 1)))))
+
+(display (fact (string-&gt;number (cadr (command-line)))))
+(newline)
+</pre></div>
+<p>In action:
+</p><div class="example">
+<pre class="example-preformatted">$ ./fact 5
+120
+$
+</pre></div>
+
+<p>However, suppose we want to use the definition of <code class="code">fact</code> in this
+file from another script.  We can&rsquo;t simply <code class="code">load</code> the script file,
+and then use <code class="code">fact</code>&rsquo;s definition, because the script will try to
+compute and display a factorial when we load it.  To avoid this problem,
+we might write the script this way:
+</p>
+<div class="example">
+<pre class="example-preformatted">#!/usr/local/bin/guile \
+-e main -s
+!#
+(define (fact n)
+  (if (zero? n) 1
+    (* n (fact (- n 1)))))
+
+(define (main args)
+  (display (fact (string-&gt;number (cadr args))))
+  (newline))
+</pre></div>
+<p>This version packages the actions the script should perform in a
+function, <code class="code">main</code>.  This allows us to load the file purely for its
+definitions, without any extraneous computation taking place.  Then we
+used the meta switch <code class="code">\</code> and the entry point switch <code class="code">-e</code> to
+tell Guile to call <code class="code">main</code> after loading the script.
+</p><div class="example">
+<pre class="example-preformatted">$ ./fact 50
+30414093201713378043612608166064768844377641568960512000000000000
+</pre></div>
+
+<p>Suppose that we now want to write a script which computes the
+<code class="code">choose</code> function: given a set of <var class="var">m</var> distinct objects,
+<code class="code">(choose <var class="var">n</var> <var class="var">m</var>)</code> is the number of distinct subsets
+containing <var class="var">n</var> objects each.  It&rsquo;s easy to write <code class="code">choose</code> given
+<code class="code">fact</code>, so we might write the script this way:
+</p>
+<div class="example">
+<pre class="example-preformatted">#!/usr/local/bin/guile \
+-l fact -e main -s
+!#
+(define (choose n m)
+  (/ (fact m) (* (fact (- m n)) (fact n))))
+
+(define (main args)
+  (let ((n (string-&gt;number (cadr args)))
+        (m (string-&gt;number (caddr args))))
+    (display (choose n m))
+    (newline)))
+</pre></div>
+
+<p>The command-line arguments here tell Guile to first load the file
+<samp class="file">fact</samp>, and then run the script, with <code class="code">main</code> as the entry
+point.  In other words, the <code class="code">choose</code> script can use definitions
+made in the <code class="code">fact</code> script.  Here are some sample runs:
+</p><div class="example">
+<pre class="example-preformatted">$ ./choose 0 4
+1
+$ ./choose 1 4
+4
+$ ./choose 2 4
+6
+$ ./choose 3 4
+4
+$ ./choose 4 4
+1
+$ ./choose 50 100
+100891344545564193334812497256
+</pre></div>
+
+<p>To call a specific procedure from a given module, we can use the special
+form <code class="code">(@ (<var class="var">module</var>) <var class="var">procedure</var>)</code>:
+</p>
+<div class="example">
+<pre class="example-preformatted">#!/usr/local/bin/guile \
+-l fact -e (@ (fac) main) -s
+!#
+(define-module (fac)
+  #:export (main))
+
+(define (choose n m)
+  (/ (fact m) (* (fact (- m n)) (fact n))))
+
+(define (main args)
+  (let ((n (string-&gt;number (cadr args)))
+        (m (string-&gt;number (caddr args))))
+    (display (choose n m))
+    (newline)))
+</pre></div>
+
+<p>We can use <code class="code">@@</code> to invoke non-exported procedures.  For exported
+procedures, we can simplify this call with the shorthand
+<code class="code">(<var class="var">module</var>)</code>:
+</p>
+<div class="example">
+<pre class="example-preformatted">#!/usr/local/bin/guile \
+-l fact -e (fac) -s
+!#
+(define-module (fac)
+  #:export (main))
+
+(define (choose n m)
+  (/ (fact m) (* (fact (- m n)) (fact n))))
+
+(define (main args)
+  (let ((n (string-&gt;number (cadr args)))
+        (m (string-&gt;number (caddr args))))
+    (display (choose n m))
+    (newline)))
+</pre></div>
+
+<p>For maximum portability, we can instead use the shell to execute
+<code class="command">guile</code> with specified command line arguments.  Here we need to
+take care to quote the command arguments correctly:
+</p>
+<div class="example">
+<pre class="example-preformatted">#!/usr/bin/env sh
+exec guile -l fact -e '(@ (fac) main)' -s &quot;$0&quot; &quot;$@&quot;
+!#
+(define-module (fac)
+  #:export (main))
+
+(define (choose n m)
+  (/ (fact m) (* (fact (- m n)) (fact n))))
+
+(define (main args)
+  (let ((n (string-&gt;number (cadr args)))
+        (m (string-&gt;number (caddr args))))
+    (display (choose n m))
+    (newline)))
+</pre></div>
+
+<p>Finally, seasoned scripters are probably missing a mention of
+subprocesses.  In Bash, for example, most shell scripts run other
+programs like <code class="code">sed</code> or the like to do the actual work.
+</p>
+<p>In Guile it&rsquo;s often possible get everything done within Guile itself, so
+do give that a try first.  But if you just need to run a program and
+wait for it to finish, use <code class="code">system*</code>.  If you need to run a
+sub-program and capture its output, or give it input, use
+<code class="code">open-pipe</code>.  See <a class="xref" href="Processes.html">Processes</a>, and See <a class="xref" href="Pipes.html">Pipes</a>, for more
+information.
+</p>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Command-Line-Handling.html">Command Line Handling</a>, Up: <a href="Guile-Scripting.html">Guile Scripting</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

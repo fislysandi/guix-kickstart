@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Querying Character Sets (Guile Reference Manual)</title>
+
+<meta name="description" content="Querying Character Sets (Guile Reference Manual)">
+<meta name="keywords" content="Querying Character Sets (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Character-Sets.html" rel="up" title="Character Sets">
+<link href="Character_002dSet-Algebra.html" rel="next" title="Character-Set Algebra">
+<link href="Creating-Character-Sets.html" rel="prev" title="Creating Character Sets">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Querying-Character-Sets">
+<div class="nav-panel">
+<p>
+Next: <a href="Character_002dSet-Algebra.html" accesskey="n" rel="next">Character-Set Algebra</a>, Previous: <a href="Creating-Character-Sets.html" accesskey="p" rel="prev">Creating Character Sets</a>, Up: <a href="Character-Sets.html" accesskey="u" rel="up">Character Sets</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Querying-Character-Sets-1">6.6.4.4 Querying Character Sets</h4>
+
+<p>Access the elements and other information of a character set with these
+procedures.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-_0025char_002dset_002ddump"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">%char-set-dump</strong> <var class="def-var-arguments">cs</var><a class="copiable-link" href='#index-_0025char_002dset_002ddump'> &para;</a></span></dt>
+<dd><p>Returns an association list containing debugging information
+for <var class="var">cs</var>. The association list has the following entries.
+</p><dl class="table">
+<dt><code class="code">char-set</code></dt>
+<dd><p>The char-set itself
+</p></dd>
+<dt><code class="code">len</code></dt>
+<dd><p>The number of groups of contiguous code points the char-set
+contains
+</p></dd>
+<dt><code class="code">ranges</code></dt>
+<dd><p>A list of lists where each sublist is a range of code points
+and their associated characters
+</p></dd>
+</dl>
+<p>The return value of this function cannot be relied upon to be
+consistent between versions of Guile and should not be used in code.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dsize"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-size</strong> <var class="def-var-arguments">cs</var><a class="copiable-link" href='#index-char_002dset_002dsize'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fsize"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_size</strong> <var class="def-var-arguments">(cs)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fsize'> &para;</a></span></dt>
+<dd><p>Return the number of elements in character set <var class="var">cs</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dcount"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-count</strong> <var class="def-var-arguments">pred cs</var><a class="copiable-link" href='#index-char_002dset_002dcount'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fcount"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_count</strong> <var class="def-var-arguments">(pred, cs)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fcount'> &para;</a></span></dt>
+<dd><p>Return the number of the elements int the character set
+<var class="var">cs</var> which satisfy the predicate <var class="var">pred</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002d_003elist"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-&gt;list</strong> <var class="def-var-arguments">cs</var><a class="copiable-link" href='#index-char_002dset_002d_003elist'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fto_005flist"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_to_list</strong> <var class="def-var-arguments">(cs)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fto_005flist'> &para;</a></span></dt>
+<dd><p>Return a list containing the elements of the character set
+<var class="var">cs</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002d_003estring"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-&gt;string</strong> <var class="def-var-arguments">cs</var><a class="copiable-link" href='#index-char_002dset_002d_003estring'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fto_005fstring"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_to_string</strong> <var class="def-var-arguments">(cs)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fto_005fstring'> &para;</a></span></dt>
+<dd><p>Return a string containing the elements of the character set
+<var class="var">cs</var>.  The order in which the characters are placed in the
+string is not defined.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dcontains_003f"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-contains?</strong> <var class="def-var-arguments">cs ch</var><a class="copiable-link" href='#index-char_002dset_002dcontains_003f'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fcontains_005fp"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_contains_p</strong> <var class="def-var-arguments">(cs, ch)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fcontains_005fp'> &para;</a></span></dt>
+<dd><p>Return <code class="code">#t</code> if the character <var class="var">ch</var> is contained in the
+character set <var class="var">cs</var>, or <code class="code">#f</code> otherwise.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002devery"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-every</strong> <var class="def-var-arguments">pred cs</var><a class="copiable-link" href='#index-char_002dset_002devery'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fevery"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_every</strong> <var class="def-var-arguments">(pred, cs)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fevery'> &para;</a></span></dt>
+<dd><p>Return a true value if every character in the character set
+<var class="var">cs</var> satisfies the predicate <var class="var">pred</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-char_002dset_002dany"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">char-set-any</strong> <var class="def-var-arguments">pred cs</var><a class="copiable-link" href='#index-char_002dset_002dany'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fchar_005fset_005fany"><span class="category-def">C Function: </span><span><strong class="def-name">scm_char_set_any</strong> <var class="def-var-arguments">(pred, cs)</var><a class="copiable-link" href='#index-scm_005fchar_005fset_005fany'> &para;</a></span></dt>
+<dd><p>Return a true value if any character in the character set
+<var class="var">cs</var> satisfies the predicate <var class="var">pred</var>.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Character_002dSet-Algebra.html">Character-Set Algebra</a>, Previous: <a href="Creating-Character-Sets.html">Creating Character Sets</a>, Up: <a href="Character-Sets.html">Character Sets</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

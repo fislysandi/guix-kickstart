@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Backslash Escapes (Guile Reference Manual)</title>
+
+<meta name="description" content="Backslash Escapes (Guile Reference Manual)">
+<meta name="keywords" content="Backslash Escapes (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Regular-Expressions.html" rel="up" title="Regular Expressions">
+<link href="Match-Structures.html" rel="prev" title="Match Structures">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Backslash-Escapes">
+<div class="nav-panel">
+<p>
+Previous: <a href="Match-Structures.html" accesskey="p" rel="prev">Match Structures</a>, Up: <a href="Regular-Expressions.html" accesskey="u" rel="up">Regular Expressions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Backslash-Escapes-1">6.13.3 Backslash Escapes</h4>
+
+<p>Sometimes you will want a regexp to match characters like &lsquo;<samp class="samp">*</samp>&rsquo; or
+&lsquo;<samp class="samp">$</samp>&rsquo; exactly.  For example, to check whether a particular string
+represents a menu entry from an Info node, it would be useful to match
+it against a regexp like &lsquo;<samp class="samp">^* [^:]*::</samp>&rsquo;.  However, this won&rsquo;t work;
+because the asterisk is a metacharacter, it won&rsquo;t match the &lsquo;<samp class="samp">*</samp>&rsquo; at
+the beginning of the string.  In this case, we want to make the first
+asterisk un-magic.
+</p>
+<p>You can do this by preceding the metacharacter with a backslash
+character &lsquo;<samp class="samp">\</samp>&rsquo;.  (This is also called <em class="dfn">quoting</em> the
+metacharacter, and is known as a <em class="dfn">backslash escape</em>.)  When Guile
+sees a backslash in a regular expression, it considers the following
+glyph to be an ordinary character, no matter what special meaning it
+would ordinarily have.  Therefore, we can make the above example work by
+changing the regexp to &lsquo;<samp class="samp">^\* [^:]*::</samp>&rsquo;.  The &lsquo;<samp class="samp">\*</samp>&rsquo; sequence tells
+the regular expression engine to match only a single asterisk in the
+target string.
+</p>
+<p>Since the backslash is itself a metacharacter, you may force a regexp to
+match a backslash in the target string by preceding the backslash with
+itself.  For example, to find variable references in a TeX program,
+you might want to find occurrences of the string &lsquo;<samp class="samp">\let\</samp>&rsquo; followed
+by any number of alphabetic characters.  The regular expression
+&lsquo;<samp class="samp">\\let\\[A-Za-z]*</samp>&rsquo; would do this: the double backslashes in the
+regexp each match a single backslash in the target string.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-regexp_002dquote"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">regexp-quote</strong> <var class="def-var-arguments">str</var><a class="copiable-link" href='#index-regexp_002dquote'> &para;</a></span></dt>
+<dd><p>Quote each special character found in <var class="var">str</var> with a backslash, and
+return the resulting string.
+</p></dd></dl>
+
+<p><strong class="strong">Very important:</strong> Using backslash escapes in Guile source code
+(as in Emacs Lisp or C) can be tricky, because the backslash character
+has special meaning for the Guile reader.  For example, if Guile
+encounters the character sequence &lsquo;<samp class="samp">\n</samp>&rsquo; in the middle of a string
+while processing Scheme code, it replaces those characters with a
+newline character.  Similarly, the character sequence &lsquo;<samp class="samp">\t</samp>&rsquo; is
+replaced by a horizontal tab.  Several of these <em class="dfn">escape sequences</em>
+are processed by the Guile reader before your code is executed.
+Unrecognized escape sequences are ignored: if the characters &lsquo;<samp class="samp">\*</samp>&rsquo;
+appear in a string, they will be translated to the single character
+&lsquo;<samp class="samp">*</samp>&rsquo;.
+</p>
+<p>This translation is obviously undesirable for regular expressions, since
+we want to be able to include backslashes in a string in order to
+escape regexp metacharacters.  Therefore, to make sure that a backslash
+is preserved in a string in your Guile program, you must use <em class="emph">two</em>
+consecutive backslashes:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define Info-menu-entry-pattern (make-regexp &quot;^\\* [^:]*&quot;))
+</pre></div>
+
+<p>The string in this example is preprocessed by the Guile reader before
+any code is executed.  The resulting argument to <code class="code">make-regexp</code> is
+the string &lsquo;<samp class="samp">^\* [^:]*</samp>&rsquo;, which is what we really want.
+</p>
+<p>This also means that in order to write a regular expression that matches
+a single backslash character, the regular expression string in the
+source code must include <em class="emph">four</em> backslashes.  Each consecutive pair
+of backslashes gets translated by the Guile reader to a single
+backslash, and the resulting double-backslash is interpreted by the
+regexp engine as matching a single backslash character.  Hence:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(define tex-variable-pattern (make-regexp &quot;\\\\let\\\\=[A-Za-z]*&quot;))
+</pre></div>
+
+<p>The reason for the unwieldiness of this syntax is historical.  Both
+regular expression pattern matchers and Unix string processing systems
+have traditionally used backslashes with the special meanings
+described above.  The POSIX regular expression specification and ANSI C
+standard both require these semantics.  Attempting to abandon either
+convention would cause other kinds of compatibility problems, possibly
+more severe ones.  Therefore, without extending the Scheme reader to
+support strings with different quoting conventions (an ungainly and
+confusing extension when implemented in other languages), we must adhere
+to this cumbersome escape syntax.
+</p>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Previous: <a href="Match-Structures.html">Match Structures</a>, Up: <a href="Regular-Expressions.html">Regular Expressions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>LALR(1) Parsing (Guile Reference Manual)</title>
+
+<meta name="description" content="LALR(1) Parsing (Guile Reference Manual)">
+<meta name="keywords" content="LALR(1) Parsing (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="API-Reference.html" rel="up" title="API Reference">
+<link href="PEG-Parsing.html" rel="next" title="PEG Parsing">
+<link href="Regular-Expressions.html" rel="prev" title="Regular Expressions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="LALR_00281_0029-Parsing">
+<div class="nav-panel">
+<p>
+Next: <a href="PEG-Parsing.html" accesskey="n" rel="next">PEG Parsing</a>, Previous: <a href="Regular-Expressions.html" accesskey="p" rel="prev">Regular Expressions</a>, Up: <a href="API-Reference.html" accesskey="u" rel="up">API Reference</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="LALR_00281_0029-Parsing-1">6.14 LALR(1) Parsing</h3>
+
+<p>The <code class="code">(system base lalr)</code> module provides the
+<a class="uref" href="https://github.com/schemeway/lalr-scm/"><code class="code">lalr-scm</code> LALR(1) parser
+generator by Dominique Boucher</a>.  <code class="code">lalr-scm</code> uses the same algorithm as GNU
+Bison (see <a data-manual="bison" href="http://www.gnu.org/software/bison/manual/html_node/Introduction.html#Introduction">Introduction to Bison</a> in <cite class="cite">Bison, The
+Yacc-compatible Parser Generator</cite>).  Parsers are defined using the
+<code class="code">lalr-parser</code> macro.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-lalr_002dparser"><span class="category-def">Scheme Syntax: </span><span><strong class="def-name">lalr-parser</strong> <var class="def-var-arguments">[<var class="var">options</var>] <var class="var">tokens</var> <var class="var">rules</var>...</var><a class="copiable-link" href='#index-lalr_002dparser'> &para;</a></span></dt>
+<dd><p>Generate an LALR(1) syntax analyzer.  <var class="var">tokens</var> is a list of symbols
+representing the terminal symbols of the grammar.  <var class="var">rules</var> are the grammar
+production rules.
+</p>
+<p>Each rule has the form <code class="code">(<var class="var">non-terminal</var> (<var class="var">rhs</var> ...) : <var class="var">action</var>
+...)</code>, where <var class="var">non-terminal</var> is the name of the rule, <var class="var">rhs</var> are the
+right-hand sides, i.e., the production rule, and <var class="var">action</var> is a semantic
+action associated with the rule.
+</p>
+<p>The generated parser is a two-argument procedure that takes a
+<em class="dfn">tokenizer</em> and a <em class="dfn">syntax error procedure</em>.  The tokenizer
+should be a thunk that returns lexical tokens as produced by
+<code class="code">make-lexical-token</code>.  The syntax error procedure may be called
+with at least an error message (a string), and optionally the lexical
+token that caused the error.
+</p></dd></dl>
+
+<p>Please refer to the <code class="code">lalr-scm</code> documentation for details.
+</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Ports and File Descriptors (Guile Reference Manual)</title>
+
+<meta name="description" content="Ports and File Descriptors (Guile Reference Manual)">
+<meta name="keywords" content="Ports and File Descriptors (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="POSIX.html" rel="up" title="POSIX">
+<link href="File-System.html" rel="next" title="File System">
+<link href="Conventions.html" rel="prev" title="Conventions">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="Ports-and-File-Descriptors">
+<div class="nav-panel">
+<p>
+Next: <a href="File-System.html" accesskey="n" rel="next">File System</a>, Previous: <a href="Conventions.html" accesskey="p" rel="prev"><abbr class="acronym">POSIX</abbr> Interface Conventions</a>, Up: <a href="POSIX.html" accesskey="u" rel="up"><abbr class="acronym">POSIX</abbr> System Calls and Networking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="Ports-and-File-Descriptors-1">7.2.2 Ports and File Descriptors</h4>
+<a class="index-entry-id" id="index-file-descriptor"></a>
+
+<p>Conventions generally follow those of scsh, <a class="ref" href="The-Scheme-shell-_0028scsh_0029.html">The Scheme shell (scsh)</a>.
+</p>
+<p>Each open file port has an associated operating system file descriptor.
+File descriptors are generally not useful in Scheme programs; however
+they may be needed when interfacing with foreign code and the Unix
+environment.
+</p>
+<p>A file descriptor can be extracted from a port and a new port can be
+created from a file descriptor.  However a file descriptor is just an
+integer and the garbage collector doesn&rsquo;t recognize it as a reference
+to the port.  If all other references to the port were dropped, then
+it&rsquo;s likely that the garbage collector would free the port, with the
+side-effect of closing the file descriptor prematurely.
+</p>
+<p>To assist the programmer in avoiding this problem, each port has an
+associated <em class="dfn">revealed count</em> which can be used to keep track of how many
+times the underlying file descriptor has been stored in other places.
+If a port&rsquo;s revealed count is greater than zero, the file descriptor
+will not be closed when the port is garbage collected.  A programmer
+can therefore ensure that the revealed count will be greater than
+zero if the file descriptor is needed elsewhere.
+</p>
+<p>For the simple case where a file descriptor is &ldquo;imported&rdquo; once to become
+a port, it does not matter if the file descriptor is closed when the
+port is garbage collected.  There is no need to maintain a revealed
+count.  Likewise when &ldquo;exporting&rdquo; a file descriptor to the external
+environment, setting the revealed count is not required provided the
+port is kept open (i.e., is pointed to by a live Scheme binding) while
+the file descriptor is in use.
+</p>
+<p>To correspond with traditional Unix behaviour, three file descriptors
+(0, 1, and 2) are automatically imported when a program starts up and
+assigned to the initial values of the current/standard input, output,
+and error ports, respectively.  The revealed count for each is
+initially set to one, so that dropping references to one of these
+ports will not result in its garbage collection: it could be retrieved
+with <code class="code">fdopen</code> or <code class="code">fdes-&gt;ports</code>.
+</p>
+<p>Guile&rsquo;s ports can be buffered.  This means that writing a byte to a file
+port goes to the internal buffer first, and only when the buffer is full
+(or the user invokes <code class="code">force-output</code> on the port) is the data
+actually written to the file descriptor.  Likewise on input, bytes are
+read in from the file descriptor in blocks and placed in a buffer.
+Reading a character via <code class="code">read-char</code> first goes to the buffer,
+filling it as needed.  Usually read buffering is more or less
+transparent, but write buffering can sometimes cause writes to be
+delayed unexpectedly, if you forget to call <code class="code">force-output</code>.
+See <a class="xref" href="Buffering.html">Buffering</a>, for more on how to control port buffers.
+</p>
+<p>Note however that some procedures (e.g., <code class="code">recv!</code>) will accept ports
+as arguments, but will actually operate directly on the file descriptor
+underlying the port.  Any port buffering is ignored, including the
+buffer which implements <code class="code">peek-char</code> and <code class="code">unread-char</code>.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-port_002drevealed"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">port-revealed</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-port_002drevealed'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fport_005frevealed"><span class="category-def">C Function: </span><span><strong class="def-name">scm_port_revealed</strong> <var class="def-var-arguments">(port)</var><a class="copiable-link" href='#index-scm_005fport_005frevealed'> &para;</a></span></dt>
+<dd><p>Return the revealed count for <var class="var">port</var>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-set_002dport_002drevealed_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">set-port-revealed!</strong> <var class="def-var-arguments">port rcount</var><a class="copiable-link" href='#index-set_002dport_002drevealed_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fset_005fport_005frevealed_005fx"><span class="category-def">C Function: </span><span><strong class="def-name">scm_set_port_revealed_x</strong> <var class="def-var-arguments">(port, rcount)</var><a class="copiable-link" href='#index-scm_005fset_005fport_005frevealed_005fx'> &para;</a></span></dt>
+<dd><p>Sets the revealed count for a <var class="var">port</var> to <var class="var">rcount</var>.
+The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-fileno"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fileno</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-fileno'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005ffileno"><span class="category-def">C Function: </span><span><strong class="def-name">scm_fileno</strong> <var class="def-var-arguments">(port)</var><a class="copiable-link" href='#index-scm_005ffileno'> &para;</a></span></dt>
+<dd><p>Return the integer file descriptor underlying <var class="var">port</var>.  Does
+not change its revealed count.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-port_002d_003efdes"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">port-&gt;fdes</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-port_002d_003efdes'> &para;</a></span></dt>
+<dd><p>Returns the integer file descriptor underlying <var class="var">port</var>.  As a
+side effect the revealed count of <var class="var">port</var> is incremented.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-fdopen"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fdopen</strong> <var class="def-var-arguments">fdes modes</var><a class="copiable-link" href='#index-fdopen'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005ffdopen"><span class="category-def">C Function: </span><span><strong class="def-name">scm_fdopen</strong> <var class="def-var-arguments">(fdes, modes)</var><a class="copiable-link" href='#index-scm_005ffdopen'> &para;</a></span></dt>
+<dd><p>Return a new port based on the file descriptor <var class="var">fdes</var>.  Modes are
+given by the string <var class="var">modes</var>.  The revealed count of the port is
+initialized to zero.  The <var class="var">modes</var> string is the same as that
+accepted by <code class="code">open-file</code> (see <a class="pxref" href="File-Ports.html">open-file</a>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-fdes_002d_003eports"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fdes-&gt;ports</strong> <var class="def-var-arguments">fdes</var><a class="copiable-link" href='#index-fdes_002d_003eports'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005ffdes_005fto_005fports"><span class="category-def">C Function: </span><span><strong class="def-name">scm_fdes_to_ports</strong> <var class="def-var-arguments">(fdes)</var><a class="copiable-link" href='#index-scm_005ffdes_005fto_005fports'> &para;</a></span></dt>
+<dd><p>Return a list of existing ports which have <var class="var">fdes</var> as an
+underlying file descriptor, without changing their revealed
+counts.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-fdes_002d_003einport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fdes-&gt;inport</strong> <var class="def-var-arguments">fdes</var><a class="copiable-link" href='#index-fdes_002d_003einport'> &para;</a></span></dt>
+<dd><p>Returns an existing input port which has <var class="var">fdes</var> as its underlying file
+descriptor, if one exists, and increments its revealed count.
+Otherwise, returns a new input port with a revealed count of 1.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-fdes_002d_003eoutport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fdes-&gt;outport</strong> <var class="def-var-arguments">fdes</var><a class="copiable-link" href='#index-fdes_002d_003eoutport'> &para;</a></span></dt>
+<dd><p>Returns an existing output port which has <var class="var">fdes</var> as its underlying file
+descriptor, if one exists, and increments its revealed count.
+Otherwise, returns a new output port with a revealed count of 1.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-primitive_002dmove_002d_003efdes"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">primitive-move-&gt;fdes</strong> <var class="def-var-arguments">port fdes</var><a class="copiable-link" href='#index-primitive_002dmove_002d_003efdes'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fprimitive_005fmove_005fto_005ffdes"><span class="category-def">C Function: </span><span><strong class="def-name">scm_primitive_move_to_fdes</strong> <var class="def-var-arguments">(port, fdes)</var><a class="copiable-link" href='#index-scm_005fprimitive_005fmove_005fto_005ffdes'> &para;</a></span></dt>
+<dd><p>Moves the underlying file descriptor for <var class="var">port</var> to the integer
+value <var class="var">fdes</var> without changing the revealed count of <var class="var">port</var>.
+Any other ports already using this descriptor will be automatically
+shifted to new descriptors and their revealed counts reset to zero.
+The return value is <code class="code">#f</code> if the file descriptor already had the
+required value or <code class="code">#t</code> if it was moved.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-move_002d_003efdes"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">move-&gt;fdes</strong> <var class="def-var-arguments">port fdes</var><a class="copiable-link" href='#index-move_002d_003efdes'> &para;</a></span></dt>
+<dd><p>Moves the underlying file descriptor for <var class="var">port</var> to the integer
+value <var class="var">fdes</var> and sets its revealed count to one.  Any other ports
+already using this descriptor will be automatically
+shifted to new descriptors and their revealed counts reset to zero.
+The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-release_002dport_002dhandle"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">release-port-handle</strong> <var class="def-var-arguments">port</var><a class="copiable-link" href='#index-release_002dport_002dhandle'> &para;</a></span></dt>
+<dd><p>Decrements the revealed count for a port.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-fsync"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fsync</strong> <var class="def-var-arguments">port_or_fd</var><a class="copiable-link" href='#index-fsync'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005ffsync"><span class="category-def">C Function: </span><span><strong class="def-name">scm_fsync</strong> <var class="def-var-arguments">(port_or_fd)</var><a class="copiable-link" href='#index-scm_005ffsync'> &para;</a></span></dt>
+<dd><p>Copies any unwritten data for the specified output file descriptor to disk.
+If <var class="var">port_or_fd</var> is a port, its buffer is flushed before the underlying
+file descriptor is fsync&rsquo;d.
+The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-open"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open</strong> <var class="def-var-arguments">path flags [mode]</var><a class="copiable-link" href='#index-open'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fopen"><span class="category-def">C Function: </span><span><strong class="def-name">scm_open</strong> <var class="def-var-arguments">(path, flags, mode)</var><a class="copiable-link" href='#index-scm_005fopen'> &para;</a></span></dt>
+<dd><p>Open the file named by <var class="var">path</var> for reading and/or writing.
+<var class="var">flags</var> is an integer specifying how the file should be opened.
+<var class="var">mode</var> is an integer specifying the permission bits of the file,
+if it needs to be created, before the umask (see <a class="pxref" href="Processes.html">Processes</a>) is
+applied.  The default is 666 (Unix itself has no default).
+</p>
+<p><var class="var">flags</var> can be constructed by combining variables using <code class="code">logior</code>.
+Basic flags are:
+</p>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-O_005fRDONLY"><span class="category-def">Variable: </span><span><strong class="def-name">O_RDONLY</strong><a class="copiable-link" href='#index-O_005fRDONLY'> &para;</a></span></dt>
+<dd><p>Open the file read-only.
+</p></dd></dl>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-O_005fWRONLY"><span class="category-def">Variable: </span><span><strong class="def-name">O_WRONLY</strong><a class="copiable-link" href='#index-O_005fWRONLY'> &para;</a></span></dt>
+<dd><p>Open the file write-only.
+</p></dd></dl>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-O_005fRDWR"><span class="category-def">Variable: </span><span><strong class="def-name">O_RDWR</strong><a class="copiable-link" href='#index-O_005fRDWR'> &para;</a></span></dt>
+<dd><p>Open the file read/write.
+</p></dd></dl>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-O_005fAPPEND"><span class="category-def">Variable: </span><span><strong class="def-name">O_APPEND</strong><a class="copiable-link" href='#index-O_005fAPPEND'> &para;</a></span></dt>
+<dd><p>Append to the file instead of truncating.
+</p></dd></dl>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-O_005fCREAT"><span class="category-def">Variable: </span><span><strong class="def-name">O_CREAT</strong><a class="copiable-link" href='#index-O_005fCREAT'> &para;</a></span></dt>
+<dd><p>Create the file if it does not already exist.
+</p></dd></dl>
+
+<p>See <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/File-Status-Flags.html#File-Status-Flags">File Status Flags</a> in <cite class="cite">The GNU C Library Reference Manual</cite>,
+for additional flags.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-openat"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">openat</strong> <var class="def-var-arguments">dir path flags [mode]</var><a class="copiable-link" href='#index-openat'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fopenat"><span class="category-def">C Function: </span><span><strong class="def-name">scm_openat</strong> <var class="def-var-arguments">(dir, path, flags, mode)</var><a class="copiable-link" href='#index-scm_005fopenat'> &para;</a></span></dt>
+<dd><p>Similar to <code class="code">open</code>, but resolve the file name <var class="var">path</var>
+relative to the directory referred to by the file port <var class="var">dir</var>
+instead.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-open_002dfdes"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-fdes</strong> <var class="def-var-arguments">path flags [mode]</var><a class="copiable-link" href='#index-open_002dfdes'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fopen_005ffdes"><span class="category-def">C Function: </span><span><strong class="def-name">scm_open_fdes</strong> <var class="def-var-arguments">(path, flags, mode)</var><a class="copiable-link" href='#index-scm_005fopen_005ffdes'> &para;</a></span></dt>
+<dd><p>Similar to <code class="code">open</code> but return a file descriptor instead of
+a port.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-open_002dfdes_002dat"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">open-fdes-at</strong> <var class="def-var-arguments">dir path flags [mode]</var><a class="copiable-link" href='#index-open_002dfdes_002dat'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fopen_005ffdes_005fat"><span class="category-def">C Function: </span><span><strong class="def-name">scm_open_fdes_at</strong> <var class="def-var-arguments">(dir, path, flags, mode)</var><a class="copiable-link" href='#index-scm_005fopen_005ffdes_005fat'> &para;</a></span></dt>
+<dd><p>Similar to <code class="code">openat</code>, but return a file descriptor instead
+of a port.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-close"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">close</strong> <var class="def-var-arguments">fd_or_port</var><a class="copiable-link" href='#index-close'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fclose"><span class="category-def">C Function: </span><span><strong class="def-name">scm_close</strong> <var class="def-var-arguments">(fd_or_port)</var><a class="copiable-link" href='#index-scm_005fclose'> &para;</a></span></dt>
+<dd><p>Similar to <code class="code">close-port</code> (see <a class="pxref" href="Ports.html">close-port</a>),
+but also works on file descriptors.  A side
+effect of closing a file descriptor is that any ports using that file
+descriptor are moved to a different file descriptor and have
+their revealed counts set to zero.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-close_002dfdes"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">close-fdes</strong> <var class="def-var-arguments">fd</var><a class="copiable-link" href='#index-close_002dfdes'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fclose_005ffdes"><span class="category-def">C Function: </span><span><strong class="def-name">scm_close_fdes</strong> <var class="def-var-arguments">(fd)</var><a class="copiable-link" href='#index-scm_005fclose_005ffdes'> &para;</a></span></dt>
+<dd><p>A simple wrapper for the <code class="code">close</code> system call.  Close file
+descriptor <var class="var">fd</var>, which must be an integer.  Unlike <code class="code">close</code>,
+the file descriptor will be closed even if a port is using it.  The
+return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-pipe-2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">pipe</strong> <var class="def-var-arguments">[flags]</var><a class="copiable-link" href='#index-pipe-2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fpipe"><span class="category-def">C Function: </span><span><strong class="def-name">scm_pipe</strong> <var class="def-var-arguments">()</var><a class="copiable-link" href='#index-scm_005fpipe'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-pipe"></a>
+<p>Return a newly created pipe: a pair of ports which are linked together
+on the local machine.  The <abbr class="acronym">CAR</abbr> is the input port and the
+<abbr class="acronym">CDR</abbr> is the output port.  Data written (and flushed) to the
+output port can be read from the input port.  Pipes are commonly used
+for communication with a newly forked child process.  The need to flush
+the output port can be avoided by making it unbuffered using
+<code class="code">setvbuf</code> (see <a class="pxref" href="Buffering.html">Buffering</a>).
+</p>
+<p>Optionally, on systems that support it such as GNU/Linux and
+GNU/Hurd, <var class="var">flags</var> can specify a bitwise-or of the following
+constants:
+</p>
+<dl class="table">
+<dt><code class="code">O_CLOEXEC</code></dt>
+<dd><p>Mark the returned file descriptors as close-on-exec;
+</p></dd>
+<dt><code class="code">O_DIRECT</code></dt>
+<dd><p>Create a pipe that performs input/output in &ldquo;packet&quot;
+mode&mdash;see <code class="command">man 2 pipe</code> for details;
+</p></dd>
+<dt><code class="code">O_NONBLOCK</code></dt>
+<dd><p>Set the <code class="code">O_NONBLOCK</code> status flag (non-blocking input and
+output) on the file descriptors.
+</p></dd>
+</dl>
+
+<p>On systems that do <em class="emph">not</em> support it, passing a non-zero
+<var class="var">flags</var> value triggers a <code class="code">system-error</code> exception.
+</p>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-PIPE_005fBUF"><span class="category-def">Variable: </span><span><strong class="def-name">PIPE_BUF</strong><a class="copiable-link" href='#index-PIPE_005fBUF'> &para;</a></span></dt>
+<dd><p>A write of up to <code class="code">PIPE_BUF</code> many bytes to a pipe is atomic,
+meaning when done it goes into the pipe instantaneously and as a
+contiguous block (see <a data-manual="libc" href="http://www.gnu.org/software/libc/manual/html_node/Pipe-Atomicity.html#Pipe-Atomicity">Atomicity of Pipe I/O</a> in <cite class="cite">The GNU C Library Reference Manual</cite>).
+</p></dd></dl>
+
+<p>Note that the output port is likely to block if too much data has been
+written but not yet read from the input port.  Typically the capacity
+is <code class="code">PIPE_BUF</code> bytes.
+</p></dd></dl>
+
+<p>The next group of procedures perform a <code class="code">dup2</code>
+system call, if <var class="var">newfd</var> (an
+integer) is supplied, otherwise a <code class="code">dup</code>.  The file descriptor to be
+duplicated can be supplied as an integer or contained in a port.  The
+type of value returned varies depending on which procedure is used.
+</p>
+<p>All procedures also have the side effect when performing <code class="code">dup2</code> that any
+ports using <var class="var">newfd</var> are moved to a different file descriptor and have
+their revealed counts set to zero.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-dup_002d_003efdes"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">dup-&gt;fdes</strong> <var class="def-var-arguments">fd_or_port [fd]</var><a class="copiable-link" href='#index-dup_002d_003efdes'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fdup_005fto_005ffdes"><span class="category-def">C Function: </span><span><strong class="def-name">scm_dup_to_fdes</strong> <var class="def-var-arguments">(fd_or_port, fd)</var><a class="copiable-link" href='#index-scm_005fdup_005fto_005ffdes'> &para;</a></span></dt>
+<dd><p>Return a new integer file descriptor referring to the open file
+designated by <var class="var">fd_or_port</var>, which must be either an open
+file port or a file descriptor.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-dup_002d_003einport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">dup-&gt;inport</strong> <var class="def-var-arguments">port/fd [newfd]</var><a class="copiable-link" href='#index-dup_002d_003einport'> &para;</a></span></dt>
+<dd><p>Returns a new input port using the new file descriptor.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-dup_002d_003eoutport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">dup-&gt;outport</strong> <var class="def-var-arguments">port/fd [newfd]</var><a class="copiable-link" href='#index-dup_002d_003eoutport'> &para;</a></span></dt>
+<dd><p>Returns a new output port using the new file descriptor.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-dup"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">dup</strong> <var class="def-var-arguments">port/fd [newfd]</var><a class="copiable-link" href='#index-dup'> &para;</a></span></dt>
+<dd><p>Returns a new port if <var class="var">port/fd</var> is a port, with the same mode as the
+supplied port, otherwise returns an integer file descriptor.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-dup_002d_003eport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">dup-&gt;port</strong> <var class="def-var-arguments">port/fd mode [newfd]</var><a class="copiable-link" href='#index-dup_002d_003eport'> &para;</a></span></dt>
+<dd><p>Returns a new port using the new file descriptor.  <var class="var">mode</var> supplies a
+mode string for the port (see <a class="pxref" href="File-Ports.html">open-file</a>).
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-duplicate_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">duplicate-port</strong> <var class="def-var-arguments">port modes</var><a class="copiable-link" href='#index-duplicate_002dport'> &para;</a></span></dt>
+<dd><p>Returns a new port which is opened on a duplicate of the file
+descriptor underlying <var class="var">port</var>, with mode string <var class="var">modes</var>
+as for <a class="ref" href="File-Ports.html">open-file</a>.  The two ports
+will share a file position and file status flags.
+</p>
+<p>Unexpected behaviour can result if both ports are subsequently used
+and the original and/or duplicate ports are buffered.
+The mode string can include <code class="code">0</code> to obtain an unbuffered duplicate
+port.
+</p>
+<p>This procedure is equivalent to <code class="code">(dup-&gt;port <var class="var">port</var> <var class="var">modes</var>)</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-redirect_002dport"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">redirect-port</strong> <var class="def-var-arguments">old_port new_port</var><a class="copiable-link" href='#index-redirect_002dport'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fredirect_005fport"><span class="category-def">C Function: </span><span><strong class="def-name">scm_redirect_port</strong> <var class="def-var-arguments">(old_port, new_port)</var><a class="copiable-link" href='#index-scm_005fredirect_005fport'> &para;</a></span></dt>
+<dd><p>This procedure takes two ports and duplicates the underlying file
+descriptor from <var class="var">old_port</var> into <var class="var">new_port</var>.  The
+current file descriptor in <var class="var">new_port</var> will be closed.
+After the redirection the two ports will share a file position
+and file status flags.
+</p>
+<p>The return value is unspecified.
+</p>
+<p>Unexpected behaviour can result if both ports are subsequently used
+and the original and/or duplicate ports are buffered.
+</p>
+<p>This procedure does not have any side effects on other ports or
+revealed counts.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-dup2"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">dup2</strong> <var class="def-var-arguments">oldfd newfd</var><a class="copiable-link" href='#index-dup2'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fdup2"><span class="category-def">C Function: </span><span><strong class="def-name">scm_dup2</strong> <var class="def-var-arguments">(oldfd, newfd)</var><a class="copiable-link" href='#index-scm_005fdup2'> &para;</a></span></dt>
+<dd><p>A simple wrapper for the <code class="code">dup2</code> system call.
+Copies the file descriptor <var class="var">oldfd</var> to descriptor
+number <var class="var">newfd</var>, replacing the previous meaning
+of <var class="var">newfd</var>.  Both <var class="var">oldfd</var> and <var class="var">newfd</var> must
+be integers.
+Unlike for <code class="code">dup-&gt;fdes</code> or <code class="code">primitive-move-&gt;fdes</code>, no attempt
+is made to move away ports which are using <var class="var">newfd</var>.
+The return value is unspecified.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-port_002dfor_002deach"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">port-for-each</strong> <var class="def-var-arguments">proc</var><a class="copiable-link" href='#index-port_002dfor_002deach'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fport_005ffor_005feach"><span class="category-def">C Function: </span><span><strong class="def-name">scm_port_for_each</strong> <var class="def-var-arguments">(SCM proc)</var><a class="copiable-link" href='#index-scm_005fport_005ffor_005feach'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fc_005fport_005ffor_005feach"><span class="category-def">C Function: </span><span><strong class="def-name">scm_c_port_for_each</strong> <var class="def-var-arguments">(void (*proc)(void *, SCM), void *data)</var><a class="copiable-link" href='#index-scm_005fc_005fport_005ffor_005feach'> &para;</a></span></dt>
+<dd><p>Apply <var class="var">proc</var> to each port in the Guile port table
+(FIXME: what is the Guile port table?)
+in turn.  The return value is unspecified.  More specifically,
+<var class="var">proc</var> is applied exactly once to every port that exists in the
+system at the time <code class="code">port-for-each</code> is invoked.  Changes to the
+port table while <code class="code">port-for-each</code> is running have no effect as far
+as <code class="code">port-for-each</code> is concerned.
+</p>
+<p>The C function <code class="code">scm_port_for_each</code> takes a Scheme procedure
+encoded as a <code class="code">SCM</code> value, while <code class="code">scm_c_port_for_each</code> takes
+a pointer to a C function and passes along a arbitrary <var class="var">data</var>
+cookie.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-fcntl"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">fcntl</strong> <var class="def-var-arguments">port/fd cmd [value]</var><a class="copiable-link" href='#index-fcntl'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005ffcntl"><span class="category-def">C Function: </span><span><strong class="def-name">scm_fcntl</strong> <var class="def-var-arguments">(object, cmd, value)</var><a class="copiable-link" href='#index-scm_005ffcntl'> &para;</a></span></dt>
+<dd><p>Apply <var class="var">cmd</var> on <var class="var">port/fd</var>, either a port or file descriptor.
+The <var class="var">value</var> argument is used by the <code class="code">SET</code> commands described
+below, it&rsquo;s an integer value.
+</p>
+<p>Values for <var class="var">cmd</var> are:
+</p>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-F_005fDUPFD"><span class="category-def">Variable: </span><span><strong class="def-name">F_DUPFD</strong><a class="copiable-link" href='#index-F_005fDUPFD'> &para;</a></span></dt>
+<dd><p>Duplicate the file descriptor, the same as <code class="code">dup-&gt;fdes</code> above
+does.
+</p></dd></dl>
+
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-F_005fGETFD"><span class="category-def">Variable: </span><span><strong class="def-name">F_GETFD</strong><a class="copiable-link" href='#index-F_005fGETFD'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-F_005fSETFD"><span class="category-def">Variable: </span><span><strong class="def-name">F_SETFD</strong><a class="copiable-link" href='#index-F_005fSETFD'> &para;</a></span></dt>
+<dd><p>Get or set flags associated with the file descriptor.  The only flag
+is the following,
+</p>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-FD_005fCLOEXEC"><span class="category-def">Variable: </span><span><strong class="def-name">FD_CLOEXEC</strong><a class="copiable-link" href='#index-FD_005fCLOEXEC'> &para;</a></span></dt>
+<dd><p>&ldquo;Close on exec&rdquo;, meaning the file descriptor will be closed on an
+<code class="code">exec</code> call (a successful such call).  For example to set that
+flag,
+</p>
+<div class="example">
+<pre class="example-preformatted">(fcntl port F_SETFD FD_CLOEXEC)
+</pre></div>
+
+<p>Or better, set it but leave any other possible future flags unchanged,
+</p>
+<div class="example">
+<pre class="example-preformatted">(fcntl port F_SETFD (logior FD_CLOEXEC
+                            (fcntl port F_GETFD)))
+</pre></div>
+</dd></dl>
+</dd></dl>
+
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-F_005fGETFL"><span class="category-def">Variable: </span><span><strong class="def-name">F_GETFL</strong><a class="copiable-link" href='#index-F_005fGETFL'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-F_005fSETFL"><span class="category-def">Variable: </span><span><strong class="def-name">F_SETFL</strong><a class="copiable-link" href='#index-F_005fSETFL'> &para;</a></span></dt>
+<dd><p>Get or set flags associated with the open file.  These flags are
+<code class="code">O_RDONLY</code> etc described under <code class="code">open</code> above.
+</p>
+<p>A common use is to set <code class="code">O_NONBLOCK</code> on a network socket.  The
+following sets that flag, and leaves other flags unchanged.
+</p>
+<div class="example">
+<pre class="example-preformatted">(fcntl sock F_SETFL (logior O_NONBLOCK
+                            (fcntl sock F_GETFL)))
+</pre></div>
+</dd></dl>
+
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-F_005fGETOWN"><span class="category-def">Variable: </span><span><strong class="def-name">F_GETOWN</strong><a class="copiable-link" href='#index-F_005fGETOWN'> &para;</a></span></dt>
+<dt class="defvrx defvarx-alias-defvrx def-cmd-defvr" id="index-F_005fSETOWN"><span class="category-def">Variable: </span><span><strong class="def-name">F_SETOWN</strong><a class="copiable-link" href='#index-F_005fSETOWN'> &para;</a></span></dt>
+<dd><p>Get or set the process ID of a socket&rsquo;s owner, for <code class="code">SIGIO</code> signals.
+</p></dd></dl>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-flock"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">flock</strong> <var class="def-var-arguments">file operation</var><a class="copiable-link" href='#index-flock'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fflock"><span class="category-def">C Function: </span><span><strong class="def-name">scm_flock</strong> <var class="def-var-arguments">(file, operation)</var><a class="copiable-link" href='#index-scm_005fflock'> &para;</a></span></dt>
+<dd><a class="index-entry-id" id="index-file-locking"></a>
+<p>Apply or remove an advisory lock on an open file.
+<var class="var">operation</var> specifies the action to be done:
+</p>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-LOCK_005fSH"><span class="category-def">Variable: </span><span><strong class="def-name">LOCK_SH</strong><a class="copiable-link" href='#index-LOCK_005fSH'> &para;</a></span></dt>
+<dd><p>Shared lock.  More than one process may hold a shared lock
+for a given file at a given time.
+</p></dd></dl>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-LOCK_005fEX"><span class="category-def">Variable: </span><span><strong class="def-name">LOCK_EX</strong><a class="copiable-link" href='#index-LOCK_005fEX'> &para;</a></span></dt>
+<dd><p>Exclusive lock.  Only one process may hold an exclusive lock
+for a given file at a given time.
+</p></dd></dl>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-LOCK_005fUN"><span class="category-def">Variable: </span><span><strong class="def-name">LOCK_UN</strong><a class="copiable-link" href='#index-LOCK_005fUN'> &para;</a></span></dt>
+<dd><p>Unlock the file.
+</p></dd></dl>
+<dl class="first-defvr first-defvar-alias-first-defvr">
+<dt class="defvr defvar-alias-defvr" id="index-LOCK_005fNB"><span class="category-def">Variable: </span><span><strong class="def-name">LOCK_NB</strong><a class="copiable-link" href='#index-LOCK_005fNB'> &para;</a></span></dt>
+<dd><p>Don&rsquo;t block when locking.  This is combined with one of the other
+operations using <code class="code">logior</code> (see <a class="pxref" href="Bitwise-Operations.html">Bitwise Operations</a>).  If
+<code class="code">flock</code> would block an <code class="code">EWOULDBLOCK</code> error is thrown
+(see <a class="pxref" href="Conventions.html"><abbr class="acronym">POSIX</abbr> Interface Conventions</a>).
+</p></dd></dl>
+
+<p>The return value is not specified. <var class="var">file</var> may be an open
+file descriptor or an open file descriptor port.
+</p>
+<p>Note that <code class="code">flock</code> does not lock files across NFS.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-select"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">select</strong> <var class="def-var-arguments">reads writes excepts [secs [usecs]]</var><a class="copiable-link" href='#index-select'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fselect"><span class="category-def">C Function: </span><span><strong class="def-name">scm_select</strong> <var class="def-var-arguments">(reads, writes, excepts, secs, usecs)</var><a class="copiable-link" href='#index-scm_005fselect'> &para;</a></span></dt>
+<dd><p>This procedure has a variety of uses: waiting for the ability
+to provide input, accept output, or the existence of
+exceptional conditions on a collection of ports or file
+descriptors, or waiting for a timeout to occur.
+</p>
+<p>When an error occurs, this procedure throws a <code class="code">system-error</code>
+exception (see <a class="pxref" href="Conventions.html"><code class="code">system-error</code></a>).  Note that
+<code class="code">select</code> may return early for other reasons, for example due to
+pending interrupts.  See <a class="xref" href="Asyncs.html">Asynchronous Interrupts</a>, for more on interrupts.
+</p>
+<p><var class="var">reads</var>, <var class="var">writes</var> and <var class="var">excepts</var> can be lists or
+vectors, with each member a port or a file descriptor.
+The value returned is a list of three corresponding
+lists or vectors containing only the members which meet the
+specified requirement.  The ability of port buffers to
+provide input or accept output is taken into account.
+Ordering of the input lists or vectors is not preserved.
+</p>
+<p>The optional arguments <var class="var">secs</var> and <var class="var">usecs</var> specify the
+timeout.  Either <var class="var">secs</var> can be specified alone, as
+either an integer or a real number, or both <var class="var">secs</var> and
+<var class="var">usecs</var> can be specified as integers, in which case
+<var class="var">usecs</var> is an additional timeout expressed in
+microseconds.  If <var class="var">secs</var> is omitted or is <code class="code">#f</code> then
+select will wait for as long as it takes for one of the other
+conditions to be satisfied.
+</p>
+<p>The scsh version of <code class="code">select</code> differs as follows:
+Only vectors are accepted for the first three arguments.
+The <var class="var">usecs</var> argument is not supported.
+Multiple values are returned instead of a list.
+Duplicates in the input vectors appear only once in output.
+An additional <code class="code">select!</code> interface is provided.
+</p></dd></dl>
+
+<p>While it is sometimes necessary to operate at the level of file
+descriptors, this is an operation whose correctness can only be
+considered as part of a whole program.  So for example while the effects
+of <code class="code">(string-set! x 34 #\y)</code> are limited to the bits of code that
+can access <var class="var">x</var>, <code class="code">(close-fdes 34)</code> mutates the state of the
+entire process.  In particular if another thread is using file
+descriptor 34 then their state might be corrupted; and another thread
+which opens a file might cause file descriptor 34 to be re-used, so that
+corruption could manifest itself in a strange way.
+</p>
+<a class="index-entry-id" id="index-fdes-finalizers"></a>
+<a class="index-entry-id" id="index-file-descriptor-finalizers"></a>
+<a class="index-entry-id" id="index-finalizers_002c-file-descriptor"></a>
+<p>However when working with file descriptors, it&rsquo;s common to want to
+associate information with the file descriptor, perhaps in a side table.
+To support this use case and to allow user code to remove an association
+when a file descriptor is closed, Guile offers <em class="dfn">fdes finalizers</em>.
+</p>
+<p>As the name indicates, fdes finalizers are finalizers &ndash; they can run in
+response to garbage collection, and they can also run in response to
+explicit calls to <code class="code">close-port</code>, <code class="code">close-fdes</code>, or the like.  As
+such they inherit many of the pitfalls of finalizers: they may be
+invoked from concurrent threads, or not at all.  See <a class="xref" href="Foreign-Object-Memory-Management.html">Foreign Object Memory Management</a>, for more on finalizers.
+</p>
+<p>To use fdes finalizers, import their module;
+</p>
+<div class="example">
+<pre class="example-preformatted">(use-modules (ice-9 fdes-finalizers))
+</pre></div>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-add_002dfdes_002dfinalizer_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">add-fdes-finalizer!</strong> <var class="def-var-arguments">fdes finalizer</var><a class="copiable-link" href='#index-add_002dfdes_002dfinalizer_0021'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-remove_002dfdes_002dfinalizer_0021"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">remove-fdes-finalizer!</strong> <var class="def-var-arguments">fdes finalizer</var><a class="copiable-link" href='#index-remove_002dfdes_002dfinalizer_0021'> &para;</a></span></dt>
+<dd><p>Add or remove a finalizer for <var class="var">fdes</var>.  A finalizer is a procedure
+that is called by Guile when a file descriptor is closed.  The file
+descriptor being closed is passed as the one argument to the finalizer.
+If a finalizer has been added multiple times to a file descriptor, to
+remove it would require that number of calls to
+<code class="code">remove-fdes-finalizer!</code>.
+</p>
+<p>The finalizers added to a file descriptor are called by Guile in an
+unspecified order, and their return values are ignored.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="File-System.html">File System</a>, Previous: <a href="Conventions.html"><abbr class="acronym">POSIX</abbr> Interface Conventions</a>, Up: <a href="POSIX.html"><abbr class="acronym">POSIX</abbr> System Calls and Networking</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

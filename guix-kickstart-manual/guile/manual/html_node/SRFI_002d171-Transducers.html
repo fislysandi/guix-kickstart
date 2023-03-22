@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>SRFI-171 Transducers (Guile Reference Manual)</title>
+
+<meta name="description" content="SRFI-171 Transducers (Guile Reference Manual)">
+<meta name="keywords" content="SRFI-171 Transducers (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SRFI_002d171.html" rel="up" title="SRFI-171">
+<link href="SRFI_002d171-Helpers.html" rel="next" title="SRFI-171 Helpers">
+<link href="SRFI_002d171-Reducers.html" rel="prev" title="SRFI-171 Reducers">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="SRFI_002d171-Transducers">
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d171-Helpers.html" accesskey="n" rel="next">Helper functions for writing transducers</a>, Previous: <a href="SRFI_002d171-Reducers.html" accesskey="p" rel="prev">Reducers</a>, Up: <a href="SRFI_002d171.html" accesskey="u" rel="up">Transducers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Transducers-1">7.5.46.4 Transducers</h4>
+<a class="index-entry-id" id="index-transducers-transducers"></a>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-tmap"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tmap</strong> <var class="def-var-arguments">proc</var><a class="copiable-link" href='#index-tmap'> &para;</a></span></dt>
+<dd><p>Returns a transducer that applies <var class="var">proc</var> to all values.  Stateless.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-tfilter"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tfilter</strong> <var class="def-var-arguments">pred?</var><a class="copiable-link" href='#index-tfilter'> &para;</a></span></dt>
+<dd><p>Returns a transducer that removes values for which <var class="var">pred?</var> returns #f.
+</p>
+<p>Stateless.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-tremove"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tremove</strong> <var class="def-var-arguments">pred?</var><a class="copiable-link" href='#index-tremove'> &para;</a></span></dt>
+<dd><p>Returns a transducer that removes values for which <var class="var">pred?</var> returns non-#f.
+</p>
+<p>Stateless
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-tfilter_002dmap"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tfilter-map</strong> <var class="def-var-arguments">proc</var><a class="copiable-link" href='#index-tfilter_002dmap'> &para;</a></span></dt>
+<dd><p>The same as <code class="code">(compose (tmap proc) (tfilter values))</code>.  Stateless.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-treplace"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">treplace</strong> <var class="def-var-arguments">mapping</var><a class="copiable-link" href='#index-treplace'> &para;</a></span></dt>
+<dd><p>The argument <var class="var">mapping</var> is an association list (using <code class="code">equal?</code>
+to compare keys), a hash-table, a one-argument procedure taking one
+argument and either producing that same argument or a replacement value.
+</p>
+<p>Returns a transducer which checks for the presence of any value passed
+through it in mapping.  If a mapping is found, the value of that mapping
+is returned, otherwise it just returns the original value.
+</p>
+<p>Does not keep internal state, but modifying the mapping while it&rsquo;s in
+use by treplace is an error.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-tdrop"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tdrop</strong> <var class="def-var-arguments">n</var><a class="copiable-link" href='#index-tdrop'> &para;</a></span></dt>
+<dd><p>Returns a transducer that discards the first <var class="var">n</var> values.
+</p>
+<p>Stateful.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ttake"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ttake</strong> <var class="def-var-arguments">n</var><a class="copiable-link" href='#index-ttake'> &para;</a></span></dt>
+<dd><p>Returns a transducer that discards all values and stops the transduction
+after the first <var class="var">n</var> values have been let through.  Any subsequent values
+are ignored.
+</p>
+<p>Stateful.
+</p></dd></dl>
+
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-tdrop_002dwhile"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tdrop-while</strong> <var class="def-var-arguments">pred?</var><a class="copiable-link" href='#index-tdrop_002dwhile'> &para;</a></span></dt>
+<dd><p>Returns a transducer that discards the first values for which
+<var class="var">pred?</var> returns true.
+</p>
+<p>Stateful.
+</p></dd></dl>
+
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-ttake_002dwhile"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ttake-while</strong> <var class="def-var-arguments">pred?</var><a class="copiable-link" href='#index-ttake_002dwhile'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-ttake_002dwhile-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">ttake-while</strong> <var class="def-var-arguments">pred? retf</var><a class="copiable-link" href='#index-ttake_002dwhile-1'> &para;</a></span></dt>
+<dd><p>Returns a transducer that stops the transduction after <var class="var">pred?</var> has
+returned #f.  Any subsequent values are ignored and the last successful
+value is returned.  <var class="var">retf</var> is a function that gets called whenever
+<var class="var">pred?</var> returns false.  The arguments passed are the result so far
+and the input for which pred? returns <code class="code">#f</code>.  The default function is
+<code class="code">(lambda (result input) result)</code>.
+</p>
+<p>Stateful.
+</p></dd></dl>
+
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-tconcatenate"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tconcatenate</strong><a class="copiable-link" href='#index-tconcatenate'> &para;</a></span></dt>
+<dd><p>tconcatenate <em class="emph">is</em> a transducer that concatenates the content of
+each value (that must be a list) into the reduction.
+</p><div class="example">
+<pre class="example-preformatted">(list-transduce tconcatenate rcons '((1 2) (3 4 5) (6 (7 8) 9)))
+&rArr; (1 2 3 4 5 6 (7 8) 9)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-tappend_002dmap"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tappend-map</strong> <var class="def-var-arguments">proc</var><a class="copiable-link" href='#index-tappend_002dmap'> &para;</a></span></dt>
+<dd><p>The same as <code class="code">(compose (tmap proc) tconcatenate)</code>.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-tflatten"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tflatten</strong><a class="copiable-link" href='#index-tflatten'> &para;</a></span></dt>
+<dd><p>tflatten <em class="emph">is</em> a transducer that flattens an input consisting of lists.
+</p>
+<div class="example">
+<pre class="example-preformatted">(list-transduce tflatten rcons '((1 2) 3 (4 (5 6) 7 8) 9)
+&rArr; (1 2 3 4 5 6 7 8 9)
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-tdelete_002dneighbor_002dduplicates"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tdelete-neighbor-duplicates</strong><a class="copiable-link" href='#index-tdelete_002dneighbor_002dduplicates'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-tdelete_002dneighbor_002dduplicates-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tdelete-neighbor-duplicates</strong> <var class="def-var-arguments">equality-predicate</var><a class="copiable-link" href='#index-tdelete_002dneighbor_002dduplicates-1'> &para;</a></span></dt>
+<dd><p>Returns a transducer that removes any directly following duplicate
+elements.  The default <var class="var">equality-predicate</var> is <code class="code">equal?</code>.
+</p>
+<p>Stateful.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-tdelete_002dduplicates"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tdelete-duplicates</strong><a class="copiable-link" href='#index-tdelete_002dduplicates'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-tdelete_002dduplicates-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tdelete-duplicates</strong> <var class="def-var-arguments">equality-predicate</var><a class="copiable-link" href='#index-tdelete_002dduplicates-1'> &para;</a></span></dt>
+<dd><p>Returns a transducer that removes any subsequent duplicate elements
+compared using <var class="var">equality-predicate</var>.  The default
+<var class="var">equality-predicate</var> is <code class="code">equal?</code>.
+</p>
+<p>Stateful.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-tsegment"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tsegment</strong> <var class="def-var-arguments">n</var><a class="copiable-link" href='#index-tsegment'> &para;</a></span></dt>
+<dd><p>Returns a transducer that groups inputs into lists of <var class="var">n</var> elements.
+When the transduction stops, it flushes any remaining collection, even
+if it contains fewer than <var class="var">n</var> elements.
+</p>
+<p>Stateful.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-tpartition"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tpartition</strong> <var class="def-var-arguments">pred?</var><a class="copiable-link" href='#index-tpartition'> &para;</a></span></dt>
+<dd><p>Returns a transducer that groups inputs in lists by whenever
+<code class="code">(pred? input)</code> changes value.
+</p>
+<p>Stateful.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-tadd_002dbetween"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tadd-between</strong> <var class="def-var-arguments">value</var><a class="copiable-link" href='#index-tadd_002dbetween'> &para;</a></span></dt>
+<dd><p>Returns a transducer which interposes <var class="var">value</var> between each value
+and the next.  This does not compose gracefully with transducers like
+<code class="code">ttake</code>, as you might end up ending the transduction on
+<code class="code">value</code>.
+</p>
+<p>Stateful.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-tenumerate"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tenumerate</strong><a class="copiable-link" href='#index-tenumerate'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-tenumerate-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tenumerate</strong> <var class="def-var-arguments">start</var><a class="copiable-link" href='#index-tenumerate-1'> &para;</a></span></dt>
+<dd><p>Returns a transducer that indexes values passed through it, starting at
+<var class="var">start</var>, which defaults to 0.  The indexing is done through cons
+pairs like <code class="code">(index . input)</code>.
+</p>
+<div class="example">
+<pre class="example-preformatted">(list-transduce (tenumerate 1) rcons (list 'first 'second 'third))
+&rArr; ((1 . first) (2 . second) (3 . third))
+</pre></div>
+
+<p>Stateful.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-tlog"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tlog</strong><a class="copiable-link" href='#index-tlog'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-tlog-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tlog</strong> <var class="def-var-arguments">logger</var><a class="copiable-link" href='#index-tlog-1'> &para;</a></span></dt>
+<dd><p>Returns a transducer that can be used to log or print values and
+results.  The result of the <var class="var">logger</var> procedure is discarded.  The
+default <var class="var">logger</var> is <code class="code">(lambda (result input) (write input)
+(newline))</code>.
+</p>
+<p>Stateless.
+</p></dd></dl>
+
+<h4 class="subheading" id="Guile_002dspecific-transducers">Guile-specific transducers</h4>
+<p>These transducers are available in the <code class="code">(srfi srfi-171 gnu)</code>
+library, and are provided outside the standard described by the SRFI-171
+document.
+</p>
+<dl class="first-deffn">
+<dt class="deffn" id="index-tbatch"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tbatch</strong> <var class="def-var-arguments">reducer</var><a class="copiable-link" href='#index-tbatch'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-tbatch-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tbatch</strong> <var class="def-var-arguments">transducer reducer</var><a class="copiable-link" href='#index-tbatch-1'> &para;</a></span></dt>
+<dd><p>A batching transducer that accumulates results using <var class="var">reducer</var> or
+<code class="code">((transducer) reducer)</code> until it returns a reduced value.  This can
+be used to generalize something like <code class="code">tsegment</code>:
+</p>
+<div class="example">
+<pre class="example-preformatted">;; This behaves exactly like (tsegment 4).
+(list-transduce (tbatch (ttake 4) rcons) rcons (iota 10))
+&rArr; ((0 1 2 3) (4 5 6 7) (8 9))
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-tfold"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tfold</strong> <var class="def-var-arguments">reducer</var><a class="copiable-link" href='#index-tfold'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-tfold-1"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">tfold</strong> <var class="def-var-arguments">reducer seed</var><a class="copiable-link" href='#index-tfold-1'> &para;</a></span></dt>
+<dd>
+<p>A folding transducer that yields the result of <code class="code">(reducer seed
+value)</code>, saving its result between iterations.
+</p>
+<div class="example">
+<pre class="example-preformatted">(list-transduce (tfold +) rcons (iota 10))
+&rArr; (0 1 3 6 10 15 21 28 36 45)
+</pre></div>
+</dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="SRFI_002d171-Helpers.html">Helper functions for writing transducers</a>, Previous: <a href="SRFI_002d171-Reducers.html">Reducers</a>, Up: <a href="SRFI_002d171.html">Transducers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

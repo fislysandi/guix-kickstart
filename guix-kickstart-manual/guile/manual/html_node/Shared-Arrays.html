@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Shared Arrays (Guile Reference Manual)</title>
+
+<meta name="description" content="Shared Arrays (Guile Reference Manual)">
+<meta name="keywords" content="Shared Arrays (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Arrays.html" rel="up" title="Arrays">
+<link href="Arrays-as-arrays-of-arrays.html" rel="next" title="Arrays as arrays of arrays">
+<link href="Array-Procedures.html" rel="prev" title="Array Procedures">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsubsection-level-extent" id="Shared-Arrays">
+<div class="nav-panel">
+<p>
+Next: <a href="Arrays-as-arrays-of-arrays.html" accesskey="n" rel="next">Arrays as arrays of arrays</a>, Previous: <a href="Array-Procedures.html" accesskey="p" rel="prev">Array Procedures</a>, Up: <a href="Arrays.html" accesskey="u" rel="up">Arrays</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsubsection" id="Shared-Arrays-1">6.6.13.3 Shared Arrays</h4>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-make_002dshared_002darray"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">make-shared-array</strong> <var class="def-var-arguments">oldarray mapfunc bound &hellip;</var><a class="copiable-link" href='#index-make_002dshared_002darray'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fmake_005fshared_005farray"><span class="category-def">C Function: </span><span><strong class="def-name">scm_make_shared_array</strong> <var class="def-var-arguments">(oldarray, mapfunc, boundlist)</var><a class="copiable-link" href='#index-scm_005fmake_005fshared_005farray'> &para;</a></span></dt>
+<dd><p>Return a new array which shares the storage of <var class="var">oldarray</var>.
+Changes made through either affect the same underlying storage.  The
+<var class="var">bound</var> &hellip; arguments are the shape of the new array, the same
+as <code class="code">make-array</code> (see <a class="pxref" href="Array-Procedures.html">Array Procedures</a>).
+</p>
+<p><var class="var">mapfunc</var> translates coordinates from the new array to the
+<var class="var">oldarray</var>.  It&rsquo;s called as <code class="code">(<var class="var">mapfunc</var> newidx1 &hellip;)</code>
+with one parameter for each dimension of the new array, and should
+return a list of indices for <var class="var">oldarray</var>, one for each dimension of
+<var class="var">oldarray</var>.
+</p>
+<p><var class="var">mapfunc</var> must be affine linear, meaning that each <var class="var">oldarray</var>
+index must be formed by adding integer multiples (possibly negative)
+of some or all of <var class="var">newidx1</var> etc, plus a possible integer offset.
+The multiples and offset must be the same in each call.
+</p>
+<br>
+<p>One good use for a shared array is to restrict the range of some
+dimensions, so as to apply say <code class="code">array-for-each</code> or
+<code class="code">array-fill!</code> to only part of an array.  The plain <code class="code">list</code>
+function can be used for <var class="var">mapfunc</var> in this case, making no changes
+to the index values.  For example,
+</p>
+<div class="example">
+<pre class="example-preformatted">(make-shared-array #2((a b c) (d e f) (g h i)) list 3 2)
+&rArr; #2((a b) (d e) (g h))
+</pre></div>
+
+<p>The new array can have fewer dimensions than <var class="var">oldarray</var>, for
+example to take a column from an array.
+</p>
+<div class="example">
+<pre class="example-preformatted">(make-shared-array #2((a b c) (d e f) (g h i))
+                   (lambda (i) (list i 2))
+                   '(0 2))
+&rArr; #1(c f i)
+</pre></div>
+
+<p>A diagonal can be taken by using the single new array index for both
+row and column in the old array.  For example,
+</p>
+<div class="example">
+<pre class="example-preformatted">(make-shared-array #2((a b c) (d e f) (g h i))
+                   (lambda (i) (list i i))
+                   '(0 2))
+&rArr; #1(a e i)
+</pre></div>
+
+<p>Dimensions can be increased by for instance considering portions of a
+one dimensional array as rows in a two dimensional array.
+(<code class="code">array-contents</code> below can do the opposite, flattening an
+array.)
+</p>
+<div class="example">
+<pre class="example-preformatted">(make-shared-array #1(a b c d e f g h i j k l)
+                   (lambda (i j) (list (+ (* i 3) j)))
+                   4 3)
+&rArr; #2((a b c) (d e f) (g h i) (j k l))
+</pre></div>
+
+<p>By negating an index the order that elements appear can be reversed.
+The following just reverses the column order,
+</p>
+<div class="example">
+<pre class="example-preformatted">(make-shared-array #2((a b c) (d e f) (g h i))
+                   (lambda (i j) (list i (- 2 j)))
+                   3 3)
+&rArr; #2((c b a) (f e d) (i h g))
+</pre></div>
+
+<p>A fixed offset on indexes allows for instance a change from a 0 based
+to a 1 based array,
+</p>
+<div class="example">
+<pre class="example-preformatted">(define x #2((a b c) (d e f) (g h i)))
+(define y (make-shared-array x
+                             (lambda (i j) (list (1- i) (1- j)))
+                             '(1 3) '(1 3)))
+(array-ref x 0 0) &rArr; a
+(array-ref y 1 1) &rArr; a
+</pre></div>
+
+<p>A multiple on an index allows every Nth element of an array to be
+taken.  The following is every third element,
+</p>
+<div class="example">
+<pre class="example-preformatted">(make-shared-array #1(a b c d e f g h i j k l)
+                   (lambda (i) (list (* i 3)))
+                   4)
+&rArr; #1(a d g j)
+</pre></div>
+
+<p>The above examples can be combined to make weird and wonderful
+selections from an array, but it&rsquo;s important to note that because
+<var class="var">mapfunc</var> must be affine linear, arbitrary permutations are not
+possible.
+</p>
+<p>In the current implementation, <var class="var">mapfunc</var> is not called for every
+access to the new array but only on some sample points to establish a
+base and stride for new array indices in <var class="var">oldarray</var> data.  A few
+sample points are enough because <var class="var">mapfunc</var> is linear.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-shared_002darray_002dincrements"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">shared-array-increments</strong> <var class="def-var-arguments">array</var><a class="copiable-link" href='#index-shared_002darray_002dincrements'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fshared_005farray_005fincrements"><span class="category-def">C Function: </span><span><strong class="def-name">scm_shared_array_increments</strong> <var class="def-var-arguments">(array)</var><a class="copiable-link" href='#index-scm_005fshared_005farray_005fincrements'> &para;</a></span></dt>
+<dd><p>For each dimension, return the distance between elements in the root vector.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-shared_002darray_002doffset"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">shared-array-offset</strong> <var class="def-var-arguments">array</var><a class="copiable-link" href='#index-shared_002darray_002doffset'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fshared_005farray_005foffset"><span class="category-def">C Function: </span><span><strong class="def-name">scm_shared_array_offset</strong> <var class="def-var-arguments">(array)</var><a class="copiable-link" href='#index-scm_005fshared_005farray_005foffset'> &para;</a></span></dt>
+<dd><p>Return the root vector index of the first element in the array.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-shared_002darray_002droot"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">shared-array-root</strong> <var class="def-var-arguments">array</var><a class="copiable-link" href='#index-shared_002darray_002droot'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005fshared_005farray_005froot"><span class="category-def">C Function: </span><span><strong class="def-name">scm_shared_array_root</strong> <var class="def-var-arguments">(array)</var><a class="copiable-link" href='#index-scm_005fshared_005farray_005froot'> &para;</a></span></dt>
+<dd><p>Return the root vector of a shared array.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-array_002dcontents"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">array-contents</strong> <var class="def-var-arguments">array [strict]</var><a class="copiable-link" href='#index-array_002dcontents'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005farray_005fcontents"><span class="category-def">C Function: </span><span><strong class="def-name">scm_array_contents</strong> <var class="def-var-arguments">(array, strict)</var><a class="copiable-link" href='#index-scm_005farray_005fcontents'> &para;</a></span></dt>
+<dd><p>If <var class="var">array</var> may be <em class="dfn">unrolled</em> into a one dimensional shared array
+without changing their order (last subscript changing fastest), then
+<code class="code">array-contents</code> returns that shared array, otherwise it returns
+<code class="code">#f</code>.  All arrays made by <code class="code">make-array</code> and
+<code class="code">make-typed-array</code> may be unrolled, some arrays made by
+<code class="code">make-shared-array</code> may not be.
+</p>
+<p>If the optional argument <var class="var">strict</var> is provided, a shared array will
+be returned only if its elements are stored internally contiguous in
+memory.
+</p></dd></dl>
+
+<dl class="first-deffn">
+<dt class="deffn" id="index-transpose_002darray"><span class="category-def">Scheme Procedure: </span><span><strong class="def-name">transpose-array</strong> <var class="def-var-arguments">array dim1 dim2 &hellip;</var><a class="copiable-link" href='#index-transpose_002darray'> &para;</a></span></dt>
+<dt class="deffnx def-cmd-deffn" id="index-scm_005ftranspose_005farray"><span class="category-def">C Function: </span><span><strong class="def-name">scm_transpose_array</strong> <var class="def-var-arguments">(array, dimlist)</var><a class="copiable-link" href='#index-scm_005ftranspose_005farray'> &para;</a></span></dt>
+<dd><p>Return an array sharing contents with <var class="var">array</var>, but with
+dimensions arranged in a different order.  There must be one
+<var class="var">dim</var> argument for each dimension of <var class="var">array</var>.
+<var class="var">dim1</var>, <var class="var">dim2</var>, &hellip; should be integers between 0
+and the rank of the array to be returned.  Each integer in that
+range must appear at least once in the argument list.
+</p>
+<p>The values of <var class="var">dim1</var>, <var class="var">dim2</var>, &hellip; correspond to
+dimensions in the array to be returned, and their positions in the
+argument list to dimensions of <var class="var">array</var>.  Several <var class="var">dim</var>s
+may have the same value, in which case the returned array will
+have smaller rank than <var class="var">array</var>.
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(transpose-array '#2((a b) (c d)) 1 0) &rArr; #2((a c) (b d))
+(transpose-array '#2((a b) (c d)) 0 0) &rArr; #1(a d)
+(transpose-array '#3(((a b c) (d e f)) ((1 2 3) (4 5 6))) 1 1 0) &rArr;
+                #2((a 4) (b 5) (c 6))
+</pre></div>
+</dd></dl>
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="Arrays-as-arrays-of-arrays.html">Arrays as arrays of arrays</a>, Previous: <a href="Array-Procedures.html">Array Procedures</a>, Up: <a href="Arrays.html">Arrays</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

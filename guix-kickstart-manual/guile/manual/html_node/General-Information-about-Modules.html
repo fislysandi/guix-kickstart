@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>General Information about Modules (Guile Reference Manual)</title>
+
+<meta name="description" content="General Information about Modules (Guile Reference Manual)">
+<meta name="keywords" content="General Information about Modules (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Modules.html" rel="up" title="Modules">
+<link href="Using-Guile-Modules.html" rel="next" title="Using Guile Modules">
+<style type="text/css">
+<!--
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="subsection-level-extent" id="General-Information-about-Modules">
+<div class="nav-panel">
+<p>
+Next: <a href="Using-Guile-Modules.html" accesskey="n" rel="next">Using Guile Modules</a>, Up: <a href="Modules.html" accesskey="u" rel="up">Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h4 class="subsection" id="General-Information-about-Modules-1">6.18.1 General Information about Modules</h4>
+
+<p>A Guile module can be thought of as a collection of named procedures,
+variables and macros.  More precisely, it is a set of <em class="dfn">bindings</em>
+of symbols (names) to Scheme objects.
+</p>
+<p>Within a module, all bindings are visible.  Certain bindings
+can be declared <em class="dfn">public</em>, in which case they are added to the
+module&rsquo;s so-called <em class="dfn">export list</em>; this set of public bindings is
+called the module&rsquo;s <em class="dfn">public interface</em> (see <a class="pxref" href="Creating-Guile-Modules.html">Creating Guile Modules</a>).
+</p>
+<p>A client module <em class="dfn">uses</em> a providing module&rsquo;s bindings by either
+accessing the providing module&rsquo;s public interface, or by building a
+custom interface (and then accessing that).  In a custom interface, the
+client module can <em class="dfn">select</em> which bindings to access and can also
+algorithmically <em class="dfn">rename</em> bindings.  In contrast, when using the
+providing module&rsquo;s public interface, the entire export list is available
+without renaming (see <a class="pxref" href="Using-Guile-Modules.html">Using Guile Modules</a>).
+</p>
+<p>All Guile modules have a unique <em class="dfn">module name</em>, for example
+<code class="code">(ice-9 popen)</code> or <code class="code">(srfi srfi-11)</code>.  Module names are lists
+of one or more symbols.
+</p>
+<p>When Guile goes to use an interface from a module, for example
+<code class="code">(ice-9 popen)</code>, Guile first looks to see if it has loaded
+<code class="code">(ice-9 popen)</code> for any reason.  If the module has not been loaded
+yet, Guile searches a <em class="dfn">load path</em> for a file that might define it,
+and loads that file.
+</p>
+<p>The following subsections go into more detail on using, creating,
+installing, and otherwise manipulating modules and the module system.
+</p>
+</div>
+
+
+
+</body>
+</html>

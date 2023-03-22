@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.0.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- This manual documents Guile version 3.0.9.
+
+Copyright (C) 1996-1997, 2000-2005, 2009-2023 Free Software Foundation,
+Inc. 
+
+Copyright (C) 2021 Maxime Devos
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License." -->
+<title>Expect (Guile Reference Manual)</title>
+
+<meta name="description" content="Expect (Guile Reference Manual)">
+<meta name="keywords" content="Expect (Guile Reference Manual)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="index.html" rel="start" title="Top">
+<link href="Concept-Index.html" rel="index" title="Concept Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Guile-Modules.html" rel="up" title="Guile Modules">
+<link href="sxml_002dmatch.html" rel="next" title="sxml-match">
+<link href="Buffered-Input.html" rel="prev" title="Buffered Input">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<div class="section-level-extent" id="Expect">
+<div class="nav-panel">
+<p>
+Next: <a href="sxml_002dmatch.html" accesskey="n" rel="next"><code class="code">sxml-match</code>: Pattern Matching of SXML</a>, Previous: <a href="Buffered-Input.html" accesskey="p" rel="prev">Buffered Input</a>, Up: <a href="Guile-Modules.html" accesskey="u" rel="up">Guile Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<h3 class="section" id="Expect-1">7.16 Expect</h3>
+
+<p>The macros in this section are made available with:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(use-modules (ice-9 expect))
+</pre></div>
+
+<p><code class="code">expect</code> is a macro for selecting actions based on the output from
+a port.  The name comes from a tool of similar functionality by Don Libes.
+Actions can be taken when a particular string is matched, when a timeout
+occurs, or when end-of-file is seen on the port.  The <code class="code">expect</code> macro
+is described below; <code class="code">expect-strings</code> is a front-end to <code class="code">expect</code>
+based on regexec (see the regular expression documentation).
+</p>
+<dl class="first-deffn first-defmac-alias-first-deffn">
+<dt class="deffn defmac-alias-deffn" id="index-expect_002dstrings"><span class="category-def">Macro: </span><span><strong class="def-name">expect-strings</strong> <var class="def-var-arguments">clause &hellip;</var><a class="copiable-link" href='#index-expect_002dstrings'> &para;</a></span></dt>
+<dd><p>By default, <code class="code">expect-strings</code> will read from the current input port.
+The first term in each clause consists of an expression evaluating to
+a string pattern (regular expression).  As characters
+are read one-by-one from the port, they are accumulated in a buffer string
+which is matched against each of the patterns.  When a
+pattern matches, the remaining expression(s) in
+the clause are evaluated and the value of the last is returned.  For example:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(with-input-from-file &quot;/etc/passwd&quot;
+  (lambda ()
+    (expect-strings
+      (&quot;^nobody&quot; (display &quot;Got a nobody user.\n&quot;)
+                 (display &quot;That's no problem.\n&quot;))
+      (&quot;^daemon&quot; (display &quot;Got a daemon user.\n&quot;)))))
+</pre></div>
+
+<p>The regular expression is compiled with the <code class="code">REG_NEWLINE</code> flag, so
+that the ^ and $ anchors will match at any newline, not just at the start
+and end of the string.
+</p>
+<p>There are two other ways to write a clause:
+</p>
+<p>The expression(s) to evaluate
+can be omitted, in which case the result of the regular expression match
+(converted to strings, as obtained from regexec with match-pick set to &quot;&quot;)
+will be returned if the pattern matches.
+</p>
+<p>The symbol <code class="code">=&gt;</code> can be used to indicate that the expression is a
+procedure which will accept the result of a successful regular expression
+match.  E.g.,
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(&quot;^daemon&quot; =&gt; write)
+(&quot;^d(aemon)&quot; =&gt; (lambda args (for-each write args)))
+(&quot;^da(em)on&quot; =&gt; (lambda (all sub)
+                  (write all) (newline)
+                  (write sub) (newline)))
+</pre></div>
+
+<p>The order of the substrings corresponds to the order in which the
+opening brackets occur.
+</p>
+<p>A number of variables can be used to control the behaviour
+of <code class="code">expect</code> (and <code class="code">expect-strings</code>).
+Most have default top-level bindings to the value <code class="code">#f</code>, 
+which produces the default behaviour.
+They can be redefined at the
+top level or locally bound in a form enclosing the expect expression.
+</p>
+<dl class="table">
+<dt><code class="code">expect-port</code></dt>
+<dd><p>A port to read characters from, instead of the current input port.
+</p></dd>
+<dt><code class="code">expect-timeout</code></dt>
+<dd><p><code class="code">expect</code> will terminate after this number of
+seconds, returning <code class="code">#f</code> or the value returned by expect-timeout-proc.
+</p></dd>
+<dt><code class="code">expect-timeout-proc</code></dt>
+<dd><p>A procedure called if timeout occurs.  The procedure takes a single argument:
+the accumulated string.
+</p></dd>
+<dt><code class="code">expect-eof-proc</code></dt>
+<dd><p>A procedure called if end-of-file is detected on the input port.  The
+procedure takes a single argument: the accumulated string.
+</p></dd>
+<dt><code class="code">expect-char-proc</code></dt>
+<dd><p>A procedure to be called every time a character is read from the
+port.  The procedure takes a single argument: the character which was read.
+</p></dd>
+<dt><code class="code">expect-strings-compile-flags</code></dt>
+<dd><p>Flags to be used when compiling a regular expression, which are passed
+to <code class="code">make-regexp</code> See <a class="xref" href="Regexp-Functions.html">Regexp Functions</a>.  The default value
+is <code class="code">regexp/newline</code>.
+</p></dd>
+<dt><code class="code">expect-strings-exec-flags</code></dt>
+<dd><p>Flags to be used when executing a regular expression, which are
+passed to regexp-exec See <a class="xref" href="Regexp-Functions.html">Regexp Functions</a>.
+The default value is <code class="code">regexp/noteol</code>, which prevents <code class="code">$</code>
+from matching the end of the string while it is still accumulating,
+but still allows it to match after a line break or at the end of file.
+</p></dd>
+</dl>
+
+<p>Here&rsquo;s an example using all of the variables:
+</p>
+<div class="example smalllisp lisp">
+<pre class="lisp-preformatted">(let ((expect-port (open-input-file &quot;/etc/passwd&quot;))
+      (expect-timeout 1)
+      (expect-timeout-proc
+        (lambda (s) (display &quot;Times up!\n&quot;)))
+      (expect-eof-proc
+        (lambda (s) (display &quot;Reached the end of the file!\n&quot;)))
+      (expect-char-proc display)
+      (expect-strings-compile-flags (logior regexp/newline regexp/icase))
+      (expect-strings-exec-flags 0))
+   (expect-strings
+     (&quot;^nobody&quot;  (display &quot;Got a nobody user\n&quot;))))
+</pre></div>
+</dd></dl>
+
+<dl class="first-deffn first-defmac-alias-first-deffn">
+<dt class="deffn defmac-alias-deffn" id="index-expect"><span class="category-def">Macro: </span><span><strong class="def-name">expect</strong> <var class="def-var-arguments">clause &hellip;</var><a class="copiable-link" href='#index-expect'> &para;</a></span></dt>
+<dd><p><code class="code">expect</code> is used in the same way as <code class="code">expect-strings</code>,
+but tests are specified not as patterns, but as procedures.  The
+procedures are called in turn after each character is read from the
+port, with two arguments: the value of the accumulated string and
+a flag to indicate whether end-of-file has been reached.  The flag
+will usually be <code class="code">#f</code>, but if end-of-file is reached, the procedures
+are called an additional time with the final accumulated string and
+<code class="code">#t</code>.
+</p>
+<p>The test is successful if the procedure returns a non-false value.
+</p>
+<p>If the <code class="code">=&gt;</code> syntax is used, then if the test succeeds it must return
+a list containing the arguments to be provided to the corresponding
+expression.
+</p>
+<p>In the following example, a string will only be matched at the beginning
+of the file:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(let ((expect-port (open-input-file &quot;/etc/passwd&quot;)))
+  (expect
+     ((lambda (s eof?) (string=? s &quot;fnord!&quot;))
+        (display &quot;Got a nobody user!\n&quot;))))
+</pre></div>
+
+<p>The control variables described for <code class="code">expect-strings</code> also
+influence the behaviour of <code class="code">expect</code>, with the exception of 
+variables whose names begin with <code class="code">expect-strings-</code>.
+</p></dd></dl>
+
+
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="sxml_002dmatch.html"><code class="code">sxml-match</code>: Pattern Matching of SXML</a>, Previous: <a href="Buffered-Input.html">Buffered Input</a>, Up: <a href="Guile-Modules.html">Guile Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>
