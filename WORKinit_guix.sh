@@ -27,11 +27,11 @@ sudo guix pull
 # installing git
 #guix install git --no-substitutes
 
-mkdir ~/Desktop
-cd ~/Desktop
-git clone https://github.com/fislysandi/guix-kickstart
+#mkdir ~/Desktop
+#cd ~/Desktop
+#git clone https://github.com/fislysandi/guix-kickstart
 
-cd guix-kickstart/guix-config/scripts/
-. /guixlinks.sh
+#cd guix-kickstart/guix-config/scripts/
+#. /guixlinks.sh
 
-guix home reconfigure home-kickstart.scm --no-substitutes
+#guix home reconfigure home-kickstart.scm --no-substitutes

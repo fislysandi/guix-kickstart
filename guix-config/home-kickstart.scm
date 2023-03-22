@@ -13,7 +13,7 @@
 (home-environment
   ;; Below is the list of packages that will show up in your
   ;; Home profile, under ~/.guix-home/profile.
-  (packages (specifications->packages (list "guix"
+  (packages (specifications->packages (list 
 											"htop"
 											"stow"
 											"guile"
@@ -33,24 +33,21 @@
   (services
    (list (service home-bash-service-type
                   (home-bash-configuration
-                   (aliases '(("gbuild" . "guix home container --no-substitutes")
-                              ("grep" . "grep --color=auto")
-                              ("gswitch" . "guix home switch --no-substitutes")
-                              ("hbuild" . "home-manager build")
-                              ("hswitch" . "home-manager switch")
-                              ("l" . "ls -CF")
-                              ("la" . "ls -A")
-                              ("ll" . "ls -alF")
-                              ("ls" . "ls --color=auto")))
+                   (aliases '(("ls" . "ls --color=auto" )
+							  ( "grep" . "grep --color=auto" )
+							  ( "greconf" . "guix home reconfigure" )
+							  ( "gcont" . "guix home container" )
+							  ( "l" . "ls -CF" )
+							  ( "la" . "ls -A" )
+							  ( "ls" . "ls --color=auto")
+							  ( "ll" . "ls -alF")))
+
                    (bashrc (list (local-file
-                                  "/home/fislysandi/src/guix-config//.bashrc"
+                                  "/home/fislysandi/guix-kickstart/guix-config//.bashrc"
                                   "bashrc")))
                    (bash-profile (list (local-file
-                                        "/home/fislysandi/src/guix-config//.bash_profile"
+                                        "/home/fislysandi/guix-kickstart/guix-config//.bash_profile"
                                         "bash_profile")))
                    (bash-logout (list (local-file
-                                       "/home/fislysandi/src/guix-config//.bash_logout"
+                                       "/home/fislysandi/guix-kickstart/guix-config//.bash_logout"
                                        "bash_logout"))))))))
-
-
-
