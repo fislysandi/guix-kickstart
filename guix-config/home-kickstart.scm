@@ -18,16 +18,17 @@
 											"stow"
 											"guile"
 											"neovim"
-											"neovim-packer"
+											;;"neovim-packer"
 											"binutils"
 											"gcc"
+											"emacs"
 											"glibc"
 											"clang-toolchain"
 											"pandoc"
 											"flex"
 											"python"
 											"tmux"
-											"tor"
+											;;"tor"
 											)))
 
   ;; Below is the list of Home services.  To search for available

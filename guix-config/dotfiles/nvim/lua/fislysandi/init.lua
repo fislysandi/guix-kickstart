@@ -41,8 +41,9 @@ for k, v in pairs(options) do
   vim.opt[k] = v
 end
 
-
+--.guile-repl.socket
 vim.g["conjure#filetype#scheme"] = "conjure.client.guile.socket"
+vim.g["conjure#client#guile#socket#pipename"] = "guile --listen=/home/fislysandi/Desktop/dev/git/guix-kickstart/.guile-repl.socket"
 
 -- Set the runtime path
 --vim.o.runtimepath = vim.o.runtimepath .. ';' .. 'C:/Users/angryteapodthebonedo/AppData/Local/nvim'
