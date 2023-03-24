@@ -1,0 +1,8 @@
+(use-modules (guix config) (gnu packages))
+
+
+(setenv "GUIX_PACKAGE_PATH"
+        (string-append (getcwd) "/guix-packages"))
+
+(append-to-load-path (getenv "GUIX_PACKAGE_PATH"))
+(load (string-append (getenv "GUIX_PACKAGE_PATH") "/default.scm"))

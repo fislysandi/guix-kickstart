@@ -14,35 +14,28 @@
   ;; Below is the list of packages that will show up in your
   ;; Home profile, under ~/.guix-home/profile.
   (packages (specifications->packages (list 
-											"htop"
-											"stow"
-											"guile"
-                                            "binutils"
-											"gcc"
-											"emacs"
-                                            "emacs-guix"
-											"glibc"
-											"clang-toolchain"
-											"pandoc"
-											"flex"
-											"python"
-											"tmux"
-											;;"tor"
-											)))
+                                        "htop"
+                                        "stow"
+                                        "guile"
+                                        "binutils"
+                                        "gcc"
+                                        "emacs"
+                                        "emacs-guix"
+                                        "glibc"
+                                        "clang-toolchain"
+                                        "pandoc"
+                                        "flex"
+                                        "python"
+                                        "tmux"
+                                        "git"
+                                        ;;"tor"
+                                        )))
 
   ;; Below is the list of Home services.  To search for available
   ;; services, run 'guix home search KEYWORD' in a terminal.
   (services
    (list (service home-bash-service-type
                   (home-bash-configuration
-                   (aliases '(("ls" . "ls --color=auto" )
-							  ( "grep" . "grep --color=auto" )
-							  ( "gswitch" . "torify guix home reconfigure" )
-							  ( "gbuild" . "torify guix home container" )
-							  ( "l" . "ls -CF" )
-							  ( "la" . "ls -A" )
-							  ( "ls" . "ls --color=auto")
-							  ( "ll" . "ls -alF")))
 
                    (bashrc (list (local-file
                                   "/home/fislysandi/src/guix-config//.bashrc"
