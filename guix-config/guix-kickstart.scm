@@ -17,6 +17,7 @@
                                         "htop"
                                         "stow"
                                         "guile"
+                                        "guile-lib"
                                         "binutils"
                                         "gcc"
                                         "emacs"
@@ -27,7 +28,7 @@
                                         "flex"
                                         "python"
                                         "tmux"
-                                        "git"
+                                        "emacs-flycheck-guile"
                                         ;;"tor"
                                         )))
 
