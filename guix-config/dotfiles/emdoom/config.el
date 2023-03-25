@@ -74,10 +74,32 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+;;
 (require 'guix)
+
+(with-eval-after-load 'scheme
+  (require 'flycheck-guile))
+
+
+(use-package eval-sexp-fu
+  :defer t
+  :hook ((scheme-mode . turn-on-eval-sexp-fu-mode)
+         (emacs-lisp-mode . turn-on-eval-sexp-fu-mode)))
+
 (require 'geiser)
 
+(use-package geiser-guile
+  :defer t)
+  (after! geiser-guile
+    (setq geiser-guile-load-init-file t))
 
+;;(defun my-scheme-mode-hook ()
+;;  "Scheme mode hook."
+;;  (guiser-guile)
+;;  (flycheck-mode)
+;;  (flycheck-guile-setup))
+                                        ;
+(add-hook 'scheme-mode-hook 'flycheck-mode)
 
 
 

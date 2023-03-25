@@ -31,7 +31,7 @@ sudo guix pull
 #cd ~/Desktop
 #git clone https://github.com/fislysandi/guix-kickstart
 
-#cd guix-kickstart/guix-config/scripts/
+$PWD/scripts/./guixlinks.sh
 #. /guixlinks.sh
 
 #guix home reconfigure home-kickstart.scm --no-substitutes

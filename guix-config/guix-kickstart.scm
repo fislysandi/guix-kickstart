@@ -28,7 +28,6 @@
                                         "flex"
                                         "python"
                                         "tmux"
-                                        "emacs-flycheck-guile"
                                         ;;"tor"
                                         )))
 
