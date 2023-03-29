@@ -11,7 +11,7 @@ rm -rf ~/.doom.d/
 git clone --depth 1 https://github.com/doomemacs/doomemacs $PWD/../emacs
 
 # Link the emacs folder to ~/.emacs.d
-ln -sf $PWD/../emacs ~/.emacs.d
+ln -sf $PWD/../emacs $HOME/.emacs.d
 
 #kill emacs daemon before installing doom
 emacsclient -e '(kill-emacs)'

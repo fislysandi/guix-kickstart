@@ -1,0 +1,87 @@
+#!/bin/sh
+guild compile "$0"
+exec guile -q -s "$0" "$@"
+!#
+
+(unless (defined? 'setrlimit)
+  ;; Without an rlimit, this test can take down your system, as it
+  ;; consumes all of your memory.  That doesn't seem like something we
+  ;; should run as part of an automated test suite.
+  (exit 0))
+
+(when (string-ci= "darwin" (vector-ref (uname) 0))
+  ;; setrlimits are ignored in OS X (tested on 10.9 and 10.10). Proceeding
+  ;; with the test would fill all available memory and probably end in a crash.
+  ;; See also test-stack-overflow.
+  (exit 77)) ; unresolved
+
+(when (string-ci= "GNU" (vector-ref (uname) 0))
+  ;; setrlimits are not yet implemented on GNU/Hurd systems. Proceeding
+  ;; with the test would end in a crash. See
+  ;; <https://lists.gnu.org/archive/html/bug-hurd/2017-05/msg00013.html>
+  (exit 77)) ; unresolved
+
+(when (string-contains-ci (vector-ref (uname) 0) "CYGWIN_NT")
+  ;; attempting to use setrlimits for memory RLIMIT_AS will always
+  ;; produce an invalid argument error on Cygwin (tested on
+  ;; CYGWIN_NT-10.0 DLL v2.7.0).  Proceeding with the test would fill
+  ;; all available memory and probably end in a crash.  See also
+  ;; test-stack-overflow.
+  (exit 77)) ; unresolved
+
+(catch #t
+  ;; Silence GC warnings.
+  (lambda ()
+    (current-warning-port (open-output-file "/dev/null")))
+  (lambda (k . args)
+    (print-exception (current-error-port) #f k args)
+    (write "Skipping test.\n" (current-error-port))
+    (exit 77))) ; unresolved
+
+;; 50 MB.
+(define *limit* (* 50 1024 1024))
+
+(call-with-values (lambda () (getrlimit 'as))
+  (lambda (soft hard)
+    (unless (and soft (< soft *limit*))
+      (setrlimit 'as (if hard (min *limit* hard) *limit*) hard))))
+
+(define (test thunk)
+  (catch 'out-of-memory
+    (lambda ()
+      (thunk)
+      (error "should not be reached"))
+    (lambda _
+      #t)))
+
+;; Prevent `test' from being inlined, which might cause an unused
+;; allocation to be omitted.
+(set! test test)
+
+(use-modules (rnrs bytevectors))
+
+(test (lambda ()
+        ;; Unhappily, on 32-bit systems, vectors are limited to 16M
+        ;; elements.  Boo.  Anyway, a vector with 16M elements takes 64
+        ;; MB, which doesn't fit into 50 MB.
+        (make-vector (1- (ash 1 24)))))
+(test (lambda ()
+        ;; Likewise for a bytevector.  This is different from the above,
+        ;; as the elements of a bytevector are not traced by GC.
+        (make-bytevector #e1e9)))
+(test (lambda ()
+        ;; This one is the kicker -- we allocate pairs until the heap
+        ;; can't expand.  This is the hardest test to deal with because
+        ;; the error-handling machinery has no memory in which to work.
+        (iota #e1e8)))
+(test (lambda ()
+        ;; The same, but also causing allocating during the unwind
+        ;; (ouch!)
+        (dynamic-wind
+          (lambda () #t)
+          (lambda () (iota #e1e8))
+          (lambda () (iota #e1e8)))))
+
+;; Local Variables:
+;; mode: scheme
+;; End:

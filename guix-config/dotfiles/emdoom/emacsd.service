@@ -1,0 +1,12 @@
+[Unit]
+Description=Emacs text editor
+Documentation=info:emacs man:emacs(1) https://gnu.org/software/emacs/
+
+[Service]
+Type=simple
+ExecStart=$(guix package --manifest=/ --profile=/run/current-system/profile/ | which emacs) --fg-daemon
+ExecStop=$(guix package --manifest=/ --profile=/run/current-system/profile/ | which emacsclient) --eval "(kill-emacs)"
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
