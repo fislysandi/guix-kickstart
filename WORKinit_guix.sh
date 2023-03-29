@@ -20,12 +20,18 @@ sudo chmod +x guix-install.sh
 echo "Running Guix installer..."
 sudo ./guix-install.sh
 
+mkdir $HOME/src/guix-config
+
+sudo mkdir -p /var/guix/profiles/per-user/$USER
+sudo chown -R $USER:$USER /var/guix/profiles/per-user/$USER
+
 
 cp -r $PWD/guix-config/dotfiles/bash/* ~/src/guix-config/
 
 # updating guix
 echo "Updating package repository..."
 sudo guix pull
+
 guix pull
 # installing git
 #guix install git --no-substitutes
